@@ -194,7 +194,7 @@ export default function OperationalHistory() {
           className="mb-24"
         >
           <p className="font-manrope text-[10px] text-[#7AADD0] uppercase tracking-[0.4em] mb-8">
-            06 / Operational History
+            06 / Experience
           </p>
           <h2 className="font-manrope font-semibold text-4xl md:text-5xl lg:text-6xl text-[#0D1E2E] leading-tight tracking-tight mb-8">
             Real-world execution

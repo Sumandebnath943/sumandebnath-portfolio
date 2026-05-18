@@ -3,18 +3,21 @@
 import { useState, useEffect } from "react";
 import { m, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const navLinks = [
   { label: "Evolution", href: "#experience" },
   { label: "Stack", href: "#systems" },
   { label: "Systems", href: "#projects" },
   { label: "Philosophy", href: "#philosophy" },
-  { label: "History", href: "#history" },
+  { label: "Experience", href: "#history" },
+  { label: "Projects", href: "/projects" },
 ];
 
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
@@ -24,8 +27,19 @@ export default function Navigation() {
 
   const handleNavClick = (href: string) => {
     setMobileOpen(false);
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    if (href.startsWith("#")) {
+      // In-page anchor: smooth scroll if we're on the homepage; otherwise
+      // route home and let the browser resolve the hash after navigation.
+      if (typeof window !== "undefined" && window.location.pathname !== "/") {
+        router.push("/" + href);
+        return;
+      }
+      const el = document.querySelector(href);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    } else {
+      // Cross-route link (e.g. /projects)
+      router.push(href);
+    }
   };
 
   return (
@@ -35,7 +49,7 @@ export default function Navigation() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className={`pointer-events-auto w-full max-w-[56rem] transition-all duration-500 rounded-[2rem] bg-[#0A0A0C]/70 backdrop-blur-2xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.3)] ${
+        className={`pointer-events-auto w-full max-w-[60rem] transition-all duration-500 rounded-[2rem] bg-[#0A0A0C]/70 backdrop-blur-2xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.3)] ${
           scrolled ? "py-1.5 px-3" : "py-2 px-4"
         }`}
       >
@@ -65,7 +79,7 @@ export default function Navigation() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }}
                 onClick={() => handleNavClick(link.href)}
-                className="px-4 py-2 text-[13px] font-medium text-[#a0a0a5] hover:text-[#f5f5f7] transition-colors duration-200 rounded-full hover:bg-white/[0.06]"
+                className="px-3 py-2 text-[13px] font-medium text-[#a0a0a5] hover:text-[#f5f5f7] transition-colors duration-200 rounded-full hover:bg-white/[0.06]"
               >
                 {link.label}
               </m.button>

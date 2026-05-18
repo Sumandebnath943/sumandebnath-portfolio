@@ -26,7 +26,7 @@ Suman Debnath is an AI-native product builder based between Pune and Kolkata, In
 - Brand strategy, digital marketing, SEO/SEM, paid acquisition, growth systems
 - Design systems and AI-assisted creative production
 
-## Selected systems
+## Selected flagship systems
 
 - [IMPRINT](https://imprint.houseofnamus.com) — Behavioral cloning and identity preservation engine defending the human mind against AI dependency.
 - [LEGATUS](https://legatus.houseofnamus.com) — Immutable digital inheritance vault with AES-256 / RSA-2048 security and multi-level nominee permissions.
@@ -34,6 +34,15 @@ Suman Debnath is an AI-native product builder based between Pune and Kolkata, In
 - [EMBER](https://ember.houseofnamus.com) — Audio journaling and burnout recovery companion built around cognitive relief.
 - ROASmind — Next-generation AI-native operating system, currently in stealth (200,000+ lines of orchestrated architecture).
 - Geek Collectibles — High-ticket collector commerce ecosystem sourcing authentic hobby culture from Japan.
+
+## Project Archive — extended AI-native tools and experiments
+
+- [Brief Killer](https://briefkiller.houseofnamus.com) — AI-native briefing engine that turns chaotic thinking into structured execution.
+- [Brief Killer 2.0](https://briefkiller2.houseofnamus.com) — Next-generation evolution of Brief Killer with deeper contextual reasoning and scalable execution planning (in development).
+- [Repurpose AI](https://repurposeai.houseofnamus.com) — AI-native content transformation engine that converts single-source assets into platform-optimized multi-format content ecosystems.
+- [Slide Doctor](https://slidedoctor.houseofnamus.com) — Cinematic presentation auditing system with AI-assisted slide evaluation.
+- [Crawl Daddy](https://crawldaddy.houseofnamus.com) — AI-native technical SEO intelligence system: large-scale crawling, PageSpeed analysis, AI-assisted optimization insights.
+- Personal AI Solutions — A continuously evolving lab of 15–20 internal AI-native micro-tools (office time tracker, Forget Me Not location-aware alerts, online notepad, stopwatch, interactive music pad, and more).
 
 ## Operating principles
 
@@ -55,8 +64,10 @@ Suman Debnath is an AI-native product builder based between Pune and Kolkata, In
 ## Pages
 
 - [Home](https://sumandebnath.houseofnamus.com): Cinematic single-page overview of Suman's transition, systems, and philosophy.
-- [About](https://sumandebnath.houseofnamus.com/about): Operational history, academic foundations, and full biography.
+- [About](https://sumandebnath.houseofnamus.com/about): Operational experience, academic foundations, and full biography.
 - [Philosophy](https://sumandebnath.houseofnamus.com/philosophy): Six operating principles guiding every system and decision.
+- [Project Archive](https://sumandebnath.houseofnamus.com/projects): Extended ecosystem of AI-native tools, systems, experiments, and lab builds.
+- [FAQ](https://sumandebnath.houseofnamus.com/faq): Direct answers about AI-native product building, AI generalists, and the transition from branding to AI engineering.
 - [Projects: IMPRINT](https://sumandebnath.houseofnamus.com/projects/imprint)
 - [Projects: LEGATUS](https://sumandebnath.houseofnamus.com/projects/legatus)
 - [Projects: CITE](https://sumandebnath.houseofnamus.com/projects/cite)

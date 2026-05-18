@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { m, AnimatePresence } from "framer-motion";
 import { Search, ArrowRight, X } from "lucide-react";
 
@@ -15,28 +16,60 @@ interface Command {
 
 const commands: Command[] = [
   {
-    id: "projects",
-    command: "/projects",
-    label: "View Projects",
-    description: "Explore featured work and builds",
+    id: "flagship-systems",
+    command: "/systems",
+    label: "Flagship Systems",
+    description: "Cinematic dossiers of the six flagship projects",
     href: "#projects",
     icon: "◈",
   },
   {
-    id: "systems",
-    command: "/systems",
+    id: "project-archive",
+    command: "/projects",
+    label: "Project Archive",
+    description: "Extended AI-native tools, experiments, and lab builds",
+    href: "/projects",
+    icon: "▦",
+  },
+  {
+    id: "stack",
+    command: "/stack",
     label: "Systems Stack",
     description: "AI tools, frameworks, and infrastructure",
     href: "#systems",
     icon: "⬡",
   },
   {
-    id: "experience",
-    command: "/experience",
-    label: "Experience",
-    description: "Professional timeline and evolution",
+    id: "evolution",
+    command: "/evolution",
+    label: "The Evolution",
+    description: "Transformation timeline from branding to AI-native systems",
     href: "#experience",
     icon: "◎",
+  },
+  {
+    id: "experience-history",
+    command: "/experience",
+    label: "Experience",
+    description: "Operational career history across brand and growth roles",
+    href: "#history",
+    icon: "◊",
+  },
+  {
+    id: "philosophy",
+    command: "/philosophy",
+    label: "AI Philosophy",
+    description: "Six operating principles guiding every system",
+    href: "#philosophy",
+    icon: "◇",
+  },
+  {
+    id: "faq",
+    command: "/faq",
+    label: "FAQ",
+    description: "Answers about AI-native product building and AI generalists",
+    href: "/faq",
+    icon: "?",
   },
   {
     id: "contact",
@@ -46,14 +79,6 @@ const commands: Command[] = [
     href: "#contact",
     icon: "→",
   },
-  {
-    id: "philosophy",
-    command: "/philosophy",
-    label: "AI Philosophy",
-    description: "Principles and thinking frameworks",
-    href: "#philosophy",
-    icon: "◇",
-  },
 ];
 
 export default function CommandPalette() {
@@ -61,6 +86,7 @@ export default function CommandPalette() {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
   const filtered = commands.filter(
     (c) =>
@@ -78,10 +104,19 @@ export default function CommandPalette() {
   const execute = useCallback(
     (command: Command) => {
       close();
-      const el = document.querySelector(command.href);
-      if (el) el.scrollIntoView({ behavior: "smooth" });
+      if (command.href.startsWith("#")) {
+        // Anchor — scroll if on homepage, otherwise route home first.
+        if (typeof window !== "undefined" && window.location.pathname !== "/") {
+          router.push("/" + command.href);
+          return;
+        }
+        const el = document.querySelector(command.href);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      } else {
+        router.push(command.href);
+      }
     },
-    [close]
+    [close, router]
   );
 
   // Global keyboard shortcut + custom event from nav

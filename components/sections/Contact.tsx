@@ -176,10 +176,32 @@ export default function Contact() {
             </p>
           </div>
 
-          {/* Center */}
-          <p className="font-manrope text-xs text-[#1A1A1A]/60 text-center font-medium">
-            Built with intelligence. Designed with intent.
-          </p>
+          {/* Center — utility links */}
+          <nav
+            aria-label="Footer utility"
+            className="flex items-center gap-4 font-manrope text-xs text-[#1A1A1A]/60 font-medium"
+          >
+            <a
+              href="/projects"
+              className="hover:text-[#1A1A1A] transition-colors"
+            >
+              Projects
+            </a>
+            <span className="text-[#1A1A1A]/30">·</span>
+            <a
+              href="/faq"
+              className="hover:text-[#1A1A1A] transition-colors"
+            >
+              FAQ
+            </a>
+            <span className="text-[#1A1A1A]/30">·</span>
+            <a
+              href="/about"
+              className="hover:text-[#1A1A1A] transition-colors"
+            >
+              About
+            </a>
+          </nav>
 
           {/* Right */}
           <p className="font-manrope text-xs font-semibold text-[#1A1A1A]/60">
