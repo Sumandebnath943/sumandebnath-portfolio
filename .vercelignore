@@ -1,0 +1,15 @@
+# Internal dev / agent docs — shipped in git for collaboration history,
+# but not needed at Vercel build time.
+analysis_results.md
+handoff.md
+project_memory.md
+
+# VS Code workspace file (local-only)
+sumandebnath.code-workspace
+
+# Claude Code worktree scratch space (also in .gitignore)
+.claude/
+
+# Generated locally during development / build verification
+.next/
+node_modules/
