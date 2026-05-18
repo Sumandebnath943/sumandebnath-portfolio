@@ -3,7 +3,7 @@ import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import Contact from "@/components/sections/Contact";
-import { faqs, buildFaqPageJsonLd } from "@/lib/faqs";
+import { allFaqs, buildFaqPageJsonLd } from "@/lib/faqs";
 import { SITE_URL } from "@/lib/projects";
 
 export const metadata: Metadata = {
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = buildFaqPageJsonLd(faqs);
+const jsonLd = buildFaqPageJsonLd(allFaqs);
 
 export default function FAQPage() {
   return (
@@ -55,7 +55,7 @@ export default function FAQPage() {
 
         <section className="max-w-5xl mx-auto px-6 md:px-10 pb-32">
           <div className="divide-y divide-black/[0.08]">
-            {faqs.map((f, i) => (
+            {allFaqs.map((f, i) => (
               <details key={i} className="group py-7" open={i === 0}>
                 <summary className="flex items-start justify-between cursor-pointer list-none gap-6">
                   <h2 className="font-manrope font-medium text-lg md:text-xl text-[#0A0A0A]">
