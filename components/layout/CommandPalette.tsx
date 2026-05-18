@@ -105,9 +105,11 @@ export default function CommandPalette() {
     (command: Command) => {
       close();
       if (command.href.startsWith("#")) {
-        // Anchor — scroll if on homepage, otherwise route home first.
         if (typeof window !== "undefined" && window.location.pathname !== "/") {
-          router.push("/" + command.href);
+          // Sub-page → home anchor: full navigation so the browser
+          // resolves the hash and scrolls. SPA router.push doesn't
+          // trigger native hash scrolling under App Router.
+          window.location.href = "/" + command.href;
           return;
         }
         const el = document.querySelector(command.href);

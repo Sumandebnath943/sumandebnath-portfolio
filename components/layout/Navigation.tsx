@@ -28,10 +28,12 @@ export default function Navigation() {
   const handleNavClick = (href: string) => {
     setMobileOpen(false);
     if (href.startsWith("#")) {
-      // In-page anchor: smooth scroll if we're on the homepage; otherwise
-      // route home and let the browser resolve the hash after navigation.
       if (typeof window !== "undefined" && window.location.pathname !== "/") {
-        router.push("/" + href);
+        // Coming from a sub-page (/about, /projects, /faq, etc.): force a
+        // real navigation so the browser resolves the hash and scrolls.
+        // router.push("/#section") doesn't trigger native hash scroll
+        // under App Router SPA navigation.
+        window.location.href = "/" + href;
         return;
       }
       const el = document.querySelector(href);
@@ -40,6 +42,14 @@ export default function Navigation() {
       // Cross-route link (e.g. /projects)
       router.push(href);
     }
+  };
+
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (typeof window !== "undefined" && window.location.pathname === "/") {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    // On any sub-page, let the browser follow href="/" naturally.
   };
 
   return (
@@ -56,7 +66,9 @@ export default function Navigation() {
         <nav className="flex items-center justify-between">
           {/* Logo */}
           <m.a
-            href="#"
+            href="/"
+            onClick={handleLogoClick}
+            aria-label="Suman Debnath — home"
             className="flex items-center gap-3 group px-2"
             whileHover={{ scale: 1.02 }}
           >
@@ -101,7 +113,20 @@ export default function Navigation() {
               <span>⌘K</span>
             </m.button>
             <a
-              href="#contact"
+              href="/#contact"
+              onClick={(e) => {
+                if (
+                  typeof window !== "undefined" &&
+                  window.location.pathname === "/"
+                ) {
+                  e.preventDefault();
+                  document
+                    .querySelector("#contact")
+                    ?.scrollIntoView({ behavior: "smooth" });
+                }
+                // On sub-pages, allow the default navigation so the
+                // browser resolves /#contact and scrolls to it on home.
+              }}
               className="px-4 py-1.5 rounded-full bg-[#f5f5f7] text-black text-[13px] font-medium hover:bg-white transition-colors"
             >
               Let&apos;s Talk
