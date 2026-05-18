@@ -1,0 +1,65 @@
+# Suman Debnath
+
+> AI-Native Product Builder · AI Generalist · AI-Native Software Developer.
+> Operator with a decade in brand and digital marketing now building intelligent SaaS systems, agentic workflows, and AI-assisted product architectures.
+
+Suman Debnath is an AI-native product builder based between Pune and Kolkata, India. Formerly a Brand & Digital Marketing Manager with a decade of operational experience (Nivea India, CBS Ventures, Pune Institute of Business Management), he transitioned in 2023–2025 into AI-native systems thinking and is now shipping intelligent products through orchestrated AI engineering ecosystems (Claude Code, Antigravity, Cursor, Codex, Lovable). His work spans identity preservation, digital inheritance, tactical career intelligence, burnout recovery, collector commerce, and a next-generation AI-native operating system.
+
+## Identity & contact
+
+- Name: Suman Debnath
+- Roles: AI-Native Product Builder, AI Generalist, AI-Native Software Developer, AI Product Engineer
+- Location: Pune & Kolkata, India
+- Email: sumandebnath944@gmail.com
+- Website: https://sumandebnath.houseofnamus.com
+- GitHub: https://github.com/Sumandebnath943
+- LinkedIn: https://linkedin.com/in/houseofnamus
+- X / Twitter: https://x.com/iamSdebnath
+
+## Core capabilities
+
+- AI-native product engineering with Claude Code, Antigravity, Cursor, Codex, Lovable
+- Multi-model LLM orchestration across ChatGPT, Claude, Gemini
+- Prompt engineering, context engineering, agentic systems, AI workflows
+- React, Next.js, TypeScript, Node.js, Prisma, Supabase, Vercel
+- Automation infrastructure with n8n, Make.com, Zapier
+- Brand strategy, digital marketing, SEO/SEM, paid acquisition, growth systems
+- Design systems and AI-assisted creative production
+
+## Selected systems
+
+- [IMPRINT](https://imprint.houseofnamus.com) — Behavioral cloning and identity preservation engine defending the human mind against AI dependency.
+- [LEGATUS](https://legatus.houseofnamus.com) — Immutable digital inheritance vault with AES-256 / RSA-2048 security and multi-level nominee permissions.
+- [CITE](https://cite.houseofnamus.com) — Corporate tactical intelligence and entity extraction system for professional survival in the AI era.
+- [EMBER](https://ember.houseofnamus.com) — Audio journaling and burnout recovery companion built around cognitive relief.
+- ROASmind — Next-generation AI-native operating system, currently in stealth (200,000+ lines of orchestrated architecture).
+- Geek Collectibles — High-ticket collector commerce ecosystem sourcing authentic hobby culture from Japan.
+
+## Operating principles
+
+1. Intelligence is infrastructure — AI is becoming the foundational layer, not a feature.
+2. Systems compound — build environments where solutions continuously emerge.
+3. Human identity must survive automation — preserve judgment, taste, and instinct inside automated systems.
+4. Craft still matters — execution without taste creates noise.
+5. Speed is a creative advantage — AI-native environments collapse the gap between thought and execution.
+6. The operator evolves — design, strategy, engineering, automation, and AI orchestration converge into one model.
+
+## Education
+
+- BA English (Hons.), West Bengal State University, 2013–2016
+- MBA Marketing, Pune Institute of Business Management, 2016–2018
+- PGP Strategic Digital Marketing, Great Lakes, 2023
+- Certified in Prompt & Context Engineering, 2025
+- Advanced Certification in Agentic & Generative AI (currently pursuing)
+
+## Pages
+
+- [Home](https://sumandebnath.houseofnamus.com): Cinematic single-page overview of Suman's transition, systems, and philosophy.
+- [About](https://sumandebnath.houseofnamus.com/about): Operational history, academic foundations, and full biography.
+- [Philosophy](https://sumandebnath.houseofnamus.com/philosophy): Six operating principles guiding every system and decision.
+- [Projects: IMPRINT](https://sumandebnath.houseofnamus.com/projects/imprint)
+- [Projects: LEGATUS](https://sumandebnath.houseofnamus.com/projects/legatus)
+- [Projects: CITE](https://sumandebnath.houseofnamus.com/projects/cite)
+- [Projects: ROASmind](https://sumandebnath.houseofnamus.com/projects/roasmind)
+- [Projects: Geek Collectibles](https://sumandebnath.houseofnamus.com/projects/geek-collectibles)
+- [Projects: EMBER](https://sumandebnath.houseofnamus.com/projects/ember)
