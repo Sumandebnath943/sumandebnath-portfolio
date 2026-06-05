@@ -26,15 +26,15 @@ export default function ResumeMascot() {
 
     // Hard to catch the first 2 times
     if (hoverCount < 2) {
-      // Jump far away (between 100px and 300px away, mostly left/up)
-      const jumpX = -(Math.random() * 200 + 100); // move left
-      const jumpY = -(Math.random() * 200 + 50); // move up
+      // Jump far away (between 150px and 400px away, mostly left/up)
+      const jumpX = -(Math.random() * 300 + 150); // move left
+      const jumpY = -(Math.random() * 300 + 100); // move up
       
       setPosition({ x: position.x + jumpX, y: position.y + jumpY });
       setHoverCount((prev) => prev + 1);
     } else if (hoverCount === 2) {
       // 3rd time is slightly evasive
-      setPosition({ x: position.x - 50, y: position.y - 20 });
+      setPosition({ x: position.x - 80, y: position.y - 40 });
       setHoverCount((prev) => prev + 1);
     }
     // After 3 times, it surrenders and lets the user click
@@ -89,13 +89,24 @@ export default function ResumeMascot() {
         </AnimatePresence>
 
         <m.div
-          whileHover={{ scale: hoverCount >= 3 ? 1.05 : 1 }}
-          whileTap={{ scale: 0.9 }}
-          onHoverStart={handleHover}
-          onClick={handleClick}
-          className={`cursor-pointer ${isCaught ? "animate-pulse" : ""}`}
-          style={{ width: 80, height: 90 }}
+          animate={{
+            y: [0, -15, 0],
+            rotate: [0, -2, 2, 0],
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
         >
+          <m.div
+            whileHover={{ scale: hoverCount >= 3 ? 1.05 : 1 }}
+            whileTap={{ scale: 0.9 }}
+            onMouseEnter={handleHover}
+            onClick={handleClick}
+            className={`cursor-pointer drop-shadow-xl ${isCaught ? "animate-pulse" : ""}`}
+            style={{ width: 90, height: 100 }}
+          >
           {/* Claude-style Robot SVG */}
           <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
             
@@ -162,6 +173,7 @@ export default function ResumeMascot() {
             </m.g>
 
           </svg>
+        </m.div>
         </m.div>
       </m.div>
     </div>
