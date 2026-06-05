@@ -32,13 +32,12 @@ function StatusPill({ status, accent }: { status: ArchiveProject["status"]; acce
   );
 }
 
-// ── POSTER (with elegant fallback) ─────────────────────────────────────────
 function PosterArea({ project }: { project: ArchiveProject }) {
   const [errored, setErrored] = useState(false);
   const hasPoster = !!project.poster && !errored;
 
   return (
-    <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden bg-[#0A0A0C] border border-white/[0.06]">
+    <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden bg-[#0A0A0C] border border-white/[0.06]">
       {hasPoster ? (
         <Image
           src={project.poster!}
@@ -51,7 +50,7 @@ function PosterArea({ project }: { project: ArchiveProject }) {
       ) : (
         // Fallback: atmospheric gradient block tinted with the project's accent.
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 flex items-center justify-center"
           style={{
             background: `radial-gradient(ellipse at 30% 20%, ${project.accent}22 0%, transparent 60%), radial-gradient(ellipse at 80% 80%, ${
               project.accentB ?? project.accent
@@ -67,18 +66,16 @@ function PosterArea({ project }: { project: ArchiveProject }) {
               backgroundSize: "32px 32px",
             }}
           />
-          {/* Centered mark — logo if present, else name in serif */}
-          <div className="absolute inset-0 flex items-center justify-center">
+          {/* Centered mark — fixed bounding box so square and wide logos scale evenly */}
+          <div className="relative z-10 w-[200px] h-[100px] flex items-center justify-center opacity-85 mix-blend-screen">
             {project.logo ? (
-              <div className="relative w-3/5 max-w-[180px] aspect-[3/1] opacity-80 mix-blend-screen">
-                <Image
-                  src={project.logo}
-                  alt={`${project.name} logo`}
-                  fill
-                  sizes="180px"
-                  className="object-contain"
-                />
-              </div>
+              <Image
+                src={project.logo}
+                alt={`${project.name} logo`}
+                fill
+                sizes="200px"
+                className="object-contain"
+              />
             ) : (
               <p
                 className="font-serif italic text-2xl md:text-3xl tracking-tight"
@@ -108,12 +105,12 @@ function LogoBadge({ project }: { project: ArchiveProject }) {
   if (!project.logo || errored) return null;
 
   return (
-    <div className="relative h-10 w-28 mix-blend-screen opacity-90">
+    <div className="relative h-8 w-32 mix-blend-screen opacity-90">
       <Image
         src={project.logo}
         alt={`${project.name} project mark`}
         fill
-        sizes="112px"
+        sizes="128px"
         className="object-contain object-left"
         onError={() => setErrored(true)}
       />
