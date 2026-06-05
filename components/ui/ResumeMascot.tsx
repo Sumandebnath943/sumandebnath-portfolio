@@ -11,10 +11,10 @@ export default function ResumeMascot() {
   const [isPeeking, setIsPeeking] = useState(false);
 
   const phrases = [
-    "Catch me for the resume!",
-    "I optimize everything for speed!",
-    "My response time is under 20ms!",
-    "Okay, you caught me. Take it!"
+    "I have Suman's resume! Come get it.",
+    "Whoops! Suman told me to play hard to get.",
+    "Missed me! Are you using a trackpad?",
+    "Okay, I'm tired. You can have the PDF now."
   ];
 
   // Initial delay before peeking
