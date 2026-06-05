@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import { m, AnimatePresence } from "framer-motion";
 
 export default function ResumeMascot() {
-  // Use absolute pixel coordinates for right and bottom instead of x/y transforms
-  const [pos, setPos] = useState({ right: 24, bottom: 24 });
+  // Use standard x, y transforms for reliable movement
+  const [position, setPosition] = useState({ x: 0, y: 0 });
   const [hoverCount, setHoverCount] = useState(0);
   const [isCaught, setIsCaught] = useState(false);
   const [isPeeking, setIsPeeking] = useState(false);
@@ -26,20 +26,20 @@ export default function ResumeMascot() {
     if (isCaught) return;
 
     if (hoverCount < 3) {
-      // Jump further away by increasing right and bottom values
-      const jumpRight = Math.random() * 300 + 200; // jump 200-500px leftwards
-      const jumpBottom = Math.random() * 250 + 150; // jump 150-400px upwards
+      // Big evasive jump safely up and left
+      const jumpX = -(Math.random() * 300 + 200); // -200 to -500px left
+      const jumpY = -(Math.random() * 250 + 150); // -150 to -400px up
       
-      setPos({ 
-        right: pos.right + jumpRight, 
-        bottom: pos.bottom + jumpBottom 
+      setPosition({ 
+        x: position.x + jumpX, 
+        y: position.y + jumpY 
       });
       setHoverCount((prev) => prev + 1);
     } else if (hoverCount === 3) {
       // Tiny exhaustion jump
-      setPos({ 
-        right: pos.right + 50, 
-        bottom: pos.bottom + 20 
+      setPosition({ 
+        x: position.x - 50, 
+        y: position.y - 20 
       });
       setHoverCount((prev) => prev + 1);
     }
@@ -59,7 +59,7 @@ export default function ResumeMascot() {
       setTimeout(() => {
         setIsCaught(false);
         setHoverCount(0);
-        setPos({ right: 24, bottom: 24 });
+        setPosition({ x: 0, y: 0 });
       }, 3000);
     }, 600);
   };
@@ -68,10 +68,12 @@ export default function ResumeMascot() {
 
   return (
     <div className="fixed inset-0 pointer-events-none z-[9999] overflow-hidden">
-      <m.div
-        animate={{ right: pos.right, bottom: pos.bottom }}
-        transition={{ type: "spring", stiffness: 300, damping: 25 }}
-        className="absolute pointer-events-auto"
+      <div
+        className="absolute bottom-6 right-6 pointer-events-auto"
+        style={{
+          transform: `translate(${position.x}px, ${position.y}px)`,
+          transition: "transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)", // bouncy spring-like CSS transition
+        }}
       >
         <AnimatePresence>
           {showTooltip && hoverCount === 0 && (
@@ -179,7 +181,7 @@ export default function ResumeMascot() {
             </svg>
           </m.div>
         </m.div>
-      </m.div>
+      </div>
     </div>
   );
 }
