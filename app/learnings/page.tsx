@@ -10,24 +10,37 @@ import { domains, competencies, experiences, type Experience } from "@/lib/learn
 import "./learnings.css";
 
 /* ─────────────────────────────────────────────────────────────── */
-/* PDF helpers — use window.pdfjsLib loaded from CDN <Script>      */
+/* PDF helpers — window.pdfjsLib resolved via a promise            */
 /* ─────────────────────────────────────────────────────────────── */
 
-// Typed access to the CDN global
-declare global {
-  interface Window {
-    pdfjsLib: {
-      GlobalWorkerOptions: { workerSrc: string };
-      getDocument(src: string): { promise: Promise<PDFDocumentProxy> };
-    };
-  }
+// Module-level promise. Resolves the moment the CDN <Script> fires
+// onLoad. Any renderPdfToCanvas call simply awaits it — no race.
+let _pdfjsResolve: ((lib: PdfjsLib) => void) | null = null;
+const _pdfjsReady = new Promise<PdfjsLib>((res) => { _pdfjsResolve = res; });
+
+interface PdfjsLib {
+  GlobalWorkerOptions: { workerSrc: string };
+  getDocument(src: string): { promise: Promise<PDFDocumentProxy> };
 }
 interface PDFDocumentProxy {
   getPage(n: number): Promise<PDFPageProxy>;
 }
 interface PDFPageProxy {
   getViewport(opts: { scale: number }): { width: number; height: number };
-  render(opts: { canvasContext: CanvasRenderingContext2D; viewport: { width: number; height: number } }): { promise: Promise<void> };
+  render(opts: {
+    canvasContext: CanvasRenderingContext2D;
+    viewport: { width: number; height: number };
+  }): { promise: Promise<void> };
+}
+
+// Called from <Script onLoad> — resolves the promise for all waiters
+function onPdfjsScriptLoad() {
+  if (typeof window !== "undefined" && (window as any).pdfjsLib) {
+    const lib = (window as any).pdfjsLib as PdfjsLib;
+    lib.GlobalWorkerOptions.workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+    _pdfjsResolve?.(lib);
+  }
 }
 
 async function renderPdfToCanvas(
@@ -36,8 +49,7 @@ async function renderPdfToCanvas(
   scale = 1.5
 ) {
   try {
-    const lib = window.pdfjsLib;
-    if (!lib) return; // CDN not loaded yet
+    const lib = await _pdfjsReady; // waits for CDN — never races
     const encoded = pdfUrl
       .split("/")
       .map((p) => encodeURIComponent(p))
@@ -427,12 +439,7 @@ export default function LearningsPage() {
       <Script
         src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"
         strategy="afterInteractive"
-        onLoad={() => {
-          if (typeof window !== "undefined" && window.pdfjsLib) {
-            window.pdfjsLib.GlobalWorkerOptions.workerSrc =
-              "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-          }
-        }}
+        onLoad={onPdfjsScriptLoad}
       />
 
       <Navigation />
