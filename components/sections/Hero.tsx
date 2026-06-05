@@ -77,13 +77,13 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col sm:flex-row items-start sm:items-center gap-4"
+            className="flex flex-col sm:flex-row items-start sm:items-center gap-4 flex-wrap"
           >
             <a
-              href="#systems"
+              href="#experience-narrative"
               className="group flex items-center justify-center gap-2 bg-[#f5f5f7] text-black px-5 py-3 lg:px-8 lg:py-4 rounded-full text-[13px] lg:text-[15px] font-medium transition-all hover:bg-white hover:scale-[1.02] active:scale-[0.98]"
             >
-              Explore Systems
+              Check Experience
               <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
             </a>
             <a
@@ -92,7 +92,12 @@ export default function Hero() {
             >
               View Projects
             </a>
-
+            <a
+              href="#history"
+              className="flex items-center justify-center px-5 py-3 lg:px-8 lg:py-4 rounded-full text-[13px] lg:text-[15px] font-medium text-[#f5f5f7] bg-white/[0.03] border border-white/[0.08] hover:bg-white/[0.08] transition-colors"
+            >
+              Career Journey
+            </a>
           </m.div>
         </div>
 
