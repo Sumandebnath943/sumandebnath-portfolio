@@ -36,13 +36,17 @@ export default function Hero() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="flex items-center gap-2 mb-6"
+            className="flex flex-wrap items-center gap-2 mb-6"
           >
-            <span className="text-[13px] font-medium text-[#86868b] tracking-wide">
+            <span className="text-[13px] font-medium text-[#86868b] tracking-wide whitespace-nowrap">
               Suman Debnath
             </span>
-            <span className="hidden sm:inline w-1 h-1 rounded-full bg-[#86868b]/50" />
-            <span className="hidden sm:inline text-[13px] font-medium text-[#86868b] tracking-wide">
+            <span className="hidden sm:inline w-1 h-1 rounded-full bg-[#86868b]/50 shrink-0" />
+            <span className="hidden sm:inline text-[13px] font-medium text-[#86868b] tracking-wide whitespace-nowrap">
+              Senior Brand Marketing Manager
+            </span>
+            <span className="hidden sm:inline w-1 h-1 rounded-full bg-[#86868b]/50 shrink-0" />
+            <span className="hidden sm:inline text-[13px] font-medium text-[#86868b] tracking-wide whitespace-nowrap">
               AI-Native Product Builder
             </span>
           </m.div>
