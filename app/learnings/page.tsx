@@ -201,31 +201,44 @@ function ExperienceModal({
   exp: Experience | null;
   onClose: () => void;
 }) {
-  const [activePdfUrl, setActivePdfUrl] = useState<string | null>(null);
   const [activeIdx, setActiveIdx] = useState(0);
+  // Use a ref instead of state so openViewer can read the current URL
+  // without waiting for a React re-render cycle
+  const activePdfUrlRef = useRef<string | null>(null);
   const activeCertRef = useRef<HTMLCanvasElement | null>(null);
   const thumbRefs = useRef<(HTMLCanvasElement | null)[]>([]);
   const [viewerOpen, setViewerOpen] = useState(false);
-  const viewerImgRef = useRef<HTMLDivElement>(null);
-  const viewerCanvasRef = useRef<HTMLCanvasElement>(null);
+  const viewerCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const [scale, setScale] = useState(1);
   const [tx, setTx] = useState(0);
   const [ty, setTy] = useState(0);
   const isDragging = useRef(false);
   const dragStart = useRef({ x: 0, y: 0 });
 
-  // Render active cert
+  // Reset state whenever a new experience is opened
   useEffect(() => {
-    if (!exp || !activeCertRef.current) return;
+    if (!exp) return;
+    setActiveIdx(0);
+    setViewerOpen(false);
+    setScale(1);
+    setTx(0);
+    setTy(0);
+  }, [exp]);
+
+  // Render active cert whenever experience or selected index changes
+  useEffect(() => {
+    if (!exp) return;
     const url = exp.credentials[activeIdx]?.pdf;
     if (!url) return;
-    setActivePdfUrl(url);
-    const ctx = activeCertRef.current.getContext("2d");
-    if (ctx) ctx.clearRect(0, 0, activeCertRef.current.width, activeCertRef.current.height);
-    renderPdfToCanvas(url, activeCertRef.current, 1.5);
+    activePdfUrlRef.current = url; // keep ref in sync
+    const canvas = activeCertRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+    renderPdfToCanvas(url, canvas, 1.5);
   }, [exp, activeIdx]);
 
-  // Render thumbnails
+  // Render thumbnails once per experience
   useEffect(() => {
     if (!exp) return;
     exp.credentials.forEach((cred, i) => {
@@ -234,13 +247,26 @@ function ExperienceModal({
     });
   }, [exp]);
 
-  // Render viewer
-  useEffect(() => {
-    if (!viewerOpen || !activePdfUrl || !viewerCanvasRef.current) return;
-    renderPdfToCanvas(activePdfUrl, viewerCanvasRef.current, 2.0);
-  }, [viewerOpen, activePdfUrl]);
+  // Open fullscreen viewer — render directly without waiting for state
+  const openViewer = useCallback(() => {
+    const url = activePdfUrlRef.current ?? exp?.credentials[activeIdx]?.pdf;
+    if (!url) return;
+    // Reset transforms
+    setScale(1);
+    setTx(0);
+    setTy(0);
+    setViewerOpen(true);
+    // Render on next tick so viewerCanvasRef.current is in its active state
+    requestAnimationFrame(() => {
+      const canvas = viewerCanvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+      renderPdfToCanvas(url, canvas, 2.0);
+    });
+  }, [exp, activeIdx]);
 
-  // Keyboard
+  // Keyboard shortcuts
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (viewerOpen) {
@@ -256,9 +282,12 @@ function ExperienceModal({
   }, [viewerOpen, exp, onClose]);
 
   const isActive = !!exp;
-  const domainName = exp ? (domains.find((d) => d.id === exp.domain)?.name ?? exp.domain) : "";
+  const domainName = exp
+    ? (domains.find((d) => d.id === exp.domain)?.name ?? exp.domain)
+    : "";
 
-  if (!exp && !isActive) return null;
+  if (!isActive) return null;
+
 
   return (
     <>
@@ -274,8 +303,8 @@ function ExperienceModal({
           <div className="lp-modal-gallery">
             <div
               className="lp-modal-active-cert"
-              onClick={() => setViewerOpen(true)}
-              style={{ flex: 1, minHeight: 0 }}
+              onClick={openViewer}
+              style={{ flex: 1, minHeight: 0, cursor: "zoom-in" }}
             >
               <canvas
                 ref={activeCertRef}
@@ -347,7 +376,6 @@ function ExperienceModal({
       >
         <button className="lp-viewer-close" onClick={() => setViewerOpen(false)} aria-label="Close viewer">×</button>
         <div
-          ref={viewerImgRef}
           className="lp-viewer-img-container"
           style={{ transform: `translate(${tx}px, ${ty}px) scale(${scale})` }}
           onMouseDown={(e) => {
