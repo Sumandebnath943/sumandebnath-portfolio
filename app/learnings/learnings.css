@@ -7,7 +7,9 @@
  * only apply inside the learnings page wrapper.
  */
 
-.lp-root {
+.lp-root,
+.lp-modal-overlay,
+.lp-viewer-overlay {
   /* ── Core Palette ───────────────────────────────────────── */
   --lp-bg-primary:    #F5F3EE;
   --lp-bg-secondary:  #ECEAE3;
@@ -79,9 +81,12 @@
   --lp-bg-claude-ecosystem:       rgba(139, 138, 32, 0.12);
 
   font-family: var(--lp-font-sans);
-  background-color: var(--lp-bg-primary);
   color: var(--lp-text-primary);
   line-height: 1.5;
+}
+
+.lp-root {
+  background-color: var(--lp-bg-primary);
   overflow-x: hidden;
 }
 
