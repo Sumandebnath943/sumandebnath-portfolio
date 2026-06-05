@@ -26,9 +26,13 @@ export default function ResumeMascot() {
     if (isCaught) return;
 
     if (hoverCount < 3) {
-      // Big evasive jump safely up and left
-      const jumpX = -(Math.random() * 300 + 200); // -200 to -500px left
-      const jumpY = -(Math.random() * 250 + 150); // -150 to -400px up
+      // Calculate random jump distances
+      const magnitudeX = Math.random() * 300 + 200; // 200-500px
+      const magnitudeY = Math.random() * 250 + 150; // 150-400px
+      
+      // If he goes too far left/up, make him jump back to the right/down!
+      const jumpX = position.x < -500 ? magnitudeX : -magnitudeX;
+      const jumpY = position.y < -300 ? magnitudeY : -magnitudeY;
       
       setPosition({ 
         x: position.x + jumpX, 
