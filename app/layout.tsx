@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope, Instrument_Serif } from "next/font/google";
 import Script from "next/script";
+import ResumeMascot from "@/components/ui/ResumeMascot";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -299,6 +300,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
         {children}
+        <ResumeMascot />
       </body>
     </html>
   );
