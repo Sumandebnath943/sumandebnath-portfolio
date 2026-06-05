@@ -12,6 +12,7 @@ const navLinks = [
   { label: "Philosophy", href: "#philosophy" },
   { label: "Experience", href: "#history" },
   { label: "Projects", href: "/projects" },
+  { label: "Learnings", href: "/learnings" },
 ];
 
 export default function Navigation() {
