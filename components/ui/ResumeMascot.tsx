@@ -9,15 +9,18 @@ export default function ResumeMascot() {
   const [hoverCount, setHoverCount] = useState(0);
   const [isCaught, setIsCaught] = useState(false);
   const [isPeeking, setIsPeeking] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(false);
+
+  const phrases = [
+    "Catch me for the resume!",
+    "I optimize everything for speed!",
+    "My response time is under 20ms!",
+    "Okay, you caught me. Take it!"
+  ];
 
   // Initial delay before peeking
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsPeeking(true);
-      setShowTooltip(true);
-      // Hide tooltip after a few seconds
-      setTimeout(() => setShowTooltip(false), 5000);
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
@@ -26,13 +29,13 @@ export default function ResumeMascot() {
     if (isCaught) return;
 
     if (hoverCount < 3) {
-      // Calculate random jump distances
-      const magnitudeX = Math.random() * 300 + 200; // 200-500px
-      const magnitudeY = Math.random() * 250 + 150; // 150-400px
+      // Small horizontal jumps (150-250px left or right), minimal vertical movement
+      const magnitudeX = Math.random() * 100 + 150; 
+      const magnitudeY = Math.random() * 20 + 10; 
       
-      // If he goes too far left/up, make him jump back to the right/down!
-      const jumpX = position.x < -500 ? magnitudeX : -magnitudeX;
-      const jumpY = position.y < -300 ? magnitudeY : -magnitudeY;
+      // Ping-pong horizontally to stay on screen safely
+      const jumpX = position.x < -300 ? magnitudeX : -magnitudeX;
+      const jumpY = position.y < -100 ? magnitudeY : -magnitudeY;
       
       setPosition({ 
         x: position.x + jumpX, 
@@ -40,10 +43,10 @@ export default function ResumeMascot() {
       });
       setHoverCount((prev) => prev + 1);
     } else if (hoverCount === 3) {
-      // Tiny exhaustion jump
+      // Exhaustion
       setPosition({ 
-        x: position.x - 50, 
-        y: position.y - 20 
+        x: position.x - 20, 
+        y: position.y - 10 
       });
       setHoverCount((prev) => prev + 1);
     }
@@ -59,7 +62,6 @@ export default function ResumeMascot() {
       link.click();
       document.body.removeChild(link);
       
-      // Reset after a few seconds
       setTimeout(() => {
         setIsCaught(false);
         setHoverCount(0);
@@ -76,23 +78,24 @@ export default function ResumeMascot() {
         className="absolute bottom-6 right-6 pointer-events-auto"
         style={{
           transform: `translate(${position.x}px, ${position.y}px)`,
-          transition: "transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)", // bouncy spring-like CSS transition
+          transition: "transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)", 
         }}
       >
-        <AnimatePresence>
-          {showTooltip && hoverCount === 0 && (
+        <AnimatePresence mode="wait">
+          {!isCaught && (
             <m.div
+              key={hoverCount}
               initial={{ opacity: 0, y: 10, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="absolute -top-12 -left-16 bg-white border border-[#E0CC70]/50 shadow-lg rounded-2xl px-4 py-2 pointer-events-none"
+              className="absolute -top-14 left-1/2 -translate-x-1/2 bg-white border border-[#E0CC70]/50 shadow-lg rounded-2xl px-4 py-2 pointer-events-none z-10"
             >
               <div className="relative">
                 <p className="font-manrope text-xs text-[#0A0A0A] font-medium whitespace-nowrap">
-                  Catch me for the resume!
+                  {phrases[Math.min(hoverCount, phrases.length - 1)]}
                 </p>
                 {/* Speech bubble pointer */}
-                <div className="absolute -bottom-3 right-4 w-2 h-2 bg-white border-b border-r border-[#E0CC70]/50 transform rotate-45" />
+                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-2 h-2 bg-white border-b border-r border-[#E0CC70]/50 transform rotate-45" />
               </div>
             </m.div>
           )}
