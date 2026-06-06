@@ -58,8 +58,10 @@ export default function Hero() {
         Suman Debnath — AI-Native Product Builder, AI Generalist, and AI-Native Software Developer.
       </h1>
 
-      {/* ── Portrait — right side, bleeds off edge, spans full hero height ─ */}
-      <div className="absolute top-0 right-0 bottom-0 w-[92%] sm:w-[58%] lg:w-[44%] pointer-events-none select-none">
+      {/* ── Portrait — right side, bleeds off edge, spans full hero height.
+            On mobile it's nudged down so the face sits in the clear band
+            between the meta text and the headline. ──────────────────────── */}
+      <div className="absolute top-0 right-0 bottom-0 w-[92%] sm:w-[58%] lg:w-[44%] translate-y-[7%] lg:translate-y-0 pointer-events-none select-none">
         <div className="relative w-full h-full">
           <Image
             src="/images/suman.png"
@@ -111,6 +113,11 @@ export default function Hero() {
           </div>
         </div>
       </div>
+
+      {/* ── Bottom scrim — keeps the headline legible over the portrait.
+            Strong on mobile (text sits in front of the face) and lighter on
+            desktop (the text is over the dark left side). ──────────────── */}
+      <div className="absolute inset-x-0 bottom-0 h-[58%] z-[5] pointer-events-none bg-gradient-to-t from-[#0A0A0C] via-[#0A0A0C]/85 to-transparent lg:h-[48%] lg:via-[#0A0A0C]/35" />
 
       {/* ── Top status bar ─────────────────────────────────────────────── */}
       <m.div
@@ -179,17 +186,6 @@ export default function Hero() {
           </p>
         </m.div>
 
-        {/* Copyright */}
-        <m.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.9, delay: 0.45 }}
-          className="hidden md:block md:col-span-3 md:col-start-10 text-right"
-        >
-          <span className="font-mono text-[11px] tracking-[0.15em] text-[#9a8f86] whitespace-nowrap">
-            ©2026 SUMAN DEBNATH
-          </span>
-        </m.div>
       </div>
 
       {/* ── Giant headline — fills remaining space, bottom-aligned ──────── */}
