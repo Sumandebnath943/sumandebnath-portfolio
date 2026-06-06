@@ -88,12 +88,14 @@ export default async function handler(req, res) {
   // Take only the last 10 messages
   const recentMessages = messages.slice(-10);
 
-  // Sanitize user messages
+  // Sanitize user messages — destructure to only role+content so UI-only
+  // fields (e.g. animating) never reach the Groq API
   const sanitizedMessages = recentMessages.map((msg) => {
-    if (msg.role === 'user') {
-      return { ...msg, content: sanitizeInput(msg.content) };
-    }
-    return msg;
+    const { role, content } = msg;
+    return {
+      role,
+      content: role === 'user' ? sanitizeInput(content) : (content ?? ''),
+    };
   });
 
   try {
