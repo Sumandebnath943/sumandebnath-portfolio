@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Manrope, Instrument_Serif, Anton } from "next/font/google";
 import Script from "next/script";
 import ResumeMascot from "@/components/ui/ResumeMascot";
+import ChatWidget from "../components/ChatWidget";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -309,6 +310,7 @@ export default function RootLayout({
         />
         {children}
         <ResumeMascot />
+        <ChatWidget />
       </body>
     </html>
   );

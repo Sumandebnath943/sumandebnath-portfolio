@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { m, AnimatePresence } from "framer-motion";
 
 export default function ResumeMascot() {
@@ -9,6 +9,13 @@ export default function ResumeMascot() {
   const [hoverCount, setHoverCount] = useState(0);
   const [isCaught, setIsCaught] = useState(false);
   const [isPeeking, setIsPeeking] = useState(false);
+  const [isJolting, setIsJolting] = useState(false);
+  const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const resetToHome = useCallback(() => {
+    setPosition({ x: 0, y: 0 });
+    setHoverCount(0);
+  }, []);
 
   const phrases = [
     "I have Suman's resume! Come get it.",
@@ -25,8 +32,22 @@ export default function ResumeMascot() {
     return () => clearTimeout(timer);
   }, []);
 
+  // Listen for resume requests from the chat widget
+  useEffect(() => {
+    const handleResumeRequest = () => {
+      setIsJolting(true);
+      setTimeout(() => setIsJolting(false), 700);
+    };
+    window.addEventListener('resumeRequest', handleResumeRequest);
+    return () => window.removeEventListener('resumeRequest', handleResumeRequest);
+  }, []);
+
   const handleHover = () => {
     if (isCaught) return;
+
+    // Restart the 10-second idle-return timer on every dodge
+    if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
+    resetTimerRef.current = setTimeout(resetToHome, 10_000);
 
     if (hoverCount < 3) {
       // Small horizontal jumps (150-250px left or right), minimal vertical movement
@@ -53,6 +74,8 @@ export default function ResumeMascot() {
   };
 
   const handleClick = () => {
+    // Cancel any pending reset — they caught it!
+    if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
     setIsCaught(true);
     setTimeout(() => {
       const link = document.createElement("a");
@@ -78,9 +101,17 @@ export default function ResumeMascot() {
         className="absolute bottom-6 right-6 pointer-events-auto"
         style={{
           transform: `translate(${position.x}px, ${position.y}px)`,
-          transition: "transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)", 
+          transition: "transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
         }}
       >
+        <m.div
+          animate={
+            isJolting
+              ? { x: [0, -18, 18, -12, 12, -6, 6, 0], y: [0, -22, 0, -10, 0], rotate: [0, -8, 8, -5, 5, 0] }
+              : { x: 0, y: 0, rotate: 0 }
+          }
+          transition={{ duration: 0.6, ease: "easeInOut" }}
+        >
         <m.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: isCaught ? 0 : 1, y: isCaught ? 10 : 0 }}
@@ -181,6 +212,7 @@ export default function ResumeMascot() {
 
             </svg>
           </m.div>
+        </m.div>
         </m.div>
       </div>
     </div>
