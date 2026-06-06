@@ -147,7 +147,7 @@ function EraCard({ era, index }: { era: (typeof eras)[0]; index: number }) {
       <div className="absolute inset-0 bg-gradient-to-b from-white/40 to-transparent pointer-events-none rounded-[2.5rem]" />
 
       {/* Content */}
-      <div className="relative z-10 px-8 md:px-16 lg:px-20 py-14 md:py-20">
+      <div className="relative z-10 px-8 md:px-16 lg:px-20 py-10 md:py-14">
 
         {/* Era index + tag */}
         <m.div
@@ -166,7 +166,7 @@ function EraCard({ era, index }: { era: (typeof eras)[0]; index: number }) {
         </m.div>
 
         {/* Main grid: narrative left, capabilities right */}
-        <div className={`grid grid-cols-1 lg:grid-cols-2 gap-16 xl:gap-24 items-start ${isAlternate ? "lg:[&>*:first-child]:order-2" : ""}`}>
+        <div className={`grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-14 items-start ${isAlternate ? "lg:[&>*:first-child]:order-2" : ""}`}>
 
           {/* Narrative side */}
           <div>
@@ -212,7 +212,7 @@ function EraCard({ era, index }: { era: (typeof eras)[0]; index: number }) {
               initial={{ opacity: 0 }}
               animate={isInView ? { opacity: 1 } : {}}
               transition={{ duration: 1.2, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="mt-10 pt-8 border-t border-current/10"
+              className="mt-8 pt-6 border-t border-current/10"
             >
               <p className={`font-serif italic font-normal text-2xl md:text-3xl ${era.emotionalColor} leading-snug whitespace-pre-line`}>
                 {era.emotionalStatement.split("\n").map((line, i, arr) => (
@@ -261,10 +261,10 @@ function EraCard({ era, index }: { era: (typeof eras)[0]; index: number }) {
 
 function EraBridge({ fromLight }: { fromLight: boolean }) {
   return (
-    <div className="relative flex flex-col items-center py-2 select-none pointer-events-none">
-      <div className={`w-px h-10 bg-gradient-to-b ${fromLight ? "from-[#C4B49A] to-[#7AAEE0]/50" : "from-[#7AAEE0]/50 to-[#D4B830]/50"}`} />
+    <div className="relative flex flex-col items-center py-1 select-none pointer-events-none">
+      <div className={`w-px h-6 bg-gradient-to-b ${fromLight ? "from-[#C4B49A] to-[#7AAEE0]/50" : "from-[#7AAEE0]/50 to-[#D4B830]/50"}`} />
       <div className={`w-1.5 h-1.5 rounded-full my-1 ${fromLight ? "bg-[#7AAEE0]/60" : "bg-[#D4B830]/60"}`} />
-      <div className={`w-px h-10 bg-gradient-to-b ${fromLight ? "from-[#7AAEE0]/50 to-transparent" : "from-[#D4B830]/50 to-transparent"}`} />
+      <div className={`w-px h-6 bg-gradient-to-b ${fromLight ? "from-[#7AAEE0]/50 to-transparent" : "from-[#D4B830]/50 to-transparent"}`} />
     </div>
   );
 }
@@ -276,7 +276,7 @@ export default function Experience() {
   const isHeaderInView = useInView(headerRef, { once: true, margin: "-60px" });
 
   return (
-    <SectionWrapper id="experience" className="py-24 px-6 bg-white" showLine={false}>
+    <SectionWrapper id="experience" className="py-16 px-6 bg-white" showLine={false}>
       <div className="max-w-6xl mx-auto">
 
         {/* ── SECTION HEADER ── */}
@@ -285,7 +285,7 @@ export default function Experience() {
           initial={{ opacity: 0, y: 30 }}
           animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-16 max-w-3xl"
+          className="mb-10 max-w-3xl"
         >
           <p className="font-manrope text-[10px] text-[#888] uppercase tracking-[0.4em] mb-6">
             02 / The Evolution
@@ -316,7 +316,7 @@ export default function Experience() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-24 text-center max-w-3xl mx-auto"
+          className="mt-16 text-center max-w-3xl mx-auto"
         >
           <div className="mb-6 flex justify-center">
             <div className="w-px h-12 bg-gradient-to-b from-[#D4B830]/50 to-transparent" />

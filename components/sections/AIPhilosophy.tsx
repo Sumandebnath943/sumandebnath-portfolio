@@ -105,15 +105,15 @@ function PrinciplePanel({
       transition={{ duration: 1, delay, ease: [0.22, 1, 0.36, 1] }}
       className="group"
     >
-      <div className={`border-t ${principle.borderColor} pt-10 pb-12 transition-colors duration-500`}>
+      <div className={`border-t ${principle.borderColor} pt-8 pb-8 transition-colors duration-500`}>
         {/* Number */}
-        <p className={`font-manrope text-[10px] tracking-[0.4em] mb-8 font-bold ${principle.textColor}`}>
+        <p className={`font-manrope text-[10px] tracking-[0.4em] mb-5 font-bold ${principle.textColor}`}>
           {principle.number}
         </p>
 
         {/* Title */}
         <h3
-          className={`font-manrope font-semibold text-[#0A0A0A] leading-tight tracking-tight mb-8 ${
+          className={`font-manrope font-semibold text-[#0A0A0A] leading-tight tracking-tight mb-5 ${
             principle.size === "hero"
               ? "text-3xl md:text-4xl lg:text-5xl"
               : "text-2xl md:text-3xl"
@@ -160,13 +160,13 @@ function CinematicQuote({
       initial={{ opacity: 0 }}
       animate={isInView ? { opacity: 1 } : {}}
       transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
-      className="py-20 md:py-28 border-t border-[#1A1A1A]/10"
+      className="py-12 md:py-16 border-t border-[#1A1A1A]/10"
     >
       <blockquote className="font-serif italic font-normal text-3xl md:text-4xl lg:text-5xl text-[#0A0A0A] leading-snug max-w-4xl">
         {quote}
       </blockquote>
       {attribution && (
-        <p className="font-manrope text-[10px] uppercase tracking-[0.4em] text-[#555] font-bold mt-10">
+        <p className="font-manrope text-[10px] uppercase tracking-[0.4em] text-[#555] font-bold mt-6">
           — {attribution}
         </p>
       )}
@@ -183,7 +183,7 @@ export default function AIPhilosophy() {
   return (
     <SectionWrapper
       id="philosophy"
-      className="py-40 px-6 bg-white"
+      className="py-24 px-6 bg-white"
       showLine={false}
     >
       <div className="max-w-5xl mx-auto">
@@ -194,7 +194,7 @@ export default function AIPhilosophy() {
           initial={{ opacity: 0, y: 24 }}
           animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-24"
+          className="mb-14"
         >
           <p className="font-manrope text-[10px] text-[#999] uppercase tracking-[0.4em] mb-8">
             05 / Operating Principles
@@ -245,7 +245,7 @@ export default function AIPhilosophy() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
-          className="pt-20 mt-4 border-t border-[#1A1A1A]/10 flex flex-col md:flex-row md:items-end md:justify-between gap-8"
+          className="pt-14 mt-4 border-t border-[#1A1A1A]/10 flex flex-col md:flex-row md:items-end md:justify-between gap-8"
         >
           <p className="font-serif italic font-normal text-2xl md:text-3xl text-[#222] max-w-xl leading-snug">
             "This is someone thinking deeply about the future relationship between humans,
