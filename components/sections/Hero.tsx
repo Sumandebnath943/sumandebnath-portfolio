@@ -45,7 +45,7 @@ export default function Hero() {
       {/* Crosshair technical grid */}
       <div className="absolute inset-0 hero-crosshair opacity-70" />
       {/* Electric-orange ambient glow behind the portrait */}
-      <div className="absolute right-[8%] top-1/2 -translate-y-1/2 w-[520px] h-[520px] rounded-full bg-[#ff6a00] opacity-[0.10] blur-[150px] pointer-events-none" />
+      <div className="absolute right-[8%] top-1/2 -translate-y-1/2 w-[520px] h-[520px] rounded-full bg-[#FF5500] opacity-[0.13] blur-[150px] pointer-events-none" />
       {/* Film grain */}
       <div className="absolute inset-0 hero-grain opacity-[0.06] mix-blend-overlay pointer-events-none" />
 
@@ -82,7 +82,7 @@ export default function Hero() {
           />
           {/* Warm electric-orange tint over the B&W portrait */}
           <div
-            className="absolute inset-0 bg-[#ff6a00] mix-blend-color opacity-[0.42]"
+            className="absolute inset-0 bg-[#FF5500] mix-blend-color opacity-[0.42]"
             style={{
               maskImage:
                 "linear-gradient(to right, transparent 0%, black 32%, black 84%, transparent 100%)",
@@ -91,7 +91,7 @@ export default function Hero() {
             }}
           />
           {/* Soft orange highlight to make the tint feel "electric" */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_50%_at_55%_40%,rgba(255,140,60,0.3)_0%,transparent_70%)] mix-blend-screen opacity-60" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_50%_at_55%_40%,rgba(255,100,0,0.35)_0%,transparent_70%)] mix-blend-screen opacity-70" />
 
           {/* Radar dot-grid overlay */}
           <div
@@ -105,9 +105,9 @@ export default function Hero() {
           />
           {/* The single pulsing radar dot with expanding ping ring */}
           <div className="absolute left-[56%] top-[40%] -translate-x-1/2 -translate-y-1/2">
-            <span className="block w-2 h-2 rounded-full bg-[#ff6a00] shadow-[0_0_12px_4px_rgba(255,106,0,0.7)] animate-pulse-glow" />
+            <span className="block w-2 h-2 rounded-full bg-[#FF5500] shadow-[0_0_12px_4px_rgba(255,85,0,0.8)] animate-pulse-glow" />
             <span
-              className="absolute inset-0 w-2 h-2 rounded-full border border-[#ff8a33]"
+              className="absolute inset-0 w-2 h-2 rounded-full border border-[#FF8000]"
               style={{ animation: "radar-ping 2.4s ease-out infinite" }}
             />
           </div>
@@ -145,7 +145,7 @@ export default function Hero() {
           className="group flex items-center gap-2 transition-colors hover:text-[#F5F0E6]"
         >
           GET IN TOUCH:
-          <span className="text-[#ff8a33] group-hover:text-[#ffae6b]">
+          <span className="text-[#FF8000] group-hover:text-[#FFB347]">
             WHATSAPP
           </span>
         </a>
@@ -160,7 +160,7 @@ export default function Hero() {
           transition={{ duration: 0.9, delay: 0.25, ease: EASE }}
           className="md:col-span-5"
         >
-          <span className="block font-mono text-[11px] tracking-[0.2em] text-[#ff8a33] mb-2.5">
+          <span className="block font-mono text-[11px] tracking-[0.2em] text-[#FF8000] mb-2.5">
             [001.1]
           </span>
           <h2 className="font-anton text-base sm:text-lg lg:text-[24px] leading-[1.05] tracking-wide uppercase text-[#F5F0E6]">
@@ -200,7 +200,7 @@ export default function Hero() {
           <span className="block">I Build</span>
           <span className="block">Experiences With</span>
           <span className="block">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ff8a33] via-[#ff6a00] to-[#ff8a33]">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF8000] via-[#FF4500] to-[#FF8000]">
               Intelligence
             </span>
           </span>
@@ -223,13 +223,13 @@ export default function Hero() {
         </a>
         <a
           href="#projects"
-          className="flex items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.03] px-5 py-2.5 lg:px-6 lg:py-3 text-[12px] lg:text-[13px] font-medium text-[#F5F0E6] backdrop-blur-md transition-colors hover:border-[#ff8a33]/40 hover:bg-white/[0.08]"
+          className="flex items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.03] px-5 py-2.5 lg:px-6 lg:py-3 text-[12px] lg:text-[13px] font-medium text-[#F5F0E6] backdrop-blur-md transition-colors hover:border-[#FF8000]/40 hover:bg-white/[0.08]"
         >
           View Projects
         </a>
         <a
           href="#history"
-          className="flex items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.03] px-5 py-2.5 lg:px-6 lg:py-3 text-[12px] lg:text-[13px] font-medium text-[#F5F0E6] backdrop-blur-md transition-colors hover:border-[#ff8a33]/40 hover:bg-white/[0.08]"
+          className="flex items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.03] px-5 py-2.5 lg:px-6 lg:py-3 text-[12px] lg:text-[13px] font-medium text-[#F5F0E6] backdrop-blur-md transition-colors hover:border-[#FF8000]/40 hover:bg-white/[0.08]"
         >
           Career Journey
         </a>
