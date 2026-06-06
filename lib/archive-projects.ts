@@ -248,7 +248,7 @@ export const archiveProjects: ArchiveProject[] = [
     stack: ["Multi-model AI", "Automation", "Rapid Prototyping", "AI Workflows"],
     accent: "#C5A880",
     accentB: "#3A302A",
-    kind: "lab",
+    kind: "secondary",
     miniItems: [
       "Office Time Tracker",
       "Forget Me Not — location-aware trigger alerts (in development)",
