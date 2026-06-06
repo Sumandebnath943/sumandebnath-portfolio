@@ -87,11 +87,12 @@
 
 .lp-root {
   background-color: var(--lp-bg-primary);
-  overflow-x: hidden;
 }
 
 /* ── Paper noise texture ─────────────────────────────────── */
-.lp-root::before {
+/* Applied on body so the fixed pseudo never creates a second
+   scroll context inside .lp-root */
+body.learnings-page::before {
   content: '';
   position: fixed;
   inset: 0;

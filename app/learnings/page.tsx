@@ -441,6 +441,12 @@ export default function LearningsPage() {
     return () => observer.disconnect();
   }, []);
 
+  // Add page-scoped class to body for the noise texture pseudo-element
+  useEffect(() => {
+    document.body.classList.add("learnings-page");
+    return () => { document.body.classList.remove("learnings-page"); };
+  }, []);
+
   // Lock body scroll when modal is open
   useEffect(() => {
     document.body.style.overflow = modalExp ? "hidden" : "";
