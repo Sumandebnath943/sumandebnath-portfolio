@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { m } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 
 /* ── Live dual-clock hook ───────────────────────────────────────────────
@@ -117,7 +117,7 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.1 }}
-        className="relative z-20 flex items-center justify-between px-6 md:px-12 lg:px-16 pt-24 lg:pt-28 text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.15em] text-[#9a8f86]"
+        className="relative z-20 flex items-center justify-between px-6 md:px-12 lg:px-16 pt-20 lg:pt-24 text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.15em] text-[#9a8f86]"
       >
         <div className="flex items-center gap-4 sm:gap-8">
           <span className="tabular-nums">
@@ -145,7 +145,7 @@ export default function Hero() {
       </m.div>
 
       {/* ── Meta label grid ────────────────────────────────────────────── */}
-      <div className="relative z-20 grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-8 px-6 md:px-12 lg:px-16 mt-5 lg:mt-7">
+      <div className="relative z-20 grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-6 px-6 md:px-12 lg:px-16 mt-4 lg:mt-6">
         {/* [001.1] role */}
         <m.div
           initial={{ opacity: 0, y: 12 }}
@@ -156,7 +156,7 @@ export default function Hero() {
           <span className="block font-mono text-[11px] tracking-[0.2em] text-[#ff8a33] mb-2.5">
             [001.1]
           </span>
-          <h2 className="font-anton text-lg sm:text-xl lg:text-[26px] leading-[1.05] tracking-wide uppercase text-[#F5F0E6]">
+          <h2 className="font-anton text-base sm:text-lg lg:text-[24px] leading-[1.05] tracking-wide uppercase text-[#F5F0E6]">
             AI-Native Product Builder
             <br />
             &amp; Brand Strategy
@@ -168,7 +168,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.35, ease: EASE }}
-          className="md:col-span-4 md:col-start-7"
+          className="md:col-span-4 md:col-start-6"
         >
           <span className="block font-mono text-[11px] tracking-[0.2em] text-[#9a8f86] mb-2.5">
             [001.2]
@@ -184,7 +184,7 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.9, delay: 0.45 }}
-          className="hidden md:block md:col-span-1 md:col-start-12 text-right"
+          className="hidden md:block md:col-span-3 md:col-start-10 text-right"
         >
           <span className="font-mono text-[11px] tracking-[0.15em] text-[#9a8f86] whitespace-nowrap">
             ©2026 SUMAN DEBNATH
@@ -198,9 +198,9 @@ export default function Hero() {
         initial={{ opacity: 0, y: 28 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.1, delay: 0.4, ease: EASE }}
-        className="relative z-10 flex-1 flex items-end px-6 md:px-12 lg:px-16"
+        className="relative z-10 flex-1 flex items-end px-6 md:px-12 lg:px-16 min-h-0"
       >
-        <h2 className="w-full font-anton uppercase text-[#F5F0E6] leading-[0.82] tracking-[-0.01em] text-[13vw] sm:text-[12vw] lg:text-[11vw] xl:text-[140px] [text-shadow:0_4px_40px_rgba(0,0,0,0.6)]">
+        <h2 className="w-full font-anton uppercase text-[#F5F0E6] leading-[0.85] tracking-[-0.01em] text-[12vw] sm:text-[11vw] lg:text-[10vw] xl:text-[120px] [text-shadow:0_4px_40px_rgba(0,0,0,0.6)]">
           <span className="block">I Build</span>
           <span className="block">Experiences With</span>
           <span className="block">
@@ -211,27 +211,31 @@ export default function Hero() {
         </h2>
       </m.div>
 
-      {/* ── Bottom-center pill CTA ──────────────────────────────────────── */}
+      {/* ── CTAs — restored original trio, fully visible above the fold ─── */}
       <m.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 0.7, ease: EASE }}
-        className="relative z-20 flex justify-center px-6 pb-6 lg:pb-8 pt-4"
+        className="relative z-20 flex flex-wrap items-center gap-3 px-6 md:px-12 lg:px-16 pb-6 lg:pb-8 pt-4"
       >
         <a
-          href="#contact"
-          className="group relative flex items-center gap-4 rounded-full border border-white/[0.12] bg-white/[0.03] backdrop-blur-md pl-5 pr-7 py-3 transition-colors hover:border-[#ff8a33]/40"
+          href="#experience-narrative"
+          className="group flex items-center justify-center gap-2 rounded-full bg-[#F5F0E6] px-5 py-2.5 lg:px-6 lg:py-3 text-[12px] lg:text-[13px] font-medium text-black transition-all hover:bg-white hover:scale-[1.02] active:scale-[0.98]"
         >
-          <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[#F5F0E6] text-[#0A0A0C] transition-transform group-hover:rotate-45">
-            <ArrowUpRight size={16} />
-          </span>
-          <span className="relative font-mono text-[11px] sm:text-[12px] uppercase tracking-[0.2em] text-[#F5F0E6]">
-            Send Message For Work
-            {/* Animated underline sweep */}
-            <span className="absolute -bottom-1.5 left-0 h-px w-full overflow-hidden">
-              <span className="block h-px w-1/3 bg-[#ff8a33] transition-transform duration-500 ease-out group-hover:translate-x-[300%]" />
-            </span>
-          </span>
+          Check Experience
+          <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
+        </a>
+        <a
+          href="#projects"
+          className="flex items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.03] px-5 py-2.5 lg:px-6 lg:py-3 text-[12px] lg:text-[13px] font-medium text-[#F5F0E6] backdrop-blur-md transition-colors hover:border-[#ff8a33]/40 hover:bg-white/[0.08]"
+        >
+          View Projects
+        </a>
+        <a
+          href="#history"
+          className="flex items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.03] px-5 py-2.5 lg:px-6 lg:py-3 text-[12px] lg:text-[13px] font-medium text-[#F5F0E6] backdrop-blur-md transition-colors hover:border-[#ff8a33]/40 hover:bg-white/[0.08]"
+        >
+          Career Journey
         </a>
       </m.div>
     </section>
