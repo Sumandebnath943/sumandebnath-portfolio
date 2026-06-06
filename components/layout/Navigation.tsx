@@ -60,7 +60,7 @@ export default function Navigation() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className={`pointer-events-auto w-full max-w-[60rem] transition-all duration-500 rounded-[2rem] bg-[#0A0A0C]/45 backdrop-blur-2xl backdrop-saturate-[180%] border border-white/15 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22),inset_0_-1px_1px_0_rgba(255,255,255,0.04),0_8px_32px_-4px_rgba(0,0,0,0.55)] ${
+        className={`pointer-events-auto w-full max-w-[60rem] transition-all duration-500 rounded-[2rem] bg-[#0A0A0C]/75 backdrop-blur-2xl backdrop-saturate-[180%] border border-white/15 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22),inset_0_-1px_1px_0_rgba(255,255,255,0.04),0_8px_32px_-4px_rgba(0,0,0,0.55)] ${
           scrolled ? "py-1.5 px-3" : "py-2 px-4"
         }`}
       >
@@ -74,7 +74,7 @@ export default function Navigation() {
             whileHover={{ scale: 1.02 }}
           >
             {/* Branding Logo */}
-            <div className="relative h-8 w-28 md:w-36 flex items-center justify-start mix-blend-screen">
+            <div className="relative h-8 w-28 md:w-36 flex items-center justify-start">
               <img 
                 src="/branding/logo_navbar_v2.png" 
                 alt="Suman Debnath Logo" 
