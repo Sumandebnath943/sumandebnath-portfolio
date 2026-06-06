@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useDeferredReveal } from '@/lib/useDeferredReveal';
 
 const INITIAL_MESSAGE = {
   role: 'assistant',
@@ -25,6 +26,9 @@ export default function ChatWidget() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+
+  // Reveal only after the page has settled (or the user scrolls a bit)
+  const revealed = useDeferredReveal();
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -109,6 +113,8 @@ export default function ChatWidget() {
   }
 
   const canSend = !isLoading && !isAnimating && input.trim().length > 0;
+
+  if (!revealed) return null;
 
   return (
     <>
@@ -469,9 +475,23 @@ export default function ChatWidget() {
 
         /* ── Mobile ── */
         @media (max-width: 480px) {
-          .cw-window { width: 90vw; }
+          .cw-wrapper { right: 16px; bottom: 92px; }
           .cw-suggestions { grid-template-columns: 1fr; }
-          .cw-wrapper { right: 16px; }
+
+          /* Fit the window to the actual visible viewport so the header never clips */
+          .cw-window {
+            width: 90vw;
+            height: min(480px, calc(100dvh - 132px));
+          }
+
+          /* Compact icon-only button (no text label) */
+          .cw-toggle {
+            padding: 12px;
+            gap: 0;
+            font-size: 0;
+            border-radius: 50%;
+          }
+          .cw-toggle-spark { display: none; }
         }
       `}</style>
 

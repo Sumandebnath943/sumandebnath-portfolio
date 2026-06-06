@@ -2,15 +2,32 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { m, AnimatePresence } from "framer-motion";
+import { useDeferredReveal } from "@/lib/useDeferredReveal";
 
 export default function ResumeMascot() {
   // Use standard x, y transforms for reliable movement
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [hoverCount, setHoverCount] = useState(0);
   const [isCaught, setIsCaught] = useState(false);
-  const [isPeeking, setIsPeeking] = useState(false);
   const [isJolting, setIsJolting] = useState(false);
+  const [isTouch, setIsTouch] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Reveal only after the page has settled (or the user scrolls a bit)
+  const revealed = useDeferredReveal();
+
+  // Detect touch (coarse pointer) and small (mobile) viewports
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    setIsTouch(window.matchMedia("(pointer: coarse)").matches);
+
+    const mq = window.matchMedia("(max-width: 480px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   const resetToHome = useCallback(() => {
     setPosition({ x: 0, y: 0 });
@@ -23,14 +40,6 @@ export default function ResumeMascot() {
     "Missed me! Are you using a trackpad?",
     "Okay, I'm tired. You can have the PDF now."
   ];
-
-  // Initial delay before peeking
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsPeeking(true);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
 
   // Listen for resume requests from the chat widget
   useEffect(() => {
@@ -50,17 +59,32 @@ export default function ResumeMascot() {
     resetTimerRef.current = setTimeout(resetToHome, 10_000);
 
     if (hoverCount < 3) {
-      // Small horizontal jumps (150-250px left or right), minimal vertical movement
-      const magnitudeX = Math.random() * 100 + 150; 
-      const magnitudeY = Math.random() * 20 + 10; 
-      
-      // Ping-pong horizontally to stay on screen safely
-      const jumpX = position.x < -300 ? magnitudeX : -magnitudeX;
+      // Viewport-aware bounds so the robot never leaves the screen
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const robotW = isMobile ? 60 : 90;
+      const robotH = isMobile ? 67 : 100;
+      const homeRight = isMobile ? 16 : 24; // matches the corner offset below
+      const homeBottom = isMobile ? 16 : 24;
+      const margin = 8;
+      const minX = margin - (vw - homeRight - robotW); // leftmost translate
+      const maxX = homeRight - margin;                  // rightmost translate
+      const minY = margin - (vh - homeBottom - robotH); // highest translate
+      const maxY = homeBottom - margin;
+
+      // Smaller hops on mobile; original magnitudes on desktop
+      const magnitudeX = isMobile ? Math.random() * 60 + 70 : Math.random() * 100 + 150;
+      const magnitudeY = isMobile ? Math.random() * 12 + 8 : Math.random() * 20 + 10;
+
+      // Ping-pong horizontally; reverse before reaching the left bound
+      const reverseAt = isMobile ? minX + magnitudeX : -300;
+      const jumpX = position.x <= reverseAt ? magnitudeX : -magnitudeX;
       const jumpY = position.y < -100 ? magnitudeY : -magnitudeY;
-      
-      setPosition({ 
-        x: position.x + jumpX, 
-        y: position.y + jumpY 
+
+      const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
+      setPosition({
+        x: clamp(position.x + jumpX, minX, maxX),
+        y: clamp(position.y + jumpY, minY, maxY),
       });
       setHoverCount((prev) => prev + 1);
     } else if (hoverCount === 3) {
@@ -70,6 +94,15 @@ export default function ResumeMascot() {
         y: position.y - 10 
       });
       setHoverCount((prev) => prev + 1);
+    }
+  };
+
+  const handleTap = () => {
+    // On touch devices, taps drive the dodge (no hover); download only once "tired".
+    if (isTouch && !isCaught && hoverCount < 4) {
+      handleHover();
+    } else {
+      handleClick();
     }
   };
 
@@ -93,12 +126,12 @@ export default function ResumeMascot() {
     }, 600);
   };
 
-  if (!isPeeking) return null;
+  if (!revealed) return null;
 
   return (
     <div className="fixed inset-0 pointer-events-none z-[9999] overflow-hidden">
       <div
-        className="absolute bottom-6 right-6 pointer-events-auto"
+        className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 pointer-events-auto"
         style={{
           transform: `translate(${position.x}px, ${position.y}px)`,
           transition: "transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
@@ -140,10 +173,10 @@ export default function ResumeMascot() {
           <m.div
             whileHover={{ scale: hoverCount >= 4 ? 1.05 : 1 }}
             whileTap={{ scale: 0.9 }}
-            onMouseEnter={handleHover}
-            onClick={handleClick}
+            onMouseEnter={() => { if (!isTouch) handleHover(); }}
+            onClick={handleTap}
             className={`cursor-pointer drop-shadow-xl ${isCaught ? "animate-pulse" : ""}`}
-            style={{ width: 90, height: 100 }}
+            style={{ width: isMobile ? 60 : 90, height: isMobile ? 67 : 100 }}
           >
             {/* Claude-style Robot SVG */}
             <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
