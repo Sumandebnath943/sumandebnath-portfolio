@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Manrope, Instrument_Serif } from "next/font/google";
+import { Manrope, Instrument_Serif, Anton } from "next/font/google";
 import Script from "next/script";
 import ResumeMascot from "@/components/ui/ResumeMascot";
 import "./globals.css";
@@ -14,6 +14,14 @@ const instrumentSerif = Instrument_Serif({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-instrument",
+  display: "swap",
+});
+
+// Condensed display face for the cinematic hero headline.
+const anton = Anton({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-anton",
   display: "swap",
 });
 
@@ -280,7 +288,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${manrope.variable} ${instrumentSerif.variable}`}
+      className={`${manrope.variable} ${instrumentSerif.variable} ${anton.variable}`}
       suppressHydrationWarning
     >
       <body

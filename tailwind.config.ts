@@ -23,6 +23,7 @@ const config: Config = {
       fontFamily: {
         manrope: ["var(--font-manrope)", "sans-serif"],
         serif: ["var(--font-instrument)", "serif"],
+        anton: ["var(--font-anton)", "Impact", "sans-serif"],
         // Keep these mapped to manrope for backward compatibility during transition
         grotesk: ["var(--font-manrope)", "sans-serif"],
         inter: ["var(--font-manrope)", "sans-serif"],
