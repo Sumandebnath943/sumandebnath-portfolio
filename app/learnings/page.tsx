@@ -550,8 +550,8 @@ export default function LearningsPage() {
               style={{ display: "flex", flexWrap: "wrap", gap: "3rem", paddingTop: "3rem", borderTop: "1px solid var(--lp-border-light)", alignItems: "flex-start", marginTop: "3rem" }}
             >
               {[
-                { num: "14+", label: "Learning Experiences" },
-                { num: "29+", label: "Professional Credentials" },
+                { num: "15+", label: "Learning Experiences" },
+                { num: "30+", label: "Professional Credentials" },
                 { num: "6+",  label: "Knowledge Domains" },
               ].map((stat) => (
                 <div key={stat.label} className="lp-stat-item">
@@ -567,7 +567,7 @@ export default function LearningsPage() {
               <div style={{ marginLeft: "auto" }}>
                 <div style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--lp-text-tertiary)", letterSpacing: "0.02em", lineHeight: 1.6, maxWidth: 200, textAlign: "right" }}>
                   Recognized by<br />
-                  <span style={{ color: "var(--lp-text-secondary)", fontWeight: 700 }}>Microsoft · Anthropic<br />LinkedIn · PMI · NASBA</span>
+                  <span style={{ color: "var(--lp-text-secondary)", fontWeight: 700 }}>Oxford · Microsoft · Anthropic<br />LinkedIn · PMI · NASBA</span>
                 </div>
               </div>
             </div>
@@ -578,7 +578,7 @@ export default function LearningsPage() {
         <div className="lp-trusted-providers lp-animate-fade-in lp-delay-300">
           <div className="lp-container">
             <div className="lp-providers-track">
-              {["Microsoft", "LinkedIn Learning", "Anthropic", "NSDC", "PMI", "NASBA", "SHRM", "HRCI"].map((logo) => (
+              {["University of Oxford", "Microsoft", "LinkedIn Learning", "Anthropic", "NSDC", "PMI", "NASBA", "SHRM", "HRCI"].map((logo) => (
                 <span key={logo} className="lp-provider-logo">{logo}</span>
               ))}
             </div>

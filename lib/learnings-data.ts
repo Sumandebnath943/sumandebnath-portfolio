@@ -33,7 +33,7 @@ export const domains: Domain[] = [
     name: "AI Foundations",
     description:
       "Mastered the core principles, neural mechanics, and foundational vocabulary of Artificial Intelligence. This knowledge is essential for evaluating vendor capabilities, understanding technical limitations, and communicating effectively with engineering teams.",
-    count: 3,
+    count: 4,
   },
   {
     id: "prompt-engineering",
@@ -84,6 +84,28 @@ export const competencies: string[] = [
 ];
 
 export const experiences: Experience[] = [
+  {
+    id: "gen-agentic-ai-oxford",
+    title: "Generative & Agentic AI",
+    domain: "ai-foundations",
+    description:
+      "An advanced programme from Saïd Business School, University of Oxford, examining how generative and agentic AI systems are designed, orchestrated, and deployed to power autonomous, goal-directed workflows.",
+    whyItMatters:
+      "Agentic AI marks the shift from models that merely respond to systems that act — planning, using tools, and executing multi-step goals. Fluency at this frontier is essential for designing the next generation of autonomous, AI-native products.",
+    learningOutcome:
+      "Developed a rigorous understanding of generative model architectures and agentic design patterns — autonomous reasoning, tool use, and the orchestration of multi-agent workflows toward defined objectives.",
+    skills: ["Generative AI", "Agentic AI", "AI Systems Design"],
+    recognizedBy: ["University of Oxford", "Coursera"],
+    credentialCount: 1,
+    featured: true,
+    credentials: [
+      {
+        title: "University of Oxford",
+        issuer: "University of Oxford",
+        pdf: "/learningportfolio/assets/certificates/Generative & Agentic AI - University of Oxford.pdf",
+      },
+    ],
+  },
   {
     id: "leading-responsible-ai",
     title: "Leading Responsible AI in Organizations",
