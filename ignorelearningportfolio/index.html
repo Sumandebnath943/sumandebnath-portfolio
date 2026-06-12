@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Portfolio | Continuous Learning & Expertise</title>
+    <meta name="description" content="A curated record of professional development across AI, Leadership, Business Strategy, Prompt Engineering, and Emerging Technologies.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+
+    <!-- PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
+</head>
+<body>
+
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress"></div>
+
+    <!-- Custom Cursor (desktop only) -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
+
+    <!-- ─────────────────────────────────────────────────────── -->
+    <!-- SECTION 1: Hero                                          -->
+    <!-- ─────────────────────────────────────────────────────── -->
+    <section class="hero" style="
+        min-height: 92vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-top: 120px;
+        padding-bottom: 100px;
+        border-bottom: 1px solid var(--border-hairline);
+        background:
+            radial-gradient(ellipse 80% 60% at 60% 0%, rgba(240,78,0,.06) 0%, transparent 60%),
+            radial-gradient(ellipse 50% 40% at 10% 80%, rgba(201,151,58,.04) 0%, transparent 55%),
+            linear-gradient(180deg, #F6F4EF 0%, #F2F0EA 100%);
+        position: relative;
+        overflow: hidden;
+    ">
+        <!-- Decorative lines -->
+        <div style="
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            opacity: 0.04;
+        ">
+            <div style="position:absolute;top:0;left:50%;width:1px;height:100%;background:var(--text-primary);"></div>
+            <div style="position:absolute;top:50%;left:0;width:100%;height:1px;background:var(--text-primary);"></div>
+        </div>
+
+        <div class="container" style="max-width: 1200px;">
+
+            <!-- Two-column: text left, robot right -->
+            <div class="hero-two-col">
+
+            <!-- LEFT: text content -->
+            <div class="hero-content">
+                
+                <!-- Eyebrow -->
+                <div class="animate-fade-in" style="
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 10px;
+                    margin-bottom: var(--spacing-6);
+                ">
+                    <div style="width: 28px; height: 1.5px; background: var(--accent);"></div>
+                    <p class="text-caption" style="color: var(--accent); letter-spacing: 0.14em;">Learning Portfolio</p>
+                </div>
+
+                <!-- Main heading -->
+                <h1 class="animate-slide-up delay-100" style="
+                    margin-bottom: var(--spacing-6);
+                    line-height: 1.05;
+                    font-weight: 800;
+                    letter-spacing: -0.046em;
+                    font-size: clamp(2.4rem, 5.5vw, 4.8rem);
+                ">
+                    Continuous <span style="
+                        font-family: var(--font-serif);
+                        font-weight: 400;
+                        font-style: italic;
+                        letter-spacing: -0.02em;
+                    ">Learning.</span><br>Applied <span style="
+                        font-family: var(--font-serif);
+                        font-weight: 400;
+                        font-style: italic;
+                        letter-spacing: -0.02em;
+                        color: var(--text-primary);
+                    ">Expertise.</span>
+                </h1>
+
+                <!-- Subtitle -->
+                <p class="text-subtitle animate-slide-up delay-200" style="
+                    max-width: 680px;
+                    margin-bottom: var(--spacing-12);
+                    font-weight: 400;
+                    font-size: clamp(1.15rem, 2.8vw, 1.55rem);
+                    line-height: 1.55;
+                    color: var(--text-secondary);
+                ">
+                    A curated record of professional development across
+                    Artificial Intelligence, Leadership, Business Strategy,
+                    Prompt Engineering, and Emerging Technologies.
+                </p>
+            </div><!-- /hero-content LEFT -->
+
+            <!-- RIGHT: Robot image -->
+            <div class="animate-fade-in delay-200" style="
+                display: flex;
+                align-items: flex-end;
+                justify-content: center;
+                position: relative;
+                height: 100%;
+                min-height: 420px;
+            ">
+                <img
+                    src="assets/robot.png"
+                    alt="AI Robot studying on a laptop"
+                    style="
+                        width: 100%;
+                        max-width: 480px;
+                        height: auto;
+                        object-fit: contain;
+                        animation: floatY 6s ease-in-out infinite;
+                        filter: drop-shadow(0 32px 48px rgba(26,25,23,0.18));
+                        user-select: none;
+                        pointer-events: none;
+                    "
+                >
+            </div><!-- /robot RIGHT -->
+
+            </div><!-- /hero-two-col grid -->
+
+            <!-- Stats row — full width below the grid -->
+            <div class="hero-stats animate-fade-in delay-300" style="
+                display: flex;
+                flex-wrap: wrap;
+                gap: var(--spacing-12);
+                padding-top: var(--spacing-12);
+                border-top: 1px solid var(--border-light);
+                align-items: flex-start;
+                margin-top: var(--spacing-12);
+            ">
+                <div class="stat-item">
+                    <div class="stat-number" style="
+                        font-size: clamp(2.8rem, 6vw, 4rem);
+                        font-weight: 800;
+                        color: var(--text-primary);
+                        letter-spacing: -0.055em;
+                        line-height: 1;
+                    ">14<span style="color:var(--accent)">+</span></div>
+                    <div class="stat-label text-caption" style="margin-top: var(--spacing-3); color: var(--text-tertiary);">Learning Experiences</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" style="
+                        font-size: clamp(2.8rem, 6vw, 4rem);
+                        font-weight: 800;
+                        color: var(--text-primary);
+                        letter-spacing: -0.055em;
+                        line-height: 1;
+                    ">29<span style="color:var(--accent)">+</span></div>
+                    <div class="stat-label text-caption" style="margin-top: var(--spacing-3); color: var(--text-tertiary);">Professional Credentials</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" style="
+                        font-size: clamp(2.8rem, 6vw, 4rem);
+                        font-weight: 800;
+                        color: var(--text-primary);
+                        letter-spacing: -0.055em;
+                        line-height: 1;
+                    ">6<span style="color:var(--accent)">+</span></div>
+                    <div class="stat-label text-caption" style="margin-top: var(--spacing-3); color: var(--text-tertiary);">Knowledge Domains</div>
+                </div>
+                <div class="stat-item" style="margin-left: auto;">
+                    <div style="
+                        font-size: 0.82rem;
+                        font-weight: 600;
+                        color: var(--text-tertiary);
+                        letter-spacing: 0.02em;
+                        line-height: 1.6;
+                        max-width: 200px;
+                        text-align: right;
+                    ">
+                        Recognized by<br>
+                        <span style="color: var(--text-secondary); font-weight: 700;">Microsoft · Anthropic<br>LinkedIn · PMI · NASBA</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────── -->
+    <!-- SECTION 1.5: Trusted Learning Providers                  -->
+    <!-- ─────────────────────────────────────────────────────── -->
+    <div class="trusted-providers animate-fade-in delay-300">
+        <div class="container">
+            <div class="providers-track">
+                <span class="provider-logo">Microsoft</span>
+                <span class="provider-logo">LinkedIn Learning</span>
+                <span class="provider-logo">Anthropic</span>
+                <span class="provider-logo">NSDC</span>
+                <span class="provider-logo">PMI</span>
+                <span class="provider-logo">NASBA</span>
+                <span class="provider-logo">SHRM</span>
+                <span class="provider-logo">HRCI</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────────────────── -->
+    <!-- SECTION 2: Knowledge Domains                             -->
+    <!-- ─────────────────────────────────────────────────────── -->
+    <section id="domains" class="container reveal">
+        <h2 class="text-h2 text-center has-rule">Knowledge Domains</h2>
+        <div class="bento-domains reveal-stagger" id="domains-grid">
+            <!-- Populated by JS -->
+        </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────── -->
+    <!-- SECTION 3: Key Competencies                              -->
+    <!-- ─────────────────────────────────────────────────────── -->
+    <section id="competencies" class="container reveal bg-white" style="padding-bottom: var(--spacing-24);">
+        <h2 class="text-h2 text-center has-rule">Key Competencies</h2>
+        <div class="competency-tags" id="competencies-container">
+            <!-- Populated by JS -->
+        </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────── -->
+    <!-- SECTION 4: Interstitial Quote                            -->
+    <!-- ─────────────────────────────────────────────────────── -->
+    <section class="interstitial reveal" style="
+        padding: 140px 0;
+        background: var(--bg-ink);
+        color: var(--text-inverse);
+        position: relative;
+        overflow: hidden;
+        margin: 0;
+    ">
+        <!-- Ambient glow -->
+        <div class="ambient-orb" style="opacity:0.12; filter:blur(120px);"></div>
+
+        <!-- Decorative grid lines -->
+        <div style="
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            opacity: 0.04;
+        ">
+            <div style="position:absolute;top:0;left:25%;width:1px;height:100%;background:#fff;"></div>
+            <div style="position:absolute;top:0;right:25%;width:1px;height:100%;background:#fff;"></div>
+        </div>
+
+        <div class="container" style="max-width: 820px; text-align: center; position: relative; z-index: 2;">
+            <p class="text-caption" style="color: var(--accent); margin-bottom: var(--spacing-8); letter-spacing: 0.18em;">A Personal Philosophy</p>
+            <blockquote class="text-display" style="
+                font-family: var(--font-serif);
+                font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+                line-height: 1.12;
+                font-style: italic;
+                font-weight: 400;
+                color: var(--text-inverse);
+                margin-bottom: var(--spacing-10);
+                letter-spacing: -0.02em;
+            ">
+                "The frontier of technology is not defined by the tools we use, but by the intent with which we apply them."
+            </blockquote>
+            <div style="
+                width: 48px;
+                height: 2px;
+                background: var(--accent);
+                margin: 0 auto;
+                border-radius: 2px;
+            "></div>
+        </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────── -->
+    <!-- SECTION 5: Featured Learning Experiences                 -->
+    <!-- ─────────────────────────────────────────────────────── -->
+    <section id="featured" class="bg-light reveal">
+        <div class="container">
+            <h2 class="text-h2 text-center has-rule">Featured Experiences</h2>
+            <div class="featured-grid reveal-stagger" id="featured-grid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────── -->
+    <!-- SECTION 6: Learning Portfolio                            -->
+    <!-- ─────────────────────────────────────────────────────── -->
+    <section id="portfolio" class="bg-white reveal">
+        <div class="container">
+            <h2 class="text-h2 text-center has-rule">Learning Portfolio</h2>
+            <div class="competency-tags mb-8" id="filter-container">
+                <button class="chip active" data-filter="all">All</button>
+                <!-- Domains populated by JS -->
+            </div>
+            <div class="grid grid-cols-3 reveal-stagger" id="portfolio-grid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────── -->
+    <!-- SECTION 7: Learning Philosophy                           -->
+    <!-- ─────────────────────────────────────────────────────── -->
+    <section id="philosophy" class="reveal" style="
+        background: linear-gradient(160deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+        border-top: 1px solid var(--border-hairline);
+        border-bottom: 1px solid var(--border-hairline);
+    ">
+        <div class="container">
+            <div style="max-width: 720px; margin: 0 auto; text-align: center;">
+                <h2 class="text-h2 has-rule">Why Continuous Learning Matters</h2>
+                <p class="text-body" style="font-size: 1.18rem; line-height: 1.75; margin-top: var(--spacing-6);">
+                    Beyond formal education, I actively pursue structured learning experiences to stay current with emerging technologies, artificial intelligence, leadership practices, business strategy, and innovation. Continuous learning helps me translate new ideas into practical capabilities and better decision-making.
+                </p>
+            </div>
+
+            <!-- Three-pillar layout -->
+            <div class="philosophy-pillars reveal-stagger">
+                <div class="pillar-card">
+                    <div class="pillar-number">01</div>
+                    <div class="pillar-title">Stay Technically Fluent</div>
+                    <div class="pillar-body">Understanding the mechanics of AI — not just the hype — allows me to make grounded decisions about what tools to adopt, and when.</div>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">02</div>
+                    <div class="pillar-title">Lead With Context</div>
+                    <div class="pillar-body">Structured credentials give me frameworks to communicate confidently with both technical teams and senior stakeholders across domains.</div>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">03</div>
+                    <div class="pillar-title">Apply, Don't Accumulate</div>
+                    <div class="pillar-body">Every learning experience I pursue ties back to a real application: a workflow improved, a decision sharpened, or a team better equipped.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────── -->
+    <!-- MODALS                                                   -->
+    <!-- ─────────────────────────────────────────────────────── -->
+
+    <!-- Experience Details Modal -->
+    <div class="modal-overlay" id="experience-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            
+            <div class="modal-gallery-container">
+                <div class="modal-active-certificate" id="modal-active-certificate" onclick="openActiveViewer()">
+                    <canvas id="active-certificate-canvas"></canvas>
+                </div>
+                <div class="modal-thumbnail-strip" id="modal-thumbnail-strip">
+                    <!-- Thumbnails populated by JS -->
+                </div>
+            </div>
+            
+            <div class="modal-details">
+                <h3 class="text-h2" id="modal-title" style="margin-bottom: var(--spacing-2); font-size: clamp(1.5rem, 3vw, 2rem);">Title</h3>
+                <p class="text-caption mb-6" id="modal-domain" style="color: var(--accent);">Domain</p>
+                
+                <p class="text-body mb-6" id="modal-description" style="font-size: 1.05rem; color: var(--text-primary); line-height: 1.65;"></p>
+
+                <h4 class="text-caption mb-2">Why This Matters</h4>
+                <p class="text-body mb-6" id="modal-why-it-matters"></p>
+
+                <h4 class="text-caption mb-2">Learning Outcome</h4>
+                <p class="text-body mb-8" id="modal-learning-outcome"></p>
+                
+                <h4 class="text-caption mb-2">Skills Acquired</h4>
+                <div class="competency-tags mb-6" id="modal-skills" style="justify-content: flex-start;"></div>
+                
+                <div style="
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: var(--spacing-8);
+                    margin-top: auto;
+                    padding-top: var(--spacing-6);
+                    border-top: 1px solid var(--border-light);
+                ">
+                    <div>
+                        <h4 class="text-caption mb-2">Recognized By</h4>
+                        <p class="text-body" id="modal-issuers"></p>
+                    </div>
+                    <div>
+                        <h4 class="text-caption mb-2">Credentials</h4>
+                        <p class="text-body"><strong id="modal-count">0</strong> verified credentials</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fullscreen Certificate Viewer -->
+    <div class="viewer-overlay" id="viewer-overlay">
+        <button class="viewer-close" onclick="closeViewer()">×</button>
+        <div class="viewer-image-container" id="viewer-image">
+            Certificate Preview
+        </div>
+        <div class="viewer-controls">
+            <button class="viewer-btn" onclick="zoomIn()">+</button>
+            <button class="viewer-btn" onclick="zoomOut()">-</button>
+            <button class="viewer-btn" onclick="resetZoom()">⟲</button>
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────────────────── -->
+    <!-- Scripts                                                  -->
+    <!-- ─────────────────────────────────────────────────────── -->
+    <script src="js/data.js?v=3"></script>
+    <script src="js/main.js?v=3"></script>
+    <script src="js/modal.js?v=3"></script>
+
+    <!-- Soul: Custom Cursor + Scroll Progress -->
+    <script>
+    (function() {
+        // ── Scroll Progress ─────────────────────────────────
+        const bar = document.getElementById('scroll-progress');
+        window.addEventListener('scroll', () => {
+            const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+            bar.style.width = (pct * 100) + '%';
+        }, { passive: true });
+
+        // ── Custom Cursor (only fine pointer devices) ────────
+        const isFinePt = window.matchMedia('(pointer: fine)').matches;
+        if (!isFinePt) return;
+
+        const dot  = document.getElementById('cursor-dot');
+        const ring = document.getElementById('cursor-ring');
+
+        let mx = -200, my = -200, rx = -200, ry = -200;
+        let rafId;
+
+        const lerp = (a, b, t) => a + (b - a) * t;
+
+        function tick() {
+            rx = lerp(rx, mx, 0.12);
+            ry = lerp(ry, my, 0.12);
+
+            dot.style.transform  = `translate(${mx - 4}px, ${my - 4}px)`;
+            ring.style.transform = `translate(${rx - 18}px, ${ry - 18}px)`;
+
+            rafId = requestAnimationFrame(tick);
+        }
+        tick();
+
+        document.addEventListener('mousemove', e => {
+            mx = e.clientX;
+            my = e.clientY;
+        }, { passive: true });
+
+        document.addEventListener('mouseleave', () => {
+            dot.style.opacity  = '0';
+            ring.style.opacity = '0';
+        });
+        document.addEventListener('mouseenter', () => {
+            dot.style.opacity  = '1';
+            ring.style.opacity = '1';
+        });
+
+        // Hover enlargement on interactive elements
+        const interactiveQuery = 'a, button, .card, .chip, .provider-logo, .certificate-thumb, .credential-stack';
+        document.addEventListener('mouseover', e => {
+            if (e.target.closest(interactiveQuery)) {
+                document.body.classList.add('cursor-hover');
+            }
+        });
+        document.addEventListener('mouseout', e => {
+            if (e.target.closest(interactiveQuery)) {
+                document.body.classList.remove('cursor-hover');
+            }
+        });
+    })();
+    </script>
+</body>
+</html>

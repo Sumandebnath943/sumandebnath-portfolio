@@ -9,6 +9,7 @@ import CiteDossier from "@/components/sections/CiteDossier";
 import RoasmindDossier from "@/components/sections/RoasmindDossier";
 import GeekCollectiblesDossier from "@/components/sections/GeekCollectiblesDossier";
 import EmberDossier from "@/components/sections/EmberDossier";
+import DPeDossier from "@/components/sections/DPeDossier";
 import Contact from "@/components/sections/Contact";
 import {
   projects,
@@ -67,6 +68,8 @@ function renderDossier(slug: string) {
       return <GeekCollectiblesDossier />;
     case "ember":
       return <EmberDossier />;
+    case "d-pe":
+      return <DPeDossier />;
     default:
       return null;
   }

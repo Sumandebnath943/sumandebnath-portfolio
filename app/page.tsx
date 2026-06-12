@@ -4,6 +4,7 @@ import CommandPalette from "@/components/layout/CommandPalette";
 import Footer from "@/components/layout/Footer";
 import LoaderGate from "@/components/layout/LoaderGate";
 import Hero from "@/components/sections/Hero";
+import Announcement from "@/components/sections/Announcement";
 import ExperienceNarrative from "@/components/sections/ExperienceNarrative";
 import NowBuilding from "@/components/sections/NowBuilding";
 import Experience from "@/components/sections/Experience";
@@ -14,6 +15,7 @@ import PhilosophyFAQ from "@/components/sections/PhilosophyFAQ";
 import OperationalHistory from "@/components/sections/OperationalHistory";
 import AcademicFoundations from "@/components/sections/AcademicFoundations";
 import Contact from "@/components/sections/Contact";
+import SiteTour from "@/components/ui/SiteTour";
 
 export default function Home() {
   return (
@@ -28,6 +30,7 @@ export default function Home() {
       {/* Page sections — server-rendered so all content lives in initial HTML */}
       <main>
         <Hero />
+        <Announcement />
         <ExperienceNarrative />
         <NowBuilding />
         <Experience />
@@ -41,6 +44,7 @@ export default function Home() {
       </main>
 
       <Footer />
+      <SiteTour />
     </MotionProvider>
   );
 }

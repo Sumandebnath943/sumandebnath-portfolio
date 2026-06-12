@@ -43,6 +43,24 @@ export interface ArchiveProject {
 
 export const archiveProjects: ArchiveProject[] = [
   {
+    slug: "d-pe",
+    name: "D-PE.ai",
+    positioning: "God-Tier Prompt Engineering workspace.",
+    description:
+      "A premium, developer-focused workspace that transforms raw ideas into structured, robust AI prompts through an intelligent, socratic interview process.",
+    type: "Prompt Engineering Workspace",
+    status: "Live",
+    stack: ["Next.js", "OpenAI", "Groq"],
+    accent: "#3fb950",
+    accentB: "#238636",
+    liveUrl: "https://d-pe.houseofnamus.com/",
+    detailUrl: "/projects/d-pe",
+    logo: "/tools/dpe_logo.png",
+    poster: "/screenshots/d-pe.png",
+    kind: "flagship",
+    flagshipNote: "Featured in flagship systems.",
+  },
+  {
     slug: "roasmind",
     name: "ROASmind",
     positioning: "Next-generation autonomous operating system.",

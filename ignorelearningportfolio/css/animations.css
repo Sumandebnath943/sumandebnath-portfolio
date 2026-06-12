@@ -1,0 +1,97 @@
+/* ── Scroll Reveals ──────────────────────────────────────── */
+
+.reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    filter: blur(6px);
+    transition:
+        opacity   var(--transition-reveal),
+        transform var(--transition-reveal),
+        filter    var(--transition-reveal);
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+}
+
+.reveal-stagger > * {
+    opacity: 0;
+    transform: translateY(28px);
+    filter: blur(6px);
+    transition:
+        opacity   var(--transition-reveal),
+        transform var(--transition-reveal),
+        filter    var(--transition-reveal);
+}
+
+.reveal-stagger.visible > *:nth-child(1)  { transition-delay:    0ms; opacity: 1; transform: translateY(0); filter: blur(0); }
+.reveal-stagger.visible > *:nth-child(2)  { transition-delay:   90ms; opacity: 1; transform: translateY(0); filter: blur(0); }
+.reveal-stagger.visible > *:nth-child(3)  { transition-delay:  180ms; opacity: 1; transform: translateY(0); filter: blur(0); }
+.reveal-stagger.visible > *:nth-child(4)  { transition-delay:  270ms; opacity: 1; transform: translateY(0); filter: blur(0); }
+.reveal-stagger.visible > *:nth-child(5)  { transition-delay:  360ms; opacity: 1; transform: translateY(0); filter: blur(0); }
+.reveal-stagger.visible > *:nth-child(6)  { transition-delay:  450ms; opacity: 1; transform: translateY(0); filter: blur(0); }
+.reveal-stagger.visible > *:nth-child(7)  { transition-delay:  540ms; opacity: 1; transform: translateY(0); filter: blur(0); }
+.reveal-stagger.visible > *:nth-child(8)  { transition-delay:  630ms; opacity: 1; transform: translateY(0); filter: blur(0); }
+.reveal-stagger.visible > *:nth-child(9)  { transition-delay:  720ms; opacity: 1; transform: translateY(0); filter: blur(0); }
+.reveal-stagger.visible > *:nth-child(10) { transition-delay:  810ms; opacity: 1; transform: translateY(0); filter: blur(0); }
+.reveal-stagger.visible > *:nth-child(11) { transition-delay:  900ms; opacity: 1; transform: translateY(0); filter: blur(0); }
+.reveal-stagger.visible > *:nth-child(12) { transition-delay:  990ms; opacity: 1; transform: translateY(0); filter: blur(0); }
+.reveal-stagger.visible > *:nth-child(13) { transition-delay: 1080ms; opacity: 1; transform: translateY(0); filter: blur(0); }
+.reveal-stagger.visible > *:nth-child(14) { transition-delay: 1170ms; opacity: 1; transform: translateY(0); filter: blur(0); }
+.reveal-stagger.visible > *:nth-child(15) { transition-delay: 1260ms; opacity: 1; transform: translateY(0); filter: blur(0); }
+
+/* ── Keyframes ───────────────────────────────────────────── */
+
+@keyframes fadeInBlur {
+    from { opacity: 0; filter: blur(8px); transform: translateY(10px); }
+    to   { opacity: 1; filter: blur(0);   transform: translateY(0); }
+}
+
+@keyframes slideUpBlur {
+    from { opacity: 0; transform: translateY(32px); filter: blur(6px); }
+    to   { opacity: 1; transform: translateY(0);    filter: blur(0);   }
+}
+
+@keyframes countUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position:  200% center; }
+}
+
+@keyframes pulseRing {
+    0%   { box-shadow: 0 0 0 0 rgba(240, 78, 0, 0.3); }
+    70%  { box-shadow: 0 0 0 12px rgba(240, 78, 0, 0); }
+    100% { box-shadow: 0 0 0 0   rgba(240, 78, 0, 0); }
+}
+
+@keyframes floatY {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-8px); }
+}
+
+.animate-fade-in {
+    animation: fadeInBlur 900ms var(--ease-out-expo) forwards;
+}
+
+.animate-slide-up {
+    animation: slideUpBlur 900ms var(--ease-out-expo) forwards;
+}
+
+.delay-100 { animation-delay: 100ms; opacity: 0; }
+.delay-200 { animation-delay: 200ms; opacity: 0; }
+.delay-300 { animation-delay: 300ms; opacity: 0; }
+.delay-400 { animation-delay: 400ms; opacity: 0; }
+
+/* ── Stat counter ────────────────────────────────────────── */
+.stat-number {
+    animation: countUp 800ms var(--ease-spring) both;
+}
+.stat-item:nth-child(1) .stat-number { animation-delay: 200ms; }
+.stat-item:nth-child(2) .stat-number { animation-delay: 320ms; }
+.stat-item:nth-child(3) .stat-number { animation-delay: 440ms; }

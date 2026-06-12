@@ -57,6 +57,7 @@ export default function Navigation() {
     <div className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4 sm:pt-6 pointer-events-none">
       {/* ── Floating Dark Pill ── */}
       <m.header
+        id="tour-nav"
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -88,6 +89,7 @@ export default function Navigation() {
             {navLinks.map((link, i) => (
               <m.button
                 key={link.href}
+                id={link.href === "/projects" ? "tour-nav-projects" : undefined}
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }}

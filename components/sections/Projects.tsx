@@ -21,6 +21,7 @@ const SCREENSHOTS: Record<string, string> = {
   cite: "/screenshots/cite.png",
   "geek-collectibles": "/screenshots/geekcollectibles.png",
   ember: "/screenshots/ember.png",
+  "d-pe": "/screenshots/d-pe.png",
 };
 
 const projects: ProjectData[] = [
@@ -124,6 +125,23 @@ const projects: ProjectData[] = [
     theme: {
       primaryAccent: "#FF8C00", // Warm ember orange
       glow: "radial-gradient(ellipse 50% 50% at 50% 50%, rgba(255, 140, 0, 0.12), transparent 70%)",
+    },
+  },
+  {
+    id: "d-pe",
+    number: "07",
+    title: "D-PE.ai",
+    positioning: "God-Tier Prompt Engineering workspace.",
+    emotion: "Precision, structure, hacker ethos.",
+    atmosphere: "Premium hacker environment.",
+    capabilities: ["Sarcastic Terminal", "Socratic Interview", "Reverse Engineer Mode"],
+    tools: ["Next.js", "OpenAI", "Groq"],
+    status: "Live",
+    links: [{ label: "Access Workspace", href: "https://d-pe.houseofnamus.com/", variant: "primary" }],
+    screenshots: [],
+    theme: {
+      primaryAccent: "#3fb950", // GitHub green
+      glow: "radial-gradient(ellipse 50% 50% at 50% 50%, rgba(63, 185, 80, 0.15), transparent 70%)",
     },
   },
 ];

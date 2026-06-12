@@ -145,6 +145,27 @@ export const projects: ProjectMeta[] = [
     ],
     primaryAccent: "#FF8C00",
   },
+  {
+    slug: "d-pe",
+    number: "07",
+    name: "D-PE.ai",
+    positioning: "God-Tier Prompt Engineering workspace.",
+    description:
+      "D-PE.ai is a premium, developer-focused workspace that transforms raw ideas into structured, robust AI prompts through an intelligent, socratic interview process, enforcing a rigorous 9-pillar architectural framework.",
+    category: "Prompt Engineering Workspace",
+    url: "https://d-pe.houseofnamus.com/",
+    status: "Live",
+    applicationCategory: "DeveloperApplication",
+    capabilities: [
+      "Sarcastic Terminal Gateway",
+      "Socratic Interview Engine",
+      "Reverse Engineer Mode",
+      "RAG Document Grounding",
+      "Advanced Tournament Mode",
+      "Session Memory",
+    ],
+    primaryAccent: "#3fb950",
+  },
 ];
 
 export function getProject(slug: string): ProjectMeta | undefined {
