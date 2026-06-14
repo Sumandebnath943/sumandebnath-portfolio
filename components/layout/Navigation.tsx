@@ -11,7 +11,13 @@ const navLinks = [
   { label: "Systems", href: "#projects" },
   { label: "Philosophy", href: "#philosophy" },
   { label: "Experience", href: "#history" },
-  { label: "Projects", href: "/projects" },
+  { 
+    label: "Portfolio", 
+    submenus: [
+      { label: "Projects", href: "/projects" },
+      { label: "Fun Apps", href: "/fun-apps" }
+    ]
+  },
   { label: "Learnings", href: "/learnings" },
 ];
 
@@ -86,19 +92,51 @@ export default function Navigation() {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
-            {navLinks.map((link, i) => (
-              <m.button
-                key={link.href}
-                id={link.href === "/projects" ? "tour-nav-projects" : undefined}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }}
-                onClick={() => handleNavClick(link.href)}
-                className="px-3 py-2 text-[13px] font-medium text-[#a0a0a5] hover:text-[#f5f5f7] transition-colors duration-200 rounded-full hover:bg-white/[0.06]"
-              >
-                {link.label}
-              </m.button>
-            ))}
+            {navLinks.map((link, i) => {
+              if (link.submenus) {
+                return (
+                  <div key={link.label} className="relative group">
+                    <m.button
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }}
+                      className="px-3 py-2 text-[13px] font-medium text-[#a0a0a5] group-hover:text-[#f5f5f7] transition-colors duration-200 rounded-full group-hover:bg-white/[0.06] flex items-center gap-1.5"
+                    >
+                      {link.label}
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-50"><path d="m6 9 6 6 6-6"/></svg>
+                    </m.button>
+                    {/* Dropdown */}
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 z-50">
+                      <div className="flex flex-col min-w-[140px] bg-[#0A0A0C]/95 backdrop-blur-xl border border-white/[0.08] rounded-xl p-1.5 shadow-2xl">
+                        {link.submenus.map((sub) => (
+                          <button
+                            key={sub.href}
+                            onClick={() => handleNavClick(sub.href)}
+                            className="text-left px-3 py-2 text-xs font-medium text-[#86868b] hover:text-[#f5f5f7] hover:bg-white/[0.06] rounded-lg transition-colors"
+                          >
+                            {sub.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+
+              return (
+                <m.button
+                  key={link.href}
+                  id={link.href === "/projects" ? "tour-nav-projects" : undefined}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }}
+                  onClick={() => handleNavClick(link.href!)}
+                  className="px-3 py-2 text-[13px] font-medium text-[#a0a0a5] hover:text-[#f5f5f7] transition-colors duration-200 rounded-full hover:bg-white/[0.06]"
+                >
+                  {link.label}
+                </m.button>
+              );
+            })}
           </div>
 
           {/* Right Actions */}
@@ -159,15 +197,35 @@ export default function Navigation() {
             className="pointer-events-auto absolute top-20 left-4 right-4 z-40 rounded-[2rem] bg-[#0A0A0C]/95 backdrop-blur-2xl border border-white/[0.08] p-4 shadow-2xl"
           >
             <div className="flex flex-col gap-1">
-              {navLinks.map((link) => (
-                <button
-                  key={link.href}
-                  onClick={() => handleNavClick(link.href)}
-                  className="text-left px-5 py-3.5 text-[15px] font-medium text-[#86868b] hover:text-[#f5f5f7] hover:bg-white/[0.04] rounded-2xl transition-all duration-200"
-                >
-                  {link.label}
-                </button>
-              ))}
+              {navLinks.map((link) => {
+                if (link.submenus) {
+                  return (
+                    <div key={link.label} className="flex flex-col gap-1">
+                      <div className="text-left px-5 py-2 text-[15px] font-medium text-[#f5f5f7] opacity-40 uppercase tracking-widest text-[10px] mt-2">
+                        {link.label}
+                      </div>
+                      {link.submenus.map((sub) => (
+                        <button
+                          key={sub.href}
+                          onClick={() => handleNavClick(sub.href)}
+                          className="text-left pl-8 pr-5 py-3 text-[15px] font-medium text-[#86868b] hover:text-[#f5f5f7] hover:bg-white/[0.04] rounded-2xl transition-all duration-200"
+                        >
+                          {sub.label}
+                        </button>
+                      ))}
+                    </div>
+                  );
+                }
+                return (
+                  <button
+                    key={link.href}
+                    onClick={() => handleNavClick(link.href!)}
+                    className="text-left px-5 py-3.5 text-[15px] font-medium text-[#86868b] hover:text-[#f5f5f7] hover:bg-white/[0.04] rounded-2xl transition-all duration-200"
+                  >
+                    {link.label}
+                  </button>
+                );
+              })}
               <div className="h-[1px] w-full bg-white/[0.06] my-2" />
               <button
                 onClick={() => {

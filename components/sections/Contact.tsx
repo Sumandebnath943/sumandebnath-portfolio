@@ -201,6 +201,13 @@ export default function Contact() {
             >
               About
             </a>
+            <span className="text-[#1A1A1A]/30">·</span>
+            <a
+              href="/fun-apps"
+              className="hover:text-[#1A1A1A] transition-colors"
+            >
+              Fun Apps
+            </a>
           </nav>
 
           {/* Right */}
