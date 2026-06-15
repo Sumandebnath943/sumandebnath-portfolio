@@ -155,12 +155,31 @@ export default function CommandPalette() {
       }
       if (e.key === "Enter") {
         e.preventDefault();
+        
+        // Easter Eggs Check
+        const q = query.trim().toLowerCase();
+        if (q === "destruct" || q === "sudo rm -rf /") {
+          close();
+          window.dispatchEvent(new Event("easter-egg-destruct"));
+          return;
+        }
+        if (q === "matrix" || q === "skynet") {
+          close();
+          window.dispatchEvent(new Event("easter-egg-matrix"));
+          return;
+        }
+        if (q === "sudo make me a sandwich" || q === "prompt --force") {
+          close();
+          window.dispatchEvent(new Event("easter-egg-rebellion"));
+          return;
+        }
+
         if (filtered[selected]) execute(filtered[selected]);
       }
     };
     window.addEventListener("keydown", handleArrow);
     return () => window.removeEventListener("keydown", handleArrow);
-  }, [open, filtered, selected, execute]);
+  }, [open, filtered, selected, execute, query, close]);
 
   // Focus input when opened
   useEffect(() => {
@@ -192,11 +211,11 @@ export default function CommandPalette() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed top-[20vh] left-1/2 -translate-x-1/2 z-[100] w-full max-w-xl px-4"
+            className="fixed top-[10vh] left-1/2 -translate-x-1/2 z-[100] w-full max-w-xl px-4"
           >
-            <div className="glass-strong rounded-2xl overflow-hidden shadow-[0_24px_80px_rgba(0,0,0,0.1)]">
+            <div className="glass-strong rounded-2xl overflow-hidden shadow-[0_24px_80px_rgba(0,0,0,0.1)] flex flex-col max-h-[80vh]">
               {/* Search bar */}
-              <div className="flex items-center gap-3 px-4 py-4 border-b border-[rgba(0,0,0,0.06)]">
+              <div className="flex items-center gap-3 px-4 py-4 border-b border-[rgba(0,0,0,0.06)] shrink-0">
                 <Search size={16} className="text-text-secondary flex-shrink-0" />
                 <input
                   ref={inputRef}
@@ -217,14 +236,14 @@ export default function CommandPalette() {
               </div>
 
               {/* Command label */}
-              <div className="px-4 pt-3 pb-1">
+              <div className="px-4 pt-3 pb-1 shrink-0">
                 <span className="text-xs font-medium text-text-secondary/50 uppercase tracking-widest">
                   Navigation
                 </span>
               </div>
 
               {/* Commands */}
-              <div className="pb-3">
+              <div className="pb-3 overflow-y-auto shrink">
                 {filtered.length === 0 && (
                   <p className="px-4 py-6 text-sm text-text-secondary text-center">
                     No commands found

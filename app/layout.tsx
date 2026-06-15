@@ -281,6 +281,8 @@ const websiteJsonLd = {
   about: { "@id": `${SITE_URL}/#person` },
 };
 
+import EasterEggs from "@/components/ui/EasterEggs";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -310,6 +312,7 @@ export default function RootLayout({
         />
         {children}
         <ResumeMascot />
+        <EasterEggs />
         <ChatWidget />
       </body>
     </html>

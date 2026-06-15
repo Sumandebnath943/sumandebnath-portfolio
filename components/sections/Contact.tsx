@@ -211,9 +211,18 @@ export default function Contact() {
           </nav>
 
           {/* Right */}
-          <p className="font-manrope text-xs font-semibold text-[#1A1A1A]/60">
-            © {new Date().getFullYear()}
-          </p>
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => window.dispatchEvent(new Event("easter-egg-destruct"))}
+              className="px-2 py-1 bg-red-500/10 text-red-600 hover:bg-red-500 hover:text-white rounded text-[9px] font-bold tracking-widest uppercase transition-colors"
+              aria-label="System Self-Destruct"
+            >
+              Do Not Click
+            </button>
+            <p className="font-manrope text-xs font-semibold text-[#1A1A1A]/60">
+              © {new Date().getFullYear()}
+            </p>
+          </div>
 
         </div>
       </div>
