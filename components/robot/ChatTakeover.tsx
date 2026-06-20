@@ -58,7 +58,7 @@ const IDLE_MESSAGES = [
 // so 0.17 centers the robot in it. Mobile centers it in the top band.
 const DESKTOP_TARGETS: RobotTargets = {
   corner: { sx: 0.92, y: -1.7, scale: 0.52 },
-  panel: { sx: 0.21, y: -1.6, scale: 1.25 }, // rig sits right of center; the mesh is ~4% left of its origin, so visual lands centered
+  panel: { sx: 0.18, y: -1.6, scale: 1.25 }, // centered in the left 34vw (visual lands ~17% of width)
 };
 const MOBILE_TARGETS: RobotTargets = {
   corner: { sx: 0.82, y: -1.6, scale: 0.34 },
