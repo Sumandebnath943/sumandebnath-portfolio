@@ -172,8 +172,8 @@ export default function FunAppsPage() {
             </FadeInUp>
             <BentoGridContainer className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-              {/* BLOCK 1: Hovering Image (Spans 2 columns) */}
-              <BentoCard className="md:col-span-2 rounded-[2.5rem] relative overflow-hidden border border-black/[0.04] shadow-sm group min-h-[300px] md:min-h-0 cursor-pointer">
+              {/* BLOCK 1: Full-width 16:9 hero image */}
+              <BentoCard className="md:col-span-3 rounded-[2.5rem] relative overflow-hidden border border-black/[0.04] shadow-sm group aspect-[1376/768] cursor-pointer">
                 <Image
                   src="/shraddha-portfolio/museum-hero.png"
                   alt="The Design Museum — particle constellation transitioning into a walkable marble gallery"
@@ -262,16 +262,6 @@ export default function FunAppsPage() {
                     </p>
                   </div>
                 </div>
-              </BentoCard>
-
-              {/* BLOCK 5: Dark 1:1 Image */}
-              <BentoCard className="bg-[#050505] rounded-[2.5rem] relative overflow-hidden aspect-square border border-black/[0.04] shadow-sm group cursor-pointer">
-                <Image
-                  src="/shraddha-portfolio/museum-constellation.png"
-                  alt="Particle constellation forming Shraddha Sonel's face among her art forms"
-                  fill
-                  className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-[1.05]"
-                />
               </BentoCard>
 
               {/* FEATURE 1: AI Guide (dark accent) */}
@@ -370,8 +360,18 @@ export default function FunAppsPage() {
                 </p>
               </BentoCard>
 
-              {/* BLOCK 6: Full-width gallery banner */}
-              <BentoCard className="md:col-span-3 rounded-[2.5rem] relative overflow-hidden border border-black/[0.04] shadow-sm group min-h-[260px] md:min-h-[360px] cursor-pointer">
+              {/* BLOCK 5: Constellation square image */}
+              <BentoCard className="bg-[#050505] rounded-[2.5rem] relative overflow-hidden aspect-square border border-black/[0.04] shadow-sm group cursor-pointer">
+                <Image
+                  src="/shraddha-portfolio/museum-constellation.png"
+                  alt="Particle constellation forming Shraddha Sonel's face among her art forms"
+                  fill
+                  className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-[1.05]"
+                />
+              </BentoCard>
+
+              {/* BLOCK 6: Gallery banner (pairs with the constellation square) */}
+              <BentoCard className="md:col-span-2 rounded-[2.5rem] relative overflow-hidden border border-black/[0.04] shadow-sm group min-h-[260px] cursor-pointer">
                 <Image
                   src="/shraddha-portfolio/museum-gallery.png"
                   alt="The walkable marble gallery hall with the AI guide avatar"
