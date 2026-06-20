@@ -1,8 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope, Instrument_Serif, Anton } from "next/font/google";
 import Script from "next/script";
-import ResumeMascot from "@/components/ui/ResumeMascot";
-import ChatWidget from "../components/ChatWidget";
+import RobotMascot from "@/components/robot/RobotMascot";
+import ChatTakeover from "@/components/robot/ChatTakeover";
+import { RobotChatProvider } from "@/components/robot/RobotChatContext";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -310,10 +311,12 @@ export default function RootLayout({
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
-        {children}
-        <ResumeMascot />
-        <EasterEggs />
-        <ChatWidget />
+        <RobotChatProvider>
+          {children}
+          <RobotMascot />
+          <EasterEggs />
+          <ChatTakeover />
+        </RobotChatProvider>
       </body>
     </html>
   );
