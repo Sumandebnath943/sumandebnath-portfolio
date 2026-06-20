@@ -165,7 +165,7 @@ export default function FunAppsPage() {
             <FadeInUp>
               <div className="flex items-center gap-5 md:gap-8 mb-10">
                 <span className="font-mono text-xs md:text-sm text-[#1a1a1a]/30 font-bold tracking-widest">02</span>
-                <h2 className="font-manrope font-semibold text-xl md:text-2xl tracking-tight whitespace-nowrap text-[#1a1a1a]">The Design Museum</h2>
+                <h2 className="font-manrope font-semibold text-xl md:text-2xl tracking-tight text-[#1a1a1a]">The Design Museum <span className="font-serif italic font-normal text-base md:text-lg text-[#1a1a1a]/45">(Wife&rsquo;s Design Portfolio 😉)</span></h2>
                 <span className="h-px flex-1 bg-black/10" />
                 <span className="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] text-[#1a1a1a]/40 font-semibold whitespace-nowrap hidden sm:block">Interactive Portfolio</span>
               </div>
@@ -194,6 +194,9 @@ export default function FunAppsPage() {
                 </div>
                 <h3 className="text-3xl md:text-4xl font-manrope font-semibold text-[#1a1a1a] mb-4">
                   The Design Museum
+                  <span className="block mt-2 font-serif italic font-normal text-base md:text-lg text-[#1a1a1a]/45">
+                    (Wife&rsquo;s Design Portfolio 😉)
+                  </span>
                 </h3>
                 <p className="font-serif italic text-xl text-[#1a1a1a]/50 leading-snug mb-10">
                   A walkable 3D portfolio museum for graphic designer Shraddha Sonel — hosted by an AI guide.
