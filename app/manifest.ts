@@ -2,10 +2,10 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Suman Debnath — AI-Native Product Builder",
+    name: "Suman Debnath — Brand Marketing Leader & AI Product Builder",
     short_name: "Suman Debnath",
     description:
-      "Portfolio of Suman Debnath — AI-native product builder, AI generalist, and AI-native software developer building intelligent SaaS systems, agentic workflows, and AI-assisted product architectures.",
+      "Portfolio of Suman Debnath — Senior Brand Marketing Manager and AI-native product builder shipping intelligent SaaS systems, agentic workflows, and AI-assisted product architectures.",
     start_url: "/",
     display: "standalone",
     orientation: "portrait",
@@ -13,9 +13,22 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: "#000000",
     icons: [
       {
-        src: "/favicon.ico",
-        sizes: "any",
-        type: "image/x-icon",
+        src: "/icon-192.png",
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "any",
+      },
+      {
+        src: "/icon-512.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "any",
+      },
+      {
+        src: "/icon-512.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "maskable",
       },
     ],
   };

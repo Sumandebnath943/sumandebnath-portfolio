@@ -8,16 +8,16 @@ import { archiveProjects } from "@/lib/archive-projects";
 import { SITE_URL } from "@/lib/projects";
 
 export const metadata: Metadata = {
-  title: "Project Archive — AI-Native Tools, Systems & Experiments",
+  title: { absolute: "AI Products & Tools by Suman Debnath" },
   description:
-    "The extended systems archive — AI-native workflow tools, content systems, presentation intelligence, SEO engines, career intelligence, identity preservation, digital inheritance, burnout recovery, and a continuously evolving lab of internal AI-native micro-tools by Suman Debnath.",
+    "AI-native tools and systems built by a brand marketer turned AI product builder — identity, inheritance, career intelligence, burnout recovery, and more.",
   alternates: { canonical: "/projects" },
   openGraph: {
     type: "website",
     url: `${SITE_URL}/projects`,
-    title: "Project Archive · Suman Debnath",
+    title: "AI Products & Tools by Suman Debnath",
     description:
-      "AI-native tools, systems, experiments, and operational products built through AI-assisted execution.",
+      "AI-native tools, systems, and operational products built by a brand marketer turned AI product builder.",
     images: ["/og-image.png"],
   },
 };

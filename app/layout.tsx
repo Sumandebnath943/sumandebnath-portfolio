@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope, Instrument_Serif, Anton, DM_Mono } from "next/font/google";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import RobotMascot from "@/components/robot/RobotMascot";
 import ChatTakeover from "@/components/robot/ChatTakeover";
 import { RobotChatProvider } from "@/components/robot/RobotChatContext";
@@ -36,9 +38,9 @@ const dmMono = DM_Mono({
 });
 
 const SITE_URL = "https://sumandebnath.houseofnamus.com";
-const SITE_NAME = "Suman Debnath — AI-Native Product Builder";
+const SITE_NAME = "Suman Debnath — Brand Marketing Leader & AI Product Builder";
 const SITE_DESCRIPTION =
-  "Suman Debnath is an AI-native product builder, AI generalist, and AI-native software developer — transitioning from a decade in brand and digital marketing into building intelligent SaaS systems, agentic workflows, and AI-assisted product architectures.";
+  "Senior Brand Marketing Manager (9+ yrs) who builds AI-native products. A rare cross-domain profile — brand strategy plus hands-on AI product engineering.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -49,6 +51,15 @@ export const metadata: Metadata = {
   description: SITE_DESCRIPTION,
   keywords: [
     "Suman Debnath",
+    "Senior Brand Marketing Manager",
+    "Brand Marketing Manager",
+    "AI Product Manager",
+    "AI Product Marketing Manager",
+    "AI Product Marketing",
+    "brand marketer turned AI builder",
+    "marketing to AI product transition",
+    "brand strategy",
+    "performance marketing",
     "AI-native product builder",
     "AI generalist",
     "AI-native software developer",
@@ -91,8 +102,8 @@ export const metadata: Metadata = {
       {
         url: "/og-image.png",
         width: 1200,
-        height: 630,
-        alt: "Suman Debnath — AI-Native Product Builder, AI Generalist, AI-Native Software Developer",
+        height: 800,
+        alt: "Suman Debnath — Senior Brand Marketing Manager and AI-Native Product Builder",
       },
     ],
   },
@@ -131,16 +142,19 @@ const personJsonLd = {
   "@id": `${SITE_URL}/#person`,
   name: "Suman Debnath",
   alternateName: [
+    "Senior Brand Marketing Manager",
     "AI-Native Product Builder",
     "AI Generalist",
     "AI-Native Software Developer",
   ],
   description: SITE_DESCRIPTION,
+  disambiguatingDescription:
+    "Suman Debnath, the Senior Brand Marketing Manager and AI-native product builder based in Pune & Kolkata, India — creator of ROASmind, IMPRINT, LEGATUS, CITE, EMBER and D-PE.ai. Not to be confused with other people of the same name, including the AWS Principal Developer Advocate (AI/ML), or the power-systems researcher.",
   url: SITE_URL,
   image: `${SITE_URL}/og-image.png`,
   email: "mailto:sumandebnath944@gmail.com",
   telephone: "+91-7980296957",
-  jobTitle: "AI-Native Product Builder",
+  jobTitle: "Senior Brand Marketing Manager & AI-Native Product Builder",
   gender: "Male",
   nationality: "Indian",
   address: [
@@ -325,6 +339,24 @@ export default function RootLayout({
           <EasterEggs />
           <ChatTakeover />
         </RobotChatProvider>
+
+        {/* Vercel Analytics + Core Web Vitals — zero-config, privacy-first.
+            Enable "Analytics" and "Speed Insights" in the Vercel dashboard. */}
+        <Analytics />
+        <SpeedInsights />
+
+        {/* ── GA4 paste-point (optional) ───────────────────────────────────
+            To add Google Analytics 4 for behavioral/event tracking, create a
+            GA4 property, then uncomment and replace G-XXXXXXXXXX below:
+
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
+          strategy="afterInteractive"
+        />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');`}
+        </Script>
+        ──────────────────────────────────────────────────────────────────── */}
       </body>
     </html>
   );

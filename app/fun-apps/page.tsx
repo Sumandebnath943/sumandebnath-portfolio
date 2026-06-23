@@ -4,12 +4,21 @@ import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import Image from "next/image";
 import { FadeInUp, BentoGridContainer, BentoCard } from "@/components/ui/AnimatedBento";
+import { SITE_URL } from "@/lib/projects";
 
 export const metadata: Metadata = {
-  title: "Fun Apps & Experiments · Suman Debnath",
+  title: "Fun Apps & Experiments",
   description:
-    "A creative sandbox of generative art, interactive experiences, and fun applications.",
+    "A creative sandbox of generative art, interactive experiences, and fun applications by Suman Debnath.",
   alternates: { canonical: "/fun-apps" },
+  openGraph: {
+    type: "website",
+    url: `${SITE_URL}/fun-apps`,
+    title: "Fun Apps & Experiments · Suman Debnath",
+    description:
+      "A creative sandbox of generative art, interactive experiences, and fun applications.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function FunAppsPage() {

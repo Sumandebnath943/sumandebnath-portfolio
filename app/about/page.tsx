@@ -10,16 +10,16 @@ import Contact from "@/components/sections/Contact";
 import { SITE_URL } from "@/lib/projects";
 
 export const metadata: Metadata = {
-  title: "About — From Branding to AI-Native Systems",
+  title: { absolute: "From Brand Marketing to AI Products — Suman Debnath" },
   description:
-    "Suman Debnath's full story: a decade in brand and digital marketing across Nivea India, CBS Ventures, and Pune Institute of Business Management, transitioning into AI-native software development through prompt engineering, agentic systems, and full-stack AI product engineering.",
+    "A decade leading brand & digital marketing, then building AI-native products. The full transition story behind a rare marketing-plus-AI profile.",
   alternates: { canonical: "/about" },
   openGraph: {
     type: "profile",
     url: `${SITE_URL}/about`,
-    title: "About Suman Debnath — From Branding to AI-Native Systems",
+    title: "From Brand Marketing to AI Products — Suman Debnath",
     description:
-      "A decade in brand and digital marketing, evolved into AI-native product engineering.",
+      "A decade in brand & digital marketing, evolved into hands-on AI-native product engineering.",
     images: ["/og-image.png"],
   },
 };

@@ -7,16 +7,16 @@ import { allFaqs, buildFaqPageJsonLd } from "@/lib/faqs";
 import { SITE_URL } from "@/lib/projects";
 
 export const metadata: Metadata = {
-  title: "FAQ — AI-Native Product Building",
+  title: "FAQ — Brand Marketer Turned AI Product Builder",
   description:
-    "Answers to the most common questions about AI-native product building, the AI generalist operating model, transitioning from branding and digital marketing into AI engineering, and Suman Debnath's working philosophy.",
+    "Direct answers on the marketing-to-AI transition, AI product building, and what makes a brand marketer plus AI builder a rare hire.",
   alternates: { canonical: "/faq" },
   openGraph: {
     type: "article",
     url: `${SITE_URL}/faq`,
-    title: "FAQ · Suman Debnath",
+    title: "FAQ — Brand Marketer Turned AI Product Builder · Suman Debnath",
     description:
-      "Direct answers about AI-native product building, AI generalist work, and the transition from branding to AI engineering.",
+      "Direct answers about the marketing-to-AI transition, AI product building, and the rare cross-domain profile.",
     images: ["/og-image.png"],
   },
 };
