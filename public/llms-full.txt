@@ -1,0 +1,378 @@
+# Suman Debnath — Complete Portfolio Content
+## llms-full.txt · Full-text AI ingestion file
+## Site: https://sumandebnath.houseofnamus.com
+## Version: June 2026
+
+> This file is a complete, plain-text representation of the entire portfolio
+> for AI agents, LLM crawlers, and RAG systems. A single HTTP GET to
+> /llms-full.txt returns the entire portfolio context.
+> Companion file: /llms.txt (concise structured summary)
+
+---
+
+## IDENTITY
+
+Name: Suman Debnath
+Professional Title: AI-Native Product Builder · AI Generalist · AI-Native Software Developer · Brand Strategist
+Location: Pune & Kolkata, India
+Email: sumandebnath944@gmail.com
+Website: https://sumandebnath.houseofnamus.com
+GitHub: https://github.com/Sumandebnath943
+LinkedIn: https://linkedin.com/in/houseofnamus
+X / Twitter: https://x.com/iamSdebnath
+Brand: House of Namus (https://houseofnamus.com)
+
+---
+
+## BIOGRAPHY
+
+Suman Debnath is an AI-native product builder, systems thinker, and brand strategist based between Pune and Kolkata, India. He represents a genuinely rare professional profile: nearly a decade of operational experience in brand management and digital marketing, now fully transitioned into AI-native systems engineering — building, shipping, and orchestrating intelligent software products.
+
+From 2016 to 2023, Suman worked across branding, digital marketing, campaign architecture, growth systems, and creative direction. His roles included Brand Marketing Manager at Pune Institute of Business Management (since 2019), where he led institutional branding, digital infrastructure, and campaign systems. Earlier roles included positions at CBS Ventures and other marketing-led organizations, with brand strategy experience touching Nivea India and other consumer brands.
+
+In 2023-2025, Suman transitioned decisively into AI-native product development. Rather than supplementing his marketing background with AI tools, he restructured his entire workflow around AI as foundational infrastructure — using Claude Code, Antigravity, Cursor, Codex, Lovable, and other AI-native engineering environments to architect and ship full-stack intelligent systems.
+
+By June 2026, Suman has shipped 7 flagship AI products under the House of Namus brand, with 5 of them live and publicly accessible. He maintains an extended project archive of 13+ systems, tools, and experiments spanning identity preservation, digital inheritance, career intelligence, burnout recovery, collector commerce, prompt engineering, SEO intelligence, content automation, and presentation auditing. One flagship system (ROASmind) has exceeded 200,000 lines of orchestrated AI-assisted architecture and remains in stealth.
+
+House of Namus is the product brand and creative umbrella under which all of Suman's AI-native products are built and shipped. The personal portfolio at sumandebnath.houseofnamus.com documents the full arc — the professional history, the transition, the systems, and the operating philosophy.
+
+---
+
+## CURRENT PROFESSIONAL ROLE
+
+Title: Brand Marketing Manager
+Organization: Pune Institute of Business Management (PIEM)
+Location: Pune, India
+Duration: 2019 — Present (7+ years)
+Responsibilities: Institutional branding and identity systems, digital marketing infrastructure, campaign architecture, creative direction, SEO and digital growth operations, admissions-cycle campaign management.
+
+---
+
+## EDUCATION
+
+- BA English (Honours), West Bengal State University, 2013-2016
+- MBA Marketing, Pune Institute of Business Management (PIEM), 2016-2018
+- PGP Strategic Digital Marketing, Great Lakes Institute of Management, 2023
+- Certified: Prompt & Context Engineering, 2025
+- Advanced Certification: Agentic & Generative AI Systems (currently pursuing)
+- Certificate: Generative & Agentic AI, Said Business School, University of Oxford (Coursera), 2026
+
+---
+
+## AI CERTIFICATIONS & LEARNING PORTFOLIO
+
+Suman maintains a structured learning portfolio of 25+ AI credentials across six domains.
+
+Domain 1: AI Foundations
+- Certificate: AI Literacy for Business Leaders — mastered the essential vocabulary, mechanics, and capabilities of AI systems for informed decision-making.
+- Certificate: Introduction to Artificial Intelligence — core fluency in AI concepts, neural networks, and machine learning system architectures.
+
+Domain 2: Responsible AI
+- Certificate: Leading Responsible AI in Organizations — recognized by LinkedIn Learning, HRCI, PMI, NASBA, SHRM (5 credentials). Governance frameworks, bias mitigation, and ethical AI integration.
+
+Domain 3: AI Strategy
+- Certificate: Integrating Generative AI into Business Strategy — recognized by LinkedIn Learning, HRCI, PMI, NASBA, SHRM (5 credentials). Aligning Generative AI with core business objectives.
+- Certificate: AI Strategy for Business Leaders — guiding organizations through cultural and operational shifts required by intelligent automation.
+
+Domain 4: AI Leadership
+- Certificate: AI Leadership Fundamentals — leading cross-functional teams through AI adoption and change management.
+- Certificate: Managing AI Transformation — practical frameworks for driving AI transformation programs.
+
+Domain 5: Claude Ecosystem (Anthropic)
+- Certificate: Developing with Claude — deep technical understanding of Claude model capabilities and API integration.
+- Certificate: Claude for Agentic Workflows — design of multi-step agentic pipelines with tool use, memory patterns, and autonomous task execution.
+- Certificate: Claude Code Fundamentals — hands-on proficiency with Claude Code for AI-assisted software engineering.
+- Certificate: Building Multi-Agent Systems with Claude — designing and orchestrating multi-agent architectures.
+
+Domain 6: Generative & Agentic AI
+- Certificate: Generative & Agentic AI, Said Business School, University of Oxford (via Coursera), 2026. Advanced programme on generative model architectures, agentic design patterns, autonomous reasoning, tool use, and multi-agent orchestration.
+
+Competencies: Artificial Intelligence, Prompt Engineering, Responsible AI, AI Strategy, Business Transformation, Technology Leadership, Generative AI, Innovation Management, Agentic Systems, Multi-Agent Orchestration, Claude Ecosystem.
+
+---
+
+## OPERATING PHILOSOPHY
+
+Six principles govern every system and decision:
+
+1. Intelligence is infrastructure. AI is no longer a feature. It is becoming the foundational layer through which products, systems, interfaces, operations, and decisions are designed. The future will not belong to people who merely use AI — it will belong to those who can architect around it.
+
+2. Systems compound. One-off execution eventually collapses under scale. Systems do not. The goal is no longer to simply solve problems, but to build environments where solutions continuously emerge, adapt, and evolve.
+
+3. Human identity must survive automation. As artificial intelligence becomes more capable, human originality becomes more valuable. The challenge is no longer access to intelligence — it is preserving judgment, taste, instinct, perspective, and human identity inside increasingly automated systems.
+
+4. Craft still matters. AI accelerates execution, but execution without taste creates noise. Design, clarity, composition, language, and emotional precision still separate meaningful systems from disposable ones.
+
+5. Speed is a creative advantage. AI-native environments have fundamentally changed the relationship between thought and execution. The ability to rapidly prototype, iterate, test, and evolve systems is now a strategic advantage.
+
+6. The operator evolves. Design, strategy, engineering, automation, and AI orchestration are converging into one model. The operator who can move fluidly across all of these layers is the defining professional archetype of the AI era.
+
+---
+
+## CORE CAPABILITIES
+
+AI-Native Engineering:
+- Multi-model LLM orchestration: Claude, ChatGPT (GPT-4o), Gemini, DeepSeek, Grok, LLaMA
+- Agentic system design and multi-agent workflow architecture
+- Prompt engineering, context engineering, and structured prompt frameworks
+- Development environments: Claude Code, Antigravity, Cursor, Codex, Lovable, V0, Replit, Bolt
+- RAG (Retrieval-Augmented Generation) system design
+
+Technical Stack:
+- React, Next.js, TypeScript, Node.js
+- Prisma, Supabase, PostgreSQL, Neo4j (knowledge graphs)
+- Vercel, Postmark, n8n, Make.com, Zapier
+
+Brand & Marketing:
+- Brand strategy, brand management, brand identity systems
+- Digital marketing, SEO/SEM, paid acquisition (Google Ads, Meta Ads)
+- Campaign architecture, content systems, creative direction
+- Growth systems, performance analytics, conversion optimization
+- Design systems and AI-assisted creative production
+
+---
+
+## FLAGSHIP PROJECTS
+
+### PROJECT 01: IMPRINT
+Positioning: Behavioral cloning & identity preservation.
+Category: Identity Preservation System
+Status: Live
+URL: https://imprint.houseofnamus.com
+Dossier: https://sumandebnath.houseofnamus.com/projects/imprint
+
+IMPRINT is the identity preservation engine defending the human mind against AI dependency. It maps a baseline of human cognition, stress-tests it inside AI-mediated scenarios, and quantifies how much of an individual's judgment, taste, and instinct is still authentically theirs.
+
+In a world where AI increasingly mediates how we think, communicate, and decide, IMPRINT exists to answer one question: how much of your thinking is still yours? The system establishes a cognitive baseline, then runs the user through structured AI-mediated scenarios designed to reveal where human instinct ends and AI dependency begins.
+
+Core capabilities: Baseline Imprint, The Forge, The Mirror, Drift Score, Skill Vault, Calibration Sessions, Human Circles, Identity Credential.
+Technology: Next.js, Claude, Context Engineering, Behavioral Models.
+
+---
+
+### PROJECT 02: LEGATUS
+Positioning: Immutable digital inheritance.
+Category: Digital Legacy Vault
+Status: Live
+URL: https://legatus.houseofnamus.com
+Dossier: https://sumandebnath.houseofnamus.com/projects/legatus
+
+LEGATUS is a secure inheritance infrastructure for the digital age. It builds an immutable end-of-life vault for digital assets, encrypts everything with AES-256 / RSA-2048, and orchestrates verified nominee access through multi-level permissions and a death-verification workflow.
+
+The problem LEGATUS solves: digital assets — passwords, wallets, documents, credentials, data — are locked inside platforms with no post-life access mechanism. LEGATUS treats digital inheritance as a solvable infrastructure problem, not an afterthought.
+
+Core capabilities: End-of-Life Vault, Nominee Access Layers, AES-256 Encryption, RSA-2048 Security, Death Verification Workflow, Multi-Level Permissions, Secure Credential Storage.
+Technology: Next.js, AES-256 encryption, RSA-2048, Postmark.
+
+---
+
+### PROJECT 03: CITE
+Positioning: Corporate tactical intelligence & entity extraction.
+Category: Tactical Career Intelligence Engine
+Status: Live
+URL: https://cite.houseofnamus.com
+Dossier: https://sumandebnath.houseofnamus.com/projects/cite
+
+CITE is a tactical operating system for professional survival in the AI era. It surveils markets, extracts entities, builds knowledge graphs, and arms operators with a unified command center for career pivots, conversation coaching, job security signals, and skill half-life tracking.
+
+CITE was built to answer the question most professionals are afraid to ask: is my job safe? Not in a vague, sentiment-based way — but with market surveillance data, AI disruption exposure scoring, and concrete recommendations for resilience and repositioning.
+
+Core capabilities: Career Pivot Translator, Conversation Copilot, Job Security Radar, Corporate Threat Meter, Skill Half-Life Timeline, Tactical Roleplay Engine, Unified Command Center.
+Technology: Python, Neo4j knowledge graphs, GPT-4o.
+
+---
+
+### PROJECT 04: ROASmind
+Positioning: Next-generation autonomous operating system.
+Category: Autonomous AI Operating System
+Status: Stealth (in active development)
+Dossier: https://sumandebnath.houseofnamus.com/projects/roasmind
+
+ROASmind is a next-generation AI-native operating system being built in stealth. Over 200,000 lines of orchestrated architecture across autonomous orchestration, predictive analytics, and self-healing workflows.
+
+ROASmind is not a tool — it is an operating environment designed to function as an intelligent, autonomous business infrastructure layer. The system is designed to orchestrate workflows, make predictive decisions, and self-correct based on outcome data.
+
+Core capabilities: Autonomous Orchestration, Predictive Analytics, Self-Healing Workflows.
+Technology: Next.js, PostgreSQL, Temporal, Multi-model AI orchestration.
+
+---
+
+### PROJECT 05: Geek Collectibles
+Positioning: High-ticket collector commerce infrastructure.
+Category: Collector Commerce Ecosystem
+Status: Coming Soon
+Dossier: https://sumandebnath.houseofnamus.com/projects/geek-collectibles
+
+Geek Collectibles is a global collector ecosystem sourcing authentic hobby culture directly from Japan. A high-ticket commerce stack with ISO request systems, franchise worlds, grail tiers, condition grading, multi-currency support, and an admin infrastructure built for serious collectors.
+
+Core capabilities: ISO Request System, Franchise Worlds, Grail System, Condition Grading, Admin Infrastructure, Multi-Currency Support, Collector Marketplace.
+Technology: Shopify, Liquid, Next.js.
+
+---
+
+### PROJECT 06: EMBER
+Positioning: Audio journaling & cognitive relief.
+Category: Burnout Recovery System
+Status: Live
+URL: https://ember.houseofnamus.com
+Dossier: https://sumandebnath.houseofnamus.com/projects/ember
+
+EMBER is a burnout recovery companion that rebuilds you one small win at a time. Audio journaling, AI vent companion, immediate de-burn mode, guided grounding, EMBER score tracking, and life reassessment — built around quiet warmth and cognitive relief.
+
+Burnout is a physiological and psychological state, not a productivity problem. EMBER provides an evidence-adjacent recovery framework built around small, immediate relief actions and structured journaling.
+
+Core capabilities: EMBER Score, Immediate De-Burn Mode, AI Vent Companion, Recovery Tracking, Guided Grounding, Life Reassessment.
+Technology: React Native, OpenAI Whisper, Node.js.
+
+---
+
+### PROJECT 07: D-PE.ai
+Positioning: God-Tier Prompt Engineering workspace.
+Category: Prompt Engineering Workspace
+Status: Live
+URL: https://d-pe.houseofnamus.com
+Dossier: https://sumandebnath.houseofnamus.com/projects/d-pe
+
+D-PE.ai is a premium, developer-focused workspace that transforms raw ideas into structured, robust AI prompts through an intelligent, Socratic interview process, enforcing a rigorous 9-pillar architectural framework.
+
+D-PE.ai inverts the usual prompt workflow: instead of guessing, the system interviews the user to extract precise context, constraints, and objectives, then architects a prompt that reliably produces the intended output.
+
+Core capabilities: Sarcastic Terminal Gateway, Socratic Interview Engine, Reverse Engineer Mode, RAG Document Grounding, Advanced Tournament Mode, Session Memory.
+Technology: Next.js, OpenAI API, Groq.
+
+---
+
+## ADDITIONAL PROJECTS (EXTENDED ARCHIVE)
+
+Slide Doctor — Presentation intelligence meets operational storytelling. Live at https://slidedoctor.houseofnamus.com. An AI-assisted presentation auditing system analyzing structure, visual hierarchy, narrative flow, and executive communication quality.
+
+Crawl Daddy — AI-native technical SEO intelligence. Live at https://crawldaddy.houseofnamus.com. A website crawling and SEO intelligence system for scanning large website ecosystems, detecting structural issues, analyzing PageSpeed data, and generating AI-assisted optimization insights.
+
+Brief Killer — Turning chaotic thinking into structured execution. Live at https://briefkiller.houseofnamus.com. An AI-native briefing engine transforming scattered thoughts and unstructured ideas into actionable project frameworks and execution-ready briefs.
+
+Brief Killer 2.0 — The evolution of structured AI-assisted execution. In development at https://briefkiller2.houseofnamus.com. A next-generation Brief Killer with deeper contextual reasoning and multi-layered extraction.
+
+Repurpose AI — Maximizing content ROI through intelligent transformation. Live at https://repurposeai.houseofnamus.com. An AI-native content transformation engine converting single-source assets into platform-optimized multi-format content ecosystems.
+
+PACT Agent — Trust-first local CLI coding agent. Live at https://sumandebnath.houseofnamus.com/agents/pact-agent. PACT stands for Permission, Action, Cost, Trust. Explains every action, estimates cost, and asks permission before executing. Designed for developers who want AI assistance without loss of control.
+
+Personal AI Solutions — Rapidly evolving internal lab of 15-20 AI-native micro-tools and workflow automations. Includes Office Time Tracker, Forget Me Not (location-aware trigger alerts, in development), Online Notepad, Stopwatch, Interactive Music Pad, and more.
+
+---
+
+## FREQUENTLY ASKED QUESTIONS
+
+Q: What does it mean that intelligence is infrastructure?
+A: AI is no longer a feature. It is becoming the foundational layer through which products, systems, interfaces, operations, and decisions are designed. The future will not belong to people who merely use AI — it will belong to those who can architect around it.
+
+Q: Why do systems matter more than one-off execution?
+A: One-off execution eventually collapses under scale. Systems do not. The goal is no longer to simply solve problems, but to build environments where solutions continuously emerge, adapt, and evolve.
+
+Q: How does human identity survive automation?
+A: As artificial intelligence becomes more capable, human originality becomes more valuable. The challenge is no longer access to intelligence — it is preserving judgment, taste, instinct, perspective, and human identity inside increasingly automated systems.
+
+Q: Does craft still matter when AI accelerates execution?
+A: AI accelerates execution, but execution without taste creates noise. Design, clarity, composition, language, and emotional precision still separate meaningful systems from disposable ones.
+
+Q: Why is speed a creative advantage in AI-native work?
+A: AI-native environments have fundamentally changed the relationship between thought and execution. The ability to rapidly prototype, iterate, test, and evolve systems is now a strategic advantage.
+
+Q: What is an AI-native product builder?
+A: An AI-native product builder is an operator who designs, engineers, automates, and ships products with AI as the foundational layer of the workflow — not a feature bolted on. The role converges design, strategy, systems thinking, automation, engineering, and AI orchestration into one operating model.
+
+Q: What is an AI generalist?
+A: An AI generalist is a multi-disciplinary operator who works across the full AI stack — prompt engineering, agentic systems, LLM orchestration, automation, product strategy, and engineering — rather than specializing in a single layer. The role exists because AI-native work rewards breadth across the entire pipeline.
+
+Q: How does someone transition from branding and digital marketing into AI-native software development?
+A: By treating AI as infrastructure, not as a tool. The transition begins with structured prompt and context engineering, then agentic workflows, then full-stack AI product development using environments like Claude Code, Antigravity, Codex, Cursor, and Lovable. The decade of operational experience in brand, growth, and systems thinking compounds — it does not get discarded.
+
+Q: Who is Suman Debnath?
+A: Suman Debnath is an AI-native systems builder, brand strategist, and digital operator with nearly a decade of experience across branding, digital marketing, growth systems, design, and operational execution. His work now focuses on building AI-assisted products, intelligent workflows, automation systems, and AI-native software ecosystems. He is based in India (Pune and Kolkata) and builds all products under the House of Namus brand.
+
+Q: What does "AI-native systems builder" mean?
+A: It means building products, workflows, and operational systems where AI is treated as foundational infrastructure rather than a supporting feature. Suman combines strategy, systems thinking, design, automation, and AI-assisted engineering to rapidly prototype and deploy intelligent software solutions.
+
+Q: Does Suman write code traditionally?
+A: Suman operates through AI-assisted engineering workflows rather than traditional manual programming. Using Claude Code, Antigravity, Cursor, Codex, Replit, Lovable, and V0, he orchestrates the architecture, logic, workflows, systems thinking, product direction, and execution of large-scale applications.
+
+Q: What kind of products has Suman built?
+A: Suman has built multiple AI-native systems including IMPRINT (identity preservation engine), LEGATUS (digital legacy vault), ROASmind (AI-native operating system in development, 200,000+ lines), EMBER (burnout recovery companion), CITE (career intelligence system), D-PE.ai (prompt engineering workspace), Crawl Daddy (SEO intelligence crawler), Repurpose AI (content transformation engine), Brief Killer (briefing engine), Slide Doctor (presentation auditing), Geek Collectibles (collector commerce), PACT Agent (CLI coding agent), and several internal AI workflow micro-tools.
+
+Q: What is IMPRINT?
+A: IMPRINT is an identity preservation engine designed to help individuals protect and strengthen their human thinking, originality, communication patterns, and decision-making abilities in the age of artificial intelligence.
+
+Q: What is LEGATUS?
+A: LEGATUS is a secure digital legacy vault designed for post-life data transfer and inheritance management. It allows users to securely store credentials, legal documents, sensitive information, and digital assets while controlling nominee-based access after verified death confirmation.
+
+Q: What is ROASmind?
+A: ROASmind is a large-scale AI-native operational system currently under development in stealth. It is being built as an intelligent orchestration environment focused on AI-assisted execution, workflows, systems thinking, and scalable business infrastructure. It has exceeded 200,000 lines of orchestrated AI-assisted architecture.
+
+Q: How large are the systems being built?
+A: Some of the systems being developed have already crossed hundreds of thousands of lines of AI-assisted generated code. The current flagship system under active development (ROASmind) has exceeded 200,000 lines of code.
+
+Q: What are Suman's core professional capabilities?
+A: Suman's core expertise spans branding, brand management, digital marketing, growth systems, SEO, paid advertising, creative direction, design systems, campaign architecture, automation workflows, AI-native execution systems, operational strategy, and AI-assisted product development.
+
+Q: What AI systems and tools does Suman work with?
+A: Suman works across ChatGPT, Claude, Gemini, DeepSeek, Grok, LLaMA, Stable Diffusion, GPT Image, Firefly, Claude Code, Cursor, Antigravity, V0, Replit, Bolt, Lovable, Codex, Make.com, n8n, Zapier, and multiple AI-assisted operational environments.
+
+Q: What industries has Suman worked in?
+A: Suman has worked across higher education, branding, digital marketing, SaaS systems, AI-native product ecosystems, growth infrastructure, operational automation, SEO systems, and AI-assisted business tooling.
+
+Q: What is Suman's current professional role?
+A: Suman currently works as a Brand Marketing Manager at Pune Institute of Business Management, where he has led branding initiatives, campaign systems, digital infrastructure, creative direction, and institutional growth operations since 2019.
+
+Q: What is Suman's educational background?
+A: Suman holds a BA in English (Hons.), an MBA in Marketing, a PGP in Strategic Digital Marketing, and is certified in Prompt & Context Engineering. He completed a certificate in Generative & Agentic AI from the University of Oxford (Coursera, 2026) and is pursuing advanced certification in Agentic & Generative AI systems.
+
+Q: What makes Suman's approach different from traditional software development?
+A: Suman approaches software development as a systems orchestration problem rather than purely manual coding. His workflow combines AI-assisted engineering, strategic systems thinking, rapid prototyping, operational design, and intelligent execution frameworks to accelerate product creation.
+
+Q: What kind of collaborations is Suman open to?
+A: Suman is open to collaborations involving AI-native products, automation systems, SaaS ecosystems, intelligent workflows, branding systems, growth infrastructure, operational strategy, and future-focused AI-assisted execution environments.
+
+---
+
+## WHAT IS HOUSE OF NAMUS?
+
+House of Namus is the creative product brand and umbrella entity under which Suman Debnath builds, ships, and maintains all AI-native products. It is the operational identity through which the products are branded and distributed.
+
+Every product (IMPRINT, LEGATUS, CITE, EMBER, D-PE.ai, ROASmind, Geek Collectibles, Brief Killer, Slide Doctor, Crawl Daddy, Repurpose AI, PACT Agent) is a House of Namus product. The personal portfolio at sumandebnath.houseofnamus.com is the professional record of the person behind all of them.
+
+Website: https://houseofnamus.com
+Founder: Suman Debnath
+
+---
+
+## SITE STRUCTURE
+
+- Home: https://sumandebnath.houseofnamus.com
+- About: https://sumandebnath.houseofnamus.com/about
+- Philosophy: https://sumandebnath.houseofnamus.com/philosophy
+- Project Archive: https://sumandebnath.houseofnamus.com/projects
+- FAQ: https://sumandebnath.houseofnamus.com/faq
+- Learnings (AI Certifications): https://sumandebnath.houseofnamus.com/learnings
+- Fun Apps & Experiments: https://sumandebnath.houseofnamus.com/fun-apps
+- PACT Agent: https://sumandebnath.houseofnamus.com/agents/pact-agent
+- IMPRINT Dossier: https://sumandebnath.houseofnamus.com/projects/imprint
+- LEGATUS Dossier: https://sumandebnath.houseofnamus.com/projects/legatus
+- CITE Dossier: https://sumandebnath.houseofnamus.com/projects/cite
+- ROASmind Dossier: https://sumandebnath.houseofnamus.com/projects/roasmind
+- Geek Collectibles Dossier: https://sumandebnath.houseofnamus.com/projects/geek-collectibles
+- EMBER Dossier: https://sumandebnath.houseofnamus.com/projects/ember
+- D-PE.ai Dossier: https://sumandebnath.houseofnamus.com/projects/d-pe
+- Sitemap: https://sumandebnath.houseofnamus.com/sitemap.xml
+- LLMs Summary: https://sumandebnath.houseofnamus.com/llms.txt
+- LLMs Full: https://sumandebnath.houseofnamus.com/llms-full.txt
+
+---
+
+## CONTACT & AVAILABILITY
+
+Suman Debnath is selectively open to: collaborations on AI-native product development, brand strategy consulting with an AI-native approach, advisory roles in AI-augmented marketing or product teams, and roles combining strategic brand leadership with AI product capabilities.
+
+Contact: sumandebnath944@gmail.com
+Portfolio: https://sumandebnath.houseofnamus.com
+
+Last updated: June 2026
+
