@@ -24,6 +24,8 @@ const config: Config = {
         manrope: ["var(--font-manrope)", "sans-serif"],
         serif: ["var(--font-instrument)", "serif"],
         anton: ["var(--font-anton)", "Impact", "sans-serif"],
+        // Terminal face for the PACT Agent landing page (House of Namus look).
+        dmmono: ["var(--font-dm-mono)", "ui-monospace", "monospace"],
         // Keep these mapped to manrope for backward compatibility during transition
         grotesk: ["var(--font-manrope)", "sans-serif"],
         inter: ["var(--font-manrope)", "sans-serif"],

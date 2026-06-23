@@ -5,18 +5,36 @@ import { m, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-const navLinks = [
+type SubMenu = {
+  label: string;
+  href?: string;
+  submenus?: SubMenu[];
+};
+
+type NavLink = {
+  label: string;
+  href?: string;
+  submenus?: SubMenu[];
+};
+
+const navLinks: NavLink[] = [
   { label: "Evolution", href: "#experience" },
   { label: "Stack", href: "#systems" },
   { label: "Systems", href: "#projects" },
   { label: "Philosophy", href: "#philosophy" },
   { label: "Experience", href: "#history" },
-  { 
-    label: "Portfolio", 
+  {
+    label: "Portfolio",
     submenus: [
       { label: "Projects", href: "/projects" },
-      { label: "Fun Apps", href: "/fun-apps" }
-    ]
+      { label: "Fun Apps", href: "/fun-apps" },
+      {
+        label: "Agents",
+        submenus: [
+          { label: "PACT Agent", href: "/agents/pact-agent" },
+        ],
+      },
+    ],
   },
   { label: "Learnings", href: "/learnings" },
 ];
@@ -107,16 +125,43 @@ export default function Navigation() {
                     </m.button>
                     {/* Dropdown */}
                     <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 z-50">
-                      <div className="flex flex-col min-w-[140px] bg-[#0A0A0C]/95 backdrop-blur-xl border border-white/[0.08] rounded-xl p-1.5 shadow-2xl">
-                        {link.submenus.map((sub) => (
-                          <button
-                            key={sub.href}
-                            onClick={() => handleNavClick(sub.href)}
-                            className="text-left px-3 py-2 text-xs font-medium text-[#86868b] hover:text-[#f5f5f7] hover:bg-white/[0.06] rounded-lg transition-colors"
-                          >
-                            {sub.label}
-                          </button>
-                        ))}
+                      <div className="flex flex-col min-w-[150px] bg-[#0A0A0C]/95 backdrop-blur-xl border border-white/[0.08] rounded-xl p-1.5 shadow-2xl">
+                        {link.submenus.map((sub) => {
+                          // Nested level (e.g. Agents → PACT Agent): a side flyout.
+                          if (sub.submenus) {
+                            return (
+                              <div key={sub.label} className="relative group/sub">
+                                <div className="flex items-center justify-between gap-2 px-3 py-2 text-xs font-medium text-[#86868b] group-hover/sub:text-[#f5f5f7] group-hover/sub:bg-white/[0.06] rounded-lg transition-colors cursor-default">
+                                  {sub.label}
+                                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-50"><path d="m9 18 6-6-6-6" /></svg>
+                                </div>
+                                {/* Side flyout */}
+                                <div className="absolute top-0 left-full pl-2 opacity-0 translate-x-1 pointer-events-none group-hover/sub:opacity-100 group-hover/sub:translate-x-0 group-hover/sub:pointer-events-auto transition-all duration-200 z-50">
+                                  <div className="flex flex-col min-w-[150px] bg-[#0A0A0C]/95 backdrop-blur-xl border border-white/[0.08] rounded-xl p-1.5 shadow-2xl">
+                                    {sub.submenus.map((leaf) => (
+                                      <button
+                                        key={leaf.href}
+                                        onClick={() => handleNavClick(leaf.href!)}
+                                        className="text-left px-3 py-2 text-xs font-medium text-[#86868b] hover:text-[#f5f5f7] hover:bg-white/[0.06] rounded-lg transition-colors whitespace-nowrap"
+                                      >
+                                        {leaf.label}
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          }
+                          return (
+                            <button
+                              key={sub.href}
+                              onClick={() => handleNavClick(sub.href!)}
+                              className="text-left px-3 py-2 text-xs font-medium text-[#86868b] hover:text-[#f5f5f7] hover:bg-white/[0.06] rounded-lg transition-colors"
+                            >
+                              {sub.label}
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
@@ -204,15 +249,35 @@ export default function Navigation() {
                       <div className="text-left px-5 py-2 text-[15px] font-medium text-[#f5f5f7] opacity-40 uppercase tracking-widest text-[10px] mt-2">
                         {link.label}
                       </div>
-                      {link.submenus.map((sub) => (
-                        <button
-                          key={sub.href}
-                          onClick={() => handleNavClick(sub.href)}
-                          className="text-left pl-8 pr-5 py-3 text-[15px] font-medium text-[#86868b] hover:text-[#f5f5f7] hover:bg-white/[0.04] rounded-2xl transition-all duration-200"
-                        >
-                          {sub.label}
-                        </button>
-                      ))}
+                      {link.submenus.map((sub) => {
+                        if (sub.submenus) {
+                          return (
+                            <div key={sub.label} className="flex flex-col gap-1">
+                              <div className="text-left pl-8 pr-5 py-2 text-[10px] font-medium text-[#f5f5f7] opacity-30 uppercase tracking-widest">
+                                {sub.label}
+                              </div>
+                              {sub.submenus.map((leaf) => (
+                                <button
+                                  key={leaf.href}
+                                  onClick={() => handleNavClick(leaf.href!)}
+                                  className="text-left pl-12 pr-5 py-3 text-[15px] font-medium text-[#86868b] hover:text-[#f5f5f7] hover:bg-white/[0.04] rounded-2xl transition-all duration-200"
+                                >
+                                  {leaf.label}
+                                </button>
+                              ))}
+                            </div>
+                          );
+                        }
+                        return (
+                          <button
+                            key={sub.href}
+                            onClick={() => handleNavClick(sub.href!)}
+                            className="text-left pl-8 pr-5 py-3 text-[15px] font-medium text-[#86868b] hover:text-[#f5f5f7] hover:bg-white/[0.04] rounded-2xl transition-all duration-200"
+                          >
+                            {sub.label}
+                          </button>
+                        );
+                      })}
                     </div>
                   );
                 }

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Manrope, Instrument_Serif, Anton } from "next/font/google";
+import { Manrope, Instrument_Serif, Anton, DM_Mono } from "next/font/google";
 import Script from "next/script";
 import RobotMascot from "@/components/robot/RobotMascot";
 import ChatTakeover from "@/components/robot/ChatTakeover";
@@ -24,6 +24,14 @@ const anton = Anton({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-anton",
+  display: "swap",
+});
+
+// House of Namus terminal face — used on the PACT Agent landing page.
+const dmMono = DM_Mono({
+  weight: ["400", "500"],
+  subsets: ["latin"],
+  variable: "--font-dm-mono",
   display: "swap",
 });
 
@@ -292,7 +300,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${manrope.variable} ${instrumentSerif.variable} ${anton.variable}`}
+      className={`${manrope.variable} ${instrumentSerif.variable} ${anton.variable} ${dmMono.variable}`}
       suppressHydrationWarning
     >
       <body

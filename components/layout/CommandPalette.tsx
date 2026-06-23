@@ -32,6 +32,14 @@ const commands: Command[] = [
     icon: "▦",
   },
   {
+    id: "pact-agent",
+    command: "/pact",
+    label: "PACT Agent",
+    description: "Trust-first local CLI coding agent — landing page",
+    href: "/agents/pact-agent",
+    icon: "⌗",
+  },
+  {
     id: "stack",
     command: "/stack",
     label: "Systems Stack",
