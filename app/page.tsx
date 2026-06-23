@@ -16,10 +16,26 @@ import OperationalHistory from "@/components/sections/OperationalHistory";
 import AcademicFoundations from "@/components/sections/AcademicFoundations";
 import Contact from "@/components/sections/Contact";
 import SiteTour from "@/components/ui/SiteTour";
+import { SITE_URL } from "@/lib/projects";
+
+const profilePageJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "@id": `${SITE_URL}/#profilepage`,
+  url: SITE_URL,
+  isPartOf: { "@id": `${SITE_URL}/#website` },
+  mainEntity: { "@id": `${SITE_URL}/#person` },
+  about: { "@id": `${SITE_URL}/#person` },
+};
 
 export default function Home() {
   return (
     <MotionProvider>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(profilePageJsonLd) }}
+      />
+
       {/* Cinematic Loader — overlays content on first visit per session */}
       <LoaderGate />
 

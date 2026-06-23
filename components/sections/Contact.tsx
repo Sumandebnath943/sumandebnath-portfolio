@@ -135,7 +135,7 @@ export default function Contact() {
                 key={id}
                 href={href}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="me noopener noreferrer"
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-[#F5F5F3]/20 bg-[#F5F5F3]/[0.06] hover:border-[#F5F5F3]/35 hover:bg-[#F5F5F3]/[0.1] transition-all duration-400 font-manrope text-[11px] text-[#F5F5F3]/55 hover:text-[#F5F5F3]/80"
               >
                 <span className="text-[9px] text-[#F5F5F3]/40">{abbr}</span>
@@ -172,7 +172,7 @@ export default function Contact() {
             </p>
             <span className="text-[#1A1A1A]/40 text-xs px-1">·</span>
             <p className="font-manrope text-xs text-[#1A1A1A]/70 font-medium">
-              AI-Native Systems Builder
+              Brand Marketing Leader & AI Product Builder
             </p>
           </div>
 

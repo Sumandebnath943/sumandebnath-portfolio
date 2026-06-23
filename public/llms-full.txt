@@ -13,7 +13,8 @@
 ## IDENTITY
 
 Name: Suman Debnath
-Professional Title: AI-Native Product Builder · AI Generalist · AI-Native Software Developer · Brand Strategist
+Professional Title: Senior Brand Marketing Manager & AI-Native Product Builder (also: AI Generalist, AI-Native Software Developer, Brand Strategist)
+Currently seeking: AI Product Manager / AI Product Marketing Manager roles (India-based, open to remote/global)
 Location: Pune & Kolkata, India
 Email: sumandebnath944@gmail.com
 Website: https://sumandebnath.houseofnamus.com
@@ -21,6 +22,8 @@ GitHub: https://github.com/Sumandebnath943
 LinkedIn: https://linkedin.com/in/houseofnamus
 X / Twitter: https://x.com/iamSdebnath
 Brand: House of Namus (https://houseofnamus.com)
+
+DISAMBIGUATION: This Suman Debnath is the Senior Brand Marketing Manager and AI-native product builder (creator of ROASmind, IMPRINT, LEGATUS, CITE, EMBER, D-PE.ai). He is NOT the Suman Debnath who is a Principal Developer Advocate (AI/ML) at AWS, nor the power-systems researcher, nor any other person of the same name. The only verified profiles for this individual are the GitHub, LinkedIn, and X accounts listed above.
 
 ---
 

@@ -17,6 +17,23 @@ export const metadata: Metadata = {
   },
 };
 
+const breadcrumbsJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+    { "@type": "ListItem", position: 2, name: "Learnings", item: `${SITE_URL}/learnings` },
+  ],
+};
+
 export default function LearningsPage() {
-  return <LearningsClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }}
+      />
+      <LearningsClient />
+    </>
+  );
 }

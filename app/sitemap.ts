@@ -1,102 +1,32 @@
 import type { MetadataRoute } from "next";
+import { projects, SITE_URL } from "@/lib/projects";
 
-const SITE = "https://sumandebnath.houseofnamus.com";
+const SITE = SITE_URL;
+
+// Centralised so a single edit moves every "freshness" signal. Bump when the
+// site sees a substantive content pass.
+const LAST_CONTENT_UPDATE = new Date("2026-06-24");
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
-    // ── Core pages ──────────────────────────────────────────────────────────
-    {
-      url: `${SITE}`,
-      lastModified: new Date("2026-06-20"),
-      changeFrequency: "weekly",
-      priority: 1,
-    },
-    {
-      url: `${SITE}/about`,
-      lastModified: new Date("2026-06-20"),
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${SITE}/philosophy`,
-      lastModified: new Date("2026-06-20"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE}/faq`,
-      lastModified: new Date("2026-06-20"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE}/projects`,
-      lastModified: new Date("2026-06-20"),
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
-      url: `${SITE}/learnings`,
-      lastModified: new Date("2026-06-20"),
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${SITE}/fun-apps`,
-      lastModified: new Date("2026-06-20"),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${SITE}/agents/pact-agent`,
-      lastModified: new Date("2026-06-20"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
+  // ── Core pages ──────────────────────────────────────────────────────────
+  const corePages: MetadataRoute.Sitemap = [
+    { url: `${SITE}`, changeFrequency: "weekly" as const, priority: 1 },
+    { url: `${SITE}/about`, changeFrequency: "monthly" as const, priority: 0.9 },
+    { url: `${SITE}/projects`, changeFrequency: "weekly" as const, priority: 0.9 },
+    { url: `${SITE}/learnings`, changeFrequency: "monthly" as const, priority: 0.9 },
+    { url: `${SITE}/philosophy`, changeFrequency: "monthly" as const, priority: 0.8 },
+    { url: `${SITE}/faq`, changeFrequency: "monthly" as const, priority: 0.8 },
+    { url: `${SITE}/agents/pact-agent`, changeFrequency: "monthly" as const, priority: 0.8 },
+    { url: `${SITE}/fun-apps`, changeFrequency: "monthly" as const, priority: 0.7 },
+  ].map((p) => ({ ...p, lastModified: LAST_CONTENT_UPDATE }));
 
-    // ── Flagship project dossiers ────────────────────────────────────────────
-    {
-      url: `${SITE}/projects/imprint`,
-      lastModified: new Date("2026-06-01"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE}/projects/legatus`,
-      lastModified: new Date("2026-06-01"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE}/projects/cite`,
-      lastModified: new Date("2026-06-01"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE}/projects/roasmind`,
-      lastModified: new Date("2026-06-01"),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${SITE}/projects/geek-collectibles`,
-      lastModified: new Date("2026-06-01"),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${SITE}/projects/ember`,
-      lastModified: new Date("2026-06-01"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE}/projects/d-pe`,
-      lastModified: new Date("2026-06-01"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-  ];
+  // ── Project dossiers — derived from lib/projects so this can never drift ──
+  const projectPages: MetadataRoute.Sitemap = projects.map((p) => ({
+    url: `${SITE}/projects/${p.slug}`,
+    lastModified: LAST_CONTENT_UPDATE,
+    changeFrequency: "monthly" as const,
+    priority: p.status === "Live" ? 0.8 : 0.7,
+  }));
+
+  return [...corePages, ...projectPages];
 }
-

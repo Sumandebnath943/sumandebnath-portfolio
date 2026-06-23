@@ -55,7 +55,8 @@ export default function Hero() {
         altering the cinematic visual headline below.
       */}
       <h1 className="sr-only">
-        Suman Debnath — AI-Native Product Builder, AI Generalist, and AI-Native Software Developer.
+        Suman Debnath — Senior Brand Marketing Manager and AI-native product builder.
+        A rare cross-domain profile bridging brand strategy and hands-on AI product engineering.
       </h1>
 
       {/* ── Portrait — right side, bleeds off edge, spans full hero height.
@@ -164,9 +165,9 @@ export default function Hero() {
             [001.1]
           </span>
           <h2 className="font-anton text-base sm:text-lg lg:text-[24px] leading-[1.05] tracking-wide uppercase text-[#F5F0E6]">
-            AI-Native Product Builder
+            Brand Marketing Leader
             <br />
-            &amp; Brand Strategy
+            &amp; AI Product Builder
           </h2>
         </m.div>
 
@@ -181,8 +182,8 @@ export default function Hero() {
             [001.2]
           </span>
           <p className="font-mono text-[11px] sm:text-xs leading-[1.7] uppercase tracking-wide text-[#b8ada3]">
-            I craft intelligent systems and AI-native products for businesses
-            seeking to elevate their strategic and technical level.
+            Senior Brand Marketing Manager who builds AI-native products —
+            bridging brand strategy and hands-on AI product engineering.
           </p>
         </m.div>
 

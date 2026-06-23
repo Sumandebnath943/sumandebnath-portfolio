@@ -34,6 +34,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = `${project.name} — ${project.positioning}`;
   const url = `${SITE_URL}/projects/${project.slug}`;
 
+  // Per-project social image from /public/screenshots; ROASmind is in stealth
+  // and has no screenshot, so it falls back to the site OG card.
+  const shotSlug =
+    project.slug === "geek-collectibles" ? "geekcollectibles" : project.slug;
+  const ogImage =
+    project.slug === "roasmind" ? "/og-image.png" : `/screenshots/${shotSlug}.png`;
+
   return {
     title,
     description: project.description,
@@ -43,13 +50,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url,
       title: `${title} · Suman Debnath`,
       description: project.description,
-      images: ["/og-image.png"],
+      images: [ogImage],
     },
     twitter: {
       card: "summary_large_image",
       title: `${title} · Suman Debnath`,
       description: project.description,
-      images: ["/og-image.png"],
+      images: [ogImage],
     },
   };
 }
@@ -134,6 +141,18 @@ export default async function ProjectPage({ params }: Props) {
           <p className="font-manrope text-[15px] md:text-base text-white/60 max-w-3xl mt-6 leading-[1.8]">
             {project.description}
           </p>
+
+          {project.url && (
+            <a
+              href={project.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-2 mt-8 rounded-full border border-white/15 bg-white/[0.04] px-5 py-2.5 font-manrope text-[13px] font-medium text-white/85 transition-colors hover:border-white/30 hover:bg-white/[0.08]"
+            >
+              Visit the live product
+              <span className="transition-transform group-hover:translate-x-0.5">↗</span>
+            </a>
+          )}
         </header>
 
         <div className="max-w-7xl mx-auto">{renderDossier(project.slug)}</div>

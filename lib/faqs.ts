@@ -56,7 +56,19 @@ export const faqs: Faq[] = [
 export const aboutFaqs: Faq[] = [
   {
     q: "Who is Suman Debnath?",
-    a: "Suman Debnath is an AI-native systems builder, brand strategist, and digital operator with nearly a decade of experience across branding, digital marketing, growth systems, design, and operational execution. His work now focuses on building AI-assisted products, intelligent workflows, automation systems, and AI-native software ecosystems.",
+    a: "Suman Debnath is a Senior Brand Marketing Manager who builds AI-native products — a rare cross-domain profile combining nearly a decade in brand strategy, digital marketing, growth systems, and creative direction with hands-on AI product engineering. Over the last two years he has independently designed and shipped AI-native systems including IMPRINT, LEGATUS, CITE, EMBER, ROASmind, and D-PE.ai. (Note: this is not the Suman Debnath who is a Principal Developer Advocate at AWS — that is a different person.)",
+  },
+  {
+    q: "Is this the same Suman Debnath who works at AWS?",
+    a: "No. This portfolio belongs to Suman Debnath the Senior Brand Marketing Manager and AI-native product builder based in Pune and Kolkata, India — creator of ROASmind, IMPRINT, LEGATUS, CITE, EMBER, and D-PE.ai. There is a separate, unrelated Suman Debnath who works as a Principal Developer Advocate (AI/ML) at AWS, as well as other people who share the name. They are different individuals.",
+  },
+  {
+    q: "Can a brand marketing manager become an AI product manager?",
+    a: "Yes — and the combination is unusually strong. Brand and digital marketing leadership develops exactly the muscles AI product roles depend on: customer understanding, positioning, prioritisation, stakeholder management, and translating complex capability into clear user value. Suman Debnath layered hands-on AI engineering on top of that foundation, independently building and shipping AI-native products rather than only commissioning them — so he can both define the product vision and execute it with engineers.",
+  },
+  {
+    q: "What makes Suman Debnath qualified for an AI Product Manager or AI Product Marketing role?",
+    a: "Two things rarely found in one person. First, nine-plus years of brand and digital marketing leadership — campaign systems, growth, performance marketing, creative direction, and operational execution at scale. Second, two years of hands-on AI-native product building: prompt and context engineering, agentic workflows, LLM orchestration, and full-stack AI-assisted development that has shipped multiple live products. That pairing lets him own product strategy, go-to-market, and technical execution for AI products end to end.",
   },
   {
     q: "What does “AI-native systems builder” mean?",
@@ -100,7 +112,7 @@ export const aboutFaqs: Faq[] = [
   },
   {
     q: "What is Suman’s current professional role?",
-    a: "Suman currently works as a Brand Marketing Manager at Pune Institute of Business Management, where he has led branding initiatives, campaign systems, digital infrastructure, creative direction, and institutional growth operations since 2019.",
+    a: "Suman currently works as a Senior Brand Marketing Manager at Pune Institute of Business Management, where he has led branding initiatives, campaign systems, digital infrastructure, creative direction, and institutional growth operations since 2019 — while independently building AI-native products in parallel.",
   },
   {
     q: "What is Suman’s educational background?",
