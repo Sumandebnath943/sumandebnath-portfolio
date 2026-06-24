@@ -66,13 +66,86 @@ export default function AboutPage() {
             </span>
           </h1>
           <p className="font-manrope text-[15px] md:text-lg text-white/70 leading-[1.8] max-w-3xl">
-            A decade as an operator across consumer brands, paid acquisition, and
-            campaign systems — then a deliberate evolution into AI-native product
-            engineering. Today: AI-native product builder, AI generalist, and
-            AI-native software developer working at the intersection of design,
-            strategy, automation, and full-stack AI engineering.
+            Nearly a decade leading brand and digital marketing — consumer brands,
+            paid acquisition, SEO, and campaign systems — then a deliberate move
+            into building AI-native products with my own hands. Today: a Senior
+            Brand Marketing Manager who ships AI products, working at the
+            intersection of brand strategy, growth, design, automation, and
+            full-stack AI engineering.
           </p>
         </header>
+
+        {/* ── Cross-domain narrative — unique to /about (AEO + keyword surface) ── */}
+        <section
+          aria-labelledby="about-narrative"
+          className="max-w-5xl mx-auto px-6 md:px-10 pb-20 md:pb-24 text-white border-t border-white/[0.06] pt-16"
+        >
+          <h2
+            id="about-narrative"
+            className="font-manrope font-semibold text-2xl md:text-4xl leading-tight tracking-tight mb-8 max-w-3xl"
+          >
+            A rare profile:{" "}
+            <span className="font-serif italic font-normal text-white/70">
+              brand marketing leadership × AI product building.
+            </span>
+          </h2>
+
+          <div className="max-w-3xl space-y-6 font-manrope text-[15px] md:text-[17px] text-white/65 leading-[1.85]">
+            <p>
+              Suman Debnath is a Senior Brand Marketing Manager who builds
+              AI-native products. That pairing — roughly a decade of brand
+              strategy, digital marketing, and growth leadership combined with
+              hands-on AI product engineering — is what makes the profile
+              unusual. Most marketers brief engineers and wait; Suman defines the
+              brand, the positioning, and the go-to-market, then designs and ships
+              the product itself.
+            </p>
+            <p>
+              The marketing foundation is deep and operational: brand management,
+              performance marketing, paid acquisition, SEO, campaign architecture,
+              creative direction, and growth systems across consumer brands and
+              higher education. Leading branding at Pune Institute of Business
+              Management since 2019, he has run institutional brand strategy,
+              digital infrastructure, and full go-to-market campaigns end to end.
+            </p>
+            <p>
+              Over the last two years he restructured his entire workflow around
+              AI as infrastructure — prompt and context engineering, agentic
+              systems, multi-model LLM orchestration, and full-stack AI-assisted
+              development with Claude Code, Cursor, Codex, and Lovable. The output
+              is not throwaway demos but shipped products: IMPRINT, LEGATUS, CITE,
+              EMBER, and D-PE.ai — with ROASmind, an AI-native operating system,
+              in stealth.
+            </p>
+          </div>
+
+          <h2 className="font-manrope font-semibold text-xl md:text-2xl tracking-tight mt-14 mb-5 max-w-3xl">
+            Why a brand marketer for an AI product role?
+          </h2>
+          <div className="max-w-3xl space-y-6 font-manrope text-[15px] md:text-[17px] text-white/65 leading-[1.85]">
+            <p>
+              Brand and performance marketing build exactly the muscles AI product
+              roles depend on — customer understanding, positioning, prioritisation,
+              stakeholder management, and translating complex capability into clear
+              user value. Layering hands-on AI engineering on top means Suman can
+              both define the product vision and execute it with engineers, rather
+              than handing off and hoping.
+            </p>
+            <p>
+              He is now focused on{" "}
+              <strong className="font-semibold text-white/85">
+                AI Product Manager
+              </strong>{" "}
+              and{" "}
+              <strong className="font-semibold text-white/85">
+                AI Product Marketing Manager
+              </strong>{" "}
+              roles, where brand thinking, customer insight, and technical fluency
+              converge. Based between Pune and Kolkata, India, and open to remote
+              and global opportunities.
+            </p>
+          </div>
+        </section>
 
         <Experience />
         <SystemsStack />
