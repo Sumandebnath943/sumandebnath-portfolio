@@ -345,18 +345,14 @@ export default function RootLayout({
         <Analytics />
         <SpeedInsights />
 
-        {/* ── GA4 paste-point (optional) ───────────────────────────────────
-            To add Google Analytics 4 for behavioral/event tracking, create a
-            GA4 property, then uncomment and replace G-XXXXXXXXXX below:
-
+        {/* Google Analytics 4 — behavioral/event tracking (portfolio property). */}
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
+          src="https://www.googletagmanager.com/gtag/js?id=G-9D3BDPZH49"
           strategy="afterInteractive"
         />
         <Script id="ga4-init" strategy="afterInteractive">
-          {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');`}
+          {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-9D3BDPZH49');`}
         </Script>
-        ──────────────────────────────────────────────────────────────────── */}
       </body>
     </html>
   );
