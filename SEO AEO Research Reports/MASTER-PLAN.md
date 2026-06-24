@@ -15,7 +15,7 @@
 | Decision | Choice |
 |---|---|
 | Primary positioning | **Brand Marketing × AI Product** — lead with both |
-| `sameAs` / identity | **Only 3 owned profiles**: `github.com/Sumandebnath943`, `linkedin.com/in/houseofnamus`, `x.com/iamSdebnath`. **Never** the namesake profiles. |
+| `sameAs` / identity | **Only 3 owned profiles**: `github.com/Sumandebnath943`, `linkedin.com/in/suman-debnath-a528653a1` (main identity account), `x.com/iamSdebnath`. **Never** the namesake profiles, and **never** `/in/houseofnamus` (intentionally stealth, no name). |
 | Writing/blog | **None for now** → FAQ expansion becomes the content lever (one-time, not ongoing) |
 | Canonical / "who wins" | Brand site + product subdomains win for *product* queries; **portfolio homepage wins for "Suman Debnath"** |
 | Primary landing page | Homepage |
@@ -84,7 +84,7 @@
 
 | # | Action |
 |---|---|
-| P2-1 | **LinkedIn vanity URL** — `/in/houseofnamus` lacks your name; move to a name-based URL and keep the **exact same headline** across LinkedIn / GitHub / X / site. Identical NAP resolves *which* Suman Debnath you are. |
+| P2-1 | **LinkedIn** — site now links the main identity account `/in/suman-debnath-a528653a1`; the `/in/houseofnamus` account is intentionally kept stealth and excluded. Optionally clean the main account's vanity URL to `/in/sumandebnath` (or close), and keep the **exact same headline** across LinkedIn / GitHub / X / site. Identical NAP resolves *which* Suman Debnath you are. |
 | P2-2 | **Backlink from the brand site to this portfolio.** A followed link from `houseofnamus.com` author bios → this subdomain passes authority + reinforces this as the canonical "Suman Debnath" hub. |
 | P2-3 | **Submit live tools** (IMPRINT, LEGATUS, CITE, EMBER, D-PE) to Product Hunt / BetaList / SaaS directories — pointed at the **product subdomains**, portfolio as creator reference. |
 | P2-4 | **Manual AEO testing** — monthly, prompt ChatGPT / Perplexity / Gemini with "brand marketer who builds AI products," "Suman Debnath AI product manager," and check you surface *and* aren't confused with the AWS namesake. |

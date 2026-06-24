@@ -177,7 +177,7 @@ const personJsonLd = {
   ],
   sameAs: [
     "https://github.com/Sumandebnath943",
-    "https://linkedin.com/in/houseofnamus",
+    "https://linkedin.com/in/suman-debnath-a528653a1",
     "https://x.com/iamSdebnath",
   ],
   knowsAbout: [

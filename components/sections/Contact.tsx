@@ -5,7 +5,7 @@ import { m, useInView } from "framer-motion";
 
 const socials = [
   { id: "github",   label: "GitHub",      href: "https://github.com/Sumandebnath943",    abbr: "GH" },
-  { id: "linkedin", label: "LinkedIn",    href: "https://linkedin.com/in/houseofnamus",  abbr: "in" },
+  { id: "linkedin", label: "LinkedIn",    href: "https://linkedin.com/in/suman-debnath-a528653a1",  abbr: "in" },
   { id: "twitter",  label: "X / Twitter", href: "https://x.com/iamSdebnath",             abbr: "𝕏"  },
 ];
 
