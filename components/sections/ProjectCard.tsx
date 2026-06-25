@@ -22,6 +22,10 @@ export interface ProjectData {
     variant?: "primary" | "ghost" | "subtle";
   }[];
   screenshots: string[];
+  /** Optional dedicated page for the "Full Dossier" link (defaults to /projects/{id}). */
+  dossierHref?: string;
+  /** Optional representative image shown object-cover in the card's right panel. */
+  coverImage?: string;
   theme: {
     primaryAccent: string;
     glow: string;

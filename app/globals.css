@@ -301,3 +301,105 @@ body {
   .pact-marquee-track,
   [class*="pact-"] { animation: none !important; }
 }
+
+/* ─── PentaCMD (SLM) landing — spectrum / language-model motion system ──── */
+
+/* Seamless horizontal marquee (track is duplicated). */
+@keyframes penta-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Slow ambient drift for spectrum orbs / mesh. */
+@keyframes penta-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(3%, -4%) scale(1.08); }
+}
+
+/* Soft blink for cursors / live status dots. */
+@keyframes penta-blink {
+  0%, 49%   { opacity: 1; }
+  50%, 100% { opacity: 0.12; }
+}
+
+/* Vertical scanning beam (training / inference panels). */
+@keyframes penta-sweep {
+  0%   { transform: translateY(-130%); opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { transform: translateY(260%); opacity: 0; }
+}
+
+/* Slow conic / ring rotation. */
+@keyframes penta-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Flowing dashes along the data-ribbon SVG paths (token stream). */
+@keyframes penta-dash {
+  to { stroke-dashoffset: -1000; }
+}
+
+/* Diagonal sheen sweeping across a solid panel. */
+@keyframes penta-shimmer {
+  0%   { transform: translateX(-160%) skewX(-18deg); }
+  100% { transform: translateX(280%) skewX(-18deg); }
+}
+
+/* Expanding pulse ring (active pipeline node / peak marker). */
+@keyframes penta-pulse-ring {
+  0%   { transform: scale(0.7); opacity: 0.6; }
+  100% { transform: scale(2.3); opacity: 0; }
+}
+
+/* Spectrum gradient slide — animates background-position for moving rainbow. */
+@keyframes penta-spectrum {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* Embedding-lattice node floats (two phases for parallax). */
+@keyframes penta-float-a {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(6px, -10px); }
+}
+@keyframes penta-float-b {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(-8px, 8px); }
+}
+
+/* Token cell glow pulse. */
+@keyframes penta-glow {
+  0%, 100% { opacity: 0.25; }
+  50%      { opacity: 1; }
+}
+
+/* Vertical rise used on streaming tokens. */
+@keyframes penta-rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Slow hue rotation for the ambient neural backdrop. */
+@keyframes penta-hue {
+  to { filter: hue-rotate(360deg); }
+}
+
+/* Horizontal scroll for the background wave contours — translates exactly one
+   viewBox width (1200 user units) so the doubled path loops seamlessly. */
+@keyframes penta-wave {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-1200px); }
+}
+
+/* Glow travelling down the journey spine (data flowing through the arc). */
+@keyframes penta-fall {
+  0%   { transform: translateY(-120%); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(1400%); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [class*="penta-"] { animation: none !important; }
+}

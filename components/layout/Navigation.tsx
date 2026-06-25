@@ -8,36 +8,58 @@ import { useRouter } from "next/navigation";
 type SubMenu = {
   label: string;
   href?: string;
+  color?: string;
   submenus?: SubMenu[];
 };
 
 type NavLink = {
   label: string;
   href?: string;
+  color?: string;
   submenus?: SubMenu[];
 };
 
 const navLinks: NavLink[] = [
-  { label: "Evolution", href: "#experience" },
-  { label: "Stack", href: "#systems" },
-  { label: "Systems", href: "#projects" },
-  { label: "Philosophy", href: "#philosophy" },
-  { label: "Experience", href: "#history" },
+  { label: "Evolution", href: "#experience", color: "#38BDF8" },
+  { label: "Stack", href: "#systems", color: "#A78BFA" },
+  { label: "Systems", href: "#projects", color: "#34D399" },
+  { label: "Philosophy", href: "#philosophy", color: "#FB7185" },
+  { label: "Experience", href: "#history", color: "#FACC15" },
   {
     label: "Portfolio",
+    color: "#FF8C00",
     submenus: [
-      { label: "Projects", href: "/projects" },
-      { label: "Fun Apps", href: "/fun-apps" },
+      { label: "Projects", href: "/projects", color: "#FF3B6B" },
+      { label: "Fun Apps", href: "/fun-apps", color: "#FF8C00" },
       {
         label: "Agents",
+        color: "#FF5500",
         submenus: [
-          { label: "PACT Agent", href: "/agents/pact-agent" },
+          { label: "PACT Agent", href: "/agents/pact-agent", color: "#FF5500" },
+        ],
+      },
+      {
+        label: "SLMs",
+        color: "#A78BFA",
+        submenus: [
+          { label: "PentaCMD", href: "/slms/pentacmd", color: "#38BDF8" },
         ],
       },
     ],
   },
-  { label: "Learnings", href: "/learnings" },
+  { label: "Learnings", href: "/learnings", color: "#22D3EE" },
 ];
+
+// Per-item CSS vars so hover styles can reference each item's accent colour
+// (Tailwind can't generate dynamic colours, so we drive them via custom props).
+function hueVars(color?: string): React.CSSProperties | undefined {
+  if (!color) return undefined;
+  return {
+    ["--c" as string]: color,
+    ["--cb" as string]: `${color}24`, // soft fill (~14%)
+    ["--cr" as string]: `${color}55`, // ring
+  } as React.CSSProperties;
+}
 
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
@@ -118,7 +140,8 @@ export default function Navigation() {
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }}
-                      className="px-3 py-2 text-[13px] font-medium text-[#a0a0a5] group-hover:text-[#f5f5f7] transition-colors duration-200 rounded-full group-hover:bg-white/[0.06] flex items-center gap-1.5"
+                      style={hueVars(link.color)}
+                      className="px-3 py-2 text-[13px] font-medium text-[#a0a0a5] transition-all duration-200 rounded-full group-hover:text-[var(--c)] group-hover:bg-[var(--cb)] group-hover:shadow-[inset_0_0_0_1px_var(--cr),0_5px_18px_-8px_var(--c)] flex items-center gap-1.5"
                     >
                       {link.label}
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-50"><path d="m6 9 6 6 6-6"/></svg>
@@ -131,7 +154,7 @@ export default function Navigation() {
                           if (sub.submenus) {
                             return (
                               <div key={sub.label} className="relative group/sub">
-                                <div className="flex items-center justify-between gap-2 px-3 py-2 text-xs font-medium text-[#86868b] group-hover/sub:text-[#f5f5f7] group-hover/sub:bg-white/[0.06] rounded-lg transition-colors cursor-default">
+                                <div style={hueVars(sub.color)} className="flex items-center justify-between gap-2 px-3 py-2 text-xs font-medium text-[#86868b] transition-all group-hover/sub:text-[var(--c)] group-hover/sub:bg-[var(--cb)] group-hover/sub:shadow-[inset_0_0_0_1px_var(--cr)] rounded-lg cursor-default">
                                   {sub.label}
                                   <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-50"><path d="m9 18 6-6-6-6" /></svg>
                                 </div>
@@ -142,7 +165,8 @@ export default function Navigation() {
                                       <button
                                         key={leaf.href}
                                         onClick={() => handleNavClick(leaf.href!)}
-                                        className="text-left px-3 py-2 text-xs font-medium text-[#86868b] hover:text-[#f5f5f7] hover:bg-white/[0.06] rounded-lg transition-colors whitespace-nowrap"
+                                        style={hueVars(leaf.color)}
+                                        className="text-left px-3 py-2 text-xs font-medium text-[#86868b] transition-all hover:text-[var(--c)] hover:bg-[var(--cb)] hover:shadow-[inset_0_0_0_1px_var(--cr)] rounded-lg whitespace-nowrap"
                                       >
                                         {leaf.label}
                                       </button>
@@ -156,7 +180,8 @@ export default function Navigation() {
                             <button
                               key={sub.href}
                               onClick={() => handleNavClick(sub.href!)}
-                              className="text-left px-3 py-2 text-xs font-medium text-[#86868b] hover:text-[#f5f5f7] hover:bg-white/[0.06] rounded-lg transition-colors"
+                              style={hueVars(sub.color)}
+                              className="text-left px-3 py-2 text-xs font-medium text-[#86868b] transition-all hover:text-[var(--c)] hover:bg-[var(--cb)] hover:shadow-[inset_0_0_0_1px_var(--cr)] rounded-lg"
                             >
                               {sub.label}
                             </button>
@@ -176,7 +201,8 @@ export default function Navigation() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }}
                   onClick={() => handleNavClick(link.href!)}
-                  className="px-3 py-2 text-[13px] font-medium text-[#a0a0a5] hover:text-[#f5f5f7] transition-colors duration-200 rounded-full hover:bg-white/[0.06]"
+                  style={hueVars(link.color)}
+                  className="px-3 py-2 text-[13px] font-medium text-[#a0a0a5] transition-all duration-200 rounded-full hover:text-[var(--c)] hover:bg-[var(--cb)] hover:shadow-[inset_0_0_0_1px_var(--cr),0_5px_18px_-8px_var(--c)]"
                 >
                   {link.label}
                 </m.button>

@@ -6,15 +6,27 @@ import { ArrowRight, Sparkles } from "lucide-react";
 
 const announcements = [
   {
-    title: "D-PE.ai",
-    desc: "God-Tier Prompt Engineering workspace.",
+    title: "PentaCMD-47M",
+    desc: "A 47M-param small language model that speaks your terminal.",
+    linkText: "Explore",
+    href: "/slms/pentacmd"
+  },
+  {
+    title: "PACT Agent",
+    desc: "Trust-first local CLI coding agent.",
     linkText: "View Dossier",
-    href: "/projects/d-pe"
+    href: "/agents/pact-agent"
   },
   {
     title: "Soul Canvas",
-    desc: "Cinematic psychological architecture.",
-    linkText: "Explore",
+    desc: "Your psyche, rendered as living particle art.",
+    linkText: "Launch",
+    href: "/fun-apps"
+  },
+  {
+    title: "The Design Museum",
+    desc: "A walkable 3D portfolio museum, hosted by an AI guide.",
+    linkText: "Enter",
     href: "/fun-apps"
   }
 ];

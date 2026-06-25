@@ -26,8 +26,84 @@ const SCREENSHOTS: Record<string, string> = {
 
 const projects: ProjectData[] = [
   {
-    id: "imprint",
+    id: "pentacmd",
     number: "01",
+    title: "PentaCMD-47M",
+    positioning: "A 47M-parameter language model that speaks your terminal.",
+    emotion: "English in. Commands out.",
+    atmosphere: "From scratch. Built for developers.",
+    capabilities: ["From-Scratch Transformer", "5 CLI Families", "~86.7% Exact-Match"],
+    tools: ["PyTorch", "nanoGPT", "Kaggle T4"],
+    status: "Live",
+    links: [{ label: "View on GitHub", href: "https://github.com/Sumandebnath943/pentacmd", variant: "primary" }],
+    screenshots: [],
+    dossierHref: "/slms/pentacmd",
+    coverImage: "/pentacmd-images/product1.png",
+    theme: {
+      primaryAccent: "#A78BFA",
+      glow: "radial-gradient(ellipse 50% 50% at 50% 50%, rgba(167,139,250,0.15), transparent 70%)",
+    },
+  },
+  {
+    id: "pact-agent",
+    number: "02",
+    title: "PACT Agent",
+    positioning: "Trust-first local CLI coding agent.",
+    emotion: "Permission. Action. Cost. Trust.",
+    atmosphere: "Earned trust, not assumed trust.",
+    capabilities: ["Permission Contracts", "Sandboxed Execution", "Independent Verifier"],
+    tools: ["Python", "OpenRouter", "Ollama"],
+    status: "Live",
+    links: [{ label: "View on GitHub", href: "https://github.com/Sumandebnath943/pact-agent", variant: "primary" }],
+    screenshots: [],
+    dossierHref: "/agents/pact-agent",
+    coverImage: "/pact-images/pact-terminal.png",
+    theme: {
+      primaryAccent: "#FF5500",
+      glow: "radial-gradient(ellipse 50% 50% at 50% 50%, rgba(255,85,0,0.15), transparent 70%)",
+    },
+  },
+  {
+    id: "soul-canvas",
+    number: "03",
+    title: "Soul Canvas",
+    positioning: "Your psyche, rendered as living particle art.",
+    emotion: "A cinematic exploration of your psychological architecture.",
+    atmosphere: "Generative, meditative, alive.",
+    capabilities: ["Psychometric Mapping", "Generative 3D Art", "100k-Particle GPU Render"],
+    tools: ["Three.js", "GLSL", "GSAP"],
+    status: "Live",
+    links: [{ label: "Launch Experience", href: "https://soulcanvas.houseofnamus.com/", variant: "primary" }],
+    screenshots: [],
+    dossierHref: "/fun-apps",
+    coverImage: "/soul-canvas.png",
+    theme: {
+      primaryAccent: "#FF3D81",
+      glow: "radial-gradient(ellipse 50% 50% at 50% 50%, rgba(255,61,129,0.15), transparent 70%)",
+    },
+  },
+  {
+    id: "design-museum",
+    number: "04",
+    title: "The Design Museum",
+    positioning: "A walkable 3D portfolio museum, hosted by an AI guide.",
+    emotion: "Step inside a gallery that greets you and talks back.",
+    atmosphere: "Marble, light, presence.",
+    capabilities: ["Walkable 3D Gallery", "AI Docent (Voice)", "150k-Particle Constellation"],
+    tools: ["React Three Fiber", "Three.js", "Groq"],
+    status: "Live",
+    links: [{ label: "Enter Museum", href: "https://shraddhasonel.houseofnamus.com/", variant: "primary" }],
+    screenshots: [],
+    dossierHref: "/fun-apps",
+    coverImage: "/shraddha-portfolio/museum-hero.png",
+    theme: {
+      primaryAccent: "#7AA2F7",
+      glow: "radial-gradient(ellipse 50% 50% at 50% 50%, rgba(122,162,247,0.14), transparent 70%)",
+    },
+  },
+  {
+    id: "imprint",
+    number: "05",
     title: "IMPRINT",
     positioning: "Behavioral cloning & identity preservation.",
     emotion: "A reckoning. A mirror held against AI dependency.",
@@ -44,7 +120,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "legatus",
-    number: "02",
+    number: "06",
     title: "LEGATUS",
     positioning: "Immutable digital inheritance.",
     emotion: "Security, permanence, legacy.",
@@ -61,7 +137,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "cite",
-    number: "03",
+    number: "07",
     title: "CITE",
     positioning: "Corporate tactical intelligence & entity extraction.",
     emotion: "Corporate tactical intelligence.",
@@ -78,7 +154,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "roasmind",
-    number: "04",
+    number: "08",
     title: "ROASmind",
     positioning: "Next-generation autonomous operating system.",
     emotion: "The future.",
@@ -95,7 +171,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "geek-collectibles",
-    number: "05",
+    number: "09",
     title: "Geek Collectibles",
     positioning: "High-ticket collector commerce infrastructure.",
     emotion: "Akihabara at 2AM.",
@@ -112,7 +188,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "ember",
-    number: "06",
+    number: "10",
     title: "EMBER",
     positioning: "Audio journaling & cognitive relief.",
     emotion: "Emotional safety and burnout recovery.",
@@ -129,7 +205,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "d-pe",
-    number: "07",
+    number: "11",
     title: "D-PE.ai",
     positioning: "God-Tier Prompt Engineering workspace.",
     emotion: "Precision, structure, hacker ethos.",
@@ -162,6 +238,9 @@ function StackCard({
   const accent = project.theme.primaryAccent;
   const isLast = index === total - 1;
   const screenshot = SCREENSHOTS[project.id];
+  // Image-only cards (wide 16:9 cover) are shorter so the framed image fills
+  // the panel snugly instead of leaving a tall empty void.
+  const isImageCard = !!project.coverImage;
 
   // As later cards rise to cover this one, recede it: scale + dim. The last
   // card never gets covered, so it stays at full size.
@@ -183,7 +262,7 @@ function StackCard({
         filter,
         zIndex: index + 1,
       }}
-      className="sticky h-[78vh] lg:h-[84vh] min-h-[480px] origin-top px-2 md:px-0"
+      className={`sticky origin-top px-2 md:px-0 ${isImageCard ? "h-[64vh] lg:h-[490px] min-h-[440px]" : "h-[78vh] lg:h-[84vh] min-h-[480px]"}`}
     >
       <div
         className="h-full w-full overflow-hidden rounded-[1.75rem] border bg-[#0A0A0C] flex lg:grid lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] shadow-[0_30px_120px_-30px_rgba(0,0,0,0.8)]"
@@ -262,7 +341,7 @@ function StackCard({
                 <ArrowUpRight size={15} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </a>
               <a
-                href={`/projects/${project.id}`}
+                href={project.dossierHref ?? `/projects/${project.id}`}
                 className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-[13px] font-medium text-white/80 transition-colors hover:border-white/30 hover:text-white"
               >
                 Full Dossier
@@ -276,7 +355,23 @@ function StackCard({
           className="relative hidden lg:block lg:h-full border-l overflow-hidden bg-[#050505]"
           style={{ borderColor: `${accent}26` }}
         >
-          {screenshot ? (
+          {project.coverImage ? (
+            <div className="relative h-full w-full flex items-center justify-center p-6 lg:p-7 overflow-hidden">
+              {/* soft accent glow fills the slim margin around the framed image */}
+              <div className="absolute inset-0 opacity-55 pointer-events-none" style={{ background: project.theme.glow }} />
+              <div className="relative w-full rounded-xl overflow-hidden border border-white/10 shadow-[0_24px_60px_-18px_rgba(0,0,0,0.75)]">
+                <Image
+                  src={project.coverImage}
+                  alt={`${project.title} preview`}
+                  width={1672}
+                  height={941}
+                  className="w-full h-auto block"
+                  loading="lazy"
+                  sizes="(max-width: 1024px) 0px, 50vw"
+                />
+              </div>
+            </div>
+          ) : screenshot ? (
             <>
               {/* top/bottom fade masks */}
               <div className="absolute top-0 inset-x-0 h-12 bg-gradient-to-b from-[#0A0A0C] to-transparent z-10 pointer-events-none" />

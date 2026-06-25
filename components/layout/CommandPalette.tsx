@@ -40,6 +40,14 @@ const commands: Command[] = [
     icon: "⌗",
   },
   {
+    id: "pentacmd",
+    command: "/pentacmd",
+    label: "PentaCMD-47M",
+    description: "From-scratch 47M-param SLM — English to terminal commands",
+    href: "/slms/pentacmd",
+    icon: "⌥",
+  },
+  {
     id: "stack",
     command: "/stack",
     label: "Systems Stack",
