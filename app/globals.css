@@ -403,3 +403,138 @@ body {
 @media (prefers-reduced-motion: reduce) {
   [class*="penta-"] { animation: none !important; }
 }
+
+/* ─── Forget Anything? (App) landing — Royal Emerald & Gold motion system ──── */
+
+/* Gold sheen sweep for the download CTA. */
+@keyframes fa-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+/* Slow ambient float for the emerald/gold backdrop orbs. */
+@keyframes fa-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%      { transform: translate(2%, -3%) scale(1.06); }
+  66%      { transform: translate(-2%, 2%) scale(0.96); }
+}
+
+/* Larger lazy drift for hero glow blobs. */
+@keyframes fa-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(16px, -20px) scale(1.08); }
+}
+
+/* Expanding radar ping (geofence boundary / departure alarm). */
+@keyframes fa-ping {
+  0%   { transform: scale(0.55); opacity: 0.5; }
+  80%  { opacity: 0; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* Seamless marquee (track duplicated → translate exactly -50%). */
+@keyframes fa-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Wi-Fi signal-bar breathing. */
+@keyframes fa-wave {
+  0%, 100% { opacity: 0.3;  transform: scaleY(0.65); }
+  50%      { opacity: 1;    transform: scaleY(1); }
+}
+
+/* Slow ring rotation (concentric geofence guides). */
+@keyframes fa-spin-slow { to { transform: rotate(360deg); } }
+
+/* Flowing dashes along connector paths (settings → native sync). */
+@keyframes fa-dash { to { stroke-dashoffset: -1000; } }
+
+/* Soft blink for live status dots. */
+@keyframes fa-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0.18; } }
+
+/* Gentle vertical bob for floating chips. */
+@keyframes fa-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+
+/* Soft opacity pulse. */
+@keyframes fa-pulse-soft { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.9; } }
+
+/* ── Leave-Home simulator — one synchronized ~9s departure loop ───────────── */
+
+/* The traveller walks from home across the (adjustable) geofence edge and out.
+   --fa-cross is set from the radius slider so the crossing always meets the ring. */
+@keyframes fa-traverse {
+  0%, 7%  { left: var(--fa-start, 13%); opacity: 1; }
+  44%     { left: var(--fa-cross, 46%); opacity: 1; }
+  78%     { left: var(--fa-far, 86%); opacity: 1; }
+  86%     { left: var(--fa-far, 86%); opacity: 0; }
+  92%     { left: var(--fa-start, 13%); opacity: 0; }
+  100%    { left: var(--fa-start, 13%); opacity: 1; }
+}
+
+/* Boundary alarm ring flashes exactly as the traveller crosses. */
+@keyframes fa-alarm {
+  0%, 40% { opacity: 0;   transform: scale(0.5); }
+  47%     { opacity: 0.85; transform: scale(1); }
+  72%     { opacity: 0;   transform: scale(2.3); }
+  100%    { opacity: 0; }
+}
+
+/* The real notification card slides up at the crossing, holds, then resets. */
+@keyframes fa-popcard {
+  0%, 42% { opacity: 0; transform: translateY(16px) scale(0.96); }
+  50%     { opacity: 1; transform: translateY(0) scale(1); }
+  80%     { opacity: 1; transform: translateY(0) scale(1); }
+  90%,100%{ opacity: 0; transform: translateY(8px) scale(0.98); }
+}
+
+/* Status line A ("at home") shows first, B ("left home") second. */
+@keyframes fa-status-a { 0%, 40% { opacity: 1; } 47%, 100% { opacity: 0; } }
+@keyframes fa-status-b { 0%, 41% { opacity: 0; } 48% { opacity: 1; } 82% { opacity: 1; } 90%, 100% { opacity: 0; } }
+
+/* Home Wi-Fi node toggles connected → dropped → reconnected across the loop. */
+@keyframes fa-wifi-on  { 0%, 40% { opacity: 1; } 47%, 86% { opacity: 0; } 93%, 100% { opacity: 1; } }
+@keyframes fa-wifi-off { 0%, 40% { opacity: 0; } 47%, 86% { opacity: 1; } 93%, 100% { opacity: 0; } }
+
+/* ── Dynamic background system — keeps long scroll from going monotone ────── */
+
+/* Slow aurora drift — pan a soft multi-stop emerald/gold gradient. */
+@keyframes fa-aurora {
+  0%   { transform: translate3d(-6%, -3%, 0) rotate(0deg) scale(1.25); }
+  50%  { transform: translate3d(6%, 4%, 0) rotate(8deg) scale(1.4); }
+  100% { transform: translate3d(-6%, -3%, 0) rotate(0deg) scale(1.25); }
+}
+
+/* Conic mesh slow rotation. */
+@keyframes fa-conic { to { transform: rotate(360deg); } }
+
+/* Horizontal gradient position pan (animated emerald sheen on bands). */
+@keyframes fa-grad-x {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* Diagonal sheen sweeping a card/panel. */
+@keyframes fa-sheen {
+  0%   { transform: translateX(-160%) skewX(-18deg); }
+  100% { transform: translateX(260%) skewX(-18deg); }
+}
+
+/* Particle twinkle. */
+@keyframes fa-twinkle {
+  0%, 100% { opacity: 0.15; transform: scale(0.8); }
+  50%      { opacity: 0.9;  transform: scale(1.1); }
+}
+
+/* Small orbiting dot around a centre. */
+@keyframes fa-orbit { to { transform: rotate(360deg); } }
+
+/* Endless horizontal contour scroll for topographic backdrops. */
+@keyframes fa-contour { from { transform: translateX(0); } to { transform: translateX(-1200px); } }
+
+/* Deck card subtle idle breathing. */
+@keyframes fa-deck-breathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  [class*="fa-"] { animation: none !important; }
+}

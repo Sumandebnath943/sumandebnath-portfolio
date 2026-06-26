@@ -45,6 +45,14 @@ const navLinks: NavLink[] = [
           { label: "PentaCMD", href: "/slms/pentacmd", color: "#38BDF8" },
         ],
       },
+      {
+        label: "Apps",
+        color: "#50C878",
+        submenus: [
+          { label: "Forget Anything?", href: "/apps/forget-anything", color: "#DAA520" },
+        ],
+      },
+
     ],
   },
   { label: "Learnings", href: "/learnings", color: "#22D3EE" },

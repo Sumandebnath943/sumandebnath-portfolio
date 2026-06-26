@@ -220,6 +220,25 @@ const projects: ProjectData[] = [
       glow: "radial-gradient(ellipse 50% 50% at 50% 50%, rgba(63, 185, 80, 0.15), transparent 70%)",
     },
   },
+  {
+    id: "forget-anything",
+    number: "12",
+    title: "Forget Anything?",
+    positioning: "Never leave home without your essentials.",
+    emotion: "The app that remembers, so you don't have to.",
+    atmosphere: "Royal emerald & gold. Privacy-first.",
+    capabilities: ["Wi-Fi + Geofence Triggers", "100% Offline", "Kotlin Foreground Service"],
+    tools: ["React", "Capacitor", "Kotlin"],
+    status: "Live",
+    links: [{ label: "Open Landing Page", href: "/apps/forget-anything", variant: "primary" }],
+    screenshots: [],
+    dossierHref: "/apps/forget-anything",
+    coverImage: "/forget-anything-app/Images/hero-wide.png",
+    theme: {
+      primaryAccent: "#50C878", // Royal emerald
+      glow: "radial-gradient(ellipse 50% 50% at 50% 50%, rgba(80, 200, 120, 0.16), transparent 70%)",
+    },
+  },
 ];
 
 // ── STACK CARD ────────────────────────────────────────────────────────────────

@@ -18,7 +18,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE}/faq`, changeFrequency: "monthly" as const, priority: 0.8 },
     { url: `${SITE}/agents/pact-agent`, changeFrequency: "monthly" as const, priority: 0.8 },
     { url: `${SITE}/slms/pentacmd`, changeFrequency: "monthly" as const, priority: 0.8 },
+    { url: `${SITE}/apps/forget-anything`, changeFrequency: "monthly" as const, priority: 0.8 },
     { url: `${SITE}/fun-apps`, changeFrequency: "monthly" as const, priority: 0.7 },
+
   ].map((p) => ({ ...p, lastModified: LAST_CONTENT_UPDATE }));
 
   // ── Project dossiers — derived from lib/projects so this can never drift ──

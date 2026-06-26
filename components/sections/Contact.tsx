@@ -30,7 +30,18 @@ const socials = [
   { id: "x", label: "X", href: "https://x.com/iamSdebnath" },
 ];
 
-export default function Contact() {
+export default function Contact({
+  closingBg = "linear-gradient(180deg, #1C120C 0%, #24110A 12%, #140B08 55%, #050505 100%)",
+  glowColor = "rgba(160,70,15,0.22)",
+  hazeColor = "rgba(180,80,20,0.1)",
+}: {
+  /** Section gradient — override per-page (e.g. emerald) so the closing matches the page. */
+  closingBg?: string;
+  /** Central atmospheric glow colour (rgba). */
+  glowColor?: string;
+  /** Left haze colour (rgba). */
+  hazeColor?: string;
+} = {}) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
 
@@ -39,31 +50,25 @@ export default function Contact() {
       id="contact"
       ref={ref}
       className="relative overflow-hidden"
-      style={{
-        // Clean cinematic descent — no white fog, warm graphite entry, ember descent
-        background:
-          "linear-gradient(180deg, #1C120C 0%, #24110A 12%, #140B08 55%, #050505 100%)",
-      }}
+      style={{ background: closingBg }}
     >
       {/* ── ATMOSPHERIC DEPTH ── */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Central ember core — restrained breathing */}
+        {/* Central glow core — restrained breathing */}
         <m.div
           animate={{ opacity: [0.35, 0.55, 0.35] }}
           transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px]"
           style={{
-            background:
-              "radial-gradient(ellipse at top, rgba(160,70,15,0.22) 0%, transparent 70%)",
+            background: `radial-gradient(ellipse at top, ${glowColor} 0%, transparent 70%)`,
             filter: "blur(60px)",
           }}
         />
-        {/* Left warm haze */}
+        {/* Left haze */}
         <div
           className="absolute top-[20%] left-[-10%] w-[45%] h-[400px]"
           style={{
-            background:
-              "radial-gradient(ellipse at left, rgba(180,80,20,0.1) 0%, transparent 70%)",
+            background: `radial-gradient(ellipse at left, ${hazeColor} 0%, transparent 70%)`,
             filter: "blur(70px)",
           }}
         />

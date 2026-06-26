@@ -48,6 +48,14 @@ const commands: Command[] = [
     icon: "⌥",
   },
   {
+    id: "forget-anything",
+    command: "/forget",
+    label: "Forget Anything?",
+    description: "Smart departure companion — never leave essentials behind",
+    href: "/apps/forget-anything",
+    icon: "🔔",
+  },
+  {
     id: "stack",
     command: "/stack",
     label: "Systems Stack",

@@ -6,6 +6,12 @@ import { ArrowRight, Sparkles } from "lucide-react";
 
 const announcements = [
   {
+    title: "Forget Anything?",
+    desc: "An Android app that reminds you the moment you leave home without your essentials.",
+    linkText: "Open App",
+    href: "/apps/forget-anything"
+  },
+  {
     title: "PentaCMD-47M",
     desc: "A 47M-param small language model that speaks your terminal.",
     linkText: "Explore",
