@@ -239,44 +239,36 @@ export default function ForgetAnythingPage() {
             </Reveal>
           </div>
 
-          {/* edge-to-edge image (both sides) with a readable narrative panel */}
+          {/* edge-to-edge image — fully visible, never covered */}
           <Reveal delay={0.08} y={30}>
-            <div className="relative z-10">
-              <div className="relative w-full">
-                <Image src="/forget-anything-app/Images/pain-point-stairs-wide option.png" alt="A watercolour: looking up five flights of stairs after forgetting something at home" width={1915} height={821} className="hidden sm:block w-full h-auto" />
-                <Image src="/forget-anything-app/Images/pain-point-stairs.png" alt="A watercolour: looking up the stairwell after forgetting something at home" width={1024} height={1024} className="sm:hidden w-full h-auto" />
-                {/* soft top/bottom blend into the page */}
-                <div className="absolute inset-x-0 top-0 h-16 pointer-events-none" style={{ background: "linear-gradient(to bottom, #05100b, transparent)" }} />
-                <div className="absolute inset-x-0 bottom-0 h-16 pointer-events-none" style={{ background: "linear-gradient(to top, #040a07, transparent)" }} />
+            <div className="relative z-10 w-full">
+              <Image src="/forget-anything-app/Images/pain-point-stairs-wide option.png" alt="A watercolour: looking up five flights of stairs after forgetting something at home" width={1915} height={821} className="hidden sm:block w-full h-auto" />
+              <Image src="/forget-anything-app/Images/pain-point-stairs.png" alt="A watercolour: looking up the stairwell after forgetting something at home" width={1024} height={1024} className="sm:hidden w-full h-auto" />
+              {/* soft top/bottom blend into the page — never over the subject */}
+              <div className="absolute inset-x-0 top-0 h-14 pointer-events-none" style={{ background: "linear-gradient(to bottom, #05100b, transparent)" }} />
+              <div className="absolute inset-x-0 bottom-0 h-16 pointer-events-none" style={{ background: "linear-gradient(to top, #040a07, transparent)" }} />
+            </div>
+          </Reveal>
 
-                {/* desktop: readable solid glass card, bottom-left, inset within content width */}
-                <div className="hidden lg:block absolute inset-0">
-                  <div className="max-w-7xl mx-auto px-6 h-full flex items-end pb-10 xl:pb-14">
-                    <div className="max-w-lg rounded-2xl border border-white/[0.12] bg-[#04100a]/90 backdrop-blur-md p-7 xl:p-8" style={{ boxShadow: "0 30px 80px -20px rgba(0,0,0,0.85)" }}>
-                      <p className="font-manrope text-[15.5px] text-white/90 leading-[1.85] mb-4">
-                        I live on the <strong className="text-white font-semibold">5th floor</strong>, and our lift only runs in the evening. Every forgotten
-                        phone meant five flights of stairs — in the morning rush, in the summer heat. When my wife forgot her
-                        <span className="text-[#FCF6BA]"> glasses</span>, that climb was mine too.
-                      </p>
-                      <p className="font-manrope text-[14.5px] text-white/65 leading-[1.8]">
-                        I went looking for an app that would ask me <em className="text-white/90 not-italic font-medium">the moment I stepped out</em>. Nothing existed.
-                        So I built one — with Kotlin, an Android foreground service, and an <span className="text-[#D4AF37]">AI pair-programmer</span> at every step.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* mobile / tablet: narrative in a readable card below the image */}
-              <div className="lg:hidden max-w-2xl mx-auto px-6 mt-7">
-                <div className="rounded-2xl border border-white/[0.1] bg-white/[0.03] p-6 space-y-4">
-                  <p className="font-manrope text-[15px] text-white/80 leading-[1.85]">
-                    I live on the <strong className="text-white font-semibold">5th floor</strong>, and our lift only runs in the evening. Every forgotten phone meant
-                    five flights of stairs. When my wife forgot her <span className="text-[#FCF6BA]">glasses</span>, that climb was mine too.
+          {/* story — set BELOW the art, in a readable editorial column */}
+          <Reveal delay={0.14}>
+            <div className="relative z-10 max-w-6xl mx-auto px-6 mt-12 md:mt-16">
+              <div className="grid lg:grid-cols-[0.82fr_1.18fr] gap-8 lg:gap-16 items-start">
+                <div className="lg:border-l-2 lg:border-[#D4AF37]/30 lg:pl-8">
+                  <span className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#D4AF37]/50">The problem</span>
+                  <p className="font-manrope font-bold text-[1.6rem] md:text-[2.1rem] leading-[1.18] tracking-[-0.02em] mt-4" style={gWhite}>
+                    Five flights of stairs, for a forgotten phone.
                   </p>
-                  <p className="font-manrope text-[14.5px] text-white/60 leading-[1.8]">
-                    No app would ask me <em className="text-white/85 not-italic font-medium">the moment I stepped out</em>. So I built one — Kotlin, a foreground
-                    service, and an <span className="text-[#D4AF37]">AI pair-programmer</span> at every step.
+                </div>
+                <div className="space-y-5">
+                  <p className="font-manrope text-[16px] md:text-[17px] text-white/75 leading-[1.9]">
+                    I live on the <strong className="text-white font-semibold">5th floor</strong>, and our lift only runs in the evening. Every forgotten
+                    phone meant five flights of stairs — in the morning rush, in the summer heat. When my wife forgot her
+                    <span className="text-[#FCF6BA]"> glasses</span>, that climb was mine too.
+                  </p>
+                  <p className="font-manrope text-[15px] md:text-[16px] text-white/55 leading-[1.9]">
+                    I went looking for an app that would ask me <em className="text-white/85 not-italic font-medium">the moment I stepped out</em>. Nothing existed.
+                    So I built one — with Kotlin, an Android foreground service, and an <span className="text-[#D4AF37]">AI pair-programmer</span> at every step.
                   </p>
                 </div>
               </div>
