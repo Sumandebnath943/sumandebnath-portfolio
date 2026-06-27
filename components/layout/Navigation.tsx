@@ -46,7 +46,7 @@ const navLinks: NavLink[] = [
         ],
       },
       {
-        label: "Apps",
+        label: "Mobile Apps",
         color: "#50C878",
         submenus: [
           { label: "Forget Anything?", href: "/apps/forget-anything", color: "#DAA520" },
