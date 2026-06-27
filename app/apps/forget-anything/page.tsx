@@ -69,7 +69,10 @@ const gWhite = { background: "linear-gradient(180deg,#ffffff 0%,rgba(255,255,255
 const gGold = { background: "linear-gradient(135deg,#BF953F 0%,#FCF6BA 45%,#D4AF37 70%,#AA771C 100%)", WebkitBackgroundClip: "text" as const, WebkitTextFillColor: "transparent" as const };
 const gEmerald = { background: "linear-gradient(135deg,#7BE0A0 0%,#2E8B57 100%)", WebkitBackgroundClip: "text" as const, WebkitTextFillColor: "transparent" as const };
 
-const APK = "/forget-anything-app/forget-anything.apk";
+// Hosted on GitHub Releases (keeps the 23 MB binary out of the repo).
+// Upload the APK to a release tagged `forget-anything-v1` with the asset
+// named exactly `forget-anything.apk` and this URL resolves.
+const APK = "https://github.com/Sumandebnath943/sumandebnath-portfolio/releases/download/forget-anything-v1/forget-anything.apk";
 
 function Kicker({ children }: { children: React.ReactNode }) {
   return (
@@ -127,7 +130,7 @@ export default function ForgetAnythingPage() {
             <Reveal delay={0.18}>
               <div className="flex flex-col items-center gap-3.5">
                 <GoldShimmerButton href={APK}><AndroidIcon />Download for Android</GoldShimmerButton>
-                <span className="font-manrope text-[11px] tracking-wide text-white/30">Free · ~4 MB · Android 8+ · No ads · No internet permission</span>
+                <span className="font-manrope text-[11px] tracking-wide text-white/30">Free · ~23 MB · Android 8+ · No ads · No internet permission</span>
               </div>
             </Reveal>
 
@@ -562,7 +565,7 @@ export default function ForgetAnythingPage() {
               <Reveal delay={0.16}>
                 <div className="flex flex-col items-center gap-4">
                   <GoldShimmerButton href={APK}><AndroidIcon />Download for Android</GoldShimmerButton>
-                  <span className="font-manrope text-[11px] tracking-wide text-white/25">Free · ~4 MB · Android 8+ · Sideload the APK</span>
+                  <span className="font-manrope text-[11px] tracking-wide text-white/25">Free · ~23 MB · Android 8+ · Sideload the APK</span>
                 </div>
               </Reveal>
             </div>

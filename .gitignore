@@ -46,3 +46,6 @@ next-env.d.ts
 # 3D robot source assets (converted to public/robot.glb via scripts/build-robot-glb.mjs)
 /_source-fbx/
 /tmp_glb/
+
+# Android APK binaries — distributed via GitHub Releases, not committed
+*.apk
