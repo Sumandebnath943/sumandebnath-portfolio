@@ -29,14 +29,14 @@ const SCREENS = [
  *  it opens as the centre card of the showcase.
  * ────────────────────────────────────────────────────────────────────────── */
 const POSTERS = [
-  { src: "/forget-anything-app/spotlights/02-triggers.png", title: "Smart Triggers", sub: "Location, Wi-Fi, or both" },
-  { src: "/forget-anything-app/spotlights/03-radius.png", title: "Adjustable Radius", sub: "Tune your own safe zone" },
-  { src: "/forget-anything-app/spotlights/04-timing.png", title: "Smarter Timing", sub: "Burst reminders that land" },
-  { src: "/forget-anything-app/Images/1 (5).png", title: "The Original Concept", sub: "Where this page began" },
-  { src: "/forget-anything-app/spotlights/05-burst.png", title: "One Alert or Many", sub: "Single or burst — you decide" },
-  { src: "/forget-anything-app/spotlights/06-trip.png", title: "Trip Mode", sub: "Pack with confidence" },
-  { src: "/forget-anything-app/spotlights/07-custom.png", title: "Custom Essentials", sub: "Add what matters to you" },
-  { src: "/forget-anything-app/spotlights/01-overview.png", title: "The Whole Idea", sub: "Never leave essentials behind" },
+  { src: "/forget-anything-app/spotlights/02-triggers.png", title: "Smart Triggers", sub: "Location, Wi-Fi, or both", w: 941, h: 1672 },
+  { src: "/forget-anything-app/spotlights/03-radius.png", title: "Adjustable Radius", sub: "Tune your own safe zone", w: 941, h: 1672 },
+  { src: "/forget-anything-app/spotlights/04-timing.png", title: "Smarter Timing", sub: "Burst reminders that land", w: 941, h: 1672 },
+  { src: "/forget-anything-app/Images/1 (5).png", title: "The Original Concept", sub: "Where this page began", w: 1024, h: 1536 },
+  { src: "/forget-anything-app/spotlights/05-burst.png", title: "One Alert or Many", sub: "Single or burst — you decide", w: 941, h: 1672 },
+  { src: "/forget-anything-app/spotlights/06-trip.png", title: "Trip Mode", sub: "Pack with confidence", w: 941, h: 1672 },
+  { src: "/forget-anything-app/spotlights/07-custom.png", title: "Custom Essentials", sub: "Add what matters to you", w: 941, h: 1672 },
+  { src: "/forget-anything-app/spotlights/01-overview.png", title: "The Whole Idea", sub: "Never leave essentials behind", w: 941, h: 1672 },
 ] as const;
 const CENTER_START = 3; // index of "The Original Concept"
 
@@ -462,7 +462,7 @@ export function SpotlightDeck() {
             return (
               <button key={p.src} aria-label={isCenter ? `Open ${p.title}` : `Show ${p.title}`} onClick={() => (isCenter ? setOpen(i) : setIdx(i))}
                 className="absolute w-[300px] lg:w-[330px] rounded-[20px] overflow-hidden border focus:outline-none"
-                style={{ ...style, aspectRatio: "941 / 1672", borderColor: isCenter ? "rgba(212,175,55,0.45)" : "rgba(255,255,255,0.1)", boxShadow: isCenter ? "0 50px 120px -30px rgba(0,0,0,0.85), 0 0 0 1px rgba(212,175,55,0.2)" : "0 30px 70px -30px rgba(0,0,0,0.8)" }}>
+                style={{ ...style, aspectRatio: `${p.w} / ${p.h}`, borderColor: isCenter ? "rgba(212,175,55,0.45)" : "rgba(255,255,255,0.1)", boxShadow: isCenter ? "0 50px 120px -30px rgba(0,0,0,0.85), 0 0 0 1px rgba(212,175,55,0.2)" : "0 30px 70px -30px rgba(0,0,0,0.8)" }}>
                 <Image src={p.src} alt={p.title} fill sizes="330px" className="object-cover object-top" priority={i === CENTER_START} />
                 {isCenter && <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-[20px] pointer-events-none" />}
               </button>
@@ -487,7 +487,7 @@ export function SpotlightDeck() {
       {/* mobile horizontal scroll */}
       <div className="md:hidden flex gap-3 overflow-x-auto pb-4 -mx-6 px-6 snap-x" style={{ scrollbarWidth: "none" }}>
         {POSTERS.map((p, i) => (
-          <button key={p.src} onClick={() => setOpen(i)} className="relative shrink-0 w-[160px] snap-center rounded-2xl overflow-hidden border border-white/10" style={{ aspectRatio: "941 / 1672" }} aria-label={`Open ${p.title}`}>
+          <button key={p.src} onClick={() => setOpen(i)} className="relative shrink-0 w-[160px] snap-center rounded-2xl overflow-hidden border border-white/10" style={{ aspectRatio: `${p.w} / ${p.h}` }} aria-label={`Open ${p.title}`}>
             <Image src={p.src} alt={p.title} fill sizes="160px" className="object-cover object-top" />
             <div className="absolute inset-x-0 bottom-0 p-2.5 bg-gradient-to-t from-black/80 to-transparent text-left">
               <p className="font-manrope text-[11px] font-bold text-white leading-tight">{p.title}</p>
@@ -503,7 +503,7 @@ export function SpotlightDeck() {
             className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8 bg-black/85 backdrop-blur-md" onClick={() => setOpen(null)}>
             <m.div initial={{ scale: 0.92, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.92, y: 20 }} transition={{ ease: [0.22, 1, 0.36, 1] }}
               className="relative max-h-[90vh] w-auto" onClick={(e) => e.stopPropagation()}>
-              <Image src={POSTERS[open].src} alt={POSTERS[open].title} width={941} height={1672} className="h-[90vh] w-auto rounded-2xl border border-white/10 object-contain" />
+              <Image src={POSTERS[open].src} alt={POSTERS[open].title} width={POSTERS[open].w} height={POSTERS[open].h} className="h-[90vh] w-auto rounded-2xl border border-white/10 object-contain" />
               <button onClick={() => setOpen(null)} className="absolute -top-3 -right-3 h-9 w-9 rounded-full bg-white text-black flex items-center justify-center font-bold shadow-lg" aria-label="Close">✕</button>
               <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex gap-2">
                 {POSTERS.map((p, i) => (

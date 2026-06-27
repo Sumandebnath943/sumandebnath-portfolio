@@ -566,12 +566,8 @@ export default function ForgetAnythingPage() {
 
       </main>
 
-      {/* emerald-toned closing so it doesn't go red-below-green */}
-      <Contact
-        closingBg="linear-gradient(180deg, #07140e 0%, #0a2014 14%, #061009 55%, #050505 100%)"
-        glowColor="rgba(80,200,120,0.18)"
-        hazeColor="rgba(212,175,55,0.08)"
-      />
+      {/* white footer with green fonts & accents (this page only) */}
+      <Contact variant="light" />
       <Footer />
     </MotionProvider>
   );

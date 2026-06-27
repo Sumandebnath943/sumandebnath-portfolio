@@ -34,6 +34,7 @@ export default function Contact({
   closingBg = "linear-gradient(180deg, #1C120C 0%, #24110A 12%, #140B08 55%, #050505 100%)",
   glowColor = "rgba(160,70,15,0.22)",
   hazeColor = "rgba(180,80,20,0.1)",
+  variant = "dark",
 }: {
   /** Section gradient — override per-page (e.g. emerald) so the closing matches the page. */
   closingBg?: string;
@@ -41,16 +42,19 @@ export default function Contact({
   glowColor?: string;
   /** Left haze colour (rgba). */
   hazeColor?: string;
+  /** "light" = white footer with green fonts & accents (same layout/content). */
+  variant?: "dark" | "light";
 } = {}) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const light = variant === "light";
 
   return (
     <section
       id="contact"
       ref={ref}
       className="relative overflow-hidden"
-      style={{ background: closingBg }}
+      style={{ background: light ? "#ffffff" : closingBg }}
     >
       {/* ── ATMOSPHERIC DEPTH ── */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -60,7 +64,7 @@ export default function Contact({
           transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px]"
           style={{
-            background: `radial-gradient(ellipse at top, ${glowColor} 0%, transparent 70%)`,
+            background: `radial-gradient(ellipse at top, ${light ? "rgba(46,139,87,0.10)" : glowColor} 0%, transparent 70%)`,
             filter: "blur(60px)",
           }}
         />
@@ -68,12 +72,12 @@ export default function Contact({
         <div
           className="absolute top-[20%] left-[-10%] w-[45%] h-[400px]"
           style={{
-            background: `radial-gradient(ellipse at left, ${hazeColor} 0%, transparent 70%)`,
+            background: `radial-gradient(ellipse at left, ${light ? "rgba(46,139,87,0.07)" : hazeColor} 0%, transparent 70%)`,
             filter: "blur(70px)",
           }}
         />
-        {/* Floor darkening */}
-        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[#050505] to-transparent" />
+        {/* Floor blend */}
+        <div className={`absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t to-transparent ${light ? "from-white" : "from-[#050505]"}`} />
       </div>
 
       {/* ── MAIN CONTENT ── */}
@@ -84,7 +88,7 @@ export default function Contact({
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="font-manrope text-[10px] text-[#F5F5F3]/20 uppercase tracking-[0.4em] mb-3"
+          className={`font-manrope text-[10px] uppercase tracking-[0.4em] mb-3 ${light ? "text-[#2E8B57]/80" : "text-[#F5F5F3]/20"}`}
         >
           08 / Contact
         </m.p>
@@ -97,21 +101,40 @@ export default function Contact({
             transition={{ duration: 1.1, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
             className="w-full md:max-w-[55%]"
           >
-            <h2 className="font-manrope font-semibold text-4xl md:text-5xl text-[#F5F5F3] leading-tight tracking-tight">
+            <h2 className={`font-manrope font-semibold text-4xl md:text-5xl leading-tight tracking-tight ${light ? "text-[#0B3B25]" : "text-[#F5F5F3]"}`}>
               Let&apos;s Build
               <br />
-              <span className="text-[#F5F5F3]/70">What Comes Next.</span>
+              <span className={light ? "text-[#1f7a4d]" : "text-[#F5F5F3]/70"}>What Comes Next.</span>
             </h2>
           </m.div>
-          
+
           {/* Big signature logo on the right (absolute on desktop so it doesn't push layout vertically) */}
-          <div className="md:absolute right-0 bottom-[-60px] mt-6 md:mt-0 w-full md:w-[580px] h-40 md:h-[220px] flex items-center justify-start md:justify-end mix-blend-screen opacity-85 hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-            <img 
-              src="/branding/logo_v2.png" 
-              alt="Suman Debnath Signature" 
-              className="h-full w-full object-contain object-left md:object-right"
-            />
-          </div>
+          {light ? (
+            <div className="md:absolute right-0 bottom-[-60px] mt-6 md:mt-0 w-full md:w-[580px] h-40 md:h-[220px] opacity-90 hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+              <div
+                className="h-full w-full"
+                style={{
+                  background: "#1f7a4d",
+                  WebkitMaskImage: "url(/branding/logo_v2.png)",
+                  maskImage: "url(/branding/logo_v2.png)",
+                  WebkitMaskSize: "contain",
+                  maskSize: "contain",
+                  WebkitMaskRepeat: "no-repeat",
+                  maskRepeat: "no-repeat",
+                  WebkitMaskPosition: "right center",
+                  maskPosition: "right center",
+                }}
+              />
+            </div>
+          ) : (
+            <div className="md:absolute right-0 bottom-[-60px] mt-6 md:mt-0 w-full md:w-[580px] h-40 md:h-[220px] flex items-center justify-start md:justify-end mix-blend-screen opacity-85 hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+              <img
+                src="/branding/logo_v2.png"
+                alt="Suman Debnath Signature"
+                className="h-full w-full object-contain object-left md:object-right"
+              />
+            </div>
+          )}
         </div>
 
         {/* Subtext */}
@@ -119,7 +142,7 @@ export default function Contact({
           initial={{ opacity: 0, y: 16 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.9, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
-          className="font-manrope text-sm text-[#F5F5F3]/55 leading-relaxed max-w-md mb-10"
+          className={`font-manrope text-sm leading-relaxed max-w-md mb-10 ${light ? "text-[#0B3B25]/65" : "text-[#F5F5F3]/55"}`}
         >
           Open to meaningful collaborations, AI-native systems,
           product strategy, and future-focused conversations.
@@ -135,24 +158,32 @@ export default function Contact({
           {/* Phone pill */}
           <a
             href="tel:+917980296957"
-            className="group inline-flex items-center gap-3 px-6 py-3 rounded-full border border-[#F5F5F3]/12 bg-[#F5F5F3]/[0.04] text-[#F5F5F3]/55 hover:text-[#F5F5F3]/85 hover:border-[#F5F5F3]/22 hover:bg-[#F5F5F3]/[0.07] transition-all duration-500 font-manrope text-xs tracking-wide"
+            className={`group inline-flex items-center gap-3 px-6 py-3 rounded-full border transition-all duration-500 font-manrope text-xs tracking-wide ${
+              light
+                ? "border-[#2E8B57]/25 bg-[#2E8B57]/[0.05] text-[#0B3B25]/65 hover:text-[#0B3B25] hover:border-[#2E8B57]/45 hover:bg-[#2E8B57]/[0.1]"
+                : "border-[#F5F5F3]/12 bg-[#F5F5F3]/[0.04] text-[#F5F5F3]/55 hover:text-[#F5F5F3]/85 hover:border-[#F5F5F3]/22 hover:bg-[#F5F5F3]/[0.07]"
+            }`}
           >
-            <span className="w-1 h-1 rounded-full bg-[#F5F5F3]/30 group-hover:bg-[#F5F5F3]/60 transition-colors duration-500" />
+            <span className={`w-1 h-1 rounded-full transition-colors duration-500 ${light ? "bg-[#2E8B57]/50 group-hover:bg-[#2E8B57]" : "bg-[#F5F5F3]/30 group-hover:bg-[#F5F5F3]/60"}`} />
             +91 7980296957
           </a>
-          
+
           {/* Email pill */}
           <a
             href="mailto:sumandebnath944@gmail.com"
-            className="group inline-flex items-center gap-3 px-6 py-3 rounded-full border border-[#F5F5F3]/12 bg-[#F5F5F3]/[0.04] text-[#F5F5F3]/55 hover:text-[#F5F5F3]/85 hover:border-[#F5F5F3]/22 hover:bg-[#F5F5F3]/[0.07] transition-all duration-500 font-manrope text-xs tracking-wide"
+            className={`group inline-flex items-center gap-3 px-6 py-3 rounded-full border transition-all duration-500 font-manrope text-xs tracking-wide ${
+              light
+                ? "border-[#2E8B57]/25 bg-[#2E8B57]/[0.05] text-[#0B3B25]/65 hover:text-[#0B3B25] hover:border-[#2E8B57]/45 hover:bg-[#2E8B57]/[0.1]"
+                : "border-[#F5F5F3]/12 bg-[#F5F5F3]/[0.04] text-[#F5F5F3]/55 hover:text-[#F5F5F3]/85 hover:border-[#F5F5F3]/22 hover:bg-[#F5F5F3]/[0.07]"
+            }`}
           >
-            <span className="w-1 h-1 rounded-full bg-[#F5F5F3]/30 group-hover:bg-[#F5F5F3]/60 transition-colors duration-500" />
+            <span className={`w-1 h-1 rounded-full transition-colors duration-500 ${light ? "bg-[#2E8B57]/50 group-hover:bg-[#2E8B57]" : "bg-[#F5F5F3]/30 group-hover:bg-[#F5F5F3]/60"}`} />
             sumandebnath944@gmail.com
             <span className="text-[10px] opacity-35 group-hover:opacity-60 transition-opacity">↗</span>
           </a>
 
           {/* Divider */}
-          <div className="hidden sm:block w-px h-5 bg-[#F5F5F3]/[0.08]" />
+          <div className={`hidden sm:block w-px h-5 ${light ? "bg-[#2E8B57]/[0.18]" : "bg-[#F5F5F3]/[0.08]"}`} />
 
           {/* Social pills */}
           <div className="flex items-center flex-wrap gap-2">
@@ -164,7 +195,11 @@ export default function Contact({
                 rel="me noopener noreferrer"
                 aria-label={label}
                 title={label}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#F5F5F3]/20 bg-[#F5F5F3]/[0.06] hover:border-[#F5F5F3]/35 hover:bg-[#F5F5F3]/[0.1] transition-all duration-400 font-manrope text-[11px] text-[#F5F5F3]/60 hover:text-[#F5F5F3]/90"
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-400 font-manrope text-[11px] ${
+                  light
+                    ? "border-[#2E8B57]/30 bg-[#2E8B57]/[0.06] text-[#0B3B25]/70 hover:border-[#2E8B57]/50 hover:bg-[#2E8B57]/[0.12] hover:text-[#0B3B25]"
+                    : "border-[#F5F5F3]/20 bg-[#F5F5F3]/[0.06] text-[#F5F5F3]/60 hover:border-[#F5F5F3]/35 hover:bg-[#F5F5F3]/[0.1] hover:text-[#F5F5F3]/90"
+                }`}
               >
                 <SocialIcon id={id} />
                 {label}
@@ -178,28 +213,28 @@ export default function Contact({
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 1.4, delay: 0.38, ease: [0.22, 1, 0.36, 1] }}
-          className="border-t border-[#F5F5F3]/[0.05] pt-12 pb-12"
+          className={`border-t pt-12 pb-12 ${light ? "border-[#2E8B57]/[0.16]" : "border-[#F5F5F3]/[0.05]"}`}
         >
-          <p className="font-serif italic font-normal text-xl md:text-2xl text-[#F5F5F3]/45 leading-relaxed">
-            "Human instinct.{" "}
-            <span className="text-[#F5F5F3]/28">AI amplification.</span>
+          <p className={`font-serif italic font-normal text-xl md:text-2xl leading-relaxed ${light ? "text-[#1f7a4d]/80" : "text-[#F5F5F3]/45"}`}>
+            &ldquo;Human instinct.{" "}
+            <span className={light ? "text-[#1f7a4d]/55" : "text-[#F5F5F3]/28"}>AI amplification.</span>
             <br />
-            <span className="text-[#F5F5F3]/20">Systemic execution."</span>
+            <span className={light ? "text-[#1f7a4d]/40" : "text-[#F5F5F3]/20"}>Systemic execution.&rdquo;</span>
           </p>
         </m.div>
       </div>
 
       {/* ── FOOTER STRIP ── */}
-      <div className="relative z-10 bg-white border-t border-[#E8E8E8]">
+      <div className={`relative z-10 border-t ${light ? "bg-white border-[#2E8B57]/[0.18]" : "bg-white border-[#E8E8E8]"}`}>
         <div className="max-w-5xl mx-auto px-6 py-7 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
 
           {/* Left */}
           <div className="flex items-baseline gap-2">
-            <p className="font-manrope font-semibold text-sm text-[#1A1A1A]">
+            <p className={`font-manrope font-semibold text-sm ${light ? "text-[#0B3B25]" : "text-[#1A1A1A]"}`}>
               Suman Debnath
             </p>
-            <span className="text-[#1A1A1A]/40 text-xs px-1">·</span>
-            <p className="font-manrope text-xs text-[#1A1A1A]/70 font-medium">
+            <span className={`text-xs px-1 ${light ? "text-[#2E8B57]/50" : "text-[#1A1A1A]/40"}`}>·</span>
+            <p className={`font-manrope text-xs font-medium ${light ? "text-[#1f7a4d]/80" : "text-[#1A1A1A]/70"}`}>
               Brand Marketing Leader & AI Product Builder
             </p>
           </div>
@@ -207,47 +242,39 @@ export default function Contact({
           {/* Center — utility links */}
           <nav
             aria-label="Footer utility"
-            className="flex items-center gap-4 font-manrope text-xs text-[#1A1A1A]/60 font-medium"
+            className={`flex items-center gap-4 font-manrope text-xs font-medium ${light ? "text-[#1f7a4d]/75" : "text-[#1A1A1A]/60"}`}
           >
-            <a
-              href="/projects"
-              className="hover:text-[#1A1A1A] transition-colors"
-            >
+            <a href="/projects" className={`transition-colors ${light ? "hover:text-[#0B3B25]" : "hover:text-[#1A1A1A]"}`}>
               Projects
             </a>
-            <span className="text-[#1A1A1A]/30">·</span>
-            <a
-              href="/faq"
-              className="hover:text-[#1A1A1A] transition-colors"
-            >
+            <span className={light ? "text-[#2E8B57]/35" : "text-[#1A1A1A]/30"}>·</span>
+            <a href="/faq" className={`transition-colors ${light ? "hover:text-[#0B3B25]" : "hover:text-[#1A1A1A]"}`}>
               FAQ
             </a>
-            <span className="text-[#1A1A1A]/30">·</span>
-            <a
-              href="/about"
-              className="hover:text-[#1A1A1A] transition-colors"
-            >
+            <span className={light ? "text-[#2E8B57]/35" : "text-[#1A1A1A]/30"}>·</span>
+            <a href="/about" className={`transition-colors ${light ? "hover:text-[#0B3B25]" : "hover:text-[#1A1A1A]"}`}>
               About
             </a>
-            <span className="text-[#1A1A1A]/30">·</span>
-            <a
-              href="/fun-apps"
-              className="hover:text-[#1A1A1A] transition-colors"
-            >
+            <span className={light ? "text-[#2E8B57]/35" : "text-[#1A1A1A]/30"}>·</span>
+            <a href="/fun-apps" className={`transition-colors ${light ? "hover:text-[#0B3B25]" : "hover:text-[#1A1A1A]"}`}>
               Fun Apps
             </a>
           </nav>
 
           {/* Right */}
           <div className="flex items-center gap-3">
-            <button 
+            <button
               onClick={() => window.dispatchEvent(new Event("easter-egg-destruct"))}
-              className="px-2 py-1 bg-red-500/10 text-red-600 hover:bg-red-500 hover:text-white rounded text-[9px] font-bold tracking-widest uppercase transition-colors"
+              className={`px-2 py-1 rounded text-[9px] font-bold tracking-widest uppercase transition-colors ${
+                light
+                  ? "bg-[#2E8B57]/12 text-[#1f7a4d] hover:bg-[#2E8B57] hover:text-white"
+                  : "bg-red-500/10 text-red-600 hover:bg-red-500 hover:text-white"
+              }`}
               aria-label="System Self-Destruct"
             >
               Do Not Click
             </button>
-            <p className="font-manrope text-xs font-semibold text-[#1A1A1A]/60">
+            <p className={`font-manrope text-xs font-semibold ${light ? "text-[#1f7a4d]/70" : "text-[#1A1A1A]/60"}`}>
               © {new Date().getFullYear()}
             </p>
           </div>
