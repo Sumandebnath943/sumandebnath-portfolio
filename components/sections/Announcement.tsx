@@ -1,92 +1,113 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { m, AnimatePresence } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowUpRight, Radio } from "lucide-react";
 
-const announcements = [
+type Announcement = {
+  title: string;
+  desc: string;
+  href: string;
+  color: string;
+};
+
+const announcements: Announcement[] = [
+  {
+    title: "Pentashell",
+    desc: "Plain English in, one safe terminal command out — the local CLI for PentaCMD-47M.",
+    href: "/agents/pentashell",
+    color: "#2FE2F0",
+  },
   {
     title: "Forget Anything?",
     desc: "An Android app that reminds you the moment you leave home without your essentials.",
-    linkText: "Open App",
-    href: "/apps/forget-anything"
+    href: "/apps/forget-anything",
+    color: "#DAA520",
   },
   {
     title: "PentaCMD-47M",
     desc: "A 47M-param small language model that speaks your terminal.",
-    linkText: "Explore",
-    href: "/slms/pentacmd"
+    href: "/slms/pentacmd",
+    color: "#A78BFA",
   },
   {
     title: "PACT Agent",
     desc: "Trust-first local CLI coding agent.",
-    linkText: "View Dossier",
-    href: "/agents/pact-agent"
+    href: "/agents/pact-agent",
+    color: "#FF5500",
   },
   {
     title: "Soul Canvas",
     desc: "Your psyche, rendered as living particle art.",
-    linkText: "Launch",
-    href: "/fun-apps"
+    href: "/fun-apps",
+    color: "#FF3D81",
   },
   {
     title: "The Design Museum",
     desc: "A walkable 3D portfolio museum, hosted by an AI guide.",
-    linkText: "Enter",
-    href: "/fun-apps"
-  }
+    href: "/fun-apps",
+    color: "#7AA2F7",
+  },
 ];
 
+function TickerItem({ a }: { a: Announcement }) {
+  return (
+    <a
+      href={a.href}
+      className="group/item flex items-center gap-2.5 pr-8 pl-0 whitespace-nowrap"
+    >
+      {/* accent separator dot */}
+      <span className="relative flex h-1.5 w-1.5 shrink-0">
+        <span
+          className="absolute inline-flex h-full w-full rounded-full opacity-60"
+          style={{ background: a.color, animation: "pact-pulse-ring 2.4s ease-out infinite" }}
+        />
+        <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: a.color }} />
+      </span>
+
+      <span
+        className="font-manrope text-[13px] font-semibold text-white/90 transition-colors group-hover/item:text-white"
+        style={{ textShadow: `0 0 18px ${a.color}30` }}
+      >
+        {a.title}
+      </span>
+      <span className="font-manrope text-[13px] text-white/35">{a.desc}</span>
+      <ArrowUpRight
+        size={13}
+        className="shrink-0 text-white/30 transition-all group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5"
+      />
+    </a>
+  );
+}
+
 export default function Announcement() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % announcements.length);
-    }, 4500);
-    return () => clearInterval(timer);
-  }, []);
-
-  const current = announcements[currentIndex];
+  // Two back-to-back copies make the -50% translate loop seamlessly.
+  const loop = [...announcements, ...announcements];
 
   return (
-    <div className="w-full bg-[#050505] border-b border-white/[0.08] relative overflow-hidden flex justify-center px-4 py-3 sm:py-4">
-      {/* Subtle glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl h-full bg-[radial-gradient(ellipse_at_center,rgba(63,185,80,0.1)_0%,transparent_70%)] pointer-events-none blur-xl" />
-      
-      <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 text-left w-full max-w-3xl justify-center">
-        <div className="flex items-center gap-2 mt-1 sm:mt-0 shrink-0">
-          <div className="flex items-center justify-center w-6 h-6 rounded-full bg-[#3fb950]/20 text-[#3fb950] shrink-0">
-            <Sparkles size={12} />
-          </div>
-          <span className="font-mono text-[10px] uppercase tracking-widest text-[#3fb950] font-semibold whitespace-nowrap">
-            Recent Activity
-          </span>
+    <div className="w-full bg-[#050505] border-b border-white/[0.08] relative flex items-stretch overflow-hidden">
+      {/* ── Fixed label ── */}
+      <div className="relative z-20 flex items-center gap-2 pl-4 pr-3 sm:pl-6 sm:pr-5 bg-[#050505] border-r border-white/[0.08] shrink-0">
+        <span className="flex items-center justify-center w-6 h-6 rounded-full bg-[#3fb950]/15 text-[#3fb950] shrink-0">
+          <Radio size={12} className="animate-pulse" />
+        </span>
+        <span className="hidden sm:inline font-mono text-[10px] uppercase tracking-[0.2em] text-[#3fb950] font-semibold whitespace-nowrap">
+          Live Feed
+        </span>
+      </div>
+
+      {/* ── Scrolling ticker ── */}
+      <div className="group relative flex-1 overflow-hidden py-3">
+        <div
+          className="flex w-max items-center will-change-transform group-hover:[animation-play-state:paused] motion-reduce:animate-none"
+          style={{ animation: "pact-marquee 48s linear infinite" }}
+        >
+          {loop.map((a, i) => (
+            <TickerItem key={`${a.title}-${i}`} a={a} />
+          ))}
         </div>
-        
-        <div className="relative flex flex-col justify-center border-l border-white/[0.08] pl-4 sm:pl-6 min-h-[44px] sm:min-h-[24px]">
-          <AnimatePresence mode="wait">
-            <m.div
-              key={currentIndex}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3"
-            >
-              <p className="font-manrope text-xs sm:text-sm text-white/80">
-                <span className="text-white font-medium">{current.title}</span> — {current.desc}
-              </p>
-              <a
-                href={current.href}
-                className="group inline-flex w-fit items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-white/50 hover:text-[#3fb950] transition-colors pb-0.5"
-              >
-                {current.linkText}
-                <ArrowRight size={10} className="transition-transform group-hover:translate-x-0.5" />
-              </a>
-            </m.div>
-          </AnimatePresence>
-        </div>
+
+        {/* edge fades */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-[#050505] to-transparent z-10" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-[#050505] to-transparent z-10" />
       </div>
     </div>
   );

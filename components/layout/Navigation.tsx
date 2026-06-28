@@ -36,6 +36,7 @@ const navLinks: NavLink[] = [
         color: "#FF5500",
         submenus: [
           { label: "PACT Agent", href: "/agents/pact-agent", color: "#FF5500" },
+          { label: "Pentashell", href: "/agents/pentashell", color: "#2FE2F0" },
         ],
       },
       {

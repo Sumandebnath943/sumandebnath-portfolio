@@ -17,6 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE}/philosophy`, changeFrequency: "monthly" as const, priority: 0.8 },
     { url: `${SITE}/faq`, changeFrequency: "monthly" as const, priority: 0.8 },
     { url: `${SITE}/agents/pact-agent`, changeFrequency: "monthly" as const, priority: 0.8 },
+    { url: `${SITE}/agents/pentashell`, changeFrequency: "monthly" as const, priority: 0.8 },
     { url: `${SITE}/slms/pentacmd`, changeFrequency: "monthly" as const, priority: 0.8 },
     { url: `${SITE}/apps/forget-anything`, changeFrequency: "monthly" as const, priority: 0.8 },
     { url: `${SITE}/fun-apps`, changeFrequency: "monthly" as const, priority: 0.7 },

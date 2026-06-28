@@ -45,8 +45,27 @@ const projects: ProjectData[] = [
     },
   },
   {
-    id: "pact-agent",
+    id: "pentashell",
     number: "02",
+    title: "Pentashell",
+    positioning: "Plain English in. One safe terminal command out.",
+    emotion: "One instruction. One command. Your approval.",
+    atmosphere: "Local, no GPU. The CLI that wraps PentaCMD-47M.",
+    capabilities: ["Approval-Gated Execution", "5 Command Families", "Names the Risk"],
+    tools: ["Python", "PyTorch (CPU)", "rich"],
+    status: "Live",
+    links: [{ label: "View on GitHub", href: "https://github.com/Sumandebnath943/pentashell-cli", variant: "primary" }],
+    screenshots: [],
+    dossierHref: "/agents/pentashell",
+    coverImage: "/pentashell/pentashell (2).png",
+    theme: {
+      primaryAccent: "#2FE2F0",
+      glow: "radial-gradient(ellipse 50% 50% at 50% 50%, rgba(47,226,240,0.16), transparent 70%)",
+    },
+  },
+  {
+    id: "pact-agent",
+    number: "03",
     title: "PACT Agent",
     positioning: "Trust-first local CLI coding agent.",
     emotion: "Permission. Action. Cost. Trust.",
@@ -65,7 +84,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "soul-canvas",
-    number: "03",
+    number: "04",
     title: "Soul Canvas",
     positioning: "Your psyche, rendered as living particle art.",
     emotion: "A cinematic exploration of your psychological architecture.",
@@ -84,7 +103,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "design-museum",
-    number: "04",
+    number: "05",
     title: "The Design Museum",
     positioning: "A walkable 3D portfolio museum, hosted by an AI guide.",
     emotion: "Step inside a gallery that greets you and talks back.",
@@ -103,7 +122,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "imprint",
-    number: "05",
+    number: "06",
     title: "IMPRINT",
     positioning: "Behavioral cloning & identity preservation.",
     emotion: "A reckoning. A mirror held against AI dependency.",
@@ -120,7 +139,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "legatus",
-    number: "06",
+    number: "07",
     title: "LEGATUS",
     positioning: "Immutable digital inheritance.",
     emotion: "Security, permanence, legacy.",
@@ -137,7 +156,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "cite",
-    number: "07",
+    number: "08",
     title: "CITE",
     positioning: "Corporate tactical intelligence & entity extraction.",
     emotion: "Corporate tactical intelligence.",
@@ -154,7 +173,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "roasmind",
-    number: "08",
+    number: "09",
     title: "ROASmind",
     positioning: "Next-generation autonomous operating system.",
     emotion: "The future.",
@@ -171,7 +190,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "geek-collectibles",
-    number: "09",
+    number: "10",
     title: "Geek Collectibles",
     positioning: "High-ticket collector commerce infrastructure.",
     emotion: "Akihabara at 2AM.",
@@ -188,7 +207,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "ember",
-    number: "10",
+    number: "11",
     title: "EMBER",
     positioning: "Audio journaling & cognitive relief.",
     emotion: "Emotional safety and burnout recovery.",
@@ -205,7 +224,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "d-pe",
-    number: "11",
+    number: "12",
     title: "D-PE.ai",
     positioning: "God-Tier Prompt Engineering workspace.",
     emotion: "Precision, structure, hacker ethos.",
@@ -222,7 +241,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "forget-anything",
-    number: "12",
+    number: "13",
     title: "Forget Anything?",
     positioning: "Never leave home without your essentials.",
     emotion: "The app that remembers, so you don't have to.",

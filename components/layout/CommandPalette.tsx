@@ -48,6 +48,14 @@ const commands: Command[] = [
     icon: "⌥",
   },
   {
+    id: "pentashell",
+    command: "/pentashell",
+    label: "Pentashell",
+    description: "The local CLI for PentaCMD-47M — plain English to one safe command",
+    href: "/agents/pentashell",
+    icon: "⌗",
+  },
+  {
     id: "forget-anything",
     command: "/forget",
     label: "Forget Anything?",
