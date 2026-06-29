@@ -45,8 +45,27 @@ const projects: ProjectData[] = [
     },
   },
   {
-    id: "pentashell",
+    id: "qdex",
     number: "02",
+    title: "Qdex-1.5B",
+    positioning: "A 1.5B coding LLM that runs on your laptop.",
+    emotion: "Taught to answer when asked — 1.2% → 39.0% on HumanEval.",
+    atmosphere: "QLoRA fine-tune. CPU-only, no GPU.",
+    capabilities: ["QLoRA Instruction-Tune", "Runs on 16GB CPU", "1.2% → 39.0% HumanEval"],
+    tools: ["Qwen2.5-Coder", "Unsloth", "GGUF / Ollama"],
+    status: "Live",
+    links: [{ label: "View on GitHub", href: "https://github.com/Sumandebnath943/Qdex-1.5B", variant: "primary" }],
+    screenshots: [],
+    dossierHref: "/llms/qdex-1.5b",
+    coverImage: "/qdex-images/cover.png",
+    theme: {
+      primaryAccent: "#34D399",
+      glow: "radial-gradient(ellipse 50% 50% at 50% 50%, rgba(52,211,153,0.16), transparent 70%)",
+    },
+  },
+  {
+    id: "pentashell",
+    number: "03",
     title: "Pentashell",
     positioning: "Plain English in. One safe terminal command out.",
     emotion: "One instruction. One command. Your approval.",
@@ -65,7 +84,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "pact-agent",
-    number: "03",
+    number: "04",
     title: "PACT Agent",
     positioning: "Trust-first local CLI coding agent.",
     emotion: "Permission. Action. Cost. Trust.",
@@ -84,7 +103,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "soul-canvas",
-    number: "04",
+    number: "05",
     title: "Soul Canvas",
     positioning: "Your psyche, rendered as living particle art.",
     emotion: "A cinematic exploration of your psychological architecture.",
@@ -103,7 +122,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "design-museum",
-    number: "05",
+    number: "06",
     title: "The Design Museum",
     positioning: "A walkable 3D portfolio museum, hosted by an AI guide.",
     emotion: "Step inside a gallery that greets you and talks back.",
@@ -122,7 +141,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "imprint",
-    number: "06",
+    number: "07",
     title: "IMPRINT",
     positioning: "Behavioral cloning & identity preservation.",
     emotion: "A reckoning. A mirror held against AI dependency.",
@@ -139,7 +158,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "legatus",
-    number: "07",
+    number: "08",
     title: "LEGATUS",
     positioning: "Immutable digital inheritance.",
     emotion: "Security, permanence, legacy.",
@@ -156,7 +175,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "cite",
-    number: "08",
+    number: "09",
     title: "CITE",
     positioning: "Corporate tactical intelligence & entity extraction.",
     emotion: "Corporate tactical intelligence.",
@@ -173,7 +192,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "roasmind",
-    number: "09",
+    number: "10",
     title: "ROASmind",
     positioning: "Next-generation autonomous operating system.",
     emotion: "The future.",
@@ -190,7 +209,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "geek-collectibles",
-    number: "10",
+    number: "11",
     title: "Geek Collectibles",
     positioning: "High-ticket collector commerce infrastructure.",
     emotion: "Akihabara at 2AM.",
@@ -207,7 +226,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "ember",
-    number: "11",
+    number: "12",
     title: "EMBER",
     positioning: "Audio journaling & cognitive relief.",
     emotion: "Emotional safety and burnout recovery.",
@@ -224,7 +243,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "d-pe",
-    number: "12",
+    number: "13",
     title: "D-PE.ai",
     positioning: "God-Tier Prompt Engineering workspace.",
     emotion: "Precision, structure, hacker ethos.",
@@ -241,7 +260,7 @@ const projects: ProjectData[] = [
   },
   {
     id: "forget-anything",
-    number: "13",
+    number: "14",
     title: "Forget Anything?",
     positioning: "Never leave home without your essentials.",
     emotion: "The app that remembers, so you don't have to.",
@@ -320,7 +339,7 @@ function StackCard({
                 className="font-mono text-xs tracking-[0.3em]"
                 style={{ color: accent }}
               >
-                {project.number}
+                {String(index + 1).padStart(2, "0")}
               </span>
               <span className="h-px w-8" style={{ background: `${accent}80` }} />
               <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#86868B]">

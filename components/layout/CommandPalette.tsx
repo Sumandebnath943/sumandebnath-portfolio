@@ -48,6 +48,14 @@ const commands: Command[] = [
     icon: "⌥",
   },
   {
+    id: "qdex",
+    command: "/qdex",
+    label: "Qdex-1.5B",
+    description: "1.5B coding LLM — QLoRA-tuned, runs locally on CPU (GGUF)",
+    href: "/llms/qdex-1.5b",
+    icon: "◇",
+  },
+  {
     id: "pentashell",
     command: "/pentashell",
     label: "Pentashell",

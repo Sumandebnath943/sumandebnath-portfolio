@@ -47,6 +47,13 @@ const navLinks: NavLink[] = [
         ],
       },
       {
+        label: "LLMs",
+        color: "#34D399",
+        submenus: [
+          { label: "Qdex-1.5B", href: "/llms/qdex-1.5b", color: "#2DD4BF" },
+        ],
+      },
+      {
         label: "Mobile Apps",
         color: "#50C878",
         submenus: [

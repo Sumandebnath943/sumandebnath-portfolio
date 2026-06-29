@@ -11,6 +11,12 @@ type Announcement = {
 
 const announcements: Announcement[] = [
   {
+    title: "Qdex-1.5B",
+    desc: "A 1.5B coding LLM, QLoRA-tuned to follow instructions — runs locally on a 16GB laptop, no GPU.",
+    href: "/llms/qdex-1.5b",
+    color: "#34D399",
+  },
+  {
     title: "Pentashell",
     desc: "Plain English in, one safe terminal command out — the local CLI for PentaCMD-47M.",
     href: "/agents/pentashell",
