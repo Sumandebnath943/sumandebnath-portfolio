@@ -13,7 +13,7 @@ const SITE_URL = "https://sumandebnath.houseofnamus.com";
 export const metadata: Metadata = {
   title: "Qdex-1.5B — a 1.5B coding LLM, QLoRA-tuned to follow instructions and run locally (GGUF · CPU)",
   description:
-    "Qdex-1.5B is an instruction-tuned coding model built on Qwen2.5-Coder-1.5B with QLoRA. Fine-tuning lifted instruction-mode HumanEval pass@1 from 1.2% to 39.0% (~32×), recovering ~97% of the base model's raw coding ability — and it runs locally on a 16GB no-GPU laptop via Ollama / llama.cpp (GGUF). Open weights on Hugging Face, code on GitHub.",
+    "Qdex-1.5B is an instruction-tuned coding model built on Qwen2.5-Coder-1.5B with QLoRA. Fine-tuning lifted instruction-mode HumanEval pass@1 from 1.2% to 42.1% (~35×), matching and slightly edging the base model's raw coding ability (42.1% vs 40.2%) — and it runs locally on a 16GB no-GPU laptop via Ollama / llama.cpp (GGUF). Open weights on Hugging Face, code on GitHub.",
   keywords: [
     "Qdex-1.5B",
     "Qdex",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     type: "website",
     title: "Qdex-1.5B · taught to answer when asked",
     description:
-      "A 1.5B coding LLM, QLoRA-tuned on Qwen2.5-Coder-1.5B. Instruction-mode HumanEval pass@1: 1.2% → 39.0% (~32×), ~97% of the base model's raw ability — runs locally on CPU via GGUF.",
+      "A 1.5B coding LLM, QLoRA-tuned on Qwen2.5-Coder-1.5B. Instruction-mode HumanEval pass@1: 1.2% → 42.1% (~35×), matching and slightly edging the base model's raw ability — runs locally on CPU via GGUF.",
     url: "/llms/qdex-1.5b",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Qdex-1.5B — a small coding LLM that runs on your laptop." }],
   },
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Qdex-1.5B · a 1.5B coding LLM that runs on your laptop",
     description:
-      "QLoRA fine-tune of Qwen2.5-Coder-1.5B. Instruction-mode HumanEval: 1.2% → 39.0%. GGUF, runs on a 16GB no-GPU laptop. Open weights.",
+      "QLoRA fine-tune of Qwen2.5-Coder-1.5B. Instruction-mode HumanEval: 1.2% → 42.1%. GGUF, runs on a 16GB no-GPU laptop. Open weights.",
     images: ["/og-image.png"],
   },
 };
@@ -81,7 +81,7 @@ const articleJsonLd = {
   "@type": "TechArticle",
   headline: "Qdex-1.5B — teaching a small coding model to answer when asked",
   description:
-    "How a 1.5B coding model was instruction-tuned with QLoRA — lifting instruction-mode HumanEval pass@1 from 1.2% to 39.0%, recovering ~97% of the base model's raw coding ability, and exporting it to GGUF for local CPU use.",
+    "How a 1.5B coding model was instruction-tuned with QLoRA — lifting instruction-mode HumanEval pass@1 from 1.2% to 42.1%, matching and slightly edging the base model's raw coding ability, and exporting it to GGUF for local CPU use.",
   author: { "@type": "Person", name: "Suman Debnath", url: SITE_URL },
   mainEntityOfPage: `${SITE_URL}/llms/qdex-1.5b`,
   image: `${SITE_URL}/og-image.png`,
@@ -179,8 +179,8 @@ export default function QdexPage() {
                     <span className="text-[#f3f4fb]">locally on a 16GB laptop with no GPU</span>. Fine-tuning lifted
                     instruction-mode HumanEval from{" "}
                     <span className="text-[#F43F5E] font-medium">1.2%</span> to{" "}
-                    <span className="text-[#34D399] font-medium">39.0%</span> — a{" "}
-                    <span className="text-[#38BDF8] font-medium">~32×</span> jump.
+                    <span className="text-[#34D399] font-medium">42.1%</span> — a{" "}
+                    <span className="text-[#38BDF8] font-medium">~35×</span> jump.
                   </p>
                 </Reveal>
 
@@ -233,11 +233,12 @@ export default function QdexPage() {
               <p className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#5a6286] mb-4">// tl;dr — the headline result</p>
               <p className="font-manrope text-lg md:text-xl text-[#c4cae6] leading-relaxed">
                 Fine-tuning took this model from <span className="text-[#F43F5E] font-medium">1.2%</span> to{" "}
-                <span className="text-[#34D399] font-medium">39.0%</span> on HumanEval (pass@1) in
-                instruction-following mode. In doing so it recovered{" "}
-                <span className="text-[#f3f4fb] font-medium">~97% of the base model&rsquo;s raw coding ability</span>{" "}
-                (39.0% vs 40.2%), while making that ability actually usable through natural instructions. The
-                fine-tune didn&rsquo;t teach the model new programming knowledge — it taught it to{" "}
+                <span className="text-[#34D399] font-medium">42.1%</span> on HumanEval (pass@1) in
+                instruction-following mode. In doing so it{" "}
+                <span className="text-[#f3f4fb] font-medium">matched and slightly edged the base model&rsquo;s raw coding ability</span>{" "}
+                (42.1% vs the base model&rsquo;s 40.2% raw-completion score) — it learned to follow instructions and
+                kept all of its coding skill, while making that ability actually usable through natural
+                instructions. The fine-tune didn&rsquo;t teach the model new programming knowledge — it taught it to{" "}
                 <span className="font-serif italic text-[#34D399]">answer when asked</span>.
               </p>
             </Reveal>
@@ -245,9 +246,9 @@ export default function QdexPage() {
             <Reveal delay={0.1} className="max-w-5xl mx-auto">
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px rounded-2xl overflow-hidden border border-white/[0.08] bg-white/[0.06]">
                 {[
-                  { v: <><StatCounter value={1.2} decimals={1} suffix="→39" /></>, l: "HumanEval pass@1 (instruct)", c: "#34D399" },
-                  { v: <StatCounter value={32} suffix="×" />, l: "instruction-mode jump", c: "#38BDF8" },
-                  { v: <StatCounter value={97} suffix="%" />, l: "of base ability recovered", c: "#A78BFA" },
+                  { v: <><StatCounter value={1.2} decimals={1} suffix="→42" /></>, l: "HumanEval pass@1 (instruct)", c: "#34D399" },
+                  { v: <StatCounter value={35} suffix="×" />, l: "instruction-mode jump", c: "#38BDF8" },
+                  { v: <StatCounter value={1.9} decimals={1} prefix="+" suffix=" pts" />, l: "above base raw-completion", c: "#A78BFA" },
                   { v: <StatCounter value={1.18} decimals={2} suffix="%" />, l: "params trained (QLoRA)", c: "#FACC15" },
                   { v: <StatCounter value={1} suffix=" GB" />, l: "GGUF · runs on CPU", c: "#F97316" },
                   { v: <StatCounter value={0} prefix="₹" />, l: "cost · free T4 GPU", c: "#F43F5E" },
@@ -299,7 +300,7 @@ export default function QdexPage() {
                     <div className="pt-2 border-t border-white/[0.07]">
                       <p className="text-[#5a6286]">// instruction — &ldquo;write a function that&hellip;&rdquo;</p>
                       <p className="text-[#e6e9f5]">base: <span className="text-[#F43F5E]">✗ rambles · 1.2%</span></p>
-                      <p className="text-[#e6e9f5]">Qdex: <span className="text-[#34D399]">✓ answers · 39.0%</span></p>
+                      <p className="text-[#e6e9f5]">Qdex: <span className="text-[#34D399]">✓ answers · 42.1%</span></p>
                     </div>
                   </div>
                   <p className="font-manrope text-xs text-[#7c84a8] mt-5 leading-relaxed">
@@ -353,8 +354,8 @@ export default function QdexPage() {
                       The base model could code (40.2% in completion mode — which also matches the published paper,
                       confirming the harness is sound), but was nearly useless when actually{" "}
                       <em className="text-[#dfe3f2]">asked</em> (1.2%). After fine-tuning, Qdex answers coding
-                      requests at <span className="text-[#34D399] font-medium">39.0%</span> — almost the model&rsquo;s
-                      full latent ability, now reachable through instructions.
+                      requests at <span className="text-[#34D399] font-medium">42.1%</span> — matching, and slightly
+                      edging, the model&rsquo;s full latent ability, now reachable through instructions.
                     </p>
                   </div>
                 </Reveal>
@@ -583,6 +584,12 @@ export default function QdexPage() {
                   <span>The third run completed and every artifact survived. The lesson — assume the session can die at any moment — is what separates a notebook that works once from a pipeline you can trust.</span>
                 </div>
               </Reveal>
+              <Reveal delay={0.12}>
+                <div className="flex items-start gap-3 mt-4 font-dmmono text-[11.5px] text-[#d8d9f4] border-l-2 border-[#8FD6FB]/60 pl-4 py-1">
+                  <span className="text-[#8FD6FB] text-base leading-none mt-0.5">⌖</span>
+                  <span>I also audited my own benchmark and found a scoring bug that was undercounting the model — correct solutions were failing on output-formatting artifacts. I hardened the extractor, added a regression test, and re-ran the full benchmark for a fair number (39.0% → 42.1%).</span>
+                </div>
+              </Reveal>
             </div>
           </section>
 
@@ -663,7 +670,7 @@ export default function QdexPage() {
 
                   <div className="hidden md:flex w-44 lg:w-52 shrink-0 aspect-square rounded-2xl border border-white/15 bg-[#06120f]/60 items-center justify-center">
                     <span className="font-manrope font-semibold text-2xl bg-clip-text text-transparent text-center leading-tight" style={{ backgroundImage: "linear-gradient(120deg,#34D399,#38BDF8)" }}>
-                      1.2%<br /><span className="text-white/40 text-base">→</span><br />39.0%
+                      1.2%<br /><span className="text-white/40 text-base">→</span><br />42.1%
                     </span>
                   </div>
                 </div>

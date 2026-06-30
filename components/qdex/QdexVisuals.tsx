@@ -97,9 +97,9 @@ export function HumanEvalBars() {
         <span className="font-semibold text-2xl text-[#F43F5E] tabular-nums">1.2%</span>
         <span className="font-dmmono text-[#A78BFA] text-xl">→</span>
         <span className="font-semibold text-2xl tabular-nums bg-clip-text text-transparent" style={{ backgroundImage: `linear-gradient(90deg, ${QDEX.emerald}, ${QDEX.sky})` }}>
-          39.0%
+          42.1%
         </span>
-        <span className="font-dmmono text-[10.5px] uppercase tracking-[0.18em] text-[#7c84a8] ml-1">~32× · instruction mode</span>
+        <span className="font-dmmono text-[10.5px] uppercase tracking-[0.18em] text-[#7c84a8] ml-1">~35× · instruction mode</span>
       </div>
     </div>
   );

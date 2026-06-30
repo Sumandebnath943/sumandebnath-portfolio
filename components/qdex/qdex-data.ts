@@ -20,7 +20,7 @@ export type EvalBar = {
   model: string;
   mode: string;
   pct: number;
-  ratio: string; // e.g. "64/164"
+  ratio: string; // e.g. "69/164"
   color: string;
   highlight?: boolean;
   note?: string;
@@ -49,10 +49,10 @@ export const HUMANEVAL: EvalBar[] = [
     key: "qdex-instruction",
     model: "Qdex-1.5B (this model)",
     mode: "instruction",
-    pct: 39.0,
-    ratio: "64/164",
+    pct: 42.1,
+    ratio: "69/164",
     color: QDEX.emerald,
     highlight: true,
-    note: "~97% of latent ability, now usable through instructions",
+    note: "matched and slightly edged the base model's raw ability, now usable through instructions",
   },
 ];
