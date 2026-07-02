@@ -420,18 +420,19 @@ export default function MigiPage() {
         <section className="px-6 py-20 md:py-28" style={{ background: MIGI.creamDeep, borderTop: `1px solid ${MIGI.line}`, borderBottom: `1px solid ${MIGI.line}` }}>
           <div className="max-w-5xl mx-auto">
             <Reveal>
-              <SectionLabel index="04" kicker="linkedin autopilot · human-in-the-loop" />
+              <SectionLabel index="04" kicker="linkedin autopilot · i pick the story" />
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
                 I don&rsquo;t outsource my voice.{" "}
                 <span className="relative inline-block">
-                  <span className="relative z-10">I direct it.</span>
+                  <span className="relative z-10">I edit with it.</span>
                   <span aria-hidden className="absolute left-0 right-0 bottom-1 h-3 md:h-4 -z-0" style={{ background: MIGI.lime }} />
                 </span>
               </h2>
               <p className="text-[15px] leading-relaxed max-w-2xl mb-12" style={{ color: MIGI.muted }}>
-                A closed-loop content engine that keeps me visible on LinkedIn — the system does the
-                research, drafting and safety; I own the judgment and the final yes. Nothing is ever
-                posted without my approval.
+                A closed-loop content engine that keeps me visible on LinkedIn. It surfaces the day&rsquo;s
+                best stories, drafts in a voice that&rsquo;s mine, and guards against repeating itself — I
+                choose the topic, shape the angle, and give the final yes. Editorial control at the top
+                of the funnel; leverage everywhere else.
               </p>
             </Reveal>
 

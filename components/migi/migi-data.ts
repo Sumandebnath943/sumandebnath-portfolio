@@ -63,7 +63,7 @@ export const AREAS: Area[] = [
     kicker: "show up consistently",
     icon: "M3 11l15-7v16L3 14v-3z M8 14v4a2 2 0 004 0",
     agents: [
-      { name: "LinkedIn Autopilot", what: "Scans the day's AI news, grounds it in my real work, clears a multi-layer safety engine, then sends a draft to Telegram with Approve / Edit — and publishes on my yes.", why: "A consistent presence without the blank page — my voice, my final call.", tag: "Human-approved → auto-published" },
+      { name: "LinkedIn Autopilot", what: "Curates the day's top AI stories for me to pick from, drafts the one I choose in my voice with a real takeaway, guards against repeating itself, and clears a safety review — then publishes on my yes.", why: "Editorial control at the top of the funnel; leverage everywhere else.", tag: "I pick the story · human-approved" },
       { name: "Build-in-Public", what: "Turns the day's actual commits into a short, shareable post.", why: "Momentum, shared." },
     ],
   },
@@ -116,17 +116,20 @@ export const BOT_FEED =
 
 /* ── LinkedIn Autopilot — the human-in-the-loop content engine (feature #1) ── */
 export const LINKEDIN_STEPS: { title: string; body: string }[] = [
-  { title: "Listens", body: "Every morning it scans trending AI, LLM and agent news for the story worth reacting to." },
-  { title: "Grounds it in me", body: "It reads my live portfolio and recent shipping activity, then ties the news to my real work and point of view — never inventing experience." },
-  { title: "Researches hashtags", body: "A live web-search step picks current, relevant hashtags instead of stale guesses." },
-  { title: "Safety-checks", body: "A multi-layer guardrail — hard filters for anything sensitive plus an automated compliance review — keeps every draft legal, authentic, non-political and feed-safe." },
-  { title: "Asks me", body: "The draft lands on Telegram with Approve / Edit buttons. I reply with plain-language edits and it revises on the spot." },
-  { title: "Posts", body: "On my approval it publishes to LinkedIn and logs the live post." },
-  { title: "Reports", body: "A weekly recap of what went out — and how it performed." },
+  { title: "Curates the day's news", body: "Every morning it gathers the top ~7 AI developments, each with a one-line “why this matters.”" },
+  { title: "I pick the story", body: "I choose what to talk about with a single tap — or tell it to auto-pick, or skip the day. The highest-leverage decision — what to say — stays mine." },
+  { title: "Grounds it in me", body: "It ties the chosen story to my real work and point of view — never inventing experience." },
+  { title: "Writes in my voice", body: "A studied high-engagement structure: a scroll-stopping hook, short punchy lines, one concrete takeaway, a sharp close — and it has to add real value, never just rephrase the news." },
+  { title: "Never repeats itself", body: "It checks the draft against what I've recently posted and avoids reusing topics or opening lines, so the feed stays varied and intentional." },
+  { title: "Safety review", body: "A multi-layer guardrail keeps every draft legal, authentic, non-political and safe for a public feed." },
+  { title: "Asks me", body: "The draft lands on Telegram with Approve / Edit / Regenerate. One tap for a fresh angle, or plain-language edits it applies instantly." },
+  { title: "Publishes", body: "On my explicit yes it posts to LinkedIn — in full and correctly formatted — and logs the live post." },
+  { title: "Reports", body: "A weekly recap of what went out, and how it performed." },
 ];
 export const LINKEDIN_CHIPS = [
-  "Trend-aware", "Grounded to me — no fabrication", "Multi-layer safety engine",
-  "Human-approved", "Auto-published", "Full audit trail", "Weekly performance recap",
+  "I pick the story", "Studied high-engagement structure", "Value in every post",
+  "Anti-repetition memory", "One-tap regenerate", "Plain-language edits", "Human-approved",
+  "Grounded to my real work — no fabrication", "Multi-layer safety", "Weekly recap",
 ];
 
 /* ── Architecture flow (agents → LLMs → channels → state → dashboard) ─────── */
