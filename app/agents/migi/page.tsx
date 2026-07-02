@@ -484,15 +484,15 @@ export default function MigiPage() {
                 const email = d.channel === "Email";
                 return (
                   <Reveal key={d.src} delay={i * 0.07}>
-                    <div className="migi-card rounded-2xl overflow-hidden bg-white h-full" style={{ border: `1px solid ${MIGI.line}` }}>
-                      <div className="h-[360px] sm:h-[420px] overflow-hidden" style={{ background: MIGI.creamDeep }}>
+                    <div className="migi-card rounded-2xl overflow-hidden bg-white h-full flex flex-col" style={{ border: `1px solid ${MIGI.line}` }}>
+                      <div className="h-[440px] sm:h-[480px] flex items-center justify-center p-4" style={{ background: MIGI.creamDeep }}>
                         <Image
                           src={d.src}
                           alt={`${d.agent} — a real ${d.channel.toLowerCase()} the agent sent`}
                           width={d.w}
                           height={d.h}
-                          className="w-full h-full object-cover"
-                          style={{ objectPosition: "left top" }}
+                          className="max-w-full max-h-full w-auto h-auto object-contain rounded-lg"
+                          style={{ boxShadow: "0 14px 34px -16px rgba(0,0,0,0.4)" }}
                           loading="lazy"
                         />
                       </div>
