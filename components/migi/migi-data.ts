@@ -154,6 +154,16 @@ export const SHOTS: { src: string; label: string; alt: string; caption: string }
   },
 ];
 
+/* ── Real deliverables — actual agent output (public/generic content only) ── */
+export const DELIVERABLES: { src: string; w: number; h: number; agent: string; channel: "Email" | "Telegram" }[] = [
+  { src: "/migi-agent/agent responses (1).jpeg", w: 1440, h: 3200, agent: "Daily Tech Briefing", channel: "Email" },
+  { src: "/migi-agent/agent responses (2).jpeg", w: 1440, h: 896, agent: "Journaling Companion", channel: "Telegram" },
+  { src: "/migi-agent/agent responses (3).jpeg", w: 1440, h: 3200, agent: "Evening Video Digest", channel: "Email" },
+];
+
+/* ── Orchestration proof — the real GitHub Actions workflow list ──────────── */
+export const ORCHESTRATION_SHOT = { src: "/migi-agent/github agents.png", w: 1348, h: 526 };
+
 /* ── How it was built ─────────────────────────────────────────────────────── */
 export const BUILD: { title: string; body: string }[] = [
   { title: "Built with Claude Code", body: "From architecture to 20+ agents to a secure dashboard — designed and shipped by orchestrating an AI coding agent, solo." },

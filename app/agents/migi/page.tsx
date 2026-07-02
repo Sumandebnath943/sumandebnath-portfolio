@@ -12,6 +12,8 @@ import {
   BOT_COMMANDS,
   STACK,
   BUILD,
+  DELIVERABLES,
+  ORCHESTRATION_SHOT,
 } from "@/components/migi/migi-data";
 
 /* ── SEO ───────────────────────────────────────────────────────────────── */
@@ -275,6 +277,33 @@ export default function MigiPage() {
                 </Reveal>
               ))}
             </div>
+
+            {/* real orchestration proof — the GitHub Actions workflow list */}
+            <Reveal delay={0.1}>
+              <div
+                className="mt-8 rounded-[1.25rem] overflow-hidden bg-[#0d1117]"
+                style={{ border: `1px solid ${MIGI.ink}`, boxShadow: "0 30px 70px -44px rgba(0,0,0,0.6)" }}
+              >
+                <div className="flex items-center gap-2 px-4 py-3" style={{ background: MIGI.ink, borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+                  <span className="w-3 h-3 rounded-full" style={{ background: "#F1655B" }} />
+                  <span className="w-3 h-3 rounded-full" style={{ background: "#F5BF4F" }} />
+                  <span className="w-3 h-3 rounded-full" style={{ background: MIGI.green }} />
+                  <span className="ml-3 font-dmmono text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>
+                    github actions · all workflows
+                  </span>
+                </div>
+                <Image
+                  src={ORCHESTRATION_SHOT.src}
+                  alt="The real GitHub Actions workflow list — every Migi agent runs as its own scheduled or event-driven workflow"
+                  width={ORCHESTRATION_SHOT.w}
+                  height={ORCHESTRATION_SHOT.h}
+                  className="w-full h-auto block"
+                />
+              </div>
+            </Reveal>
+            <p className="font-dmmono text-[11px] mt-4 text-center" style={{ color: MIGI.muted }}>
+              No mockups — every agent is its own scheduled GitHub Actions workflow.
+            </p>
           </div>
         </section>
 
@@ -373,11 +402,55 @@ export default function MigiPage() {
           </div>
         </section>
 
-        {/* ════════════════════════════ 04 · THE DASHBOARD ════════════════════════════ */}
+        {/* ════════════════════════════ 04 · REAL OUTPUT ════════════════════════════ */}
+        <section className="px-6 py-20 md:py-28">
+          <div className="max-w-6xl mx-auto">
+            <Reveal>
+              <SectionLabel index="04" kicker="real output · straight to my phone" />
+              <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
+                What actually lands on my phone.
+              </h2>
+              <p className="text-[15px] leading-relaxed max-w-2xl mb-12" style={{ color: MIGI.muted }}>
+                Not concepts — real messages the agents send me every day, as instant Telegram
+                pings and designed email digests. Public content only; personal data stays private.
+              </p>
+            </Reveal>
+            <div className="grid sm:grid-cols-3 gap-4 md:gap-5">
+              {DELIVERABLES.map((d, i) => {
+                const email = d.channel === "Email";
+                return (
+                  <Reveal key={d.src} delay={i * 0.07}>
+                    <div className="migi-card rounded-2xl overflow-hidden bg-white h-full" style={{ border: `1px solid ${MIGI.line}` }}>
+                      <div className="h-[360px] sm:h-[420px] overflow-hidden" style={{ background: MIGI.creamDeep }}>
+                        <Image
+                          src={d.src}
+                          alt={`${d.agent} — a real ${d.channel.toLowerCase()} the agent sent`}
+                          width={d.w}
+                          height={d.h}
+                          className="w-full h-full object-cover"
+                          style={{ objectPosition: "left top" }}
+                          loading="lazy"
+                        />
+                      </div>
+                      <div className="flex items-center justify-between gap-2 p-4">
+                        <span className="font-manrope font-semibold text-[13.5px]" style={{ color: MIGI.text }}>{d.agent}</span>
+                        <span className="font-dmmono text-[9.5px] uppercase tracking-[0.12em] rounded-full px-2.5 py-1" style={{ background: email ? MIGI.lime : MIGI.ink, color: email ? MIGI.ink : MIGI.lime }}>
+                          {d.channel}
+                        </span>
+                      </div>
+                    </div>
+                  </Reveal>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* ════════════════════════════ 05 · THE DASHBOARD ════════════════════════════ */}
         <section id="dashboard" className="px-6 py-20 md:py-28 scroll-mt-24" style={{ background: MIGI.creamDeep, borderTop: `1px solid ${MIGI.line}`, borderBottom: `1px solid ${MIGI.line}` }}>
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="04" kicker="migi · mission control" />
+              <SectionLabel index="05" kicker="migi · mission control" />
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
                 One screen to command them all.
               </h2>
@@ -391,11 +464,11 @@ export default function MigiPage() {
           </div>
         </section>
 
-        {/* ════════════════════════════ 05 · HOW IT'S BUILT ════════════════════════════ */}
+        {/* ════════════════════════════ 06 · HOW IT'S BUILT ════════════════════════════ */}
         <section className="px-6 py-20 md:py-28">
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="05" kicker="the operating model" />
+              <SectionLabel index="06" kicker="the operating model" />
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
                 Built solo — the AI-native way.
               </h2>
