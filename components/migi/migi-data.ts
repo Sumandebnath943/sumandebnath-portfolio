@@ -63,7 +63,7 @@ export const AREAS: Area[] = [
     kicker: "show up consistently",
     icon: "M3 11l15-7v16L3 14v-3z M8 14v4a2 2 0 004 0",
     agents: [
-      { name: "LinkedIn Thought-Leadership Engine", what: "Pulls the day's AI news, picks the most relevant story, and drafts a post in my voice with my point of view.", why: "A consistent presence without the blank page.", tag: "Draft-only · I approve everything" },
+      { name: "LinkedIn Autopilot", what: "Scans the day's AI news, grounds it in my real work, clears a multi-layer safety engine, then sends a draft to Telegram with Approve / Edit — and publishes on my yes.", why: "A consistent presence without the blank page — my voice, my final call.", tag: "Human-approved → auto-published" },
       { name: "Build-in-Public", what: "Turns the day's actual commits into a short, shareable post.", why: "Momentum, shared." },
     ],
   },
@@ -102,8 +102,32 @@ export const AREAS: Area[] = [
   },
 ];
 
-/* ── The two-way bot ───────────────────────────────────────────────────────── */
-export const BOT_COMMANDS = ["/reading", "/expenses", "/ideas", "/notes <url>", "/habits", "/journal", "/drafts", "/help"];
+/* ── The two-way bot — now real-time (event-driven webhook) ───────────────── */
+export const BOT_ACTIONS: { cmd: string; does: string }[] = [
+  { cmd: "/briefing", does: "Today's tech briefing, on demand" },
+  { cmd: "/linkedin", does: "Draft a LinkedIn post right now" },
+  { cmd: "/standup", does: "Where I left off across my repos" },
+  { cmd: "/reading", does: "My unread saved links" },
+  { cmd: "/expenses", does: "This month's spend summary" },
+  { cmd: "/ideas", does: "The ranked idea backlog" },
+];
+export const BOT_FEED =
+  "Send a link, a receipt photo, a habit line or a journal reply — each routes to the right agent automatically.";
+
+/* ── LinkedIn Autopilot — the human-in-the-loop content engine (feature #1) ── */
+export const LINKEDIN_STEPS: { title: string; body: string }[] = [
+  { title: "Listens", body: "Every morning it scans trending AI, LLM and agent news for the story worth reacting to." },
+  { title: "Grounds it in me", body: "It reads my live portfolio and recent shipping activity, then ties the news to my real work and point of view — never inventing experience." },
+  { title: "Researches hashtags", body: "A live web-search step picks current, relevant hashtags instead of stale guesses." },
+  { title: "Safety-checks", body: "A multi-layer guardrail — hard filters for anything sensitive plus an automated compliance review — keeps every draft legal, authentic, non-political and feed-safe." },
+  { title: "Asks me", body: "The draft lands on Telegram with Approve / Edit buttons. I reply with plain-language edits and it revises on the spot." },
+  { title: "Posts", body: "On my approval it publishes to LinkedIn and logs the live post." },
+  { title: "Reports", body: "A weekly recap of what went out — and how it performed." },
+];
+export const LINKEDIN_CHIPS = [
+  "Trend-aware", "Grounded to me — no fabrication", "Multi-layer safety engine",
+  "Human-approved", "Auto-published", "Full audit trail", "Weekly performance recap",
+];
 
 /* ── Architecture flow (agents → LLMs → channels → state → dashboard) ─────── */
 export const FLOW: { id: string; label: string; sub: string }[] = [

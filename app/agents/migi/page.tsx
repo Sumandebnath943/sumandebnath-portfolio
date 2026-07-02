@@ -9,7 +9,10 @@ import {
   MIGI,
   STATS,
   AREAS,
-  BOT_COMMANDS,
+  BOT_ACTIONS,
+  BOT_FEED,
+  LINKEDIN_STEPS,
+  LINKEDIN_CHIPS,
   STACK,
   BUILD,
   DELIVERABLES,
@@ -374,26 +377,37 @@ export default function MigiPage() {
               ))}
             </div>
 
-            {/* the two-way bot */}
+            {/* the two-way bot — now real-time (event-driven webhook) */}
             <Reveal>
               <div className="mt-14 rounded-[1.75rem] p-8 md:p-10 overflow-hidden relative" style={{ background: MIGI.ink }}>
-                <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-10">
-                  <div className="flex-1">
-                    <p className="font-dmmono text-[10px] uppercase tracking-[0.28em] mb-3" style={{ color: MIGI.lime }}>the two-way bot</p>
+                <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-start">
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="font-dmmono text-[10px] uppercase tracking-[0.28em]" style={{ color: MIGI.lime }}>the two-way bot</span>
+                      <span className="font-dmmono text-[9px] uppercase tracking-[0.14em] rounded-full px-2 py-0.5" style={{ background: MIGI.lime, color: MIGI.ink }}>now real-time</span>
+                    </div>
                     <h3 className="font-manrope font-bold text-[1.5rem] md:text-[2rem] leading-tight tracking-[-0.02em] text-white mb-3">
-                      One inbox to run my life.
+                      One chat to run the whole system.
                     </h3>
-                    <p className="font-manrope text-[14px] leading-relaxed" style={{ color: "rgba(255,255,255,0.6)" }}>
-                      A single Telegram bot routes everything I send it — a link, a receipt photo, a
-                      habit line, a journal reply, or a slash-command — to the right agent, and answers
-                      commands instantly.
+                    <p className="font-manrope text-[14px] leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.6)" }}>
+                      Migi went from agents that message me to a system I <span className="text-white">talk to</span>.
+                      Read any state I&rsquo;ve captured, trigger any agent on demand, or feed it anything —
+                      all from one Telegram thread.
+                    </p>
+                    <p className="font-manrope text-[13px] leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>
+                      {BOT_FEED}
+                    </p>
+                    <p className="font-dmmono text-[10.5px] mt-5 flex items-center gap-2" style={{ color: MIGI.lime }}>
+                      <span className="w-1.5 h-1.5 rounded-full" style={{ background: MIGI.lime, animation: "migi-blink 1.4s steps(1) infinite" }} />
+                      polling → event-driven webhook · replies now instant
                     </p>
                   </div>
-                  <div className="flex flex-wrap gap-2 md:max-w-[240px]">
-                    {BOT_COMMANDS.map((c) => (
-                      <span key={c} className="font-dmmono text-[12px] rounded-lg px-2.5 py-1.5" style={{ background: "rgba(255,255,255,0.06)", color: MIGI.lime, border: "1px solid rgba(255,255,255,0.10)" }}>
-                        {c}
-                      </span>
+                  <div className="space-y-2">
+                    {BOT_ACTIONS.map((a) => (
+                      <div key={a.cmd} className="flex items-center gap-3 rounded-xl px-3.5 py-2.5" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                        <span className="font-dmmono text-[12.5px] shrink-0 w-[74px]" style={{ color: MIGI.lime }}>{a.cmd}</span>
+                        <span className="font-manrope text-[12.5px]" style={{ color: "rgba(255,255,255,0.62)" }}>{a.does}</span>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -402,11 +416,60 @@ export default function MigiPage() {
           </div>
         </section>
 
-        {/* ════════════════════════════ 04 · REAL OUTPUT ════════════════════════════ */}
+        {/* ════════════════════════════ 04 · LINKEDIN AUTOPILOT ════════════════════════════ */}
+        <section className="px-6 py-20 md:py-28" style={{ background: MIGI.creamDeep, borderTop: `1px solid ${MIGI.line}`, borderBottom: `1px solid ${MIGI.line}` }}>
+          <div className="max-w-5xl mx-auto">
+            <Reveal>
+              <SectionLabel index="04" kicker="linkedin autopilot · human-in-the-loop" />
+              <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
+                I don&rsquo;t outsource my voice.{" "}
+                <span className="relative inline-block">
+                  <span className="relative z-10">I direct it.</span>
+                  <span aria-hidden className="absolute left-0 right-0 bottom-1 h-3 md:h-4 -z-0" style={{ background: MIGI.lime }} />
+                </span>
+              </h2>
+              <p className="text-[15px] leading-relaxed max-w-2xl mb-12" style={{ color: MIGI.muted }}>
+                A closed-loop content engine that keeps me visible on LinkedIn — the system does the
+                research, drafting and safety; I own the judgment and the final yes. Nothing is ever
+                posted without my approval.
+              </p>
+            </Reveal>
+
+            {/* the 7-step flow */}
+            <div className="space-y-3">
+              {LINKEDIN_STEPS.map((s, i) => (
+                <Reveal key={s.title} delay={(i % 2) * 0.05}>
+                  <div className="flex gap-4 sm:gap-5 items-start rounded-2xl bg-white p-5" style={{ border: `1px solid ${MIGI.line}` }}>
+                    <span className="w-10 h-10 rounded-xl shrink-0 flex items-center justify-center font-manrope font-extrabold text-[15px]" style={{ background: MIGI.lime, color: MIGI.ink }}>
+                      {i + 1}
+                    </span>
+                    <div className="pt-1">
+                      <h3 className="font-manrope font-semibold text-[15px] mb-1" style={{ color: MIGI.text }}>{s.title}</h3>
+                      <p className="font-manrope text-[13px] leading-relaxed" style={{ color: MIGI.muted }}>{s.body}</p>
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+
+            {/* talking-point chips */}
+            <Reveal delay={0.1}>
+              <div className="flex flex-wrap gap-2 mt-8">
+                {LINKEDIN_CHIPS.map((c) => (
+                  <span key={c} className="font-manrope text-[12px] font-medium rounded-full px-3.5 py-1.5" style={{ background: MIGI.ink, color: MIGI.lime }}>
+                    {c}
+                  </span>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* ════════════════════════════ 05 · REAL OUTPUT ════════════════════════════ */}
         <section className="px-6 py-20 md:py-28">
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="04" kicker="real output · straight to my phone" />
+              <SectionLabel index="05" kicker="real output · straight to my phone" />
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
                 What actually lands on my phone.
               </h2>
@@ -446,29 +509,30 @@ export default function MigiPage() {
           </div>
         </section>
 
-        {/* ════════════════════════════ 05 · THE DASHBOARD ════════════════════════════ */}
+        {/* ════════════════════════════ 06 · THE DASHBOARD ════════════════════════════ */}
         <section id="dashboard" className="px-6 py-20 md:py-28 scroll-mt-24" style={{ background: MIGI.creamDeep, borderTop: `1px solid ${MIGI.line}`, borderBottom: `1px solid ${MIGI.line}` }}>
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="05" kicker="migi · mission control" />
+              <SectionLabel index="06" kicker="migi · mission control" />
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
                 One screen to command them all.
               </h2>
               <p className="text-[15px] leading-relaxed max-w-2xl mb-10" style={{ color: MIGI.muted }}>
-                A private, secure Next.js control panel behind a password and an authenticator-app
-                lock. It shows fleet health, live domain status, the responses feed and personal data
-                at a glance — and runs any agent on demand.
+                A private, secure Next.js control panel behind a password and authenticator-app 2FA —
+                now a multi-page mission control: live agent health with per-run history, real-time
+                domain and uptime status, a feed of everything the agents produced, one-click Run for
+                any agent, and a LinkedIn control &amp; audit view.
               </p>
             </Reveal>
             <Reveal delay={0.08}><DashboardShowcase /></Reveal>
           </div>
         </section>
 
-        {/* ════════════════════════════ 06 · HOW IT'S BUILT ════════════════════════════ */}
+        {/* ════════════════════════════ 07 · HOW IT'S BUILT ════════════════════════════ */}
         <section className="px-6 py-20 md:py-28">
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="06" kicker="the operating model" />
+              <SectionLabel index="07" kicker="the operating model" />
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
                 Built solo — the AI-native way.
               </h2>
