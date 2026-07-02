@@ -37,6 +37,7 @@ const navLinks: NavLink[] = [
         submenus: [
           { label: "PACT Agent", href: "/agents/pact-agent", color: "#FF5500" },
           { label: "Pentashell", href: "/agents/pentashell", color: "#2FE2F0" },
+          { label: "Migi - Personal Suite of AI Agents", href: "/agents/migi", color: "#C6F24E" },
         ],
       },
       {

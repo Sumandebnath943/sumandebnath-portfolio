@@ -11,6 +11,12 @@ type Announcement = {
 
 const announcements: Announcement[] = [
   {
+    title: "Migi",
+    desc: "A personal suite of 20+ autonomous AI agents + a secure dashboard — built solo with Claude Code, on free infra.",
+    href: "/agents/migi",
+    color: "#C6F24E",
+  },
+  {
     title: "Qdex-1.5B",
     desc: "A 1.5B coding LLM, QLoRA-tuned to follow instructions — runs locally on a 16GB laptop, no GPU.",
     href: "/llms/qdex-1.5b",

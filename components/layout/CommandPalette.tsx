@@ -64,6 +64,14 @@ const commands: Command[] = [
     icon: "⌗",
   },
   {
+    id: "migi",
+    command: "/migi",
+    label: "Migi — AI Agent Fleet",
+    description: "20+ autonomous agents + a secure control dashboard, built with Claude Code",
+    href: "/agents/migi",
+    icon: "◐",
+  },
+  {
     id: "forget-anything",
     command: "/forget",
     label: "Forget Anything?",
