@@ -13,6 +13,16 @@ import {
   BOT_FEED,
   LINKEDIN_STEPS,
   LINKEDIN_CHIPS,
+  LINKEDIN_SHOT,
+  FINANCE_STEPS,
+  FINANCE_LAYERS,
+  FINANCE_CHIPS,
+  FINANCE_SHOT,
+  JOBS_STEPS,
+  JOBS_LAYERS,
+  JOBS_STAGES,
+  JOBS_CHIPS,
+  JOBS_SHOT,
   STACK,
   BUILD,
   DELIVERABLES,
@@ -22,9 +32,9 @@ import {
 /* ── SEO ───────────────────────────────────────────────────────────────── */
 const SITE = "https://sumandebnath.houseofnamus.com";
 export const metadata: Metadata = {
-  title: "Migi · A Personal Suite of 20+ Autonomous AI Agents",
+  title: "Migi · A Personal Suite of 30+ Autonomous AI Agents",
   description:
-    "Migi is a fleet of 20+ AI agents that run themselves in the cloud — monitoring, curating, drafting and remembering — plus a secure mission-control dashboard to command them. Built solo with Claude Code, on entirely free infrastructure.",
+    "Migi is a fleet of 30+ AI agents that run themselves in the cloud — monitoring, curating, drafting, job-hunting, tracking money and more — plus a secure mission-control dashboard to command them. Built solo with Claude Code, on entirely free infrastructure.",
   keywords: [
     "Migi", "AI agent fleet", "autonomous agents", "agent orchestration", "GitHub Actions agents",
     "Claude Code", "AI generalist", "personal AI automation", "Telegram bot agents", "Suman Debnath",
@@ -32,11 +42,11 @@ export const metadata: Metadata = {
   alternates: { canonical: "/agents/migi" },
   openGraph: {
     type: "website",
-    title: "Migi · A Personal Suite of 20+ Autonomous AI Agents",
+    title: "Migi · A Personal Suite of 30+ Autonomous AI Agents",
     description:
-      "A fleet of 20+ self-running AI agents + a secure control dashboard. Built solo with Claude Code, on free infrastructure.",
+      "A fleet of 30+ self-running AI agents + a secure control dashboard. Built solo with Claude Code, on free infrastructure.",
     url: `${SITE}/agents/migi`,
-    images: [{ url: "/migi-agent/dashboard.png", width: 1366, height: 768, alt: "The Migi mission-control dashboard" }],
+    images: [{ url: "/migi-agent/overview.png", width: 1350, height: 767, alt: "The Migi mission-control dashboard" }],
   },
 };
 
@@ -48,7 +58,7 @@ const appLd = {
   applicationCategory: "BusinessApplication",
   operatingSystem: "Cloud (GitHub Actions + Vercel)",
   description:
-    "A personal fleet of 20+ autonomous AI agents that monitor, curate, draft and remember, orchestrated on GitHub Actions and commanded through a secure Next.js dashboard.",
+    "A personal fleet of 30+ autonomous AI agents that monitor, curate, draft, find work, track money and launch what he ships, orchestrated on GitHub Actions and commanded through a secure Next.js dashboard.",
   url: `${SITE}/agents/migi`,
   author: { "@type": "Person", name: "Suman Debnath", url: SITE },
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
@@ -56,11 +66,11 @@ const appLd = {
 const articleLd = {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  headline: "Migi — a personal suite of 20+ autonomous AI agents",
+  headline: "Migi — a personal suite of 30+ autonomous AI agents",
   author: { "@type": "Person", name: "Suman Debnath" },
   publisher: { "@type": "Person", name: "Suman Debnath" },
   description:
-    "How one operator designed, built and now runs a 20+ agent fleet and a secure control dashboard end to end with Claude Code, on free infrastructure.",
+    "How one operator designed, built and now runs a 30+ agent fleet and a secure control dashboard end to end with Claude Code, on free infrastructure.",
   mainEntityOfPage: `${SITE}/agents/migi`,
 };
 
@@ -95,6 +105,72 @@ function AreaIcon({ path }: { path: string }) {
         <path d={path} />
       </svg>
     </span>
+  );
+}
+
+/* ── spotlight building blocks (shared by Finance & Job Search) ───────────── */
+function SubLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="font-dmmono text-[11px] uppercase tracking-[0.24em] mb-5" style={{ color: MIGI.muted }}>
+      {children}
+    </p>
+  );
+}
+
+function Screenshot({ shot, label, alt }: { shot: { src: string; w: number; h: number }; label: string; alt: string }) {
+  return (
+    <div className="rounded-[1.25rem] overflow-hidden bg-white" style={{ border: `1px solid ${MIGI.line}`, boxShadow: "0 40px 90px -50px rgba(0,0,0,0.5)" }}>
+      <div className="flex items-center gap-2 px-4 py-3" style={{ background: "#F4F3ED", borderBottom: `1px solid ${MIGI.line}` }}>
+        <span className="w-3 h-3 rounded-full" style={{ background: "#F1655B" }} />
+        <span className="w-3 h-3 rounded-full" style={{ background: "#F5BF4F" }} />
+        <span className="w-3 h-3 rounded-full" style={{ background: MIGI.green }} />
+        <span className="ml-3 font-dmmono text-[11px]" style={{ color: MIGI.muted }}>migi · {label}</span>
+      </div>
+      <Image src={shot.src} alt={alt} width={shot.w} height={shot.h} className="w-full h-auto block" loading="lazy" />
+    </div>
+  );
+}
+
+function StepGrid({ steps }: { steps: { title: string; body: string }[] }) {
+  return (
+    <div className="grid sm:grid-cols-2 gap-3">
+      {steps.map((s, i) => (
+        <Reveal key={s.title} delay={(i % 2) * 0.05}>
+          <div className="flex gap-4 items-start rounded-2xl bg-white p-5 h-full" style={{ border: `1px solid ${MIGI.line}` }}>
+            <span className="w-9 h-9 rounded-xl shrink-0 flex items-center justify-center font-manrope font-extrabold text-[14px]" style={{ background: MIGI.lime, color: MIGI.ink }}>{i + 1}</span>
+            <div>
+              <h4 className="font-manrope font-semibold text-[14.5px] mb-1" style={{ color: MIGI.text }}>{s.title}</h4>
+              <p className="font-manrope text-[12.5px] leading-relaxed" style={{ color: MIGI.muted }}>{s.body}</p>
+            </div>
+          </div>
+        </Reveal>
+      ))}
+    </div>
+  );
+}
+
+function LayerRow({ layers }: { layers: { name: string; body: string }[] }) {
+  return (
+    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      {layers.map((l, i) => (
+        <Reveal key={l.name} delay={(i % 3) * 0.05}>
+          <div className="rounded-2xl p-5 h-full" style={{ background: MIGI.ink }}>
+            <p className="font-dmmono text-[10px] uppercase tracking-[0.2em] mb-2" style={{ color: MIGI.lime }}>{l.name}</p>
+            <p className="font-manrope text-[12.5px] leading-relaxed" style={{ color: "rgba(255,255,255,0.62)" }}>{l.body}</p>
+          </div>
+        </Reveal>
+      ))}
+    </div>
+  );
+}
+
+function ChipRow({ chips }: { chips: string[] }) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {chips.map((c) => (
+        <span key={c} className="font-manrope text-[12px] font-medium rounded-full px-3.5 py-1.5" style={{ background: MIGI.ink, color: MIGI.lime }}>{c}</span>
+      ))}
+    </div>
   );
 }
 
@@ -156,7 +232,7 @@ export default function MigiPage() {
             <Reveal delay={0.12}>
               <h1 className="font-manrope font-extrabold text-[2.1rem] sm:text-[2.9rem] md:text-[3.3rem] leading-[1.08] tracking-[-0.04em] mt-7 mb-5" style={{ color: MIGI.ink }}>
                 A personal suite of{" "}
-                <span className="inline-block rounded-xl px-3 py-0.5 leading-[1.12] align-baseline" style={{ background: MIGI.ink, color: MIGI.lime }}>20+ AI agents</span>
+                <span className="inline-block rounded-xl px-3 py-0.5 leading-[1.12] align-baseline" style={{ background: MIGI.ink, color: MIGI.lime }}>30+ AI agents</span>
                 <br />
                 that quietly run my work.
               </h1>
@@ -319,8 +395,8 @@ export default function MigiPage() {
                 Meet the fleet.
               </h2>
               <p className="text-[15px] leading-relaxed max-w-2xl mb-12" style={{ color: MIGI.muted }}>
-                Twenty-plus agents, grouped into six areas. Each does one useful thing — and each is
-                framed the same way: what it does, and why it helps.
+                Thirty-plus agents, grouped into six areas — now including a whole career-and-growth
+                layer. Each does one useful thing, framed the same way: what it does, and why it helps.
               </p>
             </Reveal>
 
@@ -463,14 +539,127 @@ export default function MigiPage() {
                 ))}
               </div>
             </Reveal>
+
+            {/* the LinkedIn control & audit view */}
+            <Reveal delay={0.08}>
+              <div className="mt-10">
+                <Screenshot shot={LINKEDIN_SHOT} label="linkedin" alt="The Migi dashboard LinkedIn view — autopilot drafts, approvals and full post history" />
+              </div>
+            </Reveal>
+            <p className="font-dmmono text-[11px] mt-4 text-center" style={{ color: MIGI.muted }}>
+              The LinkedIn control &amp; audit view — drafts, approvals, and full post history in one place.
+            </p>
           </div>
         </section>
 
-        {/* ════════════════════════════ 05 · REAL OUTPUT ════════════════════════════ */}
+        {/* ════════════════════════════ 05 · FINANCE TRACKER ════════════════════════════ */}
         <section className="px-6 py-20 md:py-28">
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="05" kicker="real output · straight to my phone" />
+              <SectionLabel index="05" kicker="finance tracker · privacy-first money" />
+              <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
+                From an SMS to a{" "}
+                <span className="relative inline-block">
+                  <span className="relative z-10">categorized ledger.</span>
+                  <span aria-hidden className="absolute left-0 right-0 bottom-1 h-3 md:h-4 -z-0" style={{ background: MIGI.lime }} />
+                </span>
+              </h2>
+              <p className="text-[15px] leading-relaxed max-w-2xl mb-10" style={{ color: MIGI.muted }}>
+                A privacy-first money agent. Every bank &amp; UPI transaction alert on my phone is
+                auto-parsed into a clean, categorized ledger — account numbers stripped, OTPs never
+                stored — with budget caps, instant over-cap alerts, and a full audit trail. All private,
+                behind my login only.
+              </p>
+            </Reveal>
+
+            <Reveal delay={0.08}>
+              <Screenshot shot={FINANCE_SHOT} label="finance" alt="The Migi dashboard Finance tracker — today / week / month spend, categories, top merchants, daily-spend chart and budget caps" />
+            </Reveal>
+            <p className="font-dmmono text-[11px] mt-4 mb-12 text-center" style={{ color: MIGI.muted }}>
+              The Finance tracker — spend by period, intelligent categories, top merchants and budget caps.
+            </p>
+
+            <div className="mb-12">
+              <Reveal><SubLabel>How it automates the money</SubLabel></Reveal>
+              <StepGrid steps={FINANCE_STEPS} />
+            </div>
+
+            <div className="mb-10">
+              <Reveal><SubLabel>The layers inside</SubLabel></Reveal>
+              <LayerRow layers={FINANCE_LAYERS} />
+            </div>
+
+            <Reveal delay={0.05}><ChipRow chips={FINANCE_CHIPS} /></Reveal>
+          </div>
+        </section>
+
+        {/* ════════════════════════════ 06 · JOB SEARCH ════════════════════════════ */}
+        <section className="px-6 py-20 md:py-28" style={{ background: MIGI.creamDeep, borderTop: `1px solid ${MIGI.line}`, borderBottom: `1px solid ${MIGI.line}` }}>
+          <div className="max-w-6xl mx-auto">
+            <Reveal>
+              <SectionLabel index="06" kicker="job search · apply-ready, human-sent" />
+              <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
+                The tedious 95% of applying,{" "}
+                <span className="relative inline-block">
+                  <span className="relative z-10">done.</span>
+                  <span aria-hidden className="absolute left-0 right-0 bottom-1 h-3 md:h-4 -z-0" style={{ background: MIGI.lime }} />
+                </span>
+              </h2>
+              <p className="text-[15px] leading-relaxed max-w-2xl mb-10" style={{ color: MIGI.muted }}>
+                It continuously scouts target roles, scores each against my CV, writes a tailored cover
+                letter, and hands me an apply-ready packet with a direct link. I make the final
+                click — deliberately no auto-submit, for quality and full compliance — then track the
+                whole pipeline on the dashboard.
+              </p>
+            </Reveal>
+
+            {/* pipeline stepper */}
+            <Reveal delay={0.05}>
+              <div className="flex flex-wrap items-center gap-2.5 mb-10">
+                {JOBS_STAGES.map((st, i) => (
+                  <div key={st} className="flex items-center gap-2.5">
+                    <span
+                      className="rounded-full px-4 py-2 font-manrope font-semibold text-[13px]"
+                      style={{
+                        background: i === 0 ? MIGI.lime : "#FFFFFF",
+                        color: MIGI.ink,
+                        border: `1px solid ${i === 0 ? MIGI.lime : MIGI.line}`,
+                      }}
+                    >
+                      {st}
+                    </span>
+                    {i < JOBS_STAGES.length - 1 && <span className="font-dmmono" style={{ color: MIGI.muted }}>→</span>}
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.08}>
+              <Screenshot shot={JOBS_SHOT} label="jobs" alt="The Migi dashboard Jobs tracker — roles scored against my CV with match percentages, cover-letter actions, apply links and a status pipeline" />
+            </Reveal>
+            <p className="font-dmmono text-[11px] mt-4 mb-12 text-center" style={{ color: MIGI.muted }}>
+              The Jobs tracker — match scores, cover letters, direct apply links, and a new → applied → interviewing → rejected pipeline.
+            </p>
+
+            <div className="mb-12">
+              <Reveal><SubLabel>How it automates the hunt</SubLabel></Reveal>
+              <StepGrid steps={JOBS_STEPS} />
+            </div>
+
+            <div className="mb-10">
+              <Reveal><SubLabel>The layers inside</SubLabel></Reveal>
+              <LayerRow layers={JOBS_LAYERS} />
+            </div>
+
+            <Reveal delay={0.05}><ChipRow chips={JOBS_CHIPS} /></Reveal>
+          </div>
+        </section>
+
+        {/* ════════════════════════════ 07 · REAL OUTPUT ════════════════════════════ */}
+        <section className="px-6 py-20 md:py-28">
+          <div className="max-w-6xl mx-auto">
+            <Reveal>
+              <SectionLabel index="07" kicker="real output · straight to my phone" />
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
                 What actually lands on my phone.
               </h2>
@@ -510,35 +699,35 @@ export default function MigiPage() {
           </div>
         </section>
 
-        {/* ════════════════════════════ 06 · THE DASHBOARD ════════════════════════════ */}
+        {/* ════════════════════════════ 08 · THE DASHBOARD ════════════════════════════ */}
         <section id="dashboard" className="px-6 py-20 md:py-28 scroll-mt-24" style={{ background: MIGI.creamDeep, borderTop: `1px solid ${MIGI.line}`, borderBottom: `1px solid ${MIGI.line}` }}>
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="06" kicker="migi · mission control" />
+              <SectionLabel index="08" kicker="migi · a full operator OS" />
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
-                One screen to command them all.
+                One console to command them all.
               </h2>
               <p className="text-[15px] leading-relaxed max-w-2xl mb-10" style={{ color: MIGI.muted }}>
-                A private, secure Next.js control panel behind a password and authenticator-app 2FA —
-                now a multi-page mission control: live agent health with per-run history, real-time
-                domain and uptime status, a feed of everything the agents produced, one-click Run for
-                any agent, and a LinkedIn control &amp; audit view.
+                The control panel grew from a monitor into a full operator OS — a multi-page console
+                behind a password and authenticator-app 2FA, with its own tracker for each workflow:
+                <span style={{ color: MIGI.text }}> Finance, Jobs, Build, Outreach, Skills and Launch</span> —
+                plus fleet health, live domain status, a responses feed, and one-click Run for any agent.
               </p>
             </Reveal>
             <Reveal delay={0.08}><DashboardShowcase /></Reveal>
           </div>
         </section>
 
-        {/* ════════════════════════════ 07 · HOW IT'S BUILT ════════════════════════════ */}
+        {/* ════════════════════════════ 09 · HOW IT'S BUILT ════════════════════════════ */}
         <section className="px-6 py-20 md:py-28">
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="07" kicker="the operating model" />
+              <SectionLabel index="09" kicker="the operating model" />
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
                 Built solo — the AI-native way.
               </h2>
               <p className="text-[15px] leading-relaxed max-w-2xl mb-12" style={{ color: MIGI.muted }}>
-                From architecture to 20+ agents to a secure dashboard: designed and shipped by one
+                From architecture to 30+ agents to a secure dashboard: designed and shipped by one
                 person orchestrating an AI coding agent, end to end, on entirely free infrastructure.
               </p>
             </Reveal>
@@ -573,14 +762,14 @@ export default function MigiPage() {
                     <span style={{ color: MIGI.lime }}>Design, build and operate it.</span>
                   </h2>
                   <p className="font-manrope text-[15px] max-w-lg mx-auto leading-relaxed" style={{ color: "rgba(255,255,255,0.6)" }}>
-                    Migi is the proof: a real, running system of 20+ agents and a secure control plane,
+                    Migi is the proof: a real, running system of 30+ agents and a secure control plane,
                     shipped solo with Claude Code — the way one person operates in the AI age.
                   </p>
                 </div>
               </div>
             </Reveal>
             <p className="font-dmmono text-[11px] text-center mt-10 tracking-wide" style={{ color: MIGI.muted }}>
-              Migi · 20+ autonomous agents + a secure dashboard · built with Claude Code by Suman Debnath
+              Migi · 30+ autonomous agents + a secure dashboard · built with Claude Code by Suman Debnath
             </p>
           </div>
         </section>

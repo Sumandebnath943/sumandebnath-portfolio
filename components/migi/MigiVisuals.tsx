@@ -56,8 +56,8 @@ export function DashboardShowcase() {
         <Image
           src={shot.src}
           alt={shot.alt}
-          width={1366}
-          height={768}
+          width={shot.w}
+          height={shot.h}
           className="w-full h-auto block"
         />
       </m.div>

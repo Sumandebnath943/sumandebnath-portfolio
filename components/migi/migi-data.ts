@@ -25,8 +25,8 @@ export const MIGI = {
 
 /* ── Headline numbers (hero band) ─────────────────────────────────────────── */
 export const STATS: { value: number; suffix?: string; prefix?: string; label: string; sub: string }[] = [
-  { value: 20, suffix: "+", label: "autonomous agents", sub: "one job each, all running" },
-  { value: 6, label: "capability areas", sub: "ship · brand · learn · ops · meta" },
+  { value: 30, suffix: "+", label: "autonomous agents", sub: "one job each, all running" },
+  { value: 6, label: "capability areas", sub: "ship · brand · learn · ops · meta · career" },
   { value: 2, label: "free LLMs", sub: "Groq + Google Gemini" },
   { value: 24, suffix: "/7", label: "in the cloud", sub: "no servers, no paid infra" },
   { value: 0, prefix: "$", label: "running cost", sub: "free tiers, end to end" },
@@ -100,6 +100,20 @@ export const AREAS: Area[] = [
       { name: "Weekly Founder Review", what: "Reads everything the other agents collected and writes a 'state of you' review with three focus areas.", why: "A chief-of-staff that runs on my own data." },
     ],
   },
+  {
+    id: "career",
+    title: "Career & Growth",
+    kicker: "find work · build · reach out · launch · money",
+    icon: "M3 17l6-6 4 4 8-8 M15 7h6v6",
+    agents: [
+      { name: "Finance Tracker", what: "Turns bank & UPI transaction alerts into a private, categorized ledger — with budget caps, instant over-cap alerts, and a full audit trail.", why: "My money, tracked without me lifting a finger.", tag: "Privacy-first · behind my login" },
+      { name: "Job Search", what: "Continuously scouts target roles, scores each against my CV, drafts a tailored cover letter, and hands me an apply-ready packet with a direct link.", why: "The tedious 95% of applying, done — I keep the final click.", tag: "No auto-submit · by design" },
+      { name: "Build Compass", what: "Accumulates real demand from developer communities all week — weighing engagement and what people ask for — then ranks a Top-7 'build this next' with evidence and a kickoff prompt.", why: "I build what people actually want, not what I guess." },
+      { name: "Outreach Scout", what: "Twice a week it surfaces freelance gigs, collabs and hackathons that fit me, and drafts a specific, non-cringe intro for each.", why: "Opportunities I'd never find — with the intro already written.", tag: "Draft-only · I send it myself" },
+      { name: "Skill-Gap Advisor", what: "Monthly, it compares what I've been building against what's rising in AI and names at most two skills to learn next — each with a first step.", why: "One focused nudge a month, never overwhelm." },
+      { name: "Micro-Launch Autopilot", what: "For any repo I've shipped, it drafts platform-tailored launch posts (Show HN, Reddit, Bluesky, X, Product Hunt) and can auto-post the Bluesky one on a tap.", why: "Ship, then actually announce it.", tag: "Draft-only except Bluesky" },
+    ],
+  },
 ];
 
 /* ── The two-way bot — now real-time (event-driven webhook) ───────────────── */
@@ -131,10 +145,58 @@ export const LINKEDIN_CHIPS = [
   "Anti-repetition memory", "One-tap regenerate", "Plain-language edits", "Human-approved",
   "Grounded to my real work — no fabrication", "Multi-layer safety", "Weekly recap",
 ];
+export const LINKEDIN_SHOT = { src: "/migi-agent/linkedin.png", w: 1365, h: 767 };
+
+/* ── Finance Tracker — spotlight (feature #2) ─────────────────────────────── */
+export const FINANCE_STEPS: { title: string; body: string }[] = [
+  { title: "Ingests the alert", body: "A bank or UPI transaction SMS hits my phone — nothing to log by hand." },
+  { title: "Parses it safely", body: "It reads amount, merchant and direction, strips account numbers, and never stores OTPs." },
+  { title: "Categorizes", body: "Each transaction is sorted into an intelligent category automatically." },
+  { title: "Writes to a private ledger", body: "Everything lands in a categorized ledger — behind my login only." },
+  { title: "Watches budgets", body: "Set a cap per category and get an instant Telegram alert the moment it's crossed." },
+  { title: "Rolls it up", body: "Daily, weekly and monthly spend, top merchants and trends — at a glance, with a full audit trail." },
+];
+export const FINANCE_LAYERS: { name: string; body: string }[] = [
+  { name: "Capture", body: "Reads transaction alerts the instant they arrive." },
+  { name: "Privacy", body: "Strips account numbers and drops OTPs before anything is stored." },
+  { name: "Intelligence", body: "Amount, merchant and category, inferred automatically." },
+  { name: "Ledger", body: "A private, categorized store of every transaction." },
+  { name: "Control", body: "Per-category budget caps with instant breach alerts." },
+  { name: "Audit", body: "A full trail of exactly what came through, and when." },
+];
+export const FINANCE_CHIPS = [
+  "Privacy-first", "Account numbers stripped", "OTPs never stored", "Intelligent categories",
+  "Budget caps + instant alerts", "Daily / weekly / monthly", "Audit trail", "Behind my login only",
+];
+export const FINANCE_SHOT = { src: "/migi-agent/finance.png", w: 1350, h: 767 };
+
+/* ── Job Search — spotlight (feature #3) ──────────────────────────────────── */
+export const JOBS_STEPS: { title: string; body: string }[] = [
+  { title: "Scouts roles", body: "Continuously scans job boards for roles that fit my target." },
+  { title: "Scores against my CV", body: "Ranks each opening with a match score, so the strongest fits rise to the top." },
+  { title: "Writes the cover letter", body: "Drafts a tailored cover letter for each role, grounded in my real experience." },
+  { title: "Packages it apply-ready", body: "Hands me a complete packet with a direct apply link — everything but the final click." },
+  { title: "I click apply", body: "Deliberately no auto-submit: higher quality and fully compliant. The submit is always mine." },
+  { title: "Tracks the pipeline", body: "Every role moves through new → applied → interviewing → rejected on the dashboard." },
+];
+export const JOBS_LAYERS: { name: string; body: string }[] = [
+  { name: "Discovery", body: "Scouts target roles across job boards, continuously." },
+  { name: "Matching", body: "Scores each role against my CV for genuine fit." },
+  { name: "Generation", body: "Drafts a tailored cover letter per role." },
+  { name: "Packaging", body: "Assembles an apply-ready packet with a direct link." },
+  { name: "Human gate", body: "I make the final apply click — never auto-submitted." },
+  { name: "Pipeline", body: "Tracks every application through to its outcome." },
+];
+export const JOBS_STAGES = ["New", "Applied", "Interviewing", "Rejected"];
+export const JOBS_CHIPS = [
+  "Scores against my CV", "Tailored cover letters", "Apply-ready packet", "Direct apply link",
+  "No auto-submit — by design", "Fully compliant", "Pipeline tracking",
+];
+export const JOBS_SHOT = { src: "/migi-agent/jobs.png", w: 1348, h: 767 };
 
 /* ── Architecture flow (agents → LLMs → channels → state → dashboard) ─────── */
 export const FLOW: { id: string; label: string; sub: string }[] = [
-  { id: "agents", label: "20+ Agents", sub: "GitHub Actions · cron + on-demand" },
+  { id: "agents", label: "30+ Agents", sub: "GitHub Actions · cron + on-demand" },
   { id: "llms", label: "Two free LLMs", sub: "Groq · Google Gemini" },
   { id: "channels", label: "Telegram + Email", sub: "instant pings · designed digests" },
   { id: "state", label: "Supabase", sub: "shared brain · memory" },
@@ -154,27 +216,57 @@ export const STACK: { name: string; role: string }[] = [
 ];
 
 /* ── Dashboard showcase (screenshots live in /public/migi-agent) ──────────── */
-export const SHOTS: { src: string; label: string; alt: string; caption: string }[] = [
+export const SHOTS: { src: string; w: number; h: number; label: string; alt: string; caption: string }[] = [
   {
-    src: "/migi-agent/dashboard.png",
+    src: "/migi-agent/overview.png", w: 1350, h: 767,
     label: "Overview",
-    alt: "Migi dashboard Overview — fleet stats, next-run countdown, recent-run bars, live domain health and the Agent Control panel",
-    caption: "Fleet health, a live next-run countdown, recent-run bars, real-time domain health, and one-click Run for every agent.",
+    alt: "Migi dashboard Overview — fleet stats, a next-run countdown, month spend, recent-run bars, live domain health and the Agent Control panel",
+    caption: "The home summary: fleet health, a live next-run countdown, month-to-date spend, real-time domain health, one-click Run, and the latest responses.",
   },
   {
-    src: "/migi-agent/dashboard 3.png",
+    src: "/migi-agent/agents.png", w: 1348, h: 767,
     label: "Agents",
     alt: "Migi dashboard Agents page — full workflow table grouped by area with cadence, next run, last run, run-history heatmaps and status",
-    caption: "Every workflow in one table — cadence, next run, last run, an eight-run history heatmap, and Run / Logs on each row.",
+    caption: "Every workflow in one table — cadence, next run, last run, a run-history heatmap, and Run / Logs on each row.",
   },
   {
-    src: "/migi-agent/dashboard 2.png",
+    src: "/migi-agent/build.png", w: 1350, h: 767,
+    label: "Build",
+    alt: "Migi dashboard Build tracker — a scored Top-7 'build this next', each with the demand evidence and Start / Reject controls",
+    caption: "Build Compass: a scored 'build this next' list grounded in real demand, with the evidence and a start → shipped tracker.",
+  },
+  {
+    src: "/migi-agent/outreach.png", w: 1350, h: 767,
+    label: "Outreach",
+    alt: "Migi dashboard Outreach tracker — freelance, collab and hackathon opportunities with a drafted intro and a reached-out → replied pipeline",
+    caption: "Outreach Scout: fitting opportunities with a drafted intro each — draft-only, tracked from reached-out to replied.",
+  },
+  {
+    src: "/migi-agent/skills.png", w: 1365, h: 767,
+    label: "Skills",
+    alt: "Migi dashboard Skills tracker — at most two skills to learn next, each with why-now, how-it-builds-on-my-work and a first step",
+    caption: "Skill-Gap Advisor: at most two skills to learn next — each with why now, how it builds on my work, and a first step.",
+  },
+  {
+    src: "/migi-agent/launch.png", w: 1350, h: 767,
+    label: "Launch",
+    alt: "Migi dashboard Launch tracker — my repos with new-repo flags and per-platform launch drafts, Bluesky auto-post on a tap",
+    caption: "Micro-Launch Autopilot: my repos with new-repo flags and platform-tailored launch drafts — Bluesky on one tap, the rest copy-only.",
+  },
+  {
+    src: "/migi-agent/responses.png", w: 1350, h: 767,
     label: "Responses",
     alt: "Migi dashboard Responses feed — a bento wall of the actual content the agents produced, filterable by email or Telegram channel",
     caption: "A bento feed of the actual content the agents produced — filterable by channel, mirrored from every message they send.",
   },
   {
-    src: "/migi-agent/dashboard login.png",
+    src: "/migi-agent/data.png", w: 1348, h: 767,
+    label: "Data",
+    alt: "Migi dashboard Data page — spend, habits, journal, ideas backlog, reading queue, LinkedIn drafts, repos and video channels at a glance",
+    caption: "Everything the personal-ops and knowledge agents have collected — spend, habits, journal, ideas, reading and more, at a glance.",
+  },
+  {
+    src: "/migi-agent/dashboard login.png", w: 1365, h: 767,
     label: "Locked",
     alt: "Migi dashboard sign-in — passphrase plus authenticator (TOTP) 2FA on a lime canvas; restricted, single-operator console",
     caption: "A single-operator console: passphrase + authenticator-app 2FA, a signed httpOnly session, and lockout on repeated failures.",
@@ -193,7 +285,7 @@ export const ORCHESTRATION_SHOT = { src: "/migi-agent/github agents.png", w: 134
 
 /* ── How it was built ─────────────────────────────────────────────────────── */
 export const BUILD: { title: string; body: string }[] = [
-  { title: "Built with Claude Code", body: "From architecture to 20+ agents to a secure dashboard — designed and shipped by orchestrating an AI coding agent, solo." },
+  { title: "Built with Claude Code", body: "From architecture to 30+ agents to a secure dashboard — designed and shipped by orchestrating an AI coding agent, solo." },
   { title: "On free infrastructure", body: "GitHub Actions, free LLM tiers, Supabase and Vercel free plans. The whole fleet runs 24/7 at zero running cost." },
   { title: "Humans in the loop", body: "Drafts and queues, never auto-send to the outside world. LinkedIn is draft-only; nothing leaves without approval." },
   { title: "One repo, many agents", body: "A single public monorepo with a shared lib/ foundation — one place to add an agent, one brain they all share." },

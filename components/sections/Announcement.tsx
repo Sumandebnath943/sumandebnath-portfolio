@@ -12,7 +12,7 @@ type Announcement = {
 const announcements: Announcement[] = [
   {
     title: "Migi",
-    desc: "A personal suite of 20+ autonomous AI agents + a secure dashboard — built solo with Claude Code, on free infra.",
+    desc: "A personal suite of 30+ autonomous AI agents — finds work, tracks money, launches what I ship — plus a secure dashboard. Built with Claude Code.",
     href: "/agents/migi",
     color: "#C6F24E",
   },
