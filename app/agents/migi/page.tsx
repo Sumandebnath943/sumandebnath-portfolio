@@ -312,7 +312,8 @@ export default function MigiPage() {
                   Migi is a portfolio of autonomous agents that run on a schedule — or on demand —
                   in the cloud. No servers, no paid infrastructure. Each agent does one useful job:
                   it watches something, summarizes something, drafts something, or remembers
-                  something, then reaches me on Telegram or email.
+                  something, then reaches me on Telegram or email. Lately, some don&rsquo;t do my
+                  work at all — they run the fleet itself.
                 </p>
               </Reveal>
               <Reveal delay={0.12}>
@@ -395,8 +396,9 @@ export default function MigiPage() {
                 Meet the fleet.
               </h2>
               <p className="text-[15px] leading-relaxed max-w-2xl mb-12" style={{ color: MIGI.muted }}>
-                Thirty-plus agents, grouped into six areas — now including a whole career-and-growth
-                layer. Each does one useful thing, framed the same way: what it does, and why it helps.
+                Thirty-plus agents, grouped into seven areas — a career-and-growth layer, and a staff
+                layer that runs the fleet itself. Each does one useful thing, framed the same way:
+                what it does, and why it helps.
               </p>
             </Reveal>
 
@@ -412,6 +414,30 @@ export default function MigiPage() {
                       </div>
                     </div>
                   </Reveal>
+
+                  {area.intro && (
+                    <Reveal>
+                      <div className="rounded-2xl p-6 md:p-7 mb-6 overflow-hidden" style={{ background: MIGI.ink }}>
+                        <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-8">
+                          <p className="font-manrope text-[14px] leading-relaxed flex-1" style={{ color: "rgba(255,255,255,0.72)" }}>
+                            {area.intro.text}
+                          </p>
+                          {area.intro.shot && (
+                            <div className="rounded-xl overflow-hidden shrink-0 w-full md:w-[320px]" style={{ border: "1px solid rgba(255,255,255,0.12)" }}>
+                              <Image
+                                src={area.intro.shot.src}
+                                alt="A Migi home staff-summary card — the fleet's own LLM-ops totals for the last 7 days"
+                                width={area.intro.shot.w}
+                                height={area.intro.shot.h}
+                                className="w-full h-auto block"
+                                loading="lazy"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </Reveal>
+                  )}
 
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {area.agents.map((ag, i) => {
@@ -565,10 +591,11 @@ export default function MigiPage() {
                 </span>
               </h2>
               <p className="text-[15px] leading-relaxed max-w-2xl mb-10" style={{ color: MIGI.muted }}>
-                A privacy-first money agent. Every bank &amp; UPI transaction alert on my phone is
-                auto-parsed into a clean, categorized ledger — account numbers stripped, OTPs never
-                stored — with budget caps, instant over-cap alerts, and a full audit trail. All private,
-                behind my login only.
+                A privacy-first money agent that leveled up from parsing one SMS into a tracker I can
+                actually trust. It captures both bank SMS and app notifications, de-duplicates the same
+                transaction across them, learns my category corrections, and ignores payment reminders
+                so only money that actually moved is logged — with manual cash entry, a 24-month history,
+                budgets and a full audit trail. All behind my login.
               </p>
             </Reveal>
 
@@ -710,8 +737,11 @@ export default function MigiPage() {
               <p className="text-[15px] leading-relaxed max-w-2xl mb-10" style={{ color: MIGI.muted }}>
                 The control panel grew from a monitor into a full operator OS — a multi-page console
                 behind a password and authenticator-app 2FA, with its own tracker for each workflow:
-                <span style={{ color: MIGI.text }}> Finance, Jobs, Build, Outreach, Skills and Launch</span> —
-                plus fleet health, live domain status, a responses feed, and one-click Run for any agent.
+                <span style={{ color: MIGI.text }}> Finance, Jobs, Build, Outreach, Skills and Launch</span>.
+                It now meters itself too — a <span style={{ color: MIGI.text }}>Team observability page</span> (12-month
+                usage, cost and tokens by provider, a per-agent breakdown, live health and a &ldquo;needs
+                attention&rdquo; panel), home staff-summary cards, and a redesigned data page — plus fleet
+                health, live domain status, a responses feed, and one-click Run for any agent.
               </p>
             </Reveal>
             <Reveal delay={0.08}><DashboardShowcase /></Reveal>

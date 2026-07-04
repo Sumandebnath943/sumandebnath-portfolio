@@ -26,7 +26,7 @@ export const MIGI = {
 /* ── Headline numbers (hero band) ─────────────────────────────────────────── */
 export const STATS: { value: number; suffix?: string; prefix?: string; label: string; sub: string }[] = [
   { value: 30, suffix: "+", label: "autonomous agents", sub: "one job each, all running" },
-  { value: 6, label: "capability areas", sub: "ship · brand · learn · ops · meta · career" },
+  { value: 7, label: "capability areas", sub: "watch · operate · self-run" },
   { value: 2, label: "free LLMs", sub: "Groq + Google Gemini" },
   { value: 24, suffix: "/7", label: "in the cloud", sub: "no servers, no paid infra" },
   { value: 0, prefix: "$", label: "running cost", sub: "free tiers, end to end" },
@@ -41,6 +41,8 @@ export type Area = {
   kicker: string;
   icon: string; // 24×24 stroke path
   agents: Agent[];
+  // optional framing beat rendered above the area's cards (used by the staff layer)
+  intro?: { text: string; shot?: { src: string; w: number; h: number } };
 };
 
 export const AREAS: Area[] = [
@@ -106,7 +108,7 @@ export const AREAS: Area[] = [
     kicker: "find work · build · reach out · launch · money",
     icon: "M3 17l6-6 4 4 8-8 M15 7h6v6",
     agents: [
-      { name: "Finance Tracker", what: "Turns bank & UPI transaction alerts into a private, categorized ledger — with budget caps, instant over-cap alerts, and a full audit trail.", why: "My money, tracked without me lifting a finger.", tag: "Privacy-first · behind my login" },
+      { name: "Finance Tracker", what: "Captures bank SMS and app notifications, de-duplicates the same transaction across both, learns my category corrections, and ignores payment reminders — a private, categorized ledger with budgets, alerts and a 24-month history.", why: "An expense tracker I can actually trust.", tag: "Privacy-first · behind my login" },
       { name: "Job Search", what: "Continuously scouts target roles, scores each against my CV, drafts a tailored cover letter, and hands me an apply-ready packet with a direct link.", why: "The tedious 95% of applying, done — I keep the final click.", tag: "No auto-submit · by design" },
       { name: "Build Compass", what: "Accumulates real demand from developer communities all week — weighing engagement and what people ask for — then ranks a Top-7 'build this next' with evidence and a kickoff prompt.", why: "I build what people actually want, not what I guess." },
       { name: "Outreach Scout", what: "Twice a week it surfaces freelance gigs, collabs and hackathons that fit me, and drafts a specific, non-cringe intro for each.", why: "Opportunities I'd never find — with the intro already written.", tag: "Draft-only · I send it myself" },
@@ -114,16 +116,31 @@ export const AREAS: Area[] = [
       { name: "Micro-Launch Autopilot", what: "For any repo I've shipped, it drafts platform-tailored launch posts (Show HN, Reddit, Bluesky, X, Product Hunt) and can auto-post the Bluesky one on a tap.", why: "Ship, then actually announce it.", tag: "Draft-only except Bluesky" },
     ],
   },
+  {
+    id: "staff",
+    title: "Staff & Self-Management",
+    kicker: "the fleet that runs the fleet",
+    icon: "M12 3a2 2 0 100 4 2 2 0 000-4z M5 21a2 2 0 100-4 2 2 0 000 4z M19 21a2 2 0 100-4 2 2 0 000 4z M12 7v4 M12 11H6v2 M12 11h6v2",
+    intro: {
+      text: "The newest layer isn't more agents doing my work — it's agents that run the fleet itself. A one-person company where even the ops, QA and analytics roles are automated: an in-house CTO reviewing my code, a brand manager auditing my sites, and a team manager metering every AI call. The fleet reports on itself.",
+      shot: { src: "/migi-agent/team observability card.png", w: 654, h: 168 },
+    },
+    agents: [
+      { name: "Automated CTO", what: "Every morning it reviews new commits across every repo I own — auto-discovering new ones — for security, performance, quality, duplication and missing docs/tests, then sends one consolidated, severity-ranked PDF review to my phone.", why: "A senior engineer looking over my shoulder, across everything I ship.", tag: "Only reviews what's new" },
+      { name: "AI Brand Manager", what: "Weekly, it audits every page of my live sites (found via each sitemap) for performance, accessibility and on-page SEO — plus Google rankings and traffic — and flags week-over-week regressions.", why: "A marketing-ops team that never sleeps — catching a regression the week it happens.", tag: "Budget-aware · free tiers" },
+      { name: "AI Team Manager", what: "Meters every LLM call the whole fleet makes — cost, tokens, latency, failures and rate-limits, per provider and per agent — into a live dashboard, a weekly ops report and provider health checks.", why: "You can't run a fleet you can't see. Now I can see all of it.", tag: "Self-observability" },
+    ],
+  },
 ];
 
 /* ── The two-way bot — now real-time (event-driven webhook) ───────────────── */
 export const BOT_ACTIONS: { cmd: string; does: string }[] = [
+  { cmd: "/review", does: "Code-review my latest commits" },
+  { cmd: "/audit", does: "Audit my sites' health & SEO" },
+  { cmd: "/ops", does: "This week's AI cost & failures" },
   { cmd: "/briefing", does: "Today's tech briefing, on demand" },
   { cmd: "/linkedin", does: "Draft a LinkedIn post right now" },
-  { cmd: "/standup", does: "Where I left off across my repos" },
-  { cmd: "/reading", does: "My unread saved links" },
   { cmd: "/expenses", does: "This month's spend summary" },
-  { cmd: "/ideas", does: "The ranked idea backlog" },
 ];
 export const BOT_FEED =
   "Send a link, a receipt photo, a habit line or a journal reply — each routes to the right agent automatically.";
@@ -149,24 +166,24 @@ export const LINKEDIN_SHOT = { src: "/migi-agent/linkedin.png", w: 1365, h: 767 
 
 /* ── Finance Tracker — spotlight (feature #2) ─────────────────────────────── */
 export const FINANCE_STEPS: { title: string; body: string }[] = [
-  { title: "Ingests the alert", body: "A bank or UPI transaction SMS hits my phone — nothing to log by hand." },
-  { title: "Parses it safely", body: "It reads amount, merchant and direction, strips account numbers, and never stores OTPs." },
-  { title: "Categorizes", body: "Each transaction is sorted into an intelligent category automatically." },
-  { title: "Writes to a private ledger", body: "Everything lands in a categorized ledger — behind my login only." },
-  { title: "Watches budgets", body: "Set a cap per category and get an instant Telegram alert the moment it's crossed." },
-  { title: "Rolls it up", body: "Daily, weekly and monthly spend, top merchants and trends — at a glance, with a full audit trail." },
+  { title: "Captures both channels", body: "It reads both bank SMS and banking-app notifications, so nothing slips through a channel gap." },
+  { title: "De-duplicates", body: "When the same transaction arrives on both channels it's merged into one — matched on the bank's reference number — while two genuinely identical purchases stay two." },
+  { title: "Filters the noise", body: "Payment-due and upcoming-EMI reminders are recognized and skipped, so only money that actually moved is logged." },
+  { title: "Categorizes & learns", body: "Sorts each spend into real-world categories (rent, EMI, OTT, groceries, misc…) — and when I re-categorize a merchant, it remembers next time." },
+  { title: "Takes manual entry too", body: "A one-tap form captures cash spends the phone never sees." },
+  { title: "Tracks & guards", body: "A 24-month history, daily/weekly/monthly rollups, budget caps with instant alerts, and a full audit trail — private, behind my login." },
 ];
 export const FINANCE_LAYERS: { name: string; body: string }[] = [
-  { name: "Capture", body: "Reads transaction alerts the instant they arrive." },
+  { name: "Capture", body: "Reads bank SMS and app notifications the instant they arrive." },
+  { name: "Dedup", body: "Merges the same transaction across channels on its reference number." },
+  { name: "Filter", body: "Recognizes and skips payment reminders — logs only real spend." },
+  { name: "Learning", body: "Remembers my category corrections, per merchant." },
   { name: "Privacy", body: "Strips account numbers and drops OTPs before anything is stored." },
-  { name: "Intelligence", body: "Amount, merchant and category, inferred automatically." },
-  { name: "Ledger", body: "A private, categorized store of every transaction." },
-  { name: "Control", body: "Per-category budget caps with instant breach alerts." },
-  { name: "Audit", body: "A full trail of exactly what came through, and when." },
+  { name: "Ledger", body: "24-month categorized history, budgets, alerts and audit trail." },
 ];
 export const FINANCE_CHIPS = [
-  "Privacy-first", "Account numbers stripped", "OTPs never stored", "Intelligent categories",
-  "Budget caps + instant alerts", "Daily / weekly / monthly", "Audit trail", "Behind my login only",
+  "SMS + app notifications", "Smart de-duplication", "Learns my corrections", "Ignores payment reminders",
+  "Manual cash entry", "24-month history", "Budget caps + alerts", "Privacy-first", "Behind my login",
 ];
 export const FINANCE_SHOT = { src: "/migi-agent/finance.png", w: 1350, h: 767 };
 
@@ -230,6 +247,12 @@ export const SHOTS: { src: string; w: number; h: number; label: string; alt: str
     caption: "Every workflow in one table — cadence, next run, last run, a run-history heatmap, and Run / Logs on each row.",
   },
   {
+    src: "/migi-agent/team.png", w: 1348, h: 767,
+    label: "Team",
+    alt: "Migi dashboard Team Manager — LLM cost, tokens, latency, failures and rate-limits across the fleet, 12-month usage, a per-agent breakdown and a needs-attention panel",
+    caption: "The self-observability page: LLM cost, tokens, latency and success — per provider and per agent — with 12-month usage, live health, and a 'needs attention' panel.",
+  },
+  {
     src: "/migi-agent/build.png", w: 1350, h: 767,
     label: "Build",
     alt: "Migi dashboard Build tracker — a scored Top-7 'build this next', each with the demand evidence and Start / Reject controls",
@@ -260,10 +283,10 @@ export const SHOTS: { src: string; w: number; h: number; label: string; alt: str
     caption: "A bento feed of the actual content the agents produced — filterable by channel, mirrored from every message they send.",
   },
   {
-    src: "/migi-agent/data.png", w: 1348, h: 767,
+    src: "/migi-agent/data (2).png", w: 1350, h: 767,
     label: "Data",
-    alt: "Migi dashboard Data page — spend, habits, journal, ideas backlog, reading queue, LinkedIn drafts, repos and video channels at a glance",
-    caption: "Everything the personal-ops and knowledge agents have collected — spend, habits, journal, ideas, reading and more, at a glance.",
+    alt: "Migi dashboard redesigned Data page — a journaling streak, a productivity trend, a mood timeline, reading tags, scored ideas and monthly spend",
+    caption: "The redesigned data page turns raw personal data into signal — a journaling streak, a productivity trend, a mood timeline, reading tags, scored ideas and monthly spend.",
   },
   {
     src: "/migi-agent/dashboard login.png", w: 1365, h: 767,
