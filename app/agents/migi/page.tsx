@@ -23,6 +23,8 @@ import {
   JOBS_STAGES,
   JOBS_CHIPS,
   JOBS_SHOT,
+  DEVICES_SHOT,
+  SECURITY_FEATURES,
   STACK,
   BUILD,
   DELIVERABLES,
@@ -745,6 +747,43 @@ export default function MigiPage() {
               </p>
             </Reveal>
             <Reveal delay={0.08}><DashboardShowcase /></Reveal>
+
+            {/* secure & mobile — session security + device management (feature #5) */}
+            <div className="mt-16">
+              <Reveal>
+                <SubLabel>Secure &amp; mobile</SubLabel>
+                <h3 className="font-manrope font-bold text-[1.4rem] md:text-[1.9rem] tracking-[-0.02em] leading-tight mb-4">
+                  Operating a system means being able to secure it.
+                </h3>
+                <p className="text-[14px] leading-relaxed max-w-2xl mb-8" style={{ color: MIGI.muted }}>
+                  The console grew up on access, too. Sessions now persist on a 7-day rolling window
+                  instead of dropping me every few hours, a Devices page shows every place I&rsquo;m
+                  logged in and lets me remotely log out any one — or everywhere — in a tap, and the
+                  whole panel is fully responsive, so I can run the fleet from my pocket.
+                </p>
+              </Reveal>
+
+              <Reveal delay={0.06}>
+                <Screenshot shot={DEVICES_SHOT} label="devices" alt="The Migi dashboard Devices & sessions page — active sessions per browser and OS with revoke, log-out-others and log-out-everywhere controls" />
+              </Reveal>
+              <p className="font-dmmono text-[11px] mt-4 mb-10 text-center" style={{ color: MIGI.muted }}>
+                The Devices &amp; sessions page — every logged-in device, with one-tap revoke, log-out-others, or log-out-everywhere.
+              </p>
+
+              <div className="grid sm:grid-cols-3 gap-4">
+                {SECURITY_FEATURES.map((f, i) => (
+                  <Reveal key={f.title} delay={(i % 3) * 0.05}>
+                    <div className="migi-card rounded-2xl bg-white h-full p-6" style={{ border: `1px solid ${MIGI.line}` }}>
+                      <span className="inline-flex w-9 h-9 rounded-xl items-center justify-center mb-4" style={{ background: MIGI.lime }}>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={MIGI.ink} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d={f.icon} /></svg>
+                      </span>
+                      <h4 className="font-manrope font-semibold text-[15px] mb-2" style={{ color: MIGI.text }}>{f.title}</h4>
+                      <p className="font-manrope text-[13px] leading-relaxed" style={{ color: MIGI.muted }}>{f.body}</p>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
 

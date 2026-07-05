@@ -306,6 +306,14 @@ export const DELIVERABLES: { src: string; w: number; h: number; agent: string; c
 /* ── Orchestration proof — the real GitHub Actions workflow list ──────────── */
 export const ORCHESTRATION_SHOT = { src: "/migi-agent/github agents.png", w: 1348, h: 526 };
 
+/* ── Session security + mobile (feature #5) — dashboard, not an agent ─────── */
+export const DEVICES_SHOT = { src: "/migi-agent/devices.png", w: 1365, h: 449 };
+export const SECURITY_FEATURES: { title: string; body: string; icon: string }[] = [
+  { title: "Persistent, revocable sessions", body: "A 7-day rolling window that renews as I use it — no more random logouts, and still killable on demand.", icon: "M12 7v5l3 2 M12 3a9 9 0 100 18 9 9 0 000-18z" },
+  { title: "Remote device logout", body: "See every device the dashboard is logged in on, and revoke any one, all others, or everywhere in a tap.", icon: "M12 4v8 M7.5 7a7 7 0 109 0" },
+  { title: "Mobile-first control panel", body: "A compact menu and cards that reflow for a phone — the whole fleet, run from my pocket.", icon: "M8 3h8a1 1 0 011 1v16a1 1 0 01-1 1H8a1 1 0 01-1-1V4a1 1 0 011-1z M11 18h2" },
+];
+
 /* ── How it was built ─────────────────────────────────────────────────────── */
 export const BUILD: { title: string; body: string }[] = [
   { title: "Built with Claude Code", body: "From architecture to 30+ agents to a secure dashboard — designed and shipped by orchestrating an AI coding agent, solo." },
