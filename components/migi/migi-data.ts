@@ -26,11 +26,50 @@ export const MIGI = {
 /* ── Headline numbers (hero band) ─────────────────────────────────────────── */
 export const STATS: { value: number; suffix?: string; prefix?: string; label: string; sub: string }[] = [
   { value: 30, suffix: "+", label: "autonomous agents", sub: "one job each, all running" },
-  { value: 7, label: "capability areas", sub: "watch · operate · self-run" },
-  { value: 2, label: "free LLMs", sub: "Groq + Google Gemini" },
+  { value: 3, label: "identities, one panel", sub: "fleet · MAS · ECHO" },
+  { value: 2, label: "free LLMs", sub: "auto-retry + provider failover" },
   { value: 24, suffix: "/7", label: "in the cloud", sub: "no servers, no paid infra" },
   { value: 0, prefix: "$", label: "running cost", sub: "free tiers, end to end" },
-  { value: 1, label: "operator dashboard", sub: "password + 2FA gated" },
+  { value: 1, label: "operator OS", sub: "human-in-the-loop, 2FA gated" },
+];
+
+/* ── The three pillars — one control panel, three identities ──────────────── */
+export const PILLARS: {
+  id: "fleet" | "mas" | "echo";
+  badge: string;
+  name: string;
+  role: string;
+  tagline: string;
+  body: string;
+  points: string[];
+}[] = [
+  {
+    id: "fleet",
+    badge: "the doer",
+    name: "MIGI",
+    role: "the fleet",
+    tagline: "30+ agents that run my career & ops.",
+    body: "The original fleet: 30+ cloud agents that monitor, learn, create and run my day — each doing one job and reporting back, plus a staff layer that runs the fleet itself.",
+    points: ["30+ scheduled + on-demand agents", "Monitors, curates, drafts, job-hunts, tracks money", "Reaches me on Telegram + email"],
+  },
+  {
+    id: "mas",
+    badge: "the team",
+    name: "MIGI MAS",
+    role: "a multi-agent system",
+    tagline: "Hand it a goal; a squad plans & executes it.",
+    body: "A team of specialist agents I delegate an open-ended goal to — by text or voice. A supervisor plans it, workers research, draft and critique, and it returns something for me to approve.",
+    points: ["Supervisor + researcher / analyst / writer / critic", "Composes the fleet agents as tools", "Human approval on every real action"],
+  },
+  {
+    id: "echo",
+    badge: "the memory",
+    name: "MIGI ECHO",
+    role: "a knowledge brain",
+    tagline: "A second brain I can talk to.",
+    body: "A private RAG system that has read my notes, files and code. I ask by text or voice and it answers from my own knowledge plus live data, cites the source, and reads it back aloud.",
+    points: ["Feed it notes, docs, URLs, my repos", "Grounded, cited answers — text or voice", "Its own dedicated memory store"],
+  },
 ];
 
 /* ── The fleet — six areas, framed by value (never listing private data) ──── */
@@ -210,6 +249,77 @@ export const JOBS_CHIPS = [
   "No auto-submit — by design", "Fully compliant", "Pipeline tracking",
 ];
 export const JOBS_SHOT = { src: "/migi-agent/jobs.png", w: 1348, h: 767 };
+
+/* ── MIGI MAS — a multi-agent system (feature #1) ─────────────────────────── */
+export const MAS_STEPS: { title: string; body: string }[] = [
+  { title: "I hand it a goal", body: "Typed or spoken — a voice note is enough. One open-ended objective instead of a single-agent trigger." },
+  { title: "A supervisor plans it", body: "It breaks the goal into a plan and delegates each step to the right specialist worker." },
+  { title: "Specialists collaborate", body: "A researcher, an analyst, a writer and a critic work through a shared workspace — and can call my existing fleet agents as tools." },
+  { title: "They critique each other", body: "Drafts get reviewed and sharpened before anything reaches me — not one model's first guess." },
+  { title: "I approve every action", body: "It plans and proposes; every real-world action waits for my explicit yes. Human-in-the-loop by design." },
+];
+export const MAS_MISSIONS: { name: string; body: string }[] = [
+  { name: "Job-application prep", body: "Research the company, score my fit, draft a tailored cover letter and a warm-up post." },
+  { name: "Content draft", body: "Take an angle and produce a finished, on-voice piece — researched and critiqued." },
+  { name: "Market / competitor scan", body: "Survey a topic or a competitor and come back with a structured read." },
+  { name: "Decision memo", body: "Write a reasoned memo on an open question, with the trade-offs laid out." },
+  { name: "Ask across all my data", body: "Answer a question over everything I've captured, at once." },
+  { name: "Fleet triage", body: "Check the health of the whole fleet and surface what needs attention." },
+];
+export const MAS_CHIPS = [
+  "Goal-in, mission-out", "Voice-startable", "Supervisor + specialist workers",
+  "Composes the fleet as tools", "Critic in the loop", "Approval on every action",
+  "Fully isolated · own compute budget", "Runs only when I ask",
+];
+export const MAS_SHOT = { src: "/migi-agent/MIGI MAS.png", w: 1350, h: 767 };
+
+/* ── MIGI ECHO — a knowledge brain you talk to (feature #2) ───────────────── */
+export const ECHO_STEPS: { title: string; body: string }[] = [
+  { title: "Teach it anything", body: "Typed notes, PDFs and Word docs, a URL, or one of my GitHub repos — it reads, chunks and remembers each one." },
+  { title: "Ask it any way", body: "Type or speak, on the web app or a dedicated assistant — it transcribes my voice and understands the question." },
+  { title: "Grounded + cited", body: "Answers pull from what I've taught it plus a live read of my own data, and it tells me the source — or says “I don't know that yet” instead of inventing." },
+  { title: "Reads it back", body: "On the web it speaks its replies aloud with a free browser voice — a real conversation, not a search box." },
+  { title: "Its own memory", body: "A dedicated store so my knowledge can grow without competing with the fleet — inside a modern chat UI with a history sidebar." },
+];
+export const ECHO_CHIPS = [
+  "RAG over my own knowledge", "Notes · docs · URLs · my repos", "Text or voice", "Speaks replies aloud",
+  "Cites every source", "Says “I don't know” — no inventing", "Dedicated memory store", "Chat UI with history",
+];
+export const ECHO_SHOT = { src: "/migi-agent/MIGI ECHO.png", w: 1365, h: 767 };
+
+/* ── Resume / ATS reviewer (feature #3) ───────────────────────────────────── */
+export const RESUME_STEPS: { title: string; body: string }[] = [
+  { title: "Parses like an ATS", body: "It reads the file the way an applicant-tracking system does, and flags the traps that get resumes auto-rejected: multi-column layouts, tables, text trapped in images, un-parseable dates and sections." },
+  { title: "Matches the real roles", body: "It scores the resume against the actual live roles I'm targeting — pulled by my job agent — for a real match-rate with the exact missing keywords." },
+  { title: "Three review lenses", body: "It reads as a recruiter, a hiring manager and an ATS bot in turn, then hands back prioritized fixes." },
+  { title: "Tracks the score", body: "Every review is logged, so I can watch the score climb as I fix what it found." },
+];
+export const RESUME_LENSES: { name: string; body: string }[] = [
+  { name: "Recruiter", body: "The 6-second scan — does it land at a glance?" },
+  { name: "Hiring manager", body: "The depth read — does the substance hold up?" },
+  { name: "ATS bot", body: "The machine parse — does it survive the filter?" },
+];
+export const RESUME_CHIPS = [
+  "Real ATS-style parse", "Flags column / table / image traps", "Market-calibrated keyword match",
+  "Scored against my live roles", "Recruiter · hiring-manager · ATS-bot", "Prioritized fixes", "Tracked score history",
+];
+export const RESUME_SHOT = { src: "/migi-agent/Resume Reviewer Agent.png", w: 1365, h: 767 };
+
+/* ── One post, every platform — LinkedIn repurpose step (feature #4) ──────── */
+export const CROSSPOST = {
+  body: "Right after it publishes to LinkedIn, the autopilot offers to shorten and rewrite the same story — in my voice, with real, clickable hashtags — for Bluesky and Mastodon too, or to pick a different story for those. Both are free, open networks; still draft-and-approve.",
+  chips: ["Repurposes each post", "LinkedIn → Bluesky + Mastodon", "In my voice", "Clickable hashtags", "Free open networks", "Still draft-and-approve"],
+};
+
+/* ── One animated identity switch (feature #5) ────────────────────────────── */
+export const TOGGLE_SHOT = { src: "/migi-agent/MIGI Toggle.png", w: 126, h: 71 };
+
+/* ── Under the hood — quality upgrades across the whole system ─────────────── */
+export const UNDERHOOD: { title: string; body: string; icon: string }[] = [
+  { title: "Designed email templates", body: "Every automated email the fleet sends is now a designed template — tiles, sections and brand accents — so reports read like a product, not a log dump.", icon: "M4 6h16v12H4z M4 8l8 5 8-5" },
+  { title: "A robust hashtag engine", body: "Relevant, never-junk hashtags across all posting — real, clickable tags instead of keyword soup.", icon: "M9 3L7 21 M17 3l-2 18 M4 8h16 M3 16h16" },
+  { title: "LLM resilience", body: "Calls auto-retry transient provider outages and fall back to a second AI provider if one is down — so a spike doesn't kill a run.", icon: "M4 12a8 8 0 0113-6 M20 4v4h-4 M20 12a8 8 0 01-13 6 M4 20v-4h4" },
+];
 
 /* ── Architecture flow (agents → LLMs → channels → state → dashboard) ─────── */
 export const FLOW: { id: string; label: string; sub: string }[] = [

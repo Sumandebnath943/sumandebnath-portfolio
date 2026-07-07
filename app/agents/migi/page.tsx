@@ -8,12 +8,21 @@ import { DashboardShowcase, ArchitectureFlow } from "@/components/migi/MigiVisua
 import {
   MIGI,
   STATS,
+  PILLARS,
   AREAS,
   BOT_ACTIONS,
   BOT_FEED,
+  MAS_STEPS,
+  MAS_MISSIONS,
+  MAS_CHIPS,
+  MAS_SHOT,
+  ECHO_STEPS,
+  ECHO_CHIPS,
+  ECHO_SHOT,
   LINKEDIN_STEPS,
   LINKEDIN_CHIPS,
   LINKEDIN_SHOT,
+  CROSSPOST,
   FINANCE_STEPS,
   FINANCE_LAYERS,
   FINANCE_CHIPS,
@@ -23,6 +32,12 @@ import {
   JOBS_STAGES,
   JOBS_CHIPS,
   JOBS_SHOT,
+  RESUME_STEPS,
+  RESUME_LENSES,
+  RESUME_CHIPS,
+  RESUME_SHOT,
+  TOGGLE_SHOT,
+  UNDERHOOD,
   DEVICES_SHOT,
   SECURITY_FEATURES,
   STACK,
@@ -34,19 +49,20 @@ import {
 /* ── SEO ───────────────────────────────────────────────────────────────── */
 const SITE = "https://sumandebnath.houseofnamus.com";
 export const metadata: Metadata = {
-  title: "Migi · A Personal Suite of 30+ Autonomous AI Agents",
+  title: "Migi · A Three-Pillar Operator OS — 30+ AI Agents, a Multi-Agent System & a Knowledge Brain",
   description:
-    "Migi is a fleet of 30+ AI agents that run themselves in the cloud — monitoring, curating, drafting, job-hunting, tracking money and more — plus a secure mission-control dashboard to command them. Built solo with Claude Code, on entirely free infrastructure.",
+    "Migi grew from a fleet of 30+ self-running AI agents into a three-pillar operator OS: MIGI (the fleet), MIGI MAS (a multi-agent system you hand a goal), and MIGI ECHO (a knowledge brain you talk to) — one secure control panel, three identities. Built solo with Claude Code, on entirely free infrastructure.",
   keywords: [
-    "Migi", "AI agent fleet", "autonomous agents", "agent orchestration", "GitHub Actions agents",
-    "Claude Code", "AI generalist", "personal AI automation", "Telegram bot agents", "Suman Debnath",
+    "Migi", "AI agent fleet", "multi-agent system", "MAS", "RAG knowledge brain", "autonomous agents",
+    "agent orchestration", "GitHub Actions agents", "Claude Code", "AI generalist", "personal AI automation",
+    "Telegram bot agents", "Suman Debnath",
   ],
   alternates: { canonical: "/agents/migi" },
   openGraph: {
     type: "website",
-    title: "Migi · A Personal Suite of 30+ Autonomous AI Agents",
+    title: "Migi · A Three-Pillar Operator OS — fleet + multi-agent system + knowledge brain",
     description:
-      "A fleet of 30+ self-running AI agents + a secure control dashboard. Built solo with Claude Code, on free infrastructure.",
+      "30+ self-running AI agents, a multi-agent system you hand a goal, and a second brain you talk to — one secure control panel. Built solo with Claude Code, on free infrastructure.",
     url: `${SITE}/agents/migi`,
     images: [{ url: "/migi-agent/overview.png", width: 1350, height: 767, alt: "The Migi mission-control dashboard" }],
   },
@@ -60,7 +76,7 @@ const appLd = {
   applicationCategory: "BusinessApplication",
   operatingSystem: "Cloud (GitHub Actions + Vercel)",
   description:
-    "A personal fleet of 30+ autonomous AI agents that monitor, curate, draft, find work, track money and launch what he ships, orchestrated on GitHub Actions and commanded through a secure Next.js dashboard.",
+    "A personal three-pillar operator OS: MIGI, a fleet of 30+ autonomous AI agents; MIGI MAS, a multi-agent system that plans and executes goals; and MIGI ECHO, a personal knowledge brain (RAG) you talk to. Orchestrated on GitHub Actions and commanded through one secure Next.js control panel.",
   url: `${SITE}/agents/migi`,
   author: { "@type": "Person", name: "Suman Debnath", url: SITE },
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
@@ -127,6 +143,20 @@ function Screenshot({ shot, label, alt }: { shot: { src: string; w: number; h: n
         <span className="w-3 h-3 rounded-full" style={{ background: "#F5BF4F" }} />
         <span className="w-3 h-3 rounded-full" style={{ background: MIGI.green }} />
         <span className="ml-3 font-dmmono text-[11px]" style={{ color: MIGI.muted }}>migi · {label}</span>
+      </div>
+      <Image src={shot.src} alt={alt} width={shot.w} height={shot.h} className="w-full h-auto block" loading="lazy" />
+    </div>
+  );
+}
+
+function DarkScreenshot({ shot, label, alt }: { shot: { src: string; w: number; h: number }; label: string; alt: string }) {
+  return (
+    <div className="rounded-[1.25rem] overflow-hidden" style={{ background: MIGI.ink, border: `1px solid ${MIGI.ink}`, boxShadow: "0 40px 90px -50px rgba(0,0,0,0.7)" }}>
+      <div className="flex items-center gap-2 px-4 py-3" style={{ background: MIGI.ink, borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+        <span className="w-3 h-3 rounded-full" style={{ background: "#F1655B" }} />
+        <span className="w-3 h-3 rounded-full" style={{ background: "#F5BF4F" }} />
+        <span className="w-3 h-3 rounded-full" style={{ background: MIGI.green }} />
+        <span className="ml-3 font-dmmono text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>migi · {label}</span>
       </div>
       <Image src={shot.src} alt={alt} width={shot.w} height={shot.h} className="w-full h-auto block" loading="lazy" />
     </div>
@@ -210,7 +240,7 @@ export default function MigiPage() {
                 style={{ background: MIGI.ink, color: "#FFFFFF" }}
               >
                 <span className="w-1.5 h-1.5 rounded-full" style={{ background: MIGI.lime, animation: "migi-blink 1.4s steps(1) infinite" }} />
-                Autonomous AI agent fleet · running 24/7
+                Three-pillar operator OS · fleet · MAS · ECHO
               </span>
             </Reveal>
 
@@ -233,30 +263,31 @@ export default function MigiPage() {
 
             <Reveal delay={0.12}>
               <h1 className="font-manrope font-extrabold text-[2.1rem] sm:text-[2.9rem] md:text-[3.3rem] leading-[1.08] tracking-[-0.04em] mt-7 mb-5" style={{ color: MIGI.ink }}>
-                A personal suite of{" "}
-                <span className="inline-block rounded-xl px-3 py-0.5 leading-[1.12] align-baseline" style={{ background: MIGI.ink, color: MIGI.lime }}>30+ AI agents</span>
+                It started as{" "}
+                <span className="inline-block rounded-xl px-3 py-0.5 leading-[1.12] align-baseline" style={{ background: MIGI.ink, color: MIGI.lime }}>30+ AI agents</span>.
                 <br />
-                that quietly run my work.
+                Now it&rsquo;s an operator OS.
               </h1>
             </Reveal>
 
             <Reveal delay={0.18}>
               <p className="text-[0.97rem] md:text-[1.08rem] leading-relaxed max-w-2xl mb-8" style={{ color: "rgba(22,23,28,0.72)" }}>
-                A fleet of autonomous agents that live in the cloud and automate my monitoring,
-                my content, my learning and my personal ops — each reaching me on Telegram or
-                email — plus a secure dashboard to command them all.{" "}
-                <span style={{ color: MIGI.ink, fontWeight: 700 }}>Built entirely with Claude Code, on free infrastructure.</span>
+                Migi grew from a fleet that does my work into three identities I switch between in one
+                control panel: <span style={{ color: MIGI.ink, fontWeight: 700 }}>MIGI</span>, the 30+ agent
+                fleet; <span style={{ color: MIGI.ink, fontWeight: 700 }}>MIGI MAS</span>, a multi-agent
+                system I hand a goal to; and <span style={{ color: MIGI.ink, fontWeight: 700 }}>MIGI ECHO</span>,
+                a second brain I can talk to. <span style={{ color: MIGI.ink, fontWeight: 700 }}>Built entirely with Claude Code, on free infrastructure.</span>
               </p>
             </Reveal>
 
             <Reveal delay={0.24}>
               <div className="flex flex-col sm:flex-row items-center gap-3.5">
                 <a
-                  href="#fleet"
+                  href="#pillars"
                   className="inline-flex items-center gap-2 rounded-full px-6 py-3 font-manrope font-semibold text-sm transition-transform hover:-translate-y-0.5"
                   style={{ background: MIGI.ink, color: MIGI.lime, boxShadow: "0 16px 34px -16px rgba(0,0,0,0.7)" }}
                 >
-                  Explore the fleet <span>↓</span>
+                  The three pillars <span>↓</span>
                 </a>
                 <a
                   href="#dashboard"
@@ -320,21 +351,100 @@ export default function MigiPage() {
               </Reveal>
               <Reveal delay={0.12}>
                 <p className="text-[15px] leading-relaxed" style={{ color: MIGI.muted }}>
-                  A shared &ldquo;brain&rdquo; — a lightweight database — lets the agents keep memory,
-                  and lets a mission-control dashboard show everything at a glance and trigger any
-                  agent with one click. The whole thing is an argument for how one person operates in
-                  the AI age: <span style={{ color: MIGI.text, fontWeight: 600 }}>leverage, automation and taste — not headcount.</span>
+                  This cycle it stopped being only a fleet. The same control panel now holds
+                  <span style={{ color: MIGI.text, fontWeight: 600 }}> three identities</span> — a fleet that
+                  does my work, a multi-agent system I hand goals to, and a knowledge brain I talk to.
+                  The whole thing is an argument for how one person operates in the AI age:{" "}
+                  <span style={{ color: MIGI.text, fontWeight: 600 }}>leverage, automation and taste — not headcount.</span>
                 </p>
               </Reveal>
             </div>
           </div>
         </section>
 
-        {/* ════════════════════════════ 02 · ARCHITECTURE ════════════════════════════ */}
+        {/* ════════════════════════════ 02 · THE THREE PILLARS ════════════════════════════ */}
+        <section id="pillars" className="px-6 py-20 md:py-28 scroll-mt-24">
+          <div className="max-w-6xl mx-auto">
+            <Reveal>
+              <SectionLabel index="02" kicker="one control panel · three identities" />
+              <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
+                One control panel.{" "}
+                <span className="relative inline-block">
+                  <span className="relative z-10">Three identities.</span>
+                  <span aria-hidden className="absolute left-0 right-0 bottom-1 h-3 md:h-4 -z-0" style={{ background: MIGI.lime }} />
+                </span>
+              </h2>
+              <p className="text-[15px] leading-relaxed max-w-2xl mb-10" style={{ color: MIGI.muted }}>
+                Not just a fleet that does my work and runs itself — now a fleet I can also delegate
+                open-ended goals to, and a second brain I can talk to. A single animated toggle
+                transforms the whole dashboard between the three worlds, each with its own logo,
+                colour and cinematic transition.
+              </p>
+            </Reveal>
+
+            {/* the identity toggle */}
+            <Reveal delay={0.05}>
+              <div className="flex items-center gap-4 mb-10 rounded-2xl p-5 md:p-6" style={{ background: MIGI.ink }}>
+                <span className="rounded-xl overflow-hidden shrink-0" style={{ border: "1px solid rgba(255,255,255,0.14)" }}>
+                  <Image src={TOGGLE_SHOT.src} alt="The Migi identity toggle — one animated switch between the fleet, MAS and ECHO" width={TOGGLE_SHOT.w} height={TOGGLE_SHOT.h} className="block h-[46px] w-auto" loading="lazy" />
+                </span>
+                <p className="font-manrope text-[13px] leading-relaxed" style={{ color: "rgba(255,255,255,0.62)" }}>
+                  <span className="text-white font-semibold">One switch, three worlds.</span> You don&rsquo;t change tabs — you switch identities,
+                  and the entire experience re-themes around you.
+                </p>
+              </div>
+            </Reveal>
+
+            {/* the three pillar cards */}
+            <div className="grid md:grid-cols-3 gap-4">
+              {PILLARS.map((p, i) => {
+                const echo = p.id === "echo";
+                const mas = p.id === "mas";
+                const dark = mas || echo;
+                const bg = p.id === "fleet"
+                  ? "#FFFFFF"
+                  : mas
+                    ? MIGI.ink
+                    : "radial-gradient(120% 100% at 100% 0%, #123a2e 0%, #0d1b22 55%, #0a0d12 100%)";
+                const nameC = dark ? "#FFFFFF" : MIGI.ink;
+                const roleC = MIGI.lime;
+                const bodyC = dark ? "rgba(255,255,255,0.66)" : MIGI.muted;
+                const lineC = dark ? "rgba(255,255,255,0.14)" : MIGI.line;
+                const dotBg = dark ? "rgba(255,255,255,0.08)" : MIGI.limeSoft;
+                return (
+                  <Reveal key={p.id} delay={i * 0.06}>
+                    <div className="migi-card rounded-[1.5rem] h-full p-6 md:p-7 flex flex-col" style={{ background: bg, border: p.id === "fleet" ? `1px solid ${MIGI.line}` : "1px solid rgba(255,255,255,0.10)" }}>
+                      <div className="flex items-center justify-between gap-2 mb-4">
+                        <span className="font-dmmono text-[9.5px] uppercase tracking-[0.2em] rounded-full px-2.5 py-1" style={{ background: MIGI.lime, color: MIGI.ink }}>{p.badge}</span>
+                        <span className="font-dmmono text-[10px]" style={{ color: dark ? "rgba(255,255,255,0.4)" : MIGI.muted }}>{String(i + 1).padStart(2, "0")}</span>
+                      </div>
+                      <h3 className="font-manrope font-extrabold text-[1.5rem] tracking-[-0.02em] leading-none" style={{ color: nameC }}>{p.name}</h3>
+                      <p className="font-dmmono text-[10.5px] uppercase tracking-[0.18em] mt-2 mb-3" style={{ color: roleC }}>{p.role}</p>
+                      <p className="font-manrope font-semibold text-[14px] leading-snug mb-3" style={{ color: nameC }}>{p.tagline}</p>
+                      <p className="font-manrope text-[12.5px] leading-relaxed mb-4 flex-1" style={{ color: bodyC }}>{p.body}</p>
+                      <ul className="space-y-2 pt-3" style={{ borderTop: `1px solid ${lineC}` }}>
+                        {p.points.map((pt) => (
+                          <li key={pt} className="flex items-start gap-2.5">
+                            <span className="w-4 h-4 rounded-md shrink-0 mt-0.5 flex items-center justify-center" style={{ background: dotBg }}>
+                              <span className="w-1.5 h-1.5 rounded-full" style={{ background: MIGI.lime }} />
+                            </span>
+                            <span className="font-manrope text-[12px] leading-snug" style={{ color: dark ? "rgba(255,255,255,0.72)" : MIGI.text }}>{pt}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </Reveal>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* ════════════════════════════ 03 · ARCHITECTURE ════════════════════════════ */}
         <section className="px-6 py-16 md:py-24" style={{ background: MIGI.creamDeep, borderTop: `1px solid ${MIGI.line}`, borderBottom: `1px solid ${MIGI.line}` }}>
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="02" kicker="how it fits together" />
+              <SectionLabel index="03" kicker="how it fits together" />
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
                 Simple parts, wired for leverage.
               </h2>
@@ -389,13 +499,13 @@ export default function MigiPage() {
           </div>
         </section>
 
-        {/* ════════════════════════════ 03 · THE FLEET ════════════════════════════ */}
+        {/* ════════════════════════════ 04 · THE FLEET (MIGI) ════════════════════════════ */}
         <section id="fleet" className="px-6 py-20 md:py-28 scroll-mt-24">
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="03" kicker="six areas · one job each" />
+              <SectionLabel index="04" kicker="pillar one · migi · the fleet" />
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
-                Meet the fleet.
+                Pillar one: meet the fleet.
               </h2>
               <p className="text-[15px] leading-relaxed max-w-2xl mb-12" style={{ color: MIGI.muted }}>
                 Thirty-plus agents, grouped into seven areas — a career-and-growth layer, and a staff
@@ -520,11 +630,140 @@ export default function MigiPage() {
           </div>
         </section>
 
-        {/* ════════════════════════════ 04 · LINKEDIN AUTOPILOT ════════════════════════════ */}
+        {/* ════════════════════════════ 05 · MIGI MAS ════════════════════════════ */}
+        <section className="px-6 py-20 md:py-28" style={{ background: MIGI.ink }}>
+          <div className="max-w-6xl mx-auto">
+            <Reveal>
+              <div className="flex items-center gap-3 mb-5">
+                <span className="font-dmmono text-[11px] rounded px-1.5 py-0.5 leading-none" style={{ color: MIGI.ink, background: MIGI.lime }}>05</span>
+                <span className="w-1.5 h-1.5 rounded-full" style={{ background: MIGI.lime }} />
+                <span className="font-dmmono text-[10px] uppercase tracking-[0.3em]" style={{ color: "rgba(255,255,255,0.5)" }}>pillar two · migi mas · the team</span>
+              </div>
+              <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4 text-white">
+                Pillar two: hand it a goal.
+              </h2>
+              <p className="text-[15px] leading-relaxed max-w-2xl mb-10" style={{ color: "rgba(255,255,255,0.62)" }}>
+                The biggest leap this cycle. Instead of triggering one agent at a time, I give Migi a
+                goal — typed or spoken — and a team of specialist agents takes it from there: a
+                supervisor plans it, workers research, draft and critique, and it comes back with a
+                result to approve. It can compose my existing fleet agents as tools inside a mission,
+                and runs fully isolated from the scheduled fleet — its own assistant, its own compute
+                budget, its own space.
+              </p>
+            </Reveal>
+
+            <Reveal delay={0.08}>
+              <DarkScreenshot shot={MAS_SHOT} label="mas · command deck" alt="The Migi MAS command deck — launch a mission by typing or voice, watch a squad of specialist agents plan and work, and approve every real action" />
+            </Reveal>
+            <p className="font-dmmono text-[11px] mt-4 mb-12 text-center" style={{ color: "rgba(255,255,255,0.4)" }}>
+              The MAS command deck — launch a mission, watch the squad work, and approve every real action.
+            </p>
+
+            {/* goal → mission flow */}
+            <div className="mb-12">
+              <Reveal>
+                <p className="font-dmmono text-[11px] uppercase tracking-[0.24em] mb-5" style={{ color: "rgba(255,255,255,0.45)" }}>Goal in → mission out</p>
+              </Reveal>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                {MAS_STEPS.map((s, i) => (
+                  <Reveal key={s.title} delay={(i % 5) * 0.04}>
+                    <div className="rounded-2xl h-full p-5" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)" }}>
+                      <span className="inline-flex w-8 h-8 rounded-xl items-center justify-center font-manrope font-extrabold text-[13px] mb-3" style={{ background: MIGI.lime, color: MIGI.ink }}>{i + 1}</span>
+                      <h4 className="font-manrope font-semibold text-[13.5px] mb-1.5 text-white leading-snug">{s.title}</h4>
+                      <p className="font-manrope text-[12px] leading-relaxed" style={{ color: "rgba(255,255,255,0.55)" }}>{s.body}</p>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+
+            {/* missions it runs */}
+            <div className="mb-10">
+              <Reveal>
+                <p className="font-dmmono text-[11px] uppercase tracking-[0.24em] mb-5" style={{ color: "rgba(255,255,255,0.45)" }}>Real missions it runs</p>
+              </Reveal>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {MAS_MISSIONS.map((mi, i) => (
+                  <Reveal key={mi.name} delay={(i % 3) * 0.05}>
+                    <div className="rounded-2xl p-5 h-full" style={{ background: MIGI.lime }}>
+                      <p className="font-manrope font-bold text-[13.5px] mb-1.5" style={{ color: MIGI.ink }}>{mi.name}</p>
+                      <p className="font-manrope text-[12px] leading-relaxed" style={{ color: "rgba(22,23,28,0.72)" }}>{mi.body}</p>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+
+            <Reveal delay={0.05}>
+              <div className="flex flex-wrap gap-2">
+                {MAS_CHIPS.map((c) => (
+                  <span key={c} className="font-manrope text-[12px] font-medium rounded-full px-3.5 py-1.5" style={{ background: "rgba(255,255,255,0.06)", color: MIGI.lime, border: "1px solid rgba(255,255,255,0.1)" }}>{c}</span>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* ════════════════════════════ 06 · MIGI ECHO ════════════════════════════ */}
+        <section className="px-6 py-20 md:py-28" style={{ background: "radial-gradient(120% 90% at 82% -10%, #133a2c 0%, #0e1c22 52%, #0a0d12 100%)" }}>
+          <div className="max-w-6xl mx-auto">
+            <Reveal>
+              <div className="flex items-center gap-3 mb-5">
+                <span className="font-dmmono text-[11px] rounded px-1.5 py-0.5 leading-none" style={{ color: MIGI.ink, background: MIGI.lime }}>06</span>
+                <span className="w-1.5 h-1.5 rounded-full" style={{ background: MIGI.lime }} />
+                <span className="font-dmmono text-[10px] uppercase tracking-[0.3em]" style={{ color: "rgba(255,255,255,0.55)" }}>pillar three · migi echo · the memory</span>
+              </div>
+              <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4 text-white">
+                Pillar three: talk to your knowledge.
+              </h2>
+              <p className="text-[15px] leading-relaxed max-w-2xl mb-10" style={{ color: "rgba(255,255,255,0.66)" }}>
+                A personal, private RAG system — a second brain that actually knows my work and my
+                life. I teach it anything (notes, documents, web pages, even my own code repositories),
+                then I talk to it by text or voice; it answers from my own knowledge plus a live read
+                of my data, cites where each answer came from, and reads it back aloud. Searching your
+                notes is friction; conversing with them is leverage.
+              </p>
+            </Reveal>
+
+            <Reveal delay={0.08}>
+              <DarkScreenshot shot={ECHO_SHOT} label="echo · knowledge chat" alt="The Migi ECHO knowledge chat — an aurora-lit chat interface with a history sidebar, a centered composer, voice input and spoken replies over my own knowledge base" />
+            </Reveal>
+            <p className="font-dmmono text-[11px] mt-4 mb-12 text-center" style={{ color: "rgba(255,255,255,0.45)" }}>
+              The ECHO knowledge chat — ask by text or voice, get grounded, cited answers read back aloud.
+            </p>
+
+            <div className="mb-10">
+              <Reveal>
+                <p className="font-dmmono text-[11px] uppercase tracking-[0.24em] mb-5" style={{ color: "rgba(255,255,255,0.5)" }}>Teach it, then ask it anything</p>
+              </Reveal>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                {ECHO_STEPS.map((s, i) => (
+                  <Reveal key={s.title} delay={(i % 5) * 0.04}>
+                    <div className="rounded-2xl h-full p-5" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(198,242,78,0.16)" }}>
+                      <span className="inline-flex w-8 h-8 rounded-xl items-center justify-center font-manrope font-extrabold text-[13px] mb-3" style={{ background: MIGI.lime, color: MIGI.ink }}>{i + 1}</span>
+                      <h4 className="font-manrope font-semibold text-[13.5px] mb-1.5 text-white leading-snug">{s.title}</h4>
+                      <p className="font-manrope text-[12px] leading-relaxed" style={{ color: "rgba(255,255,255,0.6)" }}>{s.body}</p>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+
+            <Reveal delay={0.05}>
+              <div className="flex flex-wrap gap-2">
+                {ECHO_CHIPS.map((c) => (
+                  <span key={c} className="font-manrope text-[12px] font-medium rounded-full px-3.5 py-1.5" style={{ background: "rgba(198,242,78,0.1)", color: MIGI.lime, border: "1px solid rgba(198,242,78,0.22)" }}>{c}</span>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* ════════════════════════════ 07 · LINKEDIN AUTOPILOT ════════════════════════════ */}
         <section className="px-6 py-20 md:py-28" style={{ background: MIGI.creamDeep, borderTop: `1px solid ${MIGI.line}`, borderBottom: `1px solid ${MIGI.line}` }}>
           <div className="max-w-5xl mx-auto">
             <Reveal>
-              <SectionLabel index="04" kicker="linkedin autopilot · i pick the story" />
+              <SectionLabel index="07" kicker="linkedin autopilot · i pick the story" />
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
                 I don&rsquo;t outsource my voice.{" "}
                 <span className="relative inline-block">
@@ -577,14 +816,35 @@ export default function MigiPage() {
             <p className="font-dmmono text-[11px] mt-4 text-center" style={{ color: MIGI.muted }}>
               The LinkedIn control &amp; audit view — drafts, approvals, and full post history in one place.
             </p>
+
+            {/* one post, every platform — cross-post repurpose step */}
+            <Reveal delay={0.06}>
+              <div className="mt-12 rounded-[1.5rem] p-7 md:p-9" style={{ background: MIGI.ink }}>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="font-dmmono text-[10px] uppercase tracking-[0.28em]" style={{ color: MIGI.lime }}>new · one post, every platform</span>
+                  <span className="font-dmmono text-[9px] uppercase tracking-[0.14em] rounded-full px-2 py-0.5" style={{ background: MIGI.lime, color: MIGI.ink }}>free networks</span>
+                </div>
+                <h3 className="font-manrope font-bold text-[1.4rem] md:text-[1.8rem] leading-tight tracking-[-0.02em] text-white mb-3">
+                  Publish once. Repurpose everywhere.
+                </h3>
+                <p className="font-manrope text-[14px] leading-relaxed max-w-2xl mb-5" style={{ color: "rgba(255,255,255,0.62)" }}>
+                  {CROSSPOST.body}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {CROSSPOST.chips.map((c) => (
+                    <span key={c} className="font-manrope text-[12px] font-medium rounded-full px-3.5 py-1.5" style={{ background: "rgba(255,255,255,0.06)", color: MIGI.lime, border: "1px solid rgba(255,255,255,0.1)" }}>{c}</span>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
           </div>
         </section>
 
-        {/* ════════════════════════════ 05 · FINANCE TRACKER ════════════════════════════ */}
+        {/* ════════════════════════════ 08 · FINANCE TRACKER ════════════════════════════ */}
         <section className="px-6 py-20 md:py-28">
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="05" kicker="finance tracker · privacy-first money" />
+              <SectionLabel index="08" kicker="finance tracker · privacy-first money" />
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
                 From an SMS to a{" "}
                 <span className="relative inline-block">
@@ -622,11 +882,11 @@ export default function MigiPage() {
           </div>
         </section>
 
-        {/* ════════════════════════════ 06 · JOB SEARCH ════════════════════════════ */}
+        {/* ════════════════════════════ 09 · JOB SEARCH ════════════════════════════ */}
         <section className="px-6 py-20 md:py-28" style={{ background: MIGI.creamDeep, borderTop: `1px solid ${MIGI.line}`, borderBottom: `1px solid ${MIGI.line}` }}>
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="06" kicker="job search · apply-ready, human-sent" />
+              <SectionLabel index="09" kicker="job search · apply-ready, human-sent" />
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
                 The tedious 95% of applying,{" "}
                 <span className="relative inline-block">
@@ -684,11 +944,52 @@ export default function MigiPage() {
           </div>
         </section>
 
-        {/* ════════════════════════════ 07 · REAL OUTPUT ════════════════════════════ */}
+        {/* ════════════════════════════ 10 · RESUME / ATS REVIEWER ════════════════════════════ */}
         <section className="px-6 py-20 md:py-28">
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="07" kicker="real output · straight to my phone" />
+              <SectionLabel index="10" kicker="resume / ats reviewer · wired to my job hunt" />
+              <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
+                Reviewed the way it&rsquo;s actually{" "}
+                <span className="relative inline-block">
+                  <span className="relative z-10">screened.</span>
+                  <span aria-hidden className="absolute left-0 right-0 bottom-1 h-3 md:h-4 -z-0" style={{ background: MIGI.lime }} />
+                </span>
+              </h2>
+              <p className="text-[15px] leading-relaxed max-w-2xl mb-10" style={{ color: MIGI.muted }}>
+                Anyone can paste a resume into a chatbot for one generic opinion. This parses the file
+                like an applicant-tracking system, scores it against the actual live roles my job agent
+                is tracking, and reviews it through the same three sets of eyes that screen it in real
+                life — then hands back prioritized fixes and tracks the score over time.
+              </p>
+            </Reveal>
+
+            <Reveal delay={0.08}>
+              <Screenshot shot={RESUME_SHOT} label="resume" alt="The Migi dashboard Resume / ATS reviewer — upload a resume, optionally score it against my live roles from the Job Agent, and review as a recruiter, hiring manager and ATS bot with a tracked score history" />
+            </Reveal>
+            <p className="font-dmmono text-[11px] mt-4 mb-12 text-center" style={{ color: MIGI.muted }}>
+              The Resume / ATS reviewer — ATS-style parse, keyword match vs my live roles, and a tracked score history.
+            </p>
+
+            <div className="mb-12">
+              <Reveal><SubLabel>How it reviews</SubLabel></Reveal>
+              <StepGrid steps={RESUME_STEPS} />
+            </div>
+
+            <div className="mb-10">
+              <Reveal><SubLabel>Three lenses</SubLabel></Reveal>
+              <LayerRow layers={RESUME_LENSES} />
+            </div>
+
+            <Reveal delay={0.05}><ChipRow chips={RESUME_CHIPS} /></Reveal>
+          </div>
+        </section>
+
+        {/* ════════════════════════════ 11 · REAL OUTPUT ════════════════════════════ */}
+        <section className="px-6 py-20 md:py-28">
+          <div className="max-w-6xl mx-auto">
+            <Reveal>
+              <SectionLabel index="11" kicker="real output · straight to my phone" />
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
                 What actually lands on my phone.
               </h2>
@@ -728,25 +1029,55 @@ export default function MigiPage() {
           </div>
         </section>
 
-        {/* ════════════════════════════ 08 · THE DASHBOARD ════════════════════════════ */}
+        {/* ════════════════════════════ 12 · THE DASHBOARD ════════════════════════════ */}
         <section id="dashboard" className="px-6 py-20 md:py-28 scroll-mt-24" style={{ background: MIGI.creamDeep, borderTop: `1px solid ${MIGI.line}`, borderBottom: `1px solid ${MIGI.line}` }}>
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="08" kicker="migi · a full operator OS" />
+              <SectionLabel index="12" kicker="migi · one control panel, three worlds" />
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
                 One console to command them all.
               </h2>
               <p className="text-[15px] leading-relaxed max-w-2xl mb-10" style={{ color: MIGI.muted }}>
-                The control panel grew from a monitor into a full operator OS — a multi-page console
-                behind a password and authenticator-app 2FA, with its own tracker for each workflow:
-                <span style={{ color: MIGI.text }}> Finance, Jobs, Build, Outreach, Skills and Launch</span>.
-                It now meters itself too — a <span style={{ color: MIGI.text }}>Team observability page</span> (12-month
+                One animated toggle switches this control panel between all three identities — the
+                <span style={{ color: MIGI.text }}> fleet</span> (this light operator dashboard), the
+                <span style={{ color: MIGI.text }}> MAS command deck</span> and the
+                <span style={{ color: MIGI.text }}> ECHO knowledge chat</span>. On the fleet side it&rsquo;s a
+                full operator OS behind a password and authenticator-app 2FA, with its own tracker for
+                each workflow: <span style={{ color: MIGI.text }}>Finance, Jobs, Resume, Build, Outreach, Skills and Launch</span>.
+                It meters itself too — a <span style={{ color: MIGI.text }}>Team observability page</span> (12-month
                 usage, cost and tokens by provider, a per-agent breakdown, live health and a &ldquo;needs
                 attention&rdquo; panel), home staff-summary cards, and a redesigned data page — plus fleet
                 health, live domain status, a responses feed, and one-click Run for any agent.
               </p>
             </Reveal>
             <Reveal delay={0.08}><DashboardShowcase /></Reveal>
+
+            {/* under the hood — quality upgrades across the whole system */}
+            <div className="mt-16">
+              <Reveal>
+                <SubLabel>Under the hood</SubLabel>
+                <h3 className="font-manrope font-bold text-[1.4rem] md:text-[1.9rem] tracking-[-0.02em] leading-tight mb-4">
+                  Product-grade, all the way down.
+                </h3>
+                <p className="text-[14px] leading-relaxed max-w-2xl mb-8" style={{ color: MIGI.muted }}>
+                  The upgrades that don&rsquo;t show up in a screenshot but make the whole system feel like a
+                  product — from the emails it sends to how it survives a provider outage.
+                </p>
+              </Reveal>
+              <div className="grid sm:grid-cols-3 gap-4">
+                {UNDERHOOD.map((f, i) => (
+                  <Reveal key={f.title} delay={(i % 3) * 0.05}>
+                    <div className="migi-card rounded-2xl bg-white h-full p-6" style={{ border: `1px solid ${MIGI.line}` }}>
+                      <span className="inline-flex w-9 h-9 rounded-xl items-center justify-center mb-4" style={{ background: MIGI.lime }}>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={MIGI.ink} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d={f.icon} /></svg>
+                      </span>
+                      <h4 className="font-manrope font-semibold text-[15px] mb-2" style={{ color: MIGI.text }}>{f.title}</h4>
+                      <p className="font-manrope text-[13px] leading-relaxed" style={{ color: MIGI.muted }}>{f.body}</p>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
 
             {/* secure & mobile — session security + device management (feature #5) */}
             <div className="mt-16">
@@ -787,17 +1118,18 @@ export default function MigiPage() {
           </div>
         </section>
 
-        {/* ════════════════════════════ 09 · HOW IT'S BUILT ════════════════════════════ */}
+        {/* ════════════════════════════ 13 · HOW IT'S BUILT ════════════════════════════ */}
         <section className="px-6 py-20 md:py-28">
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="09" kicker="the operating model" />
+              <SectionLabel index="13" kicker="the operating model" />
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
                 Built solo — the AI-native way.
               </h2>
               <p className="text-[15px] leading-relaxed max-w-2xl mb-12" style={{ color: MIGI.muted }}>
-                From architecture to 30+ agents to a secure dashboard: designed and shipped by one
-                person orchestrating an AI coding agent, end to end, on entirely free infrastructure.
+                From architecture to 30+ agents to a multi-agent system, a knowledge brain and a secure
+                dashboard: designed and shipped by one person orchestrating an AI coding agent, end to
+                end, on entirely free infrastructure.
               </p>
             </Reveal>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -831,14 +1163,15 @@ export default function MigiPage() {
                     <span style={{ color: MIGI.lime }}>Design, build and operate it.</span>
                   </h2>
                   <p className="font-manrope text-[15px] max-w-lg mx-auto leading-relaxed" style={{ color: "rgba(255,255,255,0.6)" }}>
-                    Migi is the proof: a real, running system of 30+ agents and a secure control plane,
-                    shipped solo with Claude Code — the way one person operates in the AI age.
+                    Migi is the proof: a fleet that does my work, a team of agents I hand goals to, and a
+                    second brain I can talk to — one control plane, shipped solo with Claude Code. Leverage
+                    without headcount, now with reasoning and memory on top.
                   </p>
                 </div>
               </div>
             </Reveal>
             <p className="font-dmmono text-[11px] text-center mt-10 tracking-wide" style={{ color: MIGI.muted }}>
-              Migi · 30+ autonomous agents + a secure dashboard · built with Claude Code by Suman Debnath
+              Migi · a three-pillar operator OS: fleet + multi-agent system + knowledge brain · built with Claude Code by Suman Debnath
             </p>
           </div>
         </section>
