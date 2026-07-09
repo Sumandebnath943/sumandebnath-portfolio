@@ -27,10 +27,10 @@ export const MIGI = {
 export const STATS: { value: number; suffix?: string; prefix?: string; label: string; sub: string }[] = [
   { value: 30, suffix: "+", label: "autonomous agents", sub: "one job each, all running" },
   { value: 3, label: "identities, one panel", sub: "fleet · MAS · ECHO" },
-  { value: 2, label: "free LLMs", sub: "auto-retry + provider failover" },
+  { value: 1, label: "right brain per job", sub: "a fallback for every agent" },
   { value: 24, suffix: "/7", label: "in the cloud", sub: "no servers, no paid infra" },
-  { value: 0, prefix: "$", label: "running cost", sub: "free tiers, end to end" },
-  { value: 1, label: "operator OS", sub: "human-in-the-loop, 2FA gated" },
+  { value: 0, prefix: "$", label: "running cost", sub: "free-tier + a few $/mo, capped" },
+  { value: 2, label: "security audits", sub: "independently audited + hardened" },
 ];
 
 /* ── The three pillars — one control panel, three identities ──────────────── */
@@ -207,7 +207,7 @@ export const LINKEDIN_SHOT = { src: "/migi-agent/linkedin.png", w: 1365, h: 767 
 export const FINANCE_STEPS: { title: string; body: string }[] = [
   { title: "Captures both channels", body: "It reads both bank SMS and banking-app notifications, so nothing slips through a channel gap." },
   { title: "De-duplicates", body: "When the same transaction arrives on both channels it's merged into one — matched on the bank's reference number — while two genuinely identical purchases stay two." },
-  { title: "Filters the noise", body: "Payment-due and upcoming-EMI reminders are recognized and skipped, so only money that actually moved is logged." },
+  { title: "Filters the noise", body: "Ads and recharge offers, payment-due and EMI reminders, money I received, OTPs and pending authorizations are all recognized and skipped — a deterministic rule I can read and test, not a guess. Only money that actually moved is logged." },
   { title: "Categorizes & learns", body: "Sorts each spend into real-world categories (rent, EMI, OTT, groceries, misc…) — and when I re-categorize a merchant, it remembers next time." },
   { title: "Takes manual entry too", body: "A one-tap form captures cash spends the phone never sees." },
   { title: "Tracks & guards", body: "A 24-month history, daily/weekly/monthly rollups, budget caps with instant alerts, and a full audit trail — private, behind my login." },
@@ -221,10 +221,19 @@ export const FINANCE_LAYERS: { name: string; body: string }[] = [
   { name: "Ledger", body: "24-month categorized history, budgets, alerts and audit trail." },
 ];
 export const FINANCE_CHIPS = [
+  "Trained on my real messages", "Deterministic classifier", "Regression test suite",
   "SMS + app notifications", "Smart de-duplication", "Learns my corrections", "Ignores payment reminders",
   "Manual cash entry", "24-month history", "Budget caps + alerts", "Privacy-first", "Behind my login",
 ];
 export const FINANCE_SHOT = { src: "/migi-agent/finance.png", w: 1350, h: 767 };
+
+/* ── Cycle A · Finance, trained + tested like a product ───────────────────── */
+export const FINANCE_TRUST: { name: string; body: string }[] = [
+  { name: "Trained on real messages", body: "Taught on a labeled set of my own bank-message screenshots, so it learns exactly what is — and isn't — an actual payment." },
+  { name: "A deterministic decision", body: "The log-this / skip-this call is made by rules I can read and test; the AI only helps with the genuinely fuzzy parts. It can't be talked into logging an ad as a purchase." },
+  { name: "One payment, counted once", body: "When the same payment arrives from two sources, the bank's record is the source of truth — so a single EMI or premium is never double-counted." },
+  { name: "Ships with a test suite", body: "Dozens of labeled real-world cases run in one command and prove the classifier is right — so I can change it fearlessly and catch any regression instantly." },
+];
 
 /* ── Job Search — spotlight (feature #3) ──────────────────────────────────── */
 export const JOBS_STEPS: { title: string; body: string }[] = [
@@ -259,19 +268,29 @@ export const MAS_STEPS: { title: string; body: string }[] = [
   { title: "I approve every action", body: "It plans and proposes; every real-world action waits for my explicit yes. Human-in-the-loop by design." },
 ];
 export const MAS_MISSIONS: { name: string; body: string }[] = [
+  { name: "Draft & publish a post", body: "Give it a topic or the exact words; it researches, writes in my voice, and — on my yes — publishes to LinkedIn, Bluesky and Mastodon with the links back." },
   { name: "Job-application prep", body: "Research the company, score my fit, draft a tailored cover letter and a warm-up post." },
   { name: "Content draft", body: "Take an angle and produce a finished, on-voice piece — researched and critiqued." },
   { name: "Market / competitor scan", body: "Survey a topic or a competitor and come back with a structured read." },
   { name: "Decision memo", body: "Write a reasoned memo on an open question, with the trade-offs laid out." },
   { name: "Ask across all my data", body: "Answer a question over everything I've captured, at once." },
-  { name: "Fleet triage", body: "Check the health of the whole fleet and surface what needs attention." },
 ];
 export const MAS_CHIPS = [
-  "Goal-in, mission-out", "Voice-startable", "Supervisor + specialist workers",
-  "Composes the fleet as tools", "Critic in the loop", "Approval on every action",
+  "Goal-in, done-out", "Voice-startable", "Supervisor + specialist workers",
+  "Composes the fleet as tools", "Critic in the loop", "Approve / Edit gate",
+  "Publishes to LinkedIn + Bluesky + Mastodon", "Returns the live links",
   "Fully isolated · own compute budget", "Runs only when I ask",
 ];
 export const MAS_SHOT = { src: "/migi-agent/MIGI MAS.png", w: 1350, h: 767 };
+
+/* ── Cycle A · MIGI MAS now EXECUTES — the Operator ───────────────────────── */
+export const MAS_EXECUTE_STEPS: { title: string; body: string }[] = [
+  { title: "Hand it a task", body: "In plain language — from the dashboard, or by chat or voice. Either the exact words to post, or just a topic to run with." },
+  { title: "It researches + drafts", body: "Given only a topic, the squad researches it and writes the post in my voice, tailored to each platform." },
+  { title: "Approve or edit", body: "The finished post lands behind an Approve / Edit gate — I revise it in one message (“punchier, drop the emoji”) and it re-drafts. Nothing goes out until I say yes." },
+  { title: "It publishes live", body: "On approval it posts to my LinkedIn, Bluesky and Mastodon at once — then hands me back the links to the live posts." },
+];
+export const MAS_EXECUTE_SHOT = { src: "/migi-agent/MAS can execute.png", w: 308, h: 181 };
 
 /* ── MIGI ECHO — a knowledge brain you talk to (feature #2) ───────────────── */
 export const ECHO_STEPS: { title: string; body: string }[] = [
@@ -314,6 +333,79 @@ export const CROSSPOST = {
 /* ── One animated identity switch (feature #5) ────────────────────────────── */
 export const TOGGLE_SHOT = { src: "/migi-agent/MIGI Toggle.png", w: 126, h: 71 };
 
+/* ═══════════════════════════════════════════════════════════════════════════
+ *  Cycle C — Intelligent model routing (the right brain per job)
+ *  Public-safe: no vendor/model names, no exact $ figures. Generic labels only.
+ * ═════════════════════════════════════════════════════════════════════════ */
+export const ROUTING_LAYERS: { name: string; body: string }[] = [
+  { name: "Premium on the hard problems", body: "The reasoning-heavy, reputation-facing agents — code review, cover letters, my public content, the multi-agent war room — run on a top-tier paid model for quality." },
+  { name: "Free on the routine", body: "The light, high-volume agents stay on free models. Capability matched to cost, per task — model orchestration, not “call an API.”" },
+  { name: "A fallback for every agent", body: "Each agent has an ordered fallback chain; if its first-choice model is throttled or down, it drops to the next — so a single provider's bad day can't stall the fleet." },
+  { name: "Cost-controlled", body: "Runs on the order of a few dollars a month, with per-provider spend tracked live on the dashboard — which brain, how many calls, what it cost." },
+  { name: "Fail-safe", body: "Strictly opt-in: pull the paid key and every agent silently falls back to free models — zero breakage. One switch dials the priciest agent between premium and free." },
+  { name: "Privacy-aware routing", body: "My most personal data — journal, finances, habits — is routed only through privacy-respecting providers, never free tiers that might train on it. Vision tasks are pinned to image-capable models." },
+];
+/* generic per-job fallback chains — replaces the (name-revealing) routing screenshot */
+export const ROUTING_CHAINS: { job: string; chain: string[] }[] = [
+  { job: "Heavy · quality · private work", chain: ["Premium · 1st", "Free A", "Free B", "Free C"] },
+  { job: "Routine · high-volume work", chain: ["Free A · 1st", "Free B", "Free C", "Premium"] },
+];
+/* Cycle A3 · a self-regulating fleet — reliability on free infrastructure */
+export const ROUTING_RELIABILITY: { title: string; body: string }[] = [
+  { title: "It paces itself", body: "Agents space out their AI calls to stay under each provider's per-minute ceiling, so a busy agent can't stampede the limit and knock out the others." },
+  { title: "It backs off politely", body: "When a provider says “slow down,” the fleet honors its own retry timing instead of hammering — and falls back to a second provider so a critical daily job never just fails." },
+  { title: "It watches its own health", body: "A live diagnostics view shows exactly which agent and minute is under pressure, with an early-warning signal that flags call-bunching before it turns into a failure." },
+];
+export const ROUTING_CHIPS = [
+  "The right brain per job", "A fallback for every agent", "No single-vendor dependency",
+  "Premium where it counts, free where it doesn't", "Cost-controlled (~a few $/mo)", "Live per-provider spend",
+  "Fail-safe — pull the paid key, it runs free", "Privacy-aware routing", "Self-pacing under free-tier limits",
+];
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ *  Cycle B — The engineering-maturity layer (trustworthy · extensible · self-improving)
+ *  Public-safe: no vendor names for the add-ons; capabilities only.
+ * ═════════════════════════════════════════════════════════════════════════ */
+export const MATURITY: { title: string; body: string; why: string; icon: string }[] = [
+  { title: "It tests + hardens itself", body: "A growing automated test suite guards the agents' core logic and runs on every change; every job has production guardrails — time limits, no double-runs, least-privilege — and self-recovers from transient database blips.", why: "Evolve it fast, and trust it still works.", icon: "M12 3l7 4v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V7l7-4z M9 12l2 2 4-4" },
+  { title: "It heals itself", body: "A failure-triage agent spots any agent that fails, reads the error, diagnoses the likely cause and a suggested fix, and messages me — suggestion-only, it never edits code on its own.", why: "I learn what broke and how to fix it before I go looking.", icon: "M12 3a9 9 0 100 18 9 9 0 000-18z M12 8v4l3 2" },
+  { title: "A resilient backbone + a built-in editor", body: "Multiple free AI providers with automatic failover so no single outage stops the work; a self-critique pass reviews my public content for voice and quality before it ever reaches me.", why: "Resilience and a quality gate — for free.", icon: "M4 12a8 8 0 0113-6 M20 4v4h-4 M20 12a8 8 0 01-13 6 M4 20v-4h4" },
+  { title: "It connects to any AI", body: "Migi exposes its capabilities as standard, reusable tools any AI assistant can plug into — query my live data, trigger an agent, remember something — via the emerging industry standard for AI tools. It runs locally and privately.", why: "A closed system became an open platform.", icon: "M9 12h6 M6 9a3 3 0 100 6 3 3 0 000-6z M18 9a3 3 0 100 6 3 3 0 000-6z" },
+  { title: "Free power-ups that can't overspend", body: "A budget-guard lets me bolt on premium-tier free services — sharper recall, cleaner web reading, real-time research — each metered against its monthly free limit and auto-falling-back to baseline the moment it's spent.", why: "Scale capability on free infra, strictly upside.", icon: "M13 2L4 14h6l-1 8 9-12h-6l1-8z" },
+  { title: "Agents that learn + watch the web", body: "Adaptive memory learns my preferences over time — my content voice improves from the edits I make. A browser agent watches chosen public web pages and alerts me the moment something changes. Alert-only, human-in-the-loop.", why: "The fleet improves from how I use it — and can see the live web.", icon: "M12 3a9 9 0 100 18 9 9 0 000-18z M3 12h18 M12 3c3 3 3 15 0 18 M12 3c-3 3-3 15 0 18" },
+];
+/* the free-tier budgets graphic — generic add-ons, no vendor names */
+export const BUDGET_ADDONS: { name: string; note: string }[] = [
+  { name: "Sharper recall", note: "premium-tier knowledge retrieval" },
+  { name: "Cleaner web reading", note: "clean page extraction" },
+  { name: "Real-time research", note: "live web search" },
+];
+export const MATURITY_CHIPS = [
+  "Self-testing (eval suite on every change)", "Self-healing (auto-diagnoses failures)",
+  "Production guardrails + self-recovery", "Resilient multi-provider backbone", "A built-in AI editor",
+  "A standard AI-tool layer (MCP)", "Free power-ups that can't overspend", "Agents that learn",
+  "Watches the web — alert-only", "Still $0 · human-in-the-loop",
+];
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ *  Cycle D — Security maturity (POSTURE ONLY — never the recipe)
+ *  Public-safe: no vulnerabilities, no endpoints/files/tables/env names, no
+ *  audit tools/vendors, no implication of a breach. Proactive hardening only.
+ * ═════════════════════════════════════════════════════════════════════════ */
+export const SECURITY_MATURITY: { title: string; body: string; icon: string }[] = [
+  { title: "Independently audited, hardened in phases", body: "Because Migi runs my private life, I treated it like production software: I put the whole system — the fleet and the dashboard — through two independent AI-driven security audits, reconciled the findings into one prioritized plan, and fixed them high-to-low, each phase verified before the next, ending in a clean build and a live deploy.", icon: "M12 3l7 4v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V7l7-4z M9 12l2 2 4-4" },
+  { title: "Fail-closed authentication", body: "The password + authenticator-app 2FA now fails closed: if any security setting is ever missing or misconfigured, it denies access instead of silently opening. Every view of private or financial data re-verifies my session on the server, and repeated failed logins lock out and ping me instantly.", icon: "M6 10V8a6 6 0 0112 0v2 M5 10h14v10H5z M12 14v3" },
+  { title: "Private data, sealed at every layer", body: "Database access is locked so nothing is readable without the server's own key, my single most sensitive stored credential is encrypted at rest, and secrets live only in the platform vault — never in the code, the browser, or the logs.", icon: "M12 3a9 9 0 00-9 9c0 5 4 8 9 9 5-1 9-4 9-9a9 9 0 00-9-9z M9 12l2 2 4-4" },
+  { title: "Hardened against AI-specific attacks", body: "The agents treat any web page or feed they read as untrusted data, never as instructions — so a malicious page can't hijack them. The AI tool layer got allowlists and a read-only mode, with guards against server-side request forgery and injection in the automation pipeline.", icon: "M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z M12 9v4 M12 16h.01" },
+  { title: "The web fundamentals, done right", body: "Clickjacking protection, cross-site-request-forgery checks and strict browser security headers across the dashboard, plus brute-force lockouts with instant alerts — belt and suspenders on top of the AI-specific work.", icon: "M4 6h16v12H4z M4 10h16 M8 15h4" },
+];
+export const SECURITY_MATURITY_CHIPS = [
+  "Independently security-audited (twice)", "Hardened in phases", "Fail-closed auth + 2FA",
+  "Defense in depth", "A sealed database", "Sensitive credentials encrypted at rest",
+  "Secrets never in code / browser / logs", "Prompt-injection defense", "A locked-down AI tool layer",
+  "SSRF + pipeline-injection guards", "Clickjacking / CSRF / brute-force protection", "Proactive, not reactive",
+];
+
 /* ── Under the hood — quality upgrades across the whole system ─────────────── */
 export const UNDERHOOD: { title: string; body: string; icon: string }[] = [
   { title: "Designed email templates", body: "Every automated email the fleet sends is now a designed template — tiles, sections and brand accents — so reports read like a product, not a log dump.", icon: "M4 6h16v12H4z M4 8l8 5 8-5" },
@@ -324,7 +416,7 @@ export const UNDERHOOD: { title: string; body: string; icon: string }[] = [
 /* ── Architecture flow (agents → LLMs → channels → state → dashboard) ─────── */
 export const FLOW: { id: string; label: string; sub: string }[] = [
   { id: "agents", label: "30+ Agents", sub: "GitHub Actions · cron + on-demand" },
-  { id: "llms", label: "Two free LLMs", sub: "Groq · Google Gemini" },
+  { id: "llms", label: "Routed LLMs", sub: "right brain per job · free + premium" },
   { id: "channels", label: "Telegram + Email", sub: "instant pings · designed digests" },
   { id: "state", label: "Supabase", sub: "shared brain · memory" },
   { id: "dashboard", label: "Migi Dashboard", sub: "Next.js on Vercel · 2FA" },
@@ -333,8 +425,8 @@ export const FLOW: { id: string; label: string; sub: string }[] = [
 /* ── Tech-stack chips ─────────────────────────────────────────────────────── */
 export const STACK: { name: string; role: string }[] = [
   { name: "GitHub Actions", role: "Orchestration — cron + event-driven, one public monorepo of agents" },
-  { name: "Groq · gpt-oss", role: "Private content — journal, habits, email (no training on data)" },
-  { name: "Google Gemini", role: "Public + visual — news, briefings, receipt vision" },
+  { name: "A premium model", role: "The lead brain — heavy, quality-critical work (code review, cover letters, public content, MAS reasoning)" },
+  { name: "Privacy-first free LLMs", role: "Routine + personal work — routed only through providers that don't train on my data, vision-capable for receipts, a fallback for every agent" },
   { name: "Telegram Bot API", role: "Two-way channel — instant pings and slash-commands" },
   { name: "Resend", role: "Designed, email-safe HTML digests" },
   { name: "Supabase", role: "Shared state — Postgres key/value + per-domain tables" },

@@ -16,6 +16,8 @@ import {
   MAS_MISSIONS,
   MAS_CHIPS,
   MAS_SHOT,
+  MAS_EXECUTE_STEPS,
+  MAS_EXECUTE_SHOT,
   ECHO_STEPS,
   ECHO_CHIPS,
   ECHO_SHOT,
@@ -27,6 +29,7 @@ import {
   FINANCE_LAYERS,
   FINANCE_CHIPS,
   FINANCE_SHOT,
+  FINANCE_TRUST,
   JOBS_STEPS,
   JOBS_LAYERS,
   JOBS_STAGES,
@@ -37,6 +40,15 @@ import {
   RESUME_CHIPS,
   RESUME_SHOT,
   TOGGLE_SHOT,
+  ROUTING_LAYERS,
+  ROUTING_CHAINS,
+  ROUTING_RELIABILITY,
+  ROUTING_CHIPS,
+  MATURITY,
+  BUDGET_ADDONS,
+  MATURITY_CHIPS,
+  SECURITY_MATURITY,
+  SECURITY_MATURITY_CHIPS,
   UNDERHOOD,
   DEVICES_SHOT,
   SECURITY_FEATURES,
@@ -51,7 +63,7 @@ const SITE = "https://sumandebnath.houseofnamus.com";
 export const metadata: Metadata = {
   title: "Migi · A Three-Pillar Operator OS — 30+ AI Agents, a Multi-Agent System & a Knowledge Brain",
   description:
-    "Migi grew from a fleet of 30+ self-running AI agents into a three-pillar operator OS: MIGI (the fleet), MIGI MAS (a multi-agent system you hand a goal), and MIGI ECHO (a knowledge brain you talk to) — one secure control panel, three identities. Built solo with Claude Code, on entirely free infrastructure.",
+    "Migi grew from a fleet of 30+ self-running AI agents into a three-pillar operator OS: MIGI (the fleet), MIGI MAS (a multi-agent system you hand a goal), and MIGI ECHO (a knowledge brain you talk to) — one secure control panel, three identities. Now with intelligent model routing (the right AI per job, a fallback for every agent), self-testing and self-healing, and independently security-audited + hardened. Built solo with Claude Code, on entirely free infrastructure.",
   keywords: [
     "Migi", "AI agent fleet", "multi-agent system", "MAS", "RAG knowledge brain", "autonomous agents",
     "agent orchestration", "GitHub Actions agents", "Claude Code", "AI generalist", "personal AI automation",
@@ -351,10 +363,12 @@ export default function MigiPage() {
               </Reveal>
               <Reveal delay={0.12}>
                 <p className="text-[15px] leading-relaxed" style={{ color: MIGI.muted }}>
-                  This cycle it stopped being only a fleet. The same control panel now holds
+                  It stopped being only a fleet. The same control panel now holds
                   <span style={{ color: MIGI.text, fontWeight: 600 }}> three identities</span> — a fleet that
-                  does my work, a multi-agent system I hand goals to, and a knowledge brain I talk to.
-                  The whole thing is an argument for how one person operates in the AI age:{" "}
+                  does my work, a multi-agent system I hand goals to, and a knowledge brain I talk to — and
+                  it grew up as software: <span style={{ color: MIGI.text, fontWeight: 600 }}>routing the right
+                  AI to each job</span>, testing and healing itself, and hardened after two independent
+                  security audits. The whole thing is an argument for how one person operates in the AI age:{" "}
                   <span style={{ color: MIGI.text, fontWeight: 600 }}>leverage, automation and taste — not headcount.</span>
                 </p>
               </Reveal>
@@ -449,8 +463,8 @@ export default function MigiPage() {
                 Simple parts, wired for leverage.
               </h2>
               <p className="text-[15px] leading-relaxed max-w-2xl mb-10" style={{ color: MIGI.muted }}>
-                Agents fire on GitHub Actions, think with two free LLMs, speak through Telegram and
-                email, remember in Supabase, and answer to a single secure dashboard.
+                Agents fire on GitHub Actions, think with the right model for each job, speak through
+                Telegram and email, remember in Supabase, and answer to a single secure dashboard.
               </p>
             </Reveal>
             <Reveal delay={0.08}><ArchitectureFlow /></Reveal>
@@ -643,12 +657,13 @@ export default function MigiPage() {
                 Pillar two: hand it a goal.
               </h2>
               <p className="text-[15px] leading-relaxed max-w-2xl mb-10" style={{ color: "rgba(255,255,255,0.62)" }}>
-                The biggest leap this cycle. Instead of triggering one agent at a time, I give Migi a
+                The biggest leap. Instead of triggering one agent at a time, I give Migi a
                 goal — typed or spoken — and a team of specialist agents takes it from there: a
-                supervisor plans it, workers research, draft and critique, and it comes back with a
-                result to approve. It can compose my existing fleet agents as tools inside a mission,
-                and runs fully isolated from the scheduled fleet — its own assistant, its own compute
-                budget, its own space.
+                supervisor plans it, workers research, draft and critique. And this cycle it stopped
+                just planning and drafting — it learned to <span className="text-white">do the thing</span>,
+                publishing live once I approve. It can compose my existing fleet agents as tools inside
+                a mission, and runs fully isolated from the scheduled fleet — its own assistant, its own
+                compute budget, its own space.
               </p>
             </Reveal>
 
@@ -658,6 +673,47 @@ export default function MigiPage() {
             <p className="font-dmmono text-[11px] mt-4 mb-12 text-center" style={{ color: "rgba(255,255,255,0.4)" }}>
               The MAS command deck — launch a mission, watch the squad work, and approve every real action.
             </p>
+
+            {/* the Operator — MAS now executes (Cycle A) */}
+            <div className="mb-12 rounded-[1.5rem] p-7 md:p-9 overflow-hidden" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(198,242,78,0.18)" }}>
+              <div className="flex items-center gap-2 mb-3">
+                <span className="font-dmmono text-[10px] uppercase tracking-[0.28em]" style={{ color: MIGI.lime }}>the operator</span>
+                <span className="font-dmmono text-[9px] uppercase tracking-[0.14em] rounded-full px-2 py-0.5" style={{ background: MIGI.lime, color: MIGI.ink }}>now it executes</span>
+              </div>
+              <h3 className="font-manrope font-bold text-[1.5rem] md:text-[2rem] leading-tight tracking-[-0.02em] text-white mb-3">
+                From a team that drafts to a team that <span style={{ color: MIGI.lime }}>does it</span>.
+              </h3>
+              <p className="font-manrope text-[14px] leading-relaxed max-w-2xl mb-7" style={{ color: "rgba(255,255,255,0.62)" }}>
+                I hand it a task in plain English — “draft a post on this and put it out everywhere.” It
+                researches, writes in my voice, shows me the finished version, and once I approve, publishes
+                it across my platforms and sends me the links. Planning and doing, with me on the approve button.
+              </p>
+
+              <div className="grid md:grid-cols-[300px_1fr] gap-6 md:gap-8 items-start">
+                <div className="rounded-2xl overflow-hidden bg-[#0d1117] w-full" style={{ border: "1px solid rgba(255,255,255,0.1)" }}>
+                  <div className="flex items-center gap-2 px-3.5 py-2.5" style={{ background: MIGI.ink, borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+                    <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#F1655B" }} />
+                    <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#F5BF4F" }} />
+                    <span className="w-2.5 h-2.5 rounded-full" style={{ background: MIGI.green }} />
+                    <span className="ml-2.5 font-dmmono text-[10px]" style={{ color: "rgba(255,255,255,0.5)" }}>mas · operator</span>
+                  </div>
+                  <div className="p-5 flex items-center justify-center">
+                    <Image src={MAS_EXECUTE_SHOT.src} alt="The MIGI MAS Operator — hand it ready-to-post text or a topic and it drafts, then publishes on approval" width={MAS_EXECUTE_SHOT.w} height={MAS_EXECUTE_SHOT.h} className="w-full h-auto block rounded-lg" loading="lazy" />
+                  </div>
+                </div>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {MAS_EXECUTE_STEPS.map((s, i) => (
+                    <Reveal key={s.title} delay={(i % 2) * 0.05}>
+                      <div className="rounded-2xl h-full p-5" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)" }}>
+                        <span className="inline-flex w-8 h-8 rounded-xl items-center justify-center font-manrope font-extrabold text-[13px] mb-3" style={{ background: MIGI.lime, color: MIGI.ink }}>{i + 1}</span>
+                        <h4 className="font-manrope font-semibold text-[13.5px] mb-1.5 text-white leading-snug">{s.title}</h4>
+                        <p className="font-manrope text-[12px] leading-relaxed" style={{ color: "rgba(255,255,255,0.55)" }}>{s.body}</p>
+                      </div>
+                    </Reveal>
+                  ))}
+                </div>
+              </div>
+            </div>
 
             {/* goal → mission flow */}
             <div className="mb-12">
@@ -759,11 +815,183 @@ export default function MigiPage() {
           </div>
         </section>
 
-        {/* ════════════════════════════ 07 · LINKEDIN AUTOPILOT ════════════════════════════ */}
+        {/* ════════════════════════════ 07 · INTELLIGENT MODEL ROUTING ════════════════════════════ */}
+        <section className="px-6 py-20 md:py-28">
+          <div className="max-w-6xl mx-auto">
+            <Reveal>
+              <SectionLabel index="07" kicker="intelligent model routing · a brain per job" />
+              <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
+                One model for everything?{" "}
+                <span className="relative inline-block">
+                  <span className="relative z-10">Not anymore.</span>
+                  <span aria-hidden className="absolute left-0 right-0 bottom-1 h-3 md:h-4 -z-0" style={{ background: MIGI.lime }} />
+                </span>
+              </h2>
+              <p className="text-[15px] leading-relaxed max-w-2xl mb-10" style={{ color: MIGI.muted }}>
+                Migi stopped using one AI for everything and started thinking like a team lead — assigning
+                each job to the right brain, with a backup for every brain, on a budget, without ever
+                risking a breakage. A premium model leads the heavy, quality-critical work; free models
+                handle the routine; and every agent has an ordered fallback chain.
+              </p>
+            </Reveal>
+
+            {/* the per-job fallback chains — generic, name-safe */}
+            <Reveal delay={0.06}>
+              <div className="rounded-[1.25rem] overflow-hidden" style={{ background: MIGI.ink, border: `1px solid ${MIGI.ink}`, boxShadow: "0 30px 70px -44px rgba(0,0,0,0.6)" }}>
+                <div className="flex items-center gap-2 px-4 py-3" style={{ background: MIGI.ink, borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+                  <span className="w-3 h-3 rounded-full" style={{ background: "#F1655B" }} />
+                  <span className="w-3 h-3 rounded-full" style={{ background: "#F5BF4F" }} />
+                  <span className="w-3 h-3 rounded-full" style={{ background: MIGI.green }} />
+                  <span className="ml-3 font-dmmono text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>migi · llm routing · primary → fallbacks</span>
+                </div>
+                <div className="p-6 md:p-8 space-y-4">
+                  {ROUTING_CHAINS.map((row) => (
+                    <div key={row.job} className="flex flex-col sm:flex-row sm:items-center gap-3">
+                      <span className="font-manrope font-semibold text-[13px] text-white sm:w-[210px] shrink-0">{row.job}</span>
+                      <div className="flex flex-wrap items-center gap-2">
+                        {row.chain.map((c, i) => (
+                          <span key={c} className="flex items-center gap-2">
+                            <span
+                              className="font-dmmono text-[11.5px] rounded-full px-3 py-1"
+                              style={i === 0
+                                ? { background: MIGI.lime, color: MIGI.ink }
+                                : { background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.66)", border: "1px solid rgba(255,255,255,0.1)" }}
+                            >
+                              {c}
+                            </span>
+                            {i < row.chain.length - 1 && <span className="font-dmmono text-[12px]" style={{ color: "rgba(255,255,255,0.35)" }}>→</span>}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
+            <p className="font-dmmono text-[11px] mt-4 text-center" style={{ color: MIGI.muted }}>
+              Each agent&rsquo;s primary brain and its exact fallback order — a provider&rsquo;s bad day never stalls the fleet.
+            </p>
+
+            {/* how the routing thinks */}
+            <div className="mb-10 mt-12">
+              <Reveal><SubLabel>How the routing thinks</SubLabel></Reveal>
+              <LayerRow layers={ROUTING_LAYERS} />
+            </div>
+
+            {/* a fleet that regulates itself */}
+            <div className="mb-10">
+              <Reveal><SubLabel>A fleet that regulates itself</SubLabel></Reveal>
+              <Reveal delay={0.05}>
+                <div className="rounded-[1.5rem] p-7 md:p-9" style={{ background: MIGI.ink }}>
+                  <div className="grid md:grid-cols-[210px_1fr] gap-8 items-start">
+                    <div>
+                      <p className="font-dmmono text-[10px] uppercase tracking-[0.22em] mb-2" style={{ color: "rgba(255,255,255,0.45)" }}>rate-limits · 7d</p>
+                      <p className="font-manrope font-extrabold text-[2.6rem] leading-none tracking-[-0.02em]" style={{ color: MIGI.lime }}>110</p>
+                      <p className="font-manrope text-[12.5px] leading-relaxed mt-3" style={{ color: "rgba(255,255,255,0.55)" }}>
+                        call-limit events absorbed — the fleet falls over to a backup provider when one says wait.
+                      </p>
+                      <span className="mt-4 inline-flex items-center gap-2 font-dmmono text-[10px] uppercase tracking-[0.14em] rounded-full px-2.5 py-1" style={{ background: "rgba(198,242,78,0.12)", color: MIGI.lime }}>
+                        <span className="w-1.5 h-1.5 rounded-full" style={{ background: MIGI.lime, animation: "migi-blink 1.4s steps(1) infinite" }} />
+                        early-warning before failure
+                      </span>
+                    </div>
+                    <div className="space-y-3">
+                      {ROUTING_RELIABILITY.map((r) => (
+                        <div key={r.title} className="rounded-2xl p-5" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)" }}>
+                          <h4 className="font-manrope font-semibold text-[13.5px] mb-1 text-white">{r.title}</h4>
+                          <p className="font-manrope text-[12.5px] leading-relaxed" style={{ color: "rgba(255,255,255,0.55)" }}>{r.body}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+
+            <Reveal delay={0.05}><ChipRow chips={ROUTING_CHIPS} /></Reveal>
+          </div>
+        </section>
+
+        {/* ════════════════════════════ 08 · ENGINEERING MATURITY ════════════════════════════ */}
+        <section className="px-6 py-20 md:py-28" style={{ background: MIGI.ink }}>
+          <div className="max-w-6xl mx-auto">
+            <Reveal>
+              <div className="flex items-center gap-3 mb-5">
+                <span className="font-dmmono text-[11px] rounded px-1.5 py-0.5 leading-none" style={{ color: MIGI.ink, background: MIGI.lime }}>08</span>
+                <span className="w-1.5 h-1.5 rounded-full" style={{ background: MIGI.lime }} />
+                <span className="font-dmmono text-[10px] uppercase tracking-[0.3em]" style={{ color: "rgba(255,255,255,0.5)" }}>engineering maturity · trust · extend · improve</span>
+              </div>
+              <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4 text-white">
+                The fleet grew up as engineering.
+              </h2>
+              <p className="text-[15px] leading-relaxed max-w-2xl mb-10" style={{ color: "rgba(255,255,255,0.62)" }}>
+                Prompted by two independent audits, this cycle didn&rsquo;t add a fourth pillar — it added
+                the engineering-maturity layer. Migi went from &ldquo;a fleet that runs&rdquo; to &ldquo;a fleet you can
+                trust and build on&rdquo;: it tests itself, heals itself, plugs into any AI assistant, safely
+                bolts on premium-tier free tools, and starts to learn from how I use it — all still on
+                $0 infrastructure, all human-in-the-loop.
+              </p>
+            </Reveal>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {MATURITY.map((f, i) => (
+                <Reveal key={f.title} delay={(i % 3) * 0.05}>
+                  <div className="rounded-2xl h-full p-6 flex flex-col" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)" }}>
+                    <span className="inline-flex w-9 h-9 rounded-xl items-center justify-center mb-4" style={{ background: MIGI.lime }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={MIGI.ink} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d={f.icon} /></svg>
+                    </span>
+                    <h4 className="font-manrope font-semibold text-[15px] mb-2 text-white leading-snug">{f.title}</h4>
+                    <p className="font-manrope text-[12.5px] leading-relaxed mb-4 flex-1" style={{ color: "rgba(255,255,255,0.6)" }}>{f.body}</p>
+                    <p className="font-manrope text-[12px] italic leading-snug pt-3" style={{ color: MIGI.lime, borderTop: "1px solid rgba(255,255,255,0.12)" }}>{f.why}</p>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+
+            {/* free-tier budgets graphic — generic add-ons, name-safe */}
+            <div className="mt-10">
+              <Reveal>
+                <p className="font-dmmono text-[11px] uppercase tracking-[0.24em] mb-5" style={{ color: "rgba(255,255,255,0.45)" }}>Free power-ups, metered — they can&rsquo;t overspend</p>
+              </Reveal>
+              <Reveal delay={0.05}>
+                <div className="rounded-[1.5rem] p-6 md:p-7" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)" }}>
+                  <p className="font-dmmono text-[10px] uppercase tracking-[0.16em] mb-5" style={{ color: "rgba(255,255,255,0.4)" }}>
+                    free-tier budgets · metered add-ons · agents fall back to baseline when a budget is spent
+                  </p>
+                  <div className="grid sm:grid-cols-3 gap-3">
+                    {BUDGET_ADDONS.map((a) => (
+                      <div key={a.name} className="rounded-xl p-4" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                        <div className="flex items-center justify-between gap-2 mb-1">
+                          <span className="font-manrope font-semibold text-[13.5px] text-white">{a.name}</span>
+                          <span className="font-dmmono text-[9px] uppercase tracking-[0.12em] rounded-full px-2 py-0.5" style={{ background: "rgba(198,242,78,0.14)", color: MIGI.lime }}>active</span>
+                        </div>
+                        <p className="font-manrope text-[11.5px] mb-3" style={{ color: "rgba(255,255,255,0.5)" }}>{a.note}</p>
+                        <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.1)" }}>
+                          <span className="block h-full rounded-full" style={{ width: "8%", background: MIGI.lime }} />
+                        </div>
+                        <p className="font-dmmono text-[10px] mt-2" style={{ color: "rgba(255,255,255,0.4)" }}>within free limit · resets monthly</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+
+            <Reveal delay={0.05}>
+              <div className="flex flex-wrap gap-2 mt-8">
+                {MATURITY_CHIPS.map((c) => (
+                  <span key={c} className="font-manrope text-[12px] font-medium rounded-full px-3.5 py-1.5" style={{ background: "rgba(255,255,255,0.06)", color: MIGI.lime, border: "1px solid rgba(255,255,255,0.1)" }}>{c}</span>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* ════════════════════════════ 09 · LINKEDIN AUTOPILOT ════════════════════════════ */}
         <section className="px-6 py-20 md:py-28" style={{ background: MIGI.creamDeep, borderTop: `1px solid ${MIGI.line}`, borderBottom: `1px solid ${MIGI.line}` }}>
           <div className="max-w-5xl mx-auto">
             <Reveal>
-              <SectionLabel index="07" kicker="linkedin autopilot · i pick the story" />
+              <SectionLabel index="09" kicker="linkedin autopilot · i pick the story" />
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
                 I don&rsquo;t outsource my voice.{" "}
                 <span className="relative inline-block">
@@ -840,11 +1068,11 @@ export default function MigiPage() {
           </div>
         </section>
 
-        {/* ════════════════════════════ 08 · FINANCE TRACKER ════════════════════════════ */}
+        {/* ════════════════════════════ 10 · FINANCE TRACKER ════════════════════════════ */}
         <section className="px-6 py-20 md:py-28">
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="08" kicker="finance tracker · privacy-first money" />
+              <SectionLabel index="10" kicker="finance tracker · trained + tested like a product" />
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
                 From an SMS to a{" "}
                 <span className="relative inline-block">
@@ -853,11 +1081,12 @@ export default function MigiPage() {
                 </span>
               </h2>
               <p className="text-[15px] leading-relaxed max-w-2xl mb-10" style={{ color: MIGI.muted }}>
-                A privacy-first money agent that leveled up from parsing one SMS into a tracker I can
-                actually trust. It captures both bank SMS and app notifications, de-duplicates the same
-                transaction across them, learns my category corrections, and ignores payment reminders
-                so only money that actually moved is logged — with manual cash entry, a 24-month history,
-                budgets and a full audit trail. All behind my login.
+                A privacy-first money agent I hardened the way you&rsquo;d harden a real product, not a
+                demo — trained on my own bank messages and shipped with a test suite. It captures both
+                bank SMS and app notifications, de-duplicates the same transaction across them, learns my
+                category corrections, and ignores everything that looks like money but isn&rsquo;t — so only
+                money that actually moved is logged, with manual cash entry, a 24-month history, budgets
+                and a full audit trail. All behind my login.
               </p>
             </Reveal>
 
@@ -878,15 +1107,30 @@ export default function MigiPage() {
               <LayerRow layers={FINANCE_LAYERS} />
             </div>
 
+            {/* trained + tested like a product (Cycle A) */}
+            <div className="mb-10">
+              <Reveal><SubLabel>Trained + tested like a product</SubLabel></Reveal>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                {FINANCE_TRUST.map((t, i) => (
+                  <Reveal key={t.name} delay={(i % 4) * 0.05}>
+                    <div className="migi-card rounded-2xl bg-white h-full p-5" style={{ border: `1px solid ${MIGI.line}` }}>
+                      <p className="font-manrope font-semibold text-[13.5px] mb-1.5" style={{ color: MIGI.text }}>{t.name}</p>
+                      <p className="font-manrope text-[12.5px] leading-relaxed" style={{ color: MIGI.muted }}>{t.body}</p>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+
             <Reveal delay={0.05}><ChipRow chips={FINANCE_CHIPS} /></Reveal>
           </div>
         </section>
 
-        {/* ════════════════════════════ 09 · JOB SEARCH ════════════════════════════ */}
+        {/* ════════════════════════════ 11 · JOB SEARCH ════════════════════════════ */}
         <section className="px-6 py-20 md:py-28" style={{ background: MIGI.creamDeep, borderTop: `1px solid ${MIGI.line}`, borderBottom: `1px solid ${MIGI.line}` }}>
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="09" kicker="job search · apply-ready, human-sent" />
+              <SectionLabel index="11" kicker="job search · apply-ready, human-sent" />
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
                 The tedious 95% of applying,{" "}
                 <span className="relative inline-block">
@@ -944,11 +1188,11 @@ export default function MigiPage() {
           </div>
         </section>
 
-        {/* ════════════════════════════ 10 · RESUME / ATS REVIEWER ════════════════════════════ */}
+        {/* ════════════════════════════ 12 · RESUME / ATS REVIEWER ════════════════════════════ */}
         <section className="px-6 py-20 md:py-28">
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="10" kicker="resume / ats reviewer · wired to my job hunt" />
+              <SectionLabel index="12" kicker="resume / ats reviewer · wired to my job hunt" />
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
                 Reviewed the way it&rsquo;s actually{" "}
                 <span className="relative inline-block">
@@ -985,11 +1229,11 @@ export default function MigiPage() {
           </div>
         </section>
 
-        {/* ════════════════════════════ 11 · REAL OUTPUT ════════════════════════════ */}
+        {/* ════════════════════════════ 13 · REAL OUTPUT ════════════════════════════ */}
         <section className="px-6 py-20 md:py-28">
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="11" kicker="real output · straight to my phone" />
+              <SectionLabel index="13" kicker="real output · straight to my phone" />
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
                 What actually lands on my phone.
               </h2>
@@ -1029,11 +1273,11 @@ export default function MigiPage() {
           </div>
         </section>
 
-        {/* ════════════════════════════ 12 · THE DASHBOARD ════════════════════════════ */}
+        {/* ════════════════════════════ 14 · THE DASHBOARD ════════════════════════════ */}
         <section id="dashboard" className="px-6 py-20 md:py-28 scroll-mt-24" style={{ background: MIGI.creamDeep, borderTop: `1px solid ${MIGI.line}`, borderBottom: `1px solid ${MIGI.line}` }}>
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="12" kicker="migi · one control panel, three worlds" />
+              <SectionLabel index="14" kicker="migi · one control panel, three worlds" />
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
                 One console to command them all.
               </h2>
@@ -1118,11 +1362,62 @@ export default function MigiPage() {
           </div>
         </section>
 
-        {/* ════════════════════════════ 13 · HOW IT'S BUILT ════════════════════════════ */}
+        {/* ════════════════════════════ 15 · SECURITY MATURITY ════════════════════════════ */}
+        <section className="px-6 py-20 md:py-28" style={{ background: MIGI.ink }}>
+          <div className="max-w-6xl mx-auto">
+            <Reveal>
+              <div className="flex items-center gap-3 mb-5">
+                <span className="font-dmmono text-[11px] rounded px-1.5 py-0.5 leading-none" style={{ color: MIGI.ink, background: MIGI.lime }}>15</span>
+                <span className="w-1.5 h-1.5 rounded-full" style={{ background: MIGI.lime }} />
+                <span className="font-dmmono text-[10px] uppercase tracking-[0.3em]" style={{ color: "rgba(255,255,255,0.5)" }}>security maturity · treated like production</span>
+              </div>
+              <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4 text-white">
+                I had it independently{" "}
+                <span className="relative inline-block">
+                  <span className="relative z-10" style={{ color: MIGI.ink }}>security-audited.</span>
+                  <span aria-hidden className="absolute -left-1 -right-1 top-0 bottom-0 -z-0 rounded-md" style={{ background: MIGI.lime }} />
+                </span>{" "}
+                Twice.
+              </h2>
+              <p className="text-[15px] leading-relaxed max-w-2xl mb-10" style={{ color: "rgba(255,255,255,0.62)" }}>
+                Migi runs my private life — my journal, my finances, my content, my job hunt — so I treated
+                it like any real product that holds sensitive data. This wasn&rsquo;t a feature cycle; it was a
+                security-maturity cycle: two independent AI-driven audits of the whole system, reconciled
+                into one plan and fixed in phases, then hardened end to end against the specific ways AI
+                systems get attacked. Handling private data responsibly is part of the build, not an
+                afterthought — and this is proactive hardening, never a response to a breach.
+              </p>
+            </Reveal>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {SECURITY_MATURITY.map((f, i) => (
+                <Reveal key={f.title} delay={(i % 3) * 0.05}>
+                  <div className="rounded-2xl h-full p-6 flex flex-col" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)" }}>
+                    <span className="inline-flex w-9 h-9 rounded-xl items-center justify-center mb-4" style={{ background: MIGI.lime }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={MIGI.ink} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d={f.icon} /></svg>
+                    </span>
+                    <h4 className="font-manrope font-semibold text-[15px] mb-2 text-white leading-snug">{f.title}</h4>
+                    <p className="font-manrope text-[12.5px] leading-relaxed" style={{ color: "rgba(255,255,255,0.6)" }}>{f.body}</p>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+
+            <Reveal delay={0.05}>
+              <div className="flex flex-wrap gap-2 mt-8">
+                {SECURITY_MATURITY_CHIPS.map((c) => (
+                  <span key={c} className="font-manrope text-[12px] font-medium rounded-full px-3.5 py-1.5" style={{ background: "rgba(255,255,255,0.06)", color: MIGI.lime, border: "1px solid rgba(255,255,255,0.1)" }}>{c}</span>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* ════════════════════════════ 16 · HOW IT'S BUILT ════════════════════════════ */}
         <section className="px-6 py-20 md:py-28">
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="13" kicker="the operating model" />
+              <SectionLabel index="16" kicker="the operating model" />
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
                 Built solo — the AI-native way.
               </h2>
@@ -1164,8 +1459,8 @@ export default function MigiPage() {
                   </h2>
                   <p className="font-manrope text-[15px] max-w-lg mx-auto leading-relaxed" style={{ color: "rgba(255,255,255,0.6)" }}>
                     Migi is the proof: a fleet that does my work, a team of agents I hand goals to, and a
-                    second brain I can talk to — one control plane, shipped solo with Claude Code. Leverage
-                    without headcount, now with reasoning and memory on top.
+                    second brain I can talk to — routed to the right AI per job, independently security-audited,
+                    and shipped solo with Claude Code. Leverage without headcount, built like a product.
                   </p>
                 </div>
               </div>
