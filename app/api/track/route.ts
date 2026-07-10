@@ -17,11 +17,12 @@ export const dynamic = "force-dynamic";
 type Page = { path?: string; ms?: number; scroll?: number };
 type Action = { a?: string; label?: string };
 type Payload = {
-  type?: "arrival" | "summary" | "mute" | "unmute";
+  type?: "arrival" | "summary" | "mute" | "unmute" | "action";
   id?: string;
   path?: string;
   source?: string;
-  visit?: number;
+  a?: string;
+  label?: string;
   tag?: string;
   referrer?: string;
   tz?: string;
@@ -195,6 +196,15 @@ export async function POST(request: NextRequest) {
         `📱 ${esc(device)}`,
         `📍 ${esc(location)}`,
       ].join("\n");
+    } else if (body.type === "action") {
+      // Real-time high-intent alert (e.g. résumé download, email/phone click).
+      const label = esc((body.label || body.a || "action").slice(0, 80));
+      const path = esc((body.path || "").slice(0, 200));
+      text = [
+        `🔥 <b>Hot action</b> · <code>${id || "?"}</code>${tagLine ? ` · 🏷️ ${esc(tagLine)}` : ""}`,
+        `⭐ <b>${label}</b>${path ? ` — on ${path}` : ""}`,
+        `📍 ${esc(location)} · 📱 ${esc(device)}`,
+      ].join("\n");
     } else if (body.type === "summary") {
       const pages = Array.isArray(body.pages) ? body.pages : [];
       const journey =
@@ -226,17 +236,13 @@ export async function POST(request: NextRequest) {
       const source = (body.source || "Direct").slice(0, 60);
       const referrer = (body.referrer || "").slice(0, 200);
       const langLine = (body.langs || "").slice(0, 80);
-      const visit = typeof body.visit === "number" ? body.visit : 1;
-      const visitorLine =
-        visit > 1 ? `👤 <b>Returning</b> (visit #${visit})` : "🆕 <b>New visitor</b>";
       const isp = await reverseDns(ip);
       const t = localTime(tzName);
 
       const lines = [
-        `🔔 <b>New visit</b> · <code>${id || "?"}</code>${tagLine ? ` · 🏷️ ${esc(tagLine)}` : ""}`,
+        `🔔 <b>New visitor</b> · <code>${id || "?"}</code>${tagLine ? ` · 🏷️ ${esc(tagLine)}` : ""}`,
         `📄 <b>Entered on:</b> ${esc(path)}`,
         `🧭 <b>Source:</b> ${esc(source)}`,
-        visitorLine,
         `📍 <b>From:</b> ${esc(location)}${mapLink ? ` · <a href="${mapLink}">map</a>` : ""}`,
         `🌐 <b>IP:</b> ${esc(ip)}${isp ? ` · ${esc(isp)}` : ""}`,
         `📱 <b>Device:</b> ${esc(device)}`,

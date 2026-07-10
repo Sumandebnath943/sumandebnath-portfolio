@@ -20,7 +20,10 @@ import { usePathname } from "next/navigation";
 
 const SS_KEY = "vp_session";
 const MUTE_KEY = "vp_notrack";
-const VISITS_KEY = "vp_visits";
+
+// Actions that warrant an immediate "hot" ping (direct hiring/contact intent),
+// rather than only appearing in the end-of-visit summary.
+const HOT = new Set(["resume", "email", "phone", "copy-email", "copy-phone"]);
 
 type Action = { a: string; label: string };
 type Entry = { path: string; enter: number; scroll: number };
@@ -33,7 +36,6 @@ type Session = {
   activeMs: number;
   lastActive: number; // timestamp of last visible->active transition
   tag: string;
-  visit: number;
 };
 
 // --- small first-party readers ---------------------------------------------
@@ -148,26 +150,24 @@ export default function VisitorPing() {
 
     let s = loadSession();
     if (!s) {
-      // New session → count it as a visit (per-browser, across sessions).
-      const visit = safe(() => {
-        const n = (parseInt(localStorage.getItem(VISITS_KEY) || "0", 10) || 0) + 1;
-        localStorage.setItem(VISITS_KEY, String(n));
-        return n;
-      }, 1);
       s = {
         id: newId(), start: Date.now(), arrivalSent: false, entries: [],
-        actions: [], activeMs: 0, lastActive: Date.now(), tag: readTag(), visit,
+        actions: [], activeMs: 0, lastActive: Date.now(), tag: readTag(),
       };
       saveSession(s);
     }
     sessionRef.current = s;
 
-    // Helper to record a notable action (deduped by label).
+    // Helper to record a notable action (deduped by label). High-intent actions
+    // also fire an immediate "hot" ping so the owner hears about them in real time.
     const addAction = (a: string, label: string) => {
       const cur = sessionRef.current;
       if (!cur || cur.actions.some((x) => x.label === label)) return;
       cur.actions.push({ a, label });
       saveSession(cur);
+      if (HOT.has(a)) {
+        post({ type: "action", id: cur.id, a, label, path: safe(() => location.pathname, ""), tag: cur.tag });
+      }
     };
 
     // Key-action clicks (capture phase so we see it before navigation).
@@ -266,7 +266,6 @@ export default function VisitorPing() {
         id: s.id,
         path: pathname,
         source: readSource(),
-        visit: s.visit,
         tag: s.tag,
         referrer: safe(() => document.referrer, "") || "",
         tz: tz(),

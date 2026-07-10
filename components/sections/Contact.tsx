@@ -280,6 +280,14 @@ export default function Contact({
           </div>
 
         </div>
+
+        {/* Privacy disclosure — first-party visit analytics */}
+        <div className="max-w-5xl mx-auto px-6 pb-6 -mt-1">
+          <p className={`font-manrope text-[10px] leading-relaxed ${light ? "text-[#1f7a4d]/45" : "text-[#1A1A1A]/40"}`}>
+            This site logs anonymous visit data — pages viewed, approximate location, device, and on-page
+            interactions — for analytics. No personal details are collected unless you reach out directly.
+          </p>
+        </div>
       </div>
     </section>
   );
