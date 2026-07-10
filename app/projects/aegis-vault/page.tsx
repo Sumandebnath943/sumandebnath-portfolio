@@ -129,7 +129,7 @@ export default function AegisVaultPage() {
         style={{ background: AEGIS.bg, color: AEGIS.text }}
       >
         {/* ════════════════════════════ HERO ════════════════════════════ */}
-        <section className="relative px-6 pt-36 pb-20 md:pt-44 md:pb-28 overflow-hidden">
+        <section className="relative px-6 pt-28 pb-16 md:pt-28 md:pb-24 overflow-hidden">
           {/* atmospheric emerald glow */}
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[900px] h-[560px] rounded-full blur-3xl" style={{ background: "radial-gradient(ellipse at top, rgba(34,197,94,0.12) 0%, transparent 70%)" }} />
@@ -145,13 +145,6 @@ export default function AegisVaultPage() {
           </div>
 
           <div className="relative max-w-6xl mx-auto">
-            <Reveal>
-              <a href="/projects" className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.24em] mb-8 transition-colors" style={{ color: AEGIS.faint }}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
-                Project Archive
-              </a>
-            </Reveal>
-
             <div className="flex flex-col items-center text-center">
               <Reveal delay={0.05}>
                 <span
@@ -163,24 +156,17 @@ export default function AegisVaultPage() {
                 </span>
               </Reveal>
 
-              {/* Wordmark lockup — seated on a light brand plate so the dark
-                  "AEGIS" reads against the near-black hero. h1 kept for SEO. */}
+              {/* Wordmark lockup — light-on-dark logo, shown directly. h1 kept for SEO. */}
               <h1 className="sr-only">AEGIS VAULT — zero-knowledge encrypted notepad</h1>
               <Reveal delay={0.12}>
-                <div
-                  aria-hidden
-                  className="mt-8 inline-flex items-center justify-center rounded-[1.75rem] px-8 py-8 sm:px-14 sm:py-10"
-                  style={{ background: "linear-gradient(160deg,#ffffff 0%,#e9f6df 100%)", boxShadow: "0 44px 90px -34px rgba(34,197,94,0.42), inset 0 0 0 1px rgba(255,255,255,0.7)" }}
-                >
-                  <Image
-                    src="/aegis-vault/logo.png"
-                    alt="AEGIS VAULT"
-                    width={1406}
-                    height={360}
-                    priority
-                    className="w-[min(640px,78vw)] h-auto"
-                  />
-                </div>
+                <Image
+                  src="/aegis-vault/logo.png"
+                  alt="AEGIS VAULT"
+                  width={1361}
+                  height={390}
+                  priority
+                  className="mt-6 md:mt-7 w-[min(760px,90vw)] h-auto drop-shadow-[0_18px_50px_rgba(34,197,94,0.22)]"
+                />
               </Reveal>
 
               <Reveal delay={0.18}>
@@ -233,8 +219,8 @@ export default function AegisVaultPage() {
               </Reveal>
 
               {/* hero screenshot — full width beneath the lockup */}
-              <Reveal delay={0.42}>
-                <div className="w-full max-w-5xl mt-16">
+              <Reveal delay={0.42} className="w-full">
+                <div className="w-full max-w-6xl mt-12">
                   <ScreenshotFrame
                     src="/aegis-vault/cover.png"
                     label="aegisnote.houseofnamus.com"
@@ -408,20 +394,28 @@ export default function AegisVaultPage() {
                 From vault creation to auto-lock.
               </h2>
             </Reveal>
-            <div className="grid md:grid-cols-2 gap-5 items-start">
-              {/* portrait: create vault */}
-              <div className="md:row-span-2">
-                <Reveal>
-                  <ScreenshotFrame {...SHOTS[0]} />
-                </Reveal>
-              </div>
-              <Reveal delay={0.05}>
+            {/* Vault creation — portrait focal shot */}
+            <Reveal>
+              <figure className="max-w-sm mx-auto">
+                <ScreenshotFrame {...SHOTS[0]} />
+                <figcaption className="font-manrope text-[12.5px] leading-relaxed text-center mt-4" style={{ color: AEGIS.muted }}>
+                  Vault creation — a live strength checklist and entropy meter gate the
+                  encrypted vault before it can be made.
+                </figcaption>
+              </figure>
+            </Reveal>
+
+            {/* Encrypted editor + auto-lock — matched landscapes */}
+            <div className="grid md:grid-cols-2 gap-5 mt-10">
+              <Reveal>
                 <ScreenshotFrame {...SHOTS[1]} />
               </Reveal>
-              <Reveal delay={0.1}>
+              <Reveal delay={0.05}>
                 <ScreenshotFrame {...SHOTS[2]} />
               </Reveal>
             </div>
+
+            {/* Security settings + live encryption states */}
             <div className="grid md:grid-cols-2 gap-5 items-stretch mt-5">
               <Reveal>
                 <ScreenshotFrame {...SHOTS[3]} />
