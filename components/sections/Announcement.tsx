@@ -11,6 +11,12 @@ type Announcement = {
 
 const announcements: Announcement[] = [
   {
+    title: "AEGIS VAULT",
+    desc: "A zero-knowledge encrypted notepad — encrypted in your browser, unreadable to the server. Argon2id + AES-256-GCM.",
+    href: "/projects/aegis-vault",
+    color: "#8FE04E",
+  },
+  {
     title: "Migi",
     desc: "A personal suite of 30+ autonomous AI agents — finds work, tracks money, launches what I ship — plus a secure dashboard. Built with Claude Code.",
     href: "/agents/migi",
