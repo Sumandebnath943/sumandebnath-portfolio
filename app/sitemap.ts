@@ -16,6 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE}/learnings`, changeFrequency: "monthly" as const, priority: 0.9 },
     { url: `${SITE}/philosophy`, changeFrequency: "monthly" as const, priority: 0.8 },
     { url: `${SITE}/faq`, changeFrequency: "monthly" as const, priority: 0.8 },
+    { url: `${SITE}/projects/aegis-vault`, changeFrequency: "monthly" as const, priority: 0.8 },
     { url: `${SITE}/agents/pact-agent`, changeFrequency: "monthly" as const, priority: 0.8 },
     { url: `${SITE}/agents/pentashell`, changeFrequency: "monthly" as const, priority: 0.8 },
     { url: `${SITE}/agents/migi`, changeFrequency: "monthly" as const, priority: 0.8 },

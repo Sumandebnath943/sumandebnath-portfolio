@@ -131,6 +131,22 @@ export const archiveProjects: ArchiveProject[] = [
     flagshipNote: "Featured in flagship systems.",
   },
   {
+    slug: "aegis-vault",
+    name: "AEGIS VAULT",
+    positioning: "A password manager's security model, applied to note-taking.",
+    description:
+      "A zero-knowledge notes app — every note is encrypted in the browser with Argon2id + AES-256-GCM before it ever leaves your device. The server stores nothing but ciphertext; a full database breach would reveal nothing without your master password.",
+    type: "Zero-Knowledge Encrypted Notes",
+    status: "Live",
+    stack: ["Next.js 16", "Supabase", "Web Crypto", "PostgreSQL / RLS"],
+    accent: "#8FE04E",
+    accentB: "#22C55E",
+    liveUrl: "https://aegisnote.houseofnamus.com/",
+    detailUrl: "/projects/aegis-vault",
+    poster: "/aegis-vault/cover.png",
+    kind: "secondary",
+  },
+  {
     slug: "slide-doctor",
     name: "Slide Doctor",
     positioning: "Presentation intelligence meets operational storytelling.",

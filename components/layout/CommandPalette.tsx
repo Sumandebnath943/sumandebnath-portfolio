@@ -80,6 +80,14 @@ const commands: Command[] = [
     icon: "🔔",
   },
   {
+    id: "aegis-vault",
+    command: "/aegis",
+    label: "AEGIS VAULT",
+    description: "Zero-knowledge encrypted notepad — Argon2id + AES-256-GCM, unreadable to the server",
+    href: "/projects/aegis-vault",
+    icon: "🛡",
+  },
+  {
     id: "stack",
     command: "/stack",
     label: "Systems Stack",
