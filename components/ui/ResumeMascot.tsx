@@ -117,6 +117,12 @@ export default function ResumeMascot() {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      // Fire an intent signal for the visitor notifier (additive, best-effort).
+      try {
+        window.dispatchEvent(
+          new CustomEvent("vp:action", { detail: { a: "resume", label: "downloaded Résumé" } }),
+        );
+      } catch {}
       
       setTimeout(() => {
         setIsCaught(false);
