@@ -224,9 +224,6 @@ export default function PixelVillePage() {
                   🏙️ Start your village
                   <span className="transition-transform group-hover:translate-x-0.5">→</span>
                 </a>
-                <a href={LINKS.source} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full px-7 py-3.5 font-manrope font-semibold text-sm transition-colors hover:border-white/25" style={{ background: PV.panel, border: `1.5px solid ${PV.line}`, color: PV.snow }}>
-                  View the source →
-                </a>
               </div>
             </Reveal>
 
@@ -720,9 +717,6 @@ export default function PixelVillePage() {
                   <a href={LINKS.live} target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-2 rounded-full px-7 py-3.5 font-manrope font-bold text-sm transition-transform hover:-translate-y-0.5" style={{ background: PV.gold, color: PV.night, boxShadow: "0 18px 40px -16px rgba(245,185,74,0.6)" }}>
                     🏙️ Play PixelVille now
                     <span className="transition-transform group-hover:translate-x-0.5">→</span>
-                  </a>
-                  <a href={LINKS.source} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full px-7 py-3.5 font-manrope font-semibold text-sm transition-colors" style={{ background: "rgba(8,11,22,0.5)", border: `1.5px solid ${PV.line}`, color: PV.snow }}>
-                    View the source →
                   </a>
                 </div>
               </Reveal>
