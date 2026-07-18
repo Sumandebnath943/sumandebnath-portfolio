@@ -23,6 +23,12 @@ const announcements: Announcement[] = [
     color: "#C6F24E",
   },
   {
+    title: "PixelVille",
+    desc: "A self-governing pixel-art village where citizens have memory, knowledge and minds — they elect mayors and rebuild the town themselves. Zero dependencies, zero image assets.",
+    href: "/games/pixelville",
+    color: "#F5B94A",
+  },
+  {
     title: "Qdex-1.5B",
     desc: "A 1.5B coding LLM, QLoRA-tuned to follow instructions — runs locally on a 16GB laptop, no GPU.",
     href: "/llms/qdex-1.5b",

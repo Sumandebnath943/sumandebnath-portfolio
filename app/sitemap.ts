@@ -23,6 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE}/slms/pentacmd`, changeFrequency: "monthly" as const, priority: 0.8 },
     { url: `${SITE}/llms/qdex-1.5b`, changeFrequency: "monthly" as const, priority: 0.8 },
     { url: `${SITE}/apps/forget-anything`, changeFrequency: "monthly" as const, priority: 0.8 },
+    { url: `${SITE}/games/pixelville`, changeFrequency: "monthly" as const, priority: 0.8 },
     { url: `${SITE}/fun-apps`, changeFrequency: "monthly" as const, priority: 0.7 },
 
   ].map((p) => ({ ...p, lastModified: LAST_CONTENT_UPDATE }));

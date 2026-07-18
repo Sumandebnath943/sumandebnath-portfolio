@@ -538,3 +538,44 @@ body {
 @media (prefers-reduced-motion: reduce) {
   [class*="fa-"] { animation: none !important; }
 }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   PixelVille (/games/pixelville) — cozy game-landing motion.
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* Auto-road pathfinder drawing itself, then holding, then resetting. */
+@keyframes pv-draw {
+  0%        { stroke-dashoffset: var(--pv-len, 460); }
+  55%, 82%  { stroke-dashoffset: 0; }
+  100%      { stroke-dashoffset: 0; }
+}
+
+/* Campaign-banner sway on the wire. */
+@keyframes pv-sway {
+  0%, 100% { transform: rotate(-4deg); }
+  50%      { transform: rotate(4deg); }
+}
+
+/* Season pip gentle bob. */
+@keyframes pv-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+/* Slow horizontal drift for hero pixel clouds. */
+@keyframes pv-drift { 0% { transform: translateX(-10px); } 100% { transform: translateX(30px); } }
+
+/* Twinkle for hero stars. */
+@keyframes pv-twinkle { 0%, 100% { opacity: 0.9; } 50% { opacity: 0.25; } }
+
+/* Live-dot blink. */
+@keyframes pv-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+
+/* Card lift on hover. */
+.pv-card { transition: transform .35s cubic-bezier(.22,1,.36,1), border-color .35s, box-shadow .35s; }
+.pv-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(245,185,74,0.5);
+  box-shadow: 0 26px 60px -34px rgba(0,0,0,0.6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [class*="pv-"] { animation: none !important; }
+}

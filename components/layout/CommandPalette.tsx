@@ -80,6 +80,14 @@ const commands: Command[] = [
     icon: "🔔",
   },
   {
+    id: "pixelville",
+    command: "/pixelville",
+    label: "PixelVille",
+    description: "A self-governing pixel-art village where citizens remember, decide and rebuild — zero deps, zero images",
+    href: "/games/pixelville",
+    icon: "🏙",
+  },
+  {
     id: "aegis-vault",
     command: "/aegis",
     label: "AEGIS VAULT",

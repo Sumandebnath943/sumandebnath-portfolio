@@ -61,6 +61,13 @@ const navLinks: NavLink[] = [
           { label: "Forget Anything?", href: "/apps/forget-anything", color: "#DAA520" },
         ],
       },
+      {
+        label: "Games",
+        color: "#F5B94A",
+        submenus: [
+          { label: "Pixelville", href: "/games/pixelville", color: "#F5B94A" },
+        ],
+      },
 
     ],
   },
