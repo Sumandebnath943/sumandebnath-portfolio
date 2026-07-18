@@ -31,7 +31,7 @@ export const PV = {
 } as const;
 
 export const LINKS = {
-  live: "https://pixelville.vercel.app",
+  live: "https://pixelville.houseofnamus.com", // canonical custom domain for the live game
   source: "https://github.com/Sumandebnath943/pixelville",
 } as const;
 
