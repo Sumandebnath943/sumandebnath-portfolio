@@ -5,6 +5,7 @@ import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import { Reveal, StatCounter } from "@/components/penta/PentaWidgets";
 import { DashboardShowcase, ArchitectureFlow } from "@/components/migi/MigiVisuals";
+import MigiVideo from "@/components/migi/MigiVideo";
 import {
   MIGI,
   STATS,
@@ -339,6 +340,28 @@ export default function MigiPage() {
                 </Reveal>
               );
             })}
+          </div>
+        </section>
+
+        {/* ════════════════════════════ HERO VIDEO · teaser ════════════════════════════ */}
+        <section className="px-6 pt-16 md:pt-20">
+          <div className="max-w-5xl mx-auto">
+            <Reveal>
+              <div className="flex items-center gap-3 mb-5">
+                <span className="font-dmmono text-[11px] rounded px-1.5 py-0.5 leading-none" style={{ color: MIGI.ink, background: MIGI.lime }}>▶</span>
+                <span className="w-1.5 h-1.5 rounded-full" style={{ background: MIGI.green }} />
+                <span className="font-dmmono text-[10px] uppercase tracking-[0.3em]" style={{ color: MIGI.muted }}>see it in 60 seconds</span>
+              </div>
+            </Reveal>
+            <Reveal delay={0.06}>
+              <MigiVideo
+                videoId="E1rvfaBMm1I"
+                title="Migi — a 60-second teaser"
+                label="teaser"
+                ctaHref="#walkthrough"
+                ctaLabel="Watch the full walk-through"
+              />
+            </Reveal>
           </div>
         </section>
 
@@ -1123,6 +1146,29 @@ export default function MigiPage() {
             </div>
 
             <Reveal delay={0.05}><ChipRow chips={FINANCE_CHIPS} /></Reveal>
+          </div>
+        </section>
+
+        {/* ════════════════════════════ ★ · FULL WALK-THROUGH VIDEO ════════════════════════════ */}
+        <section id="walkthrough" className="px-6 py-20 md:py-28 scroll-mt-24" style={{ background: MIGI.creamDeep, borderTop: `1px solid ${MIGI.line}`, borderBottom: `1px solid ${MIGI.line}` }}>
+          <div className="max-w-5xl mx-auto">
+            <Reveal>
+              <SectionLabel index="▶" kicker="the full walk-through" />
+              <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
+                See the whole thing{" "}
+                <span className="relative inline-block">
+                  <span className="relative z-10">in motion.</span>
+                  <span aria-hidden className="absolute left-0 right-0 bottom-1 h-3 md:h-4 -z-0" style={{ background: MIGI.lime }} />
+                </span>
+              </h2>
+              <p className="text-[15px] leading-relaxed max-w-2xl mb-10" style={{ color: MIGI.muted }}>
+                The complete tour — the three identities, the dashboard, the agents and the routing,
+                all in one take. Press play and watch Migi actually run.
+              </p>
+            </Reveal>
+            <Reveal delay={0.06}>
+              <MigiVideo videoId="Qa4R4TKUTfs" title="Migi — full walk-through" label="full walk-through" />
+            </Reveal>
           </div>
         </section>
 
