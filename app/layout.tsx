@@ -347,13 +347,15 @@ export default function RootLayout({
         <Analytics />
         <SpeedInsights />
 
-        {/* Google Analytics 4 — behavioral/event tracking (portfolio property). */}
+        {/* Google Analytics 4 — behavioral/event tracking.
+            G-9D3BDPZH49 : portfolio property
+            G-52W6W0B4W6 : Google Ads-linked property */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-9D3BDPZH49"
           strategy="afterInteractive"
         />
         <Script id="ga4-init" strategy="afterInteractive">
-          {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-9D3BDPZH49');`}
+          {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-9D3BDPZH49');gtag('config','G-52W6W0B4W6');`}
         </Script>
       </body>
     </html>
