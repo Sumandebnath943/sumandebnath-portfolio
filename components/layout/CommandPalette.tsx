@@ -80,6 +80,14 @@ const commands: Command[] = [
     icon: "🔔",
   },
   {
+    id: "migi-app",
+    command: "/migiapp",
+    label: "Migi Companion App",
+    description: "Private mobile access layer for the Migi agent fleet",
+    href: "/apps/migi-app",
+    icon: "📱",
+  },
+  {
     id: "pixelville",
     command: "/pixelville",
     label: "PixelVille",

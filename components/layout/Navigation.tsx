@@ -59,6 +59,7 @@ const navLinks: NavLink[] = [
         color: "#50C878",
         submenus: [
           { label: "Forget Anything?", href: "/apps/forget-anything", color: "#DAA520" },
+          { label: "MIGI Companion App", href: "/apps/migi-app", color: "#C6F24E" },
         ],
       },
       {
