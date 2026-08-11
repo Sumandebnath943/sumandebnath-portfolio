@@ -82,8 +82,8 @@ const commands: Command[] = [
   {
     id: "migi-app",
     command: "/migiapp",
-    label: "Migi Companion App",
-    description: "Private mobile access layer for the Migi agent fleet",
+    label: "MIGI Android App",
+    description: "Standalone native Android control room for the MIGI agent fleet",
     href: "/apps/migi-app",
     icon: "📱",
   },
