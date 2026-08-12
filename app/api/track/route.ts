@@ -39,6 +39,10 @@ type Payload = {
   // Telegram message id of this visit's arrival alert, so later messages can be
   // sent as replies to it and thread together.
   mid?: number;
+  // Telegram message id of this visit's journey card. The browser is handed this
+  // at arrival and gives it back on every summary, so each update rewrites that
+  // one message instead of posting another.
+  smid?: number;
   // Device/behaviour signals used for the human-vs-bot read.
   screen?: string;
   hw?: number;
@@ -343,6 +347,42 @@ async function sendTelegram(
   return data?.result?.message_id;
 }
 
+// Rewrite a message already in the chat. Telegram does not re-notify on an edit,
+// so the journey card can be brought up to date as often as we like without the
+// phone buzzing again. Returns false if the message is gone (deleted by hand, or
+// sent by a previous bot token), so the caller can fall back to posting.
+async function editTelegram(
+  token: string,
+  chatId: string,
+  messageId: number,
+  text: string,
+): Promise<boolean> {
+  try {
+    const res = await fetch(`https://api.telegram.org/bot${token}/editMessageText`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: chatId,
+        message_id: messageId,
+        text,
+        parse_mode: "HTML",
+        disable_web_page_preview: true,
+      }),
+    });
+    const data = (await res.json().catch(() => null)) as { ok?: boolean } | null;
+    return data?.ok === true;
+  } catch {
+    return false;
+  }
+}
+
+// Reports already posted, so a visit that ends more than once (a reload looks
+// exactly like a departure at unload) updates its report instead of stacking a
+// second one. Per-instance and therefore best-effort, like the rate limiter —
+// the journey card above is the part that is guaranteed, because the browser
+// carries its message id rather than relying on this.
+const reportMsg = new Map<string, { mid: number; pages: number }>();
+
 // --- handler ---------------------------------------------------------------
 
 export async function POST(request: NextRequest) {
@@ -555,7 +595,22 @@ export async function POST(request: NextRequest) {
 
           const d = [head, behaviour, who].filter(Boolean).join("\n\n");
 
-          await sendTelegram(token, chatId, d, replyTo);
+          // A visit can "end" more than once, because a reload is
+          // indistinguishable from leaving at unload. Rather than post a second
+          // report, rewrite the first — and ignore an ending that knows less
+          // than the one already reported.
+          const key = id || "?";
+          const prior = reportMsg.get(key);
+          if (prior && count <= prior.pages) return;
+          if (prior && (await editTelegram(token, chatId, prior.mid, d))) {
+            reportMsg.set(key, { mid: prior.mid, pages: count });
+            return;
+          }
+          const reportId = await sendTelegram(token, chatId, d, replyTo);
+          if (reportId) {
+            if (reportMsg.size > 500) reportMsg.clear();
+            reportMsg.set(key, { mid: reportId, pages: count });
+          }
         } catch {
           // A failed report must never surface anywhere.
         }
@@ -591,12 +646,34 @@ export async function POST(request: NextRequest) {
       text = lines.join("\n");
     }
 
-    const sentId = await sendTelegram(token, chatId, text, replyTo);
+    // A summary rewrites the visit's own journey card rather than posting a new
+    // message. This is what makes a reload harmless: it reports "left" with a
+    // partial journey, the visit carries on, and the next update overwrites the
+    // card with the complete one. Falls back to posting if the card is gone.
+    const cardId = typeof body.smid === "number" ? body.smid : undefined;
+    let sentId: number | undefined;
+    if (body.type === "summary" && cardId) {
+      sentId = (await editTelegram(token, chatId, cardId, text))
+        ? cardId
+        : await sendTelegram(token, chatId, text, replyTo);
+    } else {
+      sentId = await sendTelegram(token, chatId, text, replyTo);
+    }
 
     // The arrival message owns the thread, so hand its id back to the browser;
     // it quotes it on every later message for this visit.
     if (isArrival && sentId) {
-      return new Response(JSON.stringify({ mid: sentId }), {
+      // Open the visit's journey card straight away and hand its id back with
+      // the thread id. Creating it here, while the browser can still read a
+      // response, is the whole trick: at unload the page can only fire a beacon
+      // and cannot learn an id, so it has to already hold one.
+      const cardMid = await sendTelegram(
+        token,
+        chatId,
+        `🧭 <b>Visit in progress</b> · <code>${id || "?"}</code>`,
+        sentId,
+      );
+      return new Response(JSON.stringify({ mid: sentId, smid: cardMid }), {
         status: 200,
         headers: { "content-type": "application/json" },
       });

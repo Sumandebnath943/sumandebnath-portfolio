@@ -21,10 +21,6 @@ import { usePathname } from "next/navigation";
 const SS_KEY = "vp_session";
 const MUTE_KEY = "vp_notrack";
 const VISITOR_KEY = "vp_visitor";
-// Holds the id of the visit already summarised. Kept apart from the session
-// blob so a later saveSession — an action click, a scroll — cannot overwrite it,
-// and so the guard survives the page loads a visit spans.
-const SUMMARY_KEY = "vp_summarised";
 
 // How long a tab must stay hidden before it counts as "visitor left". Below
 // this it's a tab-switch, and the visit is still going.
@@ -47,6 +43,7 @@ type Session = {
   tag: string;
   interacted: boolean; // any scroll/pointer/key input seen this visit
   mid?: number; // Telegram id of the arrival alert; later messages reply to it
+  smid?: number; // Telegram id of this visit's journey card, rewritten as it goes
 };
 // Per-browser visit history. The one piece of state that outlives the tab.
 type Visitor = { first: number; last: number; count: number };
@@ -152,7 +149,7 @@ function saveSession(s: Session): void {
 // `onReply` exists only for the arrival call, which needs the Telegram message
 // id back. Beacons can't read responses, but they don't need to — they only
 // echo the id the arrival already stored.
-function post(body: unknown, onReply?: (data: { mid?: number }) => void): void {
+function post(body: unknown, onReply?: (data: { mid?: number; smid?: number }) => void): void {
   safe(() => {
     fetch("/api/track", {
       method: "POST",
@@ -162,7 +159,7 @@ function post(body: unknown, onReply?: (data: { mid?: number }) => void): void {
     })
       .then((r) => (onReply && r.ok ? r.json().catch(() => null) : null))
       .then((d) => {
-        if (d && onReply) onReply(d as { mid?: number });
+        if (d && onReply) onReply(d as { mid?: number; smid?: number });
       })
       .catch(() => {});
   }, undefined);
@@ -408,10 +405,13 @@ export default function VisitorPing() {
         daysSince,
       }, (d) => {
         const cur = sessionRef.current;
-        if (cur && typeof d?.mid === "number") {
-          cur.mid = d.mid;
-          saveSession(cur);
-        }
+        if (!cur) return;
+        if (typeof d?.mid === "number") cur.mid = d.mid;
+        // The id of this visit's journey card. Captured here because this is the
+        // only send whose response we can read — at unload we can fire a beacon
+        // and nothing more, so the id has to be in hand before then.
+        if (typeof d?.smid === "number") cur.smid = d.smid;
+        if (typeof d?.mid === "number" || typeof d?.smid === "number") saveSession(cur);
       });
     }
 
@@ -423,12 +423,11 @@ export default function VisitorPing() {
     if (summarySentRef.current) return;
     const s = sessionRef.current || loadSession();
     if (!s || s.entries.length === 0) return;
-    // Belt and braces: the ref stops a double send within this page, the stored
-    // id stops one across page loads. At most one summary per visit, whatever
-    // route we got here by.
-    if (safe(() => sessionStorage.getItem(SUMMARY_KEY) === s.id, false)) return;
+    // The ref stops a double send within this page. There is deliberately no
+    // across-page guard: a visit that resumes after a reload must be allowed to
+    // send again, because that later send is the one carrying the complete
+    // journey. It rewrites the same card rather than adding a message.
     summarySentRef.current = true;
-    safe(() => sessionStorage.setItem(SUMMARY_KEY, s.id), undefined);
 
     // Measure to when they actually left, not to when the grace timer fired.
     const end = leftAtRef.current || Date.now();
@@ -447,6 +446,7 @@ export default function VisitorPing() {
       id: s.id,
       tag: s.tag,
       mid: s.mid,
+      smid: s.smid,
       totalMs: Math.max(0, end - s.start),
       activeMs: s.activeMs,
       pageCount: s.entries.length,
