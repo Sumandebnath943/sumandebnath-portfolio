@@ -32,6 +32,14 @@ type Payload = {
   pageCount?: number;
   pages?: Page[];
   actions?: Action[];
+  // Device/behaviour signals used for the human-vs-bot read.
+  screen?: string;
+  hw?: number;
+  wd?: boolean;
+  interacted?: boolean;
+  // Returning-visitor counters (per browser, from localStorage).
+  visits?: number;
+  daysSince?: number;
 };
 
 // --- helpers ---------------------------------------------------------------
@@ -158,6 +166,103 @@ async function reverseDns(ip: string): Promise<string> {
   }
 }
 
+// AS names change rarely and visitors cluster onto a handful of ISPs, so a
+// process-lifetime cache keeps this at roughly zero lookups in steady state.
+const asnNameCache = new Map<string, string>();
+
+// Team Cymru's ASN registry, over DNS. The query carries only the AS *number* —
+// never the visitor's IP — so nothing identifying about them leaves this server.
+async function asnName(asn: string): Promise<string> {
+  if (!asn || !/^\d{1,10}$/.test(asn)) return "";
+  const cached = asnNameCache.get(asn);
+  if (cached !== undefined) return cached;
+
+  let name = "";
+  try {
+    const txt = (await Promise.race([
+      dns.resolveTxt(`AS${asn}.asn.cymru.com`),
+      new Promise<string[][]>((_, rej) => setTimeout(() => rej(new Error("timeout")), 1200)),
+    ])) as string[][];
+    // "140158 | IN | apnic | 2020-02-14 | NAII-AS-IN - Net Access Internet India Pvt Ltd, IN"
+    const org = (txt?.[0]?.join("") || "").split("|")[4]?.trim() || "";
+    // Drop the registry handle prefix and trailing country code.
+    name = org.replace(/^[A-Z0-9-]+\s+-\s+/, "").replace(/,\s*[A-Z]{2}$/, "").trim();
+  } catch {
+    name = "";
+  }
+
+  if (asnNameCache.size > 500) asnNameCache.clear();
+  asnNameCache.set(asn, name);
+  return name;
+}
+
+// Networks that belong to hosting providers rather than people. A visit from one
+// is far more likely to be a scraper than a recruiter.
+const HOSTING_RE =
+  /amazon|aws|google llc|microsoft|azure|digitalocean|linode|ovh|hetzner|vultr|cloudflare|oracle|alibaba|tencent|scaleway|contabo|leaseweb|choopa|host|datacenter|data center|vps|cloud/i;
+
+// tzdata carries several names for the same zone. Without folding these, every
+// Indian visitor whose browser reports "Asia/Calcutta" would look like a VPN.
+const TZ_ALIASES: Record<string, string> = {
+  "asia/calcutta": "asia/kolkata",
+  "asia/katmandu": "asia/kathmandu",
+  "asia/rangoon": "asia/yangon",
+  "asia/saigon": "asia/ho_chi_minh",
+  "asia/dacca": "asia/dhaka",
+  "europe/kiev": "europe/kyiv",
+  "us/eastern": "america/new_york",
+  "us/central": "america/chicago",
+  "us/mountain": "america/denver",
+  "us/pacific": "america/los_angeles",
+};
+function canonTz(tz: string): string {
+  const key = (tz || "").trim().toLowerCase();
+  return TZ_ALIASES[key] || key;
+}
+
+// Human-vs-bot read. Deliberately three-way: a wrong "bot" verdict costs a real
+// hiring signal, while a wrong "human" verdict costs one junk notification — so
+// the thresholds lean toward calling things human.
+function classify(o: {
+  ua: string;
+  wd?: boolean;
+  hw?: number;
+  screen?: string;
+  interacted?: boolean;
+  org: string;
+}): { label: string; why: string } {
+  const why: string[] = [];
+  let score = 0;
+
+  if (/headless|phantom|electron|puppeteer|playwright/i.test(o.ua)) {
+    score += 3;
+    why.push("headless UA");
+  }
+  if (o.wd === true) {
+    score += 3;
+    why.push("webdriver");
+  }
+  if (o.hw === 0) {
+    score += 2;
+    why.push("0 CPU cores");
+  }
+  if (o.screen === "0×0") {
+    score += 2;
+    why.push("no screen");
+  }
+  if (o.org && HOSTING_RE.test(o.org)) {
+    score += 2;
+    why.push("datacenter network");
+  }
+  if (o.interacted === false) {
+    score += 1;
+    why.push("no interaction");
+  }
+
+  const label = score >= 3 ? "🤖 automated" : score >= 1 ? "❓ unclear" : "👤 human";
+  return { label, why: why.join(", ") };
+}
+
 async function sendTelegram(token: string, chatId: string, text: string): Promise<void> {
   await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
     method: "POST",
@@ -195,7 +300,11 @@ export async function POST(request: NextRequest) {
     const city = decode(h.get("x-vercel-ip-city"));
     const region = decode(h.get("x-vercel-ip-country-region"));
     const country = decode(h.get("x-vercel-ip-country"));
+    const postal = decode(h.get("x-vercel-ip-postal-code"));
     const location = [city, region, country].filter(Boolean).join(", ") || "Unknown location";
+    // Unlike lat/lng — which is a fixed city centroid shared by every visitor
+    // from that city — the postal code actually varies within a metro.
+    const placed = postal ? `${postal} · ${location}` : location;
     const lat = h.get("x-vercel-ip-latitude");
     const lng = h.get("x-vercel-ip-longitude");
     const mapLink = lat && lng ? `https://www.google.com/maps?q=${lat},${lng}` : "";
@@ -207,30 +316,69 @@ export async function POST(request: NextRequest) {
     const tzName = (body.tz || "").slice(0, 60);
     const tagLine = (body.tag || "").slice(0, 60);
 
+    // Vercel hands us the AS number directly; only the name needs resolving.
+    const asn = (h.get("x-vercel-ip-as-number") || "").trim();
+    const org = await asnName(asn);
+    const network = org ? `${org} (AS${asn})` : asn ? `AS${asn}` : "";
+
+    // A browser reporting a timezone that disagrees with the one implied by its
+    // IP usually means a VPN — or a genuinely remote reviewer.
+    const ipTz = h.get("x-vercel-ip-timezone") || "";
+    const tzMismatch =
+      tzName && ipTz && canonTz(tzName) !== canonTz(ipTz) ? `${tzName} vs ${ipTz} by IP` : "";
+
+    const verdict = classify({
+      ua,
+      wd: body.wd,
+      hw: body.hw,
+      screen: body.screen,
+      interacted: body.interacted,
+      org,
+    });
+    // Stay silent when the visitor looks human — that's the common case, and
+    // labelling it would just add a line to every message.
+    const flag = verdict.label.startsWith("👤")
+      ? ""
+      : ` · ${verdict.label}${verdict.why ? ` (${verdict.why})` : ""}`;
+
+    const visits = typeof body.visits === "number" ? body.visits : 0;
+    const daysSince = typeof body.daysSince === "number" ? body.daysSince : -1;
+    const returning =
+      visits > 1
+        ? `🔁 <b>Returning:</b> visit #${visits}${
+            daysSince === 0 ? " · earlier today"
+            : daysSince > 0 ? ` · last seen ${daysSince}d ago`
+            : ""
+          }`
+        : "";
+
     let text = "";
 
     if (body.type === "mute") {
       text = [
         "🔕 <b>Alerts muted for this browser</b>",
         `📱 ${esc(device)}`,
-        `📍 ${esc(location)}`,
+        `📍 ${esc(placed)}`,
         "<i>This device won't trigger visitor alerts. Use ?notrack=0 to undo.</i>",
       ].join("\n");
     } else if (body.type === "unmute") {
       text = [
         "🔔 <b>Alerts re-enabled for this browser</b>",
         `📱 ${esc(device)}`,
-        `📍 ${esc(location)}`,
+        `📍 ${esc(placed)}`,
       ].join("\n");
     } else if (body.type === "action") {
       // Real-time high-intent alert (e.g. résumé download, email/phone click).
       const label = esc((body.label || body.a || "action").slice(0, 80));
       const path = esc((body.path || "").slice(0, 200));
       text = [
-        `🔥 <b>Hot action</b> · <code>${id || "?"}</code>${tagLine ? ` · 🏷️ ${esc(tagLine)}` : ""}`,
+        `🔥 <b>Hot action</b> · <code>${id || "?"}</code>${tagLine ? ` · 🏷️ ${esc(tagLine)}` : ""}${flag}`,
         `⭐ <b>${label}</b>${path ? ` — on ${path}` : ""}`,
-        `📍 ${esc(location)} · 📱 ${esc(device)}`,
-      ].join("\n");
+        `📍 ${esc(placed)} · 📱 ${esc(device)}`,
+        network ? `🏢 ${esc(network)}` : "",
+      ]
+        .filter(Boolean)
+        .join("\n");
     } else if (body.type === "summary") {
       const pages = Array.isArray(body.pages) ? body.pages : [];
       const journey =
@@ -248,11 +396,13 @@ export async function POST(request: NextRequest) {
       const count = body.pageCount ?? pages.length;
       const active = typeof body.activeMs === "number" ? ` · 👁️ ${human(body.activeMs)} active` : "";
       text = [
-        `👋 <b>Visitor left</b> · <code>${id || "?"}</code>${tagLine ? ` · 🏷️ ${esc(tagLine)}` : ""}`,
+        `👋 <b>Visitor left</b> · <code>${id || "?"}</code>${tagLine ? ` · 🏷️ ${esc(tagLine)}` : ""}${flag}`,
         `🧭 <b>Journey:</b> ${journey}`,
         actionLine,
         `📄 ${count} page${count === 1 ? "" : "s"} · ⏱️ <b>${human(body.totalMs || 0)}</b>${active}`,
-        `📍 ${esc(location)} · 📱 ${esc(device)}`,
+        returning,
+        `📍 ${esc(placed)} · 📱 ${esc(device)}`,
+        network ? `🏢 ${esc(network)}` : "",
       ]
         .filter(Boolean)
         .join("\n");
@@ -265,15 +415,22 @@ export async function POST(request: NextRequest) {
       const isp = await reverseDns(ip);
       const t = localTime(tzName);
 
+      const screen = (body.screen || "").slice(0, 24);
+
       const lines = [
-        `🔔 <b>New visitor</b> · <code>${id || "?"}</code>${tagLine ? ` · 🏷️ ${esc(tagLine)}` : ""}`,
+        `🔔 <b>New visitor</b> · <code>${id || "?"}</code>${tagLine ? ` · 🏷️ ${esc(tagLine)}` : ""}${flag}`,
         `📄 <b>Entered on:</b> ${esc(path)}`,
         `🧭 <b>Source:</b> ${esc(source)}`,
-        `📍 <b>From:</b> ${esc(location)}${mapLink ? ` · <a href="${mapLink}">map</a>` : ""}`,
-        `🌐 <b>IP:</b> ${esc(ip)}${isp ? ` · ${esc(isp)}` : ""}`,
-        `📱 <b>Device:</b> ${esc(device)}`,
+        `📍 <b>From:</b> ${esc(placed)}${mapLink ? ` · <a href="${mapLink}">map</a>` : ""}`,
       ];
+      if (network) lines.push(`🏢 <b>Network:</b> ${esc(network)}`);
+      lines.push(
+        `🌐 <b>IP:</b> ${esc(ip)}${isp ? ` · ${esc(isp)}` : ""}`,
+        `📱 <b>Device:</b> ${esc(device)}${screen ? ` · ${esc(screen)}` : ""}`,
+      );
+      if (returning) lines.push(returning);
       if (t) lines.push(`🕑 <b>Their time:</b> ${esc(t)}${tzName ? ` (${esc(tzName)})` : ""}`);
+      if (tzMismatch) lines.push(`🛰️ <b>Timezone mismatch:</b> ${esc(tzMismatch)}`);
       if (langLine) lines.push(`🗣️ <b>Languages:</b> ${esc(langLine)}`);
       if (referrer) lines.push(`↩️ <b>Referrer:</b> ${esc(referrer)}`);
 

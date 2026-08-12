@@ -20,6 +20,7 @@ import { usePathname } from "next/navigation";
 
 const SS_KEY = "vp_session";
 const MUTE_KEY = "vp_notrack";
+const VISITOR_KEY = "vp_visitor";
 
 // How long a tab must stay hidden before it counts as "visitor left". Below
 // this it's a tab-switch, and the visit is still going.
@@ -40,7 +41,10 @@ type Session = {
   activeMs: number;
   lastActive: number; // timestamp of last visible->active transition
   tag: string;
+  interacted: boolean; // any scroll/pointer/key input seen this visit
 };
+// Per-browser visit history. The one piece of state that outlives the tab.
+type Visitor = { first: number; last: number; count: number };
 
 // --- small first-party readers ---------------------------------------------
 
@@ -54,6 +58,36 @@ function safe<T>(fn: () => T, fallback: T): T {
 const tz = () => safe(() => Intl.DateTimeFormat().resolvedOptions().timeZone || "", "");
 const langs = () =>
   safe(() => (navigator.languages || [navigator.language]).slice(0, 4).join(", "), "");
+
+// Physical screen, not the window — a headless run usually reports 0×0.
+const screenSize = () =>
+  safe(() => {
+    const dpr = window.devicePixelRatio || 1;
+    return `${screen.width}×${screen.height}${dpr !== 1 ? ` @${dpr}x` : ""}`;
+  }, "");
+const cores = () => safe(() => navigator.hardwareConcurrency ?? -1, -1);
+const webdriver = () => safe(() => navigator.webdriver === true, false);
+
+// Count this visit and report how long since the last one. Called once per
+// session, so a reload in the same tab doesn't inflate the count.
+function bumpVisitor(): { visits: number; daysSince: number } {
+  return safe(
+    () => {
+      const raw = localStorage.getItem(VISITOR_KEY);
+      const prev = raw ? (JSON.parse(raw) as Visitor) : null;
+      const now = Date.now();
+      const rec: Visitor = prev
+        ? { first: prev.first, last: now, count: (prev.count || 0) + 1 }
+        : { first: now, last: now, count: 1 };
+      localStorage.setItem(VISITOR_KEY, JSON.stringify(rec));
+      return {
+        visits: rec.count,
+        daysSince: prev?.last ? Math.floor((now - prev.last) / 86_400_000) : -1,
+      };
+    },
+    { visits: 1, daysSince: -1 },
+  );
+}
 
 function newId(): string {
   return safe(() => {
@@ -159,6 +193,7 @@ export default function VisitorPing() {
       s = {
         id: newId(), start: Date.now(), arrivalSent: false, entries: [],
         actions: [], activeMs: 0, lastActive: Date.now(), tag: readTag(),
+        interacted: false,
       };
       saveSession(s);
     }
@@ -209,8 +244,18 @@ export default function VisitorPing() {
       if (d.a && d.label) addAction(String(d.a), String(d.label));
     };
 
+    // Any genuine input. Scrapers that only fetch and parse never fire these,
+    // which makes it the single most useful human signal we collect.
+    const markInteracted = () => {
+      const cur = sessionRef.current;
+      if (!cur || cur.interacted) return;
+      cur.interacted = true;
+      saveSession(cur);
+    };
+
     // Max scroll depth for the current page.
     const onScroll = () => {
+      markInteracted();
       safe(() => {
         const cur = sessionRef.current;
         if (!cur || cur.entries.length === 0) return;
@@ -266,6 +311,9 @@ export default function VisitorPing() {
     window.addEventListener("scroll", onScroll, { passive: true });
     document.addEventListener("visibilitychange", onVisibility);
     window.addEventListener("pagehide", onPageHide);
+    document.addEventListener("pointerdown", markInteracted, { passive: true, once: true });
+    document.addEventListener("keydown", markInteracted, { once: true });
+    document.addEventListener("touchstart", markInteracted, { passive: true, once: true });
     return () => {
       document.removeEventListener("click", onClick, true);
       document.removeEventListener("copy", onCopy);
@@ -273,6 +321,9 @@ export default function VisitorPing() {
       window.removeEventListener("scroll", onScroll);
       document.removeEventListener("visibilitychange", onVisibility);
       window.removeEventListener("pagehide", onPageHide);
+      document.removeEventListener("pointerdown", markInteracted);
+      document.removeEventListener("keydown", markInteracted);
+      document.removeEventListener("touchstart", markInteracted);
       if (leaveTimerRef.current) clearTimeout(leaveTimerRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -291,6 +342,7 @@ export default function VisitorPing() {
 
     if (!s.arrivalSent) {
       s.arrivalSent = true;
+      const { visits, daysSince } = bumpVisitor();
       post({
         type: "arrival",
         id: s.id,
@@ -300,6 +352,11 @@ export default function VisitorPing() {
         referrer: safe(() => document.referrer, "") || "",
         tz: tz(),
         langs: langs(),
+        screen: screenSize(),
+        hw: cores(),
+        wd: webdriver(),
+        visits,
+        daysSince,
       });
     }
 
@@ -320,6 +377,11 @@ export default function VisitorPing() {
       return { path: e.path, ms: Math.max(0, next - e.enter), scroll: e.scroll };
     });
 
+    const seen = safe(() => {
+      const raw = localStorage.getItem(VISITOR_KEY);
+      return raw ? (JSON.parse(raw) as Visitor) : null;
+    }, null);
+
     beacon({
       type: "summary",
       id: s.id,
@@ -329,6 +391,13 @@ export default function VisitorPing() {
       pageCount: s.entries.length,
       pages,
       actions: s.actions.slice(0, 12),
+      screen: screenSize(),
+      hw: cores(),
+      wd: webdriver(),
+      // Sessions started before this field existed must read as "unknown", not
+      // "no interaction" — otherwise a deploy mid-visit mislabels real people.
+      interacted: typeof s.interacted === "boolean" ? s.interacted : undefined,
+      visits: seen?.count ?? 1,
     });
   }
 
