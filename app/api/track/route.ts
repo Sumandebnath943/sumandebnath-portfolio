@@ -487,6 +487,14 @@ export async function POST(request: NextRequest) {
       // alert rather than racing it, and so the two read as a pair in the feed.
       after(async () => {
         try {
+          // Don't spend a full report on a scraper. Only a firm "automated"
+          // read suppresses it; "unclear" still gets one, carrying the verdict
+          // in its header, so a doubtful visit is labelled rather than hidden.
+          // The asymmetry is deliberate — suppressing a real visit loses a
+          // hiring signal, sending one extra costs a notification. Checked
+          // before the delay so bot traffic doesn't hold the function open.
+          if (verdict.label.startsWith("🤖")) return;
+
           await new Promise((r) => setTimeout(r, DETAIL_DELAY_MS));
 
           const deepest = pages.reduce(
