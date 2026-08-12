@@ -43,6 +43,9 @@ type Payload = {
   // at arrival and gives it back on every summary, so each update rewrites that
   // one message instead of posting another.
   smid?: number;
+  // True when the card is being brought up to date mid-visit rather than because
+  // the visit ended. Keeps the wording honest and holds back the deep-dive.
+  live?: boolean;
   // Device/behaviour signals used for the human-vs-bot read.
   screen?: string;
   hw?: number;
@@ -512,7 +515,9 @@ export async function POST(request: NextRequest) {
       const count = body.pageCount ?? pages.length;
       const active = typeof body.activeMs === "number" ? ` · 👁️ ${human(body.activeMs)} active` : "";
       text = [
-        `👋 <b>Visitor left</b> · <code>${id || "?"}</code>${tagLine ? ` · 🏷️ ${esc(tagLine)}` : ""}${flag}`,
+        body.live
+          ? `🧭 <b>Reading now</b> · <code>${id || "?"}</code>${tagLine ? ` · 🏷️ ${esc(tagLine)}` : ""}${flag}`
+          : `👋 <b>Visitor left</b> · <code>${id || "?"}</code>${tagLine ? ` · 🏷️ ${esc(tagLine)}` : ""}${flag}`,
         `🧭 <b>Journey:</b> ${journey}`,
         actionLine,
         `📄 ${count} page${count === 1 ? "" : "s"} · ⏱️ <b>${human(body.totalMs || 0)}</b>${active}`,
@@ -527,6 +532,10 @@ export async function POST(request: NextRequest) {
       // alert rather than racing it, and so the two read as a pair in the feed.
       after(async () => {
         try {
+          // A card refreshed mid-visit is not a visit ending — the deep-dive
+          // waits for the real one.
+          if (body.live) return;
+
           // Don't spend a full report on a scraper. Only a firm "automated"
           // read suppresses it; "unclear" still gets one, carrying the verdict
           // in its header, so a doubtful visit is labelled rather than hidden.
@@ -667,10 +676,15 @@ export async function POST(request: NextRequest) {
       // the thread id. Creating it here, while the browser can still read a
       // response, is the whole trick: at unload the page can only fire a beacon
       // and cannot learn an id, so it has to already hold one.
+      // Opened with the entry page already on it, so even a visit that dies
+      // before its first refresh leaves a card that says something.
       const cardMid = await sendTelegram(
         token,
         chatId,
-        `🧭 <b>Visit in progress</b> · <code>${id || "?"}</code>`,
+        [
+          `🧭 <b>Reading now</b> · <code>${id || "?"}</code>`,
+          `📄 ${esc((body.path || "/").slice(0, 200))}`,
+        ].join("\n"),
         sentId,
       );
       return new Response(JSON.stringify({ mid: sentId, smid: cardMid }), {

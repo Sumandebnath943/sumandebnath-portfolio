@@ -25,6 +25,8 @@ const VISITOR_KEY = "vp_visitor";
 // How long a tab must stay hidden before it counts as "visitor left". Below
 // this it's a tab-switch, and the visit is still going.
 const LEAVE_GRACE_MS = 20_000;
+// How long a page is left to settle before the journey card is rewritten.
+const CARD_REFRESH_MS = 3_000;
 
 // Actions that warrant an immediate "hot" ping (direct hiring/contact intent),
 // rather than only appearing in the end-of-visit summary.
@@ -186,6 +188,74 @@ export default function VisitorPing() {
   // <a>, so following one unloads the page and fires pagehide exactly as a real
   // exit does — this is what tells the two apart.
   const internalNavRef = useRef(false);
+
+  // Declared ahead of the effects that call them: the effects reference these,
+  // and a function declared afterwards cannot be seen to change over time.
+  function summaryPayload(live: boolean) {
+    const s = sessionRef.current || loadSession();
+    if (!s || s.entries.length === 0) return null;
+
+    // Measure to when they actually left, not to when the grace timer fired.
+    const end = live ? Date.now() : leftAtRef.current || Date.now();
+    const pages = s.entries.slice(0, 60).map((e, i) => {
+      const next = s.entries[i + 1]?.enter ?? end;
+      return { path: e.path, ms: Math.max(0, next - e.enter), scroll: e.scroll };
+    });
+
+    const seen = safe(() => {
+      const raw = localStorage.getItem(VISITOR_KEY);
+      return raw ? (JSON.parse(raw) as Visitor) : null;
+    }, null);
+
+    return {
+      type: "summary" as const,
+      live,
+      id: s.id,
+      tag: s.tag,
+      mid: s.mid,
+      smid: s.smid,
+      totalMs: Math.max(0, end - s.start),
+      activeMs: s.activeMs,
+      pageCount: s.entries.length,
+      pages,
+      actions: s.actions.slice(0, 12),
+      // Carried again so the deep-dive report can stand on its own.
+      tz: tz(),
+      langs: langs(),
+      source: readSource(),
+      referrer: safe(() => document.referrer, "") || "",
+      screen: screenSize(),
+      hw: cores(),
+      wd: webdriver(),
+      // Sessions started before this field existed must read as "unknown", not
+      // "no interaction" — otherwise a deploy mid-visit mislabels real people.
+      interacted: typeof s.interacted === "boolean" ? s.interacted : undefined,
+      visits: seen?.count ?? 1,
+    };
+  }
+
+  // Bring the card up to date mid-visit. Without this the card only ever gets
+  // written at unload, so a tab that is killed outright leaves it stranded on
+  // the placeholder with no journey on it.
+  function refreshCard() {
+    const p = summaryPayload(true);
+    // Nothing to say until the arrival round-trip has handed us a card to write.
+    if (!p || typeof p.smid !== "number") return;
+    post(p);
+  }
+
+  function sendSummary() {
+    // The ref stops a double send within this page. There is deliberately no
+    // across-page guard: a visit that resumes after a reload must be allowed to
+    // send again, because that later send is the one carrying the complete
+    // journey. It rewrites the same card rather than adding a message.
+    if (summarySentRef.current) return;
+    const p = summaryPayload(false);
+    if (!p) return;
+    summarySentRef.current = true;
+    beacon(p);
+  }
+
 
   useEffect(() => {
     if (initedRef.current) return;
@@ -417,55 +487,16 @@ export default function VisitorPing() {
 
     sessionRef.current = s;
     saveSession(s);
+
+    // Write the card shortly after each page settles. Delayed so a quick bounce
+    // through a page doesn't spend a call on a journey that is about to change,
+    // and so the arrival round-trip has had time to hand back the card id.
+    const t = setTimeout(refreshCard, CARD_REFRESH_MS);
+    return () => clearTimeout(t);
+    // refreshCard is redeclared every render; listing it would re-run this on
+    // each one and write the card far more often than a page view.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
-
-  function sendSummary() {
-    if (summarySentRef.current) return;
-    const s = sessionRef.current || loadSession();
-    if (!s || s.entries.length === 0) return;
-    // The ref stops a double send within this page. There is deliberately no
-    // across-page guard: a visit that resumes after a reload must be allowed to
-    // send again, because that later send is the one carrying the complete
-    // journey. It rewrites the same card rather than adding a message.
-    summarySentRef.current = true;
-
-    // Measure to when they actually left, not to when the grace timer fired.
-    const end = leftAtRef.current || Date.now();
-    const pages = s.entries.slice(0, 60).map((e, i) => {
-      const next = s.entries[i + 1]?.enter ?? end;
-      return { path: e.path, ms: Math.max(0, next - e.enter), scroll: e.scroll };
-    });
-
-    const seen = safe(() => {
-      const raw = localStorage.getItem(VISITOR_KEY);
-      return raw ? (JSON.parse(raw) as Visitor) : null;
-    }, null);
-
-    beacon({
-      type: "summary",
-      id: s.id,
-      tag: s.tag,
-      mid: s.mid,
-      smid: s.smid,
-      totalMs: Math.max(0, end - s.start),
-      activeMs: s.activeMs,
-      pageCount: s.entries.length,
-      pages,
-      actions: s.actions.slice(0, 12),
-      // Carried again so the deep-dive report can stand on its own.
-      tz: tz(),
-      langs: langs(),
-      source: readSource(),
-      referrer: safe(() => document.referrer, "") || "",
-      screen: screenSize(),
-      hw: cores(),
-      wd: webdriver(),
-      // Sessions started before this field existed must read as "unknown", not
-      // "no interaction" — otherwise a deploy mid-visit mislabels real people.
-      interacted: typeof s.interacted === "boolean" ? s.interacted : undefined,
-      visits: seen?.count ?? 1,
-    });
-  }
 
   return null;
 }
