@@ -112,16 +112,41 @@ function localTime(tzName: string): string {
   }
 }
 
+// Proxies hand us IPv4-mapped IPv6 (::ffff:1.2.3.4) as often as plain IPv4.
+// Unwrap so one set of range checks covers both.
+function normalizeIp(raw: string): string {
+  const ip = (raw || "").trim().toLowerCase();
+  const mapped = ip.match(/^::ffff:(\d{1,3}(?:\.\d{1,3}){3})$/);
+  return mapped ? mapped[1] : ip;
+}
+
+// Loopback / private / link-local / carrier-NAT — nothing to learn from a
+// lookup. Note 172 is private only across 172.16–172.31; the rest is public.
+function isPrivateIp(ip: string): boolean {
+  if (!ip || ip === "unknown") return true;
+
+  const v4 = ip.match(/^(\d{1,3})\.(\d{1,3})\.\d{1,3}\.\d{1,3}$/);
+  if (v4) {
+    const a = Number(v4[1]);
+    const b = Number(v4[2]);
+    if (a === 0 || a === 10 || a === 127) return true;
+    if (a === 172 && b >= 16 && b <= 31) return true; // 172.16.0.0/12
+    if (a === 192 && b === 168) return true;
+    if (a === 169 && b === 254) return true; // link-local
+    if (a === 100 && b >= 64 && b <= 127) return true; // CGNAT (100.64.0.0/10)
+    return false;
+  }
+
+  if (ip === "::" || ip === "::1") return true;
+  if (/^f[cd][0-9a-f]{2}:/.test(ip)) return true; // fc00::/7 unique-local
+  if (/^fe[89ab][0-9a-f]:/.test(ip)) return true; // fe80::/10 link-local
+  return false;
+}
+
 // Reverse DNS → often reveals the ISP (home users) or company (corporate
 // networks). Never a person. Public DNS infra, not a third-party service.
 async function reverseDns(ip: string): Promise<string> {
-  if (
-    !ip || ip === "unknown" ||
-    ip.startsWith("::1") || ip.startsWith("127.") ||
-    ip.startsWith("10.") || ip.startsWith("192.168.") || ip.startsWith("172.")
-  ) {
-    return "";
-  }
+  if (isPrivateIp(ip)) return "";
   try {
     const names = (await Promise.race([
       dns.reverse(ip),
@@ -174,8 +199,9 @@ export async function POST(request: NextRequest) {
     const lat = h.get("x-vercel-ip-latitude");
     const lng = h.get("x-vercel-ip-longitude");
     const mapLink = lat && lng ? `https://www.google.com/maps?q=${lat},${lng}` : "";
-    const ip =
-      (h.get("x-forwarded-for") || "").split(",")[0].trim() || h.get("x-real-ip") || "unknown";
+    const ip = normalizeIp(
+      (h.get("x-forwarded-for") || "").split(",")[0].trim() || h.get("x-real-ip") || "unknown",
+    );
     const device = parseDevice(ua);
     const id = esc((body.id || "").slice(0, 24));
     const tzName = (body.tz || "").slice(0, 60);
@@ -250,6 +276,18 @@ export async function POST(request: NextRequest) {
       if (t) lines.push(`🕑 <b>Their time:</b> ${esc(t)}${tzName ? ` (${esc(tzName)})` : ""}`);
       if (langLine) lines.push(`🗣️ <b>Languages:</b> ${esc(langLine)}`);
       if (referrer) lines.push(`↩️ <b>Referrer:</b> ${esc(referrer)}`);
+
+      // TEMPORARY: visit any page with ?v=debug to dump the geo/network headers
+      // this deployment receives, so we know whether an ASN header already
+      // exists before adding a lookup. Remove once the ASN source is settled.
+      if (tagLine === "debug") {
+        const dump = Array.from(h.entries())
+          .filter(([k]) => k.startsWith("x-vercel-"))
+          .map(([k, v]) => `${k}: ${v}`)
+          .join("\n");
+        lines.push(`🧪 <b>Headers</b>\n<pre>${esc(dump || "none")}</pre>`);
+      }
+
       text = lines.join("\n");
     }
 

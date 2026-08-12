@@ -21,6 +21,10 @@ import { usePathname } from "next/navigation";
 const SS_KEY = "vp_session";
 const MUTE_KEY = "vp_notrack";
 
+// How long a tab must stay hidden before it counts as "visitor left". Below
+// this it's a tab-switch, and the visit is still going.
+const LEAVE_GRACE_MS = 20_000;
+
 // Actions that warrant an immediate "hot" ping (direct hiring/contact intent),
 // rather than only appearing in the end-of-visit summary.
 const HOT = new Set(["resume", "email", "phone", "copy-email", "copy-phone"]);
@@ -126,6 +130,8 @@ export default function VisitorPing() {
   const mutedRef = useRef(false);
   const summarySentRef = useRef(false);
   const initedRef = useRef(false);
+  const leftAtRef = useRef(0);
+  const leaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (initedRef.current) return;
@@ -219,18 +225,39 @@ export default function VisitorPing() {
       }, undefined);
     };
 
-    // Active-time accounting + leave detection.
+    // Active-time accounting + leave detection. Hiding only *arms* the summary:
+    // coming back within the grace window cancels it and the visit keeps
+    // accumulating, so a tab-switch no longer truncates the whole visit.
     const onVisibility = () => {
       const cur = sessionRef.current;
       if (!cur) return;
       if (document.visibilityState === "hidden") {
         cur.activeMs += Math.max(0, Date.now() - cur.lastActive);
         saveSession(cur);
-        sendSummary();
+        leftAtRef.current = Date.now();
+        if (leaveTimerRef.current) clearTimeout(leaveTimerRef.current);
+        leaveTimerRef.current = setTimeout(sendSummary, LEAVE_GRACE_MS);
       } else {
+        if (leaveTimerRef.current) {
+          clearTimeout(leaveTimerRef.current);
+          leaveTimerRef.current = null;
+        }
+        leftAtRef.current = 0;
         cur.lastActive = Date.now();
         saveSession(cur);
       }
+    };
+
+    // A real close or navigation away gets no grace period. Mobile browsers
+    // often fire only one of these two, so both paths are wired.
+    const onPageHide = () => {
+      const cur = sessionRef.current;
+      if (cur && document.visibilityState !== "hidden") {
+        cur.activeMs += Math.max(0, Date.now() - cur.lastActive);
+        saveSession(cur);
+      }
+      if (!leftAtRef.current) leftAtRef.current = Date.now();
+      sendSummary();
     };
 
     document.addEventListener("click", onClick, true);
@@ -238,12 +265,15 @@ export default function VisitorPing() {
     window.addEventListener("vp:action", onVpAction);
     window.addEventListener("scroll", onScroll, { passive: true });
     document.addEventListener("visibilitychange", onVisibility);
+    window.addEventListener("pagehide", onPageHide);
     return () => {
       document.removeEventListener("click", onClick, true);
       document.removeEventListener("copy", onCopy);
       window.removeEventListener("vp:action", onVpAction);
       window.removeEventListener("scroll", onScroll);
       document.removeEventListener("visibilitychange", onVisibility);
+      window.removeEventListener("pagehide", onPageHide);
+      if (leaveTimerRef.current) clearTimeout(leaveTimerRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -283,7 +313,8 @@ export default function VisitorPing() {
     if (!s || s.entries.length === 0) return;
     summarySentRef.current = true;
 
-    const end = Date.now();
+    // Measure to when they actually left, not to when the grace timer fired.
+    const end = leftAtRef.current || Date.now();
     const pages = s.entries.slice(0, 60).map((e, i) => {
       const next = s.entries[i + 1]?.enter ?? end;
       return { path: e.path, ms: Math.max(0, next - e.enter), scroll: e.scroll };
