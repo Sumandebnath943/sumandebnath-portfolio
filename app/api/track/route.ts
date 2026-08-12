@@ -277,17 +277,6 @@ export async function POST(request: NextRequest) {
       if (langLine) lines.push(`🗣️ <b>Languages:</b> ${esc(langLine)}`);
       if (referrer) lines.push(`↩️ <b>Referrer:</b> ${esc(referrer)}`);
 
-      // TEMPORARY: visit any page with ?v=debug to dump the geo/network headers
-      // this deployment receives, so we know whether an ASN header already
-      // exists before adding a lookup. Remove once the ASN source is settled.
-      if (tagLine === "debug") {
-        const dump = Array.from(h.entries())
-          .filter(([k]) => k.startsWith("x-vercel-"))
-          .map(([k, v]) => `${k}: ${v}`)
-          .join("\n");
-        lines.push(`🧪 <b>Headers</b>\n<pre>${esc(dump || "none")}</pre>`);
-      }
-
       text = lines.join("\n");
     }
 
