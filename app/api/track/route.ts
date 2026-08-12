@@ -9,10 +9,14 @@
 // Design rule: this must NEVER affect the visitor. Every failure path returns a
 // harmless response and is swallowed.
 
+import { after } from "next/server";
 import type { NextRequest } from "next/server";
 import { promises as dns } from "node:dns";
 
 export const dynamic = "force-dynamic";
+// The deep-dive report is held back briefly after a visit ends (see DETAIL_DELAY_MS),
+// and `after` runs against this budget.
+export const maxDuration = 30;
 
 type Page = { path?: string; ms?: number; scroll?: number };
 type Action = { a?: string; label?: string };
@@ -32,6 +36,9 @@ type Payload = {
   pageCount?: number;
   pages?: Page[];
   actions?: Action[];
+  // Telegram message id of this visit's arrival alert, so later messages can be
+  // sent as replies to it and thread together.
+  mid?: number;
   // Device/behaviour signals used for the human-vs-bot read.
   screen?: string;
   hw?: number;
@@ -263,8 +270,62 @@ function classify(o: {
   return { label, why: why.join(", ") };
 }
 
-async function sendTelegram(token: string, chatId: string, text: string): Promise<void> {
-  await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+// --- abuse limits ----------------------------------------------------------
+//
+// This endpoint is public and cannot be authenticated: any secret shipped to the
+// browser is readable by anyone. The goal is only to raise the cost of flooding
+// the Telegram chat or fabricating visits. Counters are per-instance, and
+// serverless spreads traffic over several, so treat these as best-effort.
+
+const RATE_WINDOW_MS = 60_000;
+const RATE_MAX = 20; // messages per IP per window
+const DAILY_MAX = 400; // per instance, per day
+const MAX_BODY_BYTES = 8_000;
+const DETAIL_DELAY_MS = 15_000;
+
+const rateLog = new Map<string, number[]>();
+let dayStamp = 0;
+let daySent = 0;
+
+function rateLimited(key: string): boolean {
+  const now = Date.now();
+  const hits = (rateLog.get(key) || []).filter((t) => now - t < RATE_WINDOW_MS);
+  hits.push(now);
+  if (rateLog.size > 5_000) rateLog.clear(); // crude cap; this map is unbounded otherwise
+  rateLog.set(key, hits);
+  return hits.length > RATE_MAX;
+}
+
+function overDailyCap(): boolean {
+  const day = Math.floor(Date.now() / 86_400_000);
+  if (day !== dayStamp) {
+    dayStamp = day;
+    daySent = 0;
+  }
+  daySent += 1;
+  return daySent > DAILY_MAX;
+}
+
+// Reject only a *mismatched* origin. A missing Origin header is not treated as
+// hostile — beacon behaviour varies between browsers, and dropping those would
+// silently lose real visits, which is a worse failure than letting one through.
+function originAllowed(h: Headers): boolean {
+  const origin = h.get("origin");
+  if (!origin) return true;
+  try {
+    return new URL(origin).host === (h.get("host") || "");
+  } catch {
+    return false;
+  }
+}
+
+async function sendTelegram(
+  token: string,
+  chatId: string,
+  text: string,
+  replyTo?: number,
+): Promise<number | undefined> {
+  const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -272,8 +333,14 @@ async function sendTelegram(token: string, chatId: string, text: string): Promis
       text,
       parse_mode: "HTML",
       disable_web_page_preview: true,
+      // If the arrival message was deleted, still send rather than erroring.
+      ...(replyTo ? { reply_to_message_id: replyTo, allow_sending_without_reply: true } : {}),
     }),
   });
+  const data = (await res.json().catch(() => null)) as
+    | { result?: { message_id?: number } }
+    | null;
+  return data?.result?.message_id;
 }
 
 // --- handler ---------------------------------------------------------------
@@ -289,6 +356,13 @@ export async function POST(request: NextRequest) {
     const h = request.headers;
     const ua = h.get("user-agent") || "";
     if (isBot(ua)) return ok();
+    if (!originAllowed(h)) return ok();
+    if (Number(h.get("content-length") || 0) > MAX_BODY_BYTES) return ok();
+
+    const ip = normalizeIp(
+      (h.get("x-forwarded-for") || "").split(",")[0].trim() || h.get("x-real-ip") || "unknown",
+    );
+    if (rateLimited(ip) || overDailyCap()) return ok();
 
     let body: Payload = {};
     try {
@@ -308,9 +382,6 @@ export async function POST(request: NextRequest) {
     const lat = h.get("x-vercel-ip-latitude");
     const lng = h.get("x-vercel-ip-longitude");
     const mapLink = lat && lng ? `https://www.google.com/maps?q=${lat},${lng}` : "";
-    const ip = normalizeIp(
-      (h.get("x-forwarded-for") || "").split(",")[0].trim() || h.get("x-real-ip") || "unknown",
-    );
     const device = parseDevice(ua);
     const id = esc((body.id || "").slice(0, 24));
     const tzName = (body.tz || "").slice(0, 60);
@@ -340,6 +411,11 @@ export async function POST(request: NextRequest) {
     const flag = verdict.label.startsWith("👤")
       ? ""
       : ` · ${verdict.label}${verdict.why ? ` (${verdict.why})` : ""}`;
+
+    const isArrival = !body.type || body.type === "arrival";
+    // Every message after the arrival quotes it, so Telegram threads the whole
+    // visit under one parent instead of leaving IDs to be matched by eye.
+    const replyTo = typeof body.mid === "number" ? body.mid : undefined;
 
     const visits = typeof body.visits === "number" ? body.visits : 0;
     const daysSince = typeof body.daysSince === "number" ? body.daysSince : -1;
@@ -406,6 +482,76 @@ export async function POST(request: NextRequest) {
       ]
         .filter(Boolean)
         .join("\n");
+
+      // Deep-dive report. Held back briefly so it lands after the terse "left"
+      // alert rather than racing it, and so the two read as a pair in the feed.
+      after(async () => {
+        try {
+          await new Promise((r) => setTimeout(r, DETAIL_DELAY_MS));
+
+          const deepest = pages.reduce(
+            (m, p) => Math.max(m, typeof p.scroll === "number" ? p.scroll : 0),
+            0,
+          );
+          const totalMs = body.totalMs || 0;
+          const activeMs = body.activeMs || 0;
+          const focus = totalMs > 0 ? Math.round((activeMs / totalMs) * 100) : 0;
+
+          // Deterministic engagement read — time, depth, breadth and intent.
+          let eng = 0;
+          if (activeMs > 120_000) eng += 2;
+          else if (activeMs > 30_000) eng += 1;
+          if (count >= 3) eng += 1;
+          if (deepest >= 70) eng += 1;
+          if (actions.length > 0) eng += 2;
+          const engLabel =
+            eng >= 4 ? "🔥 strong interest" : eng >= 2 ? "👀 genuine read" : "💨 quick bounce";
+
+          const isp = await reverseDns(ip);
+          const t = localTime(tzName);
+          const entry = pages[0]?.path || "";
+          const exit = pages[pages.length - 1]?.path || "";
+
+          // Three blocks — what they did, then who they are — joined by blank
+          // lines so the report stays scannable in a phone notification.
+          const head = [
+            `🧾 <b>Visit report</b> · <code>${id || "?"}</code>${tagLine ? ` · 🏷️ ${esc(tagLine)}` : ""}${flag}`,
+            engLabel,
+          ].join("\n");
+
+          const behaviour = [
+            `🧭 <b>Journey:</b> ${journey}`,
+            actionLine,
+            entry && exit && entry !== exit
+              ? `🚪 <b>Entered</b> ${esc(entry)} · <b>left from</b> ${esc(exit)}`
+              : "",
+            `📊 ${count} page${count === 1 ? "" : "s"} · ⏱️ ${human(totalMs)} total · 👁️ ${human(activeMs)} active (${focus}%) · ↕️ ${deepest}% deepest`,
+            returning,
+          ]
+            .filter(Boolean)
+            .join("\n");
+
+          const who = [
+            `📍 ${esc(placed)}${mapLink ? ` · <a href="${mapLink}">map</a>` : ""}`,
+            network ? `🏢 ${esc(network)}` : "",
+            `🌐 ${esc(ip)}${isp ? ` · ${esc(isp)}` : ""}`,
+            `📱 ${esc(device)}${body.screen ? ` · ${esc(body.screen.slice(0, 24))}` : ""}`,
+            t ? `🕑 ${esc(t)}${tzName ? ` (${esc(tzName)})` : ""}` : "",
+            tzMismatch ? `🛰️ <b>Timezone mismatch:</b> ${esc(tzMismatch)}` : "",
+            body.source ? `↗️ <b>Source:</b> ${esc(body.source.slice(0, 60))}` : "",
+            body.referrer ? `↩️ ${esc(body.referrer.slice(0, 200))}` : "",
+            body.langs ? `🗣️ ${esc(body.langs.slice(0, 80))}` : "",
+          ]
+            .filter(Boolean)
+            .join("\n");
+
+          const d = [head, behaviour, who].filter(Boolean).join("\n\n");
+
+          await sendTelegram(token, chatId, d, replyTo);
+        } catch {
+          // A failed report must never surface anywhere.
+        }
+      });
     } else {
       // Arrival.
       const path = (body.path || "/").slice(0, 200);
@@ -437,7 +583,16 @@ export async function POST(request: NextRequest) {
       text = lines.join("\n");
     }
 
-    await sendTelegram(token, chatId, text);
+    const sentId = await sendTelegram(token, chatId, text, replyTo);
+
+    // The arrival message owns the thread, so hand its id back to the browser;
+    // it quotes it on every later message for this visit.
+    if (isArrival && sentId) {
+      return new Response(JSON.stringify({ mid: sentId }), {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      });
+    }
     return ok();
   } catch {
     return ok();

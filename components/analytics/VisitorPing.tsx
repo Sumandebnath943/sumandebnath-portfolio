@@ -42,6 +42,7 @@ type Session = {
   lastActive: number; // timestamp of last visible->active transition
   tag: string;
   interacted: boolean; // any scroll/pointer/key input seen this visit
+  mid?: number; // Telegram id of the arrival alert; later messages reply to it
 };
 // Per-browser visit history. The one piece of state that outlives the tab.
 type Visitor = { first: number; last: number; count: number };
@@ -89,11 +90,17 @@ function bumpVisitor(): { visits: number; daysSince: number } {
   );
 }
 
+// Pronounceable ids beat hex for spotting the same visit across messages in a
+// busy chat — "clever-marten-42" sticks where "V-A3F2B1" does not. 16 × 16 × 100
+// combinations is ample for telling concurrent visitors apart.
+const ID_ADJ = "amber brisk clever dusky eager frosty golden hazel ivory jolly keen lunar misty noble olive quiet".split(" ");
+const ID_NOUN = "fox heron ibex jackal koala lynx marten newt otter puma quail raven seal tapir urchin viper".split(" ");
+
 function newId(): string {
   return safe(() => {
     const b = crypto.getRandomValues(new Uint8Array(3));
-    return "V-" + Array.from(b).map((x) => x.toString(16).padStart(2, "0")).join("").toUpperCase();
-  }, "V-" + Math.random().toString(16).slice(2, 8).toUpperCase());
+    return `${ID_ADJ[b[0] % 16]}-${ID_NOUN[b[1] % 16]}-${b[2] % 100}`;
+  }, `visit-${Math.random().toString(36).slice(2, 6)}`);
 }
 
 // Personalized-link tag: ?v= / ?ref= / utm_source / utm_campaign.
@@ -138,14 +145,22 @@ function saveSession(s: Session): void {
 
 // --- sending ---------------------------------------------------------------
 
-function post(body: unknown): void {
+// `onReply` exists only for the arrival call, which needs the Telegram message
+// id back. Beacons can't read responses, but they don't need to — they only
+// echo the id the arrival already stored.
+function post(body: unknown, onReply?: (data: { mid?: number }) => void): void {
   safe(() => {
     fetch("/api/track", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
       keepalive: true,
-    }).catch(() => {});
+    })
+      .then((r) => (onReply && r.ok ? r.json().catch(() => null) : null))
+      .then((d) => {
+        if (d && onReply) onReply(d as { mid?: number });
+      })
+      .catch(() => {});
   }, undefined);
 }
 function beacon(body: unknown): void {
@@ -207,7 +222,7 @@ export default function VisitorPing() {
       cur.actions.push({ a, label });
       saveSession(cur);
       if (HOT.has(a)) {
-        post({ type: "action", id: cur.id, a, label, path: safe(() => location.pathname, ""), tag: cur.tag });
+        post({ type: "action", id: cur.id, a, label, path: safe(() => location.pathname, ""), tag: cur.tag, mid: cur.mid });
       }
     };
 
@@ -357,6 +372,12 @@ export default function VisitorPing() {
         wd: webdriver(),
         visits,
         daysSince,
+      }, (d) => {
+        const cur = sessionRef.current;
+        if (cur && typeof d?.mid === "number") {
+          cur.mid = d.mid;
+          saveSession(cur);
+        }
       });
     }
 
@@ -386,11 +407,17 @@ export default function VisitorPing() {
       type: "summary",
       id: s.id,
       tag: s.tag,
+      mid: s.mid,
       totalMs: Math.max(0, end - s.start),
       activeMs: s.activeMs,
       pageCount: s.entries.length,
       pages,
       actions: s.actions.slice(0, 12),
+      // Carried again so the deep-dive report can stand on its own.
+      tz: tz(),
+      langs: langs(),
+      source: readSource(),
+      referrer: safe(() => document.referrer, "") || "",
       screen: screenSize(),
       hw: cores(),
       wd: webdriver(),
