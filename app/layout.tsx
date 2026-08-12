@@ -306,6 +306,7 @@ const websiteJsonLd = {
 
 import EasterEggs from "@/components/ui/EasterEggs";
 import VisitorPing from "@/components/analytics/VisitorPing";
+import PrivacyNotice from "@/components/ui/PrivacyNotice";
 
 export default function RootLayout({
   children,
@@ -340,6 +341,7 @@ export default function RootLayout({
           <EasterEggs />
           <ChatTakeover />
           <VisitorPing />
+          <PrivacyNotice />
         </RobotChatProvider>
 
         {/* Vercel Analytics + Core Web Vitals — zero-config, privacy-first.

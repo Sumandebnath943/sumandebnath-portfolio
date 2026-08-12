@@ -27,7 +27,7 @@ const breadcrumbsJsonLd = {
   ],
 };
 
-const LAST_UPDATED = "12 August 2026";
+const LAST_UPDATED = "13 August 2026";
 
 // Shared type styles — kept local so this page stays self-contained.
 const h2 = "font-manrope font-semibold text-xl md:text-2xl tracking-tight text-white mb-4";
@@ -213,6 +213,11 @@ export default function PrivacyPage() {
             <Bullet>
               <span className="font-mono text-[13px] text-white/80">vp_notrack</span> —
               only exists if you have opted out, and is the thing that keeps you opted out.
+            </Bullet>
+            <Bullet>
+              <span className="font-mono text-[13px] text-white/80">sd_notice_seen</span> —
+              records that you have already been shown the small notice at the bottom
+              of the screen, so it does not reappear on every page.
             </Bullet>
             <Bullet>
               Google Analytics sets its own cookies, separately from the above.
