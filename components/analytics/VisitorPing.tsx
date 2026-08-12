@@ -21,6 +21,10 @@ import { usePathname } from "next/navigation";
 const SS_KEY = "vp_session";
 const MUTE_KEY = "vp_notrack";
 const VISITOR_KEY = "vp_visitor";
+// Holds the id of the visit already summarised. Kept apart from the session
+// blob so a later saveSession — an action click, a scroll — cannot overwrite it,
+// and so the guard survives the page loads a visit spans.
+const SUMMARY_KEY = "vp_summarised";
 
 // How long a tab must stay hidden before it counts as "visitor left". Below
 // this it's a tab-switch, and the visit is still going.
@@ -181,6 +185,10 @@ export default function VisitorPing() {
   const initedRef = useRef(false);
   const leftAtRef = useRef(0);
   const leaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Set the moment an in-site link is clicked. Internal links here are plain
+  // <a>, so following one unloads the page and fires pagehide exactly as a real
+  // exit does — this is what tells the two apart.
+  const internalNavRef = useRef(false);
 
   useEffect(() => {
     if (initedRef.current) return;
@@ -212,6 +220,12 @@ export default function VisitorPing() {
       };
       saveSession(s);
     }
+    // The page has just loaded, so the visitor is active as of now. Resuming a
+    // session used to keep the previous page's `lastActive`, and the next
+    // hidden-tab accounting then re-counted seconds already banked in activeMs —
+    // which is how a 16s visit reported 43s of active time.
+    s.lastActive = Date.now();
+    saveSession(s);
     sessionRef.current = s;
 
     // Helper to record a notable action (deduped by label). High-intent actions
@@ -233,6 +247,22 @@ export default function VisitorPing() {
         if (!anchor) return;
         const href = (anchor.getAttribute("href") || "").toLowerCase();
         if (!href) return;
+
+        // Is this click about to reload us into another page of this same site?
+        // Modified clicks and target=_blank open elsewhere and leave this page
+        // alive, so they are not an internal navigation for our purposes.
+        const plainClick =
+          e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey;
+        const newTab = (anchor.getAttribute("target") || "").toLowerCase() === "_blank";
+        if (plainClick && !newTab) {
+          const dest = safe(() => new URL(anchor.getAttribute("href") || "", location.href), null);
+          if (dest && dest.origin === location.origin && !href.startsWith("#")) {
+            internalNavRef.current = true;
+            // If the navigation never happens (preventDefault, a blocked route),
+            // release the flag so a genuine exit still reports.
+            setTimeout(() => (internalNavRef.current = false), 3_000);
+          }
+        }
         if (href.startsWith("mailto:")) return addAction("email", "clicked email");
         if (href.startsWith("tel:")) return addAction("phone", "clicked phone");
         if (href.includes("linkedin")) return addAction("social", "clicked LinkedIn");
@@ -316,6 +346,10 @@ export default function VisitorPing() {
         cur.activeMs += Math.max(0, Date.now() - cur.lastActive);
         saveSession(cur);
       }
+      // Moving to another page of this site is not the end of the visit. The
+      // next page picks the same session back up out of sessionStorage and keeps
+      // going; summarising here is what sent one "left" message per page.
+      if (internalNavRef.current) return;
       if (!leftAtRef.current) leftAtRef.current = Date.now();
       sendSummary();
     };
@@ -389,7 +423,12 @@ export default function VisitorPing() {
     if (summarySentRef.current) return;
     const s = sessionRef.current || loadSession();
     if (!s || s.entries.length === 0) return;
+    // Belt and braces: the ref stops a double send within this page, the stored
+    // id stops one across page loads. At most one summary per visit, whatever
+    // route we got here by.
+    if (safe(() => sessionStorage.getItem(SUMMARY_KEY) === s.id, false)) return;
     summarySentRef.current = true;
+    safe(() => sessionStorage.setItem(SUMMARY_KEY, s.id), undefined);
 
     // Measure to when they actually left, not to when the grace timer fired.
     const end = leftAtRef.current || Date.now();

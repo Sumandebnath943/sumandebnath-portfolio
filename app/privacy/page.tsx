@@ -207,8 +207,10 @@ export default function PrivacyPage() {
               closing the tab. This is what lets me see a returning reader.
             </Bullet>
             <Bullet>
-              <span className="font-mono text-[13px] text-white/80">vp_session</span> —
-              the current visit in progress. Cleared automatically when you close the tab.
+              <span className="font-mono text-[13px] text-white/80">vp_session</span> and{" "}
+              <span className="font-mono text-[13px] text-white/80">vp_summarised</span> —
+              the current visit in progress, and whether its summary has already been
+              sent. Both are cleared automatically when you close the tab.
             </Bullet>
             <Bullet>
               <span className="font-mono text-[13px] text-white/80">vp_notrack</span> —
