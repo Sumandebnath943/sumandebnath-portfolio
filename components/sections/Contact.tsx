@@ -259,6 +259,10 @@ export default function Contact({
             <a href="/fun-apps" className={`transition-colors ${light ? "hover:text-[#0B3B25]" : "hover:text-[#1A1A1A]"}`}>
               Fun Apps
             </a>
+            <span className={light ? "text-[#2E8B57]/35" : "text-[#1A1A1A]/30"}>·</span>
+            <a href="/privacy" className={`transition-colors ${light ? "hover:text-[#0B3B25]" : "hover:text-[#1A1A1A]"}`}>
+              Privacy
+            </a>
           </nav>
 
           {/* Right */}
@@ -281,11 +285,21 @@ export default function Contact({
 
         </div>
 
-        {/* Privacy disclosure — first-party visit analytics */}
+        {/* Visit-data disclosure. Must stay factually in step with /privacy —
+            this site records IP addresses and runs third-party analytics, so it
+            cannot be described as anonymous. */}
         <div className="max-w-5xl mx-auto px-6 pb-6 -mt-1">
           <p className={`font-manrope text-[10px] leading-relaxed ${light ? "text-[#1f7a4d]/45" : "text-[#1A1A1A]/40"}`}>
-            This site logs anonymous visit data — pages viewed, approximate location, device, and on-page
-            interactions — for analytics. No personal details are collected unless you reach out directly.
+            This site records visit data — pages viewed, time and scroll depth, device, your IP address and
+            the approximate location and network provider derived from it — and sends it to me privately. It
+            also runs Google Analytics and Vercel Analytics.{" "}
+            <a
+              href="/privacy"
+              className={`underline underline-offset-2 transition-colors ${light ? "decoration-[#1f7a4d]/30 hover:text-[#0B3B25]" : "decoration-[#1A1A1A]/30 hover:text-[#1A1A1A]"}`}
+            >
+              Full detail and how to opt out
+            </a>
+            .
           </p>
         </div>
       </div>
