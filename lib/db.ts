@@ -478,6 +478,117 @@ export async function getVisit(id: string): Promise<VisitDetail | null> {
   }
 }
 
+// --- aggregates, for the charts ---------------------------------------------
+
+export type Ranked = { label: string; value: number; sub?: string | null };
+
+// Bots are excluded from every aggregate by default. A scraper hitting one page
+// a hundred times would otherwise top the "most read page" chart, and the whole
+// point of these is to see people.
+const HUMAN = "bot_verdict is distinct from 'automated'";
+
+export type Overview = {
+  visits: number;
+  humans: number;
+  countries: number;
+  medianMs: number | null;
+  bounceRate: number | null;
+  returning: number;
+};
+
+export async function overview(humansOnly = true): Promise<Overview> {
+  const sql = client();
+  if (!sql) return { visits: 0, humans: 0, countries: 0, medianMs: null, bounceRate: null, returning: 0 };
+  try {
+    const rows = await sql.query(
+      `select
+         count(*)::int                                             as visits,
+         count(*) filter (where ${HUMAN})::int                     as humans,
+         count(distinct country) filter (where country is not null)::int as countries,
+         -- Median, not mean: one tab left open for three hours drags an average
+         -- somewhere no real visit ever was.
+         percentile_cont(0.5) within group (order by total_ms)     as median_ms,
+         avg(case when is_bounce then 1.0 else 0.0 end)            as bounce_rate,
+         count(*) filter (where visit_number > 1)::int             as returning
+       from visits ${humansOnly ? `where ${HUMAN}` : ""}`,
+    );
+    const r = (rows as Record<string, number | null>[])[0] || {};
+    return {
+      visits: Number(r.visits ?? 0),
+      humans: Number(r.humans ?? 0),
+      countries: Number(r.countries ?? 0),
+      medianMs: r.median_ms === null || r.median_ms === undefined ? null : Number(r.median_ms),
+      bounceRate: r.bounce_rate === null || r.bounce_rate === undefined ? null : Number(r.bounce_rate),
+      returning: Number(r.returning ?? 0),
+    };
+  } catch {
+    return { visits: 0, humans: 0, countries: 0, medianMs: null, bounceRate: null, returning: 0 };
+  }
+}
+
+/** Country totals with a position, averaged from the visits themselves. */
+export async function countryMap(
+  humansOnly = true,
+): Promise<{ code: string; visits: number; lat: number; lng: number }[]> {
+  const sql = client();
+  if (!sql) return [];
+  try {
+    const rows = await sql.query(
+      `select country as code, count(*)::int as visits,
+              avg(lat)::float as lat, avg(lng)::float as lng
+         from visits
+        where country is not null and lat is not null and lng is not null
+          ${humansOnly ? `and ${HUMAN}` : ""}
+        group by country order by visits desc limit 100`,
+    );
+    return rows as { code: string; visits: number; lat: number; lng: number }[];
+  } catch {
+    return [];
+  }
+}
+
+async function ranked(query: string): Promise<Ranked[]> {
+  const sql = client();
+  if (!sql) return [];
+  try {
+    return (await sql.query(query)) as Ranked[];
+  } catch {
+    return [];
+  }
+}
+
+const human = (on: boolean, first = true) => (on ? `${first ? "where" : "and"} ${HUMAN}` : "");
+
+export const topPages = (h = true) =>
+  ranked(`select p.path as label, count(distinct p.visit_id)::int as value
+            from visit_pages p join visits v on v.id = p.visit_id
+           ${human(h)} group by p.path order by value desc limit 10`);
+
+export const topLocations = (h = true) =>
+  ranked(`select coalesce(city, 'Unknown') as label, count(*)::int as value, country as sub
+            from visits where country is not null ${human(h, false)}
+           group by city, country order by value desc limit 10`);
+
+export const topNetworks = (h = true) =>
+  ranked(`select network as label, count(*)::int as value,
+                 count(distinct ip)::text as sub
+            from visits where network is not null ${human(h, false)}
+           group by network order by value desc limit 10`);
+
+/** Repeat visitors, by IP. The point is who came back, so single visits are out. */
+export const topIps = (h = true) =>
+  ranked(`select ip as label, count(*)::int as value,
+                 coalesce(network, '') || case when city is not null then ' · ' || city else '' end as sub
+            from visits where ip is not null ${human(h, false)}
+           group by ip, network, city having count(*) > 1
+           order by value desc limit 10`);
+
+export const longestSessions = (h = true) =>
+  ranked(`select id as label, total_ms::int as value,
+                 coalesce(city || ', ', '') || coalesce(country, '') as sub
+            from visits where total_ms is not null ${human(h, false)}
+           order by total_ms desc limit 10`);
+
 export async function saveVisitActions(id: string, actions: VisitAction[]): Promise<boolean> {
   const sql = client();
   if (!sql || !id || actions.length === 0) return false;

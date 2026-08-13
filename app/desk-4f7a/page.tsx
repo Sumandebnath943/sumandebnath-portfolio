@@ -67,6 +67,12 @@ export default async function DashboardPage({
 
           <div className="flex items-center gap-3">
             <Link
+              href="/desk-4f7a/insights"
+              className="rounded-lg border border-white/[0.12] px-3 py-2 font-manrope text-[12px] text-white/70 hover:text-white hover:border-white/30 transition-colors"
+            >
+              Insights
+            </Link>
+            <Link
               // Keeps every other filter in place while toggling bots, so the
               // view you built is not thrown away to answer one question.
               href={(() => {
