@@ -1,5 +1,5 @@
 import type { Ranked } from "@/lib/db";
-import { RULE, TRACK, card, eyebrow, hue, tint } from "./theme";
+import { TRACK, card, eyebrow, hue, tint } from "./theme";
 
 // Server-rendered SVG and CSS. No chart library, no client JavaScript — these
 // are static pictures of numbers, and a dependency to draw a rectangle would be
@@ -94,84 +94,85 @@ export function BarList({
   );
 }
 
+// Both come from the platform rather than a data file: Intl knows every region
+// name, and a flag is just its two letters as regional-indicator codepoints.
+const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
+
+function countryName(code: string): string {
+  try {
+    return regionNames.of(code.toUpperCase()) || code;
+  } catch {
+    return code;
+  }
+}
+
+function flagOf(code: string): string {
+  if (!/^[a-z]{2}$/i.test(code)) return "🏳️";
+  return String.fromCodePoint(
+    ...code.toUpperCase().split("").map((c) => 0x1f1a5 + c.charCodeAt(0)),
+  );
+}
+
 /**
- * Country bubbles on an equirectangular graticule.
+ * Visits by country: flag, name, share, and the cities behind each one.
  *
- * Positions are averaged from the visits' own coordinates, which Vercel derives
- * as a city centroid — enough to put a country in the right place, nowhere near
- * enough to put a person anywhere. Deliberately no coastlines: a
- * hand-approximated world outline would be wrong in ways that look
- * authoritative, so the graticule and country codes carry the reading.
+ * This replaced a bubble map. Coordinates plotted on a bare graticule read as a
+ * broken map rather than a deliberate one, and the honest fix — real coastlines
+ * — needs outline data rather than a guess at where the continents go. A ranked
+ * country list carries the same answer, is legible at two countries or twenty,
+ * and never implies precision it does not have.
  */
-export function WorldMap({
-  points,
+export function CountryList({
+  rows,
   accent = 0,
 }: {
-  points: { code: string; visits: number; lat: number; lng: number }[];
+  rows: { code: string; visits: number; cities: string[] }[];
   accent?: number;
 }) {
-  if (!points.length) {
-    return <Empty>No located visits yet — coordinates are recorded from now on.</Empty>;
-  }
+  if (!rows.length) return <Empty>No located visits yet.</Empty>;
 
-  const W = 720;
-  const H = 360;
-  const x = (lng: number) => ((lng + 180) / 360) * W;
-  const y = (lat: number) => ((90 - lat) / 180) * H;
-  const most = Math.max(...points.map((p) => p.visits), 1);
-  // Area, not radius, tracks the count — a radius scale exaggerates big values.
-  const r = (v: number) => 4 + Math.sqrt(v / most) * 22;
+  const total = rows.reduce((n, r) => n + r.visits, 0) || 1;
+  const most = Math.max(...rows.map((r) => r.visits), 1);
   const colour = hue(accent);
 
   return (
-    <div className="overflow-x-auto">
-      <svg
-        viewBox={`0 0 ${W} ${H}`}
-        className="w-full min-w-[520px] h-auto"
-        role="img"
-        aria-label={`Visits by country. ${points.slice(0, 5).map((p) => `${p.code}: ${p.visits}`).join(", ")}.`}
-      >
-        <rect x={0} y={0} width={W} height={H} rx={10} fill="#f7f7f5" />
-        {/* Hairline graticule, solid — a dashed grid reads as a threshold. */}
-        {[-60, -30, 0, 30, 60].map((lat) => (
-          <line key={`h${lat}`} x1={0} x2={W} y1={y(lat)} y2={y(lat)} stroke={RULE} strokeWidth={1} />
-        ))}
-        {[-120, -60, 0, 60, 120].map((lng) => (
-          <line key={`v${lng}`} y1={0} y2={H} x1={x(lng)} x2={x(lng)} stroke={RULE} strokeWidth={1} />
-        ))}
-        <line x1={0} x2={W} y1={y(0)} y2={y(0)} stroke="rgba(0,0,0,0.14)" strokeWidth={1} />
-
-        {points.map((p) => (
-          <g key={p.code}>
-            <circle
-              cx={x(p.lng)}
-              cy={y(p.lat)}
-              r={r(p.visits)}
-              fill={colour}
-              fillOpacity={0.22}
-              stroke={colour}
-              strokeWidth={1.5}
-            >
-              {/* Native tooltip: interaction without shipping JavaScript. */}
-              <title>{`${p.code} — ${p.visits} visit${p.visits === 1 ? "" : "s"}`}</title>
-            </circle>
-            {/* Only label where the bubble can actually hold it. */}
-            {r(p.visits) > 11 ? (
-              <text
-                x={x(p.lng)}
-                y={y(p.lat) + 4}
-                textAnchor="middle"
-                className="font-mono"
-                fontSize={10}
-                fill="#0b0b0b"
+    <ul className="space-y-4">
+      {rows.map((r) => {
+        const share = Math.round((r.visits / total) * 100);
+        return (
+          <li key={r.code} className="flex items-start gap-3">
+            <span className="text-[26px] leading-none shrink-0 mt-0.5" aria-hidden>
+              {flagOf(r.code)}
+            </span>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-baseline justify-between gap-3">
+                <span className="font-manrope text-[14px] text-[#0b0b0b] truncate">
+                  {countryName(r.code)}
+                </span>
+                <span className="font-mono text-[11px] text-[#52514e] tabular-nums shrink-0">
+                  {r.visits} · {share}%
+                </span>
+              </div>
+              <div
+                className="h-1.5 rounded-full overflow-hidden mt-1.5"
+                style={{ backgroundColor: TRACK }}
               >
-                {p.code}
-              </text>
-            ) : null}
-          </g>
-        ))}
-      </svg>
-    </div>
+                <div
+                  className="h-full rounded-full"
+                  style={{ width: `${Math.max(2, (r.visits / most) * 100)}%`, backgroundColor: colour }}
+                />
+              </div>
+              {r.cities.length ? (
+                <p className="font-manrope text-[11.5px] text-[#6b6a66] mt-1.5 truncate">
+                  {r.cities.slice(0, 6).join(" · ")}
+                  {r.cities.length > 6 ? ` +${r.cities.length - 6}` : ""}
+                </p>
+              ) : null}
+            </div>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 

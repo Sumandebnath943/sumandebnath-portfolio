@@ -569,22 +569,30 @@ export async function overview(humansOnly = true): Promise<Overview> {
   }
 }
 
-/** Country totals with a position, averaged from the visits themselves. */
-export async function countryMap(
-  humansOnly = true,
-): Promise<{ code: string; visits: number; lat: number; lng: number }[]> {
+export type CountryRow = { code: string; visits: number; cities: string[] };
+
+/**
+ * Visits per country, with the cities seen in each.
+ *
+ * Replaced a bubble map drawn on a bare graticule. Plotting coordinates without
+ * coastlines produced circles floating on a grid — it read as a broken map
+ * rather than a deliberate one, and drawing the coastlines from memory would
+ * have been confidently wrong. Coordinates are still stored, so a real
+ * projection remains possible the day there is proper outline data to draw it
+ * against.
+ */
+export async function countryBreakdown(humansOnly = true): Promise<CountryRow[]> {
   const sql = client();
   if (!sql) return [];
   try {
     const rows = await sql.query(
       `select country as code, count(*)::int as visits,
-              avg(lat)::float as lat, avg(lng)::float as lng
+              coalesce(array_agg(distinct city) filter (where city is not null), '{}') as cities
          from visits
-        where country is not null and lat is not null and lng is not null
-          ${humansOnly ? `and ${HUMAN}` : ""}
-        group by country order by visits desc limit 100`,
+        where country is not null ${humansOnly ? `and ${HUMAN}` : ""}
+        group by country order by visits desc limit 20`,
     );
-    return rows as { code: string; visits: number; lat: number; lng: number }[];
+    return rows as CountryRow[];
   } catch {
     return [];
   }

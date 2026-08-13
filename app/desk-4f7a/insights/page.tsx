@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
-  countryMap,
+  countryBreakdown,
   longestSessions,
   overview,
   topIps,
@@ -9,7 +9,7 @@ import {
   topNetworks,
   topPages,
 } from "@/lib/db";
-import { BarList, Empty, Panel, Stat, WorldMap } from "../Charts";
+import { BarList, CountryList, Empty, Panel, Stat } from "../Charts";
 import { dur } from "../format";
 import { body, button, eyebrow, heading, page } from "../theme";
 
@@ -29,9 +29,9 @@ export default async function InsightsPage({
   const showBots = bots === "1";
   const humansOnly = !showBots;
 
-  const [stats, map, pages, locations, networks, ips, longest] = await Promise.all([
+  const [stats, countries, pages, locations, networks, ips, longest] = await Promise.all([
     overview(humansOnly),
-    countryMap(humansOnly),
+    countryBreakdown(humansOnly),
     topPages(humansOnly),
     topLocations(humansOnly),
     topNetworks(humansOnly),
@@ -87,9 +87,9 @@ export default async function InsightsPage({
           <Panel
             accent={0}
             title="Where they are"
-            hint="Placed from the city your visitor's network resolves to — accurate to a city, never to a person."
+            hint="Grouped by country, with the cities each visit resolved to. Location comes from the network, so it is accurate to a city and never to a person."
           >
-            <WorldMap points={map} accent={0} />
+            <CountryList rows={countries} accent={0} />
           </Panel>
         </div>
 
