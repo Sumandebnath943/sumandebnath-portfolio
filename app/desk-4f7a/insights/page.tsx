@@ -129,7 +129,7 @@ export default async function InsightsPage({
           <Panel accent={2} title="Returning visitors">
             <div className="py-2">
               <p className={`${heading} text-[26px]`}>{stats.returning}</p>
-              <p className="font-manrope text-[12px] text-black/45 mt-1">
+              <p className="font-manrope text-[12px] text-[#52514e] mt-1">
                 {stats.visits > 0
                   ? `${Math.round((stats.returning / stats.visits) * 100)}% of visits were someone coming back`
                   : "No visits yet"}

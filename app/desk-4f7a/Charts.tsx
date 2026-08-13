@@ -33,14 +33,14 @@ export function Panel({
         />
         <h2 className={eyebrow}>{title}</h2>
       </div>
-      {hint ? <p className="font-manrope text-[11px] text-black/35 mt-1.5">{hint}</p> : null}
+      {hint ? <p className="font-manrope text-[11px] text-[#6b6a66] mt-1.5">{hint}</p> : null}
       <div className="mt-4">{children}</div>
     </section>
   );
 }
 
 export function Empty({ children }: { children: React.ReactNode }) {
-  return <p className="font-manrope text-[13px] text-black/35 py-6 text-center">{children}</p>;
+  return <p className="font-manrope text-[13px] text-[#6b6a66] py-6 text-center">{children}</p>;
 }
 
 /**
@@ -73,12 +73,12 @@ export function BarList({
         return (
           <li key={`${d.label}-${d.sub ?? ""}`}>
             <div className="flex items-baseline justify-between gap-3 mb-1">
-              <span className="font-manrope text-[12.5px] text-[#0b0b0b] truncate" title={d.label}>
+              <span className="font-manrope text-[13px] text-[#0b0b0b] truncate" title={d.label}>
                 {d.label}
-                {d.sub ? <span className="text-black/35"> · {d.sub}</span> : null}
+                {d.sub ? <span className="text-[#6b6a66]"> · {d.sub}</span> : null}
               </span>
               {/* tabular-nums here because these do align vertically. */}
-              <span className="font-mono text-[11px] text-black/50 tabular-nums shrink-0">
+              <span className="font-mono text-[11px] text-[#52514e] tabular-nums shrink-0">
                 {fmt(d.value)}
               </span>
             </div>
@@ -196,7 +196,7 @@ export function Stat({
       {/* Proportional figures: tabular-nums makes a large standalone number look
           loose, and this one does not align with anything. */}
       <p className="font-manrope text-[26px] tracking-tight text-[#0b0b0b] mt-1.5">{value}</p>
-      {sub ? <p className="font-manrope text-[11px] text-black/40 mt-0.5">{sub}</p> : null}
+      {sub ? <p className="font-manrope text-[11px] text-[#6b6a66] mt-0.5">{sub}</p> : null}
     </div>
   );
 }

@@ -83,7 +83,22 @@ export function dbConfigured(): boolean {
 
 export type DbHealth =
   | { ok: true; visits: number }
-  | { ok: false; reason: "unconfigured" | "unreachable" | "no-schema"; detail?: string };
+  | {
+      ok: false;
+      reason: "unconfigured" | "unreachable" | "no-schema" | "schema-behind";
+      detail?: string;
+      missing?: string[];
+    };
+
+// Columns saveVisit writes to. If the code is deployed ahead of the migration,
+// every insert fails on the missing column and the error is swallowed — the
+// dashboard would go on showing yesterday's rows as though nothing were wrong.
+// Checking for them turns a silent outage into a visible one.
+const REQUIRED_COLUMNS = [
+  "exit_path", "max_scroll", "browser", "os", "device_type", "referrer_host",
+  "utm_medium", "utm_campaign", "bot_reason", "action_count", "is_bounce",
+  "viewport", "lat", "lng",
+];
 
 /**
  * Actually ask the database, rather than checking that a variable exists.
@@ -98,6 +113,14 @@ export async function dbHealth(): Promise<DbHealth> {
   try {
     const [t] = await sql`select to_regclass('public.visits') is not null as present`;
     if (!t?.present) return { ok: false, reason: "no-schema" };
+
+    const cols = await sql`
+      select column_name from information_schema.columns where table_name = 'visits'
+    `;
+    const have = new Set((cols as { column_name: string }[]).map((c) => c.column_name));
+    const missing = REQUIRED_COLUMNS.filter((c) => !have.has(c));
+    if (missing.length) return { ok: false, reason: "schema-behind", missing };
+
     const [c] = await sql`select count(*)::int as n from visits`;
     return { ok: true, visits: c?.n ?? 0 };
   } catch (e) {

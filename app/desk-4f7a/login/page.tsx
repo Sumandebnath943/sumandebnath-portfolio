@@ -19,7 +19,7 @@ export default async function LoginPage({
   return (
     <main className="min-h-screen bg-[#fcfcfb] text-[#0b0b0b] flex items-center justify-center px-6">
       <div className="w-full max-w-[340px]">
-        <p className="font-mono text-[11px] tracking-[0.2em] text-black/40 uppercase mb-3">
+        <p className="font-mono text-[11px] tracking-[0.2em] text-[#6b6a66] uppercase mb-3">
           Restricted
         </p>
         <h1 className="font-manrope text-2xl tracking-tight mb-6">Sign in</h1>

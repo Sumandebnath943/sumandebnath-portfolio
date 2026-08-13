@@ -60,7 +60,7 @@ export default async function DashboardPage({
       <div className="max-w-[1200px] mx-auto">
         <header className="flex flex-wrap items-end justify-between gap-4 mb-6">
           <div>
-            <p className="font-mono text-[11px] tracking-[0.2em] text-black/40 uppercase mb-2">
+            <p className="font-mono text-[11px] tracking-[0.2em] text-[#6b6a66] uppercase mb-2">
               Dashboard
             </p>
             <h1 className="font-manrope text-2xl tracking-tight">Visitors</h1>
@@ -69,7 +69,7 @@ export default async function DashboardPage({
           <div className="flex items-center gap-3">
             <Link
               href="/desk-4f7a/insights"
-              className="rounded-lg border border-black/[0.12] px-3 py-2 font-manrope text-[12px] text-black/60 hover:text-[#0b0b0b] hover:border-black/30 transition-colors"
+              className="rounded-lg border border-black/[0.12] px-3 py-2 font-manrope text-[12px] text-[#3f3e3b] hover:text-[#0b0b0b] hover:border-black/30 transition-colors"
             >
               Insights
             </Link>
@@ -83,14 +83,14 @@ export default async function DashboardPage({
                 const q = p.toString();
                 return q ? `/desk-4f7a?${q}` : "/desk-4f7a";
               })()}
-              className="rounded-lg border border-black/[0.12] px-3 py-2 font-manrope text-[12px] text-black/60 hover:text-[#0b0b0b] hover:border-black/30 transition-colors"
+              className="rounded-lg border border-black/[0.12] px-3 py-2 font-manrope text-[12px] text-[#3f3e3b] hover:text-[#0b0b0b] hover:border-black/30 transition-colors"
             >
               {showBots ? "Hide bots" : `Show bots (${counts.automated})`}
             </Link>
             <form action="/desk-4f7a/logout" method="post">
               <button
                 type="submit"
-                className="rounded-lg border border-black/[0.12] px-3 py-2 font-manrope text-[12px] text-black/60 hover:text-[#0b0b0b] hover:border-black/30 transition-colors"
+                className="rounded-lg border border-black/[0.12] px-3 py-2 font-manrope text-[12px] text-[#3f3e3b] hover:text-[#0b0b0b] hover:border-black/30 transition-colors"
               >
                 Sign out
               </button>
@@ -98,7 +98,7 @@ export default async function DashboardPage({
           </div>
         </header>
 
-        <p className="font-manrope text-[13px] text-black/45 mb-4">
+        <p className="font-manrope text-[13px] text-[#52514e] mb-4">
           {health.ok ? (
             <>
               {counts.total - counts.automated} real {counts.total - counts.automated === 1 ? "visit" : "visits"}
@@ -109,16 +109,39 @@ export default async function DashboardPage({
             <span className="text-amber-700">
               No tables yet — run the migration against this environment.
             </span>
+          ) : health.reason === "schema-behind" ? (
+            <span className="text-amber-700">Database is behind the code.</span>
           ) : (
             <span className="text-red-700">Storage {health.reason}.</span>
           )}
         </p>
 
+        {/* Loud on purpose. The code writes columns this database does not have,
+            so every insert is failing and being swallowed — the table below goes
+            on showing older rows as though nothing were wrong. That silence is
+            exactly what makes this worth a banner. */}
+        {!health.ok && health.reason === "schema-behind" ? (
+          <div className="rounded-xl border border-amber-300 bg-amber-50 p-4 mb-5">
+            <p className="font-manrope text-[14px] font-medium text-amber-900">
+              Visits are not being saved right now.
+            </p>
+            <p className="font-manrope text-[13px] text-amber-800 mt-1 leading-[1.7]">
+              This database is missing {health.missing?.length} column
+              {health.missing?.length === 1 ? "" : "s"} the tracker writes to, so every
+              new visit is being dropped. Run the migration and it will start recording
+              again — nothing already stored is affected.
+            </p>
+            <p className="font-mono text-[11px] text-amber-800/80 mt-2 break-all">
+              {health.missing?.join(", ")}
+            </p>
+          </div>
+        ) : null}
+
         {health.ok ? <Filters active={sp} options={options} matched={matched} /> : null}
 
         {visits.length === 0 ? (
           <div className="bg-white border border-black/[0.07] rounded-xl p-10 text-center shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
-            <p className="font-manrope text-[15px] text-black/50">
+            <p className="font-manrope text-[15px] text-[#52514e]">
               {!health.ok
                 ? "Nothing to show until storage is working."
                 : narrowed
@@ -127,7 +150,7 @@ export default async function DashboardPage({
                     ? "Nothing recorded yet."
                     : "No human visits yet."}
             </p>
-            <p className="font-manrope text-[13px] text-black/40 mt-2">
+            <p className="font-manrope text-[13px] text-[#6b6a66] mt-2">
               {narrowed
                 ? "Widen the range, or clear the filters."
                 : "Recording starts from now — there is no history before the database existed."}
@@ -139,7 +162,7 @@ export default async function DashboardPage({
           <div className="overflow-x-auto bg-white border border-black/[0.07] rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
             <table className="w-full border-collapse text-left">
               <thead>
-                <tr className="bg-black/[0.02] border-b border-black/[0.07] font-mono text-[10px] uppercase tracking-[0.12em] text-black/40">
+                <tr className="bg-black/[0.02] border-b border-black/[0.07] font-mono text-[11px] uppercase tracking-[0.12em] text-[#6b6a66]">
                   <th className="px-3 py-3 font-normal whitespace-nowrap">Arrived</th>
                   <th className="px-3 py-3 font-normal whitespace-nowrap">Left</th>
                   <th className="px-3 py-3 font-normal whitespace-nowrap">Stayed</th>
@@ -153,7 +176,7 @@ export default async function DashboardPage({
                   <th className="px-3 py-3 font-normal" />
                 </tr>
               </thead>
-              <tbody className="font-manrope text-[13px]">
+              <tbody className="font-manrope text-[13.5px]">
                 {visits.map((v) => {
                   const verdict = verdictTone(v.bot_verdict);
                   return (
@@ -165,15 +188,15 @@ export default async function DashboardPage({
                         <Link href={`/desk-4f7a/v/${encodeURIComponent(v.id)}`} className="font-medium hover:underline" style={{ color: hue(0) }}>
                           {when(v.started_at)}
                         </Link>
-                        <span className="block font-mono text-[10px] text-black/35">{v.id}</span>
+                        <span className="block font-mono text-[10.5px] text-[#6b6a66]">{v.id}</span>
                       </td>
-                      <td className="px-3 py-3 whitespace-nowrap text-black/55">
+                      <td className="px-3 py-3 whitespace-nowrap text-[#3f3e3b]">
                         {v.ended_at ? when(v.ended_at) : <span className="text-emerald-700">still here</span>}
                       </td>
                       <td className="px-3 py-3 whitespace-nowrap">{dur(v.total_ms)}</td>
-                      <td className="px-3 py-3 whitespace-nowrap text-black/55">
+                      <td className="px-3 py-3 whitespace-nowrap text-[#3f3e3b]">
                         {dur(v.active_ms)}
-                        <span className="text-black/30"> · {focus(v.total_ms, v.active_ms)}</span>
+                        <span className="text-[#6b6a66]"> · {focus(v.total_ms, v.active_ms)}</span>
                       </td>
                       <td className="px-3 py-3 whitespace-nowrap">
                         {v.page_count ?? 0}
@@ -183,19 +206,19 @@ export default async function DashboardPage({
                           </span>
                         ) : null}
                       </td>
-                      <td className="px-3 py-3 text-black/60">{place(v)}</td>
-                      <td className="px-3 py-3 text-black/45 max-w-[220px] truncate" title={v.network || ""}>
+                      <td className="px-3 py-3 text-[#3f3e3b]">{place(v)}</td>
+                      <td className="px-3 py-3 text-[#52514e] max-w-[220px] truncate" title={v.network || ""}>
                         {v.network || "—"}
                       </td>
-                      <td className="px-3 py-3 whitespace-nowrap text-black/55">
+                      <td className="px-3 py-3 whitespace-nowrap text-[#3f3e3b]">
                         {v.source || "—"}
                         {v.tag ? (
-                          <span className="ml-2 rounded bg-amber-50 px-1.5 py-0.5 font-mono text-[10px] text-amber-800">
+                          <span className="ml-2 rounded bg-amber-50 px-1.5 py-0.5 font-mono text-[10.5px] text-amber-800">
                             {v.tag}
                           </span>
                         ) : null}
                       </td>
-                      <td className="px-3 py-3 whitespace-nowrap text-black/45">{v.device || "—"}</td>
+                      <td className="px-3 py-3 whitespace-nowrap text-[#52514e]">{v.device || "—"}</td>
                       <td className={`px-3 py-3 whitespace-nowrap font-mono text-[11px] ${verdict.className}`}>
                         {verdict.label}
                       </td>
@@ -220,7 +243,7 @@ export default async function DashboardPage({
         {/* The retention promise on /privacy is only worth as much as its
             enforcement, so show what the purge job has left to do. */}
         {health.ok ? (
-          <p className="mt-5 font-manrope text-[12px] text-black/35 leading-[1.7]">
+          <p className="mt-5 font-manrope text-[12px] text-[#6b6a66] leading-[1.7]">
             IP addresses removed after {IP_RETENTION_DAYS} days · visits deleted after{" "}
             {VISIT_RETENTION_DAYS} days · purged daily
             {retention.oldestDays !== null ? ` · oldest record ${retention.oldestDays}d old` : ""}

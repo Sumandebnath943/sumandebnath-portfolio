@@ -60,10 +60,10 @@ export function verdictTone(v: string | null): { label: string; className: strin
   // The word carries the meaning and the colour only reinforces it — a status
   // colour never stands alone here, which is also why "bot" is simply recessive
   // rather than red. It is not an error, just less interesting.
-  if (v === "automated") return { label: "bot", className: "text-black/35" };
+  if (v === "automated") return { label: "bot", className: "text-[#6b6a66]" };
   if (v === "unclear") return { label: "unclear", className: "text-amber-700" };
   if (v === "human") return { label: "human", className: "text-emerald-700" };
-  return { label: "—", className: "text-black/30" };
+  return { label: "—", className: "text-[#6b6a66]" };
 }
 
 // Kolkata is +05:30 year round with no daylight saving, so a fixed offset is

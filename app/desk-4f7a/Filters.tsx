@@ -15,7 +15,7 @@ type Options = { countries: string[]; paths: string[]; actions: string[]; source
 
 const field =
   "w-full rounded-lg border border-black/[0.12] bg-white px-3 py-2 font-manrope text-[13px] text-[#0b0b0b] outline-none focus:border-black/40 transition-colors";
-const label = "block font-mono text-[10px] uppercase tracking-[0.12em] text-black/40 mb-1.5";
+const label = "block font-mono text-[11px] uppercase tracking-[0.12em] text-[#6b6a66] mb-1.5";
 
 function Select({
   name,
@@ -96,20 +96,20 @@ export default function Filters({
           Apply
         </button>
 
-        <span className="font-manrope text-[12px] text-black/40">
+        <span className="font-manrope text-[12px] text-[#6b6a66]">
           {matched} {matched === 1 ? "match" : "matches"}
         </span>
 
         <span className="flex-1" />
 
-        <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-black/35">Quick</span>
-        <Link href={range(1)} className="font-manrope text-[12px] text-black/50 hover:text-[#0b0b0b] transition-colors">
+        <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-[#6b6a66]">Quick</span>
+        <Link href={range(1)} className="font-manrope text-[12px] text-[#52514e] hover:text-[#0b0b0b] transition-colors">
           24h
         </Link>
-        <Link href={range(7)} className="font-manrope text-[12px] text-black/50 hover:text-[#0b0b0b] transition-colors">
+        <Link href={range(7)} className="font-manrope text-[12px] text-[#52514e] hover:text-[#0b0b0b] transition-colors">
           7d
         </Link>
-        <Link href={range(30)} className="font-manrope text-[12px] text-black/50 hover:text-[#0b0b0b] transition-colors">
+        <Link href={range(30)} className="font-manrope text-[12px] text-[#52514e] hover:text-[#0b0b0b] transition-colors">
           30d
         </Link>
         {applied > 0 ? (
