@@ -361,7 +361,7 @@ export type VisitDetail = {
 // ("automated") and something that announced itself as a crawler. Both are
 // excluded from "people" views. coalesce() because a null verdict is an
 // unknown, and an unknown is not something to hide.
-const NOT_HUMAN_EXCLUDED = "coalesce(bot_verdict, '') not in ('automated', 'crawler')";
+const NOT_HUMAN_EXCLUDED = "coalesce(bot_verdict, '') not in ('automated', 'crawler', 'scanner')";
 
 export type VisitFilters = {
   humansOnly?: boolean;
@@ -476,7 +476,7 @@ export async function visitCounts(): Promise<{ total: number; automated: number 
   try {
     const [r] = await sql`
       select count(*)::int as total,
-             count(*) filter (where bot_verdict in ('automated','crawler'))::int as automated
+             count(*) filter (where bot_verdict in ('automated','crawler','scanner'))::int as automated
       from visits
     `;
     return { total: r?.total ?? 0, automated: r?.automated ?? 0 };

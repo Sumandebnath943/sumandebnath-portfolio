@@ -481,6 +481,20 @@ export async function POST(request: NextRequest) {
     const org = await asnName(asn);
     const network = org ? `${org} (AS${asn})` : asn ? `AS${asn}` : "";
 
+    // A browser running on Azure or AWS is a scanner, not a reader — the link
+    // checkers that open a URL the moment it is shared, in a real headless
+    // Chrome, from a hosting network. They pass every user-agent test because
+    // the user agent is genuine.
+    //
+    // These get ONE message and nothing else: no journey card, no leave
+    // summary, no hot-action pings. Three messages apiece for something that
+    // never read a word is what buried the real visitors.
+    //
+    // The trade is deliberate and worth naming: a real person behind a
+    // corporate proxy that egresses through Azure collapses to a single alert
+    // too. The full record still lands in the dashboard either way.
+    const isScanner = Boolean(org && HOSTING_RE.test(org));
+
     // A browser reporting a timezone that disagrees with the one implied by its
     // IP usually means a VPN — or a genuinely remote reviewer.
     const ipTz = h.get("x-vercel-ip-timezone") || "";
@@ -681,8 +695,16 @@ export async function POST(request: NextRequest) {
 
       const screen = (body.screen || "").slice(0, 24);
 
+      // A message headed "New visitor" that then says "Returning: visit #3"
+      // contradicts itself. Whichever the visitor is, say it once, at the top.
+      const heading = isScanner
+        ? "🖥️ <b>Automated scan</b>"
+        : (body.visits ?? 1) > 1
+          ? "🔁 <b>Returning visitor</b>"
+          : "🔔 <b>New visitor</b>";
+
       const lines = [
-        `🔔 <b>New visitor</b> · <code>${id || "?"}</code>${tagLine ? ` · 🏷️ ${esc(tagLine)}` : ""}${flag}`,
+        `${heading} · <code>${id || "?"}</code>${tagLine ? ` · 🏷️ ${esc(tagLine)}` : ""}${flag}`,
         `📄 <b>Entered on:</b> ${esc(path)}`,
         `🧭 <b>Source:</b> ${esc(source)}`,
         `📍 <b>From:</b> ${esc(placed)}${mapLink ? ` · <a href="${mapLink}">map</a>` : ""}`,
@@ -698,6 +720,15 @@ export async function POST(request: NextRequest) {
       if (langLine) lines.push(`🗣️ <b>Languages:</b> ${esc(langLine)}`);
       if (referrer) lines.push(`↩️ <b>Referrer:</b> ${esc(referrer)}`);
 
+      // Say what this is and that nothing more is coming, so silence afterwards
+      // reads as intended rather than as something having gone wrong.
+      if (isScanner) {
+        lines.push(
+          "",
+          "<i>A link checker on a hosting network, not a reader — the kind that opens a URL moments after it is shared. This is the only message for it.</i>",
+        );
+      }
+
       text = lines.join("\n");
     }
 
@@ -707,7 +738,16 @@ export async function POST(request: NextRequest) {
     // card with the complete one. Falls back to posting if the card is gone.
     const cardId = typeof body.smid === "number" ? body.smid : undefined;
     let sentId: number | undefined;
-    if (body.type === "summary" && cardId) {
+
+    // A scanner's single message is its arrival. Everything after it — the
+    // card, the leave summary, any hot action — is silence, while the database
+    // still receives the lot. Evaluated per request from the network the
+    // request actually came from, so it needs nothing remembered client-side.
+    const notifying = !isScanner || isArrival;
+
+    if (!notifying) {
+      sentId = undefined;
+    } else if (body.type === "summary" && cardId) {
       sentId = (await editTelegram(token, chatId, cardId, text))
         ? cardId
         : await sendTelegram(token, chatId, text, replyTo);
@@ -748,7 +788,9 @@ export async function POST(request: NextRequest) {
 
             // Stored as a bare word; the emoji belongs in Telegram, not a column
             // the dashboard has to filter on.
-            botVerdict: verdict.label.replace(/[^a-z]/gi, "").toLowerCase() || null,
+            botVerdict: isScanner
+              ? "scanner"
+              : verdict.label.replace(/[^a-z]/gi, "").toLowerCase() || null,
             interacted: typeof body.interacted === "boolean" ? body.interacted : null,
 
             entryPath: isArrival ? body.path || "/" : null,
@@ -823,15 +865,20 @@ export async function POST(request: NextRequest) {
       // and cannot learn an id, so it has to already hold one.
       // Opened with the entry page already on it, so even a visit that dies
       // before its first refresh leaves a card that says something.
-      const cardMid = await sendTelegram(
-        token,
-        chatId,
-        [
-          `🧭 <b>Reading now</b> · <code>${id || "?"}</code>`,
-          `📄 ${esc((body.path || "/").slice(0, 200))}`,
-        ].join("\n"),
-        sentId,
-      );
+      //
+      // Not for scanners: a card tracking a journey nobody is taking is the
+      // second of the three messages this is meant to stop sending.
+      const cardMid = isScanner
+        ? undefined
+        : await sendTelegram(
+            token,
+            chatId,
+            [
+              `🧭 <b>Reading now</b> · <code>${id || "?"}</code>`,
+              `📄 ${esc((body.path || "/").slice(0, 200))}`,
+            ].join("\n"),
+            sentId,
+          );
       return new Response(JSON.stringify({ mid: sentId, smid: cardMid }), {
         status: 200,
         headers: { "content-type": "application/json" },
