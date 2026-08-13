@@ -17,9 +17,9 @@ export default async function LoginPage({
   const { e } = await searchParams;
 
   return (
-    <main className="min-h-screen bg-black text-white flex items-center justify-center px-6">
+    <main className="min-h-screen bg-[#fcfcfb] text-[#0b0b0b] flex items-center justify-center px-6">
       <div className="w-full max-w-[340px]">
-        <p className="font-mono text-[11px] tracking-[0.2em] text-white/35 uppercase mb-3">
+        <p className="font-mono text-[11px] tracking-[0.2em] text-black/40 uppercase mb-3">
           Restricted
         </p>
         <h1 className="font-manrope text-2xl tracking-tight mb-6">Sign in</h1>
@@ -35,19 +35,19 @@ export default async function LoginPage({
             required
             aria-label="Password"
             aria-invalid={e ? true : undefined}
-            className="w-full rounded-lg border border-white/[0.12] bg-white/[0.03] px-4 py-3 font-manrope text-[15px] text-white placeholder-white/25 outline-none focus:border-white/35 transition-colors"
+            className="w-full rounded-lg border border-black/[0.12] bg-white px-4 py-3 font-manrope text-[15px] text-[#0b0b0b] placeholder-black/35 outline-none focus:border-black/40 transition-colors"
             placeholder="Password"
           />
           <button
             type="submit"
-            className="w-full rounded-lg bg-white px-4 py-3 font-manrope text-[15px] font-medium text-black hover:bg-white/90 transition-colors"
+            className="w-full rounded-lg bg-[#0b0b0b] px-4 py-3 font-manrope text-[15px] font-medium text-white hover:bg-[#0b0b0b]/90 transition-colors"
           >
             Continue
           </button>
         </form>
 
         {e ? (
-          <p role="alert" className="mt-4 font-manrope text-[13px] text-red-400/80">
+          <p role="alert" className="mt-4 font-manrope text-[13px] text-red-700">
             {e === "rate"
               ? "Too many attempts. Wait a few minutes and try again."
               : "That did not work."}

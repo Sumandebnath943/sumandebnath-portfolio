@@ -57,10 +57,13 @@ export function place(v: {
  * wrong human call costs one row in a table.
  */
 export function verdictTone(v: string | null): { label: string; className: string } {
-  if (v === "automated") return { label: "bot", className: "text-white/30" };
-  if (v === "unclear") return { label: "unclear", className: "text-amber-400/70" };
-  if (v === "human") return { label: "human", className: "text-emerald-400/75" };
-  return { label: "—", className: "text-white/25" };
+  // The word carries the meaning and the colour only reinforces it — a status
+  // colour never stands alone here, which is also why "bot" is simply recessive
+  // rather than red. It is not an error, just less interesting.
+  if (v === "automated") return { label: "bot", className: "text-black/35" };
+  if (v === "unclear") return { label: "unclear", className: "text-amber-700" };
+  if (v === "human") return { label: "human", className: "text-emerald-700" };
+  return { label: "—", className: "text-black/30" };
 }
 
 // Kolkata is +05:30 year round with no daylight saving, so a fixed offset is

@@ -14,8 +14,8 @@ export type ActiveFilters = {
 type Options = { countries: string[]; paths: string[]; actions: string[]; sources: string[] };
 
 const field =
-  "w-full rounded-lg border border-white/[0.12] bg-white/[0.03] px-3 py-2 font-manrope text-[13px] text-white outline-none focus:border-white/35 transition-colors";
-const label = "block font-mono text-[10px] uppercase tracking-[0.12em] text-white/35 mb-1.5";
+  "w-full rounded-lg border border-black/[0.12] bg-white px-3 py-2 font-manrope text-[13px] text-[#0b0b0b] outline-none focus:border-black/40 transition-colors";
+const label = "block font-mono text-[10px] uppercase tracking-[0.12em] text-black/40 mb-1.5";
 
 function Select({
   name,
@@ -68,7 +68,7 @@ export default function Filters({
   };
 
   return (
-    <form method="get" action="/desk-4f7a" className="border border-white/[0.08] rounded-xl p-4 mb-5">
+    <form method="get" action="/desk-4f7a" className="bg-white border border-black/[0.07] rounded-xl p-4 mb-5 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
       {/* Carried through the form so narrowing by date does not silently
           re-hide the bots you had chosen to see. */}
       {active.bots ? <input type="hidden" name="bots" value={active.bots} /> : null}
@@ -91,31 +91,31 @@ export default function Filters({
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <button
           type="submit"
-          className="rounded-lg bg-white px-4 py-2 font-manrope text-[13px] font-medium text-black hover:bg-white/90 transition-colors"
+          className="rounded-lg bg-[#0b0b0b] px-4 py-2 font-manrope text-[13px] font-medium text-white hover:bg-[#0b0b0b]/90 transition-colors"
         >
           Apply
         </button>
 
-        <span className="font-manrope text-[12px] text-white/35">
+        <span className="font-manrope text-[12px] text-black/40">
           {matched} {matched === 1 ? "match" : "matches"}
         </span>
 
         <span className="flex-1" />
 
-        <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-white/30">Quick</span>
-        <Link href={range(1)} className="font-manrope text-[12px] text-white/55 hover:text-white transition-colors">
+        <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-black/35">Quick</span>
+        <Link href={range(1)} className="font-manrope text-[12px] text-black/50 hover:text-[#0b0b0b] transition-colors">
           24h
         </Link>
-        <Link href={range(7)} className="font-manrope text-[12px] text-white/55 hover:text-white transition-colors">
+        <Link href={range(7)} className="font-manrope text-[12px] text-black/50 hover:text-[#0b0b0b] transition-colors">
           7d
         </Link>
-        <Link href={range(30)} className="font-manrope text-[12px] text-white/55 hover:text-white transition-colors">
+        <Link href={range(30)} className="font-manrope text-[12px] text-black/50 hover:text-[#0b0b0b] transition-colors">
           30d
         </Link>
         {applied > 0 ? (
           <Link
             href={active.bots ? `/desk-4f7a?bots=${active.bots}` : "/desk-4f7a"}
-            className="font-manrope text-[12px] text-amber-400/80 hover:text-amber-300 transition-colors"
+            className="font-manrope text-[12px] text-amber-700 hover:text-amber-800 transition-colors"
           >
             Clear {applied}
           </Link>
