@@ -65,6 +65,30 @@ export function dbConfigured(): boolean {
   return Boolean(process.env.DATABASE_URL);
 }
 
+export type DbHealth =
+  | { ok: true; visits: number }
+  | { ok: false; reason: "unconfigured" | "unreachable" | "no-schema"; detail?: string };
+
+/**
+ * Actually ask the database, rather than checking that a variable exists.
+ *
+ * The distinction matters: a connection string can be present and correct while
+ * the schema has never been created, in which case every visit is silently
+ * dropped. A status light that only reads the env var would call that healthy.
+ */
+export async function dbHealth(): Promise<DbHealth> {
+  const sql = client();
+  if (!sql) return { ok: false, reason: "unconfigured" };
+  try {
+    const [t] = await sql`select to_regclass('public.visits') is not null as present`;
+    if (!t?.present) return { ok: false, reason: "no-schema" };
+    const [c] = await sql`select count(*)::int as n from visits`;
+    return { ok: true, visits: c?.n ?? 0 };
+  } catch (e) {
+    return { ok: false, reason: "unreachable", detail: (e as Error)?.message?.slice(0, 120) };
+  }
+}
+
 // Empty string is not a value — the tracker uses "" for "not known", and
 // writing that over a field a previous request filled in would lose data.
 function nil<T>(v: T | undefined | null | ""): T | null {

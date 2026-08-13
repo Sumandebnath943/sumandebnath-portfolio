@@ -3,6 +3,10 @@
 //
 //   node scripts/db-migrate.mjs            # uses DATABASE_URL from .env.local
 //   node scripts/db-migrate.mjs --check    # report only, change nothing
+//   node scripts/db-migrate.mjs --sql      # print the SQL and connect to nothing
+//
+// --sql exists so production can be migrated by pasting into Vercel's Storage
+// query editor, without the production connection string ever leaving Vercel.
 //
 // Every statement is idempotent, so running it twice is a no-op. Point it at
 // the dev branch first, and only then at production.
@@ -11,6 +15,7 @@ import fs from "node:fs";
 import { neon } from "@neondatabase/serverless";
 
 const checkOnly = process.argv.includes("--check");
+const sqlOnly = process.argv.includes("--sql");
 
 function connectionString() {
   if (process.env.DATABASE_URL) return process.env.DATABASE_URL;
@@ -25,7 +30,8 @@ function connectionString() {
   process.exit(1);
 }
 
-const sql = neon(connectionString());
+// Printing the SQL must not require — or touch — a database.
+const sql = sqlOnly ? null : neon(connectionString());
 
 // Ordered, and each one safe to re-run.
 const statements = [
@@ -103,6 +109,15 @@ const statements = [
   ["visit_pages_path index", `create index if not exists visit_pages_path_idx on visit_pages (path)`],
   ["visit_actions_action index", `create index if not exists visit_actions_action_idx on visit_actions (action)`],
 ];
+
+if (sqlOnly) {
+  console.log("-- Visitor dashboard schema. Safe to run more than once.\n");
+  for (const [label, ddl] of statements) {
+    console.log(`-- ${label}`);
+    console.log(`${ddl.replace(/\n\s+/g, "\n  ").trim()};\n`);
+  }
+  process.exit(0);
+}
 
 const existing = await sql`
   select table_name from information_schema.tables where table_schema = 'public'

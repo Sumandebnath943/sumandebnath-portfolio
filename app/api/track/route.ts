@@ -330,11 +330,14 @@ function originAllowed(h: Headers): boolean {
 }
 
 async function sendTelegram(
-  token: string,
-  chatId: string,
+  token: string | undefined,
+  chatId: string | undefined,
   text: string,
   replyTo?: number,
 ): Promise<number | undefined> {
+  // No bot configured is a normal state, not an error. The visit still gets
+  // recorded; there is simply nobody to notify.
+  if (!token || !chatId) return undefined;
   const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -358,11 +361,12 @@ async function sendTelegram(
 // phone buzzing again. Returns false if the message is gone (deleted by hand, or
 // sent by a previous bot token), so the caller can fall back to posting.
 async function editTelegram(
-  token: string,
-  chatId: string,
+  token: string | undefined,
+  chatId: string | undefined,
   messageId: number,
   text: string,
 ): Promise<boolean> {
+  if (!token || !chatId) return false;
   try {
     const res = await fetch(`https://api.telegram.org/bot${token}/editMessageText`, {
       method: "POST",
@@ -397,7 +401,13 @@ export async function POST(request: NextRequest) {
   try {
     const token = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
-    if (!token || !chatId) return ok();
+    // Deliberately NOT an early return. The dashboard is the durable record and
+    // Telegram is only the notification — bailing out here meant a missing or
+    // rotated bot token silently stopped visits being recorded at all. The send
+    // helpers no-op without a token; everything else still runs.
+    if (!token || !chatId) {
+      if (!dbConfigured()) return ok(); // nothing to notify, nothing to store
+    }
 
     const h = request.headers;
     const ua = h.get("user-agent") || "";
