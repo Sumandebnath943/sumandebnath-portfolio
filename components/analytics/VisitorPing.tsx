@@ -17,6 +17,7 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
+import { ADMIN_PATH } from "@/lib/admin-path";
 
 const SS_KEY = "vp_session";
 const MUTE_KEY = "vp_notrack";
@@ -276,6 +277,13 @@ export default function VisitorPing() {
     if (safe(() => localStorage.getItem(MUTE_KEY) === "1", false)) {
       mutedRef.current = true;
       return; // muted browser: no tracking, no listeners
+    }
+
+    // Never track the dashboard. Reading your own visitor records should not
+    // alert you about yourself or land in the table you are reading.
+    if (safe(() => location.pathname.startsWith(ADMIN_PATH), false)) {
+      mutedRef.current = true;
+      return;
     }
 
     let s = loadSession();
