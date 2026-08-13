@@ -99,6 +99,29 @@ export function sessionCookieOptions() {
   };
 }
 
+/**
+ * A short-lived key the proxy uses to call our own crawler endpoint.
+ *
+ * Derived from the session secret rather than asking for another environment
+ * variable, and bound to a ten-minute window so a copied header stops working
+ * quickly. The endpoint accepts the previous window too, or a request landing on
+ * a boundary would be rejected for no good reason.
+ */
+export function internalKey(offsetWindows = 0): string {
+  const w = Math.floor(Date.now() / 600_000) - offsetWindows;
+  return createHmac("sha256", secret()).update(`crawl:${w}`).digest("hex").slice(0, 32);
+}
+
+export function internalKeyValid(given: string | null): boolean {
+  if (!given || !secret()) return false;
+  // Constant-time against both accepted windows.
+  return [0, 1].some((o) => {
+    const expected = Buffer.from(internalKey(o), "hex");
+    const got = Buffer.from(given, "hex");
+    return equal(expected, got);
+  });
+}
+
 /** Configured at all? Used to fail closed rather than open. */
 export function authConfigured(): boolean {
   return Boolean(process.env.ADMIN_PASSWORD_HASH && process.env.ADMIN_SESSION_SECRET);

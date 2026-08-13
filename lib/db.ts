@@ -357,6 +357,12 @@ export type VisitDetail = {
   actions: { seq: number; action: string | null; label: string | null }[];
 };
 
+// Automated traffic, in both its forms: something pretending to be a browser
+// ("automated") and something that announced itself as a crawler. Both are
+// excluded from "people" views. coalesce() because a null verdict is an
+// unknown, and an unknown is not something to hide.
+const NOT_HUMAN_EXCLUDED = "coalesce(bot_verdict, '') not in ('automated', 'crawler')";
+
 export type VisitFilters = {
   humansOnly?: boolean;
   from?: string; // inclusive, ISO
@@ -385,7 +391,7 @@ function buildWhere(f: VisitFilters): { clause: string; params: unknown[] } {
   };
 
   // No parameter: a fixed predicate with nothing user-supplied in it.
-  if (f.humansOnly) parts.push("bot_verdict is distinct from 'automated'");
+  if (f.humansOnly) parts.push(NOT_HUMAN_EXCLUDED);
 
   if (f.from) add("started_at >= $?", f.from);
   if (f.to) add("started_at < $?", f.to);
@@ -470,7 +476,7 @@ export async function visitCounts(): Promise<{ total: number; automated: number 
   try {
     const [r] = await sql`
       select count(*)::int as total,
-             count(*) filter (where bot_verdict = 'automated')::int as automated
+             count(*) filter (where bot_verdict in ('automated','crawler'))::int as automated
       from visits
     `;
     return { total: r?.total ?? 0, automated: r?.automated ?? 0 };
@@ -508,7 +514,7 @@ export type Ranked = { label: string; value: number; sub?: string | null };
 // Bots are excluded from every aggregate by default. A scraper hitting one page
 // a hundred times would otherwise top the "most read page" chart, and the whole
 // point of these is to see people.
-const HUMAN = "bot_verdict is distinct from 'automated'";
+const HUMAN = NOT_HUMAN_EXCLUDED;
 
 export type Overview = {
   visits: number;
