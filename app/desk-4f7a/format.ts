@@ -63,6 +63,31 @@ export function verdictTone(v: string | null): { label: string; className: strin
   return { label: "—", className: "text-white/25" };
 }
 
+// Kolkata is +05:30 year round with no daylight saving, so a fixed offset is
+// safe here and keeps "13 August" meaning the same day you would call it —
+// filtering by UTC days would slide the boundary by five and a half hours.
+const TZ_OFFSET = "+05:30";
+
+/** Start of the given YYYY-MM-DD, in the owner's timezone. */
+export function dayStart(date: string): string | undefined {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return undefined;
+  return `${date}T00:00:00${TZ_OFFSET}`;
+}
+
+/** Start of the following day, so a `to` filter includes the day named. */
+export function dayAfter(date: string): string | undefined {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return undefined;
+  const d = new Date(`${date}T00:00:00${TZ_OFFSET}`);
+  d.setUTCDate(d.getUTCDate() + 1);
+  return d.toISOString();
+}
+
+/** YYYY-MM-DD for N days ago, in the owner's timezone. */
+export function daysAgo(n: number): string {
+  const d = new Date(Date.now() - n * 86_400_000);
+  return new Intl.DateTimeFormat("en-CA", { timeZone: TZ }).format(d);
+}
+
 /** Percentage of wall-clock time the tab was actually visible. */
 export function focus(total: number | null, active: number | null): string {
   if (!total || active === null || active === undefined) return "—";

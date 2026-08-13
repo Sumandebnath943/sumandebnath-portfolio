@@ -229,26 +229,109 @@ export type VisitDetail = {
   actions: { seq: number; action: string | null; label: string | null }[];
 };
 
+export type VisitFilters = {
+  humansOnly?: boolean;
+  from?: string; // inclusive, ISO
+  to?: string; // exclusive, ISO
+  country?: string;
+  path?: string;
+  action?: string;
+  source?: string;
+  limit?: number;
+};
+
 /**
- * Newest first. `humansOnly` drops visits the classifier was confident about —
- * without it the table fills with scrapers and the real readers get lost, which
- * makes it a usability control rather than a nicety.
+ * Build the WHERE clause and its parameters together.
+ *
+ * Values are never interpolated into the SQL — every one becomes a numbered
+ * placeholder. That is the whole point of doing it this way: these filters come
+ * straight off the query string, and string-building them into a query is how
+ * a dashboard becomes an injection hole.
  */
-export async function listVisits(opts: { limit?: number; humansOnly?: boolean } = {}): Promise<VisitRow[]> {
+function buildWhere(f: VisitFilters): { clause: string; params: unknown[] } {
+  const parts: string[] = [];
+  const params: unknown[] = [];
+  const add = (sqlFragment: string, value: unknown) => {
+    params.push(value);
+    parts.push(sqlFragment.replace("$?", `$${params.length}`));
+  };
+
+  // No parameter: a fixed predicate with nothing user-supplied in it.
+  if (f.humansOnly) parts.push("bot_verdict is distinct from 'automated'");
+
+  if (f.from) add("started_at >= $?", f.from);
+  if (f.to) add("started_at < $?", f.to);
+  if (f.country) add("country = $?", f.country);
+  if (f.source) add("source = $?", f.source);
+  // Containment against the denormalised jsonb array, which is GIN-indexed.
+  if (f.path) add("paths @> $?::jsonb", JSON.stringify([f.path]));
+  if (f.action) {
+    add(
+      "exists (select 1 from visit_actions a where a.visit_id = visits.id and a.action = $?)",
+      f.action,
+    );
+  }
+
+  return { clause: parts.length ? `where ${parts.join(" and ")}` : "", params };
+}
+
+/** Newest first, narrowed by whatever filters are set. */
+export async function listVisits(f: VisitFilters = {}): Promise<VisitRow[]> {
   const sql = client();
   if (!sql) return [];
-  const limit = Math.min(Math.max(opts.limit ?? 100, 1), 500);
+  const limit = Math.min(Math.max(f.limit ?? 200, 1), 500);
   try {
-    const rows = opts.humansOnly
-      ? await sql`
-          select * from visits
-          where bot_verdict is distinct from 'automated'
-          order by started_at desc limit ${limit}
-        `
-      : await sql`select * from visits order by started_at desc limit ${limit}`;
+    const { clause, params } = buildWhere(f);
+    const rows = await sql.query(
+      `select * from visits ${clause} order by started_at desc limit $${params.length + 1}`,
+      [...params, limit],
+    );
     return rows as VisitRow[];
   } catch {
     return [];
+  }
+}
+
+/** How many rows the current filters match, independent of the display limit. */
+export async function countVisits(f: VisitFilters = {}): Promise<number> {
+  const sql = client();
+  if (!sql) return 0;
+  try {
+    const { clause, params } = buildWhere(f);
+    const rows = await sql.query(`select count(*)::int as n from visits ${clause}`, params);
+    return (rows as { n: number }[])[0]?.n ?? 0;
+  } catch {
+    return 0;
+  }
+}
+
+/**
+ * The values worth offering in the filter controls, taken from the data itself
+ * — a dropdown of pages nobody visited would be noise.
+ */
+export async function filterOptions(): Promise<{
+  countries: string[];
+  paths: string[];
+  actions: string[];
+  sources: string[];
+}> {
+  const sql = client();
+  if (!sql) return { countries: [], paths: [], actions: [], sources: [] };
+  try {
+    const [countries, paths, actions, sources] = await Promise.all([
+      sql`select distinct country from visits where country is not null order by country`,
+      sql`select distinct path from visit_pages where path is not null order by path limit 200`,
+      sql`select distinct action from visit_actions where action is not null order by action`,
+      sql`select distinct source from visits where source is not null order by source limit 100`,
+    ]);
+    return {
+      countries: (countries as { country: string }[]).map((r) => r.country),
+      paths: (paths as { path: string }[]).map((r) => r.path),
+      actions: (actions as { action: string }[]).map((r) => r.action),
+      sources: (sources as { source: string }[]).map((r) => r.source),
+    };
+  } catch {
+    return { countries: [], paths: [], actions: [], sources: [] };
   }
 }
 

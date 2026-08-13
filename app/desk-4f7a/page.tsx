@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { dbHealth, listVisits, visitCounts } from "@/lib/db";
-import { dur, focus, place, verdictTone, when } from "./format";
+import { countVisits, dbHealth, filterOptions, listVisits, visitCounts } from "@/lib/db";
+import Filters, { type ActiveFilters } from "./Filters";
+import { dayAfter, dayStart, dur, focus, place, verdictTone, when } from "./format";
 
 export const metadata: Metadata = {
   title: { absolute: "Visitors" },
@@ -13,18 +14,35 @@ export const dynamic = "force-dynamic";
 export default async function DashboardPage({
   searchParams,
 }: {
-  searchParams: Promise<{ bots?: string }>;
+  searchParams: Promise<ActiveFilters>;
 }) {
-  const { bots } = await searchParams;
+  const sp = await searchParams;
   // Bots hidden unless asked for: left in, they outnumber the readers and the
   // table stops being worth opening.
-  const showBots = bots === "1";
+  const showBots = sp.bots === "1";
 
-  const [health, counts, visits] = await Promise.all([
+  const filters = {
+    humansOnly: !showBots,
+    // Dates arrive as YYYY-MM-DD and mean days in the owner's timezone, so they
+    // are widened to real instants before they reach SQL.
+    from: sp.from ? dayStart(sp.from) : undefined,
+    to: sp.to ? dayAfter(sp.to) : undefined,
+    country: sp.country || undefined,
+    path: sp.path || undefined,
+    action: sp.action || undefined,
+    source: sp.source || undefined,
+    limit: 200,
+  };
+
+  const [health, counts, visits, matched, options] = await Promise.all([
     dbHealth(),
     visitCounts(),
-    listVisits({ humansOnly: !showBots, limit: 200 }),
+    listVisits(filters),
+    countVisits(filters),
+    filterOptions(),
   ]);
+
+  const narrowed = Boolean(sp.from || sp.to || sp.country || sp.path || sp.action || sp.source);
 
   return (
     <main className="min-h-screen bg-black text-white px-5 py-8">
@@ -39,7 +57,15 @@ export default async function DashboardPage({
 
           <div className="flex items-center gap-3">
             <Link
-              href={showBots ? "/desk-4f7a" : "/desk-4f7a?bots=1"}
+              // Keeps every other filter in place while toggling bots, so the
+              // view you built is not thrown away to answer one question.
+              href={(() => {
+                const p = new URLSearchParams();
+                for (const [k, v] of Object.entries(sp)) if (v && k !== "bots") p.set(k, String(v));
+                if (!showBots) p.set("bots", "1");
+                const q = p.toString();
+                return q ? `/desk-4f7a?${q}` : "/desk-4f7a";
+              })()}
               className="rounded-lg border border-white/[0.12] px-3 py-2 font-manrope text-[12px] text-white/70 hover:text-white hover:border-white/30 transition-colors"
             >
               {showBots ? "Hide bots" : `Show bots (${counts.automated})`}
@@ -55,13 +81,12 @@ export default async function DashboardPage({
           </div>
         </header>
 
-        <p className="font-manrope text-[13px] text-white/45 mb-5">
+        <p className="font-manrope text-[13px] text-white/45 mb-4">
           {health.ok ? (
             <>
               {counts.total - counts.automated} real {counts.total - counts.automated === 1 ? "visit" : "visits"}
-              {counts.automated > 0 ? ` · ${counts.automated} automated hidden` : ""}
-              {" · showing newest "}
-              {visits.length}
+              {counts.automated > 0 ? ` · ${counts.automated} automated${showBots ? " shown" : " hidden"}` : ""}
+              {visits.length < matched ? ` · showing newest ${visits.length} of ${matched}` : ""}
             </>
           ) : health.reason === "no-schema" ? (
             <span className="text-amber-400/90">
@@ -72,17 +97,23 @@ export default async function DashboardPage({
           )}
         </p>
 
+        {health.ok ? <Filters active={sp} options={options} matched={matched} /> : null}
+
         {visits.length === 0 ? (
           <div className="border border-white/[0.08] rounded-xl p-10 text-center">
             <p className="font-manrope text-[15px] text-white/55">
-              {health.ok
-                ? showBots
-                  ? "Nothing recorded yet."
-                  : "No human visits yet."
-                : "Nothing to show until storage is working."}
+              {!health.ok
+                ? "Nothing to show until storage is working."
+                : narrowed
+                  ? "No visits match these filters."
+                  : showBots
+                    ? "Nothing recorded yet."
+                    : "No human visits yet."}
             </p>
             <p className="font-manrope text-[13px] text-white/35 mt-2">
-              Recording starts from now — there is no history before the database existed.
+              {narrowed
+                ? "Widen the range, or clear the filters."
+                : "Recording starts from now — there is no history before the database existed."}
             </p>
           </div>
         ) : (
