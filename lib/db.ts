@@ -189,6 +189,70 @@ export async function saveVisitPages(id: string, pages: VisitPage[]): Promise<bo
   }
 }
 
+// --- retention --------------------------------------------------------------
+
+// After this, the IP is removed but the visit is kept. An IP is the identifying
+// part of the record; the journey, country and network are not.
+export const IP_RETENTION_DAYS = 90;
+// After this, the visit goes entirely.
+export const VISIT_RETENTION_DAYS = 365;
+
+/**
+ * Enforce the retention promise made on /privacy.
+ *
+ * Two stages rather than one: the identifying field goes early, the rest stays
+ * long enough to be useful. Deliberately idempotent — running it twice a day, or
+ * twice in a minute, changes nothing after the first pass.
+ */
+export async function purgeVisits(): Promise<{
+  ok: boolean;
+  ipsCleared: number;
+  visitsDeleted: number;
+  error?: string;
+}> {
+  const sql = client();
+  if (!sql) return { ok: false, ipsCleared: 0, visitsDeleted: 0, error: "no database" };
+  try {
+    // Deleting first would mean clearing IPs on rows about to be removed.
+    const deleted = await sql`
+      delete from visits
+      where started_at < now() - make_interval(days => ${VISIT_RETENTION_DAYS})
+      returning id
+    `;
+    const cleared = await sql`
+      update visits set ip = null
+      where ip is not null
+        and started_at < now() - make_interval(days => ${IP_RETENTION_DAYS})
+      returning id
+    `;
+    return { ok: true, ipsCleared: cleared.length, visitsDeleted: deleted.length };
+  } catch (e) {
+    return {
+      ok: false,
+      ipsCleared: 0,
+      visitsDeleted: 0,
+      error: (e as Error)?.message?.slice(0, 200),
+    };
+  }
+}
+
+/** What retention has left to do — surfaced on the dashboard so the promise is visible. */
+export async function retentionStatus(): Promise<{ withIp: number; oldestDays: number | null }> {
+  const sql = client();
+  if (!sql) return { withIp: 0, oldestDays: null };
+  try {
+    const [r] = await sql`
+      select
+        count(*) filter (where ip is not null)::int as with_ip,
+        extract(day from now() - min(started_at))::int as oldest_days
+      from visits
+    `;
+    return { withIp: r?.with_ip ?? 0, oldestDays: r?.oldest_days ?? null };
+  } catch {
+    return { withIp: 0, oldestDays: null };
+  }
+}
+
 // --- reading, for the dashboard -------------------------------------------
 
 export type VisitRow = {

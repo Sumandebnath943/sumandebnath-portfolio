@@ -1,6 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { countVisits, dbHealth, filterOptions, listVisits, visitCounts } from "@/lib/db";
+import {
+  IP_RETENTION_DAYS,
+  VISIT_RETENTION_DAYS,
+  countVisits,
+  dbHealth,
+  filterOptions,
+  listVisits,
+  retentionStatus,
+  visitCounts,
+} from "@/lib/db";
 import Filters, { type ActiveFilters } from "./Filters";
 import { dayAfter, dayStart, dur, focus, place, verdictTone, when } from "./format";
 
@@ -34,12 +43,13 @@ export default async function DashboardPage({
     limit: 200,
   };
 
-  const [health, counts, visits, matched, options] = await Promise.all([
+  const [health, counts, visits, matched, options, retention] = await Promise.all([
     dbHealth(),
     visitCounts(),
     listVisits(filters),
     countVisits(filters),
     filterOptions(),
+    retentionStatus(),
   ]);
 
   const narrowed = Boolean(sp.from || sp.to || sp.country || sp.path || sp.action || sp.source);
@@ -188,6 +198,17 @@ export default async function DashboardPage({
             </table>
           </div>
         )}
+
+        {/* The retention promise on /privacy is only worth as much as its
+            enforcement, so show what the purge job has left to do. */}
+        {health.ok ? (
+          <p className="mt-5 font-manrope text-[12px] text-white/30 leading-[1.7]">
+            IP addresses removed after {IP_RETENTION_DAYS} days · visits deleted after{" "}
+            {VISIT_RETENTION_DAYS} days · purged daily
+            {retention.oldestDays !== null ? ` · oldest record ${retention.oldestDays}d old` : ""}
+            {retention.withIp > 0 ? ` · ${retention.withIp} still hold an IP` : ""}
+          </p>
+        ) : null}
       </div>
     </main>
   );

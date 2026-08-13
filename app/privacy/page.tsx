@@ -3,6 +3,9 @@ import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import Contact from "@/components/sections/Contact";
 import { SITE_URL } from "@/lib/projects";
+// Read from the same constants the purge job enforces, so the page cannot claim
+// a retention period the code does not actually apply.
+import { IP_RETENTION_DAYS, VISIT_RETENTION_DAYS } from "@/lib/db";
 
 export const metadata: Metadata = {
   title: { absolute: "Privacy — Suman Debnath" },
@@ -27,7 +30,7 @@ const breadcrumbsJsonLd = {
   ],
 };
 
-const LAST_UPDATED = "13 August 2026";
+const LAST_UPDATED = "14 August 2026";
 
 // Shared type styles — kept local so this page stays self-contained.
 const h2 = "font-manrope font-semibold text-xl md:text-2xl tracking-tight text-white mb-4";
@@ -90,8 +93,13 @@ export default function PrivacyPage() {
               data, so I am not going to call this &ldquo;anonymous&rdquo;.
             </Bullet>
             <Bullet>
-              My own visit alerts go to a private Telegram chat that only I can read.
-              They are never sold, shared, or fed into any marketing list.
+              My own visit alerts go to a private Telegram chat that only I can read,
+              and each visit is also saved to a private database only I can open.
+              Neither is ever sold, shared, or fed into any marketing list.
+            </Bullet>
+            <Bullet>
+              Your IP address is deleted after {IP_RETENTION_DAYS} days. The rest of the
+              visit is deleted after a year.
             </Bullet>
             <Bullet>
               This site also runs Google Analytics and Vercel Analytics. Those are
@@ -228,11 +236,34 @@ export default function PrivacyPage() {
         {/* ── Retention ───────────────────────────────────────────────────── */}
         <section className={section}>
           <h2 className={h2}>How long it is kept</h2>
+          <p className={`${p} mb-4`}>
+            Each visit is saved to a private database so I can see who has been reading
+            this site over time. It is hosted in the United States, and I am the only
+            person with access.
+          </p>
+          <ul className="space-y-3 mb-4">
+            <Bullet>
+              <span className="text-white/85">
+                Your IP address is deleted after {IP_RETENTION_DAYS} days.
+              </span>{" "}
+              It is the part that could identify you, so it goes first. The rest of the
+              visit — pages, timings, country, network — stays.
+            </Bullet>
+            <Bullet>
+              <span className="text-white/85">
+                The whole visit is deleted after {Math.round(VISIT_RETENTION_DAYS / 365)} year.
+              </span>{" "}
+              Nothing is kept beyond that.
+            </Bullet>
+            <Bullet>
+              A scheduled job does this automatically once a day. It is not something I
+              have to remember to run.
+            </Bullet>
+          </ul>
           <p className={p}>
-            There is no database behind this site — my alerts are messages, not records
-            in a system. They stay in my private Telegram chat until I delete them.
-            Anything stored in your browser stays until you clear it. Google and Vercel
-            retain their own data according to their own retention settings.
+            The Telegram alerts stay in my private chat until I delete them. Anything
+            stored in your browser stays until you clear it. Google and Vercel retain
+            their own data according to their own settings, not mine.
           </p>
         </section>
 
@@ -265,9 +296,10 @@ export default function PrivacyPage() {
           <h2 className={h2}>Your rights, and getting in touch</h2>
           <p className={`${p} mb-6`}>
             If you want to know what I hold about a visit, or want it deleted, email me
-            and I will do it. Since there is no database, in practice this means finding
-            and deleting the relevant messages — so the more detail you can give me
-            (roughly when you visited, and from where), the better.
+            and I will do it. Visits are stored in a database I can search, so the more
+            detail you can give me — roughly when you visited, and from where — the
+            faster I can find yours and remove it, along with the matching Telegram
+            messages.
           </p>
           <a
             href="mailto:sumandebnath944@gmail.com"
