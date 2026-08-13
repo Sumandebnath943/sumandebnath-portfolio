@@ -143,6 +143,7 @@ export default async function DashboardPage({
                   <th className="px-3 py-3 font-normal whitespace-nowrap">Source</th>
                   <th className="px-3 py-3 font-normal whitespace-nowrap">Device</th>
                   <th className="px-3 py-3 font-normal whitespace-nowrap">Read</th>
+                  <th className="px-3 py-3 font-normal" />
                 </tr>
               </thead>
               <tbody className="font-manrope text-[13px]">
@@ -151,7 +152,7 @@ export default async function DashboardPage({
                   return (
                     <tr
                       key={v.id}
-                      className="border-b border-white/[0.05] last:border-0 hover:bg-white/[0.03] transition-colors"
+                      className="group border-b border-white/[0.05] last:border-0 hover:bg-white/[0.04] transition-colors"
                     >
                       <td className="px-3 py-3 whitespace-nowrap">
                         <Link href={`/desk-4f7a/v/${encodeURIComponent(v.id)}`} className="hover:underline">
@@ -190,6 +191,16 @@ export default async function DashboardPage({
                       <td className="px-3 py-3 whitespace-nowrap text-white/50">{v.device || "—"}</td>
                       <td className={`px-3 py-3 whitespace-nowrap font-mono text-[11px] ${verdict.className}`}>
                         {verdict.label}
+                      </td>
+                      {/* An explicit way in. The timestamp is also a link, but a
+                          link that looks like a timestamp is one nobody finds. */}
+                      <td className="px-3 py-3 whitespace-nowrap text-right">
+                        <Link
+                          href={`/desk-4f7a/v/${encodeURIComponent(v.id)}`}
+                          className="rounded-md border border-white/[0.12] px-2.5 py-1 font-manrope text-[11px] text-white/55 group-hover:text-white group-hover:border-white/30 transition-colors"
+                        >
+                          Detail →
+                        </Link>
                       </td>
                     </tr>
                   );

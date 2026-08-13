@@ -70,6 +70,15 @@ const screenSize = () =>
     const dpr = window.devicePixelRatio || 1;
     return `${screen.width}×${screen.height}${dpr !== 1 ? ` @${dpr}x` : ""}`;
   }, "");
+// The window, as opposed to the screen. A large monitor with the site in a
+// narrow window is a different reading experience from a maximised one.
+const viewportSize = () => safe(() => `${window.innerWidth}×${window.innerHeight}`, "");
+
+// utm_source already feeds the visit tag; these two are kept apart so campaign
+// and medium can be grouped independently.
+const utmPart = (key: string) =>
+  safe(() => new URLSearchParams(window.location.search).get(key)?.slice(0, 60) || "", "");
+
 const cores = () => safe(() => navigator.hardwareConcurrency ?? -1, -1);
 const webdriver = () => safe(() => navigator.webdriver === true, false);
 
@@ -226,6 +235,9 @@ export default function VisitorPing() {
       source: readSource(),
       referrer: safe(() => document.referrer, "") || "",
       screen: screenSize(),
+      viewport: viewportSize(),
+      utmMedium: utmPart("utm_medium"),
+      utmCampaign: utmPart("utm_campaign"),
       hw: cores(),
       wd: webdriver(),
       // Sessions started before this field existed must read as "unknown", not
@@ -477,6 +489,9 @@ export default function VisitorPing() {
         tz: tz(),
         langs: langs(),
         screen: screenSize(),
+        viewport: viewportSize(),
+        utmMedium: utmPart("utm_medium"),
+        utmCampaign: utmPart("utm_campaign"),
         hw: cores(),
         wd: webdriver(),
         visits,

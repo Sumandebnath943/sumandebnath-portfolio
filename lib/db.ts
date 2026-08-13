@@ -46,6 +46,22 @@ export type VisitRecord = {
 
   tgArrivalMid?: number | null;
   tgCardMid?: number | null;
+
+  // Added later. Mostly things the notifier already worked out and discarded.
+  exitPath?: string | null;
+  maxScroll?: number | null;
+  browser?: string | null;
+  os?: string | null;
+  deviceType?: string | null;
+  referrerHost?: string | null;
+  utmMedium?: string | null;
+  utmCampaign?: string | null;
+  botReason?: string | null;
+  actionCount?: number | null;
+  isBounce?: boolean | null;
+  viewport?: string | null;
+  lat?: number | null;
+  lng?: number | null;
 };
 
 export type VisitPage = { path: string; ms?: number | null; scroll?: number | null };
@@ -111,7 +127,10 @@ export async function saveVisit(v: VisitRecord): Promise<boolean> {
         ip, country, region, city, postal, asn, network, timezone, languages,
         user_agent, device, screen, cores, webdriver, bot_verdict, interacted,
         entry_path, source, referrer, tag, visit_number, days_since,
-        tg_arrival_mid, tg_card_mid
+        tg_arrival_mid, tg_card_mid,
+        exit_path, max_scroll, browser, os, device_type, referrer_host,
+        utm_medium, utm_campaign, bot_reason, action_count, is_bounce,
+        viewport, lat, lng
       ) values (
         ${v.id}, now(), ${nil(v.endedAt)}, ${nil(v.totalMs)}, ${nil(v.activeMs)},
         ${nil(v.pageCount)}, ${JSON.stringify(v.paths ?? [])}::jsonb,
@@ -122,7 +141,11 @@ export async function saveVisit(v: VisitRecord): Promise<boolean> {
         ${nil(v.webdriver)}, ${nil(v.botVerdict)}, ${nil(v.interacted)},
         ${nil(v.entryPath)}, ${nil(v.source)}, ${nil(v.referrer)}, ${nil(v.tag)},
         ${nil(v.visitNumber)}, ${nil(v.daysSince)},
-        ${nil(v.tgArrivalMid)}, ${nil(v.tgCardMid)}
+        ${nil(v.tgArrivalMid)}, ${nil(v.tgCardMid)},
+        ${nil(v.exitPath)}, ${nil(v.maxScroll)}, ${nil(v.browser)}, ${nil(v.os)},
+        ${nil(v.deviceType)}, ${nil(v.referrerHost)}, ${nil(v.utmMedium)},
+        ${nil(v.utmCampaign)}, ${nil(v.botReason)}, ${nil(v.actionCount)},
+        ${nil(v.isBounce)}, ${nil(v.viewport)}, ${nil(v.lat)}, ${nil(v.lng)}
       )
       on conflict (id) do update set
         last_seen_at   = now(),
@@ -158,7 +181,25 @@ export async function saveVisit(v: VisitRecord): Promise<boolean> {
         visit_number   = coalesce(excluded.visit_number,  visits.visit_number),
         days_since     = coalesce(excluded.days_since,    visits.days_since),
         tg_arrival_mid = coalesce(visits.tg_arrival_mid,  excluded.tg_arrival_mid),
-        tg_card_mid    = coalesce(visits.tg_card_mid,     excluded.tg_card_mid)
+        tg_card_mid    = coalesce(visits.tg_card_mid,     excluded.tg_card_mid),
+        -- The exit page moves as the visit goes, so the newest write wins.
+        exit_path      = coalesce(excluded.exit_path,     visits.exit_path),
+        -- Scroll depth and action count only ever climb.
+        max_scroll     = greatest(coalesce(excluded.max_scroll, 0),
+                                  coalesce(visits.max_scroll, 0)),
+        action_count   = greatest(coalesce(excluded.action_count, 0),
+                                  coalesce(visits.action_count, 0)),
+        browser        = coalesce(excluded.browser,       visits.browser),
+        os             = coalesce(excluded.os,            visits.os),
+        device_type    = coalesce(excluded.device_type,   visits.device_type),
+        referrer_host  = coalesce(visits.referrer_host,   excluded.referrer_host),
+        utm_medium     = coalesce(visits.utm_medium,      excluded.utm_medium),
+        utm_campaign   = coalesce(visits.utm_campaign,    excluded.utm_campaign),
+        bot_reason     = coalesce(excluded.bot_reason,    visits.bot_reason),
+        is_bounce      = coalesce(excluded.is_bounce,     visits.is_bounce),
+        viewport       = coalesce(excluded.viewport,      visits.viewport),
+        lat            = coalesce(visits.lat,             excluded.lat),
+        lng            = coalesce(visits.lng,             excluded.lng)
     `;
     return true;
   } catch {

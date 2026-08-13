@@ -49,6 +49,10 @@ type Payload = {
   // True when the card is being brought up to date mid-visit rather than because
   // the visit ended. Keeps the wording honest and holds back the deep-dive.
   live?: boolean;
+  // Dashboard-only extras, of no interest to the Telegram message.
+  viewport?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
   // Device/behaviour signals used for the human-vs-bot read.
   screen?: string;
   hw?: number;
@@ -67,8 +71,15 @@ function isBot(ua: string): boolean {
   );
 }
 
-function parseDevice(ua: string): string {
-  if (!ua) return "Unknown device";
+// The same read, kept in parts. The dashboard needs them separately — "all
+// mobile visitors" is not a question you can ask of a joined-up string.
+function parseDeviceParts(ua: string): {
+  browser: string;
+  os: string;
+  type: string;
+  model: string;
+} {
+  if (!ua) return { browser: "", os: "", type: "", model: "" };
   const browser =
     /Edg\//.test(ua) ? "Edge"
     : /OPR\/|Opera/.test(ua) ? "Opera"
@@ -94,7 +105,22 @@ function parseDevice(ua: string): string {
   const m = ua.match(/;\s?([A-Za-z0-9 ._-]+?)\s+Build\//);
   if (m && m[1] && !/^wv$/i.test(m[1])) model = m[1].trim();
 
+  return { browser, os, type, model };
+}
+
+function parseDevice(ua: string): string {
+  if (!ua) return "Unknown device";
+  const { browser, os, type, model } = parseDeviceParts(ua);
   return `${browser} · ${os} · ${type}${model ? ` · ${model}` : ""}`;
+}
+
+function safeHost(url: string | undefined): string {
+  if (!url) return "";
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return "";
+  }
 }
 
 function decode(value: string | null): string {
@@ -439,6 +465,10 @@ export async function POST(request: NextRequest) {
     const lng = h.get("x-vercel-ip-longitude");
     const mapLink = lat && lng ? `https://www.google.com/maps?q=${lat},${lng}` : "";
     const device = parseDevice(ua);
+    const deviceParts = parseDeviceParts(ua);
+    // Grouping by host turns a long tail of unique URLs into a handful of real
+    // sources; the full referrer is still kept alongside it.
+    const refHost = safeHost(body.referrer);
     // esc() is for Telegram's HTML parser. The database wants the id as sent —
     // storing an escaped copy would break every join against it.
     const rawId = (body.id || "").slice(0, 24);
@@ -731,6 +761,39 @@ export async function POST(request: NextRequest) {
 
             tgArrivalMid: isArrival ? sentId ?? null : body.mid ?? null,
             tgCardMid: body.smid ?? null,
+
+            // Where they gave up, and how far down they got at their deepest.
+            exitPath: body.pages?.length
+              ? String(body.pages[body.pages.length - 1]?.path || "") || null
+              : null,
+            maxScroll: body.pages?.length
+              ? Math.max(0, ...body.pages.map((p) => (typeof p.scroll === "number" ? p.scroll : 0)))
+              : null,
+
+            browser: deviceParts.browser || null,
+            os: deviceParts.os || null,
+            deviceType: deviceParts.type || null,
+
+            // The host alone groups usefully; the full URL almost never repeats.
+            referrerHost: refHost || null,
+            utmMedium: body.utmMedium || null,
+            utmCampaign: body.utmCampaign || null,
+
+            // Why the classifier landed where it did — previously computed and
+            // thrown away, which made a surprising verdict impossible to check.
+            botReason: verdict.why || null,
+            actionCount: body.actions?.length ?? null,
+            // One page and gone in seconds. Only meaningful once the visit ends.
+            isBounce:
+              body.type === "summary" && !body.live
+                ? (body.pageCount ?? 0) <= 1 && (body.totalMs ?? 0) < 10_000
+                : null,
+            viewport: body.viewport || null,
+
+            // City centroids from Vercel — good enough to place a country on a
+            // map, nowhere near precise enough to place a person.
+            lat: lat ? Number(lat) : null,
+            lng: lng ? Number(lng) : null,
           });
 
           if (body.pages?.length) {

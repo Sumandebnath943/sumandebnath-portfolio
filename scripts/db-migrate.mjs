@@ -99,6 +99,28 @@ const statements = [
        primary key (visit_id, seq)
      )`,
   ],
+  // Added after the first release. Written as ALTERs rather than folded into
+  // the CREATE above so that a table already holding data picks them up too —
+  // "if not exists" makes both paths land in the same place.
+  [
+    "visits: later columns",
+    `alter table visits
+       add column if not exists exit_path     text,
+       add column if not exists max_scroll    integer,
+       add column if not exists browser       text,
+       add column if not exists os            text,
+       add column if not exists device_type   text,
+       add column if not exists referrer_host text,
+       add column if not exists utm_medium    text,
+       add column if not exists utm_campaign  text,
+       add column if not exists bot_reason    text,
+       add column if not exists action_count  integer,
+       add column if not exists is_bounce     boolean,
+       add column if not exists viewport      text,
+       add column if not exists lat           numeric,
+       add column if not exists lng           numeric`,
+  ],
+
   // The dashboard's default view is "newest first", so this is the index that
   // matters most.
   ["visits_started_at index", `create index if not exists visits_started_at_idx on visits (started_at desc)`],
@@ -108,6 +130,9 @@ const statements = [
   ["visits_paths index", `create index if not exists visits_paths_idx on visits using gin (paths)`],
   ["visit_pages_path index", `create index if not exists visit_pages_path_idx on visit_pages (path)`],
   ["visit_actions_action index", `create index if not exists visit_actions_action_idx on visit_actions (action)`],
+  // Grouping columns for the charts.
+  ["visits_device_type index", `create index if not exists visits_device_type_idx on visits (device_type)`],
+  ["visits_ip index", `create index if not exists visits_ip_idx on visits (ip)`],
 ];
 
 if (sqlOnly) {
