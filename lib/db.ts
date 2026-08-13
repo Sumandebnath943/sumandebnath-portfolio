@@ -189,6 +189,107 @@ export async function saveVisitPages(id: string, pages: VisitPage[]): Promise<bo
   }
 }
 
+// --- reading, for the dashboard -------------------------------------------
+
+export type VisitRow = {
+  id: string;
+  started_at: Date;
+  ended_at: Date | null;
+  total_ms: number | null;
+  active_ms: number | null;
+  page_count: number | null;
+  paths: string[];
+  ip: string | null;
+  country: string | null;
+  region: string | null;
+  city: string | null;
+  postal: string | null;
+  asn: number | null;
+  network: string | null;
+  timezone: string | null;
+  languages: string | null;
+  user_agent: string | null;
+  device: string | null;
+  screen: string | null;
+  cores: number | null;
+  webdriver: boolean | null;
+  bot_verdict: string | null;
+  interacted: boolean | null;
+  entry_path: string | null;
+  source: string | null;
+  referrer: string | null;
+  tag: string | null;
+  visit_number: number | null;
+  days_since: number | null;
+};
+
+export type VisitDetail = {
+  visit: VisitRow;
+  pages: { seq: number; path: string; ms: number | null; scroll: number | null }[];
+  actions: { seq: number; action: string | null; label: string | null }[];
+};
+
+/**
+ * Newest first. `humansOnly` drops visits the classifier was confident about —
+ * without it the table fills with scrapers and the real readers get lost, which
+ * makes it a usability control rather than a nicety.
+ */
+export async function listVisits(opts: { limit?: number; humansOnly?: boolean } = {}): Promise<VisitRow[]> {
+  const sql = client();
+  if (!sql) return [];
+  const limit = Math.min(Math.max(opts.limit ?? 100, 1), 500);
+  try {
+    const rows = opts.humansOnly
+      ? await sql`
+          select * from visits
+          where bot_verdict is distinct from 'automated'
+          order by started_at desc limit ${limit}
+        `
+      : await sql`select * from visits order by started_at desc limit ${limit}`;
+    return rows as VisitRow[];
+  } catch {
+    return [];
+  }
+}
+
+/** Counts for the header, so the effect of the bot filter is visible. */
+export async function visitCounts(): Promise<{ total: number; automated: number }> {
+  const sql = client();
+  if (!sql) return { total: 0, automated: 0 };
+  try {
+    const [r] = await sql`
+      select count(*)::int as total,
+             count(*) filter (where bot_verdict = 'automated')::int as automated
+      from visits
+    `;
+    return { total: r?.total ?? 0, automated: r?.automated ?? 0 };
+  } catch {
+    return { total: 0, automated: 0 };
+  }
+}
+
+export async function getVisit(id: string): Promise<VisitDetail | null> {
+  const sql = client();
+  if (!sql || !id) return null;
+  try {
+    const [visit] = await sql`select * from visits where id = ${id}`;
+    if (!visit) return null;
+    const pages = await sql`
+      select seq, path, ms, scroll from visit_pages where visit_id = ${id} order by seq
+    `;
+    const actions = await sql`
+      select seq, action, label from visit_actions where visit_id = ${id} order by seq
+    `;
+    return {
+      visit: visit as VisitRow,
+      pages: pages as VisitDetail["pages"],
+      actions: actions as VisitDetail["actions"],
+    };
+  } catch {
+    return null;
+  }
+}
+
 export async function saveVisitActions(id: string, actions: VisitAction[]): Promise<boolean> {
   const sql = client();
   if (!sql || !id || actions.length === 0) return false;

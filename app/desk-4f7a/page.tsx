@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
-import { dbHealth } from "@/lib/db";
+import Link from "next/link";
+import { dbHealth, listVisits, visitCounts } from "@/lib/db";
+import { dur, focus, place, verdictTone, when } from "./format";
 
 export const metadata: Metadata = {
   title: { absolute: "Visitors" },
@@ -8,59 +10,153 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-// Phase 2 lands the gate; the table and filters come next. Kept deliberately
-// thin so what is being verified here is the auth, not the UI.
-export default async function DashboardPage() {
-  const health = await dbHealth();
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ bots?: string }>;
+}) {
+  const { bots } = await searchParams;
+  // Bots hidden unless asked for: left in, they outnumber the readers and the
+  // table stops being worth opening.
+  const showBots = bots === "1";
 
-  // Named for what it actually means. "Connected" previously meant only that an
-  // environment variable existed — which reads as healthy while every visit is
-  // being dropped for want of a schema.
-  const status = health.ok
-    ? { label: `ready · ${health.visits} visit${health.visits === 1 ? "" : "s"} stored`, tone: "text-emerald-400/80" }
-    : health.reason === "no-schema"
-      ? { label: "no tables — run the migration", tone: "text-amber-400/90" }
-      : health.reason === "unconfigured"
-        ? { label: "DATABASE_URL not set", tone: "text-red-400/80" }
-        : { label: "unreachable", tone: "text-red-400/80" };
+  const [health, counts, visits] = await Promise.all([
+    dbHealth(),
+    visitCounts(),
+    listVisits({ humansOnly: !showBots, limit: 200 }),
+  ]);
 
   return (
-    <main className="min-h-screen bg-black text-white px-6 py-10">
-      <div className="max-w-3xl mx-auto">
-        <p className="font-mono text-[11px] tracking-[0.2em] text-white/35 uppercase mb-3">
-          Dashboard
-        </p>
-        <h1 className="font-manrope text-2xl tracking-tight mb-2">Visitors</h1>
-        <p className="font-manrope text-[15px] text-white/55 leading-[1.8] mb-8">
-          You are signed in. The table and filters arrive in the next phase.
-        </p>
-
-        <dl className="border-t border-white/[0.08] pt-4 space-y-2">
-          <div className="flex justify-between gap-4 font-manrope text-[13px]">
-            <dt className="text-white/45">Storage</dt>
-            <dd className={status.tone}>{status.label}</dd>
+    <main className="min-h-screen bg-black text-white px-5 py-8">
+      <div className="max-w-[1200px] mx-auto">
+        <header className="flex flex-wrap items-end justify-between gap-4 mb-6">
+          <div>
+            <p className="font-mono text-[11px] tracking-[0.2em] text-white/35 uppercase mb-2">
+              Dashboard
+            </p>
+            <h1 className="font-manrope text-2xl tracking-tight">Visitors</h1>
           </div>
-        </dl>
 
-        {!health.ok && health.reason === "no-schema" ? (
-          <p className="mt-4 font-manrope text-[13px] text-white/50 leading-[1.7]">
-            The database is reachable but empty, so visits are being recorded
-            nowhere. Run{" "}
-            <span className="font-mono text-[12px] text-white/75">
-              node scripts/db-migrate.mjs
-            </span>{" "}
-            against this environment.
-          </p>
-        ) : null}
+          <div className="flex items-center gap-3">
+            <Link
+              href={showBots ? "/desk-4f7a" : "/desk-4f7a?bots=1"}
+              className="rounded-lg border border-white/[0.12] px-3 py-2 font-manrope text-[12px] text-white/70 hover:text-white hover:border-white/30 transition-colors"
+            >
+              {showBots ? "Hide bots" : `Show bots (${counts.automated})`}
+            </Link>
+            <form action="/desk-4f7a/logout" method="post">
+              <button
+                type="submit"
+                className="rounded-lg border border-white/[0.12] px-3 py-2 font-manrope text-[12px] text-white/70 hover:text-white hover:border-white/30 transition-colors"
+              >
+                Sign out
+              </button>
+            </form>
+          </div>
+        </header>
 
-        <form action="/desk-4f7a/logout" method="post" className="mt-10">
-          <button
-            type="submit"
-            className="rounded-lg border border-white/[0.12] px-4 py-2 font-manrope text-[13px] text-white/70 hover:text-white hover:border-white/30 transition-colors"
-          >
-            Sign out
-          </button>
-        </form>
+        <p className="font-manrope text-[13px] text-white/45 mb-5">
+          {health.ok ? (
+            <>
+              {counts.total - counts.automated} real {counts.total - counts.automated === 1 ? "visit" : "visits"}
+              {counts.automated > 0 ? ` · ${counts.automated} automated hidden` : ""}
+              {" · showing newest "}
+              {visits.length}
+            </>
+          ) : health.reason === "no-schema" ? (
+            <span className="text-amber-400/90">
+              No tables yet — run the migration against this environment.
+            </span>
+          ) : (
+            <span className="text-red-400/80">Storage {health.reason}.</span>
+          )}
+        </p>
+
+        {visits.length === 0 ? (
+          <div className="border border-white/[0.08] rounded-xl p-10 text-center">
+            <p className="font-manrope text-[15px] text-white/55">
+              {health.ok
+                ? showBots
+                  ? "Nothing recorded yet."
+                  : "No human visits yet."
+                : "Nothing to show until storage is working."}
+            </p>
+            <p className="font-manrope text-[13px] text-white/35 mt-2">
+              Recording starts from now — there is no history before the database existed.
+            </p>
+          </div>
+        ) : (
+          // Horizontal scroll lives on the wrapper, so the page itself never
+          // scrolls sideways on a narrow screen.
+          <div className="overflow-x-auto border border-white/[0.08] rounded-xl">
+            <table className="w-full border-collapse text-left">
+              <thead>
+                <tr className="border-b border-white/[0.08] font-mono text-[10px] uppercase tracking-[0.12em] text-white/35">
+                  <th className="px-3 py-3 font-normal whitespace-nowrap">Arrived</th>
+                  <th className="px-3 py-3 font-normal whitespace-nowrap">Left</th>
+                  <th className="px-3 py-3 font-normal whitespace-nowrap">Stayed</th>
+                  <th className="px-3 py-3 font-normal whitespace-nowrap">Active</th>
+                  <th className="px-3 py-3 font-normal whitespace-nowrap">Pages</th>
+                  <th className="px-3 py-3 font-normal">Location</th>
+                  <th className="px-3 py-3 font-normal">Network</th>
+                  <th className="px-3 py-3 font-normal whitespace-nowrap">Source</th>
+                  <th className="px-3 py-3 font-normal whitespace-nowrap">Device</th>
+                  <th className="px-3 py-3 font-normal whitespace-nowrap">Read</th>
+                </tr>
+              </thead>
+              <tbody className="font-manrope text-[13px]">
+                {visits.map((v) => {
+                  const verdict = verdictTone(v.bot_verdict);
+                  return (
+                    <tr
+                      key={v.id}
+                      className="border-b border-white/[0.05] last:border-0 hover:bg-white/[0.03] transition-colors"
+                    >
+                      <td className="px-3 py-3 whitespace-nowrap">
+                        <Link href={`/desk-4f7a/v/${encodeURIComponent(v.id)}`} className="hover:underline">
+                          {when(v.started_at)}
+                        </Link>
+                        <span className="block font-mono text-[10px] text-white/30">{v.id}</span>
+                      </td>
+                      <td className="px-3 py-3 whitespace-nowrap text-white/60">
+                        {v.ended_at ? when(v.ended_at) : <span className="text-emerald-400/60">still here</span>}
+                      </td>
+                      <td className="px-3 py-3 whitespace-nowrap">{dur(v.total_ms)}</td>
+                      <td className="px-3 py-3 whitespace-nowrap text-white/60">
+                        {dur(v.active_ms)}
+                        <span className="text-white/25"> · {focus(v.total_ms, v.active_ms)}</span>
+                      </td>
+                      <td className="px-3 py-3 whitespace-nowrap">
+                        {v.page_count ?? 0}
+                        {v.visit_number && v.visit_number > 1 ? (
+                          <span className="ml-2 rounded bg-white/[0.08] px-1.5 py-0.5 font-mono text-[10px] text-white/50">
+                            #{v.visit_number}
+                          </span>
+                        ) : null}
+                      </td>
+                      <td className="px-3 py-3 text-white/70">{place(v)}</td>
+                      <td className="px-3 py-3 text-white/50 max-w-[220px] truncate" title={v.network || ""}>
+                        {v.network || "—"}
+                      </td>
+                      <td className="px-3 py-3 whitespace-nowrap text-white/60">
+                        {v.source || "—"}
+                        {v.tag ? (
+                          <span className="ml-2 rounded bg-amber-400/10 px-1.5 py-0.5 font-mono text-[10px] text-amber-300/80">
+                            {v.tag}
+                          </span>
+                        ) : null}
+                      </td>
+                      <td className="px-3 py-3 whitespace-nowrap text-white/50">{v.device || "—"}</td>
+                      <td className={`px-3 py-3 whitespace-nowrap font-mono text-[11px] ${verdict.className}`}>
+                        {verdict.label}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </main>
   );

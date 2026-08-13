@@ -307,6 +307,7 @@ const websiteJsonLd = {
 import EasterEggs from "@/components/ui/EasterEggs";
 import VisitorPing from "@/components/analytics/VisitorPing";
 import PrivacyNotice from "@/components/ui/PrivacyNotice";
+import SiteOnly from "@/components/layout/SiteOnly";
 
 export default function RootLayout({
   children,
@@ -337,11 +338,17 @@ export default function RootLayout({
         />
         <RobotChatProvider>
           {children}
-          <RobotMascot />
-          <EasterEggs />
-          <ChatTakeover />
+          {/* Portfolio furniture — deliberately absent from the dashboard, which
+              is a working tool and not somewhere a mascot belongs. VisitorPing
+              excludes itself separately, so that reading your own records never
+              records the reading. */}
+          <SiteOnly>
+            <RobotMascot />
+            <EasterEggs />
+            <ChatTakeover />
+            <PrivacyNotice />
+          </SiteOnly>
           <VisitorPing />
-          <PrivacyNotice />
         </RobotChatProvider>
 
         {/* Vercel Analytics + Core Web Vitals — zero-config, privacy-first.
