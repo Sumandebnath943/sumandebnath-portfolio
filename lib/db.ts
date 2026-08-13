@@ -195,8 +195,22 @@ export async function saveVisit(v: VisitRecord): Promise<boolean> {
         screen         = coalesce(excluded.screen,        visits.screen),
         cores          = coalesce(excluded.cores,         visits.cores),
         webdriver      = coalesce(excluded.webdriver,     visits.webdriver),
-        bot_verdict    = coalesce(excluded.bot_verdict,   visits.bot_verdict),
-        interacted     = coalesce(excluded.interacted,    visits.interacted),
+        -- Interaction only ever goes false -> true. Writes for one visit land
+        -- out of order (each runs in its own after() call, so an arrival settles
+        -- after the summary that followed it), and plain coalesce let a stale
+        -- "no interaction" overwrite a scroll that had already happened.
+        interacted     = coalesce(visits.interacted, false)
+                         or coalesce(excluded.interacted, false),
+        -- Somebody who scrolled is not a link checker, whatever network they
+        -- came from. Without this the same race filed a recruiter behind a
+        -- corporate proxy as a scanner — the one visitor least worth losing.
+        bot_verdict    = case
+                           when (coalesce(visits.interacted, false)
+                                 or coalesce(excluded.interacted, false))
+                                and coalesce(excluded.bot_verdict, visits.bot_verdict) = 'scanner'
+                           then 'human'
+                           else coalesce(excluded.bot_verdict, visits.bot_verdict)
+                         end,
         entry_path     = coalesce(visits.entry_path,      excluded.entry_path),
         source         = coalesce(visits.source,          excluded.source),
         referrer       = coalesce(visits.referrer,        excluded.referrer),

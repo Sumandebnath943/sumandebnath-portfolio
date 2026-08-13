@@ -252,9 +252,20 @@ export default function VisitorPing() {
   // the placeholder with no journey on it.
   function refreshCard() {
     const p = summaryPayload(true);
-    // Nothing to say until the arrival round-trip has handed us a card to write.
-    if (!p || typeof p.smid !== "number") return;
-    post(p);
+    if (!p) return;
+
+    // Normally the card id arrives with the arrival response. It does not when
+    // the visit came from a hosting network and looked automated, because no
+    // card was opened for it — the server holds off until something proves a
+    // person is there. Sending anyway is what lets it change its mind: once
+    // this carries interacted=true, it replies with the id of the card it has
+    // just opened, and from then on this behaves like any other visit.
+    post(p, (d) => {
+      const cur = sessionRef.current;
+      if (!cur || typeof d?.smid !== "number" || typeof cur.smid === "number") return;
+      cur.smid = d.smid;
+      saveSession(cur);
+    });
   }
 
   function sendSummary() {

@@ -481,19 +481,20 @@ export async function POST(request: NextRequest) {
     const org = await asnName(asn);
     const network = org ? `${org} (AS${asn})` : asn ? `AS${asn}` : "";
 
-    // A browser running on Azure or AWS is a scanner, not a reader — the link
-    // checkers that open a URL the moment it is shared, in a real headless
-    // Chrome, from a hosting network. They pass every user-agent test because
-    // the user agent is genuine.
+    // A hosting network alone proves nothing. Link checkers run a genuine
+    // headless Chrome on Azure — but so does a recruiter whose corporate proxy
+    // egresses through it, and that recruiter is the whole point of this.
     //
-    // These get ONE message and nothing else: no journey card, no leave
-    // summary, no hot-action pings. Three messages apiece for something that
-    // never read a word is what buried the real visitors.
-    //
-    // The trade is deliberate and worth naming: a real person behind a
-    // corporate proxy that egresses through Azure collapses to a single alert
-    // too. The full record still lands in the dashboard either way.
-    const isScanner = Boolean(org && HOSTING_RE.test(org));
+    // So the network only raises the question; interaction answers it. A
+    // scanner never scrolls, clicks or types. Anyone who does is treated as a
+    // person from that moment on, whatever network they arrived from.
+    const isDatacenter = Boolean(org && HOSTING_RE.test(org));
+    const interacted = body.interacted === true;
+
+    // Quiet only while it still looks like a machine. One interaction and this
+    // goes false for the rest of the visit, and the journey card opens late
+    // rather than never.
+    const quiet = isDatacenter && !interacted;
 
     // A browser reporting a timezone that disagrees with the one implied by its
     // IP usually means a VPN — or a genuinely remote reviewer.
@@ -697,7 +698,7 @@ export async function POST(request: NextRequest) {
 
       // A message headed "New visitor" that then says "Returning: visit #3"
       // contradicts itself. Whichever the visitor is, say it once, at the top.
-      const heading = isScanner
+      const heading = quiet
         ? "🖥️ <b>Automated scan</b>"
         : (body.visits ?? 1) > 1
           ? "🔁 <b>Returning visitor</b>"
@@ -722,10 +723,10 @@ export async function POST(request: NextRequest) {
 
       // Say what this is and that nothing more is coming, so silence afterwards
       // reads as intended rather than as something having gone wrong.
-      if (isScanner) {
+      if (quiet) {
         lines.push(
           "",
-          "<i>A link checker on a hosting network, not a reader — the kind that opens a URL moments after it is shared. This is the only message for it.</i>",
+          "<i>A hosting network with no sign of a person yet. Nothing further unless they scroll or click — at which point the journey card opens and this becomes an ordinary visit.</i>",
         );
       }
 
@@ -743,14 +744,27 @@ export async function POST(request: NextRequest) {
     // card, the leave summary, any hot action — is silence, while the database
     // still receives the lot. Evaluated per request from the network the
     // request actually came from, so it needs nothing remembered client-side.
-    const notifying = !isScanner || isArrival;
+    const notifying = !quiet || isArrival;
+
+    // Set when a card is opened partway through a visit rather than at arrival,
+    // which happens for exactly one case: a hosting-network visitor who has now
+    // scrolled or clicked and so is a person after all.
+    let openedCardId: number | undefined;
 
     if (!notifying) {
       sentId = undefined;
-    } else if (body.type === "summary" && cardId) {
-      sentId = (await editTelegram(token, chatId, cardId, text))
-        ? cardId
-        : await sendTelegram(token, chatId, text, replyTo);
+    } else if (body.type === "summary") {
+      if (cardId) {
+        sentId = (await editTelegram(token, chatId, cardId, text))
+          ? cardId
+          : await sendTelegram(token, chatId, text, replyTo);
+      } else {
+        // They arrived looking like a machine, so no card was opened. They have
+        // since proved otherwise — open it now, and hand the id back below so
+        // every later update rewrites this message instead of adding more.
+        sentId = await sendTelegram(token, chatId, text, replyTo);
+        openedCardId = sentId;
+      }
     } else {
       sentId = await sendTelegram(token, chatId, text, replyTo);
     }
@@ -788,7 +802,7 @@ export async function POST(request: NextRequest) {
 
             // Stored as a bare word; the emoji belongs in Telegram, not a column
             // the dashboard has to filter on.
-            botVerdict: isScanner
+            botVerdict: quiet
               ? "scanner"
               : verdict.label.replace(/[^a-z]/gi, "").toLowerCase() || null,
             interacted: typeof body.interacted === "boolean" ? body.interacted : null,
@@ -868,7 +882,7 @@ export async function POST(request: NextRequest) {
       //
       // Not for scanners: a card tracking a journey nobody is taking is the
       // second of the three messages this is meant to stop sending.
-      const cardMid = isScanner
+      const cardMid = quiet
         ? undefined
         : await sendTelegram(
             token,
@@ -880,6 +894,17 @@ export async function POST(request: NextRequest) {
             sentId,
           );
       return new Response(JSON.stringify({ mid: sentId, smid: cardMid }), {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      });
+    }
+
+    // A card opened mid-visit still has to reach the browser. Only the live
+    // refresh can receive it — that one is a fetch and can read a response,
+    // where the unload beacon cannot — which is why the refresh runs on a timer
+    // rather than only at the end.
+    if (openedCardId) {
+      return new Response(JSON.stringify({ smid: openedCardId }), {
         status: 200,
         headers: { "content-type": "application/json" },
       });
