@@ -1,6 +1,8 @@
 // Visitor notifier — server relay (Option C+: arrival + engagement summary, linked by ID).
 //
-// Fully self-contained: no third-party analytics/SaaS, no npm deps, no storage.
+// No third-party analytics or SaaS. Visits are persisted to our own Postgres
+// (Neon) for the dashboard — that write is strictly secondary, runs after the
+// response, and is allowed to fail silently.
 // The browser holds the session and sends beacons; here we enrich each with
 // server-side signals (geo + IP from Vercel headers, device from User-Agent,
 // ISP/org from a public reverse-DNS lookup) and forward one message to the
@@ -10,6 +12,7 @@
 // harmless response and is swallowed.
 
 import { after } from "next/server";
+import { dbConfigured, saveVisit, saveVisitActions, saveVisitPages } from "@/lib/db";
 import type { NextRequest } from "next/server";
 import { promises as dns } from "node:dns";
 
@@ -426,7 +429,10 @@ export async function POST(request: NextRequest) {
     const lng = h.get("x-vercel-ip-longitude");
     const mapLink = lat && lng ? `https://www.google.com/maps?q=${lat},${lng}` : "";
     const device = parseDevice(ua);
-    const id = esc((body.id || "").slice(0, 24));
+    // esc() is for Telegram's HTML parser. The database wants the id as sent —
+    // storing an escaped copy would break every join against it.
+    const rawId = (body.id || "").slice(0, 24);
+    const id = esc(rawId);
     const tzName = (body.tz || "").slice(0, 60);
     const tagLine = (body.tag || "").slice(0, 60);
 
@@ -667,6 +673,72 @@ export async function POST(request: NextRequest) {
         : await sendTelegram(token, chatId, text, replyTo);
     } else {
       sentId = await sendTelegram(token, chatId, text, replyTo);
+    }
+
+    // Persist the visit for the dashboard. Deliberately after the Telegram send
+    // and inside after(), so it runs once the response is already on its way:
+    // a cold or unreachable database costs a row, never a visitor's time and
+    // never an alert. Mirrors the card — one row per visit, rewritten as it goes.
+    if (rawId && (isArrival || body.type === "summary") && dbConfigured()) {
+      after(async () => {
+        try {
+          await saveVisit({
+            id: rawId,
+            endedAt: body.type === "summary" && !body.live ? new Date() : null,
+            totalMs: body.totalMs ?? null,
+            activeMs: body.activeMs ?? null,
+            pageCount: body.pageCount ?? null,
+            paths: (body.pages || []).map((p) => String(p.path || "")).filter(Boolean),
+
+            ip: ip === "unknown" ? null : ip,
+            country,
+            region,
+            city,
+            postal,
+            asn: /^\d+$/.test(asn) ? Number(asn) : null,
+            network,
+            timezone: tzName,
+            languages: body.langs || null,
+
+            userAgent: ua.slice(0, 400),
+            device,
+            screen: body.screen || null,
+            cores: typeof body.hw === "number" && body.hw >= 0 ? body.hw : null,
+            webdriver: typeof body.wd === "boolean" ? body.wd : null,
+
+            // Stored as a bare word; the emoji belongs in Telegram, not a column
+            // the dashboard has to filter on.
+            botVerdict: verdict.label.replace(/[^a-z]/gi, "").toLowerCase() || null,
+            interacted: typeof body.interacted === "boolean" ? body.interacted : null,
+
+            entryPath: isArrival ? body.path || "/" : null,
+            source: body.source || null,
+            referrer: body.referrer || null,
+            tag: body.tag || null,
+
+            visitNumber: body.visits ?? null,
+            daysSince: typeof body.daysSince === "number" ? body.daysSince : null,
+
+            tgArrivalMid: isArrival ? sentId ?? null : body.mid ?? null,
+            tgCardMid: body.smid ?? null,
+          });
+
+          if (body.pages?.length) {
+            await saveVisitPages(
+              rawId,
+              body.pages.map((p) => ({ path: String(p.path || ""), ms: p.ms ?? null, scroll: p.scroll ?? null })),
+            );
+          }
+          if (body.actions?.length) {
+            await saveVisitActions(
+              rawId,
+              body.actions.map((a) => ({ action: a.a ?? null, label: a.label ?? null })),
+            );
+          }
+        } catch {
+          // A dashboard row is worth strictly less than a working notifier.
+        }
+      });
     }
 
     // The arrival message owns the thread, so hand its id back to the browser;
