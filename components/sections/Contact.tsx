@@ -88,7 +88,7 @@ export default function Contact({
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className={`font-manrope text-[10px] uppercase tracking-[0.4em] mb-3 ${light ? "text-[#2E8B57]/80" : "text-[#F5F5F3]/20"}`}
+          className={`font-manrope text-[10px] uppercase tracking-[0.4em] mb-3 ${light ? "text-[#2E8B57]/80" : "text-[#F5F5F3]/55"}`}
         >
           08 / Contact
         </m.p>

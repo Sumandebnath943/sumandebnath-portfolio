@@ -18,7 +18,7 @@ export const MIGI = {
   inkSoft: "#20212A",   // dark card, lifted
   card: "#FFFFFF",      // white surface cards
   text: "#16171C",      // primary text on cream
-  muted: "#6C6B63",     // warm grey secondary text
+  muted: "#605F58",     // warm grey secondary text
   line: "#DAD8CE",      // hairline on cream
   green: "#77B33E",     // status / heatmap green
 } as const;

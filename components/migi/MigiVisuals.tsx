@@ -97,7 +97,7 @@ export function ArchitectureFlow() {
               </p>
               <p
                 className="font-dmmono text-[10px] uppercase tracking-[0.1em] mt-1.5 leading-snug"
-                style={{ color: i === 4 ? "rgba(0,0,0,0.55)" : "rgba(255,255,255,0.4)" }}
+                style={{ color: i === 4 ? "rgba(0,0,0,0.55)" : "rgba(255,255,255,0.55)" }}
               >
                 {node.sub}
               </p>

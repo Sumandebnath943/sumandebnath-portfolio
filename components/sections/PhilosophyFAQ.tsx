@@ -14,7 +14,7 @@ export default function PhilosophyFAQ() {
     >
       <div className="max-w-5xl mx-auto px-6 md:px-10 py-24 md:py-32">
         <div className="mb-16 max-w-2xl">
-          <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#999] mb-6">
+          <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#6E6E6E] mb-6">
             Frequently Asked
           </p>
           <h2

@@ -18,8 +18,8 @@ const entries = [
     disciplines: ["Language", "Communication", "Storytelling", "Human Psychology", "Structured Expression"],
     status: "completed",
     // Lightest — most human
-    yearColor: "text-[#AAA]",
-    numberColor: "text-[#CCC]",
+    yearColor: "text-[#656565]",
+    numberColor: "text-[#6E6E6E]",
     degreeColor: "text-[#0A0A0A]",
     institutionColor: "text-[#555] font-semibold",
     descColor: "text-[#1A1A1A]/80 font-medium",
@@ -39,8 +39,8 @@ const entries = [
       "Expanded into strategy, brand systems, growth, campaign architecture, market behavior, and organizational execution.",
     disciplines: ["Brand Strategy", "Growth", "Campaign Architecture", "Market Behavior", "Organizational Systems"],
     status: "completed",
-    yearColor: "text-[#999]",
-    numberColor: "text-[#BBB]",
+    yearColor: "text-[#5F5F5F]",
+    numberColor: "text-[#6A6A6A]",
     degreeColor: "text-[#0A0A0A]",
     institutionColor: "text-[#555] font-semibold",
     descColor: "text-[#1A1A1A]/80 font-medium",
@@ -60,8 +60,8 @@ const entries = [
       "Focused on digital ecosystems, performance infrastructure, online growth systems, analytics, and scalable digital execution.",
     disciplines: ["Digital Ecosystems", "Performance Infrastructure", "Analytics", "Growth Systems", "Digital Execution"],
     status: "completed",
-    yearColor: "text-[#888]",
-    numberColor: "text-[#AAA]",
+    yearColor: "text-[#595959]",
+    numberColor: "text-[#666666]",
     degreeColor: "text-[#0A0A0A]",
     institutionColor: "text-[#555] font-semibold",
     descColor: "text-[#1A1A1A]/80 font-medium",
@@ -81,8 +81,8 @@ const entries = [
       "The transition layer into AI-native systems thinking. Focused on structured prompting, context architecture, AI reasoning workflows, instruction design, human-AI interaction models, and operational AI communication systems.",
     disciplines: ["Structured Prompting", "Context Architecture", "AI Reasoning Workflows", "Instruction Design", "Human-AI Interaction", "AI Communication Systems"],
     status: "completed",
-    yearColor: "text-[#777]",
-    numberColor: "text-[#999]",
+    yearColor: "text-[#535353]",
+    numberColor: "text-[#626262]",
     degreeColor: "text-[#0A0A0A]",
     institutionColor: "text-[#555] font-semibold",
     descColor: "text-[#1A1A1A]/80 font-medium",
@@ -102,8 +102,8 @@ const entries = [
       "Exploring AI orchestration, agentic systems, workflow autonomy, AI-native infrastructure, and the next generation of intelligent execution models. The frontier, still being mapped.",
     disciplines: ["AI Orchestration", "Agentic Systems", "Workflow Autonomy", "AI-Native Infrastructure", "Generative Systems", "Intelligent Execution"],
     status: "active",
-    yearColor: "text-[#555]",
-    numberColor: "text-[#777]",
+    yearColor: "text-[#4D4D4D]",
+    numberColor: "text-[#5E5E5E]",
     degreeColor: "text-[#0A0A0A]",
     institutionColor: "text-[#555] font-semibold",
     descColor: "text-[#1A1A1A]/80 font-medium",
@@ -238,7 +238,7 @@ export default function AcademicFoundations() {
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
           className="mb-24"
         >
-          <p className="font-manrope text-[10px] text-[#999] uppercase tracking-[0.4em] mb-8">
+          <p className="font-manrope text-[10px] text-[#6E6E6E] uppercase tracking-[0.4em] mb-8">
             07 / Academic Foundations
           </p>
           <h2 className="font-manrope font-semibold text-4xl md:text-5xl lg:text-6xl text-[#0A0A0A] leading-tight tracking-tight mb-8">

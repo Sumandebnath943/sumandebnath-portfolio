@@ -35,7 +35,7 @@ export default function FAQPage() {
 
       <main className="bg-white text-[#0A0A0A]">
         <header className="max-w-5xl mx-auto px-6 md:px-10 pt-40 pb-12">
-          <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#999] mb-6">
+          <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#6E6E6E] mb-6">
             FAQ
           </p>
           <h1 className="font-manrope font-semibold text-4xl md:text-5xl lg:text-6xl leading-tight tracking-tight mb-6">

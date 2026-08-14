@@ -35,7 +35,7 @@ const eras = [
     shadow: "shadow-[0_20px_80px_-16px_rgba(180,160,130,0.2)]",
     tagColor: "text-[#8C7B60]",
     tagBg: "bg-[#8C7B60]/[0.08]",
-    yearColor: "text-[#1A1A1A]/30",
+    yearColor: "text-[#1A1A1A]/65",
     titleColor: "text-[#0A0A0A]",
     narrativeColor: "text-[#3A3530]/70",
     chipBg: "bg-[#8C7B60]/[0.07]",
@@ -73,7 +73,7 @@ const eras = [
     shadow: "shadow-[0_20px_80px_-16px_rgba(100,160,230,0.2)]",
     tagColor: "text-[#2E6FBF]",
     tagBg: "bg-[#2E6FBF]/[0.08]",
-    yearColor: "text-[#1A2A3A]/30",
+    yearColor: "text-[#1A2A3A]/65",
     titleColor: "text-[#0A1420]",
     narrativeColor: "text-[#1A2E45]/65",
     chipBg: "bg-[#2E6FBF]/[0.07]",
@@ -111,7 +111,7 @@ const eras = [
     shadow: "shadow-[0_20px_80px_-16px_rgba(200,180,60,0.2)]",
     tagColor: "text-[#8C7010]",
     tagBg: "bg-[#8C7010]/[0.08]",
-    yearColor: "text-[#2A2000]/30",
+    yearColor: "text-[#2A2000]/65",
     titleColor: "text-[#1A1400]",
     narrativeColor: "text-[#3A3010]/65",
     chipBg: "bg-[#8C7010]/[0.07]",
@@ -287,7 +287,7 @@ export default function Experience() {
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
           className="mb-10 max-w-3xl"
         >
-          <p className="font-manrope text-[10px] text-[#888] uppercase tracking-[0.4em] mb-6">
+          <p className="font-manrope text-[10px] text-[#6E6E6E] uppercase tracking-[0.4em] mb-6">
             02 / The Evolution
           </p>
           <h2 className="font-manrope font-semibold text-4xl md:text-5xl lg:text-6xl text-[#0A0A0A] leading-tight tracking-tight mb-8">
@@ -321,7 +321,7 @@ export default function Experience() {
           <div className="mb-6 flex justify-center">
             <div className="w-px h-12 bg-gradient-to-b from-[#D4B830]/50 to-transparent" />
           </div>
-          <p className="font-manrope text-[10px] uppercase tracking-[0.5em] text-[#888] mb-8">
+          <p className="font-manrope text-[10px] uppercase tracking-[0.5em] text-[#6E6E6E] mb-8">
             The Result
           </p>
           <h3 className="font-serif italic font-normal text-3xl md:text-4xl lg:text-5xl text-[#0A0A0A] leading-snug mb-8">

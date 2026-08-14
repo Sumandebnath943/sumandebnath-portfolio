@@ -242,7 +242,7 @@ export function LeaveHomeSimulator() {
               <div className="mt-5 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center" style={{ background: "linear-gradient(160deg, rgba(80,200,120,0.16), rgba(80,200,120,0.04))", border: "1px solid rgba(80,200,120,0.3)", boxShadow: "0 12px 30px -10px rgba(80,200,120,0.4)" }}>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={EMERALD} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
               </div>
-              <span className="mt-2 font-dmmono text-[9px] tracking-[0.14em] uppercase text-white/45">Home</span>
+              <span className="mt-2 font-dmmono text-[9px] tracking-[0.14em] uppercase text-white/50">Home</span>
             </div>
           </div>
 
@@ -309,7 +309,7 @@ export function LeaveHomeSimulator() {
           {/* radius slider */}
           <div className="mt-auto pt-1">
             <div className="flex items-center justify-between mb-2">
-              <label htmlFor="fa-radius" className="font-dmmono text-[10px] uppercase tracking-[0.16em] text-white/45">Drag to resize zone</label>
+              <label htmlFor="fa-radius" className="font-dmmono text-[10px] uppercase tracking-[0.16em] text-white/50">Drag to resize zone</label>
               <span className="font-manrope text-[12px] font-bold" style={{ color: GOLD_HI }}>{radius} m</span>
             </div>
             <input id="fa-radius" type="range" min={50} max={400} step={10} value={radius} onChange={(e) => setRadius(+e.target.value)} className="fa-range w-full" aria-label="Geofence radius in metres" />

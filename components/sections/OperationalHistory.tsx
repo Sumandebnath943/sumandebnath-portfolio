@@ -101,7 +101,7 @@ function RolePanel({
           {isDominant && (
             <span className="inline-flex items-center gap-1.5 mt-1">
               <span className="w-1.5 h-1.5 rounded-full bg-[#A0866A] opacity-60" />
-              <span className="font-manrope text-[9px] uppercase tracking-[0.35em] text-[#A0866A]/60">
+              <span className="font-manrope text-[9px] uppercase tracking-[0.35em] text-[#6B573F]/90">
                 Current
               </span>
             </span>

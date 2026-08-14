@@ -196,7 +196,7 @@ export default function AIPhilosophy() {
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
           className="mb-14"
         >
-          <p className="font-manrope text-[10px] text-[#999] uppercase tracking-[0.4em] mb-8">
+          <p className="font-manrope text-[10px] text-[#6E6E6E] uppercase tracking-[0.4em] mb-8">
             05 / Operating Principles
           </p>
           <h2 className="font-manrope font-semibold text-4xl md:text-5xl lg:text-6xl text-[#0A0A0A] leading-tight tracking-tight mb-8">

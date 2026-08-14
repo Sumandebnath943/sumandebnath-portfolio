@@ -455,7 +455,7 @@ export function ScreenRail({ screens }: { screens: { src: string; alt: string; l
             <path d="M15 18 9 12l6-6" />
           </svg>
         </button>
-        <span className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-white/25">drag · or tap a screen</span>
+        <span className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-white/50">drag · or tap a screen</span>
         <button
           onClick={() => nudge(1)}
           aria-label="Next screens"

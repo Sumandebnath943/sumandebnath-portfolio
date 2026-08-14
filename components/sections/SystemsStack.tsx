@@ -179,7 +179,7 @@ function EcosystemPanel({
             </h3>
           </div>
           {eco.overflow && (
-            <span className="font-manrope text-[10px] text-white/20 tracking-widest whitespace-nowrap mt-0.5">
+            <span className="font-manrope text-[10px] text-white/50 tracking-widest whitespace-nowrap mt-0.5">
               and more..
             </span>
           )}
@@ -192,7 +192,7 @@ function EcosystemPanel({
 
         {/* Primary tools — featured */}
         <div className="mb-5">
-          <p className="font-manrope text-[9px] uppercase tracking-[0.4em] text-white/25 mb-3">
+          <p className="font-manrope text-[9px] uppercase tracking-[0.4em] text-white/50 mb-3">
             Primary
           </p>
           <div className="flex flex-wrap gap-2">
@@ -210,7 +210,7 @@ function EcosystemPanel({
         {/* Secondary tools — supporting */}
         {eco.secondary.length > 0 && (
           <div>
-            <p className="font-manrope text-[9px] uppercase tracking-[0.4em] text-white/20 mb-3">
+            <p className="font-manrope text-[9px] uppercase tracking-[0.4em] text-white/50 mb-3">
               Supporting
             </p>
             <div className="flex flex-wrap gap-1.5">
@@ -316,7 +316,7 @@ export default function SystemsStack() {
           </p>
           <div className="flex items-center gap-3 flex-shrink-0">
             <div className="w-1.5 h-1.5 rounded-full bg-[#7B61FF]/60 animate-pulse" />
-            <span className="font-manrope text-[10px] uppercase tracking-[0.4em] text-white/20">
+            <span className="font-manrope text-[10px] uppercase tracking-[0.4em] text-white/50">
               Continuously Evolving
             </span>
           </div>

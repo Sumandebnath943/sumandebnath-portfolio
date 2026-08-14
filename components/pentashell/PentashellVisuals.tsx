@@ -244,7 +244,7 @@ function ReplTurn({ ex, onDone }: { ex: (typeof EXAMPLES)[number]; onDone: () =>
           <span className="w-2.5 h-2.5 rounded-full" style={{ background: C.green }} />
         </div>
         <span className="font-dmmono text-[11px] text-white/45">pentacmd — interactive session</span>
-        <span className="font-dmmono text-[10px] text-white/25 hidden sm:inline">CPU · local</span>
+        <span className="font-dmmono text-[10px] text-white/50 hidden sm:inline">CPU · local</span>
       </div>
 
       <div className="p-5 sm:p-7 min-h-[230px] text-left">

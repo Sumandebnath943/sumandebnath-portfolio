@@ -453,7 +453,7 @@ export default function MigiPage() {
                     <div className="migi-card rounded-[1.5rem] h-full p-6 md:p-7 flex flex-col" style={{ background: bg, border: p.id === "fleet" ? `1px solid ${MIGI.line}` : "1px solid rgba(255,255,255,0.10)" }}>
                       <div className="flex items-center justify-between gap-2 mb-4">
                         <span className="font-dmmono text-[9.5px] uppercase tracking-[0.2em] rounded-full px-2.5 py-1" style={{ background: MIGI.lime, color: MIGI.ink }}>{p.badge}</span>
-                        <span className="font-dmmono text-[10px]" style={{ color: dark ? "rgba(255,255,255,0.4)" : MIGI.muted }}>{String(i + 1).padStart(2, "0")}</span>
+                        <span className="font-dmmono text-[10px]" style={{ color: dark ? "rgba(255,255,255,0.55)" : MIGI.muted }}>{String(i + 1).padStart(2, "0")}</span>
                       </div>
                       <h3 className="font-manrope font-extrabold text-[1.5rem] tracking-[-0.02em] leading-none" style={{ color: nameC }}>{p.name}</h3>
                       <p className="font-dmmono text-[10.5px] uppercase tracking-[0.18em] mt-2 mb-3" style={{ color: roleC }}>{p.role}</p>
@@ -978,7 +978,7 @@ export default function MigiPage() {
               </Reveal>
               <Reveal delay={0.05}>
                 <div className="rounded-[1.5rem] p-6 md:p-7" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)" }}>
-                  <p className="font-dmmono text-[10px] uppercase tracking-[0.16em] mb-5" style={{ color: "rgba(255,255,255,0.4)" }}>
+                  <p className="font-dmmono text-[10px] uppercase tracking-[0.16em] mb-5" style={{ color: "rgba(255,255,255,0.55)" }}>
                     free-tier budgets · metered add-ons · agents fall back to baseline when a budget is spent
                   </p>
                   <div className="grid sm:grid-cols-3 gap-3">
@@ -992,7 +992,7 @@ export default function MigiPage() {
                         <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.1)" }}>
                           <span className="block h-full rounded-full" style={{ width: "8%", background: MIGI.lime }} />
                         </div>
-                        <p className="font-dmmono text-[10px] mt-2" style={{ color: "rgba(255,255,255,0.4)" }}>within free limit · resets monthly</p>
+                        <p className="font-dmmono text-[10px] mt-2" style={{ color: "rgba(255,255,255,0.55)" }}>within free limit · resets monthly</p>
                       </div>
                     ))}
                   </div>

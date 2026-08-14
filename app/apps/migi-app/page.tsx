@@ -506,7 +506,7 @@ export default function MigiAppPage() {
             </div>
 
             <Reveal>
-              <p className="font-dmmono mb-5 text-[10px] uppercase tracking-[0.3em] text-white/25">The tokens</p>
+              <p className="font-dmmono mb-5 text-[10px] uppercase tracking-[0.3em] text-white/50">The tokens</p>
             </Reveal>
             <PaletteStrip tokens={PALETTE} />
           </div>

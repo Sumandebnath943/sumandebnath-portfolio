@@ -459,7 +459,7 @@ function StackCard({
 
             {/* Tools */}
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-              <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[#5A5A5E]">
+              <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[#8A8A90]">
                 Stack
               </span>
               {project.tools.map((tool) => (
@@ -519,7 +519,7 @@ function StackCard({
               <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-[#0A0A0C] to-transparent z-10 pointer-events-none" />
               {/* scroll hint */}
               <div className="absolute top-3 right-3 z-20 pointer-events-none">
-                <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-white/45 bg-black/40 backdrop-blur-sm px-2 py-1 rounded">
+                <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-white/50 bg-black/40 backdrop-blur-sm px-2 py-1 rounded">
                   Landing page · scroll
                 </span>
               </div>
