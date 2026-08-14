@@ -770,7 +770,9 @@ export default function PentaCmdPage() {
                 </div>
               </Reveal>
 
-              <div className="grid lg:grid-cols-2 gap-6">
+              {/* min-w-0: see qdex — the long model URLs otherwise set the
+                  track floor and push the column past the viewport. */}
+              <div className="grid lg:grid-cols-2 gap-6 [&>*]:min-w-0">
                 <Reveal>
                   <CopyCommand
                     label="One-shot inference"

@@ -278,7 +278,10 @@ export default function RobotMascot() {
       style={{ opacity: appear ? 1 : 0, transition: "opacity 0.35s ease" }}
     >
       <div
-        className="absolute pointer-events-auto"
+        // On mobile every layer here stays inert and the small hotspot over the
+        // robot re-enables itself, so the wrapper's dead space stops sitting on
+        // top of the hero buttons. Desktop keeps the whole box live.
+        className={isMobile ? "absolute pointer-events-none" : "absolute pointer-events-auto"}
         style={{ right: CORNER_RIGHT, bottom: CORNER_BOTTOM, transform: `translateX(${x}px)`, transition: travelTransition }}
       >
         <div style={{ transform: `translateY(${hopY}px)`, transition: "transform 0.26s ease-out" }}>
@@ -305,8 +308,20 @@ export default function RobotMascot() {
           <div
             onMouseEnter={handleApproach}
             onClick={handleClick}
-            className="cursor-pointer"
-            style={{ width: robotW, height: robotH }}
+            // react-three-fiber puts `pointer-events: auto` inline on its own
+            // wrapper, which outranks a plain parent rule — hence the important
+            // child variant rather than relying on inheritance alone.
+            className={`cursor-pointer relative${isMobile ? " [&>div]:!pointer-events-none" : ""}`}
+            style={{
+              width: robotW,
+              height: robotH,
+              // On a phone the hero's CTA row ends up in the same corner as the
+              // mascot. The canvas box is far wider than the robot drawn inside
+              // it, so its empty left half was swallowing taps meant for "View
+              // Projects". Hand the live area to the hotspot below instead;
+              // desktop keeps the whole box, hover-to-chase included.
+              pointerEvents: isMobile ? "none" : "auto",
+            }}
             aria-label="Suman's robot assistant"
           >
             <RobotCanvas
@@ -318,6 +333,15 @@ export default function RobotMascot() {
               cameraFov={30}
               groupY={-1.55}
             />
+            {isMobile && (
+              // Tracks the robot's own footprint at the right of the box, clear
+              // of anything the page puts to its left.
+              <span
+                onClick={handleClick}
+                className="absolute bottom-0 right-0 h-[62%] w-[46%] cursor-pointer"
+                style={{ pointerEvents: "auto" }}
+              />
+            )}
           </div>
         </div>
       </div>

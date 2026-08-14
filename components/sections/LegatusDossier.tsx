@@ -145,11 +145,11 @@ export default function LegatusDossier() {
                 <div className="w-2.5 h-2.5 rounded-full border border-[#C5A059]/40 bg-[#C5A059]/10" />
                 <div className="w-2.5 h-2.5 rounded-full border border-[#C5A059]/40 bg-[#C5A059]/10" />
               </div>
-              <div className="flex items-center gap-4 px-6 py-2 rounded border border-[#C5A059]/20 bg-black">
-                <svg className="w-3 h-3 text-[#C5A059]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="flex min-w-0 items-center gap-4 px-6 py-2 rounded border border-[#C5A059]/20 bg-black">
+                <svg className="w-3 h-3 shrink-0 text-[#C5A059]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
-                <span className="text-[10px] font-mono text-[#C5A059]/80 tracking-widest uppercase">
+                <span className="truncate text-[10px] font-mono text-[#C5A059]/80 tracking-widest uppercase">
                   https://legatus.houseofnamus.com
                 </span>
               </div>

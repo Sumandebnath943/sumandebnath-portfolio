@@ -170,9 +170,9 @@ export default function ImprintDossier() {
                 <div className="w-3 h-3 rounded-full bg-white" />
                 <div className="w-3 h-3 rounded-full bg-white" />
               </div>
-              <div className="flex items-center gap-2 px-4 py-1.5 rounded-md bg-white/[0.03] border border-white/[0.05]">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#FF5A1F] animate-pulse" />
-                <span className="text-[10px] font-mono text-white/40 tracking-widest">
+              <div className="flex min-w-0 items-center gap-2 px-4 py-1.5 rounded-md bg-white/[0.03] border border-white/[0.05]">
+                <div className="w-1.5 h-1.5 shrink-0 rounded-full bg-[#FF5A1F] animate-pulse" />
+                <span className="truncate text-[10px] font-mono text-white/40 tracking-widest">
                   https://imprint.houseofnamus.com
                 </span>
               </div>

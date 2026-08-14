@@ -149,8 +149,8 @@ export default function CiteDossier() {
                 <div className="w-4 h-1 bg-[#00E5FF]" />
                 <div className="w-4 h-1 bg-[#7B61FF]" />
               </div>
-              <div className="flex items-center gap-3 px-6 py-1.5 rounded-sm bg-[#00E5FF]/[0.02] border border-[#00E5FF]/10">
-                <span className="text-[10px] font-mono text-[#00E5FF]/60 tracking-widest">
+              <div className="flex min-w-0 items-center gap-3 px-6 py-1.5 rounded-sm bg-[#00E5FF]/[0.02] border border-[#00E5FF]/10">
+                <span className="truncate text-[10px] font-mono text-[#00E5FF]/60 tracking-widest">
                   https://cite.houseofnamus.com
                 </span>
               </div>

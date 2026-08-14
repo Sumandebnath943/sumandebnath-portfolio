@@ -483,7 +483,11 @@ export default function QdexPage() {
                 </p>
               </Reveal>
 
-              <div className="grid lg:grid-cols-2 gap-6 items-start">
+              {/* Grid items default to min-width:auto, so the long Hugging Face
+                  URL below set the track's floor and pushed the whole column
+                  past the viewport. min-w-0 lets it shrink and the inner
+                  truncate finally does its job. */}
+              <div className="grid lg:grid-cols-2 gap-6 items-start [&>*]:min-w-0">
                 <Reveal>
                   <CopyCommand
                     label="Modelfile"

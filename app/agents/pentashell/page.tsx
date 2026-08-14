@@ -551,12 +551,15 @@ export default function PentashellPage() {
                         href={GITHUB}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group relative inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 font-manrope font-semibold text-sm text-black overflow-hidden"
+                        // max-w-full + break-all: the bare repo URL made this
+                        // pill 396px wide inside a 375px viewport, bleeding off
+                        // both edges. It now wraps within the pill instead.
+                        className="group relative inline-flex max-w-full items-center gap-2.5 rounded-full px-7 py-3.5 font-manrope font-semibold text-sm text-black overflow-hidden"
                         style={{ background: "linear-gradient(100deg,#2FE2F0,#9B6BF2,#F25FD0)", boxShadow: "0 14px 44px -12px rgba(242,95,208,0.6)" }}
                       >
                         <span aria-hidden className="absolute top-0 bottom-0 w-1/3 bg-white/30 blur-md" style={{ animation: "ps-sheen 4.5s ease-in-out infinite" }} />
                         <GitHubMark />
-                        <span className="relative">github.com/Sumandebnath943/pentashell-cli</span>
+                        <span className="relative break-all text-left">github.com/Sumandebnath943/pentashell-cli</span>
                         <span className="relative transition-transform duration-300 group-hover:translate-x-0.5">↗</span>
                       </a>
                       <a href={MODEL_PAGE} className="inline-flex items-center gap-2 rounded-full border border-white/15 text-white/85 font-manrope font-medium text-sm px-6 py-3.5 hover:border-[#9B6BF2]/60 hover:bg-white/[0.03] transition-colors">

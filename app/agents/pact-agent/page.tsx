@@ -55,7 +55,10 @@ function SectionLabel({ index, title, kicker }: { index: string; title: string; 
         )}
       </div>
       <div className="flex items-end gap-5">
-        <h2 className="font-manrope font-semibold text-3xl md:text-[2.4rem] leading-none tracking-tight text-[#f0e9e3] whitespace-nowrap">
+        {/* nowrap keeps the dashed rule tight against the title on wide
+            screens, but the longest heading needs 352px and a phone column is
+            327px — so let it wrap below md, where the rule is hidden anyway. */}
+        <h2 className="font-manrope font-semibold text-3xl md:text-[2.4rem] leading-none tracking-tight text-[#f0e9e3] whitespace-normal md:whitespace-nowrap">
           {title}
         </h2>
         <span
@@ -684,7 +687,7 @@ export default function PactAgentPage() {
                     <Image src="/pact-images/pact-neon.png" alt="" fill className="object-cover object-center mix-blend-screen" />
                   </div>
                   <div aria-hidden className="absolute -top-1/3 left-1/2 -translate-x-1/2 w-[80%] h-[80%] rounded-full blur-[100px] bg-[radial-gradient(ellipse_at_center,rgba(255,85,0,0.18),transparent_65%)]" style={{ animation: "pact-drift 16s ease-in-out infinite" }} />
-                  <div className="relative grid md:grid-cols-[1fr_auto] gap-10 items-center p-8 sm:p-12">
+                  <div className="relative grid md:grid-cols-[1fr_auto] gap-10 items-center p-8 sm:p-12 [&>*]:min-w-0">
                     <div>
                       <p className="font-dmmono text-[11px] uppercase tracking-[0.3em] text-[#CF5C36] mb-5">
                         open source · House of Namus
@@ -701,7 +704,10 @@ export default function PactAgentPage() {
                         href={GITHUB}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group inline-flex items-center gap-2.5 rounded-full bg-[#CF5C36] text-black font-manrope font-semibold text-sm px-6 py-3 hover:bg-[#FF5500] transition-colors duration-300"
+                        // max-w-full + break-all so the bare repo URL wraps
+                        // inside the pill instead of setting an un-shrinkable
+                        // floor that overflows the card on a phone.
+                        className="group inline-flex max-w-full items-center gap-2.5 rounded-full bg-[#CF5C36] text-black font-manrope font-semibold text-sm px-6 py-3 hover:bg-[#FF5500] transition-colors duration-300 break-all text-left"
                       >
                         <GitHubMark />
                         github.com/Sumandebnath943/pact-agent

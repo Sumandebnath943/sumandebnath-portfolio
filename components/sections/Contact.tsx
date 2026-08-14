@@ -242,7 +242,10 @@ export default function Contact({
           {/* Center — utility links */}
           <nav
             aria-label="Footer utility"
-            className={`flex items-center gap-4 font-manrope text-xs font-medium ${light ? "text-[#1f7a4d]/75" : "text-[#1A1A1A]/60"}`}
+            // Five links plus separators overran a 320px phone and the Privacy
+            // link fell off the right edge. Wrapping only engages when the row
+            // genuinely runs out of room, so wider screens keep the single line.
+            className={`flex flex-wrap items-center gap-x-4 gap-y-2 font-manrope text-xs font-medium ${light ? "text-[#1f7a4d]/75" : "text-[#1A1A1A]/60"}`}
           >
             <a href="/projects" className={`transition-colors ${light ? "hover:text-[#0B3B25]" : "hover:text-[#1A1A1A]"}`}>
               Projects
