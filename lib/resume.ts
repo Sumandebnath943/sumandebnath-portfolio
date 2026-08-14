@@ -34,6 +34,8 @@ export const identity = {
   targeting: "Targeting PMM and AI PM roles",
   phone: "+91 7980296957",
   phoneHref: "tel:+917980296957",
+  // Same number, same link the hero has carried all along.
+  whatsappHref: "https://wa.me/917980296957",
   email: "sumandebnath944@gmail.com",
   location: "Pune, Maharashtra, India",
   portfolio: "https://sumandebnath.houseofnamus.com",

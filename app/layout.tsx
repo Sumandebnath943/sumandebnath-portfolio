@@ -309,6 +309,7 @@ import VisitorPing from "@/components/analytics/VisitorPing";
 import PrivacyNotice from "@/components/ui/PrivacyNotice";
 import SiteOnly from "@/components/layout/SiteOnly";
 import SiteTour from "@/components/ui/SiteTour";
+import CommandPalette from "@/components/layout/CommandPalette";
 
 export default function RootLayout({
   children,
@@ -347,6 +348,11 @@ export default function RootLayout({
             <RobotMascot />
             <EasterEggs />
             <ChatTakeover />
+            {/* The nav's ⌘K badge fires an `open-command-palette` event from
+                every page, but the listener was mounted only on the homepage —
+                so on /resume, /faq and the rest both the badge and the keyboard
+                shortcut did nothing at all. Same mistake SiteTour had. */}
+            <CommandPalette />
             {/* Mounted here rather than on the homepage, which is what confined
                 the tour to a single page — it now walks the whole site and has
                 to survive the navigations between. */}

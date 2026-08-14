@@ -36,6 +36,9 @@ type NavLink = {
 const navLinks: NavLink[] = [
   {
     label: "Home",
+    // Both a destination and a menu — clicking the label lands on /, hovering
+    // reveals the page's sections.
+    href: "/",
     color: "#38BDF8",
     submenus: [
       { label: "Overview", href: "/", color: "#38BDF8" },
@@ -257,12 +260,20 @@ export default function Navigation() {
               if (link.submenus) {
                 return (
                   <div key={link.label} className="relative group">
+                    {/* A group with its own `href` is both a destination and a
+                        menu: hovering opens the dropdown, clicking goes to the
+                        page. "Home" was previously a dead button — the only way
+                        back to / was the logo. */}
                     <m.button
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }}
+                      onClick={link.href ? () => handleNavClick(link.href!) : undefined}
+                      aria-label={link.href ? `${link.label} — open page, or hover for its sections` : undefined}
                       style={hueVars(link.color)}
-                      className="px-2 lg:px-3 py-2 text-[12px] lg:text-[13px] font-medium text-[#a0a0a5] transition-all duration-200 rounded-full group-hover:text-[var(--c)] group-hover:bg-[var(--cb)] group-hover:shadow-[inset_0_0_0_1px_var(--cr),0_5px_18px_-8px_var(--c)] flex items-center gap-1 lg:gap-1.5 whitespace-nowrap"
+                      className={`px-2 lg:px-3 py-2 text-[12px] lg:text-[13px] font-medium text-[#a0a0a5] transition-all duration-200 rounded-full group-hover:text-[var(--c)] group-hover:bg-[var(--cb)] group-hover:shadow-[inset_0_0_0_1px_var(--cr),0_5px_18px_-8px_var(--c)] flex items-center gap-1 lg:gap-1.5 whitespace-nowrap ${
+                        link.href ? "cursor-pointer" : "cursor-default"
+                      }`}
                     >
                       {link.label}
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-50"><path d="m6 9 6 6 6-6"/></svg>
