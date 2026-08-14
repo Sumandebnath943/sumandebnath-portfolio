@@ -89,21 +89,23 @@ function hueVars(color?: string): React.CSSProperties | undefined {
 /* ── Phone menu styling ──────────────────────────────────────────────────
    These only ever apply inside the `md:hidden` menu, so none of it can
    reach the desktop bar. Rows are 48px+ tall for thumbs.                  */
-// Labels were #6a6a70 on near-black — 3.68:1, under the 4.5:1 floor and the
-// main reason the menu read as an undifferentiated dark block. Now 7.3:1, with
-// a hairline rule so each group is a visible band rather than a faint caption.
+// Light sheet on a dark scrim. The dark-on-dark panel had nothing to separate
+// it from the page behind; inverting it makes the menu unmistakably its own
+// surface and lets the per-item accent dots read at full strength.
+// Rows sit at 44px — the touch-target floor and the usual mobile nav rhythm —
+// rather than the roomier 48px+ they had.
 const MOBILE_GROUP_LABEL =
-  "flex items-center gap-2.5 px-4 pt-5 pb-2 text-[10px] font-semibold uppercase " +
-  "tracking-[0.2em] text-[#a8a8b2] before:h-px before:w-4 before:bg-white/25 before:content-['']";
+  "flex items-center gap-2.5 px-4 pt-4 pb-1.5 text-[10px] font-semibold uppercase " +
+  "tracking-[0.18em] text-[#5f5f66] before:h-px before:w-4 before:bg-black/20 before:content-['']";
 
 const MOBILE_ROW =
-  "flex items-center gap-3 text-left px-4 py-3.5 text-[15px] font-medium text-[#e8e8ec] " +
-  "hover:text-white hover:bg-white/[0.07] active:bg-white/[0.11] rounded-xl " +
+  "flex items-center gap-3 text-left px-4 py-3 text-[15px] font-medium text-[#1f1f24] " +
+  "hover:bg-black/[0.05] active:bg-black/[0.08] rounded-xl " +
   "transition-colors duration-150 touch-manipulation";
 
 const MOBILE_SUBROW =
-  "flex items-center gap-2.5 text-left px-3 py-3 text-[14px] font-medium text-[#bcbcc6] " +
-  "hover:text-white hover:bg-white/[0.07] active:bg-white/[0.11] rounded-lg " +
+  "flex items-center gap-2.5 text-left px-3 py-3 text-[14px] font-medium text-[#4a4a53] " +
+  "hover:bg-black/[0.05] active:bg-black/[0.08] rounded-lg " +
   "transition-colors duration-150 touch-manipulation";
 
 /** The accent already carried by every nav entry, surfaced as a status dot. */
@@ -378,7 +380,7 @@ export default function Navigation() {
             // Opaque and a step lighter than the page, so it is legible as its
             // own surface instead of a translucent near-black slab that the
             // site showed through.
-            className="pointer-events-auto absolute top-20 left-4 right-4 z-40 max-h-[calc(100dvh_-_6rem)] overflow-y-auto overscroll-contain rounded-[1.75rem] bg-[#141419] border border-white/[0.14] p-3 pb-[calc(0.75rem_+_env(safe-area-inset-bottom))] shadow-[0_24px_60px_-12px_rgba(0,0,0,0.9)]"
+            className="pointer-events-auto absolute top-20 left-4 right-4 z-40 max-h-[calc(100dvh_-_6rem)] overflow-y-auto overscroll-contain rounded-[1.75rem] bg-[#FBFBF9] border border-black/[0.08] p-2.5 pb-[calc(0.625rem_+_env(safe-area-inset-bottom))] shadow-[0_24px_60px_-12px_rgba(0,0,0,0.55)]"
           >
             <div className="flex flex-col">
               {/* Anchors and routes used to sit at identical weight, so there
@@ -433,7 +435,7 @@ export default function Navigation() {
                                 {sub.label}
                               </span>
                               <span className="flex items-center gap-2.5">
-                                <span className="text-[11px] font-mono text-[#6a6a70]">
+                                <span className="text-[11px] font-mono text-[#8a8a93]">
                                   {sub.submenus.length}
                                 </span>
                                 <svg
@@ -445,14 +447,14 @@ export default function Navigation() {
                                   strokeWidth="2.5"
                                   strokeLinecap="round"
                                   strokeLinejoin="round"
-                                  className={`text-[#6a6a70] transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
+                                  className={`text-[#8a8a93] transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
                                 >
                                   <path d="m6 9 6 6 6-6" />
                                 </svg>
                               </span>
                             </button>
                             {expanded && (
-                              <div className="flex flex-col border-l border-white/[0.09] ml-[1.4rem] pl-2 my-0.5">
+                              <div className="flex flex-col border-l border-black/[0.12] ml-[1.4rem] pl-2 my-0.5">
                                 {sub.submenus.map((leaf) => (
                                   <button
                                     key={leaf.href}
@@ -485,16 +487,16 @@ export default function Navigation() {
                   </button>
                 );
               })}
-              <div className="h-[1px] w-full bg-white/[0.06] my-2" />
+              <div className="h-[1px] w-full bg-black/[0.08] my-1.5" />
               <button
                 onClick={() => {
                   setMobileOpen(false);
                   window.dispatchEvent(new CustomEvent("open-command-palette"));
                 }}
-                className="text-left flex items-center justify-between px-5 py-3.5 text-[15px] font-medium text-[#f5f5f7] hover:bg-white/[0.04] rounded-2xl transition-all duration-200"
+                className="text-left flex items-center justify-between px-4 py-3 text-[15px] font-medium text-[#1f1f24] hover:bg-black/[0.05] active:bg-black/[0.08] rounded-xl transition-colors duration-150 touch-manipulation"
               >
                 Search Command
-                <span className="text-[11px] font-mono text-[#86868b] px-2 py-1 rounded bg-white/[0.05] border border-white/[0.05]">⌘K</span>
+                <span className="text-[11px] font-mono text-[#6b6b73] px-2 py-1 rounded bg-black/[0.05] border border-black/[0.08]">⌘K</span>
               </button>
               {/* The desktop bar carries this CTA in a `hidden md:flex` group,
                   which left the phone menu with no way to start a conversation.
@@ -509,7 +511,7 @@ export default function Navigation() {
                     document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
                   }
                 }}
-                className="mt-2 flex items-center justify-center rounded-2xl bg-[#f5f5f7] px-5 py-3.5 text-[15px] font-medium text-black transition-colors hover:bg-white touch-manipulation"
+                className="mt-1.5 flex items-center justify-center rounded-xl bg-[#1A1A1A] px-4 py-3 text-[15px] font-semibold text-white transition-colors hover:bg-black touch-manipulation"
               >
                 Let&apos;s Talk
               </a>

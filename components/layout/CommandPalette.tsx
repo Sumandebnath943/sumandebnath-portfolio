@@ -282,7 +282,11 @@ export default function CommandPalette() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
-            className="fixed inset-0 z-[90] bg-white/40 backdrop-blur-md"
+            // Above the nav wrapper (z-10000). The palette is opened *from* the
+            // mobile menu, and at z-90 it rendered underneath it — the menu
+            // takes a moment to unmount, so tapping "Search Command" looked
+            // like nothing happened. Still below the tour overlay.
+            className="fixed inset-0 z-[10090] bg-white/40 backdrop-blur-md"
             onClick={close}
           />
 
@@ -297,7 +301,7 @@ export default function CommandPalette() {
             animate={{ opacity: 1, scale: 1, y: 0, x: "-50%" }}
             exit={{ opacity: 0, scale: 0.95, y: -10, x: "-50%" }}
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed top-[10vh] left-1/2 z-[100] w-full max-w-xl px-4"
+            className="fixed top-[10vh] left-1/2 z-[10100] w-full max-w-xl px-4"
           >
             <div className="glass-strong rounded-2xl overflow-hidden shadow-[0_24px_80px_rgba(0,0,0,0.1)] flex flex-col max-h-[80vh]">
               {/* Search bar */}
