@@ -3,8 +3,29 @@ import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import Contact from "@/components/sections/Contact";
-import { allFaqs, buildFaqPageJsonLd } from "@/lib/faqs";
+import { aboutFaqs, allFaqs, buildFaqPageJsonLd, faqs, type Faq } from "@/lib/faqs";
 import { SITE_URL } from "@/lib/projects";
+import "./faq.css";
+
+/**
+ * lib/faqs.ts has always held these as two distinct sets. The page flattened
+ * both into one 26-item run, so somebody scrolling for "who is this person"
+ * had to read eight questions about operating principles first.
+ */
+const GROUPS: { id: string; label: string; title: string; items: Faq[] }[] = [
+  {
+    id: "background",
+    label: "Set 01",
+    title: "Background, capabilities & products",
+    items: aboutFaqs,
+  },
+  {
+    id: "philosophy",
+    label: "Set 02",
+    title: "Operating philosophy & the transition",
+    items: faqs,
+  },
+];
 
 export const metadata: Metadata = {
   title: "FAQ — Brand Marketer Turned AI Product Builder",
@@ -33,59 +54,66 @@ export default function FAQPage() {
 
       <Navigation />
 
-      <main className="bg-white text-[#0A0A0A]">
-        <header className="max-w-5xl mx-auto px-6 md:px-10 pt-40 pb-12">
-          <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#6E6E6E] mb-6">
-            FAQ
-          </p>
-          <h1 className="font-manrope font-semibold text-4xl md:text-5xl lg:text-6xl leading-tight tracking-tight mb-6">
-            Frequently asked{" "}
-            <span className="font-serif italic font-normal text-[#0A0A0A]/70">
-              questions
-            </span>
-            .
-          </h1>
-          <p className="font-manrope text-base md:text-lg text-[#444] leading-relaxed max-w-2xl">
-            The canonical answer set for everything recruiters, founders, and
-            operators ask about the AI-native operating model, the transition
-            from brand and digital marketing into AI-native software development,
-            and how this portfolio is built.
-          </p>
+      <main className="fq">
+        <header className="fq-hero">
+          <div className="fq-shell">
+            <p className="fq-eyebrow">Reference · {allFaqs.length} answers</p>
+            <h1 className="fq-title">
+              Everything people <em>actually</em> ask.
+            </h1>
+            <p className="fq-standfirst">
+              The canonical answer set for what recruiters, founders and operators
+              ask about the AI-native operating model, the move from brand and
+              digital marketing into shipping software, and how this portfolio is
+              built.
+            </p>
+            <nav className="fq-jump" aria-label="Jump to a set">
+              {GROUPS.map((g) => (
+                <a key={g.id} href={`#${g.id}`}>
+                  {g.title} <b>{g.items.length}</b>
+                </a>
+              ))}
+            </nav>
+          </div>
         </header>
 
-        <section className="max-w-5xl mx-auto px-6 md:px-10 pb-32">
-          <div className="divide-y divide-black/[0.08]">
-            {allFaqs.map((f, i) => (
-              <details key={i} className="group py-7" open={i === 0}>
-                <summary className="flex items-start justify-between cursor-pointer list-none gap-6">
-                  <h2 className="font-manrope font-medium text-lg md:text-xl text-[#0A0A0A]">
-                    {f.q}
-                  </h2>
-                  <span
-                    aria-hidden
-                    className="font-mono text-xl text-[#666] transition-transform group-open:rotate-45 mt-1 shrink-0"
-                  >
-                    +
-                  </span>
-                </summary>
-                <p className="font-manrope text-[15px] md:text-base text-[#333] leading-[1.85] mt-5 max-w-3xl">
-                  {f.a}
-                </p>
-              </details>
-            ))}
-          </div>
+        {GROUPS.map((group) => (
+          <section key={group.id} id={group.id} className="fq-group">
+            <div className="fq-shell">
+              <div className="fq-group-head">
+                <p className="fq-group-label">{group.label}</p>
+                <h2 className="fq-group-title">{group.title}</h2>
+              </div>
 
-          <div className="mt-20 pt-10 border-t border-black/[0.08] text-sm text-[#555] leading-relaxed">
-            <p>
-              Question not answered here?{" "}
-              <a
-                href="mailto:sumandebnath944@gmail.com"
-                className="underline underline-offset-4 decoration-black/30 hover:decoration-black transition-colors"
-              >
-                sumandebnath944@gmail.com
+              {/* Still <details>: the answers stay in the HTML for crawlers and
+                  the page works with JavaScript off. */}
+              <div className="fq-list">
+                {group.items.map((f, i) => (
+                  <details key={f.q} className="fq-item">
+                    <summary className="fq-q">
+                      <span className="fq-n">{String(i + 1).padStart(2, "0")}</span>
+                      <h3 className="fq-qt">{f.q}</h3>
+                      <span className="fq-mark" aria-hidden />
+                    </summary>
+                    <p className="fq-a">{f.a}</p>
+                  </details>
+                ))}
+              </div>
+            </div>
+          </section>
+        ))}
+
+        <section className="fq-close">
+          <div className="fq-shell">
+            <p>Not in there? Ask it directly — the answer usually exists.</p>
+            <div className="fq-close-actions">
+              <a href="/contact" className="fq-btn fq-btn-solid">
+                Ask a question
               </a>
-              .
-            </p>
+              <a href="/resume" className="fq-btn fq-btn-ghost">
+                Read the résumé
+              </a>
+            </div>
           </div>
         </section>
       </main>

@@ -1,0 +1,251 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   /faq — the technical reference.
+
+   Was 26 questions in one undifferentiated black-on-white <details> list.
+   lib/faqs.ts has always held them as two distinct sets — philosophy and
+   transition, then background and capabilities — and the page flattened both
+   into a single run, so a visitor scrolling for "who is this person" had to
+   read eight questions about operating principles first.
+
+   Identity: cool slate documentation. Deliberately the most utilitarian page
+   on the site — it is a reference, and it should look like one.
+
+   Scoped under .fq.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.fq {
+  --slate: #0b1016;
+  --slate-lift: #111823;
+  --ice: #e8eef5;
+  --ice-soft: rgba(232, 238, 245, 0.62);
+  --ice-mute: rgba(232, 238, 245, 0.34);
+  --rule: rgba(232, 238, 245, 0.1);
+  --cyan: #38bdf8;
+  --shell: 62rem;
+  background: var(--slate);
+  color: var(--ice);
+}
+
+.fq-shell {
+  max-width: var(--shell);
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+@media (min-width: 768px) { .fq-shell { padding-inline: 2.5rem; } }
+
+/* ── Hero ─────────────────────────────────────────────────────────────── */
+
+.fq-hero {
+  position: relative;
+  padding-block: clamp(9rem, 18vw, 12rem) clamp(2.5rem, 6vw, 4rem);
+  overflow: hidden;
+}
+.fq-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(232, 238, 245, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232, 238, 245, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 70% 70% at 20% 30%, #000 10%, transparent 70%);
+  pointer-events: none;
+}
+.fq-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 50% 55% at 85% 10%, rgba(56, 189, 248, 0.11), transparent 70%);
+  pointer-events: none;
+}
+.fq-hero > * { position: relative; z-index: 1; }
+
+.fq-eyebrow {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+.fq-eyebrow::after { content: ""; height: 1px; flex: 1; background: currentColor; opacity: 0.3; }
+
+.fq-title {
+  font-family: var(--font-manrope), sans-serif;
+  font-weight: 600;
+  font-size: clamp(2.2rem, 6.5vw, 3.75rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  margin-top: 1.5rem;
+  max-width: 18ch;
+}
+.fq-title em {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--cyan);
+  padding-right: 0.06em;
+}
+
+.fq-standfirst {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  line-height: 1.8;
+  color: var(--ice-soft);
+  max-width: 50ch;
+  margin-top: 1.75rem;
+}
+
+/* Jump links to the two sets, plus a live count. */
+.fq-jump { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 2.25rem; }
+.fq-jump a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  border: 1px solid var(--rule);
+  padding: 0.55rem 1rem;
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 13px;
+  color: var(--ice-soft);
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+}
+.fq-jump a:hover { border-color: var(--cyan); color: var(--ice); background: rgba(56, 189, 248, 0.07); }
+.fq-jump b {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--cyan);
+}
+
+/* ── Groups ───────────────────────────────────────────────────────────── */
+
+.fq-group { border-top: 1px solid var(--rule); padding-block: clamp(2.5rem, 6vw, 4rem); scroll-margin-top: 7rem; }
+.fq-group-head { margin-bottom: 1.5rem; }
+.fq-group-label {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ice-mute);
+}
+.fq-group-title {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: clamp(1.3rem, 3vw, 1.75rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-top: 0.65rem;
+}
+
+/* ── Question rows ────────────────────────────────────────────────────── */
+/* Still <details>, so the answers are in the HTML for crawlers and the page
+   works with JavaScript switched off. */
+
+.fq-list { border-top: 1px solid var(--rule); }
+.fq-item { border-bottom: 1px solid var(--rule); position: relative; }
+.fq-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--cyan);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.25s ease;
+}
+.fq-item[open]::before { transform: scaleY(1); }
+
+.fq-q {
+  display: grid;
+  grid-template-columns: 2.75rem 1fr 1.5rem;
+  align-items: baseline;
+  gap: 0 0.75rem;
+  padding: 1.35rem 0.75rem 1.35rem 0;
+  cursor: pointer;
+  list-style: none;
+  transition: padding-left 0.25s ease, background-color 0.25s ease;
+}
+.fq-q::-webkit-details-marker { display: none; }
+.fq-item:hover .fq-q,
+.fq-item[open] .fq-q { padding-left: 0.85rem; background: rgba(232, 238, 245, 0.025); }
+
+.fq-n {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 11px;
+  color: var(--ice-mute);
+  font-variant-numeric: tabular-nums;
+}
+.fq-item[open] .fq-n { color: var(--cyan); }
+
+.fq-qt {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: clamp(0.95rem, 2.1vw, 1.1rem);
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  color: var(--ice);
+}
+
+/* Plus that becomes a minus. */
+.fq-mark { position: relative; width: 11px; height: 11px; justify-self: end; align-self: center; }
+.fq-mark::before,
+.fq-mark::after {
+  content: "";
+  position: absolute;
+  background: var(--ice-mute);
+  transition: transform 0.25s ease, background-color 0.25s ease;
+}
+.fq-mark::before { left: 0; right: 0; top: 5px; height: 1px; }
+.fq-mark::after { top: 0; bottom: 0; left: 5px; width: 1px; }
+.fq-item[open] .fq-mark::after { transform: rotate(90deg); }
+.fq-item[open] .fq-mark::before,
+.fq-item[open] .fq-mark::after { background: var(--cyan); }
+
+.fq-a {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 14.5px;
+  line-height: 1.85;
+  color: var(--ice-soft);
+  max-width: 62ch;
+  padding: 0 1.5rem 1.75rem 3.5rem;
+}
+@media (max-width: 640px) { .fq-a { padding-left: 0.85rem; padding-right: 0.5rem; } }
+
+/* ── Closing ──────────────────────────────────────────────────────────── */
+
+.fq-close {
+  border-top: 1px solid var(--rule);
+  padding-block: clamp(3rem, 7vw, 4.5rem);
+}
+.fq-close p {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: clamp(1.05rem, 2.4vw, 1.35rem);
+  line-height: 1.6;
+  letter-spacing: -0.015em;
+  max-width: 30ch;
+}
+.fq-close-actions { display: flex; flex-wrap: wrap; gap: 0.65rem; margin-top: 1.75rem; }
+.fq-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.75rem 1.4rem;
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+.fq-btn-solid { background: var(--ice); color: var(--slate); }
+.fq-btn-solid:hover { background: #fff; }
+.fq-btn-ghost { border: 1px solid var(--rule); color: var(--ice-soft); }
+.fq-btn-ghost:hover { border-color: var(--cyan); color: var(--cyan); }
+
+@media (prefers-reduced-motion: reduce) {
+  .fq * { transition: none !important; }
+}

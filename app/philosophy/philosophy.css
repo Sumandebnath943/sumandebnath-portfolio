@@ -1,0 +1,197 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   /philosophy — the manifesto opening.
+
+   The page used to be `<div className="pt-32" />` followed by two homepage
+   sections on white: no hero, no framing, no identity of its own. This gives
+   it an opening worth the word "philosophy" — a dark ledger of the six
+   principles, each in the accent colour AIPhilosophy already assigns it, so
+   the index and the expanded section below it read as one idea.
+
+   Scoped under .ph.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.ph {
+  --void: #08070b;
+  --cream: #f2f0ec;
+  --muted: rgba(242, 240, 236, 0.55);
+  --faint: rgba(242, 240, 236, 0.28);
+  --rule: rgba(242, 240, 236, 0.1);
+  --shell: 64rem;
+}
+
+.ph-shell {
+  max-width: var(--shell);
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+@media (min-width: 768px) { .ph-shell { padding-inline: 2.5rem; } }
+
+/* ── Hero ─────────────────────────────────────────────────────────────── */
+
+.ph-hero {
+  position: relative;
+  background: var(--void);
+  color: var(--cream);
+  padding-block: clamp(9rem, 18vw, 13rem) clamp(3.5rem, 8vw, 5.5rem);
+  overflow: hidden;
+}
+/* Six faint bands, one per principle, bleeding up from the floor — the
+   colours of the section below, arriving early. */
+.ph-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 40% 55% at 8% 100%, rgba(46, 111, 191, 0.16), transparent 70%),
+    radial-gradient(ellipse 36% 50% at 26% 100%, rgba(16, 185, 129, 0.13), transparent 70%),
+    radial-gradient(ellipse 36% 50% at 44% 100%, rgba(255, 90, 31, 0.12), transparent 70%),
+    radial-gradient(ellipse 36% 50% at 62% 100%, rgba(197, 160, 89, 0.12), transparent 70%),
+    radial-gradient(ellipse 36% 50% at 80% 100%, rgba(123, 97, 255, 0.14), transparent 70%),
+    radial-gradient(ellipse 40% 55% at 98% 100%, rgba(255, 0, 60, 0.1), transparent 70%);
+  pointer-events: none;
+}
+.ph-hero > * { position: relative; z-index: 1; }
+
+.ph-eyebrow {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: var(--faint);
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+.ph-eyebrow::after { content: ""; height: 1px; flex: 1; background: currentColor; opacity: 0.4; }
+
+.ph-title {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2.6rem, 8vw, 5.25rem);
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+  margin-top: 1.75rem;
+  max-width: 15ch;
+}
+/* Instrument Serif's italic has tight right side-bearing; without this the
+   emphasised word collides with the one after it at display sizes. */
+.ph-title em { font-style: italic; color: #7b61ff; padding-right: 0.08em; }
+
+.ph-standfirst {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: clamp(1rem, 2.1vw, 1.2rem);
+  line-height: 1.8;
+  color: var(--muted);
+  max-width: 52ch;
+  margin-top: 2rem;
+}
+
+/* ── The ledger ───────────────────────────────────────────────────────── */
+/* A contents page for the six principles, and the page's signature. Each row
+   carries the accent AIPhilosophy gives that principle below. */
+
+.ph-ledger { margin-top: clamp(3rem, 7vw, 4.5rem); border-top: 1px solid var(--rule); }
+
+.ph-row {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 0 1rem;
+  align-items: center;
+  padding: 1.15rem 0.75rem 1.15rem 0;
+  border-bottom: 1px solid var(--rule);
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: padding-left 0.25s ease, background-color 0.25s ease;
+}
+@media (min-width: 720px) {
+  .ph-row { grid-template-columns: 3.5rem 1fr auto; padding-block: 1.4rem; }
+}
+/* The accent arrives as a fill from the left on hover. */
+.ph-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.25s ease;
+}
+.ph-row:hover { background: rgba(242, 240, 236, 0.03); padding-left: 0.85rem; }
+.ph-row:hover::before { transform: scaleY(1); }
+
+.ph-n {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.ph-name {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: clamp(1rem, 2.4vw, 1.35rem);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  color: var(--cream);
+  transition: color 0.25s ease;
+}
+.ph-row:hover .ph-name { color: var(--accent); }
+.ph-claim {
+  grid-column: 2 / -1;
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--faint);
+  margin-top: 0.3rem;
+}
+@media (min-width: 720px) {
+  .ph-claim {
+    grid-column: 3;
+    margin-top: 0;
+    text-align: right;
+    max-width: 26ch;
+  }
+}
+
+/* ── Closing band ─────────────────────────────────────────────────────── */
+
+.ph-close {
+  background: var(--void);
+  color: var(--cream);
+  padding-block: clamp(4rem, 9vw, 6rem);
+  position: relative;
+  overflow: hidden;
+}
+.ph-close::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 70% at 50% 120%, rgba(123, 97, 255, 0.18), transparent 70%);
+  pointer-events: none;
+}
+.ph-close > * { position: relative; z-index: 1; }
+.ph-close blockquote {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(1.6rem, 4.4vw, 2.9rem);
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+  max-width: 22ch;
+}
+.ph-close blockquote em { font-style: italic; color: #7b61ff; }
+.ph-close cite {
+  display: block;
+  margin-top: 1.75rem;
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 10px;
+  font-style: normal;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ph * { transition: none !important; }
+}
