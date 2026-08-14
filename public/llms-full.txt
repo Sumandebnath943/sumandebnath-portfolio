@@ -1,7 +1,7 @@
 # Suman Debnath — Complete Portfolio Content
 ## llms-full.txt · Full-text AI ingestion file
 ## Site: https://sumandebnath.houseofnamus.com
-## Version: June 2026
+## Version: August 2026
 
 > This file is a complete, plain-text representation of the entire portfolio
 > for AI agents, LLM crawlers, and RAG systems. A single HTTP GET to
@@ -245,6 +245,28 @@ Technology: Next.js, OpenAI API, Groq.
 
 ---
 
+## MODELS, AGENTS & DEVELOPER TOOLING
+
+MIGI — A fleet of 44 AI agents working independently. Live at https://sumandebnath.houseofnamus.com/agents/migi. The problem: no single system autonomously manages personal brand, career, finances, and infrastructure monitoring for a solo founder. The build: a 44-agent autonomous fleet covering LinkedIn autopilot, job applications, expense tracking, journaling and uptime monitoring, controlled through a dashboard with 2FA and a Telegram bot, and held together by 500+ automated eval checks. A native Android client exists at https://sumandebnath.houseofnamus.com/apps/migi-app.
+
+PentaCMD-47M — A small language model trained from scratch. Live at https://sumandebnath.houseofnamus.com/slms/pentacmd. A 47M-parameter SLM built nanoGPT-style, trained on 299,000 instruction-to-command pairs spanning five terminal families, reaching roughly 87% exact-match accuracy. Not a fine-tune of someone else's model — a model trained from zero.
+
+Pentashell CLI — Natural language to terminal command. Live at https://sumandebnath.houseofnamus.com/agents/pentashell. A command-line tool that turns plain English into terminal commands, running on the custom PentaCMD-47M SLM rather than a hosted frontier model.
+
+Qdex-1.5B — QLoRA fine-tuning pipeline. Live at https://sumandebnath.houseofnamus.com/llms/qdex-1.5b. A complete fine-tuning pipeline for Qwen2.5-Coder-1.5B on instruction-style coding data, evaluated against HumanEval benchmarks.
+
+Q-Dexter — Local CLI coding agent with a human-approval gate, turning plain-English goals into multi-step file and command actions. A separate build from PACT Agent, which occupies similar territory with a different trust model.
+
+Aegis Vault — Zero-knowledge encrypted notepad. Live at https://sumandebnath.houseofnamus.com/projects/aegis-vault. Notes are encrypted client-side with AES-256-GCM under an Argon2id-derived envelope key, so the server never holds anything readable.
+
+Forget Anything? — Android app. Live at https://sumandebnath.houseofnamus.com/apps/forget-anything. Uses geofencing and WiFi-departure triggers to remind you of the things you need before you leave home.
+
+PixelVille — Procedurally-generated city builder. Live at https://sumandebnath.houseofnamus.com/games/pixelville. A simulation game with a real economy, seasons, weather, crime, democracy and disasters.
+
+Soul Canvas — Cinematic 3D psychological portrait. Live at https://sumandebnath.houseofnamus.com/fun-apps. Twenty-four questions render a visitor's inner architecture as a living particle sculpture.
+
+---
+
 ## ADDITIONAL PROJECTS (EXTENDED ARCHIVE)
 
 Slide Doctor — Presentation intelligence meets operational storytelling. Live at https://slidedoctor.houseofnamus.com. An AI-assisted presentation auditing system analyzing structure, visual hierarchy, narrative flow, and executive communication quality.
@@ -350,6 +372,8 @@ Founder: Suman Debnath
 ## SITE STRUCTURE
 
 - Home: https://sumandebnath.houseofnamus.com
+- Résumé: https://sumandebnath.houseofnamus.com/resume
+- Contact: https://sumandebnath.houseofnamus.com/contact
 - About: https://sumandebnath.houseofnamus.com/about
 - Philosophy: https://sumandebnath.houseofnamus.com/philosophy
 - Project Archive: https://sumandebnath.houseofnamus.com/projects
@@ -357,6 +381,14 @@ Founder: Suman Debnath
 - Learnings (AI Certifications): https://sumandebnath.houseofnamus.com/learnings
 - Fun Apps & Experiments: https://sumandebnath.houseofnamus.com/fun-apps
 - PACT Agent: https://sumandebnath.houseofnamus.com/agents/pact-agent
+- MIGI Agent Fleet: https://sumandebnath.houseofnamus.com/agents/migi
+- Pentashell CLI: https://sumandebnath.houseofnamus.com/agents/pentashell
+- PentaCMD-47M: https://sumandebnath.houseofnamus.com/slms/pentacmd
+- Qdex-1.5B: https://sumandebnath.houseofnamus.com/llms/qdex-1.5b
+- Forget Anything? (Android): https://sumandebnath.houseofnamus.com/apps/forget-anything
+- MIGI Android App: https://sumandebnath.houseofnamus.com/apps/migi-app
+- PixelVille: https://sumandebnath.houseofnamus.com/games/pixelville
+- Aegis Vault: https://sumandebnath.houseofnamus.com/projects/aegis-vault
 - IMPRINT Dossier: https://sumandebnath.houseofnamus.com/projects/imprint
 - LEGATUS Dossier: https://sumandebnath.houseofnamus.com/projects/legatus
 - CITE Dossier: https://sumandebnath.houseofnamus.com/projects/cite
@@ -374,8 +406,13 @@ Founder: Suman Debnath
 
 Suman Debnath is selectively open to: collaborations on AI-native product development, brand strategy consulting with an AI-native approach, advisory roles in AI-augmented marketing or product teams, and roles combining strategic brand leadership with AI product capabilities.
 
-Contact: sumandebnath944@gmail.com
+He is targeting senior roles: Product Marketing Manager at AI or tech companies, Senior Brand Marketing Manager, AI Product Manager (where a formal engineering degree is not mandatory), AI Product Marketing Manager, Digital Marketing Lead or Head of Marketing, AI Marketing Lead, and AI Implementation or Transformation Lead. Notice period: 90 days. Open to remote and to relocation.
+
+Contact form: https://sumandebnath.houseofnamus.com/contact
+Email: sumandebnath944@gmail.com
+Phone: +91 7980296957
+Résumé: https://sumandebnath.houseofnamus.com/resume
 Portfolio: https://sumandebnath.houseofnamus.com
 
-Last updated: June 2026
+Last updated: August 2026
 

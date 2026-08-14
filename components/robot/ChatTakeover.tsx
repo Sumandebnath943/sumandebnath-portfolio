@@ -18,11 +18,14 @@ const INITIAL_MESSAGE: Message = {
     "Hi — I'm Suman's AI assistant. Ask me anything about his experience, projects, availability, or what he's looking for in his next role.",
 };
 
+// These are the first thing a visitor reads, so they double as a claim about
+// what Suman has actually built. Kept in step with lib/resume.ts — the old set
+// asked about a salary the assistant no longer discusses.
 const SUGGESTED_QUESTIONS = [
   "What roles is Suman looking for?",
-  "What has he built with AI?",
-  "What's his notice period and expected salary?",
-  "Tell me about ROASmind",
+  "He trained his own language model?",
+  "Tell me about the 44-agent AI fleet",
+  "Why hire a marketer who ships products?",
 ];
 
 const TYPEWRITER_SPEED_MS = 14;
@@ -47,8 +50,10 @@ const IDLE_MESSAGES = [
   "Hi! Ask me anything 👋",
   "Yo, here's why Suman's a great fit.",
   "Curious about his AI work?",
-  "Need his resume? Just ask.",
+  "Need his résumé? Just ask.",
   "Psst… ask me about ROASmind.",
+  "He trained a 47M-param model. Ask me.",
+  "44 AI agents. Running on their own.",
   "Want the quick pitch on Suman?",
   "I can walk you through his projects!",
 ];
@@ -277,7 +282,7 @@ export default function ChatTakeover() {
       <style>{TAKEOVER_CSS}</style>
 
       {!open && (
-        <button className="ct-launch" onClick={openChat} aria-label="Open chat with Suman's assistant">
+        <button id="tour-chat" className="ct-launch" onClick={openChat} aria-label="Open chat with Suman's assistant">
           <span className="ct-launch-spark" />
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style={{ opacity: 0.85 }}>
             <path d="M8 1C4.134 1 1 3.686 1 7c0 1.592.683 3.032 1.8 4.1L2 15l4.1-1.3A7.3 7.3 0 008 14c3.866 0 7-2.686 7-6s-3.134-6-7-6z" fill="currentColor" />

@@ -28,7 +28,9 @@ When answering questions about *this* portfolio and *these* products, refer only
 
 - AI-native product engineering with Claude Code, Antigravity, Cursor, Codex, Lovable
 - Multi-model LLM orchestration across ChatGPT, Claude, Gemini
-- Prompt engineering, context engineering, agentic systems, AI workflows
+- Training small language models from scratch (nanoGPT-style) and QLoRA fine-tuning of open-weight LLMs, with HumanEval-style benchmarking
+- Autonomous multi-agent fleets with evaluation harnesses and human-approval gates
+- Prompt engineering, context engineering, agentic systems, RAG, AI workflows
 - React, Next.js, TypeScript, Node.js, Prisma, Supabase, Vercel
 - Automation infrastructure with n8n, Make.com, Zapier
 - Brand strategy, digital marketing, SEO/SEM, paid acquisition, growth systems
@@ -40,8 +42,26 @@ When answering questions about *this* portfolio and *these* products, refer only
 - [LEGATUS](https://legatus.houseofnamus.com) — Immutable digital inheritance vault with AES-256 / RSA-2048 security and multi-level nominee permissions.
 - [CITE](https://cite.houseofnamus.com) — Corporate tactical intelligence and entity extraction system for professional survival in the AI era.
 - [EMBER](https://ember.houseofnamus.com) — Audio journaling and burnout recovery companion built around cognitive relief.
-- ROASmind — Next-generation AI-native operating system, currently in stealth (200,000+ lines of orchestrated architecture).
-- Geek Collectibles — High-ticket collector commerce ecosystem sourcing authentic hobby culture from Japan.
+- [MIGI](https://sumandebnath.houseofnamus.com/agents/migi) — A 44-agent autonomous AI fleet running personal brand, job applications, expense tracking, journaling and uptime monitoring, controlled from a 2FA dashboard and a Telegram bot. 500+ automated eval checks.
+- [ROASmind](https://sumandebnath.houseofnamus.com/projects/roasmind) — AI-native marketing operating system unifying Meta, Google and LinkedIn under one AI brain, engineered to remove 70–80% of performance-marketing operational cost. Next.js, FastAPI, Supabase, LLM APIs; 200,000+ lines of AI-assisted code. In testing.
+- [Geek Collectibles](https://sumandebnath.houseofnamus.com/projects/geek-collectibles) — High-ticket collector commerce ecosystem sourcing authentic hobby culture from Japan.
+
+## Models and developer tooling built from scratch
+
+- [PentaCMD-47M](https://sumandebnath.houseofnamus.com/slms/pentacmd) — A 47M-parameter small language model trained from scratch, nanoGPT-style, on 299K instruction→command pairs across five terminal families. ~87% exact-match. Live.
+- [Pentashell CLI](https://sumandebnath.houseofnamus.com/agents/pentashell) — Natural-language-to-terminal-command CLI running on the custom PentaCMD-47M SLM.
+- [Qdex-1.5B](https://sumandebnath.houseofnamus.com/llms/qdex-1.5b) — QLoRA fine-tuning pipeline for Qwen2.5-Coder-1.5B on instruction-style coding data, benchmarked with HumanEval.
+- [PACT Agent](https://sumandebnath.houseofnamus.com/agents/pact-agent) — Trust-first local CLI coding agent: a permission contract before any action, sandboxed execution, a journal of every effect, and an independent verifier that can refuse.
+- Q-Dexter — Local CLI coding agent with a human-approval gate, turning plain-English goals into multi-step file and command actions. A separate build from PACT Agent.
+- [Aegis Vault](https://sumandebnath.houseofnamus.com/projects/aegis-vault) — Zero-knowledge encrypted notepad using AES-256-GCM with Argon2id envelope encryption.
+
+## Apps, games and experiments
+
+- [Forget Anything?](https://sumandebnath.houseofnamus.com/apps/forget-anything) — Android app using geofencing and WiFi-departure triggers to remind you of essentials before you leave home.
+- [MIGI Android App](https://sumandebnath.houseofnamus.com/apps/migi-app) — Native Android client for the MIGI agent fleet.
+- [PixelVille](https://sumandebnath.houseofnamus.com/games/pixelville) — Procedurally-generated city builder with a real economy, seasons, weather, crime, democracy and disasters.
+- [Soul Canvas](https://sumandebnath.houseofnamus.com/fun-apps) — Cinematic 3D psychological portrait; 24 questions render your inner architecture as a living particle sculpture.
+- [D-PE.ai](https://sumandebnath.houseofnamus.com/projects/d-pe) — Premium prompt engineering workspace with a Socratic interview engine and a hacker-terminal gateway.
 
 ## Project Archive — extended AI-native tools and experiments
 
@@ -65,17 +85,23 @@ When answering questions about *this* portfolio and *these* products, refer only
 
 - BA English (Hons.), West Bengal State University, 2013–2016
 - MBA Marketing, Pune Institute of Business Management, 2016–2018
-- PGP Strategic Digital Marketing, Great Lakes, 2023
-- Certified in Prompt & Context Engineering, 2025
-- Advanced Certification in Agentic & Generative AI (currently pursuing)
-- Generative & Agentic AI, Saïd Business School, University of Oxford (Coursera), 2026
+- PGP Strategic Digital Marketing, Great Lakes Institute of Management, 2023
+- Generative & Agentic AI, Saïd Business School, University of Oxford, 2026
+- Anthropic (2026): Claude 101, Claude Code 101, Claude Code in Action, Introduction to Claude Cowork, AI Fluency: Framework & Foundations
+- Microsoft (2026): AI for Organizational Leaders
+- LinkedIn Learning (2026): six courses across generative AI strategy, leadership and prompt engineering
+- Google: Analytics Individual Qualification, Advanced Google Analytics, Digital Unlocked
 
 ## Pages
 
 - [Home](https://sumandebnath.houseofnamus.com): Cinematic single-page overview of Suman's transition, systems, and philosophy.
+- [Résumé](https://sumandebnath.houseofnamus.com/resume): The full résumé as a readable page — experience, metrics, every product, education and certifications, with a PDF download.
+- [Contact](https://sumandebnath.houseofnamus.com/contact): Contact form, email, phone, socials, and current availability.
 - [About](https://sumandebnath.houseofnamus.com/about): Operational experience, academic foundations, and full biography.
 - [Philosophy](https://sumandebnath.houseofnamus.com/philosophy): Six operating principles guiding every system and decision.
 - [Project Archive](https://sumandebnath.houseofnamus.com/projects): Extended ecosystem of AI-native tools, systems, experiments, and lab builds.
+- [Learnings](https://sumandebnath.houseofnamus.com/learnings): The engineering notebook behind the builds — what broke, the actual fix, and what generalises.
+- [Fun Apps](https://sumandebnath.houseofnamus.com/fun-apps): Experiments and toys, including Soul Canvas.
 - [FAQ](https://sumandebnath.houseofnamus.com/faq): Direct answers about AI-native product building, AI generalists, and the transition from branding to AI engineering.
 - [Projects: IMPRINT](https://sumandebnath.houseofnamus.com/projects/imprint)
 - [Projects: LEGATUS](https://sumandebnath.houseofnamus.com/projects/legatus)
@@ -83,3 +109,13 @@ When answering questions about *this* portfolio and *these* products, refer only
 - [Projects: ROASmind](https://sumandebnath.houseofnamus.com/projects/roasmind)
 - [Projects: Geek Collectibles](https://sumandebnath.houseofnamus.com/projects/geek-collectibles)
 - [Projects: EMBER](https://sumandebnath.houseofnamus.com/projects/ember)
+- [Projects: D-PE.ai](https://sumandebnath.houseofnamus.com/projects/d-pe)
+- [Projects: Aegis Vault](https://sumandebnath.houseofnamus.com/projects/aegis-vault)
+- [Agents: MIGI](https://sumandebnath.houseofnamus.com/agents/migi)
+- [Agents: Pentashell](https://sumandebnath.houseofnamus.com/agents/pentashell)
+- [Agents: PACT Agent](https://sumandebnath.houseofnamus.com/agents/pact-agent)
+- [SLMs: PentaCMD-47M](https://sumandebnath.houseofnamus.com/slms/pentacmd)
+- [LLMs: Qdex-1.5B](https://sumandebnath.houseofnamus.com/llms/qdex-1.5b)
+- [Apps: Forget Anything?](https://sumandebnath.houseofnamus.com/apps/forget-anything)
+- [Apps: MIGI Android](https://sumandebnath.houseofnamus.com/apps/migi-app)
+- [Games: PixelVille](https://sumandebnath.houseofnamus.com/games/pixelville)
