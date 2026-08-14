@@ -135,7 +135,15 @@ export default function EasterEggs() {
 
     const interval = setInterval(() => {
       setIdleTime((prev) => {
-        if (prev >= 60 && !showClippy) { // 60 seconds
+        // The card is anchored bottom-left, which on a phone is exactly where
+        // the hero's "Check Experience" / "View Projects" row lands — it was
+        // covering them outright. While the hero is still on screen those
+        // buttons are the better prompt anyway, so the nudge waits until the
+        // visitor has scrolled past it.
+        const pastHero =
+          typeof window !== "undefined" &&
+          window.scrollY > window.innerHeight * 0.6;
+        if (prev >= 60 && !showClippy && pastHero) { // 60 seconds
           setShowClippy(true);
           return prev;
         }
