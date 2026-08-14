@@ -15,7 +15,6 @@ import PhilosophyFAQ from "@/components/sections/PhilosophyFAQ";
 import OperationalHistory from "@/components/sections/OperationalHistory";
 import AcademicFoundations from "@/components/sections/AcademicFoundations";
 import Contact from "@/components/sections/Contact";
-import SiteTour from "@/components/ui/SiteTour";
 import { SITE_URL } from "@/lib/projects";
 
 const profilePageJsonLd = {
@@ -60,7 +59,8 @@ export default function Home() {
       </main>
 
       <Footer />
-      <SiteTour />
+      {/* SiteTour used to be mounted here, which is precisely why the tour never
+          left this page. It now lives in the root layout. */}
     </MotionProvider>
   );
 }

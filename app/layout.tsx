@@ -308,6 +308,7 @@ import EasterEggs from "@/components/ui/EasterEggs";
 import VisitorPing from "@/components/analytics/VisitorPing";
 import PrivacyNotice from "@/components/ui/PrivacyNotice";
 import SiteOnly from "@/components/layout/SiteOnly";
+import SiteTour from "@/components/ui/SiteTour";
 
 export default function RootLayout({
   children,
@@ -346,6 +347,10 @@ export default function RootLayout({
             <RobotMascot />
             <EasterEggs />
             <ChatTakeover />
+            {/* Mounted here rather than on the homepage, which is what confined
+                the tour to a single page — it now walks the whole site and has
+                to survive the navigations between. */}
+            <SiteTour />
             <PrivacyNotice />
           </SiteOnly>
           <VisitorPing />

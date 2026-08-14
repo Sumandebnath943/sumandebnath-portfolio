@@ -539,6 +539,7 @@ export default function LearningsPage() {
 
         {/* ── HERO ── */}
         <section
+          id="tour-learnings"
           style={{
             minHeight: "92vh",
             display: "flex",
