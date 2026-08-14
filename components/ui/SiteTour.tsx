@@ -37,7 +37,12 @@ export default function SiteTour() {
           },
         },
         {
-          element: "#tour-nav-projects",
+          // Was "#tour-nav-projects", an id that is never rendered — the step
+          // highlighted a zero-height dummy and pointed at nothing. The archive
+          // lives behind the Portfolio menu, which is a hover dropdown on
+          // desktop and inside the hamburger on mobile, so no menu item is
+          // reliably on screen. The nav pill itself always is.
+          element: "#tour-nav",
           popover: {
             title: "All Projects Archive",
             description: "This menu holds the complete systems archive. Clicking on any project there will reveal the deep technical learnings from that build.",

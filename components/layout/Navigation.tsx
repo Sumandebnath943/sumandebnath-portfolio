@@ -221,7 +221,6 @@ export default function Navigation() {
               return (
                 <m.button
                   key={link.href}
-                  id={link.href === "/projects" ? "tour-nav-projects" : undefined}
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }}
@@ -362,6 +361,21 @@ export default function Navigation() {
                 Search Command
                 <span className="text-[11px] font-mono text-[#86868b] px-2 py-1 rounded bg-white/[0.05] border border-white/[0.05]">⌘K</span>
               </button>
+              {/* The desktop bar carries this CTA in a `hidden md:flex` group,
+                  which left the phone menu with no way to start a conversation. */}
+              <a
+                href="/#contact"
+                onClick={(e) => {
+                  setMobileOpen(false);
+                  if (typeof window !== "undefined" && window.location.pathname === "/") {
+                    e.preventDefault();
+                    document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
+                className="mt-2 flex items-center justify-center rounded-2xl bg-[#f5f5f7] px-5 py-3.5 text-[15px] font-medium text-black transition-colors hover:bg-white touch-manipulation"
+              >
+                Let&apos;s Talk
+              </a>
             </div>
           </m.div>
         )}

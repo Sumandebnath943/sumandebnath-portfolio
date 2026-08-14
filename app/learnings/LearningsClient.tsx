@@ -25,13 +25,22 @@ interface PdfjsLib {
 interface PDFDocumentProxy {
   getPage(n: number): Promise<PDFPageProxy>;
 }
+interface PDFRenderTask {
+  promise: Promise<void>;
+  cancel(): void;
+}
 interface PDFPageProxy {
   getViewport(opts: { scale: number }): { width: number; height: number };
   render(opts: {
     canvasContext: CanvasRenderingContext2D;
     viewport: { width: number; height: number };
-  }): { promise: Promise<void> };
+  }): PDFRenderTask;
 }
+
+// pdf.js throws if two render() calls share one canvas, which is exactly what
+// happened when a re-render reissued a draw before the previous one settled.
+// Holding the in-flight task per canvas lets the newer draw cancel the older.
+const inFlightRenders = new WeakMap<HTMLCanvasElement, PDFRenderTask>();
 
 // Called from <Script onLoad> — resolves the promise for all waiters
 function onPdfjsScriptLoad() {
@@ -48,6 +57,7 @@ async function renderPdfToCanvas(
   canvas: HTMLCanvasElement,
   scale = 1.5
 ) {
+  inFlightRenders.get(canvas)?.cancel();
   try {
     const lib = await _pdfjsReady; // waits for CDN — never races
     const encoded = pdfUrl
@@ -60,8 +70,15 @@ async function renderPdfToCanvas(
     const ctx = canvas.getContext("2d")!;
     canvas.width = viewport.width;
     canvas.height = viewport.height;
-    await page.render({ canvasContext: ctx, viewport }).promise;
+    // Anything queued while we were awaiting the document wins over this draw.
+    inFlightRenders.get(canvas)?.cancel();
+    const task = page.render({ canvasContext: ctx, viewport });
+    inFlightRenders.set(canvas, task);
+    await task.promise;
+    if (inFlightRenders.get(canvas) === task) inFlightRenders.delete(canvas);
   } catch (err) {
+    // A superseded draw is the expected outcome of cancel(), not a failure.
+    if ((err as { name?: string })?.name === "RenderingCancelledException") return;
     console.warn("PDF render failed:", pdfUrl, err);
   }
 }
@@ -87,18 +104,46 @@ function CredentialStack({
 }) {
   const layerCount = Math.min(exp.credentials.length, 5);
   const refs = useRef<(HTMLCanvasElement | null)[]>([]);
+  const stackRef = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(false);
+
+  // Every card used to rasterise its whole stack on mount, so opening the page
+  // kicked off dozens of pdf.js jobs at once and pinned the main thread — long
+  // enough that the tab stopped responding at all on slower hardware. Cards now
+  // wait until they are near the viewport.
+  useEffect(() => {
+    const el = stackRef.current;
+    if (!el) return;
+    if (typeof IntersectionObserver === "undefined") {
+      setInView(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setInView(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "300px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   useEffect(() => {
+    if (!inView) return;
     exp.credentials.slice(0, layerCount).forEach((cred, i) => {
       const canvas = refs.current[i];
       if (canvas && cred.pdf) {
         renderPdfToCanvas(cred.pdf, canvas, 0.8);
       }
     });
-  }, [exp, layerCount]);
+  }, [inView, exp, layerCount]);
 
   return (
     <div
+      ref={stackRef}
       className="lp-credential-stack"
       data-layers={layerCount}
       onClick={onOpen}

@@ -498,11 +498,16 @@ const TAKEOVER_CSS = `
     .ct-idle-bubble { display: none; } /* no room above the head in the mobile top band */
     /* dvh so the panel tracks the browser's collapsing toolbar instead of
        pushing its input bar underneath it. */
-    .ct-panel { width: 100%; height: 68dvh; top: auto; bottom: 0; transform: translateY(102%); }
+    .ct-panel { width: 100%; height: 78dvh; top: auto; bottom: 0; transform: translateY(102%); }
     /* Safari zooms the whole page when a focused input is under 16px. */
     .ct-input { font-size: 16px; }
     .ct-panel.in { transform: translateY(0); }
     .ct-messages-inner, .ct-suggestions, .ct-input-bar { padding-left: 16px; padding-right: 16px; }
-    .ct-suggestions { grid-template-columns: 1fr; }
+    /* The stacked suggestions and generous desktop padding left barely any room
+       to actually read the conversation, so the reading area gets the space
+       back: a taller panel and tighter vertical rhythm around the messages. */
+    .ct-messages-inner { padding-top: 16px; padding-bottom: 16px; gap: 14px; }
+    .ct-input-bar { padding-top: 12px; padding-bottom: 16px; }
+    .ct-suggestions { grid-template-columns: 1fr; gap: 8px; }
   }
 `;
