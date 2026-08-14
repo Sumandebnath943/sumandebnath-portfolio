@@ -47,6 +47,26 @@ const INJECTION_PATTERNS = [
 
 const INJECTION_FALLBACK = "What can you tell me about Suman's experience?";
 
+// The chat bubble renders `msg.content` as plain text under `white-space:
+// pre-wrap` — there is no markdown renderer. gpt-oss reaches for **bold** and
+// bullet syntax far more readily than the llama model it replaced, so asterisks
+// and heading hashes would otherwise show up literally in the UI. The system
+// prompt asks for plain prose; this is the safety net for when it doesn't.
+// It also folds the U+2011 non-breaking hyphens and U+00A0 spaces the model
+// likes to emit back to their ASCII equivalents.
+function toPlainText(text) {
+  return text
+    .replace(/‑/g, "-")
+    .replace(/ /g, " ")
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/^\s*[-*+]\s+/gm, "• ")
+    .replace(/\*\*(.+?)\*\*/gs, "$1")
+    .replace(/(^|\W)\*(?!\s)(.+?)(?<!\s)\*(?=\W|$)/gs, "$1$2")
+    .replace(/(^|\W)_(?!\s)(.+?)(?<!\s)_(?=\W|$)/gs, "$1$2")
+    .replace(/`{1,3}([^`]+)`{1,3}/gs, "$1")
+    .trim();
+}
+
 function sanitizeInput(input) {
   if (typeof input !== 'string') return '';
 
@@ -100,7 +120,14 @@ export default async function handler(req, res) {
 
   try {
     const completion = await groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
+      // llama-3.3-70b-versatile is deprecated. gpt-oss-120b is OpenAI's
+      // open-weight model served on Groq, so this stays a drop-in swap on the
+      // same SDK and key. It is a reasoning model: `reasoning_effort: 'low'`
+      // keeps latency close to what the llama model gave, which matters for a
+      // chat widget, and the chain of thought comes back on a separate
+      // `message.reasoning` field that we simply never read.
+      model: 'openai/gpt-oss-120b',
+      reasoning_effort: 'low',
       messages: [
         { role: 'system', content: SYSTEM_PROMPT },
         ...sanitizedMessages,
@@ -110,7 +137,7 @@ export default async function handler(req, res) {
       top_p: 0.9,
     });
 
-    let response = completion.choices[0].message.content;
+    let response = toPlainText(completion.choices[0].message.content ?? '');
 
     // Guard against prompt-leaking responses
     if (
