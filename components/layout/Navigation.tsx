@@ -19,25 +19,50 @@ type NavLink = {
   submenus?: SubMenu[];
 };
 
+/**
+ * The whole site, in one structure.
+ *
+ * Both menus render from this — desktop dropdowns and the phone sheet — so a
+ * page added here appears in both. Several routes used to exist only in the
+ * footer or the ⌘K palette and were unreachable from the menu at all.
+ *
+ * The homepage anchors sit inside "Home" rather than loose in the bar: with
+ * Résumé, FAQ and About Me added they would have pushed the bar to twelve
+ * top-level items. Contact is deliberately absent — it is the "Let's Talk"
+ * button on the right, which is the same destination.
+ *
+ * Privacy stays footer-only, where legal furniture belongs.
+ */
 const navLinks: NavLink[] = [
-  { label: "Evolution", href: "#experience", color: "#38BDF8" },
-  { label: "Stack", href: "#systems", color: "#A78BFA" },
-  { label: "Systems", href: "#projects", color: "#34D399" },
-  { label: "Philosophy", href: "#philosophy", color: "#FB7185" },
-  { label: "Experience", href: "#history", color: "#FACC15" },
+  {
+    label: "Home",
+    color: "#38BDF8",
+    submenus: [
+      { label: "Overview", href: "/", color: "#38BDF8" },
+      { label: "Evolution", href: "#experience", color: "#38BDF8" },
+      // Never had a menu entry despite being a full homepage section.
+      { label: "Now Building", href: "#now", color: "#F97316" },
+      // These two were previously labelled "Stack" -> #systems and "Systems"
+      // -> #projects, which read backwards. The names now match the section
+      // headings and the ⌘K palette.
+      { label: "Systems Stack", href: "#systems", color: "#A78BFA" },
+      { label: "Flagship Systems", href: "#projects", color: "#34D399" },
+      { label: "AI Philosophy", href: "#philosophy", color: "#FB7185" },
+      { label: "Experience", href: "#history", color: "#FACC15" },
+    ],
+  },
   {
     label: "Portfolio",
     color: "#FF8C00",
     submenus: [
-      { label: "Projects", href: "/projects", color: "#FF3B6B" },
-      { label: "Fun Apps", href: "/fun-apps", color: "#FF8C00" },
+      { label: "All Projects", href: "/projects", color: "#FF3B6B" },
       {
         label: "Agents",
         color: "#FF5500",
         submenus: [
           { label: "PACT Agent", href: "/agents/pact-agent", color: "#FF5500" },
           { label: "Pentashell", href: "/agents/pentashell", color: "#2FE2F0" },
-          { label: "Migi - Personal Suite of AI Agents", href: "/agents/migi", color: "#C6F24E" },
+          { label: "Migi — Personal Suite of AI Agents", href: "/agents/migi", color: "#C6F24E" },
         ],
       },
       {
@@ -55,11 +80,14 @@ const navLinks: NavLink[] = [
         ],
       },
       {
-        label: "Mobile Apps",
+        // Was "Mobile Apps", which had no room for AEGIS VAULT — a web app that
+        // until now was reachable only from ⌘K.
+        label: "Apps",
         color: "#50C878",
         submenus: [
           { label: "Forget Anything?", href: "/apps/forget-anything", color: "#DAA520" },
           { label: "MIGI Android App", href: "/apps/migi-app", color: "#C6F24E" },
+          { label: "AEGIS VAULT", href: "/projects/aegis-vault", color: "#7DD3FC" },
         ],
       },
       {
@@ -69,10 +97,20 @@ const navLinks: NavLink[] = [
           { label: "Pixelville", href: "/games/pixelville", color: "#F5B94A" },
         ],
       },
-
+      { label: "Fun Apps", href: "/fun-apps", color: "#FF8C00" },
+    ],
+  },
+  {
+    label: "About Me",
+    color: "#FB7185",
+    submenus: [
+      { label: "The Story", href: "/about", color: "#FB7185" },
+      { label: "Philosophy", href: "/philosophy", color: "#F472B6" },
     ],
   },
   { label: "Learnings", href: "/learnings", color: "#22D3EE" },
+  { label: "Résumé", href: "/resume", color: "#FBBF24" },
+  { label: "FAQ", href: "/faq", color: "#94A3B8" },
 ];
 
 // Per-item CSS vars so hover styles can reference each item's accent colour
@@ -201,7 +239,10 @@ export default function Navigation() {
             whileHover={{ scale: 1.02 }}
           >
             {/* Branding Logo */}
-            <div className="relative h-8 w-28 md:w-36 flex items-center justify-start">
+            {/* Held at w-28 until lg. The centre group is absolutely centred, so
+                the logo and it are on a collision course at the md breakpoint —
+                six dropdowns need every pixel between 768px and 1024px. */}
+            <div className="relative h-8 w-28 lg:w-36 flex items-center justify-start">
               <img 
                 src="/branding/logo_navbar_v2.png" 
                 alt="Suman Debnath Logo" 
@@ -221,7 +262,7 @@ export default function Navigation() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }}
                       style={hueVars(link.color)}
-                      className="px-3 py-2 text-[13px] font-medium text-[#a0a0a5] transition-all duration-200 rounded-full group-hover:text-[var(--c)] group-hover:bg-[var(--cb)] group-hover:shadow-[inset_0_0_0_1px_var(--cr),0_5px_18px_-8px_var(--c)] flex items-center gap-1.5"
+                      className="px-2 lg:px-3 py-2 text-[12px] lg:text-[13px] font-medium text-[#a0a0a5] transition-all duration-200 rounded-full group-hover:text-[var(--c)] group-hover:bg-[var(--cb)] group-hover:shadow-[inset_0_0_0_1px_var(--cr),0_5px_18px_-8px_var(--c)] flex items-center gap-1 lg:gap-1.5 whitespace-nowrap"
                     >
                       {link.label}
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-50"><path d="m6 9 6 6 6-6"/></svg>
@@ -281,7 +322,7 @@ export default function Navigation() {
                   transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }}
                   onClick={() => handleNavClick(link.href!)}
                   style={hueVars(link.color)}
-                  className="px-3 py-2 text-[13px] font-medium text-[#a0a0a5] transition-all duration-200 rounded-full hover:text-[var(--c)] hover:bg-[var(--cb)] hover:shadow-[inset_0_0_0_1px_var(--cr),0_5px_18px_-8px_var(--c)]"
+                  className="px-2 lg:px-3 py-2 text-[12px] lg:text-[13px] font-medium text-[#a0a0a5] transition-all duration-200 rounded-full whitespace-nowrap hover:text-[var(--c)] hover:bg-[var(--cb)] hover:shadow-[inset_0_0_0_1px_var(--cr),0_5px_18px_-8px_var(--c)]"
                 >
                   {link.label}
                 </m.button>
@@ -299,35 +340,22 @@ export default function Navigation() {
               onClick={() =>
                 window.dispatchEvent(new CustomEvent("open-command-palette"))
               }
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/[0.08] text-[#86868b] hover:text-[#f5f5f7] hover:border-white/[0.15] bg-white/[0.02] transition-all duration-200 text-xs font-mono"
+              // lg, not md: a ⌘K badge is useless on a tablet with no keyboard,
+              // and dropping it below 1024px buys the six-item bar the room it
+              // needs. The phone sheet still carries a "Search Command" row.
+              className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/[0.08] text-[#86868b] hover:text-[#f5f5f7] hover:border-white/[0.15] bg-white/[0.02] transition-all duration-200 text-xs font-mono"
             >
               <span>⌘K</span>
             </m.button>
-            {/* Deliberately an <a>, not next/link: from a sub-page this has to
-                be a real navigation so the browser resolves #contact and
-                scrolls. SPA navigation to "/#anchor" does not fire native hash
-                scrolling — the same reason handleNavClick above sets
-                window.location.href directly. */}
-            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-            <a
-              href="/#contact"
-              onClick={(e) => {
-                if (
-                  typeof window !== "undefined" &&
-                  window.location.pathname === "/"
-                ) {
-                  e.preventDefault();
-                  document
-                    .querySelector("#contact")
-                    ?.scrollIntoView({ behavior: "smooth" });
-                }
-                // On sub-pages, allow the default navigation so the
-                // browser resolves /#contact and scrolls to it on home.
-              }}
+            {/* This is the menu's Contact entry — it goes to the real /contact
+                page now rather than scrolling to the homepage's closing strip,
+                which had no form and no way to actually send anything. */}
+            <button
+              onClick={() => handleNavClick("/contact")}
               className="px-4 py-1.5 rounded-full bg-[#f5f5f7] text-black text-[13px] font-medium hover:bg-white transition-colors"
             >
               Let&apos;s Talk
-            </a>
+            </button>
           </div>
 
           {/* Mobile Toggle */}
@@ -383,14 +411,89 @@ export default function Navigation() {
             className="pointer-events-auto absolute top-20 left-4 right-4 z-40 max-h-[calc(100dvh_-_6rem)] overflow-y-auto overscroll-contain rounded-[1.75rem] bg-[#FBFBF9] border border-black/[0.08] p-2.5 pb-[calc(0.625rem_+_env(safe-area-inset-bottom))] shadow-[0_24px_60px_-12px_rgba(0,0,0,0.55)]"
           >
             <div className="flex flex-col">
-              {/* Anchors and routes used to sit at identical weight, so there
-                  was no way to tell "jumps down this page" from "opens another
-                  page". They are separated into labelled blocks, and every row
-                  carries its own accent dot — colours that already existed in
-                  navLinks but were only ever used by the desktop hover state. */}
-              <p className={MOBILE_GROUP_LABEL}>On this page</p>
+              {/* Rendered straight off navLinks rather than from hardcoded
+                  blocks, so the sheet can never fall behind the desktop bar the
+                  way it did when routes were added to one and not the other.
+                  Each top-level group becomes a labelled block; a nested
+                  category inside it stays collapsed until tapped, because fully
+                  expanded the menu runs past the bottom of any phone. Every row
+                  keeps its accent dot — colours navLinks already carried but
+                  only the desktop hover state ever used. */}
               {navLinks
-                .filter((l) => !l.submenus && l.href?.startsWith("#"))
+                .filter((link) => link.submenus)
+                .map((group) => (
+                  <div key={group.label} className="flex flex-col">
+                    <p className={MOBILE_GROUP_LABEL}>{group.label}</p>
+                    {group.submenus!.map((sub) => {
+                      // Leaf route or anchor — render it directly.
+                      if (!sub.submenus) {
+                        return (
+                          <button
+                            key={sub.href}
+                            onClick={() => handleNavClick(sub.href!)}
+                            className={MOBILE_ROW}
+                          >
+                            <Dot color={sub.color} />
+                            {sub.label}
+                          </button>
+                        );
+                      }
+                      // Category — collapsed until tapped.
+                      const expanded = openGroups.includes(sub.label);
+                      return (
+                        <div key={sub.label} className="flex flex-col">
+                          <button
+                            onClick={() => toggleGroup(sub.label)}
+                            aria-expanded={expanded}
+                            className={`${MOBILE_ROW} justify-between`}
+                          >
+                            <span className="flex items-center gap-3">
+                              <Dot color={sub.color} />
+                              {sub.label}
+                            </span>
+                            <span className="flex items-center gap-2.5">
+                              <span className="text-[11px] font-mono text-[#8a8a93]">
+                                {sub.submenus.length}
+                              </span>
+                              <svg
+                                width="11"
+                                height="11"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className={`text-[#8a8a93] transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
+                              >
+                                <path d="m6 9 6 6 6-6" />
+                              </svg>
+                            </span>
+                          </button>
+                          {expanded && (
+                            <div className="flex flex-col border-l border-black/[0.12] ml-[1.4rem] pl-2 my-0.5">
+                              {sub.submenus.map((leaf) => (
+                                <button
+                                  key={leaf.href}
+                                  onClick={() => handleNavClick(leaf.href!)}
+                                  className={MOBILE_SUBROW}
+                                >
+                                  <Dot color={leaf.color} small />
+                                  <span className="truncate">{leaf.label}</span>
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                ))}
+
+              {/* Top-level routes with no dropdown of their own. */}
+              <p className={MOBILE_GROUP_LABEL}>More</p>
+              {navLinks
+                .filter((link) => !link.submenus)
                 .map((link) => (
                   <button
                     key={link.href}
@@ -402,91 +505,6 @@ export default function Navigation() {
                   </button>
                 ))}
 
-              <p className={MOBILE_GROUP_LABEL}>Explore</p>
-              {navLinks.map((link) => {
-                if (link.submenus) {
-                  return (
-                    <div key={link.label} className="flex flex-col">
-                      {link.submenus.map((sub) => {
-                        // Leaf route — render it directly.
-                        if (!sub.submenus) {
-                          return (
-                            <button
-                              key={sub.href}
-                              onClick={() => handleNavClick(sub.href!)}
-                              className={MOBILE_ROW}
-                            >
-                              <Dot color={sub.color} />
-                              {sub.label}
-                            </button>
-                          );
-                        }
-                        // Category — collapsed until tapped.
-                        const expanded = openGroups.includes(sub.label);
-                        return (
-                          <div key={sub.label} className="flex flex-col">
-                            <button
-                              onClick={() => toggleGroup(sub.label)}
-                              aria-expanded={expanded}
-                              className={`${MOBILE_ROW} justify-between`}
-                            >
-                              <span className="flex items-center gap-3">
-                                <Dot color={sub.color} />
-                                {sub.label}
-                              </span>
-                              <span className="flex items-center gap-2.5">
-                                <span className="text-[11px] font-mono text-[#8a8a93]">
-                                  {sub.submenus.length}
-                                </span>
-                                <svg
-                                  width="11"
-                                  height="11"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2.5"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  className={`text-[#8a8a93] transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
-                                >
-                                  <path d="m6 9 6 6 6-6" />
-                                </svg>
-                              </span>
-                            </button>
-                            {expanded && (
-                              <div className="flex flex-col border-l border-black/[0.12] ml-[1.4rem] pl-2 my-0.5">
-                                {sub.submenus.map((leaf) => (
-                                  <button
-                                    key={leaf.href}
-                                    onClick={() => handleNavClick(leaf.href!)}
-                                    className={MOBILE_SUBROW}
-                                  >
-                                    <Dot color={leaf.color} small />
-                                    <span className="truncate">{leaf.label}</span>
-                                  </button>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  );
-                }
-                // Top-level routes (e.g. Learnings) belong in Explore; the
-                // hash links were already rendered in the block above.
-                if (link.href?.startsWith("#")) return null;
-                return (
-                  <button
-                    key={link.href}
-                    onClick={() => handleNavClick(link.href!)}
-                    className={MOBILE_ROW}
-                  >
-                    <Dot color={link.color} />
-                    {link.label}
-                  </button>
-                );
-              })}
               <div className="h-[1px] w-full bg-black/[0.08] my-1.5" />
               <button
                 onClick={() => {
@@ -499,22 +517,13 @@ export default function Navigation() {
                 <span className="text-[11px] font-mono text-[#6b6b73] px-2 py-1 rounded bg-black/[0.05] border border-black/[0.08]">⌘K</span>
               </button>
               {/* The desktop bar carries this CTA in a `hidden md:flex` group,
-                  which left the phone menu with no way to start a conversation.
-                  Same <a>-not-Link reasoning as the desktop copy above. */}
-              {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-              <a
-                href="/#contact"
-                onClick={(e) => {
-                  setMobileOpen(false);
-                  if (typeof window !== "undefined" && window.location.pathname === "/") {
-                    e.preventDefault();
-                    document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
-                  }
-                }}
+                  which left the phone menu with no way to start a conversation. */}
+              <button
+                onClick={() => handleNavClick("/contact")}
                 className="mt-1.5 flex items-center justify-center rounded-xl bg-[#1A1A1A] px-4 py-3 text-[15px] font-semibold text-white transition-colors hover:bg-black touch-manipulation"
               >
                 Let&apos;s Talk
-              </a>
+              </button>
             </div>
           </m.div>
         )}

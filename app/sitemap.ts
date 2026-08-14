@@ -5,13 +5,15 @@ const SITE = SITE_URL;
 
 // Centralised so a single edit moves every "freshness" signal. Bump when the
 // site sees a substantive content pass.
-const LAST_CONTENT_UPDATE = new Date("2026-06-24");
+const LAST_CONTENT_UPDATE = new Date("2026-08-15");
 
 export default function sitemap(): MetadataRoute.Sitemap {
   // ── Core pages ──────────────────────────────────────────────────────────
   const corePages: MetadataRoute.Sitemap = [
     { url: `${SITE}`, changeFrequency: "weekly" as const, priority: 1 },
+    { url: `${SITE}/resume`, changeFrequency: "monthly" as const, priority: 0.95 },
     { url: `${SITE}/about`, changeFrequency: "monthly" as const, priority: 0.9 },
+    { url: `${SITE}/contact`, changeFrequency: "monthly" as const, priority: 0.9 },
     { url: `${SITE}/projects`, changeFrequency: "weekly" as const, priority: 0.9 },
     { url: `${SITE}/learnings`, changeFrequency: "monthly" as const, priority: 0.9 },
     { url: `${SITE}/philosophy`, changeFrequency: "monthly" as const, priority: 0.8 },
