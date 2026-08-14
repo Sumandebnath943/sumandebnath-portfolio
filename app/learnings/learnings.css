@@ -919,3 +919,15 @@ body.learnings-page::before {
   border-color: var(--lp-text-primary);
   box-shadow: 0 8px 20px rgba(26,25,23,0.2);
 }
+
+/* ── Touch targets ───────────────────────────────────────── */
+/* Filter chips and Explore buttons draw at roughly 37–38px, which is a thin
+   target for a thumb. Phones get a 44px floor; wider screens, where these are
+   clicked with a pointer, keep the tighter proportions. */
+@media (max-width: 767px) {
+  .lp-chip,
+  .lp-btn {
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+}

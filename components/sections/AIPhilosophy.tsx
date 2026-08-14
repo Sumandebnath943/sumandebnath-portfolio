@@ -220,7 +220,9 @@ export default function AIPhilosophy() {
         />
 
         {/* ── 2-COLUMN: PRINCIPLES 02 + 03 ── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-0">
+        {/* gap-y-0 is deliberate side by side, but stacked on a phone the two
+            panels ran straight into each other with no separation. */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10 md:gap-y-0">
           <PrinciplePanel principle={principles[1]} delay={0.05} />
           <PrinciplePanel principle={principles[2]} delay={0.12} />
         </div>
@@ -231,7 +233,9 @@ export default function AIPhilosophy() {
         />
 
         {/* ── 2-COLUMN: PRINCIPLES 04 + 05 ── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-0">
+        {/* gap-y-0 is deliberate side by side, but stacked on a phone the two
+            panels ran straight into each other with no separation. */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10 md:gap-y-0">
           <PrinciplePanel principle={principles[3]} delay={0.05} />
           <PrinciplePanel principle={principles[4]} delay={0.12} />
         </div>

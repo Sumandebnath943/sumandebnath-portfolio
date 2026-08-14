@@ -38,7 +38,9 @@ export default function SectionWrapper({
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id={id} ref={ref} className={cn("relative", className)}>
+    // scroll-mt clears the fixed pill nav: without it a hash jump from the menu
+    // parks the section's top edge underneath the header.
+    <section id={id} ref={ref} className={cn("relative scroll-mt-24", className)}>
       {showLine && (
         <div className="section-line absolute top-0 left-0 right-0 opacity-40" />
       )}

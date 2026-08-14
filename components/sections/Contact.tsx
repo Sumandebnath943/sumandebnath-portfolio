@@ -195,7 +195,7 @@ export default function Contact({
                 rel="me noopener noreferrer"
                 aria-label={label}
                 title={label}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-400 font-manrope text-[11px] ${
+                className={`inline-flex items-center gap-2 px-4 py-3.5 md:py-2 touch-manipulation rounded-full border transition-all duration-400 font-manrope text-[11px] ${
                   light
                     ? "border-[#2E8B57]/30 bg-[#2E8B57]/[0.06] text-[#0B3B25]/70 hover:border-[#2E8B57]/50 hover:bg-[#2E8B57]/[0.12] hover:text-[#0B3B25]"
                     : "border-[#F5F5F3]/20 bg-[#F5F5F3]/[0.06] text-[#F5F5F3]/60 hover:border-[#F5F5F3]/35 hover:bg-[#F5F5F3]/[0.1] hover:text-[#F5F5F3]/90"
@@ -245,7 +245,9 @@ export default function Contact({
             // Five links plus separators overran a 320px phone and the Privacy
             // link fell off the right edge. Wrapping only engages when the row
             // genuinely runs out of room, so wider screens keep the single line.
-            className={`flex flex-wrap items-center gap-x-4 gap-y-2 font-manrope text-xs font-medium ${light ? "text-[#1f7a4d]/75" : "text-[#1A1A1A]/60"}`}
+            // Text-height links are a poor thumb target, so the anchors get
+            // real vertical padding on phones and revert to inline text at md.
+            className={`flex flex-wrap items-center gap-x-4 gap-y-2 font-manrope text-xs font-medium [&_a]:py-3.5 [&_a]:touch-manipulation md:[&_a]:py-0 ${light ? "text-[#1f7a4d]/75" : "text-[#1A1A1A]/60"}`}
           >
             <a href="/projects" className={`transition-colors ${light ? "hover:text-[#0B3B25]" : "hover:text-[#1A1A1A]"}`}>
               Projects

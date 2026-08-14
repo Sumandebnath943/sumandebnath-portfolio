@@ -35,7 +35,9 @@ export default async function LoginPage({
             required
             aria-label="Password"
             aria-invalid={e ? true : undefined}
-            className="w-full rounded-lg border border-black/[0.12] bg-white px-4 py-3 font-manrope text-[15px] text-[#0b0b0b] placeholder-black/35 outline-none focus:border-black/40 transition-colors"
+            // 16px on phones, where anything smaller makes Safari zoom the page
+            // on focus; the tighter 15px returns at md.
+            className="w-full rounded-lg border border-black/[0.12] bg-white px-4 py-3 font-manrope text-[16px] md:text-[15px] text-[#0b0b0b] placeholder-black/35 outline-none focus:border-black/40 transition-colors"
             placeholder="Password"
           />
           <button

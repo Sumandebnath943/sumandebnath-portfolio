@@ -272,7 +272,9 @@ export default function Navigation() {
 
           {/* Mobile Toggle */}
           <button
-            className="md:hidden p-2 rounded-full text-[#86868b] hover:text-[#f5f5f7] hover:bg-white/5 transition-all mr-1"
+            // 18px icon + 13px padding each side = a 44px target. This control
+            // only exists below md, so the larger box costs desktop nothing.
+            className="md:hidden p-[13px] -m-[5px] mr-0 rounded-full text-[#86868b] hover:text-[#f5f5f7] hover:bg-white/5 transition-all touch-manipulation"
             onClick={() => setMobileOpen((v) => !v)}
             aria-label="Toggle navigation"
             aria-expanded={mobileOpen}

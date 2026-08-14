@@ -37,7 +37,12 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative flex flex-col h-screen min-h-[620px] overflow-hidden bg-[#0A0A0C] text-[#F5F0E6]"
+      // svh, not vh: on a phone `100vh` is the *large* viewport, so with the
+      // browser toolbar showing the CTA row at the bottom of the hero can sit
+      // behind it. svh sizes to the smallest viewport, so the buttons are
+      // reachable whether the toolbar is expanded or collapsed. Identical to
+      // 100vh on desktop.
+      className="relative flex flex-col h-[100svh] min-h-[620px] overflow-hidden bg-[#0A0A0C] text-[#F5F0E6]"
     >
       {/* ── Background layers ──────────────────────────────────────────── */}
       {/* Deep warm gradient base */}

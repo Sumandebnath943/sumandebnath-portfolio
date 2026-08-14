@@ -496,7 +496,11 @@ const TAKEOVER_CSS = `
     .ct-launch { left: 16px; right: auto; } /* bottom-left, clear of the corner robot */
     .ct-backdrop { background: linear-gradient(180deg,#f4f1ec 0%,#f4f1ec 32%,#fff 32.01%,#fff 100%); }
     .ct-idle-bubble { display: none; } /* no room above the head in the mobile top band */
-    .ct-panel { width: 100vw; height: 68vh; top: auto; bottom: 0; transform: translateY(102%); }
+    /* dvh so the panel tracks the browser's collapsing toolbar instead of
+       pushing its input bar underneath it. */
+    .ct-panel { width: 100%; height: 68dvh; top: auto; bottom: 0; transform: translateY(102%); }
+    /* Safari zooms the whole page when a focused input is under 16px. */
+    .ct-input { font-size: 16px; }
     .ct-panel.in { transform: translateY(0); }
     .ct-messages-inner, .ct-suggestions, .ct-input-bar { padding-left: 16px; padding-right: 16px; }
     .ct-suggestions { grid-template-columns: 1fr; }

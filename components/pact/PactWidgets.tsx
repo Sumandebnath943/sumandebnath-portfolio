@@ -126,7 +126,9 @@ export function CopyCommand({
         </div>
         <button
           onClick={copy}
-          className="font-dmmono text-[10.5px] uppercase tracking-[0.15em] px-2.5 py-1 rounded-md border border-white/10 text-[#c9bdb4] hover:text-[#fff] hover:border-[#CF5C36]/50 hover:bg-[#CF5C36]/10 transition-colors"
+          // The invisible ::after grows the touch target past the 27px pill
+          // without altering how the control is drawn on any breakpoint.
+          className="relative touch-manipulation after:absolute after:content-[''] after:-inset-x-2 after:-inset-y-2.5 font-dmmono text-[10.5px] uppercase tracking-[0.15em] px-2.5 py-1 rounded-md border border-white/10 text-[#c9bdb4] hover:text-[#fff] hover:border-[#CF5C36]/50 hover:bg-[#CF5C36]/10 transition-colors"
           aria-label="Copy commands"
         >
           {copied ? "Copied ✓" : "Copy"}

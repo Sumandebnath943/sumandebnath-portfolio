@@ -174,7 +174,9 @@ export default function SiteTour() {
       <div className="fixed top-1/2 right-0 -translate-y-1/2 z-[99990]">
         <button
           onClick={() => setShowPrompt((p) => !p)}
-          className="flex flex-col items-center justify-center bg-[#0A0A0C]/90 backdrop-blur-md border border-[#FF8000]/30 border-r-0 rounded-l-lg p-2 py-3 text-[#FF8000] hover:bg-[#FF8000]/10 transition-colors shadow-[-4px_0_15px_-4px_rgba(255,128,0,0.2)]"
+          // 33px wide is a thin thumb target; the invisible ::after widens the
+          // hit area leftward without changing the tab's drawn width.
+          className="relative touch-manipulation after:absolute after:content-[''] after:-inset-y-1 after:-left-3 after:right-0 flex flex-col items-center justify-center bg-[#0A0A0C]/90 backdrop-blur-md border border-[#FF8000]/30 border-r-0 rounded-l-lg p-2 py-3 text-[#FF8000] hover:bg-[#FF8000]/10 transition-colors shadow-[-4px_0_15px_-4px_rgba(255,128,0,0.2)]"
         >
           <Sparkles size={16} className="mb-2" />
           <span className="[writing-mode:vertical-rl] font-mono text-[10px] uppercase tracking-widest font-semibold">Take a Tour</span>

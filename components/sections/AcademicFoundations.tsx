@@ -225,7 +225,7 @@ export default function AcademicFoundations() {
   return (
     <SectionWrapper
       id="academic"
-      className="py-40 px-6 bg-[#FDF6EE]"
+      className="py-20 md:py-40 px-6 bg-[#FDF6EE]"
       showLine={false}
     >
       <div className="max-w-5xl mx-auto">

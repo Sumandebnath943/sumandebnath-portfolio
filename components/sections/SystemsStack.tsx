@@ -239,7 +239,7 @@ export default function SystemsStack() {
   return (
     <SectionWrapper
       id="systems"
-      className="py-40 px-6 bg-[#050505] relative"
+      className="py-20 md:py-40 px-6 bg-[#050505] relative"
       showLine={false}
     >
       {/* Subtle top separator from white section above */}
