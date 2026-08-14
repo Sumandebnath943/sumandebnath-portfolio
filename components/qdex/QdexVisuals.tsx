@@ -60,11 +60,11 @@ export function HumanEvalBars() {
             <div className="flex items-baseline justify-between gap-3 mb-1.5">
               <span className="font-dmmono text-[11.5px] sm:text-[12px]" style={{ color: b.color }}>
                 {b.model}
-                <span className="text-[#5a6286]"> · {b.mode}</span>
+                <span className="text-[#8B93B5]"> · {b.mode}</span>
               </span>
               <span className="font-manrope font-semibold tabular-nums text-[15px] shrink-0" style={{ color: b.color }}>
                 {b.pct}%
-                <span className="font-dmmono text-[10px] text-[#5a6286] ml-1.5">{b.ratio}</span>
+                <span className="font-dmmono text-[10px] text-[#8B93B5] ml-1.5">{b.ratio}</span>
               </span>
             </div>
             <div className="h-7 w-full rounded-md bg-white/[0.04] border border-white/[0.06] overflow-hidden relative">
@@ -193,9 +193,9 @@ export function LossSpark() {
         />
       </svg>
       <div className="flex items-center justify-between font-dmmono text-[10.5px] mt-2">
-        <span style={{ color: QDEX.amber }}>~1.06 <span className="text-[#5a6286]">start</span></span>
-        <span className="text-[#5a6286]">2 epochs · 5,000 steps</span>
-        <span style={{ color: QDEX.amber }}>~0.53 <span className="text-[#5a6286]">final</span></span>
+        <span style={{ color: QDEX.amber }}>~1.06 <span className="text-[#8B93B5]">start</span></span>
+        <span className="text-[#8B93B5]">2 epochs · 5,000 steps</span>
+        <span style={{ color: QDEX.amber }}>~0.53 <span className="text-[#8B93B5]">final</span></span>
       </div>
     </div>
   );

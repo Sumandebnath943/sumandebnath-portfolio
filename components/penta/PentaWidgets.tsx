@@ -142,7 +142,7 @@ export function CopyCommand({
           {lines.map((l, i) => {
             if (l.kind === "comment")
               return (
-                <div key={i} className="text-[#5a6286]">
+                <div key={i} className="text-[#8B93B5]">
                   {l.text}
                 </div>
               );

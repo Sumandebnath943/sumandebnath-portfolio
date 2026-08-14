@@ -220,7 +220,7 @@ export default function QdexPage() {
             </div>
 
             <Reveal delay={0.4} className="shrink-0 mt-16 flex justify-center">
-              <span className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#5a6286] flex flex-col items-center gap-1.5">
+              <span className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#8B93B5] flex flex-col items-center gap-1.5">
                 scroll
                 <span className="block w-px h-6 bg-gradient-to-b from-[#34D399] to-transparent" />
               </span>
@@ -230,7 +230,7 @@ export default function QdexPage() {
           {/* ════════════════════ TL;DR STAT BAND ════════════════════ */}
           <section className="px-6 md:px-14 pt-2 pb-12">
             <Reveal className="max-w-3xl mx-auto text-center mb-10">
-              <p className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#5a6286] mb-4">// tl;dr — the headline result</p>
+              <p className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#8B93B5] mb-4">// tl;dr — the headline result</p>
               <p className="font-manrope text-lg md:text-xl text-[#c4cae6] leading-relaxed">
                 Fine-tuning took this model from <span className="text-[#F43F5E] font-medium">1.2%</span> to{" "}
                 <span className="text-[#34D399] font-medium">42.1%</span> on HumanEval (pass@1) in
@@ -290,15 +290,15 @@ export default function QdexPage() {
               <Reveal delay={0.1} className="md:col-span-5">
                 <div className="relative rounded-2xl border border-white/[0.09] bg-[#080a14] p-6 overflow-hidden shadow-[0_30px_60px_-25px_rgba(20,15,60,0.45)]">
                   <span aria-hidden className="absolute -top-px left-0 right-0 h-px" style={{ background: `linear-gradient(90deg, transparent, ${SPECTRUM.join(",")}, transparent)` }} />
-                  <p className="font-dmmono text-[10px] uppercase tracking-[0.25em] text-[#5a6286] mb-5">same model · two ways of asking</p>
+                  <p className="font-dmmono text-[10px] uppercase tracking-[0.25em] text-[#8B93B5] mb-5">same model · two ways of asking</p>
                   <div className="font-dmmono text-[12px] leading-relaxed space-y-3">
                     <div>
-                      <p className="text-[#5a6286]">// raw completion — &ldquo;continue this&rdquo;</p>
+                      <p className="text-[#8B93B5]">// raw completion — &ldquo;continue this&rdquo;</p>
                       <p className="text-[#e6e9f5]">def is_palindrome(s):</p>
                       <p className="flex items-center gap-2 pt-1"><span className="text-[#38BDF8]">→</span><span className="text-[#38BDF8]">works — 40.2%</span></p>
                     </div>
                     <div className="pt-2 border-t border-white/[0.07]">
-                      <p className="text-[#5a6286]">// instruction — &ldquo;write a function that&hellip;&rdquo;</p>
+                      <p className="text-[#8B93B5]">// instruction — &ldquo;write a function that&hellip;&rdquo;</p>
                       <p className="text-[#e6e9f5]">base: <span className="text-[#F43F5E]">✗ rambles · 1.2%</span></p>
                       <p className="text-[#e6e9f5]">Qdex: <span className="text-[#34D399]">✓ answers · 42.1%</span></p>
                     </div>
@@ -342,10 +342,10 @@ export default function QdexPage() {
                         <div key={b.key} className="flex items-center justify-between gap-3 px-4 py-3.5 border-b border-white/[0.05] last:border-b-0" style={{ background: b.highlight ? `${b.color}0f` : undefined }}>
                           <div className="min-w-0">
                             <p className="font-dmmono text-[12px] truncate" style={{ color: b.color }}>{b.model}</p>
-                            <p className="font-dmmono text-[10px] text-[#5a6286] mt-0.5">{b.mode}</p>
+                            <p className="font-dmmono text-[10px] text-[#8B93B5] mt-0.5">{b.mode}</p>
                           </div>
                           <p className="font-manrope font-semibold tabular-nums text-right shrink-0" style={{ color: b.color }}>
-                            {b.pct}%<span className="font-dmmono text-[10px] text-[#5a6286] ml-1.5">{b.ratio}</span>
+                            {b.pct}%<span className="font-dmmono text-[10px] text-[#8B93B5] ml-1.5">{b.ratio}</span>
                           </p>
                         </div>
                       ))}
@@ -533,11 +533,11 @@ export default function QdexPage() {
                       <div className="flex flex-col gap-3">
                         <a href={HF} target="_blank" rel="noopener noreferrer" className="group flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3.5 hover:border-[#34D399]/50 transition-colors">
                           <span className="flex items-center gap-3 min-w-0"><HuggingFaceMark size={17} /><span className="font-dmmono text-[12px] text-[#dfe3f2] truncate">huggingface.co/SumanDebnath943/Qdex-1.5B-GGUF</span></span>
-                          <span className="font-dmmono text-[10px] uppercase tracking-wider text-[#5a6286] shrink-0">GGUF ↗</span>
+                          <span className="font-dmmono text-[10px] uppercase tracking-wider text-[#8B93B5] shrink-0">GGUF ↗</span>
                         </a>
                         <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="group flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3.5 hover:border-[#A78BFA]/50 transition-colors">
                           <span className="flex items-center gap-3 min-w-0"><GitHubMark /><span className="font-dmmono text-[12px] text-[#dfe3f2] truncate">github.com/Sumandebnath943/Qdex-1.5B</span></span>
-                          <span className="font-dmmono text-[10px] uppercase tracking-wider text-[#5a6286] shrink-0">Apache-2.0 ↗</span>
+                          <span className="font-dmmono text-[10px] uppercase tracking-wider text-[#8B93B5] shrink-0">Apache-2.0 ↗</span>
                         </a>
                       </div>
                     </div>
@@ -680,7 +680,7 @@ export default function QdexPage() {
                 </div>
               </div>
 
-              <p className="font-dmmono text-[11px] text-[#5a6286] text-center mt-10 tracking-wide">
+              <p className="font-dmmono text-[11px] text-[#8B93B5] text-center mt-10 tracking-wide">
                 Qdex-1.5B · QLoRA fine-tune of Qwen2.5-Coder-1.5B · Apache-2.0 · built by Suman Debnath
               </p>
             </div>

@@ -194,7 +194,7 @@ export function TranslationConsole() {
 
         {/* prompt */}
         <p className="text-[12.5px] sm:text-[13.5px] leading-relaxed">
-          <span className="text-[#5a6286]">### Task ({ex.family}): </span>
+          <span className="text-[#8B93B5]">### Task ({ex.family}): </span>
           <span className="text-[#e6e9f5]" suppressHydrationWarning>
             {instr}
             {phase === "instr" && (
@@ -205,13 +205,13 @@ export function TranslationConsole() {
 
         {/* thinking / command */}
         <p className="text-[12.5px] sm:text-[13.5px] leading-relaxed mt-3 min-h-[1.6em] flex items-center flex-wrap">
-          <span className="text-[#5a6286]">### Command:&nbsp;</span>
+          <span className="text-[#8B93B5]">### Command:&nbsp;</span>
           {phase === "think" ? (
             <span className="inline-flex items-center gap-1.5 text-[#8b93b5]">
               {[0, 1, 2].map((d) => (
                 <span key={d} className="w-1.5 h-1.5 rounded-full" style={{ background: fam.color, animation: `penta-glow 1s ease-in-out ${d * 0.2}s infinite` }} />
               ))}
-              <span className="text-[11px] text-[#5a6286] ml-1">generating · 47.2M params</span>
+              <span className="text-[11px] text-[#8B93B5] ml-1">generating · 47.2M params</span>
             </span>
           ) : (
             <span style={{ color: fam.color }} className="font-medium" suppressHydrationWarning>
@@ -265,7 +265,7 @@ export function DataPipeline() {
                   background: on ? `linear-gradient(160deg, ${color}1c, #0a0c16 70%)` : undefined,
                 }}
               >
-                <span className="font-dmmono text-[10px] text-[#5a6286]">{`0${i + 1}`}</span>
+                <span className="font-dmmono text-[10px] text-[#8B93B5]">{`0${i + 1}`}</span>
                 <p className="font-dmmono text-[12.5px] font-medium mt-1.5 tracking-wide transition-colors duration-500" style={{ color: on || done ? color : "#8b93b5" }}>
                   {s.step}
                 </p>
@@ -345,14 +345,14 @@ export function TrainingCurve() {
       {[0, 25, 50, 75, 100].map((g) => (
         <g key={g}>
           <line x1="60" y1={PY(g)} x2="580" y2={PY(g)} stroke="rgba(255,255,255,0.07)" strokeWidth="1" />
-          <text x="50" y={PY(g) + 3} textAnchor="end" fill="#5a6286" fontSize="9">{g}</text>
+          <text x="50" y={PY(g) + 3} textAnchor="end" fill="#8B93B5" fontSize="9">{g}</text>
         </g>
       ))}
       {/* x labels */}
       {[1000, 4000, 8000, 11000, 14000].map((s) => (
-        <text key={s} x={PX(s)} y="278" textAnchor="middle" fill="#5a6286" fontSize="9">{s >= 1000 ? `${s / 1000}k` : s}</text>
+        <text key={s} x={PX(s)} y="278" textAnchor="middle" fill="#8B93B5" fontSize="9">{s >= 1000 ? `${s / 1000}k` : s}</text>
       ))}
-      <text x="320" y="296" textAnchor="middle" fontSize="9" style={{ fill: "#5a6286" }}>training step</text>
+      <text x="320" y="296" textAnchor="middle" fontSize="9" style={{ fill: "#8B93B5" }}>training step</text>
 
       {/* area fill */}
       <path d={`${main} L ${PX(14000)} 260 L ${PX(1000)} 260 Z`} fill="url(#penta-fill)" opacity={shown ? 1 : 0} style={{ transition: "opacity 1.2s ease 0.6s" }} />

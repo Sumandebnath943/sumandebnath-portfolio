@@ -244,7 +244,7 @@ export default function PentaCmdPage() {
 
             {/* scroll hint — in flow, with guaranteed clearance above */}
             <Reveal delay={0.4} className="shrink-0 mt-16 flex justify-center">
-              <span className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#5a6286] flex flex-col items-center gap-1.5">
+              <span className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#8B93B5] flex flex-col items-center gap-1.5">
                 scroll
                 <span className="block w-px h-6 bg-gradient-to-b from-[#A78BFA] to-transparent" />
               </span>
@@ -256,7 +256,7 @@ export default function PentaCmdPage() {
             <div className="max-w-3xl mx-auto grid md:grid-cols-2 gap-6 items-start">
               {/* Run command — install & run */}
               <Reveal className="w-full">
-                <p className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#5a6286] mb-3">
+                <p className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#8B93B5] mb-3">
                   Install &amp; run on a CPU-only machine
                 </p>
                 <CopyCommand
@@ -279,7 +279,7 @@ export default function PentaCmdPage() {
 
               {/* Live translation console */}
               <Reveal delay={0.1} className="w-full">
-                <p className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#5a6286] mb-3">
+                <p className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#8B93B5] mb-3">
                   Live — real outputs, on a loop
                 </p>
                 <TranslationConsole />
@@ -341,10 +341,10 @@ export default function PentaCmdPage() {
               <Reveal delay={0.1} className="md:col-span-5">
                 <div className="relative rounded-2xl border border-white/[0.09] bg-[#080a14] p-6 overflow-hidden shadow-[0_30px_60px_-25px_rgba(20,15,60,0.45)]">
                   <span aria-hidden className="absolute -top-px left-0 right-0 h-px" style={{ background: `linear-gradient(90deg, transparent, ${SPECTRUM.join(",")}, transparent)` }} />
-                  <p className="font-dmmono text-[10px] uppercase tracking-[0.25em] text-[#5a6286] mb-5">the prompt format</p>
+                  <p className="font-dmmono text-[10px] uppercase tracking-[0.25em] text-[#8B93B5] mb-5">the prompt format</p>
                   <div className="font-dmmono text-[12.5px] leading-relaxed space-y-1">
-                    <p><span className="text-[#5a6286]">### Task (</span><span className="text-[#F97316]">git</span><span className="text-[#5a6286]">): </span><span className="text-[#e6e9f5]">undo my last commit but keep my changes</span></p>
-                    <p><span className="text-[#5a6286]">### Command:</span></p>
+                    <p><span className="text-[#8B93B5]">### Task (</span><span className="text-[#F97316]">git</span><span className="text-[#8B93B5]">): </span><span className="text-[#e6e9f5]">undo my last commit but keep my changes</span></p>
+                    <p><span className="text-[#8B93B5]">### Command:</span></p>
                     <p className="flex items-center gap-2 pt-1"><span className="text-[#34D399]">→</span><span className="text-[#34D399] font-medium">git reset --soft HEAD~1</span></p>
                   </div>
                   <div className="mt-6 pt-5 border-t border-white/[0.07] grid grid-cols-3 gap-3 font-dmmono text-[10.5px]">
@@ -493,12 +493,12 @@ export default function PentaCmdPage() {
               <Reveal delay={0.1}>
                 <div className="mt-6 rounded-2xl border border-white/[0.08] bg-[#080a14]/70 p-6 sm:p-8 grid sm:grid-cols-[1fr_auto_1fr] items-center gap-6 text-center">
                   <div>
-                    <p className="font-dmmono text-[10px] uppercase tracking-[0.25em] text-[#5a6286] mb-2">first model · 20.0M · &lt;1M tokens</p>
+                    <p className="font-dmmono text-[10px] uppercase tracking-[0.25em] text-[#8B93B5] mb-2">first model · 20.0M · &lt;1M tokens</p>
                     <p className="font-manrope font-semibold text-4xl text-[#8b93b5]"><StatCounter value={58.7} decimals={1} suffix="%" /></p>
                   </div>
                   <div className="text-[#A78BFA] font-dmmono text-2xl hidden sm:block">→</div>
                   <div>
-                    <p className="font-dmmono text-[10px] uppercase tracking-[0.25em] text-[#5a6286] mb-2">final V0 · 47.2M · ~6.54M tokens</p>
+                    <p className="font-dmmono text-[10px] uppercase tracking-[0.25em] text-[#8B93B5] mb-2">final V0 · 47.2M · ~6.54M tokens</p>
                     <p className="font-manrope font-semibold text-4xl bg-clip-text text-transparent" style={{ backgroundImage: `linear-gradient(90deg, #34D399, #38BDF8)` }}><StatCounter value={86.7} decimals={1} suffix="%" /></p>
                   </div>
                 </div>
@@ -763,7 +763,7 @@ export default function PentaCmdPage() {
                   ].map(([f, meta, d, c], i) => (
                     <div key={i} className="rounded-xl border border-white/[0.07] bg-[#080a14]/50 p-4">
                       <p className="font-dmmono text-[12.5px] break-all" style={{ color: c as string }}>{f}</p>
-                      <p className="font-dmmono text-[10px] text-[#5a6286] mt-1">{meta}</p>
+                      <p className="font-dmmono text-[10px] text-[#8B93B5] mt-1">{meta}</p>
                       <p className="font-manrope text-xs text-[#8b93b5] mt-2">{d}</p>
                     </div>
                   ))}
@@ -793,15 +793,15 @@ export default function PentaCmdPage() {
                     <div className="flex flex-col gap-3">
                       <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="group flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3.5 hover:border-[#A78BFA]/50 transition-colors">
                         <span className="flex items-center gap-3 min-w-0"><GitHubMark /><span className="font-dmmono text-[12px] text-[#dfe3f2] truncate">github.com/Sumandebnath943/pentacmd</span></span>
-                        <span className="font-dmmono text-[10px] uppercase tracking-wider text-[#5a6286] shrink-0">MIT ↗</span>
+                        <span className="font-dmmono text-[10px] uppercase tracking-wider text-[#8B93B5] shrink-0">MIT ↗</span>
                       </a>
                       <a href={HF} target="_blank" rel="noopener noreferrer" className="group flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3.5 hover:border-[#FACC15]/50 transition-colors">
                         <span className="flex items-center gap-3 min-w-0"><HuggingFaceMark size={17} /><span className="font-dmmono text-[12px] text-[#dfe3f2] truncate">huggingface.co/SumanDebnath943/PentaCMD-47M</span></span>
-                        <span className="font-dmmono text-[10px] uppercase tracking-wider text-[#5a6286] shrink-0">CC BY-NC ↗</span>
+                        <span className="font-dmmono text-[10px] uppercase tracking-wider text-[#8B93B5] shrink-0">CC BY-NC ↗</span>
                       </a>
                       <div className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3.5">
                         <span className="flex items-center gap-3 min-w-0"><span aria-hidden>📊</span><span className="font-dmmono text-[12px] text-[#dfe3f2] truncate">Kaggle · cli-command-dataset · T4 notebook</span></span>
-                        <span className="font-dmmono text-[10px] uppercase tracking-wider text-[#5a6286] shrink-0">DATA</span>
+                        <span className="font-dmmono text-[10px] uppercase tracking-wider text-[#8B93B5] shrink-0">DATA</span>
                       </div>
                     </div>
                     <p className="font-manrope text-xs text-[#7c84a8] mt-5 leading-relaxed">
@@ -937,7 +937,7 @@ export default function PentaCmdPage() {
                 </div>
               </div>
 
-              <p className="font-dmmono text-[11px] text-[#5a6286] text-center mt-10 tracking-wide">
+              <p className="font-dmmono text-[11px] text-[#8B93B5] text-center mt-10 tracking-wide">
                 PentaCMD-47M · Version 0 released · Version 1 in progress · built by Suman Debnath
               </p>
             </div>

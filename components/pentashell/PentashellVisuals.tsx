@@ -160,7 +160,7 @@ export function CopyCommand({ label, lines, copyText }: { label?: string; lines:
       <pre className="px-4 sm:px-5 py-4 overflow-x-auto font-dmmono text-[12.5px] sm:text-[13px] leading-relaxed">
         <code>
           {lines.map((l, i) => {
-            if (l.kind === "comment") return <div key={i} className="text-white/30">{l.text}</div>;
+            if (l.kind === "comment") return <div key={i} className="text-white/55">{l.text}</div>;
             if (l.kind === "out") return <div key={i} style={{ color: C.cyanSoft }}>{l.text}</div>;
             return (
               <div key={i} className="text-white/85">
@@ -263,7 +263,7 @@ function ReplTurn({ ex, onDone }: { ex: (typeof EXAMPLES)[number]; onDone: () =>
                 <span className="w-1.5 h-1.5 rounded-full" style={{ background: fam.color, boxShadow: `0 0 8px ${fam.color}` }} />
                 {ex.family}
               </span>
-              <span className="text-white/30">{ex.how}</span>
+              <span className="text-white/55">{ex.how}</span>
             </m.p>
           )}
         </div>
@@ -328,7 +328,7 @@ export function Pipeline() {
           </Reveal>
         ))}
       </div>
-      <p className="font-dmmono text-[11px] text-white/30 mt-5 text-center">
+      <p className="font-dmmono text-[11px] text-white/55 mt-5 text-center">
         One implementation. The interactive loop and{" "}
         <span style={{ color: C.cyanSoft }}>pentacmd &quot;…&quot;</span> share the exact same path.
       </p>
@@ -450,7 +450,7 @@ export function FamilyExplorer() {
               </div>
             </div>
             <p className="font-manrope text-[13.5px] text-white/55 leading-relaxed mb-5">{fam.blurb}</p>
-            <p className="font-dmmono text-[9.5px] uppercase tracking-[0.2em] text-white/30 mb-2.5">High-signal keywords</p>
+            <p className="font-dmmono text-[9.5px] uppercase tracking-[0.2em] text-white/55 mb-2.5">High-signal keywords</p>
             <div className="flex flex-wrap gap-2">
               {fam.keywords.map((k) => (
                 <span key={k} className="font-dmmono text-[10.5px] px-2.5 py-1 rounded-md border text-white/65" style={{ borderColor: `${fam.color}30`, background: `${fam.color}0d` }}>{k}</span>
@@ -465,11 +465,11 @@ export function FamilyExplorer() {
                 <span className="w-2 h-2 rounded-full" style={{ background: fam.color }} />
                 <span className="w-2 h-2 rounded-full bg-white/20" />
                 <span className="w-2 h-2 rounded-full bg-white/20" />
-                <span className="ml-1.5 font-dmmono text-[10px] text-white/35">pentacmd · {fam.id}</span>
+                <span className="ml-1.5 font-dmmono text-[10px] text-white/55">pentacmd · {fam.id}</span>
               </div>
               <div className="p-4 font-dmmono text-[12.5px] flex-1 flex flex-col">
                 <p className="text-white/75"><span style={{ color: fam.color }}>pentacmd&gt;</span> {fam.sample.instruction}</p>
-                <p className="text-white/30 text-[10.5px] mt-3 flex items-center gap-1.5">
+                <p className="text-white/55 text-[10.5px] mt-3 flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full" style={{ background: fam.color, boxShadow: `0 0 6px ${fam.color}` }} />
                   detected · {fam.id}
                 </p>
@@ -481,7 +481,7 @@ export function FamilyExplorer() {
           </div>
         </div>
       </m.div>
-      <p className="font-manrope text-[12.5px] text-white/35 text-center mt-5 max-w-xl mx-auto leading-relaxed">
+      <p className="font-manrope text-[12.5px] text-white/55 text-center mt-5 max-w-xl mx-auto leading-relaxed">
         The decision is always shown — and an explicit flag is a guaranteed override. No keyword match falls back to <span className="text-white/60">bash</span>, and says so.
       </p>
     </div>

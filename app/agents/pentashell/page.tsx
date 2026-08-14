@@ -92,7 +92,7 @@ function SectionLabel({ index, kicker, center }: { index: string; kicker: string
     <div className={`flex items-center gap-3 mb-5 ${center ? "justify-center" : ""}`}>
       <span className="font-dmmono text-[11px] border rounded px-1.5 py-0.5 leading-none" style={{ color: "#2FE2F0", borderColor: "rgba(47,226,240,0.4)" }}>[ {index} ]</span>
       <span className="w-1.5 h-1.5 rounded-full" style={{ background: "#F25FD0", animation: "pact-blink 1.3s steps(1) infinite" }} />
-      <span className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-white/35">{"// "}{kicker}</span>
+      <span className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-white/55">{"// "}{kicker}</span>
     </div>
   );
 }
@@ -179,7 +179,7 @@ export default function PentashellPage() {
 
               {/* quickstart, right under the hero */}
               <Reveal delay={0.3} className="w-full max-w-xl">
-                <p className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-white/30 mb-3">Get running in under a minute</p>
+                <p className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-white/55 mb-3">Get running in under a minute</p>
                 <CopyCommand
                   label="Quickstart"
                   lines={[
@@ -214,7 +214,7 @@ export default function PentashellPage() {
                 <div aria-hidden className="absolute inset-y-0 right-0 w-16 pointer-events-none" style={{ background: "linear-gradient(to left, #05060e, transparent)" }} />
               </div>
             </Reveal>
-            <p className="font-dmmono text-[11px] text-white/30 text-center mt-4 px-6">
+            <p className="font-dmmono text-[11px] text-white/55 text-center mt-4 px-6">
               The real interface — no mockup. <span style={gCyan}>Pentashell v0.2.0</span>, powered by PentaCMD-47M.
             </p>
           </section>
@@ -294,12 +294,12 @@ export default function PentashellPage() {
                           <StatNumber value={s.big} decimals={s.dec} suffix={s.suf} />
                         </p>
                         <p className="font-manrope font-medium text-[13px] text-white/75 mt-3">{s.label}</p>
-                        <p className="font-dmmono text-[10.5px] text-white/35 mt-1">{s.sub}</p>
+                        <p className="font-dmmono text-[10.5px] text-white/55 mt-1">{s.sub}</p>
                       </div>
                     </div>
                   ))}
                 </div>
-                <p className="font-dmmono text-[11px] text-white/30 text-center mt-5">
+                <p className="font-dmmono text-[11px] text-white/55 text-center mt-5">
                   Safe commands like <span className="text-white/55">npm install</span>, <span className="text-white/55">git add</span> and <span className="text-white/55">Format-Table</span> are correctly never flagged.
                 </p>
               </Reveal>
@@ -354,13 +354,13 @@ export default function PentashellPage() {
                         <span aria-hidden className="absolute inset-x-0 top-0 h-px opacity-60" style={{ background: "linear-gradient(90deg, transparent, #2FE2F0, transparent)" }} />
                         <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="#2FE2F0" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="absolute -right-2 -bottom-3 w-16 h-16 opacity-[0.07] group-hover:opacity-[0.12] transition-opacity"><path d={s.icon} /></svg>
                         <div className="relative flex items-start justify-between gap-2">
-                          <p className="font-dmmono text-[10px] uppercase tracking-[0.16em] text-white/35 pt-1">{s.label}</p>
+                          <p className="font-dmmono text-[10px] uppercase tracking-[0.16em] text-white/55 pt-1">{s.label}</p>
                           <span className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" style={{ background: "rgba(47,226,240,0.1)", border: "1px solid rgba(47,226,240,0.3)" }}>
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2FE2F0" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d={s.icon} /></svg>
                           </span>
                         </div>
                         <p className="relative font-manrope font-bold text-[1.4rem] mt-2.5" style={gCyan}>{s.value}</p>
-                        {s.note && <p className="relative font-dmmono text-[10.5px] text-white/30 mt-1">{s.note}</p>}
+                        {s.note && <p className="relative font-dmmono text-[10.5px] text-white/55 mt-1">{s.note}</p>}
                       </div>
                     ))}
                   </div>
@@ -505,7 +505,7 @@ export default function PentashellPage() {
               </Reveal>
 
               <Reveal delay={0.08}>
-                <p className="font-manrope text-[12.5px] text-white/35 mt-5 leading-relaxed max-w-3xl">
+                <p className="font-manrope text-[12.5px] text-white/55 mt-5 leading-relaxed max-w-3xl">
                   Prefer not to clone the 180 MB weights? They&rsquo;re also published as a separate
                   release asset / Hugging Face download — point the CLI at them and skip the LFS pull.
                   Built on torch (CPU), tokenizers and rich.
@@ -569,7 +569,7 @@ export default function PentashellPage() {
                   </div>
                 </div>
               </Reveal>
-              <p className="font-dmmono text-[11px] text-white/30 text-center mt-10 tracking-wide">
+              <p className="font-dmmono text-[11px] text-white/55 text-center mt-10 tracking-wide">
                 Pentashell · the default CLI for PentaCMD-47M · MIT · built from scratch by Suman Debnath
               </p>
             </div>
