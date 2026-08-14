@@ -253,12 +253,22 @@ export default function CommandPalette() {
     return () => window.removeEventListener("keydown", handleArrow);
   }, [open, filtered, selected, execute, query, close]);
 
-  // Focus input when opened
+  // Reset the highlighted row as the palette opens. This is done during render
+  // rather than from an effect: an effect would commit the stale selection and
+  // then immediately re-render, which is the cascading update
+  // react-hooks/set-state-in-effect warns about.
+  const [wasOpen, setWasOpen] = useState(open);
+  if (open !== wasOpen) {
+    setWasOpen(open);
+    if (open) setSelected(0);
+  }
+
+  // Focus genuinely belongs in an effect — it reaches into the DOM. The timer
+  // is cleared on unmount so a fast open/close cannot focus a torn-down input.
   useEffect(() => {
-    if (open) {
-      setTimeout(() => inputRef.current?.focus(), 50);
-      setSelected(0);
-    }
+    if (!open) return;
+    const t = setTimeout(() => inputRef.current?.focus(), 50);
+    return () => clearTimeout(t);
   }, [open]);
 
   return (

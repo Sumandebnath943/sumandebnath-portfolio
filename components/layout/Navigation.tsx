@@ -124,10 +124,13 @@ export default function Navigation() {
   const toggleGroup = (label: string) =>
     setOpenGroups((g) => (g.includes(label) ? g.filter((l) => l !== label) : [...g, label]));
 
-  // Start from a clean, collapsed menu each time it is opened.
-  useEffect(() => {
-    if (!mobileOpen) setOpenGroups([]);
-  }, [mobileOpen]);
+  // Collapse every group whenever the menu is toggled, so it always opens in
+  // its short resting state. Done here rather than in an effect keyed on
+  // mobileOpen, which would be a cascading render.
+  const toggleMobile = () => {
+    setMobileOpen((v) => !v);
+    setOpenGroups([]);
+  };
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
@@ -143,6 +146,9 @@ export default function Navigation() {
         // real navigation so the browser resolves the hash and scrolls.
         // router.push("/#section") doesn't trigger native hash scroll
         // under App Router SPA navigation.
+        // The rule below reads this as mutating an out-of-scope variable, but
+        // this is a browser navigation from an event handler, not render state.
+        // eslint-disable-next-line react-hooks/immutability
         window.location.href = "/" + href;
         return;
       }
@@ -289,6 +295,12 @@ export default function Navigation() {
             >
               <span>⌘K</span>
             </m.button>
+            {/* Deliberately an <a>, not next/link: from a sub-page this has to
+                be a real navigation so the browser resolves #contact and
+                scrolls. SPA navigation to "/#anchor" does not fire native hash
+                scrolling — the same reason handleNavClick above sets
+                window.location.href directly. */}
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
             <a
               href="/#contact"
               onClick={(e) => {
@@ -315,7 +327,7 @@ export default function Navigation() {
             // 18px icon + 13px padding each side = a 44px target. This control
             // only exists below md, so the larger box costs desktop nothing.
             className="md:hidden p-[13px] -m-[5px] mr-0 rounded-full text-[#86868b] hover:text-[#f5f5f7] hover:bg-white/5 transition-all touch-manipulation"
-            onClick={() => setMobileOpen((v) => !v)}
+            onClick={toggleMobile}
             aria-label="Toggle navigation"
             aria-expanded={mobileOpen}
             aria-controls="mobile-nav-panel"
@@ -458,7 +470,9 @@ export default function Navigation() {
                 <span className="text-[11px] font-mono text-[#86868b] px-2 py-1 rounded bg-white/[0.05] border border-white/[0.05]">⌘K</span>
               </button>
               {/* The desktop bar carries this CTA in a `hidden md:flex` group,
-                  which left the phone menu with no way to start a conversation. */}
+                  which left the phone menu with no way to start a conversation.
+                  Same <a>-not-Link reasoning as the desktop copy above. */}
+              {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
               <a
                 href="/#contact"
                 onClick={(e) => {
