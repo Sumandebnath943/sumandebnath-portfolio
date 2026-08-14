@@ -279,11 +279,15 @@ export default function CommandPalette() {
           {/* Palette Panel */}
           <m.div
             key="cp-panel"
-            initial={{ opacity: 0, scale: 0.95, y: -10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -10 }}
+            // The x:-50% lives here rather than in a `-translate-x-1/2` class:
+            // Motion owns this element's transform and writes `transform: none`
+            // once the animation settles, which silently dropped the Tailwind
+            // centering and parked the panel half a viewport to the right.
+            initial={{ opacity: 0, scale: 0.95, y: -10, x: "-50%" }}
+            animate={{ opacity: 1, scale: 1, y: 0, x: "-50%" }}
+            exit={{ opacity: 0, scale: 0.95, y: -10, x: "-50%" }}
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed top-[10vh] left-1/2 -translate-x-1/2 z-[100] w-full max-w-xl px-4"
+            className="fixed top-[10vh] left-1/2 z-[100] w-full max-w-xl px-4"
           >
             <div className="glass-strong rounded-2xl overflow-hidden shadow-[0_24px_80px_rgba(0,0,0,0.1)] flex flex-col max-h-[80vh]">
               {/* Search bar */}

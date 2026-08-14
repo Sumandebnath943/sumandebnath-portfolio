@@ -184,11 +184,16 @@ export default function SiteTour() {
       <AnimatePresence>
         {showPrompt && (
           <m.div
-            initial={{ opacity: 0, x: 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 100 }}
+            // Same story as the command palette: Motion drives x here, so a
+            // `-translate-y-1/2` class gets overwritten and the panel hangs
+            // below the midpoint instead of centring on it. The width clamps so
+            // the 280px panel plus its 48px right offset still clears the left
+            // edge on a 320px phone; above ~336px it stays exactly 280px.
+            initial={{ opacity: 0, x: 100, y: "-50%" }}
+            animate={{ opacity: 1, x: 0, y: "-50%" }}
+            exit={{ opacity: 0, x: 100, y: "-50%" }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed top-1/2 right-12 -translate-y-1/2 z-[99995] flex w-[280px] flex-col gap-3 rounded-2xl rounded-tr-none rounded-br-none border border-[#FF8000]/30 border-r-0 bg-[#0A0A0C]/95 p-5 shadow-[-10px_0_40px_-10px_rgba(255,128,0,0.25)] backdrop-blur-xl"
+            className="fixed top-1/2 right-12 z-[99995] flex w-[min(280px,calc(100vw_-_5rem))] flex-col gap-3 rounded-2xl rounded-tr-none rounded-br-none border border-[#FF8000]/30 border-r-0 bg-[#0A0A0C]/95 p-5 shadow-[-10px_0_40px_-10px_rgba(255,128,0,0.25)] backdrop-blur-xl"
           >
             <button onClick={dismissPrompt} className="absolute right-4 top-4 text-white/40 hover:text-white">
               <X size={16} />

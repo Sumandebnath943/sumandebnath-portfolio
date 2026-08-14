@@ -275,6 +275,8 @@ export default function Navigation() {
             className="md:hidden p-2 rounded-full text-[#86868b] hover:text-[#f5f5f7] hover:bg-white/5 transition-all mr-1"
             onClick={() => setMobileOpen((v) => !v)}
             aria-label="Toggle navigation"
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-nav-panel"
           >
             {mobileOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
@@ -290,7 +292,12 @@ export default function Navigation() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="pointer-events-auto absolute top-20 left-4 right-4 z-40 rounded-[2rem] bg-[#0A0A0C]/95 backdrop-blur-2xl border border-white/[0.08] p-4 shadow-2xl"
+            id="mobile-nav-panel"
+            // The panel hangs off a `fixed` parent, so the page scroll can never
+            // reach it — without its own scroll box, anything past the fold is
+            // simply unreachable. dvh (not vh) so the browser's collapsing
+            // toolbar can't push the last items out of range on a phone.
+            className="pointer-events-auto absolute top-20 left-4 right-4 z-40 max-h-[calc(100dvh_-_6rem)] overflow-y-auto overscroll-contain rounded-[2rem] bg-[#0A0A0C]/95 backdrop-blur-2xl border border-white/[0.08] p-4 pb-[calc(1rem_+_env(safe-area-inset-bottom))] shadow-2xl"
           >
             <div className="flex flex-col gap-1">
               {navLinks.map((link) => {
