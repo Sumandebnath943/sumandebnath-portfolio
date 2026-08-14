@@ -4,6 +4,7 @@ import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import Contact from "@/components/sections/Contact";
 import { SITE_URL } from "@/lib/projects";
+import "./resume.css";
 import {
   additionalProjects,
   beyondTheResume,
@@ -26,7 +27,7 @@ import {
 export const metadata: Metadata = {
   title: { absolute: `${identity.name} — Résumé | ${identity.headline}` },
   description:
-    "The full résumé of Suman Debnath: 9+ years in brand and product marketing, 2+ years shipping AI-native products — a 44-agent autonomous fleet, a 47M-parameter language model trained from scratch, and 20+ live systems.",
+    "The full résumé of Suman Debnath: 9+ years in brand and product marketing, 2+ years shipping AI-native products — a 44-agent autonomous fleet, a 47M-parameter language model trained from scratch, and 21 live systems.",
   alternates: { canonical: "/resume" },
   keywords: [
     "Suman Debnath resume",
@@ -80,10 +81,7 @@ const personSupplementJsonLd = {
   jobTitle: identity.headline,
   description: summary,
   subjectOf: { "@id": `${SITE_URL}/resume#profilepage` },
-  seeks: targetRoles.map((role) => ({
-    "@type": "Demand",
-    name: role,
-  })),
+  seeks: targetRoles.map((role) => ({ "@type": "Demand", name: role })),
   hasOccupation: experience.map((role) => ({
     "@type": "Occupation",
     name: role.title,
@@ -127,39 +125,21 @@ const breadcrumbsJsonLd = {
   ],
 };
 
-/* ── Shared type styles ─────────────────────────────────────────────────── */
+/* ── Masthead figures ─────────────────────────────────────────────────────
+   Every one of these is stated in the résumé. They are set in the dark
+   register's monospace while still on paper — the first hint that the
+   document has a second half. Two from each side, deliberately.           */
+const TICKER = [
+  { n: "9+", l: "Years leading brand & product marketing" },
+  { n: "40–50%", l: "Website traffic growth delivered" },
+  {
+    n: String(flagshipProjects.length + additionalProjects.length),
+    l: "AI products built independently",
+  },
+  { n: "44", l: "Autonomous agents in one fleet" },
+];
 
-const SECTION = "max-w-4xl mx-auto px-6 md:px-10 py-12 border-t border-black/[0.07]";
-const EYEBROW =
-  "font-mono text-[10px] uppercase tracking-[0.34em] text-[#86868B] mb-5";
-const H2 =
-  "font-manrope font-semibold text-2xl md:text-[28px] tracking-tight text-[#1D1D1F] mb-7";
-const BODY = "font-manrope text-[15px] md:text-[16px] text-[#3a3a3f] leading-[1.85]";
-
-/** One résumé section, with the printed-document numbering the site uses. */
-function Section({
-  index,
-  eyebrow,
-  title,
-  children,
-  id,
-}: {
-  index: string;
-  eyebrow: string;
-  title: string;
-  children: React.ReactNode;
-  id?: string;
-}) {
-  return (
-    <section id={id} className={SECTION}>
-      <p className={EYEBROW}>
-        {index} / {eyebrow}
-      </p>
-      <h2 className={H2}>{title}</h2>
-      {children}
-    </section>
-  );
-}
+/* ── Bits ─────────────────────────────────────────────────────────────── */
 
 /**
  * A project name that links to its page on this site where one exists, and to
@@ -167,34 +147,27 @@ function Section({
  * a page rather than a PDF is that every product becomes a real internal link.
  */
 function ProjectName({ project }: { project: ResumeProject }) {
-  const className =
-    "font-manrope font-semibold text-[15px] text-[#1D1D1F] underline decoration-black/20 underline-offset-[5px] hover:decoration-[#4da3ff] hover:text-[#0b63c4] transition-colors";
-
-  if (project.href) {
-    return (
-      <Link href={project.href} className={className}>
-        {project.name}
-      </Link>
-    );
-  }
+  if (project.href) return <Link href={project.href}>{project.name}</Link>;
   if (project.external) {
     return (
-      <a
-        href={project.external}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={className}
-      >
-        {project.name} <span className="text-[10px] opacity-45">↗</span>
+      <a href={project.external} target="_blank" rel="noopener noreferrer">
+        {project.name} <span aria-hidden>↗</span>
       </a>
     );
   }
+  return <>{project.name}</>;
+}
+
+function Eyebrow({ index, children }: { index: string; children: React.ReactNode }) {
   return (
-    <span className="font-manrope font-semibold text-[15px] text-[#1D1D1F]">
-      {project.name}
-    </span>
+    <p className="rz-eyebrow">
+      {index} / {children}
+    </p>
   );
 }
+
+/** The three skill columns shift register left to right, warm to cool. */
+const SKILL_TONE = ["rz-skill--warm", "rz-skill--mid", "rz-skill--cool"];
 
 export default function ResumePage() {
   return (
@@ -214,377 +187,342 @@ export default function ResumePage() {
 
       <Navigation />
 
-      <main className="bg-[#FBFBF9]">
+      <main className="rz">
         {/* ── Masthead ──────────────────────────────────────────────────── */}
-        <header
-          id="tour-resume-top"
-          className="max-w-4xl mx-auto px-6 md:px-10 pt-36 md:pt-40 pb-12"
-        >
-          <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#86868B] mb-6">
-            Résumé
-          </p>
-          <h1 className="font-manrope font-semibold text-4xl md:text-[54px] leading-[1.05] tracking-tight text-[#1D1D1F]">
-            {identity.name}
-          </h1>
-          <p className="font-serif italic text-xl md:text-2xl text-[#3a3a3f] mt-4 leading-snug">
-            {identity.headline}
-          </p>
+        <header id="tour-resume-top" className="rz-mast">
+          <div className="rz-shell">
+            <p className="rz-eyebrow" style={{ color: "var(--clay)" }}>
+              Résumé — {identity.targeting}
+            </p>
 
-          {/* Contact line — the same details the PDF prints in its header. */}
-          <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 font-manrope text-[13px] text-[#4a4a53]">
-            <a
-              href={identity.phoneHref}
-              className="hover:text-[#1D1D1F] transition-colors"
-            >
-              {identity.phone}
-            </a>
-            <span className="text-black/20">·</span>
-            <a
-              href={`mailto:${identity.email}`}
-              className="hover:text-[#1D1D1F] transition-colors"
-            >
-              {identity.email}
-            </a>
-            <span className="text-black/20">·</span>
-            <span>{identity.location}</span>
-            <span className="text-black/20">·</span>
-            <span>{identity.availability}</span>
-            <span className="text-black/20">·</span>
-            <span>{identity.noticePeriod} notice</span>
+            <h1 className="rz-name">
+              Suman
+              <br />
+              Debnath
+            </h1>
+
+            <p className="rz-role">
+              Senior Brand Marketing <em>&</em> AI Product Marketing Leader
+            </p>
+
+            <div className="rz-contact">
+              <a href={identity.phoneHref}>{identity.phone}</a>
+              <span className="sep">·</span>
+              <a href={`mailto:${identity.email}`}>{identity.email}</a>
+              <span className="sep">·</span>
+              <span>{identity.location}</span>
+              <span className="sep">·</span>
+              <span>{identity.availability}</span>
+              <span className="sep">·</span>
+              <span>{identity.noticePeriod} notice</span>
+            </div>
+
+            <div className="rz-actions">
+              <a href={RESUME_PDF} download className="rz-btn rz-btn-solid">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                Download PDF
+              </a>
+              <Link href="/contact" className="rz-btn rz-btn-ghost">
+                Get in touch
+              </Link>
+              <Link href="/projects" className="rz-btn rz-btn-ghost">
+                See the systems
+              </Link>
+            </div>
+
+            <div className="rz-ticker">
+              {TICKER.map((t) => (
+                <div key={t.l} className="rz-tick">
+                  <p className="rz-tick-n">{t.n}</p>
+                  <p className="rz-tick-l">{t.l}</p>
+                </div>
+              ))}
+            </div>
+
+            <p className="rz-updated">Last updated: {RESUME_UPDATED_LABEL}</p>
           </div>
-
-          {/* Actions — hidden in print, where they are just dead ink. */}
-          <div className="mt-9 flex flex-wrap items-center gap-3 print:hidden">
-            <a
-              href={RESUME_PDF}
-              download
-              className="inline-flex items-center gap-2.5 rounded-full bg-[#1A1A1A] px-6 py-3 font-manrope text-[13px] font-semibold text-white transition-colors hover:bg-black"
-            >
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden
-              >
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-              Download PDF
-            </a>
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 rounded-full border border-black/15 bg-white px-6 py-3 font-manrope text-[13px] font-semibold text-[#1D1D1F] transition-colors hover:border-black/30 hover:bg-black/[0.03]"
-            >
-              Get in touch
-            </Link>
-            <Link
-              href="/projects"
-              className="inline-flex items-center gap-2 rounded-full border border-black/15 bg-white px-6 py-3 font-manrope text-[13px] font-semibold text-[#1D1D1F] transition-colors hover:border-black/30 hover:bg-black/[0.03]"
-            >
-              See the systems
-            </Link>
-          </div>
-
-          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-[#86868B] mt-9">
-            Last updated: {RESUME_UPDATED_LABEL}
-          </p>
         </header>
 
-        {/* ── 01 · Positioning ──────────────────────────────────────────── */}
-        <Section index="01" eyebrow="Positioning" title="Who I am & the value I bring">
-          <p className={BODY}>{summary}</p>
+        {/* ── 01 · Who I am ─────────────────────────────────────────────── */}
+        <section className="rz-warm">
+          <div className="rz-shell">
+            <Eyebrow index="01">Positioning</Eyebrow>
+            <h2 className="rz-h2">Who I am &amp; the value I bring</h2>
+            <p className="rz-lede">{summary}</p>
 
-          <p className={`${EYEBROW} mt-10`}>Targeting</p>
-          <ul className="flex flex-wrap gap-2">
-            {targetRoles.map((role) => (
-              <li
-                key={role}
-                className="rounded-full border border-black/[0.09] bg-white px-3.5 py-1.5 font-manrope text-[12.5px] text-[#3a3a3f]"
-              >
-                {role}
-              </li>
-            ))}
-          </ul>
-        </Section>
+            <p className="rz-eyebrow" style={{ color: "var(--clay)", marginTop: "3rem" }}>
+              Targeting
+            </p>
+            <ul
+              className="rz-skill rz-skill--warm"
+              style={{ padding: 0, background: "transparent", marginTop: "1.25rem", display: "flex", flexWrap: "wrap", gap: "0.4rem", listStyle: "none" }}
+            >
+              {targetRoles.map((role) => (
+                <li key={role} style={{ fontFamily: "var(--font-manrope), sans-serif", fontSize: "12.5px", padding: "0.32rem 0.7rem", borderRadius: "999px", border: "1px solid var(--rule-warm)", background: "rgba(255,255,255,0.45)", color: "var(--ink-soft)" }}>
+                  {role}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
 
         {/* ── 02 · Core skills ──────────────────────────────────────────── */}
-        <Section index="02" eyebrow="Capability" title="Core skills">
-          <div className="grid gap-8 md:grid-cols-3">
-            {coreSkills.map((group) => (
-              <div key={group.group}>
-                <h3 className="font-manrope font-semibold text-[13px] uppercase tracking-[0.12em] text-[#1D1D1F] mb-3.5">
-                  {group.group}
-                </h3>
-                <ul className="space-y-1.5">
-                  {group.items.map((item) => (
-                    <li
-                      key={item}
-                      className="font-manrope text-[14px] text-[#4a4a53] leading-relaxed"
-                    >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+        <section className="rz-warm">
+          <div className="rz-shell">
+            <Eyebrow index="02">Capability</Eyebrow>
+            <h2 className="rz-h2">Core skills</h2>
           </div>
-        </Section>
-
-        {/* ── 03 · Experience ───────────────────────────────────────────── */}
-        <Section index="03" eyebrow="Track record" title="Professional experience">
-          <div className="space-y-12">
-            {experience.map((role) => (
-              <article key={`${role.title}-${role.org}`}>
-                <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 mb-1">
-                  <h3 className="font-manrope font-semibold text-lg md:text-xl tracking-tight text-[#1D1D1F]">
-                    {role.title}
-                  </h3>
-                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[#86868B]">
-                    {role.period}
-                  </p>
+          {/* Full-bleed, because the third column is already the other register
+              and a contained card would read as decoration rather than a shift. */}
+          <div className="rz-shell" style={{ marginTop: 0 }}>
+            <div className="rz-skills">
+              {coreSkills.map((group, i) => (
+                <div key={group.group} className={`rz-skill ${SKILL_TONE[i] ?? SKILL_TONE[0]}`}>
+                  <h3>{group.group}</h3>
+                  <ul>
+                    {group.items.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
                 </div>
-                <p className="font-manrope text-[14px] text-[#4a4a53] mb-6">
-                  {role.org} · {role.location}
-                </p>
-                <ul className="space-y-4">
-                  {role.bullets.map((b) => (
-                    <li key={b.text} className="relative pl-5">
-                      <span
-                        aria-hidden
-                        className="absolute left-0 top-[0.72em] h-1.5 w-1.5 rounded-full bg-black/20"
-                      />
-                      <p className="font-manrope text-[15px] text-[#3a3a3f] leading-[1.8]">
-                        {b.label && (
-                          <span className="font-semibold text-[#1D1D1F]">
-                            {b.label}:{" "}
-                          </span>
-                        )}
-                        {b.text}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            ))}
-          </div>
-
-          <div className="mt-11 border-t border-black/[0.07] pt-7">
-            <h3 className="font-manrope font-semibold text-[13px] uppercase tracking-[0.12em] text-[#1D1D1F] mb-2.5">
-              Earlier experience
-            </h3>
-            <p className="font-manrope text-[14px] text-[#4a4a53] leading-relaxed">
-              {earlierExperience}
-            </p>
-          </div>
-        </Section>
-
-        {/* ── 04 · Flagship products ────────────────────────────────────── */}
-        <Section
-          index="04"
-          eyebrow="Independent / self-initiated"
-          title="AI products built"
-          id="products"
-        >
-          <p className={`${BODY} mb-10 max-w-2xl`}>{projectsPreamble}</p>
-
-          <div className="space-y-6">
-            {flagshipProjects.map((project) => (
-              <article
-                key={project.name}
-                className="rounded-2xl border border-black/[0.08] bg-white p-6 md:p-7"
-              >
-                <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 mb-4">
-                  <h3 className="font-manrope font-semibold text-lg tracking-tight">
-                    <ProjectName project={project} />
-                  </h3>
-                  {project.status && (
-                    <span className="rounded-full bg-[#1A1A1A] px-3 py-1 font-mono text-[9.5px] font-semibold uppercase tracking-[0.18em] text-white">
-                      {project.status}
-                    </span>
-                  )}
-                </div>
-                {project.problem && (
-                  <p className="font-manrope text-[14.5px] text-[#5a5a63] leading-[1.75] mb-3">
-                    <span className="font-semibold text-[#1D1D1F]">Problem: </span>
-                    {project.problem}
-                  </p>
-                )}
-                <p className="font-manrope text-[14.5px] text-[#3a3a3f] leading-[1.75]">
-                  <span className="font-semibold text-[#1D1D1F]">Built: </span>
-                  {project.built}
-                </p>
-              </article>
-            ))}
-          </div>
-
-          <p className={`${EYEBROW} mt-12`}>Additional projects</p>
-          <ol className="grid gap-x-8 gap-y-5 md:grid-cols-2">
-            {additionalProjects.map((project, i) => (
-              <li key={project.name} className="flex gap-3">
-                <span className="font-mono text-[11px] text-[#86868B] pt-[3px] tabular-nums">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <div>
-                  <ProjectName project={project} />
-                  <p className="font-manrope text-[13.5px] text-[#5a5a63] leading-[1.65] mt-1">
-                    {project.built}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </Section>
-
-        {/* ── 05 · Beyond the résumé ────────────────────────────────────── */}
-        <Section
-          index="05"
-          eyebrow="Only on this site"
-          title="What the PDF doesn't have room for"
-        >
-          <p className={`${BODY} mb-9 max-w-2xl`}>
-            Two pages is a hard limit, and the work keeps moving. These live here
-            instead — each one a full write-up rather than a line item.
-          </p>
-          <div className="grid gap-4 md:grid-cols-2">
-            {beyondTheResume.map((project) => (
-              <Link
-                key={project.name}
-                href={project.href!}
-                className="group rounded-2xl border border-black/[0.08] bg-white p-5 transition-colors hover:border-black/20"
-              >
-                <div className="flex items-center justify-between gap-3 mb-2">
-                  <h3 className="font-manrope font-semibold text-[15px] text-[#1D1D1F]">
-                    {project.name}
-                  </h3>
-                  <span
-                    aria-hidden
-                    className="font-mono text-[13px] text-[#86868B] transition-transform group-hover:translate-x-0.5"
-                  >
-                    →
-                  </span>
-                </div>
-                <p className="font-manrope text-[13.5px] text-[#5a5a63] leading-[1.65]">
-                  {project.built}
-                </p>
-              </Link>
-            ))}
-          </div>
-        </Section>
-
-        {/* ── 06 · Education ────────────────────────────────────────────── */}
-        <Section index="06" eyebrow="Foundations" title="Education">
-          <ul className="space-y-5">
-            {education.map((entry) => (
-              <li
-                key={entry.qualification}
-                className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5"
-              >
-                <div>
-                  <p className="font-manrope font-semibold text-[15px] text-[#1D1D1F]">
-                    {entry.qualification}
-                  </p>
-                  <p className="font-manrope text-[13.5px] text-[#5a5a63]">
-                    {entry.institution}
-                  </p>
-                </div>
-                <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[#86868B]">
-                  {entry.period}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </Section>
-
-        {/* ── 07 · Certifications ───────────────────────────────────────── */}
-        <Section index="07" eyebrow="Continuous learning" title="Certifications">
-          <div className="grid gap-8 md:grid-cols-2">
-            {certifications.map((group) => (
-              <div key={group.issuer}>
-                <h3 className="font-manrope font-semibold text-[13px] uppercase tracking-[0.12em] text-[#1D1D1F] mb-3">
-                  {group.issuer}
-                  {group.period && (
-                    <span className="ml-2 font-mono text-[10px] font-normal tracking-[0.16em] text-[#86868B]">
-                      {group.period}
-                    </span>
-                  )}
-                </h3>
-                <ul className="space-y-1.5">
-                  {group.items.map((item) => (
-                    <li
-                      key={item}
-                      className="font-manrope text-[13.5px] text-[#4a4a53] leading-relaxed"
-                    >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-
-          <p className="font-manrope text-[13.5px] text-[#5a5a63] mt-9 print:hidden">
-            The full certificate portfolio, with the actual credentials, lives on{" "}
-            <Link
-              href="/learnings"
-              className="underline decoration-black/25 underline-offset-[5px] hover:text-[#1D1D1F]"
-            >
-              /learnings
-            </Link>
-            .
-          </p>
-        </Section>
-
-        {/* ── Closing CTA ───────────────────────────────────────────────── */}
-        <section className="max-w-4xl mx-auto px-6 md:px-10 py-14 border-t border-black/[0.07] print:hidden">
-          <div className="rounded-3xl bg-[#1A1A1A] px-7 py-10 md:px-11 md:py-12">
-            <h2 className="font-manrope font-semibold text-2xl md:text-[30px] tracking-tight text-white mb-3">
-              Read it, or talk to it.
-            </h2>
-            <p className="font-manrope text-[15px] text-white/60 leading-relaxed max-w-lg mb-8">
-              Everything above is also loaded into the assistant on this site — ask
-              it anything and it answers from this exact record. Or skip straight
-              to a conversation.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Link
-                href="/contact"
-                className="inline-flex items-center rounded-full bg-white px-6 py-3 font-manrope text-[13px] font-semibold text-[#1A1A1A] transition-colors hover:bg-white/90"
-              >
-                Start a conversation
-              </Link>
-              <a
-                href={RESUME_PDF}
-                download
-                className="inline-flex items-center rounded-full border border-white/20 px-6 py-3 font-manrope text-[13px] font-semibold text-white/85 transition-colors hover:border-white/40 hover:text-white"
-              >
-                Download the PDF
-              </a>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* Ctrl+P on a résumé is a reasonable thing to do, so make the result a
-            clean document: no site chrome, no dark CTA panel, no card fills,
-            and sections that don't split across a page break. */}
-        <style>{`
-          @media print {
-            @page { margin: 14mm; }
-            body { background: #fff !important; }
-            main { background: #fff !important; }
-            header, section, article { break-inside: avoid; page-break-inside: avoid; }
-            a { text-decoration: none !important; color: #1D1D1F !important; }
-            .print\\:hidden { display: none !important; }
-          }
-        `}</style>
+        {/* ── 03 · Experience ───────────────────────────────────────────── */}
+        <section className="rz-warm">
+          <div className="rz-shell">
+            <Eyebrow index="03">Track record</Eyebrow>
+            <h2 className="rz-h2">Professional experience</h2>
+
+            {experience.map((role) => (
+              <article key={`${role.title}-${role.org}`} className="rz-role-block">
+                <div className="rz-role-head">
+                  <h3 className="rz-role-title">{role.title}</h3>
+                  <p className="rz-role-when">{role.period}</p>
+                </div>
+                <p className="rz-role-org">
+                  {role.org} · {role.location}
+                </p>
+                <ul className="rz-bullets">
+                  {role.bullets.map((b) => (
+                    <li key={b.text} className="rz-bullet">
+                      {b.label && <b>{b.label}</b>}
+                      <p>{b.text}</p>
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+
+            <div className="rz-earlier">
+              <b>Earlier experience</b>
+              {earlierExperience}
+            </div>
+          </div>
+        </section>
+
+        {/* ── The seam ──────────────────────────────────────────────────────
+            The document pivots here: everything above is what he did inside
+            companies, everything below is what he built alone. The résumé's
+            own thesis sentence is set twice at identical coordinates and cut
+            along complementary halves of one diagonal, so the words carry
+            across the divide rather than stopping at it. */}
+        <div className="rz-seam">
+          {/* Establishes the section's height; the quote is layered over it. */}
+          <div className="rz-shell rz-seam-inner">
+            <p className="rz-seam-note">
+              Below this line: built alone, start to finish
+            </p>
+          </div>
+
+          {/* Two copies at identical coordinates, cut along complementary
+              halves of the one diagonal. Only the second is read aloud. */}
+          <div className="rz-quote-stack">
+            <div className="rz-quote rz-quote--under" aria-hidden="true">
+              <div className="rz-quote-wrap">
+                <p>
+                  &hellip;it is someone who understands <em>both</em> from the inside.
+                </p>
+              </div>
+            </div>
+            <div className="rz-quote rz-quote--over">
+              <div className="rz-quote-wrap">
+                <p>
+                  &hellip;it is someone who understands <em>both</em> from the inside.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── 04 · AI products ──────────────────────────────────────────── */}
+        <section id="products" className="rz-dark">
+          <div className="rz-shell">
+            <Eyebrow index="04">Independent / self-initiated</Eyebrow>
+            <h2 className="rz-h2">AI products built</h2>
+            <p className="rz-lede">{projectsPreamble}</p>
+
+            <p className="rz-eyebrow" style={{ color: "var(--emerald)", marginTop: "3rem" }}>
+              Flagship projects
+            </p>
+
+            <div className="rz-flagships">
+              {flagshipProjects.map((project) => (
+                <article key={project.name} className="rz-flag">
+                  <div className="rz-flag-head">
+                    <h3 className="rz-flag-name">
+                      <ProjectName project={project} />
+                    </h3>
+                    {project.status && (
+                      <span
+                        className={`rz-status ${
+                          project.status.toLowerCase() === "live"
+                            ? "rz-status--live"
+                            : "rz-status--testing"
+                        }`}
+                      >
+                        {project.status}
+                      </span>
+                    )}
+                  </div>
+                  <div className="rz-kv">
+                    {project.problem && (
+                      <div className="rz-kv-row">
+                        <span className="rz-kv-k">Problem</span>
+                        <p className="rz-kv-v">{project.problem}</p>
+                      </div>
+                    )}
+                    <div className="rz-kv-row rz-kv-row--built">
+                      <span className="rz-kv-k">Built</span>
+                      <p className="rz-kv-v">{project.built}</p>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <p className="rz-eyebrow" style={{ color: "var(--cyan)", marginTop: "3.5rem" }}>
+              Additional projects
+            </p>
+
+            <ol className="rz-index">
+              {additionalProjects.map((project, i) => (
+                <li key={project.name}>
+                  <div className="rz-idx">
+                    <span className="rz-idx-n">{String(i + 1).padStart(2, "0")}</span>
+                    <h3 className="rz-idx-name">
+                      <ProjectName project={project} />
+                    </h3>
+                    <p className="rz-idx-d">{project.built}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        {/* ── 05 · Education ────────────────────────────────────────────── */}
+        {/* The converged register. Both halves are already present in this
+            section of the résumé itself — Oxford's Generative & Agentic AI sits
+            directly above an English Honours degree — so neither typeface wins. */}
+        <section className="rz-soil">
+          <div className="rz-shell">
+            <Eyebrow index="05">Foundations</Eyebrow>
+            <h2 className="rz-h2">Education</h2>
+            <ul className="rz-edu">
+              {education.map((entry) => (
+                <li key={entry.qualification}>
+                  <div>
+                    <p className="rz-edu-q">{entry.qualification}</p>
+                    <p className="rz-edu-i">{entry.institution}</p>
+                  </div>
+                  <p className="rz-edu-y">{entry.period}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        {/* ── 06 · Continuous learning ──────────────────────────────────── */}
+        <section className="rz-soil" style={{ paddingTop: 0 }}>
+          <div className="rz-shell">
+            <Eyebrow index="06">Continuous learning</Eyebrow>
+            <h2 className="rz-h2">Certifications</h2>
+            <div className="rz-certs">
+              {certifications.map((group) => (
+                <div key={group.issuer} className="rz-cert">
+                  <h3>
+                    {group.issuer}
+                    {group.period && <span>{group.period}</span>}
+                  </h3>
+                  <ul>
+                    {group.items.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Beyond the résumé ─────────────────────────────────────────── */}
+        {/* Marked as an addition rather than blended in — the document above is
+            the document, and this is not part of it. */}
+        <section className="rz-beyond">
+          <div className="rz-shell">
+            <p className="rz-eyebrow" style={{ color: "var(--clay)" }}>
+              Not on the PDF
+            </p>
+            <h2 className="rz-h2">What two pages didn&apos;t have room for</h2>
+            <p className="rz-beyond-note">
+              ↓ Everything above is the résumé, verbatim. This part isn&apos;t.
+            </p>
+            <div className="rz-cards">
+              {beyondTheResume.map((project) => (
+                <Link key={project.name} href={project.href!} className="rz-card">
+                  <span className="rz-card-t">
+                    {project.name}
+                    <span aria-hidden>→</span>
+                  </span>
+                  <span className="rz-card-d">{project.built}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Closing ───────────────────────────────────────────────────── */}
+        <section className="rz-cta">
+          <div className="rz-shell">
+            <h2>Read it, or talk to it.</h2>
+            <p>
+              Everything above is also loaded into the assistant on this site — ask
+              it anything and it answers from this exact record. Or skip straight to
+              a conversation.
+            </p>
+            <div className="rz-actions">
+              <Link href="/contact" className="rz-btn rz-btn-solid">
+                Start a conversation
+              </Link>
+              <a href={RESUME_PDF} download className="rz-btn rz-btn-ghost">
+                Download the PDF
+              </a>
+              <Link href="/learnings" className="rz-btn rz-btn-ghost">
+                See the certificates
+              </Link>
+            </div>
+          </div>
+        </section>
       </main>
 
-      <Contact variant="light" />
+      <Contact />
     </MotionProvider>
   );
 }

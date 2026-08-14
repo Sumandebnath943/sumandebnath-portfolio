@@ -1,0 +1,786 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   /resume — two registers that converge.
+
+   The résumé's own thesis is that Suman understands marketing and AI "from
+   the inside", and the document itself pivots exactly once: sections 1–4 are
+   what he did inside companies, section 5 is what he built alone. The page
+   gives those two halves genuinely different visual languages — warm printed
+   paper for the first, terminal dark for the second — and puts a diagonal
+   seam at the pivot, with the thesis sentence split across it.
+
+   Everything is CSS. No scroll observers, no client component: the page is
+   statically rendered so every word of the résumé is in the initial HTML,
+   which is the entire reason for publishing it as a page rather than a PDF.
+
+   Scoped under .rz so none of this can reach the rest of the site.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.rz {
+  /* Warm register — the marketing decade */
+  --paper: #f2ece0;
+  --paper-deep: #e9e1d1;
+  --ink: #191512;
+  --ink-soft: #4a423a;
+  --ink-mute: #6d6459;
+  --clay: #b4472a;
+  --rule-warm: rgba(25, 21, 18, 0.14);
+
+  /* Dark register — the things built alone */
+  --void: #06080e;
+  --void-lift: #0c1018;
+  --cream: #ede7da;
+  --cream-soft: rgba(237, 231, 218, 0.66);
+  --cream-mute: rgba(237, 231, 218, 0.4);
+  --emerald: #34d399;
+  --cyan: #38bdf8;
+  --amber: #facc15;
+  --rule-cool: rgba(237, 231, 218, 0.12);
+
+  /* Converged register — foundations, where both halves already met */
+  --soil: #14110d;
+
+  --shell: 68rem;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* The angle the whole page is built around. Everything that references the
+   seam uses these two numbers so the diagonal stays one continuous line. */
+.rz {
+  /* Chosen so the cut passes through the pull-quote rather than under it.
+     Running it corner-to-corner (0 100%) looked stronger in the abstract but
+     left the left-aligned quote entirely on the paper side, which defeats the
+     whole device. */
+  --seam-left: 74%;
+  --seam-right: 26%;
+}
+
+.rz-shell {
+  max-width: var(--shell);
+  margin: 0 auto;
+  padding-inline: 1.5rem;
+}
+@media (min-width: 768px) {
+  .rz-shell { padding-inline: 2.5rem; }
+}
+
+/* ── Shared type ──────────────────────────────────────────────────────── */
+
+.rz-eyebrow {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+.rz-eyebrow::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: currentColor;
+  opacity: 0.28;
+}
+
+.rz-h2 {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2rem, 5.2vw, 3.25rem);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  margin-top: 1.1rem;
+}
+
+.rz-body {
+  font-family: var(--font-manrope), system-ui, sans-serif;
+  font-size: clamp(0.95rem, 1.6vw, 1.0625rem);
+  line-height: 1.85;
+}
+
+/* ── Masthead ─────────────────────────────────────────────────────────── */
+
+.rz-mast {
+  position: relative;
+  padding-block: clamp(8rem, 16vw, 11rem) clamp(3rem, 6vw, 4.5rem);
+  overflow: hidden;
+}
+/* Paper grain. Two offset gradients rather than an image, so nothing is
+   fetched and nothing can 404 the way an external noise SVG would. */
+.rz-mast::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 0%, rgba(180, 71, 42, 0.07), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 90% 20%, rgba(25, 21, 18, 0.05), transparent 65%);
+  pointer-events: none;
+}
+
+.rz-name {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(3.4rem, 12vw, 7.5rem);
+  line-height: 0.88;
+  letter-spacing: -0.025em;
+  position: relative;
+}
+.rz-role {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: clamp(0.95rem, 2.1vw, 1.25rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--ink-soft);
+  margin-top: 1.4rem;
+  max-width: 34ch;
+}
+.rz-role em {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-style: italic;
+  font-size: 1.25em;
+  /* The serif italic ampersand has tight side bearings and collided with the
+     word after it at this size. */
+  padding-inline: 0.12em;
+  color: var(--clay);
+}
+
+.rz-contact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.9rem;
+  margin-top: 2.5rem;
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--ink-mute);
+}
+.rz-contact a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--rule-warm); }
+.rz-contact a:hover { color: var(--clay); border-bottom-color: var(--clay); }
+.rz-contact .sep { opacity: 0.35; }
+
+.rz-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 2.5rem;
+}
+.rz-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-radius: 999px;
+  padding: 0.8rem 1.5rem;
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+.rz-btn-solid { background: var(--ink); color: var(--paper); }
+.rz-btn-solid:hover { background: #000; }
+.rz-btn-ghost { border: 1px solid var(--rule-warm); color: var(--ink); }
+.rz-btn-ghost:hover { border-color: var(--ink); background: rgba(25, 21, 18, 0.04); }
+
+/* The numbers, set in the dark register's typeface while still on paper —
+   the first hint that this résumé has a second half. */
+.rz-ticker {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  margin-top: clamp(3rem, 7vw, 4.5rem);
+  background: var(--rule-warm);
+  border: 1px solid var(--rule-warm);
+}
+@media (min-width: 700px) { .rz-ticker { grid-template-columns: repeat(4, 1fr); } }
+.rz-tick { background: var(--paper); padding: 1.25rem 1.1rem; }
+.rz-tick-n {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: clamp(1.35rem, 3.4vw, 1.9rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.rz-tick-l {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--ink-mute);
+  margin-top: 0.4rem;
+}
+
+/* ── Warm sections ────────────────────────────────────────────────────── */
+
+.rz-warm {
+  position: relative;
+  padding-block: clamp(3.5rem, 8vw, 5.5rem);
+  border-top: 1px solid var(--rule-warm);
+}
+.rz-warm .rz-eyebrow { color: var(--clay); }
+
+.rz-lede {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: clamp(1.05rem, 2.3vw, 1.4rem);
+  line-height: 1.72;
+  color: var(--ink-soft);
+  max-width: 46ch;
+  margin-top: 2rem;
+}
+
+/* ── Core skills: the palette shifts across the three columns ─────────── */
+
+.rz-skills { display: grid; gap: 1px; margin-top: 2.5rem; background: var(--rule-warm); }
+@media (min-width: 860px) { .rz-skills { grid-template-columns: repeat(3, 1fr); } }
+
+.rz-skill { padding: 1.75rem 1.5rem; }
+.rz-skill h3 {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 1.1rem;
+}
+.rz-skill ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.rz-skill li {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 12.5px;
+  padding: 0.32rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid;
+}
+
+/* Column 1 — wholly paper. */
+.rz-skill--warm { background: var(--paper); }
+.rz-skill--warm h3 { color: var(--clay); }
+.rz-skill--warm li { color: var(--ink-soft); border-color: var(--rule-warm); background: rgba(255, 255, 255, 0.45); }
+
+/* Column 2 — the crossover. Paper stock, cool accent. */
+.rz-skill--mid { background: var(--paper-deep); }
+.rz-skill--mid h3 { color: #2f6f57; }
+.rz-skill--mid li { color: var(--ink-soft); border-color: rgba(47, 111, 87, 0.3); background: rgba(52, 211, 153, 0.09); }
+
+/* Column 3 — already the other side. */
+.rz-skill--cool { background: var(--void-lift); }
+.rz-skill--cool h3 { color: var(--emerald); }
+.rz-skill--cool li {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 11.5px;
+  color: var(--cream-soft);
+  border-color: var(--rule-cool);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* ── Experience ───────────────────────────────────────────────────────── */
+
+.rz-role-block { margin-top: 3rem; }
+.rz-role-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem 1.5rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--rule-warm);
+}
+.rz-role-title {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(1.35rem, 3vw, 1.85rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+.rz-role-when {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.rz-role-org {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 13.5px;
+  color: var(--ink-mute);
+  margin-top: 0.75rem;
+}
+
+.rz-bullets { list-style: none; margin-top: 1.75rem; display: grid; gap: 1.4rem; }
+@media (min-width: 900px) { .rz-bullets { grid-template-columns: repeat(2, 1fr); gap: 1.6rem 2.5rem; } }
+.rz-bullet { position: relative; padding-left: 1.6rem; }
+.rz-bullet::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 0.7rem;
+  height: 1px;
+  background: var(--clay);
+  opacity: 0.75;
+}
+.rz-bullet b {
+  display: block;
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--clay);
+  margin-bottom: 0.35rem;
+}
+.rz-bullet p {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: var(--ink-soft);
+}
+
+.rz-earlier {
+  margin-top: 2.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule-warm);
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 13.5px;
+  color: var(--ink-mute);
+}
+.rz-earlier b {
+  display: block;
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--clay);
+  margin-bottom: 0.55rem;
+}
+
+/* ── The seam ─────────────────────────────────────────────────────────── */
+/* Where the document pivots from "what I did for employers" to "what I built
+   alone". The thesis sentence is rendered twice at identical coordinates and
+   clipped along complementary halves of the same diagonal, so the words carry
+   across the divide instead of stopping at it. */
+
+.rz-seam {
+  position: relative;
+  background: var(--paper);
+  overflow: hidden;
+  isolation: isolate;
+}
+.rz-seam::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--void);
+  clip-path: polygon(0 var(--seam-left), 100% var(--seam-right), 100% 100%, 0 100%);
+}
+/* No hairline on the cut: the angle changes with the container's aspect ratio,
+   so nothing statically rotated can stay glued to it, and a gradient stop
+   cannot be aimed at an angle it doesn't know. Paper against void is already
+   a hard enough edge. */
+
+/* Tall enough, and centred, so the diagonal reliably crosses the quote instead
+   of clipping a corner of it. The note is taken out of flow for the same
+   reason — in flow it pushed the quote above the cut. */
+.rz-seam-inner {
+  position: relative;
+  min-height: clamp(22rem, 52vh, 34rem);
+  display: flex;
+  align-items: center;
+  padding-block: clamp(4rem, 9vw, 6rem) clamp(5rem, 10vw, 7rem);
+}
+/* Both copies must be clipped against the SAME box the background is clipped
+   against, or the percentages resolve to two different diagonals and the text
+   seam drifts off the colour seam — cream words end up stranded on paper. So
+   the stack spans the whole section, exactly like .rz-seam::after does, and
+   the text is centred inside it rather than sized by it. */
+.rz-quote-stack {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+.rz-quote {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+}
+.rz-quote-wrap {
+  width: 100%;
+  max-width: var(--shell);
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+@media (min-width: 768px) { .rz-quote-wrap { padding-inline: 2.5rem; } }
+.rz-quote p {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(1.6rem, 4.6vw, 3rem);
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+  max-width: 20ch;
+}
+.rz-quote em { font-style: italic; }
+.rz-quote--under { color: var(--ink); clip-path: polygon(0 0, 100% 0, 100% var(--seam-right), 0 var(--seam-left)); }
+.rz-quote--under em { color: var(--clay); }
+.rz-quote--over { color: var(--cream); clip-path: polygon(0 var(--seam-left), 100% var(--seam-right), 100% 100%, 0 100%); }
+.rz-quote--over em { color: var(--emerald); }
+
+/* Absolute boxes are laid out against the padding box, so left:0 would ignore
+   the shell's inline padding and sit flush to the viewport edge. */
+.rz-seam-note {
+  position: absolute;
+  left: 1.5rem;
+  right: 1.5rem;
+  bottom: clamp(1.75rem, 4vw, 2.75rem);
+  z-index: 4;
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cream-mute);
+}
+@media (min-width: 768px) { .rz-seam-note { left: 2.5rem; right: 2.5rem; } }
+
+/* On a phone the diagonal is too shallow to read as intentional, and the quote
+   wraps to more lines, so the cut is pushed lower and steepened. */
+@media (max-width: 700px) {
+  .rz { --seam-left: 68%; --seam-right: 44%; }
+}
+
+/* ── Dark sections ────────────────────────────────────────────────────── */
+
+.rz-dark {
+  position: relative;
+  background: var(--void);
+  color: var(--cream);
+  padding-block: clamp(3.5rem, 8vw, 5.5rem);
+  overflow: hidden;
+}
+/* Faint engineering grid + a low glow, the same atmosphere the model pages use. */
+.rz-dark::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(237, 231, 218, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(237, 231, 218, 0.028) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 20%, transparent 75%);
+  pointer-events: none;
+}
+.rz-dark > * { position: relative; z-index: 1; }
+.rz-dark .rz-eyebrow { color: var(--emerald); }
+.rz-dark .rz-h2 { color: var(--cream); }
+.rz-dark .rz-lede { color: var(--cream-soft); }
+
+/* Flagship projects — HUD panels with corner ticks. */
+.rz-flagships { display: grid; gap: 1rem; margin-top: 2.75rem; }
+.rz-flag {
+  position: relative;
+  border: 1px solid var(--rule-cool);
+  background: linear-gradient(180deg, rgba(237, 231, 218, 0.035), rgba(237, 231, 218, 0.012));
+  padding: 1.75rem 1.5rem;
+  transition: border-color 0.25s, background-color 0.25s;
+}
+@media (min-width: 768px) { .rz-flag { padding: 2rem 2.25rem; } }
+.rz-flag:hover { border-color: rgba(52, 211, 153, 0.4); }
+/* Corner ticks, drawn not imported. */
+.rz-flag::before,
+.rz-flag::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: var(--emerald);
+  opacity: 0.5;
+}
+.rz-flag::before { top: -1px; left: -1px; border-top: 1px solid; border-left: 1px solid; }
+.rz-flag::after { bottom: -1px; right: -1px; border-bottom: 1px solid; border-right: 1px solid; }
+
+.rz-flag-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+}
+.rz-flag-name {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: clamp(1.05rem, 2.4vw, 1.3rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.rz-flag-name a { color: var(--cream); text-decoration: none; border-bottom: 1px solid rgba(52, 211, 153, 0.35); }
+.rz-flag-name a:hover { color: var(--emerald); border-bottom-color: var(--emerald); }
+
+.rz-status {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid;
+  white-space: nowrap;
+}
+.rz-status--live { color: var(--emerald); border-color: rgba(52, 211, 153, 0.4); background: rgba(52, 211, 153, 0.08); }
+.rz-status--testing { color: var(--amber); border-color: rgba(250, 204, 21, 0.4); background: rgba(250, 204, 21, 0.08); }
+
+.rz-kv { display: grid; gap: 0.85rem; }
+.rz-kv-row {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+  gap: 0.9rem;
+  align-items: baseline;
+}
+.rz-kv-k {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cream-mute);
+}
+.rz-kv-v {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--cream-soft);
+}
+.rz-kv-row--built .rz-kv-v { color: var(--cream); }
+
+/* Additional projects — a mono index. */
+.rz-index { list-style: none; margin-top: 3rem; border-top: 1px solid var(--rule-cool); }
+.rz-index li { border-bottom: 1px solid var(--rule-cool); }
+.rz-idx {
+  display: grid;
+  grid-template-columns: 2.4rem 1fr;
+  gap: 0 1rem;
+  padding: 1.1rem 0.5rem 1.1rem 0;
+  transition: background-color 0.2s, padding-left 0.2s;
+}
+@media (min-width: 860px) {
+  .rz-idx { grid-template-columns: 2.4rem 15rem 1fr; align-items: baseline; }
+}
+.rz-index li:hover .rz-idx { background: rgba(237, 231, 218, 0.03); padding-left: 0.6rem; }
+.rz-idx-n {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 11px;
+  color: var(--cream-mute);
+  font-variant-numeric: tabular-nums;
+  padding-top: 0.15rem;
+}
+.rz-idx-name {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--cream);
+}
+.rz-idx-name a { color: inherit; text-decoration: none; border-bottom: 1px solid rgba(56, 189, 248, 0.35); }
+.rz-idx-name a:hover { color: var(--cyan); border-bottom-color: var(--cyan); }
+.rz-idx-d {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--cream-soft);
+  grid-column: 2 / -1;
+  margin-top: 0.3rem;
+}
+@media (min-width: 860px) { .rz-idx-d { grid-column: 3; margin-top: 0; } }
+
+/* ── Foundations — the converged register ─────────────────────────────── */
+
+.rz-soil {
+  background: var(--soil);
+  color: var(--cream);
+  padding-block: clamp(3.5rem, 8vw, 5.5rem);
+  position: relative;
+}
+.rz-soil .rz-eyebrow { color: var(--clay); }
+.rz-soil .rz-h2 { color: var(--paper); }
+
+.rz-edu { list-style: none; margin-top: 2.5rem; }
+.rz-edu li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1.5rem;
+  padding: 1.15rem 0;
+  border-bottom: 1px solid rgba(237, 231, 218, 0.1);
+}
+.rz-edu-q {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(1.1rem, 2.4vw, 1.45rem);
+  line-height: 1.2;
+  color: var(--paper);
+}
+.rz-edu-i { font-family: var(--font-manrope), sans-serif; font-size: 13px; color: var(--cream-mute); }
+.rz-edu-y {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--cream-mute);
+}
+
+.rz-certs { display: grid; gap: 2rem 2.5rem; margin-top: 2.75rem; }
+@media (min-width: 760px) { .rz-certs { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1060px) { .rz-certs { grid-template-columns: repeat(3, 1fr); } }
+.rz-cert h3 {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 0.9rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+.rz-cert h3 span { color: var(--cream-mute); letter-spacing: 0.12em; }
+.rz-cert ul { list-style: none; display: grid; gap: 0.45rem; }
+.rz-cert li {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--cream-soft);
+  padding-left: 0.9rem;
+  position: relative;
+}
+.rz-cert li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 4px;
+  height: 1px;
+  background: var(--amber);
+  opacity: 0.6;
+}
+
+/* ── Beyond the résumé — visibly not part of the document ─────────────── */
+
+.rz-beyond { background: var(--paper); padding-block: clamp(3.5rem, 8vw, 5rem); }
+.rz-beyond .rz-eyebrow { color: var(--clay); }
+.rz-beyond-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1.75rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px dashed var(--rule-warm);
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.rz-cards { display: grid; gap: 1rem; margin-top: 2rem; }
+@media (min-width: 760px) { .rz-cards { grid-template-columns: repeat(2, 1fr); } }
+.rz-card {
+  display: block;
+  padding: 1.4rem 1.5rem;
+  border: 1px solid var(--rule-warm);
+  background: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.rz-card:hover { border-color: var(--clay); transform: translateY(-2px); }
+.rz-card-t {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.rz-card-t span { color: var(--ink-mute); transition: transform 0.2s; }
+.rz-card:hover .rz-card-t span { transform: translateX(3px); color: var(--clay); }
+.rz-card-d {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--ink-mute);
+  margin-top: 0.5rem;
+}
+
+/* ── Closing ──────────────────────────────────────────────────────────── */
+
+.rz-cta { background: var(--void); color: var(--cream); padding-block: clamp(4rem, 9vw, 6rem); position: relative; overflow: hidden; }
+.rz-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 70% at 50% 120%, rgba(52, 211, 153, 0.14), transparent 70%);
+  pointer-events: none;
+}
+.rz-cta > * { position: relative; z-index: 1; }
+.rz-cta h2 {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(2rem, 5.5vw, 3.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+.rz-cta p { font-family: var(--font-manrope), sans-serif; font-size: 15px; line-height: 1.75; color: var(--cream-soft); max-width: 44ch; margin-top: 1.25rem; }
+.rz-cta .rz-actions { margin-top: 2.25rem; }
+.rz-cta .rz-btn-solid { background: var(--cream); color: var(--void); }
+.rz-cta .rz-btn-solid:hover { background: #fff; }
+.rz-cta .rz-btn-ghost { border-color: var(--rule-cool); color: var(--cream-soft); }
+.rz-cta .rz-btn-ghost:hover { border-color: var(--emerald); color: var(--emerald); background: transparent; }
+
+.rz-updated {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-top: 2.5rem;
+}
+
+/* ── Print ────────────────────────────────────────────────────────────── */
+/* Ctrl+P on a résumé is a reasonable thing to do. Both registers collapse to
+   ink on white, every decoration goes, and sections stop splitting. */
+
+@media print {
+  @page { margin: 14mm; }
+  .rz,
+  .rz-mast,
+  .rz-warm,
+  .rz-seam,
+  .rz-dark,
+  .rz-soil,
+  .rz-beyond,
+  .rz-cta,
+  .rz-flag,
+  .rz-card,
+  .rz-tick,
+  .rz-skill,
+  .rz-skill--warm,
+  .rz-skill--mid,
+  .rz-skill--cool {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .rz-mast::before,
+  .rz-seam::before,
+  .rz-seam::after,
+  .rz-dark::before,
+  .rz-cta::before,
+  .rz-flag::before,
+  .rz-flag::after { display: none !important; }
+  .rz-quote--over { display: none !important; }
+  .rz-h2, .rz-name, .rz-edu-q, .rz-cta h2, .rz-flag-name, .rz-idx-name,
+  .rz-role-title, .rz-quote, .rz-kv-v, .rz-idx-d, .rz-lede, .rz-bullet p,
+  .rz-cert li, .rz-eyebrow, .rz-skill h3, .rz-cert h3 { color: #000 !important; }
+  .rz-contact, .rz-role-when, .rz-role-org, .rz-edu-i, .rz-edu-y,
+  .rz-tick-l, .rz-idx-n, .rz-kv-k, .rz-earlier { color: #333 !important; }
+  .rz a { color: #000 !important; text-decoration: none !important; border-bottom: none !important; }
+  .rz-actions, .rz-cta, .rz-beyond, .rz-seam-note { display: none !important; }
+  .rz-warm, .rz-dark, .rz-soil, .rz-mast { padding-block: 0.8rem !important; }
+  .rz-flag, .rz-role-block, .rz-skill, .rz-cert, .rz-index li { break-inside: avoid; page-break-inside: avoid; }
+  .rz-status { border-color: #000 !important; }
+}
+
+/* ── Reduced motion ───────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .rz * { transition: none !important; }
+}
