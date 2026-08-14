@@ -183,6 +183,17 @@ export default function RobotMascot() {
     const show = () => {
       // Never talk over an escape quip.
       if (busyRef.current) { timer = setTimeout(show, PROMPT_GAP_MS); return; }
+      // On a phone the hero's closing headline sits in the same band as the
+      // bubble: "Intelligence" runs x24-236 / y624-692 while the mascot's box
+      // starts at y622, so an attached bubble overlaps it by ~100x54px. No
+      // amount of nudging clears that — the headline is 68px tall and the box
+      // begins at its top edge. Wider screens have the room, so the prompt is
+      // simply held back on narrow ones until the visitor is past the hero.
+      // Escape quips still fire there: those are a reply to a deliberate tap.
+      if (window.innerWidth < 768 && window.scrollY < window.innerHeight * 0.6) {
+        timer = setTimeout(show, PROMPT_GAP_MS);
+        return;
+      }
       setPromptMsg(RESUME_PROMPTS[idx % RESUME_PROMPTS.length]);
       idx += 1;
       timer = setTimeout(hide, PROMPT_VISIBLE_MS);
