@@ -35,6 +35,27 @@ const ESCAPE_MESSAGES = [
   "Not so fast!",
 ];
 
+// Shown while the robot is resting in the corner. The mascot is the way to the
+// résumé — clicking it downloads the PDF once it gives up — but nothing on
+// screen said so, so these do the asking.
+const RESUME_PROMPTS = [
+  "Hey — here's Suman's résumé.",
+  "Looking for Suman's résumé?",
+  "I have what you're looking for.",
+  "Psst… want the résumé?",
+  "Tap me for Suman's résumé.",
+  "Résumé? Right here.",
+  "One tap and the résumé is yours.",
+  "Need the CV? I'm holding it.",
+  "Hiring? Start with the résumé.",
+  "Suman's résumé, one tap away.",
+];
+
+// How long a resting prompt stays up, and the gap before the next one.
+const PROMPT_VISIBLE_MS = 4_500;
+const PROMPT_GAP_MS = 12_000;
+const PROMPT_FIRST_DELAY_MS = 6_000;
+
 // Idle ambient rotation when the robot is resting in the corner.
 const AMBIENT_SEQ: [ClipName, number][] = [
   ["Idle", 15_000],
@@ -86,6 +107,7 @@ export default function RobotMascot() {
   const [givenUp, setGivenUp] = useState(false);
   const [resting, setResting] = useState(false); // idle in corner → run ambient loop
   const [escapeMsg, setEscapeMsg] = useState<string | null>(null);
+  const [promptMsg, setPromptMsg] = useState<string | null>(null);
 
   const busyRef = useRef(false);
   const lastMouseMove = useRef(Date.now());
@@ -146,6 +168,28 @@ export default function RobotMascot() {
     tick();
     return () => clearTimeout(timer);
   }, [resting, givenUp]);
+
+  // Résumé call-outs while the robot is parked in the corner. Suppressed once
+  // it has given up (that state shows its own résumé card), while it is
+  // running, and whenever the chat takeover owns the screen.
+  useEffect(() => {
+    if (!revealed || !resting || givenUp || chatOpen) return;
+    let timer: ReturnType<typeof setTimeout>;
+    let idx = Math.floor(Math.random() * RESUME_PROMPTS.length);
+    const hide = () => {
+      setPromptMsg(null);
+      timer = setTimeout(show, PROMPT_GAP_MS);
+    };
+    const show = () => {
+      // Never talk over an escape quip.
+      if (busyRef.current) { timer = setTimeout(show, PROMPT_GAP_MS); return; }
+      setPromptMsg(RESUME_PROMPTS[idx % RESUME_PROMPTS.length]);
+      idx += 1;
+      timer = setTimeout(hide, PROMPT_VISIBLE_MS);
+    };
+    timer = setTimeout(show, PROMPT_FIRST_DELAY_MS);
+    return () => { clearTimeout(timer); setPromptMsg(null); };
+  }, [revealed, resting, givenUp, chatOpen]);
 
   // Smooth the close handoff: reset to home whenever chat opens (so the corner
   // robot reappears clean at its spot), and fade it back in to mask the canvas
@@ -239,9 +283,20 @@ export default function RobotMascot() {
       // 2) Land and run horizontally to a new spot.
       setHopY(0); // come down
       const { minX, maxX } = bounds();
-      const magnitude = Math.random() * 150 + 200; // 200–350px
-      let targetX = xRef.current - magnitude; // prefer moving left
-      if (targetX < minX) targetX = xRef.current + magnitude; // bounce off the left edge
+      // A flat 200–350px hop assumes a desktop-width runway. A phone only has
+      // ~250px of travel, so those jumps slammed into an edge, got clamped to
+      // almost nothing, then ping-ponged off the opposite wall on the next tap
+      // — the "awkward" run. Cap the hop against the runway that exists, and
+      // head for whichever side has more room so it stops bouncing off edges.
+      // On desktop the cap never binds, so its feel is unchanged.
+      const runway = maxX - minX;
+      const span = Math.min(350, runway * 0.55);
+      const lo = Math.min(200, span * 0.6);
+      const magnitude = lo + Math.random() * Math.max(0, span - lo);
+      const roomLeft = xRef.current - minX;
+      const roomRight = maxX - xRef.current;
+      let targetX =
+        roomLeft >= roomRight ? xRef.current - magnitude : xRef.current + magnitude;
       targetX = clamp(targetX, minX, maxX);
       runTo(targetX, () => { setHops((h) => h + 1); scheduleReset(); showEscapeMessage(); setResting(true); });
     });
@@ -285,10 +340,19 @@ export default function RobotMascot() {
         style={{ right: CORNER_RIGHT, bottom: CORNER_BOTTOM, transform: `translateX(${x}px)`, transition: travelTransition }}
       >
         <div style={{ transform: `translateY(${hopY}px)`, transition: "transform 0.26s ease-out" }}>
-          {escapeMsg && !givenUp && (
-            <div className="absolute left-1/2 -translate-x-1/2 top-[40%] -translate-y-full bg-[#1D1D1F] text-white rounded-2xl shadow-lg px-3.5 py-1.5 whitespace-nowrap">
-              <p className="text-[12.5px] font-semibold">{escapeMsg}</p>
-              <span className="absolute left-1/2 -translate-x-1/2 -bottom-1 w-2.5 h-2.5 bg-[#1D1D1F] rotate-45" />
+          {/* Escape quips are short and stay on one line. The résumé prompts are
+              full sentences, so the bubble wraps and caps its width against the
+              viewport — nowrap would have run it off both edges of a phone.
+              The robot parks in the bottom-right corner at both breakpoints and
+              its box overhangs the viewport by CORNER_RIGHT, so a bubble centred
+              on it ran off the right edge once the text got longer than a short
+              quip — on a phone badly, on desktop by ~20px. It now hangs from the
+              robot's right edge, offset back to the viewport boundary, and grows
+              leftwards. The bubble is inert; taps belong to the robot beneath. */}
+          {(escapeMsg || promptMsg) && !givenUp && (
+            <div className="pointer-events-none absolute top-[40%] -translate-y-full right-[14px] bg-[#1D1D1F] text-white rounded-2xl shadow-lg px-3.5 py-2 w-max max-w-[min(15rem,calc(100vw-2rem))] text-center">
+              <p className="text-[12.5px] font-semibold leading-snug">{escapeMsg ?? promptMsg}</p>
+              <span className="absolute right-7 -bottom-1 w-2.5 h-2.5 bg-[#1D1D1F] rotate-45" />
             </div>
           )}
           {givenUp && (

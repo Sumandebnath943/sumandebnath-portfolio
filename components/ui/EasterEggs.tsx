@@ -74,6 +74,7 @@ export default function EasterEggs() {
   
   const [idleTime, setIdleTime] = useState(0);
   const [showClippy, setShowClippy] = useState(false);
+  const clippyRef = useRef<HTMLDivElement>(null);
 
   // 1. The Console Intelligence
   useEffect(() => {
@@ -123,7 +124,13 @@ export default function EasterEggs() {
 
   // 6. Clippy (Idle Mode)
   useEffect(() => {
-    const handleActivity = () => {
+    const handleActivity = (e: Event) => {
+      // Activity *inside* the card is the visitor engaging with it, not idling
+      // away from it. Dismissing on that made the card impossible to use: the
+      // mousemove listener fired the moment the cursor travelled towards it,
+      // so "Yes, let's talk" could never be reached on a pointer device.
+      const t = e.target;
+      if (clippyRef.current && t instanceof Node && clippyRef.current.contains(t)) return;
       setIdleTime(0);
       if (showClippy) setShowClippy(false);
     };
@@ -361,13 +368,19 @@ export default function EasterEggs() {
       <AnimatePresence>
         {showClippy && (
           <motion.div
+            ref={clippyRef}
             initial={{ opacity: 0, y: 20, x: -20, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, x: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, x: -20, scale: 0.9 }}
             transition={{ type: "spring", stiffness: 260, damping: 20 }}
-            className="fixed bottom-6 left-6 z-[9998] flex flex-col md:flex-row-reverse items-start md:items-end gap-4 pointer-events-auto"
+            // On a phone this sat at bottom-left on top of the "Ask about
+            // Suman" launcher, and the paperclip avatar below the card made the
+            // stack taller than the space available. Mobile now spans the width
+            // with margins and sits clear above the launcher; desktop keeps the
+            // original bottom-left card-plus-avatar arrangement.
+            className="fixed z-[9998] bottom-24 left-4 right-4 md:bottom-6 md:left-6 md:right-auto flex flex-col md:flex-row-reverse items-stretch md:items-end gap-4 pointer-events-auto"
           >
-            <div className="bg-[#FFFFE1] border border-black p-4 rounded-xl shadow-[4px_4px_0px_rgba(0,0,0,1)] relative w-64 text-black font-sans">
+            <div className="bg-[#FFFFE1] border border-black p-4 rounded-xl shadow-[4px_4px_0px_rgba(0,0,0,1)] relative w-full md:w-64 text-black font-sans">
               <button 
                 onClick={() => setShowClippy(false)}
                 className="absolute top-2 right-2 text-black/40 hover:text-black transition-colors"
@@ -391,7 +404,9 @@ export default function EasterEggs() {
               </button>
             </div>
             
-            <div className="w-16 h-16 rounded-full bg-white border-2 border-black flex items-center justify-center shadow-[4px_4px_0px_rgba(0,0,0,1)] relative shrink-0">
+            {/* Decorative avatar. Hidden on phones, where it was the piece
+                landing on top of the chat launcher. */}
+            <div className="hidden md:flex w-16 h-16 rounded-full bg-white border-2 border-black items-center justify-center shadow-[4px_4px_0px_rgba(0,0,0,1)] relative shrink-0">
               <Paperclip className="text-black" size={28} />
             </div>
           </motion.div>

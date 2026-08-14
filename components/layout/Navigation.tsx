@@ -89,17 +89,21 @@ function hueVars(color?: string): React.CSSProperties | undefined {
 /* ── Phone menu styling ──────────────────────────────────────────────────
    These only ever apply inside the `md:hidden` menu, so none of it can
    reach the desktop bar. Rows are 48px+ tall for thumbs.                  */
+// Labels were #6a6a70 on near-black — 3.68:1, under the 4.5:1 floor and the
+// main reason the menu read as an undifferentiated dark block. Now 7.3:1, with
+// a hairline rule so each group is a visible band rather than a faint caption.
 const MOBILE_GROUP_LABEL =
-  "px-4 pt-4 pb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#6a6a70]";
+  "flex items-center gap-2.5 px-4 pt-5 pb-2 text-[10px] font-semibold uppercase " +
+  "tracking-[0.2em] text-[#a8a8b2] before:h-px before:w-4 before:bg-white/25 before:content-['']";
 
 const MOBILE_ROW =
-  "flex items-center gap-3 text-left px-4 py-3.5 text-[15px] font-medium text-[#c9c9ce] " +
-  "hover:text-[#f5f5f7] hover:bg-white/[0.05] active:bg-white/[0.08] rounded-xl " +
+  "flex items-center gap-3 text-left px-4 py-3.5 text-[15px] font-medium text-[#e8e8ec] " +
+  "hover:text-white hover:bg-white/[0.07] active:bg-white/[0.11] rounded-xl " +
   "transition-colors duration-150 touch-manipulation";
 
 const MOBILE_SUBROW =
-  "flex items-center gap-2.5 text-left px-3 py-3 text-[14px] font-medium text-[#9a9aa1] " +
-  "hover:text-[#f5f5f7] hover:bg-white/[0.05] active:bg-white/[0.08] rounded-lg " +
+  "flex items-center gap-2.5 text-left px-3 py-3 text-[14px] font-medium text-[#bcbcc6] " +
+  "hover:text-white hover:bg-white/[0.07] active:bg-white/[0.11] rounded-lg " +
   "transition-colors duration-150 touch-manipulation";
 
 /** The accent already carried by every nav entry, surfaced as a status dot. */
@@ -179,7 +183,9 @@ export default function Navigation() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className={`pointer-events-auto w-full max-w-[60rem] transition-all duration-500 rounded-[2rem] bg-[#0A0A0C]/75 backdrop-blur-2xl backdrop-saturate-[180%] border border-white/15 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22),inset_0_-1px_1px_0_rgba(255,255,255,0.04),0_8px_32px_-4px_rgba(0,0,0,0.55)] ${
+        // relative z-50 keeps the pill (and its close button) above the mobile
+        // scrim, which sits at z-30.
+        className={`pointer-events-auto relative z-50 w-full max-w-[60rem] transition-all duration-500 rounded-[2rem] bg-[#0A0A0C]/75 backdrop-blur-2xl backdrop-saturate-[180%] border border-white/15 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22),inset_0_-1px_1px_0_rgba(255,255,255,0.04),0_8px_32px_-4px_rgba(0,0,0,0.55)] ${
           scrolled ? "py-1.5 px-3" : "py-2 px-4"
         }`}
       >
@@ -340,6 +346,24 @@ export default function Navigation() {
       {/* Mobile Menu (Also dark mode locked) */}
       <AnimatePresence>
         {mobileOpen && (
+          // A translucent panel over a dark page gave the menu nothing to sit
+          // against — page content bled through and the two merged into one
+          // dark mass. This scrim pushes the page back so the sheet reads as a
+          // separate layer, and doubles as tap-to-dismiss.
+          <m.div
+            key="mobile-scrim"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={toggleMobile}
+            aria-hidden
+            className="pointer-events-auto fixed inset-0 z-30 bg-black/70 backdrop-blur-[2px] md:hidden"
+          />
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {mobileOpen && (
           <m.div
             key="mobile-menu"
             initial={{ opacity: 0, y: -10, scale: 0.95 }}
@@ -351,7 +375,10 @@ export default function Navigation() {
             // reach it — without its own scroll box, anything past the fold is
             // simply unreachable. dvh (not vh) so the browser's collapsing
             // toolbar can't push the last items out of range on a phone.
-            className="pointer-events-auto absolute top-20 left-4 right-4 z-40 max-h-[calc(100dvh_-_6rem)] overflow-y-auto overscroll-contain rounded-[2rem] bg-[#0A0A0C]/95 backdrop-blur-2xl border border-white/[0.08] p-4 pb-[calc(1rem_+_env(safe-area-inset-bottom))] shadow-2xl"
+            // Opaque and a step lighter than the page, so it is legible as its
+            // own surface instead of a translucent near-black slab that the
+            // site showed through.
+            className="pointer-events-auto absolute top-20 left-4 right-4 z-40 max-h-[calc(100dvh_-_6rem)] overflow-y-auto overscroll-contain rounded-[1.75rem] bg-[#141419] border border-white/[0.14] p-3 pb-[calc(0.75rem_+_env(safe-area-inset-bottom))] shadow-[0_24px_60px_-12px_rgba(0,0,0,0.9)]"
           >
             <div className="flex flex-col">
               {/* Anchors and routes used to sit at identical weight, so there

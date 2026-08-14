@@ -115,8 +115,10 @@ function CredentialStack({
     const el = stackRef.current;
     if (!el) return;
     if (typeof IntersectionObserver === "undefined") {
-      setInView(true);
-      return;
+      // No observer available: draw everything rather than nothing. Deferred by
+      // a tick so this is not a synchronous setState inside the effect body.
+      const id = setTimeout(() => setInView(true), 0);
+      return () => clearTimeout(id);
     }
     const io = new IntersectionObserver(
       (entries) => {
@@ -480,7 +482,14 @@ export default function LearningsPage() {
           }
         });
       },
-      { threshold: 0.08 }
+      // threshold must stay 0. A ratio-based threshold is a trap for tall
+      // sections: at 0.08 an element taller than ~12.5 viewports can never
+      // expose enough of itself to qualify. The single-column portfolio
+      // section is 11,145px on a phone, so only 7.3% of it ever shows and it
+      // stayed at opacity 0 — half the page invisible. The bottom margin keeps
+      // the reveal from firing until the element is genuinely on screen,
+      // which is what the ratio was really for, without depending on height.
+      { threshold: 0, rootMargin: "0px 0px -80px 0px" }
     );
     document.querySelectorAll(".lp-reveal, .lp-stagger").forEach((el) => observer.observe(el));
     return () => observer.disconnect();
