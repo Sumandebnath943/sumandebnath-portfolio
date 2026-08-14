@@ -86,10 +86,48 @@ function hueVars(color?: string): React.CSSProperties | undefined {
   } as React.CSSProperties;
 }
 
+/* ── Phone menu styling ──────────────────────────────────────────────────
+   These only ever apply inside the `md:hidden` menu, so none of it can
+   reach the desktop bar. Rows are 48px+ tall for thumbs.                  */
+const MOBILE_GROUP_LABEL =
+  "px-4 pt-4 pb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#6a6a70]";
+
+const MOBILE_ROW =
+  "flex items-center gap-3 text-left px-4 py-3.5 text-[15px] font-medium text-[#c9c9ce] " +
+  "hover:text-[#f5f5f7] hover:bg-white/[0.05] active:bg-white/[0.08] rounded-xl " +
+  "transition-colors duration-150 touch-manipulation";
+
+const MOBILE_SUBROW =
+  "flex items-center gap-2.5 text-left px-3 py-3 text-[14px] font-medium text-[#9a9aa1] " +
+  "hover:text-[#f5f5f7] hover:bg-white/[0.05] active:bg-white/[0.08] rounded-lg " +
+  "transition-colors duration-150 touch-manipulation";
+
+/** The accent already carried by every nav entry, surfaced as a status dot. */
+function Dot({ color, small = false }: { color?: string; small?: boolean }) {
+  return (
+    <span
+      aria-hidden
+      className={`shrink-0 rounded-full ${small ? "h-1 w-1" : "h-1.5 w-1.5"}`}
+      style={{ backgroundColor: color ?? "#6a6a70" }}
+    />
+  );
+}
+
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  // Which Portfolio subgroups are expanded in the phone menu. Collapsed by
+  // default: fully expanded the menu ran to 24 rows, taller than any phone.
+  const [openGroups, setOpenGroups] = useState<string[]>([]);
   const router = useRouter();
+
+  const toggleGroup = (label: string) =>
+    setOpenGroups((g) => (g.includes(label) ? g.filter((l) => l !== label) : [...g, label]));
+
+  // Start from a clean, collapsed menu each time it is opened.
+  useEffect(() => {
+    if (!mobileOpen) setOpenGroups([]);
+  }, [mobileOpen]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
@@ -125,7 +163,10 @@ export default function Navigation() {
   };
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4 sm:pt-6 pointer-events-none">
+    // Above the floating chat launcher (1000) and the robot mascot (9999),
+    // both of which were landing on top of the open phone menu's lower rows
+    // and swallowing their taps. Still below the tour overlay (999998).
+    <div className="fixed top-0 left-0 right-0 z-[10000] flex justify-center px-4 pt-4 sm:pt-6 pointer-events-none">
       {/* ── Floating Dark Pill ── */}
       <m.header
         id="tour-nav"
@@ -300,52 +341,107 @@ export default function Navigation() {
             // toolbar can't push the last items out of range on a phone.
             className="pointer-events-auto absolute top-20 left-4 right-4 z-40 max-h-[calc(100dvh_-_6rem)] overflow-y-auto overscroll-contain rounded-[2rem] bg-[#0A0A0C]/95 backdrop-blur-2xl border border-white/[0.08] p-4 pb-[calc(1rem_+_env(safe-area-inset-bottom))] shadow-2xl"
           >
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col">
+              {/* Anchors and routes used to sit at identical weight, so there
+                  was no way to tell "jumps down this page" from "opens another
+                  page". They are separated into labelled blocks, and every row
+                  carries its own accent dot — colours that already existed in
+                  navLinks but were only ever used by the desktop hover state. */}
+              <p className={MOBILE_GROUP_LABEL}>On this page</p>
+              {navLinks
+                .filter((l) => !l.submenus && l.href?.startsWith("#"))
+                .map((link) => (
+                  <button
+                    key={link.href}
+                    onClick={() => handleNavClick(link.href!)}
+                    className={MOBILE_ROW}
+                  >
+                    <Dot color={link.color} />
+                    {link.label}
+                  </button>
+                ))}
+
+              <p className={MOBILE_GROUP_LABEL}>Explore</p>
               {navLinks.map((link) => {
                 if (link.submenus) {
                   return (
-                    <div key={link.label} className="flex flex-col gap-1">
-                      <div className="text-left px-5 py-2 text-[15px] font-medium text-[#f5f5f7] opacity-40 uppercase tracking-widest text-[10px] mt-2">
-                        {link.label}
-                      </div>
+                    <div key={link.label} className="flex flex-col">
                       {link.submenus.map((sub) => {
-                        if (sub.submenus) {
+                        // Leaf route — render it directly.
+                        if (!sub.submenus) {
                           return (
-                            <div key={sub.label} className="flex flex-col gap-1">
-                              <div className="text-left pl-8 pr-5 py-2 text-[10px] font-medium text-[#f5f5f7] opacity-30 uppercase tracking-widest">
-                                {sub.label}
-                              </div>
-                              {sub.submenus.map((leaf) => (
-                                <button
-                                  key={leaf.href}
-                                  onClick={() => handleNavClick(leaf.href!)}
-                                  className="text-left pl-12 pr-5 py-3 text-[15px] font-medium text-[#86868b] hover:text-[#f5f5f7] hover:bg-white/[0.04] rounded-2xl transition-all duration-200"
-                                >
-                                  {leaf.label}
-                                </button>
-                              ))}
-                            </div>
+                            <button
+                              key={sub.href}
+                              onClick={() => handleNavClick(sub.href!)}
+                              className={MOBILE_ROW}
+                            >
+                              <Dot color={sub.color} />
+                              {sub.label}
+                            </button>
                           );
                         }
+                        // Category — collapsed until tapped.
+                        const expanded = openGroups.includes(sub.label);
                         return (
-                          <button
-                            key={sub.href}
-                            onClick={() => handleNavClick(sub.href!)}
-                            className="text-left pl-8 pr-5 py-3 text-[15px] font-medium text-[#86868b] hover:text-[#f5f5f7] hover:bg-white/[0.04] rounded-2xl transition-all duration-200"
-                          >
-                            {sub.label}
-                          </button>
+                          <div key={sub.label} className="flex flex-col">
+                            <button
+                              onClick={() => toggleGroup(sub.label)}
+                              aria-expanded={expanded}
+                              className={`${MOBILE_ROW} justify-between`}
+                            >
+                              <span className="flex items-center gap-3">
+                                <Dot color={sub.color} />
+                                {sub.label}
+                              </span>
+                              <span className="flex items-center gap-2.5">
+                                <span className="text-[11px] font-mono text-[#6a6a70]">
+                                  {sub.submenus.length}
+                                </span>
+                                <svg
+                                  width="11"
+                                  height="11"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2.5"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  className={`text-[#6a6a70] transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
+                                >
+                                  <path d="m6 9 6 6 6-6" />
+                                </svg>
+                              </span>
+                            </button>
+                            {expanded && (
+                              <div className="flex flex-col border-l border-white/[0.09] ml-[1.4rem] pl-2 my-0.5">
+                                {sub.submenus.map((leaf) => (
+                                  <button
+                                    key={leaf.href}
+                                    onClick={() => handleNavClick(leaf.href!)}
+                                    className={MOBILE_SUBROW}
+                                  >
+                                    <Dot color={leaf.color} small />
+                                    <span className="truncate">{leaf.label}</span>
+                                  </button>
+                                ))}
+                              </div>
+                            )}
+                          </div>
                         );
                       })}
                     </div>
                   );
                 }
+                // Top-level routes (e.g. Learnings) belong in Explore; the
+                // hash links were already rendered in the block above.
+                if (link.href?.startsWith("#")) return null;
                 return (
                   <button
                     key={link.href}
                     onClick={() => handleNavClick(link.href!)}
-                    className="text-left px-5 py-3.5 text-[15px] font-medium text-[#86868b] hover:text-[#f5f5f7] hover:bg-white/[0.04] rounded-2xl transition-all duration-200"
+                    className={MOBILE_ROW}
                   >
+                    <Dot color={link.color} />
                     {link.label}
                   </button>
                 );

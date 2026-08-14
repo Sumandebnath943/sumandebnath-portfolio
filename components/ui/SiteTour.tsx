@@ -176,7 +176,10 @@ export default function SiteTour() {
       `}} />
 
       {/* Sticky Right-Edge Button */}
-      <div className="fixed top-1/2 right-0 -translate-y-1/2 z-[99990]">
+      {/* Below the nav (10000) so an open phone menu covers this tab rather
+          than having it cut across the panel's edge. Still above page content;
+          the driver.js tour overlay lives far higher and is unaffected. */}
+      <div className="fixed top-1/2 right-0 -translate-y-1/2 z-[900]">
         <button
           onClick={() => setShowPrompt((p) => !p)}
           // 33px wide is a thin thumb target; the invisible ::after widens the
@@ -200,7 +203,7 @@ export default function SiteTour() {
             animate={{ opacity: 1, x: 0, y: "-50%" }}
             exit={{ opacity: 0, x: 100, y: "-50%" }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed top-1/2 right-12 z-[99995] flex w-[min(280px,calc(100vw_-_5rem))] flex-col gap-3 rounded-2xl rounded-tr-none rounded-br-none border border-[#FF8000]/30 border-r-0 bg-[#0A0A0C]/95 p-5 shadow-[-10px_0_40px_-10px_rgba(255,128,0,0.25)] backdrop-blur-xl"
+            className="fixed top-1/2 right-12 z-[950] flex w-[min(280px,calc(100vw_-_5rem))] flex-col gap-3 rounded-2xl rounded-tr-none rounded-br-none border border-[#FF8000]/30 border-r-0 bg-[#0A0A0C]/95 p-5 shadow-[-10px_0_40px_-10px_rgba(255,128,0,0.25)] backdrop-blur-xl"
           >
             <button onClick={dismissPrompt} className="absolute right-4 top-4 text-white/40 hover:text-white">
               <X size={16} />
