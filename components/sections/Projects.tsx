@@ -11,7 +11,34 @@ import {
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import SectionWrapper from "@/components/ui/SectionWrapper";
-import { ProjectData } from "./ProjectCard";
+
+// Shape of a card in the stack. This used to live in ProjectCard, whose
+// component was never rendered — only this type was ever imported from it.
+export interface ProjectData {
+  id: string;
+  number: string;
+  title: string;
+  positioning: string;
+  emotion: string;
+  atmosphere: string;
+  capabilities: string[];
+  tools: string[];
+  status: "Live" | "Archived" | "Coming Soon" | "Classified";
+  links: {
+    label: string;
+    href: string;
+    variant?: "primary" | "ghost" | "subtle";
+  }[];
+  screenshots: string[];
+  /** Optional dedicated page for the "Full Dossier" link (defaults to /projects/{id}). */
+  dossierHref?: string;
+  /** Optional representative image shown object-cover in the card's right panel. */
+  coverImage?: string;
+  theme: {
+    primaryAccent: string;
+    glow: string;
+  };
+}
 
 // Tall landing-page screenshots shown (scrollable) in each card's right
 // window. ROASmind has no screenshot yet (Coming Soon) → styled placeholder.
