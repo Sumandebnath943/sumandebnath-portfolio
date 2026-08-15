@@ -10,6 +10,10 @@
 // contact info), and active (tab-visible) time.
 // Leave (tab hidden): fires a summary with the journey, actions, total + active
 // time — same ID.
+// Visit boundary: the session is held in sessionStorage, which outlives the
+// visit whenever a browser restores the tab. It is therefore aged out after
+// SESSION_TTL_MS of no activity, and the next page load starts a fresh visit
+// with its own arrival alert.
 //
 // Self-exclusion: ?notrack=1 mutes THIS browser (localStorage) + a Telegram
 // confirmation; ?notrack=0 re-enables. Everything is first-party, fire-and-
@@ -28,6 +32,20 @@ const VISITOR_KEY = "vp_visitor";
 const LEAVE_GRACE_MS = 20_000;
 // How long a page is left to settle before the journey card is rewritten.
 const CARD_REFRESH_MS = 3_000;
+// How long a stored session may sit untouched before the next page load counts
+// as a new visit rather than a continuation of the old one.
+//
+// Without this the notifier goes silent on phones. sessionStorage lives as long
+// as the *tab*, and a phone tab is effectively immortal — reopening the browser
+// restores it days later with `arrivalSent` still true, so no arrival is ever
+// sent again and the only traffic is a card refresh, which the server applies as
+// an edit. Telegram does not notify on edits, so a real visit made no sound at
+// all. Desktop hid the bug because a desktop visit usually opens a fresh tab.
+const SESSION_TTL_MS = 30 * 60_000;
+// While the page is visible the visit is alive even if nothing is being clicked;
+// touch the stored session periodically so a long read is never mistaken for an
+// idle tab and split into two visits.
+const HEARTBEAT_MS = 60_000;
 
 // Actions that warrant an immediate "hot" ping (direct hiring/contact intent),
 // rather than only appearing in the end-of-visit summary.
@@ -45,6 +63,7 @@ type Session = {
   lastActive: number; // timestamp of last visible->active transition
   tag: string;
   interacted: boolean; // any scroll/pointer/key input seen this visit
+  seen?: number; // last time this session was touched; ages it out (SESSION_TTL_MS)
   mid?: number; // Telegram id of the arrival alert; later messages reply to it
   smid?: number; // Telegram id of this visit's journey card, rewritten as it goes
 };
@@ -146,13 +165,27 @@ function readSource(): string {
 
 // --- storage ---------------------------------------------------------------
 
+// Returns the stored session only while it is still the *current* visit. An aged
+// one reads as absent, so the caller starts a new visit and a new arrival alert
+// goes out — see SESSION_TTL_MS for why a tab outliving its visit is the normal
+// case on a phone rather than an edge case.
+//
+// Sessions written before `seen` existed fall back to their other timestamps, so
+// a deploy mid-visit doesn't retire a session that is genuinely still running.
 function loadSession(): Session | null {
   return safe(() => {
     const raw = sessionStorage.getItem(SS_KEY);
-    return raw ? (JSON.parse(raw) as Session) : null;
+    if (!raw) return null;
+    const s = JSON.parse(raw) as Session;
+    const seen = s.seen || s.lastActive || s.start || 0;
+    return seen && Date.now() - seen <= SESSION_TTL_MS ? s : null;
   }, null);
 }
 function saveSession(s: Session): void {
+  // Every write is also a sign of life, which is what ages the session out. This
+  // is the single place all of them go through, so it cannot be forgotten at a
+  // call site.
+  s.seen = Date.now();
   safe(() => sessionStorage.setItem(SS_KEY, JSON.stringify(s)), undefined);
 }
 
@@ -461,7 +494,17 @@ export default function VisitorPing() {
     document.addEventListener("pointerdown", markInteracted, { passive: true, once: true });
     document.addEventListener("keydown", markInteracted, { once: true });
     document.addEventListener("touchstart", markInteracted, { passive: true, once: true });
+
+    // Keep the session from ageing out under someone who is simply reading. A
+    // page open and visible with no further scrolling still writes nothing, and
+    // without this a long read followed by a click would look like two visits.
+    const heartbeat = setInterval(() => {
+      const cur = sessionRef.current;
+      if (cur && document.visibilityState === "visible") saveSession(cur);
+    }, HEARTBEAT_MS);
+
     return () => {
+      clearInterval(heartbeat);
       document.removeEventListener("click", onClick, true);
       document.removeEventListener("copy", onCopy);
       window.removeEventListener("vp:action", onVpAction);
