@@ -76,7 +76,7 @@ const APK = "https://github.com/Sumandebnath943/sumandebnath-portfolio/releases/
 
 function Kicker({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center gap-2 font-dmmono text-[10px] md:text-[11px] uppercase tracking-[0.32em] text-[#D4AF37]/50">
+    <span className="inline-flex items-center gap-2 font-dmmono text-[10px] md:text-[11px] uppercase tracking-[0.32em] text-[#D4AF37]/70">
       <span className="h-px w-6 bg-gradient-to-r from-[#D4AF37]/70 to-transparent" />
       {children}
     </span>
@@ -255,7 +255,7 @@ export default function ForgetAnythingPage() {
             <div className="relative z-10 max-w-6xl mx-auto px-6 mt-12 md:mt-16">
               <div className="grid lg:grid-cols-[0.82fr_1.18fr] gap-8 lg:gap-16 items-start">
                 <div className="lg:border-l-2 lg:border-[#D4AF37]/30 lg:pl-8">
-                  <span className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#D4AF37]/50">The problem</span>
+                  <span className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#D4AF37]/70">The problem</span>
                   <p className="font-manrope font-bold text-[1.6rem] md:text-[2.1rem] leading-[1.18] tracking-[-0.02em] mt-4" style={gWhite}>
                     Five flights of stairs, for a forgotten phone.
                   </p>

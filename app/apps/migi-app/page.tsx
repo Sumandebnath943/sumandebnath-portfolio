@@ -66,7 +66,9 @@ const gLime = {
 };
 
 function Kicker({ children, tone = "dark" }: { children: React.ReactNode; tone?: "dark" | "light" | "ink" }) {
-  const color = tone === "dark" ? "rgba(198,242,78,0.6)" : tone === "ink" ? "rgba(18,22,26,0.55)" : "rgba(18,22,26,0.45)";
+  // Alphas set to clear WCAG AA at 10–11px on each tone's ground; the previous
+  // 0.55 / 0.45 left these eyebrows at 3.91:1 and 2.9:1.
+  const color = tone === "dark" ? "rgba(198,242,78,0.6)" : tone === "ink" ? "rgba(18,22,26,0.65)" : "rgba(18,22,26,0.6)";
   const rule =
     tone === "dark" ? "linear-gradient(90deg,rgba(198,242,78,0.7),transparent)" : "linear-gradient(90deg,rgba(18,22,26,0.35),transparent)";
   return (
@@ -314,7 +316,7 @@ export default function MigiAppPage() {
                   </span>
                   <span className="font-dmmono text-[11px] uppercase tracking-widest text-[#C6F24E]">Private build · in daily use</span>
                 </div>
-                <span className="font-manrope max-w-xs text-center text-[11px] leading-relaxed tracking-wide text-white/30">
+                <span className="font-manrope max-w-xs text-center text-[11px] leading-relaxed tracking-wide text-white/45">
                   Tightly coupled to a private agent server and gated behind two factors. Not distributed publicly.
                 </span>
               </div>
@@ -368,7 +370,7 @@ export default function MigiAppPage() {
                 <Reveal delay={0.06}>
                   <h2 className="font-manrope mt-6 text-[2.1rem] font-bold leading-[1.04] tracking-[-0.035em] text-[#12161A] md:text-[3.4rem]">
                     A wrapper is a{" "}
-                    <span className="font-serif font-normal italic text-[#12161A]/55">bookmark.</span>
+                    <span className="font-serif font-normal italic text-[#12161A]/60">bookmark.</span>
                   </h2>
                 </Reveal>
                 <Reveal delay={0.1}>
@@ -411,11 +413,11 @@ export default function MigiAppPage() {
                     <h3 className="font-manrope text-[1.15rem] font-bold tracking-[-0.02em] text-[#12161A] md:text-[1.35rem]">
                       The version 1 archive
                     </h3>
-                    <p className="font-manrope mt-1 text-[13.5px] text-[#12161A]/45">
+                    <p className="font-manrope mt-1 text-[13.5px] text-[#12161A]/60">
                       All twenty screens of the wrapper, kept for the record. Scroll the strip, tap any to enlarge.
                     </p>
                   </div>
-                  <span className="font-dmmono text-[10px] uppercase tracking-[0.24em] text-[#12161A]/35">20 screens · superseded</span>
+                  <span className="font-dmmono text-[10px] uppercase tracking-[0.24em] text-[#12161A]/60">20 screens · superseded</span>
                 </div>
               </Reveal>
               <ArchiveRail shots={V1_SHOTS} ground={CREAM} />
@@ -429,7 +431,7 @@ export default function MigiAppPage() {
                   <h3 className="font-manrope mt-5 text-[1.6rem] font-bold leading-tight tracking-[-0.025em] text-[#12161A] md:text-[2.2rem]">
                     Five things a wrapper structurally cannot do.
                   </h3>
-                  <p className="font-manrope mt-3 text-[14.5px] leading-relaxed text-[#12161A]/55">
+                  <p className="font-manrope mt-3 text-[14.5px] leading-relaxed text-[#12161A]/60">
                     None of these are polish. Each one is blocked by the platform, not by effort — which is what made a rewrite the
                     only honest option.
                   </p>
@@ -499,7 +501,7 @@ export default function MigiAppPage() {
                 <Reveal key={p.t} delay={i * 0.05}>
                   <div className="mg-ink-card h-full rounded-3xl bg-white/[0.02] p-7">
                     <h4 className="font-manrope text-[16px] font-bold text-white/90">{p.t}</h4>
-                    <p className="font-manrope mt-2.5 text-[13.5px] leading-relaxed text-white/40">{p.b}</p>
+                    <p className="font-manrope mt-2.5 text-[13.5px] leading-relaxed text-white/45">{p.b}</p>
                   </div>
                 </Reveal>
               ))}
@@ -807,7 +809,7 @@ export default function MigiAppPage() {
                         </div>
                         <div>
                           <h4 className="font-manrope text-[15.5px] font-bold text-white/90">{s.t}</h4>
-                          <p className="font-manrope mt-1.5 text-[13.5px] leading-relaxed text-white/40">{s.b}</p>
+                          <p className="font-manrope mt-1.5 text-[13.5px] leading-relaxed text-white/45">{s.b}</p>
                         </div>
                       </div>
                     </FadeIn>
@@ -852,7 +854,7 @@ export default function MigiAppPage() {
               </div>
             </Reveal>
             <Reveal delay={0.12}>
-              <p className="font-manrope mx-auto mt-8 max-w-xl text-[13.5px] leading-relaxed text-white/30">
+              <p className="font-manrope mx-auto mt-8 max-w-xl text-[13.5px] leading-relaxed text-white/45">
                 Talking to a Next.js dashboard on Vercel, backed by Supabase, GitHub Actions and free-tier LLM providers. The app
                 holds none of that — it holds a session.
               </p>

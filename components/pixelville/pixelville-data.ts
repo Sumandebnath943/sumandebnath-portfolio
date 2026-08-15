@@ -18,7 +18,7 @@ export const PV = {
   snow: "#F5F8FC", //  brightest text / snow
   text: "#E4EAF4",
   muted: "#8B97AD",
-  faint: "#5C6880",
+  faint: "#77839C",
 
   /* pixel-village accent hues */
   gold: "#F5B94A", //  coins · lead accent

@@ -31,21 +31,21 @@ export default function FunAppsPage() {
         <section className="pt-40 pb-16 md:pt-48 md:pb-24 px-6 md:px-10">
           <div className="max-w-6xl mx-auto flex flex-col items-center text-center">
             <FadeInUp delay={0}>
-              <p className="font-mono text-[11px] uppercase tracking-[0.4em] text-[#1a1a1a]/40 mb-6 font-semibold">
+              <p className="font-mono text-[11px] uppercase tracking-[0.4em] text-[#1a1a1a]/65 mb-6 font-semibold">
                 Creative Sandbox
               </p>
             </FadeInUp>
             <FadeInUp delay={0.1}>
               <h1 className="font-manrope font-semibold text-4xl md:text-6xl lg:text-7xl tracking-tight mb-6 text-[#1a1a1a]">
                 Fun{" "}
-                <span className="font-serif italic font-normal text-[#1a1a1a]/50">
+                <span className="font-serif italic font-normal text-[#1a1a1a]/65">
                   apps
                 </span>
                 .
               </h1>
             </FadeInUp>
             <FadeInUp delay={0.2}>
-              <p className="font-manrope text-base md:text-lg text-[#1a1a1a]/60 max-w-2xl leading-relaxed">
+              <p className="font-manrope text-base md:text-lg text-[#1a1a1a]/65 max-w-2xl leading-relaxed">
                 A curated collection of interactive art, generative experiences, and purely creative explorations outside of traditional systems.
               </p>
             </FadeInUp>
@@ -57,10 +57,10 @@ export default function FunAppsPage() {
           <div className="max-w-6xl mx-auto">
             <FadeInUp>
               <div className="flex items-center gap-5 md:gap-8 mb-10">
-                <span className="font-mono text-xs md:text-sm text-[#1a1a1a]/30 font-bold tracking-widest">01</span>
+                <span className="font-mono text-xs md:text-sm text-[#1a1a1a]/65 font-bold tracking-widest">01</span>
                 <h2 className="font-manrope font-semibold text-xl md:text-2xl tracking-tight whitespace-nowrap text-[#1a1a1a]">Soul Canvas</h2>
                 <span className="h-px flex-1 bg-black/10" />
-                <span className="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] text-[#1a1a1a]/40 font-semibold whitespace-nowrap hidden sm:block">Interactive Art</span>
+                <span className="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] text-[#1a1a1a]/65 font-semibold whitespace-nowrap hidden sm:block">Interactive Art</span>
               </div>
             </FadeInUp>
             <BentoGridContainer className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -81,25 +81,25 @@ export default function FunAppsPage() {
                   <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#1a1a1a]/70 bg-black/5 px-3 py-1.5 rounded-full font-bold">
                     Interactive Art
                   </span>
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-[#1a1a1a]/30 font-semibold">
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-[#1a1a1a]/65 font-semibold">
                     2026
                   </span>
                 </div>
                 <h3 className="text-3xl md:text-4xl font-manrope font-semibold text-[#1a1a1a] mb-4">
                   Soul Canvas
                 </h3>
-                <p className="font-serif italic text-xl text-[#1a1a1a]/50 leading-snug mb-10">
+                <p className="font-serif italic text-xl text-[#1a1a1a]/65 leading-snug mb-10">
                   A cinematic exploration of your psychological architecture.
                 </p>
 
                 <p className="font-bold text-[#1a1a1a] mb-4 text-sm uppercase tracking-wider">What it does</p>
-                <ul className="space-y-4 text-sm text-[#1a1a1a]/60 font-manrope leading-relaxed">
+                <ul className="space-y-4 text-sm text-[#1a1a1a]/65 font-manrope leading-relaxed">
                   <li className="flex items-start gap-3">
-                    <span className="text-[#1a1a1a]/30 mt-0.5">✦</span>
+                    <span className="text-[#1a1a1a]/65 mt-0.5">✦</span>
                     <span>Transforms your psychological profile into a living 3D particle sculpture.</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="text-[#1a1a1a]/30 mt-0.5">✦</span>
+                    <span className="text-[#1a1a1a]/65 mt-0.5">✦</span>
                     <span>Matches you to 1 of 47 generative art forms based on poetic questions.</span>
                   </li>
                 </ul>
@@ -137,17 +137,17 @@ export default function FunAppsPage() {
                 <div className="flex flex-col gap-6">
                   <div className="flex items-start gap-4">
                     <div className="w-8 h-8 rounded-full bg-black/5 flex items-center justify-center shrink-0 mt-1">
-                      <span className="text-[#1a1a1a]/40 text-xs font-mono">01</span>
+                      <span className="text-[#1a1a1a]/65 text-xs font-mono">01</span>
                     </div>
-                    <p className="text-sm text-[#1a1a1a]/60 font-manrope leading-relaxed">
+                    <p className="text-sm text-[#1a1a1a]/65 font-manrope leading-relaxed">
                       Real-time GPU-computed GLSL vertex shaders rendering up to 100,000 particles simultaneously at 60fps.
                     </p>
                   </div>
                   <div className="flex items-start gap-4">
                     <div className="w-8 h-8 rounded-full bg-black/5 flex items-center justify-center shrink-0 mt-1">
-                      <span className="text-[#1a1a1a]/40 text-xs font-mono">02</span>
+                      <span className="text-[#1a1a1a]/65 text-xs font-mono">02</span>
                     </div>
-                    <p className="text-sm text-[#1a1a1a]/60 font-manrope leading-relaxed">
+                    <p className="text-sm text-[#1a1a1a]/65 font-manrope leading-relaxed">
                       100% private processing running entirely in your browser using Three.js and GSAP physics.
                     </p>
                   </div>
@@ -173,10 +173,10 @@ export default function FunAppsPage() {
           <div className="max-w-6xl mx-auto">
             <FadeInUp>
               <div className="flex items-center gap-5 md:gap-8 mb-10">
-                <span className="font-mono text-xs md:text-sm text-[#1a1a1a]/30 font-bold tracking-widest">02</span>
-                <h2 className="font-manrope font-semibold text-xl md:text-2xl tracking-tight text-[#1a1a1a]">The Design Museum <span className="font-serif italic font-normal text-base md:text-lg text-[#1a1a1a]/45">(Wife&rsquo;s Design Portfolio 😉)</span></h2>
+                <span className="font-mono text-xs md:text-sm text-[#1a1a1a]/65 font-bold tracking-widest">02</span>
+                <h2 className="font-manrope font-semibold text-xl md:text-2xl tracking-tight text-[#1a1a1a]">The Design Museum <span className="font-serif italic font-normal text-base md:text-lg text-[#1a1a1a]/65">(Wife&rsquo;s Design Portfolio 😉)</span></h2>
                 <span className="h-px flex-1 bg-black/10" />
-                <span className="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] text-[#1a1a1a]/40 font-semibold whitespace-nowrap hidden sm:block">Interactive Portfolio</span>
+                <span className="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] text-[#1a1a1a]/65 font-semibold whitespace-nowrap hidden sm:block">Interactive Portfolio</span>
               </div>
             </FadeInUp>
             <BentoGridContainer className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -197,28 +197,28 @@ export default function FunAppsPage() {
                   <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#1a1a1a]/70 bg-black/5 px-3 py-1.5 rounded-full font-bold">
                     Interactive Portfolio
                   </span>
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-[#1a1a1a]/30 font-semibold">
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-[#1a1a1a]/65 font-semibold">
                     2026
                   </span>
                 </div>
                 <h3 className="text-3xl md:text-4xl font-manrope font-semibold text-[#1a1a1a] mb-4">
                   The Design Museum
-                  <span className="block mt-2 font-serif italic font-normal text-base md:text-lg text-[#1a1a1a]/45">
+                  <span className="block mt-2 font-serif italic font-normal text-base md:text-lg text-[#1a1a1a]/65">
                     (Wife&rsquo;s Design Portfolio 😉)
                   </span>
                 </h3>
-                <p className="font-serif italic text-xl text-[#1a1a1a]/50 leading-snug mb-10">
+                <p className="font-serif italic text-xl text-[#1a1a1a]/65 leading-snug mb-10">
                   A walkable 3D portfolio museum for graphic designer Shraddha Sonel — hosted by an AI guide.
                 </p>
 
                 <p className="font-bold text-[#1a1a1a] mb-4 text-sm uppercase tracking-wider">What it does</p>
-                <ul className="space-y-4 text-sm text-[#1a1a1a]/60 font-manrope leading-relaxed">
+                <ul className="space-y-4 text-sm text-[#1a1a1a]/65 font-manrope leading-relaxed">
                   <li className="flex items-start gap-3">
-                    <span className="text-[#1a1a1a]/30 mt-0.5">✦</span>
+                    <span className="text-[#1a1a1a]/65 mt-0.5">✦</span>
                     <span>A cinematic particle constellation morphs through her face and art forms over a career timeline.</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="text-[#1a1a1a]/30 mt-0.5">✦</span>
+                    <span className="text-[#1a1a1a]/65 mt-0.5">✦</span>
                     <span>Step inside a first-person 3D gallery where an AI docent greets, guides, and chats with you.</span>
                   </li>
                 </ul>
@@ -256,17 +256,17 @@ export default function FunAppsPage() {
                 <div className="flex flex-col gap-6">
                   <div className="flex items-start gap-4">
                     <div className="w-8 h-8 rounded-full bg-black/5 flex items-center justify-center shrink-0 mt-1">
-                      <span className="text-[#1a1a1a]/40 text-xs font-mono">01</span>
+                      <span className="text-[#1a1a1a]/65 text-xs font-mono">01</span>
                     </div>
-                    <p className="text-sm text-[#1a1a1a]/60 font-manrope leading-relaxed">
+                    <p className="text-sm text-[#1a1a1a]/65 font-manrope leading-relaxed">
                       150,000 GPU particles (React Three Fiber · Three.js) form a living constellation that shatters into a walkable marble gallery.
                     </p>
                   </div>
                   <div className="flex items-start gap-4">
                     <div className="w-8 h-8 rounded-full bg-black/5 flex items-center justify-center shrink-0 mt-1">
-                      <span className="text-[#1a1a1a]/40 text-xs font-mono">02</span>
+                      <span className="text-[#1a1a1a]/65 text-xs font-mono">02</span>
                     </div>
-                    <p className="text-sm text-[#1a1a1a]/60 font-manrope leading-relaxed">
+                    <p className="text-sm text-[#1a1a1a]/65 font-manrope leading-relaxed">
                       An AI guide avatar, powered by Groq (Llama 3.3), leads visitors through the wings and answers questions by voice.
                     </p>
                   </div>
@@ -303,7 +303,7 @@ export default function FunAppsPage() {
                   </svg>
                 </div>
                 <h3 className="font-manrope font-semibold text-lg text-[#1a1a1a] mb-2">Walk It in 3D</h3>
-                <p className="text-sm text-[#1a1a1a]/55 font-manrope leading-relaxed">
+                <p className="text-sm text-[#1a1a1a]/65 font-manrope leading-relaxed">
                   Roam the gallery in first person with WASD movement and mouse-look controls.
                 </p>
               </BentoCard>
@@ -318,7 +318,7 @@ export default function FunAppsPage() {
                   </svg>
                 </div>
                 <h3 className="font-manrope font-semibold text-lg text-[#1a1a1a] mb-2">Spotlit Exhibits</h3>
-                <p className="text-sm text-[#1a1a1a]/55 font-manrope leading-relaxed">
+                <p className="text-sm text-[#1a1a1a]/65 font-manrope leading-relaxed">
                   Dynamic spotlights follow you and illuminate each design as you approach the walls.
                 </p>
               </BentoCard>
@@ -334,7 +334,7 @@ export default function FunAppsPage() {
                   </svg>
                 </div>
                 <h3 className="font-manrope font-semibold text-lg text-[#1a1a1a] mb-2">Sit &amp; Reflect</h3>
-                <p className="text-sm text-[#1a1a1a]/55 font-manrope leading-relaxed">
+                <p className="text-sm text-[#1a1a1a]/65 font-manrope leading-relaxed">
                   Benches invite you to pause and take in the gallery at your own pace.
                 </p>
               </BentoCard>
@@ -349,7 +349,7 @@ export default function FunAppsPage() {
                   </svg>
                 </div>
                 <h3 className="font-manrope font-semibold text-lg text-[#1a1a1a] mb-2">Download Kiosk</h3>
-                <p className="text-sm text-[#1a1a1a]/55 font-manrope leading-relaxed">
+                <p className="text-sm text-[#1a1a1a]/65 font-manrope leading-relaxed">
                   An in-museum kiosk to grab her résumé or full portfolio in a single tap.
                 </p>
               </BentoCard>

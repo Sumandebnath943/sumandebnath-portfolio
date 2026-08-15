@@ -438,7 +438,7 @@ export function ScreenRail({ screens }: { screens: { src: string; alt: string; l
               />
               <figcaption className="mt-5 w-[186px] md:w-[212px]">
                 <p className="font-manrope text-[13px] font-bold text-white/90">{s.label}</p>
-                <p className="font-manrope mt-1 text-[12px] leading-snug text-white/35">{s.note}</p>
+                <p className="font-manrope mt-1 text-[12px] leading-snug text-white/45">{s.note}</p>
               </figcaption>
             </figure>
           </Reveal>
@@ -502,7 +502,7 @@ export function ArchiveRail({ shots, ground = "#F4F3ED" }: { shots: { src: strin
                     sizes="130px"
                   />
                 </div>
-                <p className="font-dmmono mt-2.5 w-[104px] truncate text-[9.5px] uppercase tracking-[0.14em] text-[#12161A]/40 transition-colors group-hover:text-[#12161A]/75 sm:w-[124px]">
+                <p className="font-dmmono mt-2.5 w-[104px] truncate text-[9.5px] uppercase tracking-[0.14em] text-[#12161A]/60 transition-colors group-hover:text-[#12161A]/75 sm:w-[124px]">
                   {s.label}
                 </p>
               </button>
@@ -525,7 +525,7 @@ export function ArchiveRail({ shots, ground = "#F4F3ED" }: { shots: { src: strin
         <button
           onClick={() => nudge(-1)}
           aria-label="Previous version 1 screens"
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-[#12161A]/15 text-[#12161A]/45 transition hover:border-[#12161A]/35 hover:text-[#12161A]"
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-[#12161A]/15 text-[#12161A]/60 transition hover:border-[#12161A]/35 hover:text-[#12161A]"
         >
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M15 18 9 12l6-6" />
@@ -534,13 +534,13 @@ export function ArchiveRail({ shots, ground = "#F4F3ED" }: { shots: { src: strin
         <button
           onClick={() => nudge(1)}
           aria-label="Next version 1 screens"
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-[#12161A]/15 text-[#12161A]/45 transition hover:border-[#12161A]/35 hover:text-[#12161A]"
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-[#12161A]/15 text-[#12161A]/60 transition hover:border-[#12161A]/35 hover:text-[#12161A]"
         >
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="m9 18 6-6-6-6" />
           </svg>
         </button>
-        <span className="font-dmmono text-[10px] uppercase tracking-[0.24em] text-[#12161A]/30">drag the strip · tap to enlarge</span>
+        <span className="font-dmmono text-[10px] uppercase tracking-[0.24em] text-[#12161A]/60">drag the strip · tap to enlarge</span>
       </div>
 
       <Lightbox shot={open} onClose={() => setOpen(null)} />
@@ -557,19 +557,19 @@ export function CapabilityLedger({
   return (
     <div className="overflow-hidden rounded-3xl border border-[#12161A]/10 bg-white/55 backdrop-blur-sm">
       <div className="grid grid-cols-[1fr_auto_auto] items-center gap-4 border-b border-[#12161A]/10 bg-[#12161A]/[0.03] px-5 py-3.5 md:px-8">
-        <span className="font-dmmono text-[10px] uppercase tracking-[0.28em] text-[#12161A]/45">Capability</span>
-        <span className="font-dmmono w-16 text-center text-[10px] uppercase tracking-[0.16em] text-[#12161A]/45">V1</span>
-        <span className="font-dmmono w-16 text-center text-[10px] uppercase tracking-[0.16em] text-[#12161A]/45">V2</span>
+        <span className="font-dmmono text-[10px] uppercase tracking-[0.28em] text-[#12161A]/60">Capability</span>
+        <span className="font-dmmono w-16 text-center text-[10px] uppercase tracking-[0.16em] text-[#12161A]/60">V1</span>
+        <span className="font-dmmono w-16 text-center text-[10px] uppercase tracking-[0.16em] text-[#12161A]/60">V2</span>
       </div>
       {rows.map((r, i) => (
         <FadeIn key={r.capability} delay={i * 0.06}>
           <div className="grid grid-cols-[1fr_auto_auto] items-center gap-4 border-b border-[#12161A]/[0.07] px-5 py-4 last:border-0 md:px-8 md:py-5">
             <div>
               <p className="font-manrope text-[15px] font-bold text-[#12161A] md:text-base">{r.capability}</p>
-              <p className="font-manrope mt-1 text-[13px] leading-snug text-[#12161A]/50">{r.why}</p>
+              <p className="font-manrope mt-1 text-[13px] leading-snug text-[#12161A]/60">{r.why}</p>
             </div>
             <span className="flex w-16 justify-center">
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#12161A]/[0.06] text-[#12161A]/30">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#12161A]/[0.06] text-[#12161A]/60">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
                   <path d="M18 6 6 18M6 6l12 12" />
                 </svg>
@@ -604,8 +604,8 @@ export function PaletteStrip({ tokens }: { tokens: { hex: string; name: string; 
               style={{ background: t.hex, boxShadow: `inset 0 -18px 30px -20px rgba(0,0,0,0.6)` }}
             />
             <p className="font-manrope text-[13px] font-bold text-white/90">{t.name}</p>
-            <p className="font-dmmono mt-0.5 text-[10px] uppercase tracking-wider text-white/30">{t.hex}</p>
-            <p className="font-manrope mt-1.5 text-[11px] leading-snug text-white/40">{t.role}</p>
+            <p className="font-dmmono mt-0.5 text-[10px] uppercase tracking-wider text-white/45">{t.hex}</p>
+            <p className="font-manrope mt-1.5 text-[11px] leading-snug text-white/45">{t.role}</p>
           </div>
         </Reveal>
       ))}
@@ -677,7 +677,7 @@ export function Stat({ value, label, sub }: { value: string; label: string; sub?
         {value}
       </p>
       <p className="font-manrope mt-2 text-[12.5px] font-bold uppercase tracking-[0.14em] text-[#12161A]/70">{label}</p>
-      {sub && <p className="font-manrope mt-0.5 text-[11.5px] text-[#12161A]/45">{sub}</p>}
+      {sub && <p className="font-manrope mt-0.5 text-[11.5px] text-[#12161A]/60">{sub}</p>}
     </div>
   );
 }

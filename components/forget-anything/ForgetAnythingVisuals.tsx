@@ -245,7 +245,7 @@ export function FeatureCard({
         <h3 className="font-manrope font-semibold text-lg text-[#1a1a1a] mb-2">
           {title}
         </h3>
-        <p className="font-manrope text-sm text-[#1a1a1a]/55 leading-relaxed">
+        <p className="font-manrope text-sm text-[#1a1a1a]/60 leading-relaxed">
           {description}
         </p>
       </div>
@@ -308,7 +308,7 @@ export function PrivacyPillar({
         <h3 className="font-manrope font-semibold text-base text-[#1a1a1a] mb-2">
           {title}
         </h3>
-        <p className="font-manrope text-sm text-[#1a1a1a]/50 leading-relaxed">
+        <p className="font-manrope text-sm text-[#1a1a1a]/60 leading-relaxed">
           {description}
         </p>
       </div>
@@ -332,7 +332,7 @@ export function TrustBadge({
     <Reveal delay={delay}>
       <div className="flex items-center gap-2.5 px-4 py-2">
         <span className="text-lg">{icon}</span>
-        <span className="font-manrope text-sm font-medium text-[#1a1a1a]/50 whitespace-nowrap">
+        <span className="font-manrope text-sm font-medium text-[#1a1a1a]/60 whitespace-nowrap">
           {label}
         </span>
       </div>
