@@ -54,3 +54,4 @@ next-env.d.ts
 # faces from Facebook's sidebar plus a personal bookmarks bar; only the cropped
 # evidence in public/journey-assets/ is fit to serve.
 _source-journey-assets/
+_source-journey-art/

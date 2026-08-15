@@ -1,203 +1,249 @@
 /* ─────────────────────────────────────────────────────────────────────────
    /journey — "Something you won't find in my resume."
 
-   Visually this is the résumé's dark register — the "built alone" half —
-   given a whole page. Same void/cream/emerald family as .rz so the two read
-   as one publication, but the layout is a stage rather than a document: one
-   chapter fills the viewport, artwork on one side, narrative on the other.
+   Paper, not void. The illustrations are hairline drawings made on white, and
+   the only way to get zero seam between artwork and page is to make the page
+   the same ground the drawing was made on. So the art is converted to
+   transparent ink and the paper shows THROUGH it — there is no tile, no edge,
+   no rectangle, at any zoom.
 
-   Each chapter sets its own --accent, which is inherited by the line art
-   (every stroke in JourneyArt.tsx is currentColor), the rules, and the
-   controls. That is the only thing that changes between scenes, and it is
-   enough to make sixteen chapters feel like sixteen places.
+   The device that carries the whole page: every illustration has a horizon
+   line, and lib/journey.ts stores where it sits in each one. The page draws
+   its own rule at that exact height, running from the artwork out to both
+   viewport edges. The drawn line and the page's line are one line, extending
+   past the screen in both directions. That is what makes the art feel like the
+   environment rather than an inserted picture.
 
-   Contrast: cream on void is ~15:1, and no muted text is allowed below
-   alpha 0.5, which is where the site's AA pass put the floor.
+   The drawings are deliberately quiet, so the typography is loud: a huge
+   ghosted chapter numeral bleeding off the left edge, a display serif at
+   magazine scale, and one pull line per chapter set larger than the prose.
 
-   Scoped under .jr / .jx / .ja so none of it escapes.
+   Contrast floor is AA on paper; nothing muted goes below 4.5:1.
+
+   Scoped under .jr / .jx so none of it escapes.
    ───────────────────────────────────────────────────────────────────────── */
 
 .jr {
-  --void: #06080e;
-  --void-lift: #0c1018;
-  --void-card: #10151f;
-  --cream: #ede7da;
-  --cream-soft: rgba(237, 231, 218, 0.72);
-  --cream-mute: rgba(237, 231, 218, 0.52);
-  --rule: rgba(237, 231, 218, 0.12);
-  --rule-strong: rgba(237, 231, 218, 0.24);
+  --paper: #f4efe6;
+  --paper-deep: #ebe4d7;
+  --paper-card: #faf7f1;
+  --ink: #191512;
+  --ink-soft: #453d34;
+  --ink-mute: #635a4e;
+  --rule: rgba(25, 21, 18, 0.14);
+  --rule-strong: rgba(25, 21, 18, 0.28);
 
-  --emerald: #34d399;
-  --cyan: #38bdf8;
-  --amber: #facc15;
-  --clay: #e07a5f;
-  --violet: #a78bfa;
-  --rose: #fb7185;
+  /* Accents chosen dark enough to clear AA on paper — the dark register's
+     emerald and cyan are unreadable here and are deliberately not reused. */
+  --clay: #b4472a;
+  --forest: #2c6047;
+  --indigo: #38408f;
+  --ochre: #8a5a0f;
+  --plum: #7a3358;
+  --slate: #45505e;
 
-  --accent: var(--emerald);
-  --shell: 78rem;
+  --accent: var(--clay);
+  --shell: 74rem;
 
+  background: var(--paper);
+  color: var(--ink);
   min-height: 100vh;
   min-height: 100dvh;
-  background: var(--void);
-  color: var(--cream);
-  position: relative;
-  overflow: hidden;
+  overflow-x: clip;
 }
 
-/* A chapter's colour. Assigned by mood, not by rotation: the low points cool
-   and desaturate, the two self-teaching chapters share the same green, and the
-   ending returns to it. */
-.jr-stage[data-chapter="prologue"]   { --accent: rgba(237, 231, 218, 0.75); }
-.jr-stage[data-chapter="tutor"]      { --accent: var(--amber); }
+/* Assigned by mood, not rotation: the two self-teachings share forest, the low
+   points go slate, and the ending returns to where the story began. */
+.jr-stage[data-chapter="prologue"]   { --accent: var(--slate); }
+.jr-stage[data-chapter="tutor"]      { --accent: var(--ochre); }
 .jr-stage[data-chapter="commerce"]   { --accent: var(--clay); }
-.jr-stage[data-chapter="college"]    { --accent: var(--amber); }
-.jr-stage[data-chapter="wolambo"]    { --accent: var(--emerald); }
-.jr-stage[data-chapter="selftaught"] { --accent: var(--emerald); }
-.jr-stage[data-chapter="mba"]        { --accent: var(--cyan); }
-.jr-stage[data-chapter="illusion"]   { --accent: var(--rose); }
-.jr-stage[data-chapter="rejected"]   { --accent: rgba(237, 231, 218, 0.6); }
-.jr-stage[data-chapter="hired"]      { --accent: var(--amber); }
+.jr-stage[data-chapter="college"]    { --accent: var(--ochre); }
+.jr-stage[data-chapter="wolambo"]    { --accent: var(--forest); }
+.jr-stage[data-chapter="selftaught"] { --accent: var(--forest); }
+.jr-stage[data-chapter="mba"]        { --accent: var(--indigo); }
+.jr-stage[data-chapter="illusion"]   { --accent: var(--plum); }
+.jr-stage[data-chapter="rejected"]   { --accent: var(--slate); }
+.jr-stage[data-chapter="hired"]      { --accent: var(--ochre); }
 .jr-stage[data-chapter="kerala"]     { --accent: var(--clay); }
-.jr-stage[data-chapter="gap"]        { --accent: rgba(237, 231, 218, 0.55); }
-.jr-stage[data-chapter="pibm"]       { --accent: var(--cyan); }
-.jr-stage[data-chapter="ai"]         { --accent: var(--violet); }
-.jr-stage[data-chapter="converge"]   { --accent: var(--emerald); }
-.jr-stage[data-chapter="five"]       { --accent: var(--emerald); }
+.jr-stage[data-chapter="gap"]        { --accent: var(--slate); }
+.jr-stage[data-chapter="pibm"]       { --accent: var(--indigo); }
+.jr-stage[data-chapter="ai"]         { --accent: var(--plum); }
+.jr-stage[data-chapter="converge"]   { --accent: var(--forest); }
+.jr-stage[data-chapter="five"]       { --accent: var(--clay); }
 
 /* ── Masthead ─────────────────────────────────────────────────────────── */
 
 .jr-mast {
   max-width: var(--shell);
   margin: 0 auto;
-  padding: clamp(3rem, 8vh, 6rem) 1.5rem clamp(2rem, 5vh, 3.5rem);
-  text-align: center;
+  padding: clamp(3rem, 9vh, 6.5rem) 1.5rem clamp(2rem, 5vh, 3rem);
 }
 .jr-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
   font-family: var(--font-dm-mono), ui-monospace, monospace;
   font-size: 0.7rem;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 1.25rem;
+  color: var(--clay);
+  margin-bottom: 1.5rem;
+}
+.jr-eyebrow::before {
+  content: "";
+  width: 2.5rem;
+  height: 1px;
+  background: var(--clay);
+  flex: none;
 }
 .jr-mast h1 {
-  font-family: var(--font-instrument-serif), Georgia, serif;
-  font-size: clamp(2.4rem, 7vw, 4.6rem);
-  line-height: 1.02;
-  letter-spacing: -0.02em;
+  font-family: var(--font-instrument), Georgia, serif;
   font-weight: 400;
+  font-size: clamp(2.7rem, 9vw, 6.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  max-width: 16ch;
 }
 .jr-deck {
-  max-width: 44rem;
-  margin: 1.5rem auto 0;
-  color: var(--cream-soft);
-  font-size: clamp(1rem, 1.6vw, 1.14rem);
-  line-height: 1.7;
+  max-width: 42rem;
+  margin-top: 2rem;
+  color: var(--ink-soft);
+  font-size: clamp(1rem, 1.6vw, 1.12rem);
+  line-height: 1.75;
 }
 
 /* ── Stage ────────────────────────────────────────────────────────────── */
 
 .jr-stage {
-  position: relative;
   max-width: var(--shell);
   margin: 0 auto;
-  padding: 0 1.5rem clamp(4rem, 10vh, 7rem);
+  padding: 0 1.5rem clamp(3rem, 8vh, 5rem);
+  position: relative;
 }
 
-.jr-chapter {
-  display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
-  gap: clamp(2rem, 5vw, 4.5rem);
-  align-items: start;
-  animation: jr-enter 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
+.jr-chapter { animation: jr-enter 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
 @keyframes jr-enter {
-  from { opacity: 0; transform: translateY(14px); }
+  from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: none; }
 }
 
+/* The text block, with the giant numeral behind it. */
+.jr-text { position: relative; }
+
+.jr-numeral {
+  position: absolute;
+  /* Sits behind the kicker and title only. Any higher and it collides with the
+     progress rail above, which reads as a rendering fault rather than a device. */
+  top: -0.1em;
+  left: -0.06em;
+  z-index: 0;
+  font-family: var(--font-anton), Impact, sans-serif;
+  font-size: clamp(9rem, 26vw, 22rem);
+  line-height: 0.78;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  opacity: 0.055;
+  pointer-events: none;
+  user-select: none;
+}
+
+.jr-head { position: relative; z-index: 1; }
+
 .jr-when {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
   font-family: var(--font-dm-mono), ui-monospace, monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
+  font-size: 0.71rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 0.9rem;
+  margin-bottom: 1.1rem;
+}
+.jr-when::before {
+  content: "";
+  width: 2rem;
+  height: 1px;
+  background: var(--accent);
+  flex: none;
 }
 .jr-title {
-  font-family: var(--font-instrument-serif), Georgia, serif;
+  font-family: var(--font-instrument), Georgia, serif;
   font-weight: 400;
-  font-size: clamp(1.85rem, 4vw, 3rem);
-  line-height: 1.1;
-  letter-spacing: -0.015em;
-  margin-bottom: 1.5rem;
+  font-size: clamp(2.1rem, 6vw, 4.2rem);
+  line-height: 1.0;
+  letter-spacing: -0.022em;
+  max-width: 20ch;
+  margin-bottom: 1.9rem;
 }
-.jr-title:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 6px;
-  border-radius: 4px;
+.jr-title:focus-visible { outline: 2px solid var(--accent); outline-offset: 8px; border-radius: 3px; }
+
+.jr-body {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
 }
 .jr-prose p {
-  color: var(--cream-soft);
-  font-size: clamp(0.98rem, 1.5vw, 1.06rem);
-  line-height: 1.78;
-  margin-bottom: 1.05rem;
-  max-width: 38rem;
+  color: var(--ink-soft);
+  font-size: clamp(0.98rem, 1.4vw, 1.05rem);
+  line-height: 1.8;
+  margin-bottom: 1.1rem;
+  max-width: 40rem;
 }
 .jr-pull {
-  margin: 1.9rem 0;
-  padding-left: 1.25rem;
-  border-left: 2px solid var(--accent);
-  font-family: var(--font-instrument-serif), Georgia, serif;
-  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
-  line-height: 1.35;
-  color: var(--cream);
-}
-
-/* ── Artwork ──────────────────────────────────────────────────────────── */
-
-.jr-art {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(1.4rem, 3vw, 2.15rem);
+  line-height: 1.22;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+  padding-left: 1.35rem;
+  border-left: 3px solid var(--accent);
   position: sticky;
-  top: clamp(2rem, 12vh, 7rem);
-  color: var(--accent);
-  display: grid;
-  place-items: center;
-  min-height: clamp(16rem, 34vh, 24rem);
+  top: 6rem;
 }
-.ja {
+
+/* ── The scene, and the horizon it shares with the page ───────────────── */
+
+.jr-scene {
+  position: relative;
+  margin-top: clamp(2rem, 5vh, 3.5rem);
+}
+.jr-scene-inner {
+  position: relative;
+  aspect-ratio: 1536 / 1024;
+  /* Height is capped by capping WIDTH, never with max-height. A max-height
+     against an aspect-ratio breaks the ratio: the box goes short while staying
+     full width, the contained image letterboxes inside it, and the horizon rule
+     — positioned as a % of the box — separates from the line drawn in the
+     image. Constraining width keeps box and image the same rectangle always.
+     1.5 is 1536/1024. */
+  width: min(100%, 62rem, calc(54vh * 1.5));
+  margin: 0 auto;
+}
+.jr-shot-art {
   width: 100%;
-  max-width: 30rem;
-  height: auto;
-  overflow: visible;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
-/* Staggered fade rather than a stroke-draw: dasharray needs a known path
-   length per element, and guessing one makes short strokes slide instead of
-   draw. A stagger reads as "being drawn" without lying about geometry. */
-.ja > * {
-  animation: ja-in 0.66s ease-out both;
+/* The page's half of the horizon. Two rules rather than one across the whole
+   width, so nothing is ever drawn on top of the illustration's own line —
+   they meet exactly at the artwork's edge and continue off-screen. */
+.jr-horizon-l,
+.jr-horizon-r {
+  position: absolute;
+  top: var(--horizon);
+  width: 100vw;
+  height: 1px;
+  background: var(--ink);
+  opacity: 0.55;
+  pointer-events: none;
 }
-.ja > *:nth-child(1)  { animation-delay: 0.02s }
-.ja > *:nth-child(2)  { animation-delay: 0.06s }
-.ja > *:nth-child(3)  { animation-delay: 0.10s }
-.ja > *:nth-child(4)  { animation-delay: 0.14s }
-.ja > *:nth-child(5)  { animation-delay: 0.18s }
-.ja > *:nth-child(6)  { animation-delay: 0.22s }
-.ja > *:nth-child(7)  { animation-delay: 0.26s }
-.ja > *:nth-child(8)  { animation-delay: 0.30s }
-.ja > *:nth-child(9)  { animation-delay: 0.34s }
-.ja > *:nth-child(10) { animation-delay: 0.38s }
-.ja > *:nth-child(11) { animation-delay: 0.42s }
-.ja > *:nth-child(12) { animation-delay: 0.46s }
-.ja > *:nth-child(13) { animation-delay: 0.50s }
-.ja > *:nth-child(14) { animation-delay: 0.54s }
-.ja > *:nth-child(15) { animation-delay: 0.58s }
-.ja > *:nth-child(n + 16) { animation-delay: 0.62s }
-@keyframes ja-in {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: inherit; transform: none; }
-}
-.ja-fig { animation-delay: 0.5s !important; }
+.jr-horizon-l { right: 100%; }
+.jr-horizon-r { left: 100%; }
 
 /* ── Progress rail ────────────────────────────────────────────────────── */
 
@@ -205,296 +251,176 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: clamp(1.75rem, 4vh, 2.75rem);
+  margin-bottom: clamp(1.5rem, 4vh, 2.5rem);
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--rule);
 }
-.jr-rail ol {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  flex: 1;
-}
+.jr-rail ol { display: flex; flex-wrap: wrap; gap: 0.35rem; list-style: none; margin: 0; padding: 0; flex: 1; }
 .jr-pip {
-  width: 1.5rem;
-  height: 4px;
-  border-radius: 2px;
-  border: 0;
-  padding: 0;
-  background: var(--rule-strong);
-  cursor: pointer;
+  width: 1.6rem; height: 3px; border-radius: 2px; border: 0; padding: 0;
+  background: var(--rule-strong); cursor: pointer;
   transition: background 0.2s, transform 0.2s;
 }
-.jr-pip.is-past { background: var(--cream-mute); }
-.jr-pip.is-here { background: var(--accent); transform: scaleY(1.8); }
-.jr-pip:disabled { cursor: default; opacity: 0.5; }
+.jr-pip.is-past { background: var(--ink-mute); }
+.jr-pip.is-here { background: var(--accent); transform: scaleY(2.2); }
+.jr-pip:disabled { cursor: default; opacity: 0.45; }
 .jr-pip:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .jr-rail-count {
   font-family: var(--font-dm-mono), ui-monospace, monospace;
-  font-size: 0.75rem;
-  color: var(--cream-mute);
-  white-space: nowrap;
+  font-size: 0.75rem; color: var(--ink-mute); white-space: nowrap;
 }
 .jr-rail-count span:first-child { color: var(--accent); }
 .jr-rail-of { margin-left: 0.25rem; }
 
 .jr-resume {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.85rem 1.1rem;
-  margin-bottom: 1.75rem;
-  border: 1px solid var(--rule-strong);
-  border-radius: 10px;
-  background: var(--void-lift);
-  font-size: 0.9rem;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem;
+  padding: 0.85rem 1.1rem; margin-bottom: 1.75rem;
+  border: 1px solid var(--rule-strong); border-radius: 10px;
+  background: var(--paper-card); font-size: 0.9rem;
 }
-.jr-resume p { color: var(--cream-soft); margin: 0; flex: 1; min-width: 12rem; }
+.jr-resume p { color: var(--ink-soft); margin: 0; flex: 1; min-width: 12rem; }
 .jr-resume-no {
-  background: none;
-  border: 0;
-  color: var(--cream-mute);
-  text-decoration: underline;
-  cursor: pointer;
-  font-size: 0.85rem;
+  background: none; border: 0; color: var(--ink-mute);
+  text-decoration: underline; cursor: pointer; font-size: 0.85rem;
 }
 
-/* ── Payoff: stats, depth, artifacts ──────────────────────────────────── */
+/* ── Payoff ───────────────────────────────────────────────────────────── */
 
-.jr-act { margin: 2rem 0 0; }
+.jr-act { margin-top: 2rem; position: relative; z-index: 1; }
 
 .jr-payoff {
-  margin-top: 2.25rem;
-  padding-top: 1.75rem;
+  margin-top: 2.25rem; padding-top: 1.75rem;
   border-top: 1px solid var(--rule);
   animation: jr-enter 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  position: relative; z-index: 1;
 }
 
-.jr-stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.75rem;
-  list-style: none;
-  margin: 0 0 1.75rem;
-  padding: 0;
-}
+.jr-stats { display: flex; flex-wrap: wrap; gap: 2rem; list-style: none; margin: 0 0 1.75rem; padding: 0; }
 .jr-stats li { display: flex; flex-direction: column; }
 .jr-stats strong {
   font-family: var(--font-anton), Impact, sans-serif;
-  font-size: clamp(1.5rem, 3.4vw, 2.1rem);
-  line-height: 1;
-  letter-spacing: 0.01em;
-  color: var(--accent);
+  font-size: clamp(1.7rem, 4vw, 2.6rem);
+  line-height: 1; color: var(--accent);
 }
 .jr-stats span {
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--cream-mute);
-  margin-top: 0.4rem;
+  font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-mute); margin-top: 0.45rem;
 }
 
 .jr-depth {
-  border: 1px solid var(--rule-strong);
-  border-radius: 10px;
-  background: var(--void-lift);
-  margin-bottom: 1.75rem;
+  border: 1px solid var(--rule-strong); border-radius: 10px;
+  background: var(--paper-card); margin-bottom: 1.75rem;
 }
 .jr-depth summary {
-  padding: 0.9rem 1.1rem;
-  cursor: pointer;
-  font-size: 0.9rem;
-  color: var(--cream);
-  list-style: none;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  padding: 0.9rem 1.1rem; cursor: pointer; font-size: 0.9rem; color: var(--ink);
+  list-style: none; display: flex; align-items: center; gap: 0.5rem;
 }
 .jr-depth summary::-webkit-details-marker { display: none; }
-.jr-depth summary::before {
-  content: "▸";
-  color: var(--accent);
-  transition: transform 0.2s;
-  display: inline-block;
-}
+.jr-depth summary::before { content: "▸"; color: var(--accent); transition: transform 0.2s; display: inline-block; }
 .jr-depth[open] summary::before { transform: rotate(90deg); }
 .jr-depth summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 10px; }
-.jr-depth-n { color: var(--cream-mute); font-family: var(--font-dm-mono), monospace; font-size: 0.8rem; }
-.jr-depth ul {
-  margin: 0;
-  padding: 0 1.1rem 1.1rem 2.2rem;
-  display: grid;
-  gap: 0.45rem;
-}
-.jr-depth li { color: var(--cream-soft); font-size: 0.9rem; line-height: 1.55; }
+.jr-depth-n { color: var(--ink-mute); font-family: var(--font-dm-mono), monospace; font-size: 0.8rem; }
+.jr-depth ul { margin: 0; padding: 0 1.1rem 1.1rem 2.2rem; display: grid; gap: 0.45rem; }
+.jr-depth li { color: var(--ink-soft); font-size: 0.9rem; line-height: 1.55; }
 .jr-depth li::marker { color: var(--accent); }
 
-.jr-artifacts { display: grid; gap: 1.5rem; }
-.jr-artifact { margin: 0; }
+.jr-artifacts { display: grid; gap: 1.75rem; }
 .jr-shot {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  border: 1px solid var(--rule-strong);
-  background: var(--void-card);
-  display: block;
+  width: 100%; height: auto; border-radius: 6px;
+  border: 1px solid var(--rule-strong); background: #fff; display: block;
 }
-.jr-artifact--tall { max-width: 20rem; }
-.jr-artifact--mark .jr-shot {
-  background: #fff;
-  padding: 1.5rem;
-  max-width: 20rem;
-}
+.jr-artifact { margin: 0; }
+.jr-artifact--tall { max-width: 19rem; }
+.jr-artifact--mark .jr-shot { padding: 1.5rem; max-width: 19rem; }
 .jr-artifact figcaption {
-  margin-top: 0.65rem;
-  font-size: 0.82rem;
-  line-height: 1.55;
-  color: var(--cream-mute);
+  margin-top: 0.65rem; font-size: 0.82rem; line-height: 1.55; color: var(--ink-mute);
 }
 .jr-artifact-note {
-  font-size: 0.75rem;
-  color: var(--cream-mute);
-  font-style: italic;
-  border-top: 1px solid var(--rule);
-  padding-top: 0.85rem;
+  font-size: 0.75rem; color: var(--ink-mute); font-style: italic;
+  border-top: 1px solid var(--rule); padding-top: 0.85rem;
 }
 
 /* ── Closing ──────────────────────────────────────────────────────────── */
 
 .jr-close { margin-top: 2rem; }
 .jr-close-line {
-  font-family: var(--font-instrument-serif), Georgia, serif;
-  font-size: clamp(1.4rem, 3.2vw, 2.1rem);
-  line-height: 1.28;
-  color: var(--cream);
-  margin-bottom: 1.75rem;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(1.6rem, 4vw, 2.8rem);
+  line-height: 1.18; letter-spacing: -0.018em;
+  color: var(--ink); margin-bottom: 2rem; max-width: 22ch;
 }
 .jr-close-acts { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.5rem; }
-.jr-close-egg { font-size: 0.85rem; color: var(--cream-mute); line-height: 1.7; }
+.jr-close-egg { font-size: 0.85rem; color: var(--ink-mute); line-height: 1.7; }
 .jr-close-egg a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
 .jr-close-egg kbd {
   font-family: var(--font-dm-mono), ui-monospace, monospace;
-  background: var(--void-card);
-  border: 1px solid var(--rule-strong);
-  border-radius: 4px;
-  padding: 0.1rem 0.4rem;
-  font-size: 0.8rem;
-  color: var(--cream);
+  background: var(--paper-deep); border: 1px solid var(--rule-strong);
+  border-radius: 4px; padding: 0.1rem 0.4rem; font-size: 0.8rem; color: var(--ink);
 }
 
 /* ── Chapter navigation ───────────────────────────────────────────────── */
 
 .jr-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 2.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--rule);
+  display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+  margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--rule);
+  position: relative; z-index: 1;
 }
-/* Sits between Back and Next, so the reason Next is dead is next to Next. */
-.jr-next-hint {
-  order: 1;
-  font-size: 0.78rem;
-  color: var(--cream-mute);
-  text-align: right;
-  flex: 1;
-}
+.jr-next-hint { order: 1; font-size: 0.78rem; color: var(--ink-mute); text-align: right; flex: 1; }
 .jr-next { order: 2; }
 .jr-prev, .jr-next {
-  background: none;
-  border: 1px solid var(--rule-strong);
-  color: var(--cream);
-  padding: 0.65rem 1.2rem;
-  border-radius: 999px;
-  font-size: 0.88rem;
-  cursor: pointer;
-  font-family: inherit;
+  background: none; border: 1px solid var(--rule-strong); color: var(--ink);
+  padding: 0.65rem 1.25rem; border-radius: 999px; font-size: 0.88rem;
+  cursor: pointer; font-family: inherit;
   transition: border-color 0.2s, color 0.2s, background 0.2s;
 }
-.jr-next {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-.jr-next:not(:disabled):hover { background: var(--accent); color: var(--void); }
-.jr-prev:not(:disabled):hover { border-color: var(--cream); }
+.jr-next { border-color: var(--accent); color: var(--accent); }
+.jr-next:not(:disabled):hover { background: var(--accent); color: var(--paper); }
+.jr-prev:not(:disabled):hover { border-color: var(--ink); }
 .jr-prev:disabled, .jr-next:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  border-color: var(--rule);
-  color: var(--cream-mute);
+  opacity: 0.45; cursor: not-allowed; border-color: var(--rule); color: var(--ink-mute);
 }
 .jr-prev:focus-visible, .jr-next:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
-/* ── Transcript (always present, for readers and crawlers) ────────────── */
+/* ── Transcript ───────────────────────────────────────────────────────── */
 
-.jr-transcript {
-  max-width: 46rem;
-  margin: 0 auto;
-  padding: 0 1.5rem clamp(4rem, 10vh, 7rem);
-}
+.jr-transcript { max-width: 44rem; margin: 0 auto; padding: 0 1.5rem clamp(4rem, 10vh, 7rem); }
 .jr-transcript > summary {
-  cursor: pointer;
-  padding: 1rem 0;
-  border-top: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
-  color: var(--cream-soft);
-  font-size: 0.9rem;
+  cursor: pointer; padding: 1rem 0;
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  color: var(--ink-soft); font-size: 0.9rem;
 }
-.jr-transcript > summary:focus-visible { outline: 2px solid var(--emerald); outline-offset: 2px; }
+.jr-transcript > summary:focus-visible { outline: 2px solid var(--clay); outline-offset: 2px; }
 .jr-transcript h2 {
-  font-family: var(--font-instrument-serif), Georgia, serif;
-  font-weight: 400;
-  font-size: 1.5rem;
-  margin: 2.5rem 0 0.35rem;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-weight: 400; font-size: 1.6rem; margin: 2.5rem 0 0.35rem;
 }
 .jr-transcript h3 {
   font-family: var(--font-dm-mono), ui-monospace, monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--emerald);
-  margin-top: 2rem;
+  font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--clay); margin-top: 2rem;
 }
-.jr-transcript p { color: var(--cream-soft); line-height: 1.78; margin-top: 0.9rem; }
-.jr-transcript ul { margin: 0.9rem 0 0 1.2rem; color: var(--cream-soft); line-height: 1.7; }
+.jr-transcript p { color: var(--ink-soft); line-height: 1.8; margin-top: 0.9rem; }
+.jr-transcript ul { margin: 0.9rem 0 0 1.2rem; color: var(--ink-soft); line-height: 1.7; }
+.jr-transcript a { color: var(--clay); }
 .jr-transcript .jr-t-close {
-  margin-top: 2.5rem;
-  font-family: var(--font-instrument-serif), Georgia, serif;
-  font-size: 1.3rem;
-  color: var(--cream);
-  line-height: 1.35;
+  margin-top: 2.5rem; font-family: var(--font-instrument), Georgia, serif;
+  font-size: 1.4rem; color: var(--ink); line-height: 1.3;
 }
 
 /* ═══ Interaction controls (.jx) ═══════════════════════════════════════ */
 
 .jx-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  position: relative;
-  overflow: hidden;
-  padding: 0.8rem 1.5rem;
-  border-radius: 999px;
-  border: 1px solid var(--accent);
-  background: transparent;
-  color: var(--accent);
-  font-family: inherit;
-  font-size: 0.92rem;
-  cursor: pointer;
-  text-decoration: none;
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  position: relative; overflow: hidden;
+  padding: 0.8rem 1.5rem; border-radius: 999px;
+  border: 1px solid var(--accent); background: transparent; color: var(--accent);
+  font-family: inherit; font-size: 0.92rem; cursor: pointer; text-decoration: none;
   transition: background 0.2s, color 0.2s, opacity 0.2s;
 }
-.jx-btn:not(:disabled):hover { background: var(--accent); color: var(--void); }
+.jx-btn:not(:disabled):hover { background: var(--accent); color: var(--paper); }
 .jx-btn:disabled { opacity: 0.45; cursor: default; }
 .jx-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-.jx-btn-solid { background: var(--accent); color: var(--void); font-weight: 600; }
+.jx-btn-solid { background: var(--accent); color: var(--paper); font-weight: 600; }
 .jx-btn-solid:not(:disabled):hover { filter: brightness(1.12); }
 .jx-btn-label { position: relative; z-index: 1; }
 
@@ -502,250 +428,148 @@
 .jx-hold-readout { display: flex; flex-direction: column; gap: 0.2rem; }
 .jx-big {
   font-family: var(--font-anton), Impact, sans-serif;
-  font-size: clamp(2.4rem, 7vw, 3.6rem);
-  line-height: 1;
-  color: var(--accent);
-  font-variant-numeric: tabular-nums;
+  font-size: clamp(2.6rem, 8vw, 4.2rem); line-height: 1;
+  color: var(--accent); font-variant-numeric: tabular-nums;
 }
-.jx-big-sm { font-size: clamp(1.6rem, 4.5vw, 2.4rem); }
-.jx-big-l {
-  font-size: 0.75rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--cream-mute);
-}
+.jx-big-sm { font-size: clamp(1.7rem, 5vw, 2.6rem); }
+.jx-big-l { font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); }
 .jx-btn-hold { min-width: 13rem; touch-action: none; user-select: none; }
 .jx-hold-fill {
-  position: absolute;
-  inset: 0;
-  background: var(--accent);
-  opacity: 0.28;
-  transform-origin: left center;
-  transition: transform 0.06s linear;
+  position: absolute; inset: 0; background: var(--accent); opacity: 0.22;
+  transform-origin: left center; transition: transform 0.06s linear;
 }
 .jx-skip {
-  background: none;
-  border: 0;
-  color: var(--cream-mute);
-  font-size: 0.8rem;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  cursor: pointer;
-  padding: 0;
+  background: none; border: 0; color: var(--ink-mute); font-size: 0.8rem;
+  text-decoration: underline; text-underline-offset: 3px; cursor: pointer; padding: 0;
 }
-.jx-skip:hover { color: var(--cream); }
+.jx-skip:hover { color: var(--ink); }
 
-.jx-aside {
-  margin-top: 1rem;
-  font-size: 0.88rem;
-  line-height: 1.65;
-  color: var(--cream-mute);
-  max-width: 32rem;
-}
+.jx-aside { margin-top: 1rem; font-size: 0.88rem; line-height: 1.65; color: var(--ink-mute); max-width: 32rem; }
 
-/* Assemble */
 .jx-line {
-  font-family: var(--font-instrument-serif), Georgia, serif;
-  font-size: clamp(1.3rem, 3.2vw, 1.9rem);
-  line-height: 1.4;
-  margin-bottom: 1.1rem;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(1.4rem, 3.4vw, 2.1rem); line-height: 1.35; margin-bottom: 1.1rem;
 }
-.jx-word {
-  opacity: 0.14;
-  transition: opacity 0.4s, color 0.4s;
-  margin-right: 0.35em;
-}
+.jx-word { opacity: 0.16; transition: opacity 0.4s, color 0.4s; margin-right: 0.35em; }
 .jx-word.is-set { opacity: 1; color: var(--accent); }
 .jx-word-end { margin-right: 0; }
 .jx-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .jx-chip {
-  padding: 0.45rem 0.9rem;
-  border-radius: 999px;
-  border: 1px dashed var(--rule-strong);
-  background: var(--void-lift);
-  color: var(--cream);
-  font-family: inherit;
-  font-size: 0.9rem;
-  cursor: pointer;
+  padding: 0.45rem 0.9rem; border-radius: 999px;
+  border: 1px dashed var(--rule-strong); background: var(--paper-card);
+  color: var(--ink); font-family: inherit; font-size: 0.9rem; cursor: pointer;
   transition: border-color 0.2s, transform 0.15s;
 }
 .jx-chip:hover { border-color: var(--accent); transform: translateY(-2px); }
 .jx-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-/* Choose */
 .jx-doors { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; max-width: 34rem; }
 .jx-door {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  text-align: left;
-  padding: 1.1rem 1.2rem;
-  border: 1px solid var(--rule-strong);
-  border-radius: 10px;
-  background: var(--void-lift);
-  cursor: pointer;
-  font-family: inherit;
+  display: flex; flex-direction: column; gap: 0.35rem; text-align: left;
+  padding: 1.1rem 1.2rem; border: 1px solid var(--rule-strong); border-radius: 10px;
+  background: var(--paper-card); cursor: pointer; font-family: inherit;
   transition: border-color 0.2s, transform 0.15s;
 }
 .jx-door:hover { border-color: var(--accent); transform: translateY(-2px); }
 .jx-door:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.jx-door-k { color: var(--cream); font-size: 1.05rem; }
-.jx-door-v { color: var(--cream-mute); font-size: 0.82rem; line-height: 1.5; }
+.jx-door-k { color: var(--ink); font-size: 1.05rem; }
+.jx-door-v { color: var(--ink-mute); font-size: 0.82rem; line-height: 1.5; }
 .jx-verdict p {
-  font-family: var(--font-instrument-serif), Georgia, serif;
-  font-size: clamp(1.1rem, 2.4vw, 1.5rem);
-  line-height: 1.4;
-  margin-bottom: 1.25rem;
-  color: var(--cream);
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(1.15rem, 2.6vw, 1.6rem); line-height: 1.35;
+  margin-bottom: 1.25rem; color: var(--ink);
 }
 
-/* Attend */
 .jx-counter { display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.9rem; }
 .jx-counter strong {
-  font-family: var(--font-anton), Impact, sans-serif;
-  font-size: 2rem;
-  color: var(--accent);
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
+  font-family: var(--font-anton), Impact, sans-serif; font-size: 2.1rem;
+  color: var(--accent); line-height: 1; font-variant-numeric: tabular-nums;
 }
-.jx-counter span { font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cream-mute); }
+.jx-counter span { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mute); }
 .jx-grid { display: grid; grid-template-columns: repeat(18, 1fr); gap: 4px; max-width: 24rem; }
 .jx-day {
-  aspect-ratio: 1;
-  border-radius: 2px;
-  border: 1px solid var(--rule);
-  background: transparent;
-  padding: 0;
-  cursor: pointer;
+  aspect-ratio: 1; border-radius: 2px; border: 1px solid var(--rule-strong);
+  background: transparent; padding: 0; cursor: pointer;
   transition: background 0.2s, border-color 0.2s, opacity 0.4s;
 }
 .jx-day:hover:not(:disabled) { border-color: var(--accent); }
 .jx-day.is-on { background: var(--accent); border-color: var(--accent); }
-.jx-day.is-spent { opacity: 0.22; cursor: default; }
+.jx-day.is-spent { opacity: 0.25; cursor: default; }
 .jx-day:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
-/* Unlock */
 .jx-tools { display: flex; flex-wrap: wrap; gap: 0.5rem; max-width: 34rem; }
 .jx-tool {
-  min-width: 5.5rem;
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
-  border: 1px dashed var(--rule-strong);
-  background: var(--void-lift);
-  color: var(--cream-mute);
-  font-family: var(--font-dm-mono), ui-monospace, monospace;
-  font-size: 0.82rem;
-  cursor: pointer;
-  transition: all 0.25s;
+  min-width: 5.5rem; padding: 0.6rem 1rem; border-radius: 8px;
+  border: 1px dashed var(--rule-strong); background: var(--paper-card);
+  color: var(--ink-mute); font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.82rem; cursor: pointer; transition: all 0.25s;
 }
 .jx-tool:hover:not(:disabled) { border-color: var(--accent); transform: translateY(-2px); }
-.jx-tool.is-on {
-  border-style: solid;
-  border-color: var(--accent);
-  color: var(--accent);
-  cursor: default;
-}
+.jx-tool.is-on { border-style: solid; border-color: var(--accent); color: var(--accent); cursor: default; }
 .jx-tool:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-/* Travel */
 .jx-travel { max-width: 30rem; }
 .jx-rail {
-  display: flex;
-  justify-content: space-between;
+  display: flex; justify-content: space-between;
   font-family: var(--font-dm-mono), ui-monospace, monospace;
-  font-size: 0.78rem;
-  color: var(--cream-mute);
-  margin-bottom: 0.6rem;
+  font-size: 0.78rem; color: var(--ink-mute); margin-bottom: 0.6rem;
 }
 .jx-range { width: 100%; accent-color: var(--accent); cursor: grab; }
 .jx-range:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 
-/* Shut */
 .jx-doorway {
-  position: relative;
-  width: 9rem;
-  height: 12rem;
-  border: 1px solid var(--rule-strong);
-  border-radius: 4px 4px 0 0;
-  background: var(--void-lift);
-  cursor: pointer;
-  overflow: hidden;
-  color: var(--cream-mute);
-  font-family: inherit;
-  font-size: 0.85rem;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding-bottom: 0.9rem;
+  position: relative; width: 9rem; height: 12rem;
+  border: 1px solid var(--rule-strong); border-radius: 4px 4px 0 0;
+  background: var(--paper-card); cursor: pointer; overflow: hidden;
+  color: var(--ink-mute); font-family: inherit; font-size: 0.85rem;
+  display: flex; align-items: flex-end; justify-content: center; padding-bottom: 0.9rem;
 }
 .jx-doorway-panel {
-  position: absolute;
-  inset: 0;
-  background: var(--void-card);
-  transform-origin: left center;
-  transform: perspective(600px) rotateY(-62deg);
+  position: absolute; inset: 0; background: var(--paper-deep);
+  transform-origin: left center; transform: perspective(600px) rotateY(-62deg);
   transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
   border-right: 1px solid var(--rule-strong);
 }
 .jx-doorway.is-shut .jx-doorway-panel { transform: none; }
 .jx-doorway:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
-/* Pile */
 .jx-stack { list-style: none; margin: 0 0 1rem; padding: 0; display: grid; gap: 0.3rem; max-width: 22rem; }
 .jx-load {
-  padding: 0.5rem 0.9rem;
-  border-left: 2px solid var(--accent);
-  background: var(--void-lift);
-  font-size: 0.88rem;
-  color: var(--cream-soft);
+  padding: 0.5rem 0.9rem; border-left: 2px solid var(--accent);
+  background: var(--paper-card); font-size: 0.88rem; color: var(--ink-soft);
   animation: jr-enter 0.3s ease-out both;
 }
 
-/* Build */
 .jx-ships { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; min-height: 2rem; max-width: 34rem; }
 .jx-ship {
-  padding: 0.3rem 0.7rem;
-  border: 1px solid var(--accent);
-  border-radius: 999px;
-  font-size: 0.78rem;
-  color: var(--accent);
-  animation: jr-enter 0.3s ease-out both;
+  padding: 0.3rem 0.7rem; border: 1px solid var(--accent); border-radius: 999px;
+  font-size: 0.78rem; color: var(--accent); animation: jr-enter 0.3s ease-out both;
 }
 
-/* Converge */
 .jx-facets { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; max-width: 32rem; }
 .jx-facet {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  text-align: left;
-  padding: 0.9rem 1rem;
-  border: 1px solid var(--rule-strong);
-  border-radius: 10px;
-  background: var(--void-lift);
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.25s;
+  display: flex; flex-direction: column; gap: 0.25rem; text-align: left;
+  padding: 0.9rem 1rem; border: 1px solid var(--rule-strong); border-radius: 10px;
+  background: var(--paper-card); cursor: pointer; font-family: inherit; transition: all 0.25s;
 }
 .jx-facet:hover:not(:disabled) { border-color: var(--accent); transform: translateY(-2px); }
 .jx-facet.is-on { border-color: var(--accent); cursor: default; }
 .jx-facet:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.jx-facet-k { color: var(--cream); font-size: 0.95rem; }
+.jx-facet-k { color: var(--ink); font-size: 0.95rem; }
 .jx-facet.is-on .jx-facet-k { color: var(--accent); }
-.jx-facet-v { color: var(--cream-mute); font-size: 0.78rem; line-height: 1.45; }
+.jx-facet-v { color: var(--ink-mute); font-size: 0.78rem; line-height: 1.45; }
 
 /* ── Responsive ───────────────────────────────────────────────────────── */
 
 @media (max-width: 900px) {
-  .jr-chapter { grid-template-columns: 1fr; gap: 2rem; }
-  /* Art first on a phone: it establishes the scene before the words, and a
-     sticky column in a single-column layout is just a stuck element. */
-  .jr-art { position: static; order: -1; min-height: 12rem; }
-  .ja { max-width: 22rem; }
+  .jr-body { grid-template-columns: 1fr; gap: 1.75rem; }
+  .jr-pull { position: static; }
+  .jr-numeral { font-size: clamp(7rem, 34vw, 12rem); opacity: 0.05; }
+  .jr-scene-inner { max-height: none; }
   .jx-doors, .jx-facets { grid-template-columns: 1fr; }
   .jx-grid { grid-template-columns: repeat(12, 1fr); max-width: 100%; }
-  .jr-nav { flex-direction: row; }
-  .jr-prev, .jr-next { flex: 1; }
+  .jr-prev, .jr-next { flex: 0 0 auto; }
+  .jr-next-hint { display: none; }
 }
 
 @media (max-width: 480px) {
@@ -756,14 +580,8 @@
 /* ── Reduced motion ───────────────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
-  .jr-chapter,
-  .jr-payoff,
-  .ja > *,
-  .jx-load,
-  .jx-ship {
-    animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
+  .jr-chapter, .jr-payoff, .jx-load, .jx-ship {
+    animation: none !important; opacity: 1 !important; transform: none !important;
   }
   .jx-doorway-panel { transition: none; }
   .jr-pip, .jx-chip, .jx-tool, .jx-door, .jx-facet { transition: none; }

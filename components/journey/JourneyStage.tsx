@@ -25,8 +25,7 @@
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import JourneyArt from "./JourneyArt";
-import { chapters, CLOSING_LINE, JOURNEY_ARTIFACT_NOTE } from "@/lib/journey";
+import { chapters, CLOSING_LINE, HORIZON, JOURNEY_ARTIFACT_NOTE } from "@/lib/journey";
 import {
   Assemble, Attend, Begin, Build, Choose, ConvergeIx, Expand, Finish,
   Grow, Open, Pile, Reveal, Shut, Travel, Unlock, Wait,
@@ -193,17 +192,55 @@ export default function JourneyStage() {
 
       <article className="jr-chapter" key={ch.id}>
         <div className="jr-text">
-          <p className="jr-when">{ch.when}</p>
-          <h2 className="jr-title" tabIndex={-1} ref={headingRef}>
-            {ch.title}
-          </h2>
-          <div className="jr-prose">
-            {ch.lines.map((l) => (
-              <p key={l.slice(0, 32)}>{l}</p>
-            ))}
+          {/* The chapter number at magazine scale, ghosted behind the heading.
+              The illustrations are deliberately quiet, so the type is what
+              carries the drama. */}
+          <span className="jr-numeral" aria-hidden="true">
+            {String(i + 1).padStart(2, "0")}
+          </span>
+
+          <div className="jr-head">
+            <p className="jr-when">{ch.when}</p>
+            <h2 className="jr-title" tabIndex={-1} ref={headingRef}>
+              {ch.title}
+            </h2>
           </div>
 
-          {ch.pull && <p className="jr-pull">{ch.pull}</p>}
+          <div className="jr-body">
+            <div className="jr-prose">
+              {ch.lines.map((l) => (
+                <p key={l.slice(0, 32)}>{l}</p>
+              ))}
+            </div>
+            {ch.pull && <p className="jr-pull">{ch.pull}</p>}
+          </div>
+
+          {/* The illustration, and the page continuing its horizon out past
+              both edges of the screen — see HORIZON in lib/journey.ts. */}
+          <div className="jr-scene">
+            <div
+              className="jr-scene-inner"
+              style={{ "--horizon": `${HORIZON[ch.art] ?? 78}%` } as React.CSSProperties}
+            >
+              <span className="jr-horizon-l" aria-hidden="true" />
+              <Image
+                src={`/journey-art/${ch.art}.png`}
+                alt=""
+                aria-hidden="true"
+                width={1536}
+                height={1024}
+                /* Only one chapter is mounted at a time, so there is exactly one
+                   of these on the page and lazy-loading buys nothing — it just
+                   left the scene blank until the reader scrolled down to it,
+                   then popped the drawing in. Eager for every chapter; the
+                   first also gets preloaded into the initial HTML. */
+                {...(i === 0 ? { priority: true as const } : { loading: "eager" as const })}
+                className="jr-shot-art"
+                sizes="(max-width: 900px) 100vw, 62rem"
+              />
+              <span className="jr-horizon-r" aria-hidden="true" />
+            </div>
+          </div>
 
           <div className="jr-act">{interaction()}</div>
 
@@ -306,10 +343,6 @@ export default function JourneyStage() {
               </>
             )}
           </div>
-        </div>
-
-        <div className="jr-art" aria-hidden="true">
-          <JourneyArt name={ch.art} />
         </div>
       </article>
     </div>

@@ -712,39 +712,42 @@
    a door out of the document, and it should not look like part of it. */
 
 .rz-journey { background: var(--paper); padding-block: clamp(1rem, 3vw, 2rem) clamp(3.5rem, 8vw, 5rem); }
+
+/* Paper, not the dark register — this is a door, and a door should look like
+   the room behind it. /journey is paper and ink, so the card is too, and the
+   prologue drawing sits in it at low contrast as a preview of what opens. */
 .rz-journey-card {
   display: grid;
   gap: 0.85rem;
   padding: clamp(1.75rem, 4vw, 2.75rem);
+  padding-bottom: clamp(6rem, 16vw, 9rem);
+  border: 1px solid var(--rule-warm);
   border-radius: 14px;
-  background: var(--void);
-  color: var(--cream);
+  background:
+    url("/journey-art/prologue.png") no-repeat 50% 118% / 78% auto,
+    var(--paper-deep);
+  color: var(--ink);
   text-decoration: none;
   position: relative;
   overflow: hidden;
-  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s, border-color 0.25s;
 }
-.rz-journey-card::after {
-  /* A faint horizon, so the card reads as somewhere rather than as a box. */
-  content: "";
-  position: absolute;
-  inset: auto -20% -60% -20%;
-  height: 70%;
-  background: radial-gradient(ellipse at 50% 0%, rgba(52, 211, 153, 0.16), transparent 70%);
-  pointer-events: none;
+.rz-journey-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--clay);
+  box-shadow: 0 18px 40px rgba(25, 21, 18, 0.1);
 }
-.rz-journey-card:hover { transform: translateY(-3px); box-shadow: 0 18px 40px rgba(6, 8, 14, 0.28); }
-.rz-journey-card:focus-visible { outline: 2px solid var(--emerald); outline-offset: 4px; }
+.rz-journey-card:focus-visible { outline: 2px solid var(--clay); outline-offset: 4px; }
 .rz-journey-card > * { position: relative; z-index: 1; }
 .rz-journey-eyebrow {
   font-family: var(--font-dm-mono), ui-monospace, monospace;
   font-size: 11px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--emerald);
+  color: var(--clay);
 }
 .rz-journey-h {
-  font-family: var(--font-instrument-serif), Georgia, serif;
+  font-family: var(--font-instrument), Georgia, serif;
   font-size: clamp(1.65rem, 4.6vw, 2.8rem);
   line-height: 1.08;
   letter-spacing: -0.015em;
@@ -753,7 +756,7 @@
   font-family: var(--font-manrope), sans-serif;
   font-size: 14.5px;
   line-height: 1.75;
-  color: var(--cream-soft);
+  color: var(--ink-soft);
   max-width: 56ch;
 }
 .rz-journey-go {
@@ -761,7 +764,7 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 14px;
-  color: var(--emerald);
+  color: var(--clay);
   margin-top: 0.35rem;
 }
 .rz-journey-go span:last-child { transition: transform 0.2s; }
@@ -769,7 +772,7 @@
 .rz-journey-meta {
   font-family: var(--font-dm-mono), ui-monospace, monospace;
   font-size: 11.5px;
-  color: var(--cream-mute);
+  color: var(--ink-mute);
   letter-spacing: 0.02em;
 }
 

@@ -71,6 +71,39 @@ export type Chapter = {
   depth?: { label: string; items: string[] };
 };
 
+/**
+ * Where the drawn horizon sits in each illustration, as a percentage of its
+ * height. Measured off the pixels, not guessed.
+ *
+ * This is the thing that stops the artwork reading as a rectangle pasted onto a
+ * page. The illustrations all carry a horizon line, but at different heights —
+ * 62% in one, 85% in another — so the page reads this number and continues that
+ * exact line out to both viewport edges with a rule of its own. The drawn line
+ * and the page's line become one line running off the screen in both
+ * directions, and the image stops having a left and right edge.
+ *
+ * Re-measure if an illustration is ever regenerated; the detector is in the
+ * commit that introduced this.
+ */
+export const HORIZON: Record<string, number> = {
+  prologue: 84.8,
+  tutor: 69.9,
+  commerce: 79.5,
+  college: 75.4,
+  wolambo: 62.0,
+  selftaught: 75.6,
+  mba: 65.8,
+  illusion: 61.8,
+  rejected: 80.0,
+  hired: 72.4,
+  kerala: 78.5,
+  gap: 76.5,
+  pibm: 77.8,
+  ai: 81.4,
+  converge: 80.8,
+  five: 84.9,
+};
+
 export const JOURNEY_TITLE = "Something you won't find in my resume";
 export const JOURNEY_DECK =
   "Seventeen years, from a boy who could not put one English sentence together to " +
