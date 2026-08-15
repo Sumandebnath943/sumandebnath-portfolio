@@ -73,6 +73,7 @@ export default function JourneyStage() {
   const [doneMap, setDoneMap] = useState<Record<string, boolean>>({});
   const [dismissedResume, setDismissedResume] = useState(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const chapterRef = useRef<HTMLElement>(null);
   const movedRef = useRef(false);
 
   const ch = chapters[i];
@@ -95,11 +96,20 @@ export default function JourneyStage() {
     if (i === chapters.length - 1) report("journey: finished");
   }, [i]);
 
-  // Move focus to the new chapter's heading, but only after a real navigation —
-  // doing it on first paint would yank the page down before anyone has read the
-  // opening.
+  // After a real navigation, put the new chapter's opening drawing at the top of
+  // the viewport. Without this you arrived at chapter two still scrolled to
+  // wherever chapter one's Next button happened to be, looking at prose with the
+  // scene somewhere above you.
+  //
+  // Not on first paint: that would yank the page down before anyone has read the
+  // masthead. And focus must not scroll — the heading now sits BELOW the artwork,
+  // so letting focus() do its default scrolling would jump straight past the
+  // drawing this is trying to show.
   useEffect(() => {
-    if (movedRef.current) headingRef.current?.focus();
+    if (!movedRef.current) return;
+    const smooth = !window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    chapterRef.current?.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" });
+    headingRef.current?.focus({ preventScroll: true });
   }, [i]);
 
   const complete = useCallback(() => {
@@ -190,33 +200,13 @@ export default function JourneyStage() {
         </div>
       )}
 
-      <article className="jr-chapter" key={ch.id}>
+      <article className="jr-chapter" key={ch.id} ref={chapterRef}>
         <div className="jr-text">
-          {/* The chapter number at magazine scale, ghosted behind the heading.
-              The illustrations are deliberately quiet, so the type is what
-              carries the drama. */}
-          <span className="jr-numeral" aria-hidden="true">
-            {String(i + 1).padStart(2, "0")}
-          </span>
-
-          <div className="jr-head">
-            <p className="jr-when">{ch.when}</p>
-            <h2 className="jr-title" tabIndex={-1} ref={headingRef}>
-              {ch.title}
-            </h2>
-          </div>
-
-          <div className="jr-body">
-            <div className="jr-prose">
-              {ch.lines.map((l) => (
-                <p key={l.slice(0, 32)}>{l}</p>
-              ))}
-            </div>
-            {ch.pull && <p className="jr-pull">{ch.pull}</p>}
-          </div>
-
-          {/* The illustration, and the page continuing its horizon out past
-              both edges of the screen — see HORIZON in lib/journey.ts. */}
+          {/* The establishing shot, first. It used to sit below the prose, which
+              meant a reader had to scroll a full screen before seeing the scene
+              they were being told about — and two before reaching the control
+              that moves the story on. The drawing opens the chapter now, and its
+              horizon doubles as the rule the heading sits under. */}
           <div className="jr-scene">
             <div
               className="jr-scene-inner"
@@ -236,17 +226,44 @@ export default function JourneyStage() {
                    first also gets preloaded into the initial HTML. */
                 {...(i === 0 ? { priority: true as const } : { loading: "eager" as const })}
                 className="jr-shot-art"
-                sizes="(max-width: 900px) 100vw, 62rem"
+                sizes="(max-width: 900px) 100vw, 74rem"
               />
               <span className="jr-horizon-r" aria-hidden="true" />
             </div>
           </div>
 
+          <div className="jr-head">
+            {/* The chapter number at magazine scale, ghosted behind the heading.
+                The drawings are deliberately quiet, so the type carries the
+                drama. Anchored to the heading rather than the chapter, or it
+                would sit on top of the artwork above it. */}
+            <span className="jr-numeral" aria-hidden="true">
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <p className="jr-when">{ch.when}</p>
+            <h2 className="jr-title" tabIndex={-1} ref={headingRef}>
+              {ch.title}
+            </h2>
+          </div>
+
+          <div className="jr-body">
+            <div className="jr-prose">
+              {ch.lines.map((l) => (
+                <p key={l.slice(0, 32)}>{l}</p>
+              ))}
+            </div>
+            {ch.pull && <p className="jr-pull">{ch.pull}</p>}
+          </div>
+
           <div className="jr-act">{interaction()}</div>
 
           {/* The payoff. Held back until the gesture is spent, so that acting on
-              the chapter is what produces the evidence for it. */}
-          {isDone && (
+              the chapter is what produces the evidence for it.
+              Six chapters carry no stats, artifacts or depth panel, and those
+              were rendering this as an empty box with a rule on top — which
+              looked like the control had half-failed. Nothing to show, nothing
+              drawn; the unlocked Next button is the response in that case. */}
+          {isDone && (ch.stats || ch.depth || ch.artifacts || last) && (
             <div className="jr-payoff">
               {ch.stats && (
                 <ul className="jr-stats">

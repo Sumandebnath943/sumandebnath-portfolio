@@ -73,10 +73,12 @@
 
 /* ── Masthead ─────────────────────────────────────────────────────────── */
 
+/* Kept deliberately tight. This is a title, and every pixel it spends is a
+   pixel of the first chapter's drawing pushed below the fold. */
 .jr-mast {
   max-width: var(--shell);
   margin: 0 auto;
-  padding: clamp(3rem, 9vh, 6.5rem) 1.5rem clamp(2rem, 5vh, 3rem);
+  padding: clamp(1.5rem, 3.5vh, 2.5rem) 1.5rem clamp(1rem, 2vh, 1.5rem);
 }
 .jr-eyebrow {
   display: flex;
@@ -87,7 +89,7 @@
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--clay);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 .jr-eyebrow::before {
   content: "";
@@ -99,17 +101,17 @@
 .jr-mast h1 {
   font-family: var(--font-instrument), Georgia, serif;
   font-weight: 400;
-  font-size: clamp(2.7rem, 9vw, 6.5rem);
-  line-height: 0.95;
+  font-size: clamp(2.1rem, 5.6vw, 4rem);
+  line-height: 0.96;
   letter-spacing: -0.025em;
-  max-width: 16ch;
+  max-width: 18ch;
 }
 .jr-deck {
-  max-width: 42rem;
-  margin-top: 2rem;
+  max-width: 40rem;
+  margin-top: 1rem;
   color: var(--ink-soft);
-  font-size: clamp(1rem, 1.6vw, 1.12rem);
-  line-height: 1.75;
+  font-size: clamp(0.95rem, 1.4vw, 1.05rem);
+  line-height: 1.7;
 }
 
 /* ── Stage ────────────────────────────────────────────────────────────── */
@@ -121,20 +123,27 @@
   position: relative;
 }
 
-.jr-chapter { animation: jr-enter 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.jr-chapter {
+  animation: jr-enter 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  /* Breathing room when a chapter change scrolls this to the top, so the
+     drawing does not sit flush against the viewport edge. */
+  scroll-margin-top: 1.25rem;
+}
 @keyframes jr-enter {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: none; }
 }
 
-/* The text block, with the giant numeral behind it. */
 .jr-text { position: relative; }
+
+/* Anchors the numeral, which is why this is positioned. */
+.jr-head { position: relative; z-index: 1; }
 
 .jr-numeral {
   position: absolute;
-  /* Sits behind the kicker and title only. Any higher and it collides with the
-     progress rail above, which reads as a rendering fault rather than a device. */
-  top: -0.1em;
+  /* Sits behind the kicker and title only. Any higher and it runs into the
+     artwork above, which reads as a rendering fault rather than a device. */
+  top: -0.12em;
   left: -0.06em;
   z-index: 0;
   font-family: var(--font-anton), Impact, sans-serif;
@@ -146,8 +155,6 @@
   pointer-events: none;
   user-select: none;
 }
-
-.jr-head { position: relative; z-index: 1; }
 
 .jr-when {
   display: flex;
@@ -209,7 +216,7 @@
 
 .jr-scene {
   position: relative;
-  margin-top: clamp(2rem, 5vh, 3.5rem);
+  margin-bottom: clamp(1.75rem, 4vh, 2.75rem);
 }
 .jr-scene-inner {
   position: relative;
@@ -219,8 +226,10 @@
      full width, the contained image letterboxes inside it, and the horizon rule
      — positioned as a % of the box — separates from the line drawn in the
      image. Constraining width keeps box and image the same rectangle always.
-     1.5 is 1536/1024. */
-  width: min(100%, 62rem, calc(54vh * 1.5));
+     1.5 is 1536/1024. The vh cap keeps the whole scene on screen at once —
+     above about 58vh the drawing starts pushing its own chapter heading off
+     the bottom of the viewport, which defeats leading with it. */
+  width: min(100%, 74rem, calc(58vh * 1.5));
   margin: 0 auto;
 }
 .jr-shot-art {
@@ -251,8 +260,8 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: clamp(1.5rem, 4vh, 2.5rem);
-  padding-bottom: 1rem;
+  margin-bottom: clamp(1rem, 2.5vh, 1.75rem);
+  padding-bottom: 0.8rem;
   border-bottom: 1px solid var(--rule);
 }
 .jr-rail ol { display: flex; flex-wrap: wrap; gap: 0.35rem; list-style: none; margin: 0; padding: 0; flex: 1; }
