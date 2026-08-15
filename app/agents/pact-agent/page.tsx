@@ -51,7 +51,7 @@ function SectionLabel({ index, title, kicker }: { index: string; title: string; 
         </span>
         <span className="w-1.5 h-1.5 rounded-full bg-[#CF5C36]" style={{ animation: "pact-blink 1.3s steps(1) infinite" }} />
         {kicker && (
-          <span className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#9a8e86]">// {kicker}</span>
+          <span className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#9a8e86]">{"// "}{kicker}</span>
         )}
       </div>
       <div className="flex items-end gap-5">
@@ -268,7 +268,7 @@ export default function PactAgentPage() {
             <div className="max-w-5xl mx-auto grid md:grid-cols-12 gap-10 md:gap-14 items-stretch">
               <Reveal className="md:col-span-7 flex flex-col justify-center">
                 <p className="font-dmmono text-[11px] uppercase tracking-[0.3em] text-[#CF5C36] mb-6">
-                  // the stance
+                  {"// the stance"}
                 </p>
                 <h2 className="font-manrope font-semibold text-3xl md:text-[2.6rem] leading-[1.14] tracking-tight text-[#f0e9e3]">
                   Most AI agents are{" "}

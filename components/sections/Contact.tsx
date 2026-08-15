@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRef } from "react";
 import { m, useInView } from "framer-motion";
 
@@ -249,9 +250,9 @@ export default function Contact({
             // real vertical padding on phones and revert to inline text at md.
             className={`flex flex-wrap items-center gap-x-4 gap-y-2 font-manrope text-xs font-medium [&_a]:py-3.5 [&_a]:touch-manipulation md:[&_a]:py-0 ${light ? "text-[#1f7a4d]/95" : "text-[#1A1A1A]/60"}`}
           >
-            <a href="/projects" className={`transition-colors ${light ? "hover:text-[#0B3B25]" : "hover:text-[#1A1A1A]"}`}>
+            <Link href="/projects" className={`transition-colors ${light ? "hover:text-[#0B3B25]" : "hover:text-[#1A1A1A]"}`}>
               Projects
-            </a>
+            </Link>
             <span className={light ? "text-[#1f7a4d]" : "text-[#1A1A1A]/60"}>·</span>
             <a href="/faq" className={`transition-colors ${light ? "hover:text-[#0B3B25]" : "hover:text-[#1A1A1A]"}`}>
               FAQ

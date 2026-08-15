@@ -16,8 +16,13 @@ export function useWebSpeech(onTranscript: (text: string) => void) {
 
   const recogRef = useRef<any>(null);
   const voiceRef = useRef<SpeechSynthesisVoice | null>(null);
+  // Latest-callback ref, kept in step in an effect rather than written during
+  // render. The initial value is already right for the first pass, and the only
+  // reader is a speech-recognition result event.
   const onTranscriptRef = useRef(onTranscript);
-  onTranscriptRef.current = onTranscript;
+  useEffect(() => {
+    onTranscriptRef.current = onTranscript;
+  }, [onTranscript]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;

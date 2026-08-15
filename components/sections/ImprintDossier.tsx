@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { m, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import DossierMeta from "./DossierMeta";
@@ -17,14 +17,37 @@ const capabilities = [
   { title: "Identity Credential", desc: "Immutable proof of self." },
 ];
 
+/**
+ * Ambient drifting particles.
+ *
+ * These were fifteen Math.random() calls evaluated during render, which is
+ * impure and would differ between the server and client pass — the `mounted`
+ * flag existed purely to suppress the resulting hydration mismatch. Computed
+ * once at module scope from a cheap deterministic hash instead: the scatter
+ * still reads as random, but it is the same on both sides, needs no effect,
+ * and costs nothing per render.
+ */
+const PARTICLES = Array.from({ length: 15 }, (_, i) => {
+  // Fractional parts of an irrational multiple — evenly spread, no clustering.
+  const r = (n: number) => ((i + 1) * n) % 1;
+  return {
+    size: r(0.6180339887) * 3 + 1,
+    left: r(0.7548776662) * 100,
+    top: r(0.5698402909) * 100,
+    opacity: r(0.3247179572) * 0.4 + 0.1,
+    riseTo: -100 - r(0.9159655941) * 100,
+    driftTo: (r(0.2451224580) - 0.5) * 50,
+    peak: r(0.4301597090) * 0.5 + 0.2,
+    duration: r(0.7861513777) * 10 + 10,
+    delay: r(0.1319377469) * 10,
+  };
+});
+
 export default function ImprintDossier() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [logoError, setLogoError] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  // The `mounted` flag and its effect are gone with the random particles: the
+  // markup is now identical on both passes, so there is nothing to defer.
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -48,28 +71,28 @@ export default function ImprintDossier() {
 
       {/* Subtle Ember Particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {mounted && Array.from({ length: 15 }).map((_, i) => (
+        {PARTICLES.map((p, i) => (
           <m.div
             key={i}
             className="absolute rounded-full bg-[#FF5A1F]"
             style={{
-              width: Math.random() * 3 + 1 + "px",
-              height: Math.random() * 3 + 1 + "px",
-              left: Math.random() * 100 + "%",
-              top: Math.random() * 100 + "%",
-              opacity: Math.random() * 0.4 + 0.1,
+              width: `${p.size}px`,
+              height: `${p.size}px`,
+              left: `${p.left}%`,
+              top: `${p.top}%`,
+              opacity: p.opacity,
               filter: "blur(1px)",
             }}
             animate={{
-              y: [0, -100 - Math.random() * 100],
-              x: [0, (Math.random() - 0.5) * 50],
-              opacity: [0, Math.random() * 0.5 + 0.2, 0],
+              y: [0, p.riseTo],
+              x: [0, p.driftTo],
+              opacity: [0, p.peak, 0],
             }}
             transition={{
-              duration: Math.random() * 10 + 10,
+              duration: p.duration,
               repeat: Infinity,
               ease: "linear",
-              delay: Math.random() * 10,
+              delay: p.delay,
             }}
           />
         ))}

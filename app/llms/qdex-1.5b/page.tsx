@@ -110,7 +110,7 @@ function SectionLabel({ index, title, kicker, color = QDEX.emerald }: { index: s
           [ {index} ]
         </span>
         <span className="w-1.5 h-1.5 rounded-full" style={{ background: color, animation: "penta-blink 1.3s steps(1) infinite" }} />
-        {kicker && <span className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#7c84a8]">// {kicker}</span>}
+        {kicker && <span className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#7c84a8]">{"// "}{kicker}</span>}
       </div>
       <div className="flex items-end gap-5">
         <h2 className="font-manrope font-semibold text-3xl md:text-[2.4rem] leading-none tracking-tight text-[#f3f4fb]">{title}</h2>
@@ -230,7 +230,7 @@ export default function QdexPage() {
           {/* ════════════════════ TL;DR STAT BAND ════════════════════ */}
           <section className="px-6 md:px-14 pt-2 pb-12">
             <Reveal className="max-w-3xl mx-auto text-center mb-10">
-              <p className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#8B93B5] mb-4">// tl;dr — the headline result</p>
+              <p className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#8B93B5] mb-4">{"// "}tl;dr — the headline result</p>
               <p className="font-manrope text-lg md:text-xl text-[#c4cae6] leading-relaxed">
                 Fine-tuning took this model from <span className="text-[#F43F5E] font-medium">1.2%</span> to{" "}
                 <span className="text-[#34D399] font-medium">42.1%</span> on HumanEval (pass@1) in
@@ -267,7 +267,7 @@ export default function QdexPage() {
             <div aria-hidden className="absolute inset-0 opacity-[0.5]" style={{ backgroundImage: "radial-gradient(rgba(16,185,129,0.12) 0.7px, transparent 0.8px)", backgroundSize: "26px 26px", maskImage: "radial-gradient(ellipse 90% 80% at 50% 50%, black, transparent 85%)", WebkitMaskImage: "radial-gradient(ellipse 90% 80% at 50% 50%, black, transparent 85%)" }} />
             <div className="relative max-w-5xl mx-auto grid md:grid-cols-12 gap-10 md:gap-14 items-center">
               <Reveal className="md:col-span-7">
-                <p className="font-dmmono text-[11px] uppercase tracking-[0.3em] text-[#0a8f5f] mb-6">// what it is</p>
+                <p className="font-dmmono text-[11px] uppercase tracking-[0.3em] text-[#077a4f] mb-6">{"// "}what it is</p>
                 <h2 className="font-manrope font-semibold text-3xl md:text-[2.5rem] leading-[1.16] tracking-tight text-[#15172e]">
                   The base model already knew how to code. It just couldn&rsquo;t{" "}
                   <span className="font-serif italic font-normal text-[#0a8f5f]">answer</span>.
@@ -293,12 +293,12 @@ export default function QdexPage() {
                   <p className="font-dmmono text-[10px] uppercase tracking-[0.25em] text-[#8B93B5] mb-5">same model · two ways of asking</p>
                   <div className="font-dmmono text-[12px] leading-relaxed space-y-3">
                     <div>
-                      <p className="text-[#8B93B5]">// raw completion — &ldquo;continue this&rdquo;</p>
+                      <p className="text-[#8B93B5]">{"// "}raw completion — &ldquo;continue this&rdquo;</p>
                       <p className="text-[#e6e9f5]">def is_palindrome(s):</p>
                       <p className="flex items-center gap-2 pt-1"><span className="text-[#38BDF8]">→</span><span className="text-[#38BDF8]">works — 40.2%</span></p>
                     </div>
                     <div className="pt-2 border-t border-white/[0.07]">
-                      <p className="text-[#8B93B5]">// instruction — &ldquo;write a function that&hellip;&rdquo;</p>
+                      <p className="text-[#8B93B5]">{"// "}instruction — &ldquo;write a function that&hellip;&rdquo;</p>
                       <p className="text-[#e6e9f5]">base: <span className="text-[#F43F5E]">✗ rambles · 1.2%</span></p>
                       <p className="text-[#e6e9f5]">Qdex: <span className="text-[#34D399]">✓ answers · 42.1%</span></p>
                     </div>
@@ -438,9 +438,9 @@ export default function QdexPage() {
             <div className="relative max-w-5xl mx-auto">
               <div className="mb-12">
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="font-dmmono text-[11px] border rounded px-1.5 py-0.5 leading-none text-[#0a7ea4] border-[#0a7ea4]/40">[ 03 ]</span>
+                  <span className="font-dmmono text-[11px] border rounded px-1.5 py-0.5 leading-none text-[#086a8b] border-[#0a7ea4]/40">[ 03 ]</span>
                   <span className="w-1.5 h-1.5 rounded-full bg-[#0a7ea4]" style={{ animation: "penta-blink 1.3s steps(1) infinite" }} />
-                  <span className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#5a5f7e]">// reproducible · quick reference</span>
+                  <span className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#5a5f7e]">{"// "}reproducible · quick reference</span>
                 </div>
                 <h2 className="font-manrope font-semibold text-3xl md:text-[2.4rem] leading-none tracking-tight text-[#15172e]">Training details</h2>
               </div>

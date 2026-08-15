@@ -132,7 +132,7 @@ function SectionLabel({ index, title, kicker, color = "#A78BFA" }: { index: stri
           [ {index} ]
         </span>
         <span className="w-1.5 h-1.5 rounded-full" style={{ background: color, animation: "penta-blink 1.3s steps(1) infinite" }} />
-        {kicker && <span className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#7c84a8]">// {kicker}</span>}
+        {kicker && <span className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#7c84a8]">{"// "}{kicker}</span>}
       </div>
       <div className="flex items-end gap-5">
         <h2 className="font-manrope font-semibold text-3xl md:text-[2.4rem] leading-none tracking-tight text-[#f3f4fb]">{title}</h2>
@@ -318,7 +318,7 @@ export default function PentaCmdPage() {
             <div aria-hidden className="absolute inset-0 opacity-[0.5]" style={{ backgroundImage: "radial-gradient(rgba(123,97,255,0.10) 0.7px, transparent 0.8px)", backgroundSize: "26px 26px", maskImage: "radial-gradient(ellipse 90% 80% at 50% 50%, black, transparent 85%)", WebkitMaskImage: "radial-gradient(ellipse 90% 80% at 50% 50%, black, transparent 85%)" }} />
             <div className="relative max-w-5xl mx-auto grid md:grid-cols-12 gap-10 md:gap-14 items-center">
               <Reveal className="md:col-span-7">
-                <p className="font-dmmono text-[11px] uppercase tracking-[0.3em] text-[#7B61FF] mb-6">// the idea</p>
+                <p className="font-dmmono text-[11px] uppercase tracking-[0.3em] text-[#7B61FF] mb-6">{"// "}the idea</p>
                 <h2 className="font-manrope font-semibold text-3xl md:text-[2.5rem] leading-[1.16] tracking-tight text-[#15172e]">
                   Beginners know <span className="font-serif italic font-normal text-[#7B61FF]">what</span> they want to do —
                   not the exact command.
@@ -551,7 +551,7 @@ export default function PentaCmdPage() {
               {/* honest engineering — cardless */}
               <Reveal delay={0.1}>
                 <div className="mt-12 pt-8 border-t border-white/[0.08]">
-                  <p className="font-dmmono text-[11px] uppercase tracking-[0.25em] text-[#7c84a8] mb-7">// honest engineering details</p>
+                  <p className="font-dmmono text-[11px] uppercase tracking-[0.25em] text-[#7c84a8] mb-7">{"// "}honest engineering details</p>
                   <div className="grid sm:grid-cols-2 gap-x-12 gap-y-7">
                     {[
                       ["The trailing-space bug", "A single trailing space in the inference prompt (### Command: vs ### Command:) made the model drop the first word of every command. Removing it instantly fixed outputs.", "#F43F5E"],
@@ -623,7 +623,7 @@ export default function PentaCmdPage() {
               {/* what I learned — cardless */}
               <Reveal delay={0.1}>
                 <div className="mt-14 pt-8 border-t border-white/[0.16]">
-                  <p className="font-dmmono text-[11px] uppercase tracking-[0.25em] text-[#b9bdee] mb-7">// what I learned</p>
+                  <p className="font-dmmono text-[11px] uppercase tracking-[0.25em] text-[#b9bdee] mb-7">{"// "}what I learned</p>
                   <div className="grid md:grid-cols-2 gap-x-12 gap-y-7">
                     {[
                       ["Pick the right metric", "For a leak-free split, validation loss misleads — it can rise while real accuracy climbs. Score on the task metric (exact-match), not loss.", "#FBE07A"],
@@ -822,7 +822,7 @@ export default function PentaCmdPage() {
                 <div className="flex items-center gap-3 mb-4">
                   <span className="font-dmmono text-[11px] border rounded px-1.5 py-0.5 leading-none text-[#0a7ea4] border-[#0a7ea4]/40">[ 07 ]</span>
                   <span className="w-1.5 h-1.5 rounded-full bg-[#0a7ea4]" style={{ animation: "penta-blink 1.3s steps(1) infinite" }} />
-                  <span className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#5a5f7e]">// verified · quick reference</span>
+                  <span className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#5a5f7e]">{"// "}verified · quick reference</span>
                 </div>
                 <h2 className="font-manrope font-semibold text-3xl md:text-[2.4rem] leading-none tracking-tight text-[#15172e]">The numbers</h2>
               </div>

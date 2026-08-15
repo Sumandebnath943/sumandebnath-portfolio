@@ -19,7 +19,7 @@ export default function ExperienceNarrative() {
           className="mb-16 md:mb-24 max-w-4xl"
         >
           <h2 className="font-serif italic font-normal text-3xl md:text-5xl text-[#0A0A0A] leading-tight mb-6">
-            "I didn't learn marketing from a textbook. I learned it by running teams, managing budgets, and hitting targets. Then I learned AI to build the tools I always wished I had."
+            &quot;I didn&apos;t learn marketing from a textbook. I learned it by running teams, managing budgets, and hitting targets. Then I learned AI to build the tools I always wished I had.&quot;
           </h2>
           <div className="w-16 h-px bg-[#D44400]/40" />
         </m.div>
@@ -130,7 +130,7 @@ export default function ExperienceNarrative() {
             {/* Closing statement inside the dark card */}
             <div className="relative z-10 mt-12 pt-8 border-t border-white/10">
               <p className="font-serif italic text-xl md:text-2xl text-white leading-snug">
-                "Most companies hiring for AI product roles get a builder who doesn't understand the business, or a marketer who doesn't know how to build. <span className="font-manrope font-semibold not-italic text-[#F04E00]">I bring both.</span>"
+                &quot;Most companies hiring for AI product roles get a builder who doesn&apos;t understand the business, or a marketer who doesn&apos;t know how to build. <span className="font-manrope font-semibold not-italic text-[#F04E00]">I bring both.</span>&quot;
               </p>
             </div>
           </m.div>

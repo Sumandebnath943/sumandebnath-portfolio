@@ -252,8 +252,8 @@ export default function AIPhilosophy() {
           className="pt-14 mt-4 border-t border-[#1A1A1A]/10 flex flex-col md:flex-row md:items-end md:justify-between gap-8"
         >
           <p className="font-serif italic font-normal text-2xl md:text-3xl text-[#222] max-w-xl leading-snug">
-            "This is someone thinking deeply about the future relationship between humans,
-            systems, intelligence, and execution."
+            &quot;This is someone thinking deeply about the future relationship between humans,
+            systems, intelligence, and execution.&quot;
           </p>
           <p className="font-manrope text-[10px] uppercase tracking-[0.4em] text-[#666] font-bold flex-shrink-0">
             — Operating Philosophy

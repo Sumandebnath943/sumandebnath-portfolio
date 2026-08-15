@@ -272,9 +272,9 @@ export default function AcademicFoundations() {
           className="pt-20 mt-8 border-t border-[#1A1A1A]/08"
         >
           <p className="font-serif italic font-normal text-2xl md:text-3xl lg:text-4xl text-[#0A0A0A]/90 leading-snug max-w-3xl">
-            "This evolution into AI-native systems was built on years of structured thinking,
+            &quot;This evolution into AI-native systems was built on years of structured thinking,
             communication, strategy,{" "}
-            <span className="text-[#0A0A0A]/60">and continuous learning."</span>
+            <span className="text-[#0A0A0A]/60">and continuous learning.&quot;</span>
           </p>
         </m.div>
 

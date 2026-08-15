@@ -112,7 +112,7 @@ export default function DPeDossier() {
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-32 h-[1px] bg-gradient-to-r from-transparent via-[#FFB340]/40 to-transparent" />
 
           <p className="font-serif italic text-2xl md:text-3xl text-white leading-relaxed mb-8">
-            “Developers often write 'mid' or generic prompts because they skip crucial context or don't know how to structure them.
+            “Developers often write &apos;mid&apos; or generic prompts because they skip crucial context or don&apos;t know how to structure them.
           </p>
           <p className="font-manrope text-base md:text-lg text-[#86868B] leading-relaxed mb-8">
             Instead of blindly generating a prompt from a one-liner,<br />

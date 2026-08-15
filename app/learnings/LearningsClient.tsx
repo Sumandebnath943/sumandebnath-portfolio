@@ -37,6 +37,15 @@ interface PDFPageProxy {
   }): PDFRenderTask;
 }
 
+// pdf.js is loaded from a CDN <Script>, so it arrives on window rather than
+// through an import. Declaring it here types the global properly instead of
+// casting `window as any` at each use — the shape is already described above.
+declare global {
+  interface Window {
+    pdfjsLib?: PdfjsLib;
+  }
+}
+
 // pdf.js throws if two render() calls share one canvas, which is exactly what
 // happened when a re-render reissued a draw before the previous one settled.
 // Holding the in-flight task per canvas lets the newer draw cancel the older.
@@ -44,8 +53,8 @@ const inFlightRenders = new WeakMap<HTMLCanvasElement, PDFRenderTask>();
 
 // Called from <Script onLoad> — resolves the promise for all waiters
 function onPdfjsScriptLoad() {
-  if (typeof window !== "undefined" && (window as any).pdfjsLib) {
-    const lib = (window as any).pdfjsLib as PdfjsLib;
+  if (typeof window !== "undefined" && window.pdfjsLib) {
+    const lib = window.pdfjsLib;
     lib.GlobalWorkerOptions.workerSrc =
       "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
     _pdfjsResolve?.(lib);

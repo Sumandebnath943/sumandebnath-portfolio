@@ -325,14 +325,14 @@ export default function Experience() {
             The Result
           </p>
           <h3 className="font-serif italic font-normal text-3xl md:text-4xl lg:text-5xl text-[#0A0A0A] leading-snug mb-8">
-            "This transition into AI-native systems
+            &quot;This transition into AI-native systems
             <br />
             <span className="text-[#0A0A0A]/70">was not random.</span>
           </h3>
           <p className="font-serif italic font-normal text-3xl md:text-4xl lg:text-5xl text-[#0A0A0A] leading-snug">
             <span className="text-[#0A0A0A]/70">It was the evolution of an</span>
             <br />
-            already experienced operator."
+            already experienced operator.&quot;
           </p>
         </m.div>
 

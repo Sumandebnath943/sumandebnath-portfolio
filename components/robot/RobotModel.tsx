@@ -37,8 +37,14 @@ export function RobotModel({
   // chat takeover without two canvases fighting over one scene object.
   const cloned = useMemo(() => skeletonClone(scene), [scene]);
   const { actions, mixer } = useAnimations(animations, group);
+  // Latest-callback ref. Kept in step in an effect rather than assigned during
+  // render — the initial useRef value is already correct for the first pass,
+  // and the only reader is a three.js "finished" event, which can never fire
+  // before paint.
   const onFinishedRef = useRef(onFinished);
-  onFinishedRef.current = onFinished;
+  useEffect(() => {
+    onFinishedRef.current = onFinished;
+  }, [onFinished]);
   const firstClip = useRef(true);
 
   // Relay three.js "finished" events for one-shot clips back to the controller.

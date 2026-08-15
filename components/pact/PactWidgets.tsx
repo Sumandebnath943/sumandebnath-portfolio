@@ -36,21 +36,28 @@ export function Reveal({
    counts up from page load; spend/tokens stay at an idle session's real
    zeros (no invented numbers).
    ──────────────────────────────────────────────────────────────────────── */
+/** Hoisted: defined inside LiveToolbar it was a fresh component type on every
+ *  render, which remounts the node each tick rather than updating it. */
+function Sep() {
+  return <span className="text-[#A8462A]/70 px-2 select-none">|</span>;
+}
+
 export function LiveToolbar() {
   const [elapsed, setElapsed] = useState(0);
-  const start = useRef<number>(Date.now());
+  // Stamped on mount, not during render — reading the clock while rendering is
+  // impure and gives the server and client two different starting points.
+  const start = useRef<number | null>(null);
 
   useEffect(() => {
+    start.current = Date.now();
     const id = setInterval(() => {
-      setElapsed(Math.floor((Date.now() - start.current) / 1000));
+      setElapsed(Math.floor((Date.now() - (start.current ?? Date.now())) / 1000));
     }, 1000);
     return () => clearInterval(id);
   }, []);
 
   const mm = String(Math.floor(elapsed / 60)).padStart(2, "0");
   const ss = String(elapsed % 60).padStart(2, "0");
-
-  const Sep = () => <span className="text-[#A8462A]/70 px-2 select-none">|</span>;
 
   return (
     <div className="flex items-center flex-wrap gap-y-1 font-dmmono text-[10.5px] sm:text-[11px] leading-none text-[#9a8e86]">

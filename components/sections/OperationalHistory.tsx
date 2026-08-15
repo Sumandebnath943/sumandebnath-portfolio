@@ -222,9 +222,9 @@ export default function OperationalHistory() {
           className="pt-24 mt-8 border-t border-[#A8CCE8]/40"
         >
           <p className="font-serif italic font-normal text-3xl md:text-4xl lg:text-5xl text-[#0D1E2E]/85 leading-snug">
-            "Before the systems came
+            &quot;Before the systems came
             <br />
-            <span className="text-[#0D1E2E]/60">the execution."</span>
+            <span className="text-[#0D1E2E]/60">the execution.&quot;</span>
           </p>
         </m.div>
 

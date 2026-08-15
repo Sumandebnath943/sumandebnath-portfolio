@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
@@ -208,13 +209,13 @@ export default function AegisVaultPage() {
                     Open live demo
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17 17 7M9 7h8v8" /></svg>
                   </a>
-                  <a
+                  <Link
                     href="/projects"
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-manrope font-medium text-[14px] transition-colors"
                     style={{ border: `1px solid ${AEGIS.line}`, color: AEGIS.text }}
                   >
                     All projects
-                  </a>
+                  </Link>
                 </div>
               </Reveal>
 
@@ -482,13 +483,13 @@ export default function AegisVaultPage() {
                   Open live demo
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17 17 7M9 7h8v8" /></svg>
                 </a>
-                <a
+                <Link
                   href="/projects"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-manrope font-medium text-[14px]"
                   style={{ border: `1px solid ${AEGIS.line}`, color: AEGIS.text }}
                 >
                   Back to archive
-                </a>
+                </Link>
               </div>
             </Reveal>
             <Reveal delay={0.14}>

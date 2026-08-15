@@ -271,7 +271,7 @@ export default function Navigation() {
                       onClick={link.href ? () => handleNavClick(link.href!) : undefined}
                       aria-label={link.href ? `${link.label} — open page, or hover for its sections` : undefined}
                       style={hueVars(link.color)}
-                      className={`px-2 lg:px-3 py-2 text-[12px] lg:text-[13px] font-medium text-[#b4b4b9] transition-all duration-200 rounded-full group-hover:text-[var(--c)] group-hover:bg-[var(--cb)] group-hover:shadow-[inset_0_0_0_1px_var(--cr),0_5px_18px_-8px_var(--c)] flex items-center gap-1 lg:gap-1.5 whitespace-nowrap ${
+                      className={`px-2 lg:px-3 py-2 text-[12px] lg:text-[13px] font-medium text-[#bdbdc2] transition-all duration-200 rounded-full group-hover:text-[var(--c)] group-hover:bg-[var(--cb)] group-hover:shadow-[inset_0_0_0_1px_var(--cr),0_5px_18px_-8px_var(--c)] flex items-center gap-1 lg:gap-1.5 whitespace-nowrap ${
                         link.href ? "cursor-pointer" : "cursor-default"
                       }`}
                     >
@@ -286,7 +286,7 @@ export default function Navigation() {
                           if (sub.submenus) {
                             return (
                               <div key={sub.label} className="relative group/sub">
-                                <div style={hueVars(sub.color)} className="flex items-center justify-between gap-2 px-3 py-2 text-xs font-medium text-[#86868b] transition-all group-hover/sub:text-[var(--c)] group-hover/sub:bg-[var(--cb)] group-hover/sub:shadow-[inset_0_0_0_1px_var(--cr)] rounded-lg cursor-default">
+                                <div style={hueVars(sub.color)} className="flex items-center justify-between gap-2 px-3 py-2 text-xs font-medium text-[#bdbdc2] transition-all group-hover/sub:text-[var(--c)] group-hover/sub:bg-[var(--cb)] group-hover/sub:shadow-[inset_0_0_0_1px_var(--cr)] rounded-lg cursor-default">
                                   {sub.label}
                                   <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-50"><path d="m9 18 6-6-6-6" /></svg>
                                 </div>
@@ -298,7 +298,7 @@ export default function Navigation() {
                                         key={leaf.href}
                                         onClick={() => handleNavClick(leaf.href!)}
                                         style={hueVars(leaf.color)}
-                                        className="text-left px-3 py-2 text-xs font-medium text-[#86868b] transition-all hover:text-[var(--c)] hover:bg-[var(--cb)] hover:shadow-[inset_0_0_0_1px_var(--cr)] rounded-lg whitespace-nowrap"
+                                        className="text-left px-3 py-2 text-xs font-medium text-[#bdbdc2] transition-all hover:text-[var(--c)] hover:bg-[var(--cb)] hover:shadow-[inset_0_0_0_1px_var(--cr)] rounded-lg whitespace-nowrap"
                                       >
                                         {leaf.label}
                                       </button>
@@ -313,7 +313,7 @@ export default function Navigation() {
                               key={sub.href}
                               onClick={() => handleNavClick(sub.href!)}
                               style={hueVars(sub.color)}
-                              className="text-left px-3 py-2 text-xs font-medium text-[#86868b] transition-all hover:text-[var(--c)] hover:bg-[var(--cb)] hover:shadow-[inset_0_0_0_1px_var(--cr)] rounded-lg"
+                              className="text-left px-3 py-2 text-xs font-medium text-[#bdbdc2] transition-all hover:text-[var(--c)] hover:bg-[var(--cb)] hover:shadow-[inset_0_0_0_1px_var(--cr)] rounded-lg"
                             >
                               {sub.label}
                             </button>
@@ -333,7 +333,7 @@ export default function Navigation() {
                   transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }}
                   onClick={() => handleNavClick(link.href!)}
                   style={hueVars(link.color)}
-                  className="px-2 lg:px-3 py-2 text-[12px] lg:text-[13px] font-medium text-[#b4b4b9] transition-all duration-200 rounded-full whitespace-nowrap hover:text-[var(--c)] hover:bg-[var(--cb)] hover:shadow-[inset_0_0_0_1px_var(--cr),0_5px_18px_-8px_var(--c)]"
+                  className="px-2 lg:px-3 py-2 text-[12px] lg:text-[13px] font-medium text-[#bdbdc2] transition-all duration-200 rounded-full whitespace-nowrap hover:text-[var(--c)] hover:bg-[var(--cb)] hover:shadow-[inset_0_0_0_1px_var(--cr),0_5px_18px_-8px_var(--c)]"
                 >
                   {link.label}
                 </m.button>
@@ -354,7 +354,7 @@ export default function Navigation() {
               // lg, not md: a ⌘K badge is useless on a tablet with no keyboard,
               // and dropping it below 1024px buys the six-item bar the room it
               // needs. The phone sheet still carries a "Search Command" row.
-              className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/[0.08] text-[#86868b] hover:text-[#f5f5f7] hover:border-white/[0.15] bg-white/[0.02] transition-all duration-200 text-xs font-mono"
+              className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/[0.08] text-[#bdbdc2] hover:text-[#f5f5f7] hover:border-white/[0.15] bg-white/[0.02] transition-all duration-200 text-xs font-mono"
             >
               <span>⌘K</span>
             </m.button>
@@ -373,7 +373,7 @@ export default function Navigation() {
           <button
             // 18px icon + 13px padding each side = a 44px target. This control
             // only exists below md, so the larger box costs desktop nothing.
-            className="md:hidden p-[13px] -m-[5px] mr-0 rounded-full text-[#86868b] hover:text-[#f5f5f7] hover:bg-white/5 transition-all touch-manipulation"
+            className="md:hidden p-[13px] -m-[5px] mr-0 rounded-full text-[#bdbdc2] hover:text-[#f5f5f7] hover:bg-white/5 transition-all touch-manipulation"
             onClick={toggleMobile}
             aria-label="Toggle navigation"
             aria-expanded={mobileOpen}
