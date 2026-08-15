@@ -150,8 +150,8 @@
   font-size: clamp(9rem, 26vw, 22rem);
   line-height: 0.78;
   letter-spacing: -0.03em;
-  color: var(--ink);
-  opacity: 0.055;
+  color: var(--accent);
+  opacity: 0.14;
   pointer-events: none;
   user-select: none;
 }
@@ -218,6 +218,54 @@
   position: relative;
   margin-bottom: clamp(1.75rem, 4vh, 2.75rem);
 }
+/* Colour where it cannot cost legibility: a wide, soft wash of the chapter's
+   accent sitting behind the artwork, bled past both edges of the shell. Alpha
+   stays under 0.1 and nothing reads on top of it, so the paper stays paper
+   everywhere the eye actually has to work. */
+.jr-scene::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  /* Confined to the artwork's own box. It bled 12% above and below before,
+     which put washed paper behind the chapter kicker and dropped that line to
+     3.62:1 — under AA. Colour where it cannot cost legibility means the wash
+     does not get to touch text at all. */
+  top: 0;
+  width: 150vw;
+  height: 100%;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    ellipse 46% 58% at 50% 52%,
+    color-mix(in srgb, var(--accent) 16%, transparent),
+    transparent 72%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+.jr-scene-inner { z-index: 1; }
+
+/* The drawing takes the chapter's colour too. The PNG is ink on transparency,
+   so it doubles as its own mask: the layer beneath is the accent, punched to
+   the exact shape of the line. The <img> stays underneath at low opacity so
+   that if masking is unavailable the artwork is still there in ink. */
+.jr-art-tint {
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  /* Longhands, not the `mask` shorthand: the shorthand carrying a var() url()
+     silently failed to parse and the layer painted as a solid block over the
+     drawing. */
+  -webkit-mask-image: var(--art);
+  mask-image: var(--art);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  opacity: 0.82;
+  pointer-events: none;
+}
 .jr-scene-inner {
   position: relative;
   aspect-ratio: 1536 / 1024;
@@ -237,6 +285,7 @@
   height: 100%;
   object-fit: contain;
   display: block;
+  opacity: 0.28;
 }
 /* The page's half of the horizon. Two rules rather than one across the whole
    width, so nothing is ever drawn on top of the illustration's own line —
@@ -247,8 +296,8 @@
   top: var(--horizon);
   width: 100vw;
   height: 1px;
-  background: var(--ink);
-  opacity: 0.55;
+  background: var(--accent);
+  opacity: 0.7;
   pointer-events: none;
 }
 .jr-horizon-l { right: 100%; }

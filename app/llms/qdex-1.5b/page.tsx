@@ -211,7 +211,7 @@ export default function QdexPage() {
                       <GitHubMark /> View code on GitHub
                       <span className="transition-transform duration-300 group-hover:translate-x-0.5">↗</span>
                     </a>
-                    <a href="#use" className="inline-flex items-center gap-2 rounded-full border border-white/12 text-[#dfe3f2] font-manrope font-medium text-sm px-6 py-3 hover:border-white/30 hover:bg-white/[0.03] transition-colors duration-300">
+                    <a href="#use" className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] text-[#dfe3f2] font-manrope font-medium text-sm px-6 py-3 hover:border-white/30 hover:bg-white/[0.03] transition-colors duration-300">
                       Run it <span>↓</span>
                     </a>
                   </div>

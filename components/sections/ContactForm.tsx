@@ -85,7 +85,7 @@ export default function ContactForm() {
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         className="rounded-2xl border border-black/[0.08] bg-white p-8 text-center"
       >
-        <div className="mx-auto mb-5 flex h-11 w-11 items-center justify-center rounded-full bg-[#2E8B57]/12">
+        <div className="mx-auto mb-5 flex h-11 w-11 items-center justify-center rounded-full bg-[#2E8B57]/[0.12]">
           <svg
             width="20"
             height="20"

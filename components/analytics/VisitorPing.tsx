@@ -330,6 +330,41 @@ export default function VisitorPing() {
       }
     }, undefined);
 
+    // `?notrack=status` — why this browser is or isn't reporting, on screen.
+    //
+    // Every reason a visit can go unreported lives in storage that cannot be
+    // read from a phone: a mute flag set months ago on one browser looks
+    // identical to a broken notifier, and "it works in incognito" is the only
+    // symptom either produces. This turns that into an answer you can read
+    // without a laptop, a cable, or me.
+    safe(() => {
+      if (new URLSearchParams(window.location.search).get("notrack") !== "status") return;
+      const muted = localStorage.getItem(MUTE_KEY) === "1";
+      const raw = sessionStorage.getItem(SS_KEY);
+      const sess = raw ? (JSON.parse(raw) as Session) : null;
+      const seen = sess?.seen || sess?.lastActive || sess?.start || 0;
+      const ageMin = seen ? Math.round((Date.now() - seen) / 60000) : null;
+      const el = document.createElement("pre");
+      el.setAttribute("data-vp-status", "");
+      el.style.cssText =
+        "position:fixed;inset:auto 8px 8px 8px;z-index:2147483647;margin:0;padding:12px 14px;" +
+        "background:#0c1018;color:#ede7da;font:12px/1.6 ui-monospace,monospace;border-radius:10px;" +
+        "white-space:pre-wrap;box-shadow:0 8px 32px rgba(0,0,0,.4)";
+      el.textContent = [
+        muted ? "MUTED — this browser is excluded." : "Reporting normally.",
+        muted ? "Fix: open  ?notrack=0  on this browser." : "",
+        `session: ${sess ? `${sess.id}, last touched ${ageMin}m ago` : "none (a fresh visit)"}`,
+        sess ? `arrival already sent this session: ${sess.arrivalSent ? "yes" : "no"}` : "",
+        `visits recorded on this browser: ${JSON.parse(localStorage.getItem(VISITOR_KEY) || "{}").count ?? 0}`,
+        "",
+        "tap to dismiss",
+      ]
+        .filter(Boolean)
+        .join("\n");
+      el.onclick = () => el.remove();
+      document.body.appendChild(el);
+    }, undefined);
+
     if (safe(() => localStorage.getItem(MUTE_KEY) === "1", false)) {
       mutedRef.current = true;
       return; // muted browser: no tracking, no listeners

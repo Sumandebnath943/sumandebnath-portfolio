@@ -138,7 +138,7 @@ function EntryRow({
       className="relative grid grid-cols-1 md:grid-cols-[200px_1fr] gap-x-16 gap-y-6 py-14"
     >
       {/* Separator line */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-[#1A1A1A]/08" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-[#1A1A1A]/[0.08]" />
 
       {/* Left: meta */}
       <div className="flex flex-col gap-3 md:pt-1">
@@ -269,7 +269,7 @@ export default function AcademicFoundations() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-          className="pt-20 mt-8 border-t border-[#1A1A1A]/08"
+          className="pt-20 mt-8 border-t border-[#1A1A1A]/[0.08]"
         >
           <p className="font-serif italic font-normal text-2xl md:text-3xl lg:text-4xl text-[#0A0A0A]/90 leading-snug max-w-3xl">
             &quot;This evolution into AI-native systems was built on years of structured thinking,

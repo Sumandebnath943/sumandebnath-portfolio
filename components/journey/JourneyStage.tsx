@@ -210,7 +210,12 @@ export default function JourneyStage() {
           <div className="jr-scene">
             <div
               className="jr-scene-inner"
-              style={{ "--horizon": `${HORIZON[ch.art] ?? 78}%` } as React.CSSProperties}
+              style={
+                {
+                  "--horizon": `${HORIZON[ch.art] ?? 78}%`,
+                  "--art": `url(/journey-art/${ch.art}.png)`,
+                } as React.CSSProperties
+              }
             >
               <span className="jr-horizon-l" aria-hidden="true" />
               <Image
@@ -228,6 +233,10 @@ export default function JourneyStage() {
                 className="jr-shot-art"
                 sizes="(max-width: 900px) 100vw, 74rem"
               />
+              {/* The same drawing again as a mask, filled with the chapter's
+                  colour. The image beneath shows through at low opacity, so a
+                  browser without mask support still gets the artwork in ink. */}
+              <span className="jr-art-tint" aria-hidden="true" />
               <span className="jr-horizon-r" aria-hidden="true" />
             </div>
           </div>

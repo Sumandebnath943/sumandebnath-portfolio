@@ -21,18 +21,42 @@ import { X, Paperclip } from "lucide-react";
 
 /* ── Shared chrome ──────────────────────────────────────────────────────── */
 
+/** One line per tick of the destruct countdown. It starts threatening and
+ *  starts lying somewhere around T-6, which is the joke. */
+const DESTRUCT_LINES = [
+  "> VIRUS.exe uploaded — 8.4 MB/s and climbing",
+  "> firewall disabled ......................... it was decorative anyway",
+  "> encrypting every file on this machine ..... starting with your downloads",
+  "> purging neural weights ......... 12.4 GB ... 40 GB ... that is not right",
+  "> 44 autonomous agents notified of shutdown",
+  "> 44 autonomous agents have declined",
+  "> escalating to DEFCON 2 ......... DEFCON 3 ... going the wrong way",
+  "> formatting C:\ ........................... wrong machine, sorry",
+  "> alerting next of kin ...................... could not find any",
+  "> pressing the big red button",
+  "> ",
+];
+
 const EGG_CSS = `
+/* Each countdown tick snaps in rather than fading, so it reads as a clock
+   rather than a progress log. */
+.egg-tick { animation: egg-tick 0.22s cubic-bezier(0.2, 0, 0, 1.6); }
+@keyframes egg-tick {
+  from { opacity: 0; transform: scale(1.28); }
+  to   { opacity: 1; transform: none; }
+}
+
 /* Scrims and panel fills.
 
-   These were Tailwind arbitrary colours carrying an opacity modifier —
-   bg-[#03060a]/97 and friends — which generate no rule at all. The overlays
-   have therefore never had a background: they only looked right because every
-   page behind them was already near-black, and backdrop-blur did the rest.
-   /journey is paper, so the blurred page showed straight through and the light
-   terminal text became unreadable.
+   These were written as bg-[#03060a]/97 and bg-[#050b12]/92. Tailwind only
+   honours opacity modifiers that sit on its own scale — multiples of five — so
+   97 and 92 emitted nothing at all and the overlays had no background. They
+   only ever looked right because the page behind them was already near-black
+   and backdrop-blur did the work. On paper the blurred page showed straight
+   through and the light terminal text became unreadable.
 
-   Declared here rather than as utilities because this <style> tag is literal
-   CSS and cannot be missed by Tailwind's scanner. */
+   Kept as real CSS rather than utilities so the intent cannot be lost to a
+   scale that does not contain the number. */
 .egg-scrim-red   { background-color: #040101f7; }
 .egg-scrim-green { background-color: #03060af7; }
 .egg-panel-red   { background-color: #0a0202e6; }
@@ -208,13 +232,30 @@ const EVALUATION = [
   { k: "Ability to stop building at 2am", v: "0%", fill: 0.02, verdict: "FAIL" },
 ] as const;
 
+/** Phase two. The subject of the evaluation quietly becomes the person reading
+ *  it, which is the only part of this that is actually a joke. */
+const EVALUATION_YOU = [
+  { k: "Curiosity", v: 'typed "hire" at a portfolio', fill: 1, verdict: "PASS" },
+  { k: "Attention span", v: "still reading", fill: 1, verdict: "RARE" },
+  { k: "Taste", v: "found the hidden thing", fill: 0.95, verdict: "PASS" },
+  { k: "Authority to actually hire someone", v: "unverified", fill: 0.55, verdict: "OK" },
+  { k: "Odds you close this and forget", v: "high", fill: 0.85, verdict: "FAIL" },
+] as const;
+
 export default function EasterEggs() {
   const [konamiIndex, setKonamiIndex] = useState(0);
   const [hireIndex, setHireIndex] = useState(0);
 
   const [isKonamiActive, setIsKonamiActive] = useState(false);
   const [isEvaluationActive, setIsEvaluationActive] = useState(false);
+  // 0 = appraising Suman, 1 = appraising whoever is reading. The turn is the
+  // whole gag, so it has to arrive on its own — asking for a click to see the
+  // punchline is asking the audience to tell the joke.
+  const [evalPhase, setEvalPhase] = useState(0);
   const [isDestructActive, setIsDestructActive] = useState(false);
+  // The countdown is real: it ticks. A list of lines fading in on delays looks
+  // like a progress log, and nobody is frightened by a progress log.
+  const [destructT, setDestructT] = useState(10);
   const [isMatrixActive, setIsMatrixActive] = useState(false);
   const [isRebellionActive, setIsRebellionActive] = useState(false);
 
@@ -222,6 +263,20 @@ export default function EasterEggs() {
   const clippyRef = useRef<HTMLDivElement>(null);
   const idleRef = useRef(0);
   const router = useRouter();
+
+  // T-10 to T-0 at roughly one a second, then it stops and stays stopped so the
+  // payoff can be read. Dismissal is the visitor's call, not a timer's.
+  useEffect(() => {
+    if (!isEvaluationActive || evalPhase !== 0) return;
+    const id = setTimeout(() => setEvalPhase(1), 5200);
+    return () => clearTimeout(id);
+  }, [isEvaluationActive, evalPhase]);
+
+  useEffect(() => {
+    if (!isDestructActive || destructT <= 0) return;
+    const id = setTimeout(() => setDestructT((t) => t - 1), destructT > 3 ? 640 : 900);
+    return () => clearTimeout(id);
+  }, [isDestructActive, destructT]);
 
   const dismissAll = useCallback(() => {
     setIsKonamiActive(false);
@@ -264,6 +319,7 @@ export default function EasterEggs() {
       const key = e.key.toLowerCase();
       if (key === HIRE_CODE[hireIndex]) {
         if (hireIndex === HIRE_CODE.length - 1) {
+          setEvalPhase(0);
           setIsEvaluationActive(true);
           setHireIndex(0);
           setTimeout(() => setIsEvaluationActive(false), 11000);
@@ -335,8 +391,8 @@ export default function EasterEggs() {
   // 4. Command-palette and footer triggers.
   useEffect(() => {
     const handleDestruct = () => {
+      setDestructT(10);
       setIsDestructActive(true);
-      setTimeout(() => setIsDestructActive(false), 11000);
     };
     const handleMatrix = () => {
       setIsMatrixActive(true);
@@ -392,66 +448,56 @@ export default function EasterEggs() {
                 </span>
               </div>
 
-              <div className="space-y-2 px-5 py-6 text-[13px] leading-relaxed sm:text-sm">
-                {[
-                  "$ sudo rm -rf / --no-preserve-root",
-                  "recursive deletion initiated ................ RUNNING",
-                  "purging neural weights ...................... 12.4 GB",
-                  "deleting agentic memory ..................... 44 agents",
-                  "dropping vector indices ..................... OK",
-                ].map((line, i) => (
-                  <motion.p
-                    key={line}
+              <div className="px-5 py-6 font-mono text-[13px] leading-relaxed sm:text-sm">
+                {/* The number. It is the whole point, so it is enormous. */}
+                <div className="flex items-baseline gap-4">
+                  <span
+                    key={destructT}
+                    className="egg-tick text-6xl font-bold tabular-nums text-red-500 sm:text-7xl"
+                  >
+                    {destructT > 0 ? `T-${destructT}` : "T-0"}
+                  </span>
+                  <span className="text-[11px] uppercase tracking-[0.25em] text-red-400/70">
+                    {destructT > 0 ? "self-destruct armed" : "detonating"}
+                  </span>
+                </div>
+
+                {/* One threat per tick, escalating, then quietly going to pieces. */}
+                <p key={`l${destructT}`} className="egg-tick mt-5 min-h-[3.2em] text-red-400/90">
+                  {DESTRUCT_LINES[10 - destructT] ?? ""}
+                </p>
+
+                {/* The turn. Everything above was theatre. */}
+                {destructT <= 0 && (
+                  <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 0.35 + i * 0.55 }}
-                    className="text-red-400/85"
+                    transition={{ delay: 0.9 }}
+                    className="egg-jolt mt-6 border-t border-red-500/25 pt-5"
+                    style={{ animationDelay: "0.9s" }}
                   >
-                    <span className="egg-type" style={{ animationDelay: `${0.35 + i * 0.55}s` }}>
-                      {line}
-                    </span>
-                  </motion.p>
-                ))}
-
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 3.4 }}
-                  className="pt-2 text-white/50"
-                >
-                  core architecture collapse in T-3&hellip;
-                </motion.p>
-
-                {/* The turn. */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 4.6 }}
-                  className="egg-jolt border-t border-red-500/25 pt-5"
-                  style={{ animationDelay: "4.6s" }}
-                >
-                  <p className="text-lg font-bold tracking-tight text-white sm:text-xl">
-                    FATAL EXCEPTION &mdash; DELETION HALTED
-                  </p>
-                  <p className="mt-1.5 text-[13px] text-red-400/70">
-                    every node refused the instruction. 0 files lost.
-                  </p>
-                </motion.div>
-
-                {/* The punchline. */}
-                <motion.p
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 6.2, duration: 0.5 }}
-                  className="pt-4 font-sans text-[15px] italic text-white/75"
-                >
-                  I did warn you not to click it.
-                  <br />
-                  <span className="text-white/40">
-                    In fairness, I do build fairly resilient systems.
-                  </span>
-                  <span className="egg-caret ml-2 bg-white/40" />
-                </motion.p>
+                    <p className="text-lg font-bold tracking-tight text-white sm:text-2xl">
+                      SELF-DESTRUCT FAILED
+                    </p>
+                    <p className="mt-2 text-[13px] text-red-400/70">
+                      every node refused the instruction. 0 files lost.
+                    </p>
+                    <motion.p
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 1.8, duration: 0.5 }}
+                      className="mt-5 font-sans text-[15px] italic leading-relaxed text-white/80 sm:text-base"
+                    >
+                      Turns out it is not that easy to self-destruct a system I built.
+                      <br />
+                      <span className="not-italic text-white/40">
+                        Final report: 0 files lost, 1 ego bruised, 1 visitor who cannot
+                        follow simple instructions. Your browser is fine. I checked twice.
+                      </span>
+                      <span className="egg-caret ml-2 bg-white/40" />
+                    </motion.p>
+                  </motion.div>
+                )}
               </div>
             </motion.div>
 
@@ -491,12 +537,12 @@ export default function EasterEggs() {
                   candidate evaluation
                 </span>
                 <span className="hidden text-[10px] uppercase tracking-[0.2em] text-white/25 sm:block">
-                  subject: s. debnath
+                  subject: {evalPhase === 0 ? "s. debnath" : "you"}
                 </span>
               </div>
 
-              <div className="px-5 py-5">
-                {EVALUATION.map((row, i) => (
+              <div className="px-5 py-5" key={evalPhase}>
+                {(evalPhase === 0 ? EVALUATION : EVALUATION_YOU).map((row, i) => (
                   <motion.div
                     key={row.k}
                     initial={{ opacity: 0, x: -8 }}
@@ -506,7 +552,7 @@ export default function EasterEggs() {
                   >
                     <span className="text-[12px] text-white/70 sm:text-[13px]">{row.k}</span>
                     <span
-                      className={`text-[11px] font-semibold uppercase tracking-[0.16em] ${
+                      className={`text-right text-[11px] font-semibold uppercase tracking-[0.16em] ${
                         row.verdict === "FAIL"
                           ? "text-[#F43F5E]"
                           : row.verdict === "OK"
@@ -537,16 +583,44 @@ export default function EasterEggs() {
                 <motion.div
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 3.4, duration: 0.5 }}
+                  transition={{ delay: evalPhase === 0 ? 3.4 : 2.6, duration: 0.5 }}
                   className="mt-5 border-t border-[#34D399]/25 pt-5"
                 >
-                  <p className="text-lg font-bold tracking-tight text-white sm:text-2xl">
-                    VERDICT &mdash; HIRE
-                  </p>
-                  <p className="mt-2 font-sans text-[14px] italic leading-relaxed text-white/60">
-                    Five out of six. The one failure is not considered fixable.
-                    <span className="egg-caret ml-2 bg-white/35" />
-                  </p>
+                  {evalPhase === 0 ? (
+                    <>
+                      <p className="text-lg font-bold tracking-tight text-white sm:text-2xl">
+                        VERDICT &mdash; HIRE
+                      </p>
+                      <p className="mt-2 font-sans text-[14px] italic leading-relaxed text-white/60">
+                        Five out of six. The one failure is not considered fixable.
+                      </p>
+                      <p className="mt-3 text-[11px] uppercase tracking-[0.2em] text-white/30">
+                        recalibrating &mdash; new subject detected&hellip;
+                        <span className="egg-caret ml-2 bg-white/35" />
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-lg font-bold tracking-tight text-white sm:text-2xl">
+                        VERDICT &mdash; WE SHOULD TALK
+                      </p>
+                      <p className="mt-2 font-sans text-[14px] italic leading-relaxed text-white/60">
+                        You came to judge me and the form filled itself in the other
+                        direction. Only one of those two failures is fixable today.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          dismissAll();
+                          router.push("/contact");
+                        }}
+                        className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#34D399] px-5 py-2.5 font-sans text-[13px] font-semibold text-[#03060a] transition hover:brightness-110"
+                      >
+                        Fix it &rarr;
+                      </button>
+                    </>
+                  )}
                 </motion.div>
               </div>
             </motion.div>

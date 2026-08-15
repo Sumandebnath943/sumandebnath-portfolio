@@ -162,7 +162,7 @@ export default function Contact({
             className={`group inline-flex items-center gap-3 px-6 py-3 rounded-full border transition-all duration-500 font-manrope text-xs tracking-wide ${
               light
                 ? "border-[#2E8B57]/25 bg-[#2E8B57]/[0.05] text-[#0B3B25]/80 hover:text-[#0B3B25] hover:border-[#2E8B57]/45 hover:bg-[#2E8B57]/[0.1]"
-                : "border-[#F5F5F3]/12 bg-[#F5F5F3]/[0.04] text-[#F5F5F3]/55 hover:text-[#F5F5F3]/85 hover:border-[#F5F5F3]/22 hover:bg-[#F5F5F3]/[0.07]"
+                : "border-[#F5F5F3]/[0.12] bg-[#F5F5F3]/[0.04] text-[#F5F5F3]/55 hover:text-[#F5F5F3]/85 hover:border-[#F5F5F3]/[0.22] hover:bg-[#F5F5F3]/[0.07]"
             }`}
           >
             <span className={`w-1 h-1 rounded-full transition-colors duration-500 ${light ? "bg-[#2E8B57]/50 group-hover:bg-[#2E8B57]" : "bg-[#F5F5F3]/30 group-hover:bg-[#F5F5F3]/60"}`} />
@@ -175,7 +175,7 @@ export default function Contact({
             className={`group inline-flex items-center gap-3 px-6 py-3 rounded-full border transition-all duration-500 font-manrope text-xs tracking-wide ${
               light
                 ? "border-[#2E8B57]/25 bg-[#2E8B57]/[0.05] text-[#0B3B25]/80 hover:text-[#0B3B25] hover:border-[#2E8B57]/45 hover:bg-[#2E8B57]/[0.1]"
-                : "border-[#F5F5F3]/12 bg-[#F5F5F3]/[0.04] text-[#F5F5F3]/55 hover:text-[#F5F5F3]/85 hover:border-[#F5F5F3]/22 hover:bg-[#F5F5F3]/[0.07]"
+                : "border-[#F5F5F3]/[0.12] bg-[#F5F5F3]/[0.04] text-[#F5F5F3]/55 hover:text-[#F5F5F3]/85 hover:border-[#F5F5F3]/[0.22] hover:bg-[#F5F5F3]/[0.07]"
             }`}
           >
             <span className={`w-1 h-1 rounded-full transition-colors duration-500 ${light ? "bg-[#2E8B57]/50 group-hover:bg-[#2E8B57]" : "bg-[#F5F5F3]/30 group-hover:bg-[#F5F5F3]/60"}`} />
@@ -218,7 +218,7 @@ export default function Contact({
         >
           <p className={`font-serif italic font-normal text-xl md:text-2xl leading-relaxed ${light ? "text-[#1f7a4d]/95" : "text-[#F5F5F3]/45"}`}>
             &ldquo;Human instinct.{" "}
-            <span className={light ? "text-[#1f7a4d]/95" : "text-[#F5F5F3]/28"}>AI amplification.</span>
+            <span className={light ? "text-[#1f7a4d]/95" : "text-[#F5F5F3]/[0.28]"}>AI amplification.</span>
             <br />
             <span className={light ? "text-[#1f7a4d]/95" : "text-[#F5F5F3]/20"}>Systemic execution.&rdquo;</span>
           </p>
@@ -277,7 +277,7 @@ export default function Contact({
               onClick={() => window.dispatchEvent(new Event("easter-egg-destruct"))}
               className={`px-2 py-1 rounded text-[9px] font-bold tracking-widest uppercase transition-colors ${
                 light
-                  ? "bg-[#2E8B57]/12 text-[#1f7a4d] hover:bg-[#2E8B57] hover:text-white"
+                  ? "bg-[#2E8B57]/[0.12] text-[#1f7a4d] hover:bg-[#2E8B57] hover:text-white"
                   : "bg-red-500/10 text-red-700 hover:bg-red-500 hover:text-white"
               }`}
               aria-label="System Self-Destruct"

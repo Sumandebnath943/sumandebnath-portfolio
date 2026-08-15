@@ -199,7 +199,7 @@ function Lightbox({
     <AnimatePresence>
       {shot && (
         <m.div
-          className="fixed inset-0 z-[120] flex flex-col items-center justify-center gap-5 bg-[#050706]/94 px-6 py-10 backdrop-blur-xl"
+          className="fixed inset-0 z-[120] flex flex-col items-center justify-center gap-5 bg-[#050706]/[0.94] px-6 py-10 backdrop-blur-xl"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -212,7 +212,7 @@ function Lightbox({
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="max-h-[76vh]"
           >
-            <div className="relative h-[76vh] w-[calc(76vh*1080/2400)] overflow-hidden rounded-[1.6rem] border border-white/12 bg-black">
+            <div className="relative h-[76vh] w-[calc(76vh*1080/2400)] overflow-hidden rounded-[1.6rem] border border-white/[0.12] bg-black">
               <Image src={shot.src} alt={shot.alt} fill className="object-contain" sizes="(max-width: 768px) 90vw, 40vw" />
             </div>
           </m.div>
@@ -449,7 +449,7 @@ export function ScreenRail({ screens }: { screens: { src: string; alt: string; l
         <button
           onClick={() => nudge(-1)}
           aria-label="Previous screens"
-          className="flex h-11 w-11 items-center justify-center rounded-full border border-white/12 bg-white/[0.04] text-white/55 backdrop-blur transition hover:border-[#C6F24E]/35 hover:text-white"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.04] text-white/55 backdrop-blur transition hover:border-[#C6F24E]/35 hover:text-white"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M15 18 9 12l6-6" />
@@ -459,7 +459,7 @@ export function ScreenRail({ screens }: { screens: { src: string; alt: string; l
         <button
           onClick={() => nudge(1)}
           aria-label="Next screens"
-          className="flex h-11 w-11 items-center justify-center rounded-full border border-white/12 bg-white/[0.04] text-white/55 backdrop-blur transition hover:border-[#C6F24E]/35 hover:text-white"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.04] text-white/55 backdrop-blur transition hover:border-[#C6F24E]/35 hover:text-white"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="m9 18 6-6-6-6" />
