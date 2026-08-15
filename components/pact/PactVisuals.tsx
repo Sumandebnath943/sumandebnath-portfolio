@@ -43,10 +43,10 @@ export function PageFrame() {
           <span className="absolute left-1/2 top-0 h-full w-px bg-[#CF5C36]/40" />
         </div>
       ))}
-      <span className="absolute top-1/2 left-[18px] -translate-y-1/2 -rotate-90 font-dmmono text-[9px] tracking-[0.4em] text-[#CF5C36]/35 uppercase whitespace-nowrap">
+      <span className="absolute top-1/2 left-[18px] -translate-y-1/2 -rotate-90 font-dmmono text-[9px] tracking-[0.4em] text-[#A8462A] uppercase whitespace-nowrap">
         House of Namus
       </span>
-      <span className="absolute top-1/2 right-[18px] -translate-y-1/2 rotate-90 font-dmmono text-[9px] tracking-[0.4em] text-[#CF5C36]/35 uppercase whitespace-nowrap">
+      <span className="absolute top-1/2 right-[18px] -translate-y-1/2 rotate-90 font-dmmono text-[9px] tracking-[0.4em] text-[#A8462A] uppercase whitespace-nowrap">
         v0.1.0 · pact-cli
       </span>
     </div>
@@ -72,10 +72,10 @@ export function Marquee({
       >
         {seq.map((it, i) => (
           <span key={i} className="flex items-center gap-8">
-            <span className="font-dmmono text-sm uppercase tracking-[0.3em] text-[#CF5C36]/70">
+            <span className="font-dmmono text-sm uppercase tracking-[0.3em] text-[#CF5C36]">
               {it}
             </span>
-            <span className="text-[#CF5C36]/30 text-xs">◆</span>
+            <span className="text-[#CF5C36] text-xs">◆</span>
           </span>
         ))}
       </div>
@@ -167,7 +167,7 @@ export function Pipeline() {
                 }}
               >
                 {/* corner index */}
-                <span className="font-dmmono text-[10px] text-[#6f6760]">{`0${i + 1}`}</span>
+                <span className="font-dmmono text-[10px] text-[#948b84]">{`0${i + 1}`}</span>
                 <p
                   className="font-dmmono text-[15px] font-medium mt-2 tracking-wide transition-colors duration-500"
                   style={{ color: on || done ? s.color : "#8a7e76" }}
@@ -228,7 +228,7 @@ const VERDICTS = [
   },
   {
     name: "CONTRADICTED",
-    color: "#B33A3A",
+    color: "#DE5F5F",
     conf: "88%",
     evidence: 'expected hello.txt to contain "hello world"; recorded after-content was empty. The change did not take effect.',
   },
@@ -294,7 +294,7 @@ export function VerdictCycle() {
             key={vv.name}
             className="flex-1 text-center py-1 rounded border transition-all duration-500"
             style={{
-              color: idx === i ? "#0a0807" : `${vv.color}cc`,
+              color: idx === i ? "#0a0807" : vv.color,
               background: idx === i ? vv.color : "transparent",
               borderColor: `${vv.color}55`,
             }}

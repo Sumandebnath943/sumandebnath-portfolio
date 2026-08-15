@@ -39,7 +39,7 @@ export function Reveal({
 /** Hoisted: defined inside LiveToolbar it was a fresh component type on every
  *  render, which remounts the node each tick rather than updating it. */
 function Sep() {
-  return <span className="text-[#A8462A]/70 px-2 select-none">|</span>;
+  return <span className="text-[#CF6A45]/90 px-2 select-none">|</span>;
 }
 
 export function LiveToolbar() {
@@ -84,7 +84,7 @@ export function LiveToolbar() {
       </span>
       <Sep />
       <span>
-        risk <span className="text-[#9a8e86]/60">—</span>
+        risk <span className="text-[#9a8e86]/90">—</span>
       </span>
     </div>
   );
@@ -146,7 +146,7 @@ export function CopyCommand({
           {lines.map((l, i) => {
             if (l.kind === "comment") {
               return (
-                <div key={i} className="text-[#6f6760]">
+                <div key={i} className="text-[#948b84]">
                   {l.text}
                 </div>
               );

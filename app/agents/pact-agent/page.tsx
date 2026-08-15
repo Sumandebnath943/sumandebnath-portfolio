@@ -167,7 +167,7 @@ export default function PactAgentPage() {
 
               {/* Run command — install & run, right under the hero */}
               <Reveal delay={0.3} className="w-full max-w-xl">
-                <p className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#6f6760] mb-3">
+                <p className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#948b84] mb-3">
                   Get running in 30 seconds
                 </p>
                 <CopyCommand
@@ -220,7 +220,7 @@ export default function PactAgentPage() {
                       </dl>
                     </div>
 
-                    <p className="font-dmmono text-[11.5px] text-[#6f6760] mt-5">
+                    <p className="font-dmmono text-[11.5px] text-[#948b84] mt-5">
                       Interactive session. Type a task, or /help for commands. Ctrl+D to exit.
                     </p>
                     <p className="font-dmmono text-[13px] mt-3 flex items-center flex-wrap">
@@ -294,7 +294,7 @@ export default function PactAgentPage() {
                     style={{ animation: "pact-shimmer 5.5s ease-in-out infinite" }}
                   />
                   <div className="relative p-7">
-                    <p className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-black/55 mb-5">
+                    <p className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-black/85 mb-5">
                       why it&rsquo;s different
                     </p>
                     <ul className="flex flex-col divide-y divide-black/15">
@@ -306,7 +306,7 @@ export default function PactAgentPage() {
                       ].map(([t, d]) => (
                         <li key={t} className="py-4 first:pt-0 last:pb-0">
                           <p className="font-manrope font-bold text-black text-[15px]">{t}</p>
-                          <p className="font-manrope text-sm text-black/70 mt-1 leading-relaxed">{d}</p>
+                          <p className="font-manrope text-sm text-black/85 mt-1 leading-relaxed">{d}</p>
                         </li>
                       ))}
                     </ul>
@@ -352,7 +352,7 @@ export default function PactAgentPage() {
                 </div>
               </Reveal>
               <Reveal delay={0.15}>
-                <p className="font-manrope text-sm text-[#6f6760] mt-6 max-w-2xl leading-relaxed">
+                <p className="font-manrope text-sm text-[#948b84] mt-6 max-w-2xl leading-relaxed">
                   Mode exclusivity is enforced in PACT&rsquo;s own code — never by trusting the
                   model&rsquo;s self-declared mode. An &quot;answer&quot; carrying hidden steps is
                   rejected, so an unapproved action can never slip through.
@@ -392,16 +392,16 @@ export default function PactAgentPage() {
                           </span>
                           <span className="text-[#c9bdb4]">
                             hello.txt
-                            <span className="text-[#6f6760]"> · create hello.txt with greeting</span>
+                            <span className="text-[#948b84]"> · create hello.txt with greeting</span>
                           </span>
                         </div>
                         <div className="mt-3 ml-1 pl-4 border-l border-white/[0.06] leading-relaxed">
-                          <div className="text-[#6f6760]">--- hello.txt</div>
-                          <div className="text-[#6f6760]">+++ hello.txt</div>
+                          <div className="text-[#948b84]">--- hello.txt</div>
+                          <div className="text-[#948b84]">+++ hello.txt</div>
                           <div className="text-[#4F9B5C]">+hello world</div>
                         </div>
                         <div className="mt-5 pt-4 border-t border-white/[0.06] space-y-1 text-[11.5px]">
-                          <p className="text-[#6f6760]">Using 3 memory entries (view with /memory)</p>
+                          <p className="text-[#948b84]">Using 3 memory entries (view with /memory)</p>
                           <p className="text-[#9a8e86]">Planned by anthropic/claude-haiku-4-5</p>
                           <p className="text-[#e8e0da] font-medium">Estimated model cost: $0.0008</p>
                         </div>
@@ -422,7 +422,7 @@ export default function PactAgentPage() {
                 </Reveal>
               </div>
               <Reveal delay={0.15}>
-                <p className="font-manrope text-sm text-[#6f6760] mt-6 max-w-3xl leading-relaxed">
+                <p className="font-manrope text-sm text-[#948b84] mt-6 max-w-3xl leading-relaxed">
                   The verifier receives only the recorded journal evidence — file before/after
                   snapshots, command output, exit codes — and returns a verdict with a confidence
                   percentage. It is intentionally single-model and untiered: you don&rsquo;t cheapen
@@ -452,7 +452,7 @@ export default function PactAgentPage() {
                 </Brackets>
               </Reveal>
               <Reveal delay={0.08}>
-                <p className="font-manrope text-sm text-[#6f6760] mt-5 text-center max-w-2xl mx-auto">
+                <p className="font-manrope text-sm text-[#948b84] mt-5 text-center max-w-2xl mx-auto">
                   The actual REPL masthead — block-glyph wordmark, wax-seal emblem, two-column info
                   block, live status, and the eight registered actions across the file, shell, and
                   browser families.
@@ -529,8 +529,8 @@ export default function PactAgentPage() {
                         programs and URL-bearing arguments are blocked. Browser navigation needs a host
                         you&rsquo;ve explicitly allow-listed; sensitive actions always re-prompt.
                       </p>
-                      <p className="font-dmmono text-[11.5px] text-[#B33A3A] mt-4 flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#B33A3A]" style={{ animation: "pact-blink 1s steps(1) infinite" }} />
+                      <p className="font-dmmono text-[11.5px] text-[#DE5F5F] mt-4 flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#DE5F5F]" style={{ animation: "pact-blink 1s steps(1) infinite" }} />
                         Dangerous patterns (rm -rf, sudo, chmod 777, curl | bash) escalate to HIGH risk.
                       </p>
                     </div>
@@ -560,7 +560,7 @@ export default function PactAgentPage() {
                 </div>
               </div>
               <Reveal delay={0.1}>
-                <p className="font-manrope text-sm text-[#6f6760] mt-6 max-w-3xl leading-relaxed">
+                <p className="font-manrope text-sm text-[#948b84] mt-6 max-w-3xl leading-relaxed">
                   Optional surfaces: voice input (transcribe an audio file into a task), desktop
                   notifications on unattended skill outcomes, and a copy-pasteable scheduling command —
                   PACT runs no daemon of its own.
@@ -590,7 +590,7 @@ export default function PactAgentPage() {
                   ].map(([n, t, d, code], i) => (
                     <Reveal key={n as string} delay={i * 0.05}>
                       <div className="group flex gap-4 rounded-2xl border border-white/[0.08] bg-[#0d0a08]/50 p-5 hover:border-[#CF5C36]/40 transition-colors">
-                        <span className="font-dmmono text-2xl font-medium text-[#CF5C36]/40 group-hover:text-[#CF5C36] transition-colors leading-none">{n}</span>
+                        <span className="font-dmmono text-2xl font-medium text-[#CF5C36]/75 group-hover:text-[#CF5C36] transition-colors leading-none">{n}</span>
                         <div>
                           <p className="font-manrope font-semibold text-[#f0e9e3] text-[15px]">{t}</p>
                           <p className="font-manrope text-sm text-[#9a8e86] mt-1 leading-relaxed">{d}</p>
@@ -634,7 +634,7 @@ export default function PactAgentPage() {
                       ].map(([cmd, desc]) => (
                         <li key={cmd} className="grid grid-cols-[1fr_auto] gap-3 items-baseline">
                           <span className="text-[#d8b3a3]">{cmd}</span>
-                          <span className="text-[#6f6760] text-[11px] text-right">{desc}</span>
+                          <span className="text-[#948b84] text-[11px] text-right">{desc}</span>
                         </li>
                       ))}
                     </ul>
@@ -658,7 +658,7 @@ export default function PactAgentPage() {
                       ].map(([cmd, desc]) => (
                         <li key={cmd} className="grid grid-cols-[1fr_auto] gap-3 items-baseline">
                           <span className="text-[#d8b3a3]">{cmd}</span>
-                          <span className="text-[#6f6760] text-[11px] text-right">{desc}</span>
+                          <span className="text-[#948b84] text-[11px] text-right">{desc}</span>
                         </li>
                       ))}
                     </ul>
@@ -667,7 +667,7 @@ export default function PactAgentPage() {
               </div>
 
               <Reveal delay={0.1}>
-                <p className="font-manrope text-sm text-[#6f6760] mt-6 max-w-3xl leading-relaxed">
+                <p className="font-manrope text-sm text-[#948b84] mt-6 max-w-3xl leading-relaxed">
                   Optional extras: <code className="font-dmmono text-[#9a8e86]">pact-cli[voice]</code>{" "}
                   (Whisper transcription),{" "}
                   <code className="font-dmmono text-[#9a8e86]">pact-cli[notifications]</code>{" "}
@@ -728,7 +728,7 @@ export default function PactAgentPage() {
                 </div>
               </Brackets>
 
-              <p className="font-dmmono text-[11px] text-[#6f6760] text-center mt-10 tracking-wide">
+              <p className="font-dmmono text-[11px] text-[#948b84] text-center mt-10 tracking-wide">
                 v0.1.0 · pact-cli · MIT · Built by House of Namus
               </p>
             </div>

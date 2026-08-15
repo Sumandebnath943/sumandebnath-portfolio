@@ -324,7 +324,7 @@ export default function MigiPage() {
               const bg = isInk ? MIGI.ink : isLime ? MIGI.lime : "#FFFFFF";
               const numC = isInk ? MIGI.lime : MIGI.ink;
               const labC = isInk ? "#FFFFFF" : MIGI.ink;
-              const subC = isInk ? "rgba(255,255,255,0.5)" : isLime ? "rgba(22,23,28,0.6)" : MIGI.muted;
+              const subC = isInk ? "rgba(255,255,255,0.5)" : isLime ? "rgba(22,23,28,0.7)" : MIGI.muted;
               return (
                 <Reveal key={s.label} delay={(i % 6) * 0.05}>
                   <div
@@ -645,7 +645,7 @@ export default function MigiPage() {
                       Read any state I&rsquo;ve captured, trigger any agent on demand, or feed it anything —
                       all from one Telegram thread.
                     </p>
-                    <p className="font-manrope text-[13px] leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>
+                    <p className="font-manrope text-[13px] leading-relaxed" style={{ color: "rgba(255,255,255,0.5)" }}>
                       {BOT_FEED}
                     </p>
                     <p className="font-dmmono text-[10.5px] mt-5 flex items-center gap-2" style={{ color: MIGI.lime }}>
@@ -693,7 +693,7 @@ export default function MigiPage() {
             <Reveal delay={0.08}>
               <DarkScreenshot shot={MAS_SHOT} label="mas · command deck" alt="The Migi MAS command deck — launch a mission by typing or voice, watch a squad of specialist agents plan and work, and approve every real action" />
             </Reveal>
-            <p className="font-dmmono text-[11px] mt-4 mb-12 text-center" style={{ color: "rgba(255,255,255,0.4)" }}>
+            <p className="font-dmmono text-[11px] mt-4 mb-12 text-center" style={{ color: "rgba(255,255,255,0.5)" }}>
               The MAS command deck — launch a mission, watch the squad work, and approve every real action.
             </p>
 
@@ -741,7 +741,7 @@ export default function MigiPage() {
             {/* goal → mission flow */}
             <div className="mb-12">
               <Reveal>
-                <p className="font-dmmono text-[11px] uppercase tracking-[0.24em] mb-5" style={{ color: "rgba(255,255,255,0.45)" }}>Goal in → mission out</p>
+                <p className="font-dmmono text-[11px] uppercase tracking-[0.24em] mb-5" style={{ color: "rgba(255,255,255,0.5)" }}>Goal in → mission out</p>
               </Reveal>
               <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-3">
                 {MAS_STEPS.map((s, i) => (
@@ -759,7 +759,7 @@ export default function MigiPage() {
             {/* missions it runs */}
             <div className="mb-10">
               <Reveal>
-                <p className="font-dmmono text-[11px] uppercase tracking-[0.24em] mb-5" style={{ color: "rgba(255,255,255,0.45)" }}>Real missions it runs</p>
+                <p className="font-dmmono text-[11px] uppercase tracking-[0.24em] mb-5" style={{ color: "rgba(255,255,255,0.5)" }}>Real missions it runs</p>
               </Reveal>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {MAS_MISSIONS.map((mi, i) => (
@@ -807,7 +807,7 @@ export default function MigiPage() {
             <Reveal delay={0.08}>
               <DarkScreenshot shot={ECHO_SHOT} label="echo · knowledge chat" alt="The Migi ECHO knowledge chat — an aurora-lit chat interface with a history sidebar, a centered composer, voice input and spoken replies over my own knowledge base" />
             </Reveal>
-            <p className="font-dmmono text-[11px] mt-4 mb-12 text-center" style={{ color: "rgba(255,255,255,0.45)" }}>
+            <p className="font-dmmono text-[11px] mt-4 mb-12 text-center" style={{ color: "rgba(255,255,255,0.5)" }}>
               The ECHO knowledge chat — ask by text or voice, get grounded, cited answers read back aloud.
             </p>
 
@@ -882,7 +882,7 @@ export default function MigiPage() {
                             >
                               {c}
                             </span>
-                            {i < row.chain.length - 1 && <span className="font-dmmono text-[12px]" style={{ color: "rgba(255,255,255,0.35)" }}>→</span>}
+                            {i < row.chain.length - 1 && <span className="font-dmmono text-[12px]" style={{ color: "rgba(255,255,255,0.5)" }}>→</span>}
                           </span>
                         ))}
                       </div>
@@ -908,7 +908,7 @@ export default function MigiPage() {
                 <div className="rounded-[1.5rem] p-7 md:p-9" style={{ background: MIGI.ink }}>
                   <div className="grid md:grid-cols-[210px_1fr] gap-8 items-start">
                     <div>
-                      <p className="font-dmmono text-[10px] uppercase tracking-[0.22em] mb-2" style={{ color: "rgba(255,255,255,0.45)" }}>rate-limits · 7d</p>
+                      <p className="font-dmmono text-[10px] uppercase tracking-[0.22em] mb-2" style={{ color: "rgba(255,255,255,0.5)" }}>rate-limits · 7d</p>
                       <p className="font-manrope font-extrabold text-[2.6rem] leading-none tracking-[-0.02em]" style={{ color: MIGI.lime }}>110</p>
                       <p className="font-manrope text-[12.5px] leading-relaxed mt-3" style={{ color: "rgba(255,255,255,0.55)" }}>
                         call-limit events absorbed — the fleet falls over to a backup provider when one says wait.
@@ -974,7 +974,7 @@ export default function MigiPage() {
             {/* free-tier budgets graphic — generic add-ons, name-safe */}
             <div className="mt-10">
               <Reveal>
-                <p className="font-dmmono text-[11px] uppercase tracking-[0.24em] mb-5" style={{ color: "rgba(255,255,255,0.45)" }}>Free power-ups, metered — they can&rsquo;t overspend</p>
+                <p className="font-dmmono text-[11px] uppercase tracking-[0.24em] mb-5" style={{ color: "rgba(255,255,255,0.5)" }}>Free power-ups, metered — they can&rsquo;t overspend</p>
               </Reveal>
               <Reveal delay={0.05}>
                 <div className="rounded-[1.5rem] p-6 md:p-7" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)" }}>

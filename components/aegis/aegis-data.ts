@@ -14,7 +14,9 @@ export const AEGIS = {
   amber: "#F5BF4F",
   text: "#F5F5F7",
   muted: "rgba(255,255,255,0.62)",
-  faint: "rgba(255,255,255,0.42)",
+  // 0.46 is the AA floor for 10-11px on this near-black ground; 0.42
+  // left the section kickers and terminal captions at 4.00:1.
+  faint: "rgba(255,255,255,0.5)",
 } as const;
 
 export const LIVE_URL = "https://aegisnote.houseofnamus.com/";

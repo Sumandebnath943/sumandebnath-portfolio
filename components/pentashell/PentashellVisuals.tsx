@@ -110,7 +110,7 @@ export function Marquee() {
     <div className="relative overflow-hidden border-y border-white/[0.07] bg-white/[0.012] py-3.5">
       <div className="flex w-max gap-8" style={{ animation: "pact-marquee 34s linear infinite" }}>
         {row.map((t, i) => (
-          <span key={i} className="flex items-center gap-8 font-dmmono text-[11px] uppercase tracking-[0.22em] text-white/40 whitespace-nowrap">
+          <span key={i} className="flex items-center gap-8 font-dmmono text-[11px] uppercase tracking-[0.22em] text-white/50 whitespace-nowrap">
             {t}
             <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: i % 2 ? C.magenta : C.cyan, boxShadow: `0 0 10px ${i % 2 ? C.magenta : C.cyan}` }} />
           </span>
@@ -145,7 +145,7 @@ export function CopyCommand({ label, lines, copyText }: { label?: string; lines:
           <span className="w-2.5 h-2.5 rounded-full" style={{ background: C.magenta }} />
           <span className="w-2.5 h-2.5 rounded-full" style={{ background: C.amber }} />
           <span className="w-2.5 h-2.5 rounded-full" style={{ background: C.green }} />
-          {label && <span className="ml-2 font-dmmono text-[10.5px] uppercase tracking-[0.18em] text-white/45">{label}</span>}
+          {label && <span className="ml-2 font-dmmono text-[10.5px] uppercase tracking-[0.18em] text-white/50">{label}</span>}
         </div>
         <button
           onClick={copy}
@@ -243,7 +243,7 @@ function ReplTurn({ ex, onDone }: { ex: (typeof EXAMPLES)[number]; onDone: () =>
           <span className="w-2.5 h-2.5 rounded-full" style={{ background: C.amber }} />
           <span className="w-2.5 h-2.5 rounded-full" style={{ background: C.green }} />
         </div>
-        <span className="font-dmmono text-[11px] text-white/45">pentacmd — interactive session</span>
+        <span className="font-dmmono text-[11px] text-white/50">pentacmd — interactive session</span>
         <span className="font-dmmono text-[10px] text-white/50 hidden sm:inline">CPU · local</span>
       </div>
 
@@ -258,7 +258,7 @@ function ReplTurn({ ex, onDone }: { ex: (typeof EXAMPLES)[number]; onDone: () =>
         {/* family note */}
         <div className="h-7 mt-3">
           {phase !== "typing" && (
-            <m.p initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="font-dmmono text-[11.5px] text-white/40 flex items-center gap-2">
+            <m.p initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="font-dmmono text-[11.5px] text-white/50 flex items-center gap-2">
               <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md border" style={{ color: fam.color, borderColor: `${fam.color}55`, background: `${fam.color}14` }}>
                 <span className="w-1.5 h-1.5 rounded-full" style={{ background: fam.color, boxShadow: `0 0 8px ${fam.color}` }} />
                 {ex.family}
@@ -282,7 +282,7 @@ function ReplTurn({ ex, onDone }: { ex: (typeof EXAMPLES)[number]; onDone: () =>
         <div className="h-8 mt-4">
           {phase === "gate" && (
             <m.p initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} className="font-dmmono text-[13px]" style={{ color: C.green }}>
-              Run this? <span className="text-white/45">[y/N]</span>
+              Run this? <span className="text-white/50">[y/N]</span>
               <span className="inline-block align-middle ml-1 w-[7px] h-[14px]" style={{ background: C.green, animation: "pact-blink 0.8s steps(1) infinite" }} />
               <span className="text-white/25 ml-3 hidden sm:inline">default · No — nothing runs without your yes</span>
             </m.p>
@@ -315,14 +315,14 @@ export function Pipeline() {
             <div className="group relative h-full rounded-2xl border border-white/[0.08] bg-[#0a0c16]/60 p-5 overflow-hidden hover:border-white/[0.16] transition-colors">
               <span aria-hidden className="absolute inset-x-0 top-0 h-px opacity-70" style={{ background: `linear-gradient(90deg, transparent, ${s.c}, transparent)` }} />
               <div className="flex items-center justify-between mb-3">
-                <span className="font-dmmono text-[10px] tracking-[0.2em]" style={{ color: `${s.c}cc` }}>{String(i + 1).padStart(2, "0")}</span>
+                <span className="font-dmmono text-[10px] tracking-[0.2em]" style={{ color: s.c }}>{String(i + 1).padStart(2, "0")}</span>
                 <span className="w-2 h-2 rounded-full" style={{ background: s.c, boxShadow: `0 0 10px ${s.c}`, animation: `pact-blink ${1.1 + i * 0.2}s steps(1) infinite` }} />
               </div>
               <p className="font-manrope font-semibold text-[14px] text-white/90">{s.t}</p>
               <p className="font-dmmono text-[11px] mt-1.5 leading-relaxed break-words" style={{ color: `${s.c}` }}>{s.d}</p>
               {/* connector arrow (desktop) */}
               {i < STAGES.length - 1 && (
-                <span aria-hidden className="hidden lg:block absolute top-1/2 -right-[14px] -translate-y-1/2 text-white/20 z-10">→</span>
+                <span aria-hidden className="hidden lg:block absolute top-1/2 -right-[14px] -translate-y-1/2 text-white/50 z-10">→</span>
               )}
             </div>
           </Reveal>
@@ -355,11 +355,11 @@ export function SafetyGates() {
           </p>
           <div className="mt-4 rounded-lg border px-4 py-3" style={{ borderColor: `${C.green}28`, background: `${C.green}0d` }}>
             <p className="font-dmmono text-[13px]" style={{ color: C.green }}>
-              Run this? <span className="text-white/45">[y/N]</span>
+              Run this? <span className="text-white/50">[y/N]</span>
               <span className="inline-block align-middle ml-1 w-[7px] h-[14px]" style={{ background: C.green, animation: "pact-blink 0.85s steps(1) infinite" }} />
             </p>
           </div>
-          <ul className="mt-5 space-y-2 font-manrope text-[12.5px] text-white/45">
+          <ul className="mt-5 space-y-2 font-manrope text-[12.5px] text-white/50">
             <li className="flex gap-2"><span style={{ color: C.green }}>›</span> Default is <span className="text-white/75">No</span>. Empty input = No.</li>
             <li className="flex gap-2"><span style={{ color: C.green }}>›</span> Runs only on an explicit <span className="text-white/75">y</span> / <span className="text-white/75">yes</span>.</li>
           </ul>
@@ -388,7 +388,7 @@ export function SafetyGates() {
               <span className="inline-block align-middle ml-1 w-[7px] h-[14px]" style={{ background: C.red, animation: "pact-blink 0.7s steps(1) infinite" }} />
             </p>
           </div>
-          <p className="relative mt-5 font-manrope text-[12.5px] text-white/45">
+          <p className="relative mt-5 font-manrope text-[12.5px] text-white/50">
             A bare <span className="text-white/75">y</span> is rejected — a single keystroke can never trigger it by accident.
           </p>
         </div>
@@ -446,7 +446,7 @@ export function FamilyExplorer() {
               <span className="w-9 h-9 rounded-xl flex items-center justify-center font-dmmono text-[14px] font-semibold uppercase" style={{ color: fam.color, background: `${fam.color}14`, border: `1px solid ${fam.color}45`, boxShadow: `0 0 22px -6px ${fam.color}` }}>{fam.id[0]}</span>
               <div className="leading-tight">
                 <p className="font-manrope font-semibold text-white/90 text-[17px]">{fam.id}</p>
-                <span className="font-dmmono text-[10.5px] text-white/45">{fam.flag}</span>
+                <span className="font-dmmono text-[10.5px] text-white/50">{fam.flag}</span>
               </div>
             </div>
             <p className="font-manrope text-[13.5px] text-white/55 leading-relaxed mb-5">{fam.blurb}</p>

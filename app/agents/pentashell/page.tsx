@@ -229,7 +229,7 @@ export default function PentashellPage() {
                 <h2 className="font-manrope font-bold text-[2rem] md:text-[3rem] leading-[1.07] tracking-[-0.03em] mb-5">
                   <span style={gWhite}>Watch it</span>{" "}<span className="font-serif italic font-normal" style={gBrand}>think.</span>
                 </h2>
-                <p className="font-manrope text-[15px] text-white/45 leading-relaxed max-w-2xl mb-10">
+                <p className="font-manrope text-[15px] text-white/50 leading-relaxed max-w-2xl mb-10">
                   Type what you want. Pentashell names the family it detected, suggests one command,
                   then stops at the approval gate. Every pair below is a real example run locally on CPU.
                 </p>
@@ -246,7 +246,7 @@ export default function PentashellPage() {
                 <h2 className="font-manrope font-bold text-[2rem] md:text-[3rem] leading-[1.07] tracking-[-0.03em] mb-5">
                   <span style={gWhite}>How it</span>{" "}<span className="font-serif italic font-normal" style={gCyan}>thinks.</span>
                 </h2>
-                <p className="font-manrope text-[15px] text-white/45 leading-relaxed max-w-2xl mb-12">
+                <p className="font-manrope text-[15px] text-white/50 leading-relaxed max-w-2xl mb-12">
                   Every instruction travels the same six steps — and the single most important detail is
                   the prompt format with <span className="text-white/75">no trailing space</span> after
                   the command marker (a trailing space made the model drop the first word).
@@ -265,7 +265,7 @@ export default function PentashellPage() {
                   <h2 className="font-manrope font-bold text-[2.1rem] md:text-[3.2rem] leading-[1.06] tracking-[-0.03em] mt-5 mb-5">
                     <span style={gWhite}>Nothing runs without</span>{" "}<span className="font-serif italic font-normal" style={gBrand}>your yes.</span>
                   </h2>
-                  <p className="font-manrope text-[15px] text-white/45 leading-relaxed">
+                  <p className="font-manrope text-[15px] text-white/50 leading-relaxed">
                     A model that can be wrong must never run a command you didn&rsquo;t approve — and must be
                     extra careful with anything destructive. Two gates enforce it.
                   </p>
@@ -378,7 +378,7 @@ export default function PentashellPage() {
                   <h2 className="font-manrope font-bold text-[2rem] md:text-[3rem] leading-[1.07] tracking-[-0.03em] mb-5">
                     <span style={gWhite}>How it was built —</span>{" "}<span className="font-serif italic font-normal" style={gCyan}>and what each step taught.</span>
                   </h2>
-                  <p className="font-manrope text-[15px] text-white/45 leading-relaxed">
+                  <p className="font-manrope text-[15px] text-white/50 leading-relaxed">
                     Deliberately built in small, individually-tested steps. Each one earned its place — and
                     a real lesson came out of every increment.
                   </p>
@@ -399,7 +399,7 @@ export default function PentashellPage() {
                             <h3 className="font-manrope font-semibold text-white/90 text-[16px]">{s.title}</h3>
                           </div>
                           <p className="font-manrope text-[13.5px] text-white/50 leading-relaxed">{s.body}</p>
-                          <p className="font-manrope text-[13px] text-white/40 leading-relaxed mt-3 pt-3 border-t border-white/[0.06]">
+                          <p className="font-manrope text-[13px] text-white/50 leading-relaxed mt-3 pt-3 border-t border-white/[0.06]">
                             <span className="font-dmmono text-[10px] uppercase tracking-[0.16em]" style={{ color: i % 2 ? "#F25FD0" : "#2FE2F0" }}>Lesson · </span>
                             {s.lesson}
                           </p>
@@ -421,7 +421,7 @@ export default function PentashellPage() {
                   <h2 className="font-manrope font-bold text-[2rem] md:text-[3rem] leading-[1.07] tracking-[-0.03em] mb-5 text-center">
                     <span style={gWhite}>Honest by</span>{" "}<span className="font-serif italic font-normal" style={gBrand}>design.</span>
                   </h2>
-                  <p className="font-manrope text-[15px] text-white/45 leading-relaxed">
+                  <p className="font-manrope text-[15px] text-white/50 leading-relaxed">
                     No overselling. These limits shape correct use — and they are exactly why the approval
                     gate exists in the first place.
                   </p>
@@ -452,7 +452,7 @@ export default function PentashellPage() {
                   <h2 className="font-manrope font-bold text-[2rem] md:text-[3rem] leading-[1.07] tracking-[-0.03em] mb-5">
                     <span style={gWhite}>Use it.</span>
                   </h2>
-                  <p className="font-manrope text-[15px] text-white/45 leading-relaxed">
+                  <p className="font-manrope text-[15px] text-white/50 leading-relaxed">
                     Clone, install the editable package, and the <span className="text-white/80 font-dmmono text-[13px]">pentacmd</span> command
                     works from any terminal, in any folder.
                   </p>
@@ -497,7 +497,7 @@ export default function PentashellPage() {
                     {CLI_OPTIONS.map(([cmd, desc]) => (
                       <li key={cmd} className="grid sm:grid-cols-[minmax(0,16rem)_1fr] gap-x-4 gap-y-0.5 items-baseline border-b border-white/[0.05] pb-3 last:border-0 last:pb-0">
                         <span style={{ color: "#7DEFF7" }} className="break-all">{cmd}</span>
-                        <span className="text-white/40 font-manrope text-[12.5px]">{desc}</span>
+                        <span className="text-white/50 font-manrope text-[12.5px]">{desc}</span>
                       </li>
                     ))}
                   </ul>
@@ -521,7 +521,7 @@ export default function PentashellPage() {
                         <span className="w-2 h-2 rounded-full" style={{ background: t.color, boxShadow: `0 0 8px ${t.color}` }} />
                         <span className="font-manrope font-semibold text-[13.5px] text-white/85">{t.name}</span>
                       </div>
-                      <p className="font-manrope text-[12px] text-white/40 leading-relaxed pl-[18px]">{t.role}</p>
+                      <p className="font-manrope text-[12px] text-white/50 leading-relaxed pl-[18px]">{t.role}</p>
                     </div>
                   </Reveal>
                 ))}
@@ -537,12 +537,12 @@ export default function PentashellPage() {
                   <div aria-hidden className="absolute -top-1/3 left-1/2 -translate-x-1/2 w-[80%] h-[80%] rounded-full blur-[110px]" style={{ background: "radial-gradient(ellipse at center, rgba(47,226,240,0.16), transparent 65%)", animation: "ps-drift 17s ease-in-out infinite" }} />
                   <span aria-hidden className="absolute inset-x-0 top-0 h-px" style={{ background: "linear-gradient(90deg, transparent, #2FE2F0, #F25FD0, transparent)" }} />
                   <div className="relative p-9 sm:p-14 text-center">
-                    <p className="font-dmmono text-[11px] uppercase tracking-[0.3em] text-white/40 mb-6">open source · MIT · built from scratch</p>
+                    <p className="font-dmmono text-[11px] uppercase tracking-[0.3em] text-white/50 mb-6">open source · MIT · built from scratch</p>
                     <h2 className="font-manrope font-extrabold text-[2.2rem] md:text-[3.4rem] leading-[1.05] tracking-[-0.04em] mb-4">
                       <span style={gWhite}>One instruction. One command.</span><br />
                       <span className="font-serif italic font-normal" style={gBrand}>Your approval.</span>
                     </h2>
-                    <p className="font-manrope text-[15px] text-white/45 max-w-lg mx-auto mb-9 leading-relaxed">
+                    <p className="font-manrope text-[15px] text-white/50 max-w-lg mx-auto mb-9 leading-relaxed">
                       Clone the repo, install with pip, and ask in plain English. Read every command before
                       you approve — that&rsquo;s the whole point.
                     </p>

@@ -89,7 +89,7 @@ export function SpectrumMarquee({ items, duration = 34 }: { items: string[]; dur
             <span className="font-dmmono text-sm uppercase tracking-[0.3em]" style={{ color: SPECTRUM[i % SPECTRUM.length] }}>
               {it}
             </span>
-            <span className="text-white/20 text-xs">◆</span>
+            <span className="text-white/50 text-xs">◆</span>
           </span>
         ))}
       </div>

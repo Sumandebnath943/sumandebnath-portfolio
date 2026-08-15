@@ -318,14 +318,14 @@ export default function PentaCmdPage() {
             <div aria-hidden className="absolute inset-0 opacity-[0.5]" style={{ backgroundImage: "radial-gradient(rgba(123,97,255,0.10) 0.7px, transparent 0.8px)", backgroundSize: "26px 26px", maskImage: "radial-gradient(ellipse 90% 80% at 50% 50%, black, transparent 85%)", WebkitMaskImage: "radial-gradient(ellipse 90% 80% at 50% 50%, black, transparent 85%)" }} />
             <div className="relative max-w-5xl mx-auto grid md:grid-cols-12 gap-10 md:gap-14 items-center">
               <Reveal className="md:col-span-7">
-                <p className="font-dmmono text-[11px] uppercase tracking-[0.3em] text-[#7B61FF] mb-6">{"// "}the idea</p>
+                <p className="font-dmmono text-[11px] uppercase tracking-[0.3em] text-[#5F45E0] mb-6">{"// "}the idea</p>
                 <h2 className="font-manrope font-semibold text-3xl md:text-[2.5rem] leading-[1.16] tracking-tight text-[#15172e]">
                   Beginners know <span className="font-serif italic font-normal text-[#7B61FF]">what</span> they want to do —
                   not the exact command.
                 </h2>
                 <p className="font-manrope text-lg text-[#3b3f5c] leading-relaxed mt-7 max-w-xl">
                   Big models can already do this. PentaCMD is the opposite bet: a{" "}
-                  <span className="text-[#0a8f5f] font-semibold">tiny, specialised model built entirely by hand</span> —
+                  <span className="text-[#077a4f] font-semibold">tiny, specialised model built entirely by hand</span> —
                   data, tokenizer, architecture, training, evaluation, release — to learn the whole ML
                   lifecycle by doing every step.
                 </p>
@@ -405,8 +405,11 @@ export default function PentaCmdPage() {
                       { fam: "powershell" as FamilyKey, n: 28000 },
                       { fam: "npm" as FamilyKey, n: 20000 },
                     ].map((d) => (
-                      <div key={d.fam} className="h-full flex items-center justify-center" style={{ width: `${(d.n / 299329) * 100}%`, background: `${FAMILIES[d.fam].color}d9` }} title={`${FAMILIES[d.fam].label} · ${d.n.toLocaleString("en-US")}`}>
-                        <span className="font-dmmono text-[10px] text-black/80 font-medium hidden sm:block">{((d.n / 299329) * 100).toFixed(0)}%</span>
+                      <div key={d.fam} className="h-full flex items-center justify-center" // Full opacity, not d9: at 85% over the dark page the rose family muddied to
+// #d13753, where the ink label only reached 4.02:1. At full strength every
+// bar is its true brand hue and the lowest label contrast is 5.28:1.
+style={{ width: `${(d.n / 299329) * 100}%`, background: FAMILIES[d.fam].color }} title={`${FAMILIES[d.fam].label} · ${d.n.toLocaleString("en-US")}`}>
+                        <span className="font-dmmono text-[10px] text-[#0b0d16] font-semibold hidden sm:block">{((d.n / 299329) * 100).toFixed(0)}%</span>
                       </div>
                     ))}
                   </div>
@@ -740,7 +743,7 @@ export default function PentaCmdPage() {
                   ].map(([n, t, d, code, c], i) => (
                     <Reveal key={n as string} delay={i * 0.05}>
                       <div className="group flex gap-4 rounded-2xl border border-white/[0.08] bg-[#080a14]/50 p-5 transition-colors" style={{ borderColor: undefined }}>
-                        <span className="font-dmmono text-2xl font-medium leading-none transition-colors" style={{ color: `${c}66` }}>{n}</span>
+                        <span className="font-dmmono text-2xl font-medium leading-none transition-colors" style={{ color: `${c}99` }}>{n}</span>
                         <div className="min-w-0">
                           <p className="font-manrope font-semibold text-[#f3f4fb] text-[15px]">{t}</p>
                           <p className="font-manrope text-sm text-[#8b93b5] mt-1 leading-relaxed">{d}</p>
@@ -820,7 +823,7 @@ export default function PentaCmdPage() {
             <div className="relative max-w-5xl mx-auto">
               <div className="mb-12">
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="font-dmmono text-[11px] border rounded px-1.5 py-0.5 leading-none text-[#0a7ea4] border-[#0a7ea4]/40">[ 07 ]</span>
+                  <span className="font-dmmono text-[11px] border rounded px-1.5 py-0.5 leading-none text-[#086a8b] border-[#086a8b]/40">[ 07 ]</span>
                   <span className="w-1.5 h-1.5 rounded-full bg-[#0a7ea4]" style={{ animation: "penta-blink 1.3s steps(1) infinite" }} />
                   <span className="font-dmmono text-[10px] uppercase tracking-[0.3em] text-[#5a5f7e]">{"// "}verified · quick reference</span>
                 </div>
