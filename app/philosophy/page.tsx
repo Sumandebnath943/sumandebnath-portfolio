@@ -15,7 +15,9 @@ import "./philosophy.css";
  * layout data rather than exporting them.
  */
 const PRINCIPLES = [
-  { n: "01", name: "Intelligence Is Infrastructure", claim: "Not a feature. The layer everything else is designed through.", accent: "#2E6FBF" },
+  // #4A8FE0 rather than AIPhilosophy's #2E6FBF: that blue is set on white
+  // below, where it reads fine, but only manages 3.96:1 on this dark ledger.
+  { n: "01", name: "Intelligence Is Infrastructure", claim: "Not a feature. The layer everything else is designed through.", accent: "#4A8FE0" },
   { n: "02", name: "Systems Compound", claim: "One-off execution collapses under scale. Systems don't.", accent: "#10B981" },
   { n: "03", name: "Human Identity Must Survive Automation", claim: "The scarce thing is judgment, taste and instinct.", accent: "#FF5A1F" },
   { n: "04", name: "Craft Still Matters", claim: "Execution without taste just produces more noise.", accent: "#C5A059" },

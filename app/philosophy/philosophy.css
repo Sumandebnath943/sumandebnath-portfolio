@@ -14,7 +14,9 @@
   --void: #08070b;
   --cream: #f2f0ec;
   --muted: rgba(242, 240, 236, 0.55);
-  --faint: rgba(242, 240, 236, 0.28);
+  /* 0.49, not 0.28: the eyebrow, the ledger claims and the numerals all use
+     this and sat at 2.22:1 on --void, well under WCAG AA. */
+  --faint: rgba(242, 240, 236, 0.49);
   --rule: rgba(242, 240, 236, 0.1);
   --shell: 64rem;
 }

@@ -19,7 +19,8 @@
   --gold-warm: #e0bd77;
   --bone: #f4f1ea;
   --bone-soft: rgba(244, 241, 234, 0.62);
-  --bone-mute: rgba(244, 241, 234, 0.34);
+  /* 0.48 clears AA on --pitch; 0.34 left the date labels at 2.76:1. */
+  --bone-mute: rgba(244, 241, 234, 0.48);
   --rule: rgba(244, 241, 234, 0.1);
   --shell: 64rem;
 }

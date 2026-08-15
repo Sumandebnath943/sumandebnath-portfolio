@@ -11,10 +11,14 @@
    Identity: emerald, borrowed from the WhatsApp channel that is likely to be
    the most-used one.
 
-   Scoped under .ct.
+   Scoped under .cx — NOT .ct, which belongs to ChatTakeover. That widget is
+   mounted in the root layout, so its inline <style> is injected on every page
+   including this one, and being injected after the stylesheet it wins ties.
+   Its .ct-title (15px, near-black) was overriding this page's h1, rendering
+   the headline in dark ink on a dark green hero. Do not reuse the ct- prefix.
    ───────────────────────────────────────────────────────────────────────── */
 
-.ct {
+.cx {
   --deep: #04100b;
   --deep-lift: #0a1b14;
   --paper: #fbfbf9;
@@ -23,7 +27,8 @@
   --wa: #25d366;
   --bone: #f0f6f2;
   --bone-soft: rgba(240, 246, 242, 0.62);
-  --bone-mute: rgba(240, 246, 242, 0.34);
+  /* 0.48 clears AA on the door panels; 0.34 left the notes at 2.93:1. */
+  --bone-mute: rgba(240, 246, 242, 0.48);
   --rule-dark: rgba(240, 246, 242, 0.12);
   --ink: #10201a;
   --ink-soft: #45564f;
@@ -31,23 +36,23 @@
   --shell: 64rem;
 }
 
-.ct-shell {
+.cx-shell {
   max-width: var(--shell);
   margin-inline: auto;
   padding-inline: 1.5rem;
 }
-@media (min-width: 768px) { .ct-shell { padding-inline: 2.5rem; } }
+@media (min-width: 768px) { .cx-shell { padding-inline: 2.5rem; } }
 
 /* ── Hero ─────────────────────────────────────────────────────────────── */
 
-.ct-hero {
+.cx-hero {
   position: relative;
   background: var(--deep);
   color: var(--bone);
   padding-block: clamp(9rem, 18vw, 12rem) clamp(3rem, 7vw, 4.5rem);
   overflow: hidden;
 }
-.ct-hero::before {
+.cx-hero::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -56,11 +61,11 @@
     radial-gradient(ellipse 50% 45% at 5% 95%, rgba(37, 211, 102, 0.1), transparent 70%);
   pointer-events: none;
 }
-.ct-hero > * { position: relative; z-index: 1; }
+.cx-hero > * { position: relative; z-index: 1; }
 
 /* Availability signal. A slow pulse, not a frantic one — the claim is "open",
    not "urgent". */
-.ct-signal {
+.cx-signal {
   display: inline-flex;
   align-items: center;
   gap: 0.65rem;
@@ -74,20 +79,20 @@
   text-transform: uppercase;
   color: var(--mint-warm);
 }
-.ct-dot { position: relative; width: 7px; height: 7px; }
-.ct-dot span {
+.cx-dot { position: relative; width: 7px; height: 7px; }
+.cx-dot span {
   position: absolute;
   inset: 0;
   border-radius: 999px;
   background: var(--mint);
 }
-.ct-dot span:first-child { animation: ct-ping 2.6s cubic-bezier(0, 0, 0.2, 1) infinite; }
-@keyframes ct-ping {
+.cx-dot span:first-child { animation: cx-ping 2.6s cubic-bezier(0, 0, 0.2, 1) infinite; }
+@keyframes cx-ping {
   0% { transform: scale(1); opacity: 0.7; }
   75%, 100% { transform: scale(2.6); opacity: 0; }
 }
 
-.ct-title {
+.cx-title {
   font-family: var(--font-instrument), Georgia, serif;
   font-weight: 400;
   font-size: clamp(2.6rem, 8vw, 5rem);
@@ -96,9 +101,9 @@
   margin-top: 1.75rem;
   max-width: 15ch;
 }
-.ct-title em { font-style: italic; color: var(--mint-warm); padding-right: 0.08em; }
+.cx-title em { font-style: italic; color: var(--mint-warm); padding-right: 0.08em; }
 
-.ct-standfirst {
+.cx-standfirst {
   font-family: var(--font-manrope), sans-serif;
   font-size: clamp(1rem, 2.1vw, 1.15rem);
   line-height: 1.85;
@@ -109,10 +114,10 @@
 
 /* ── The three doors ──────────────────────────────────────────────────── */
 
-.ct-doors { display: grid; gap: 0.85rem; margin-top: clamp(2.5rem, 6vw, 3.5rem); }
-@media (min-width: 760px) { .ct-doors { grid-template-columns: repeat(3, 1fr); } }
+.cx-doors { display: grid; gap: 0.85rem; margin-top: clamp(2.5rem, 6vw, 3.5rem); }
+@media (min-width: 760px) { .cx-doors { grid-template-columns: repeat(3, 1fr); } }
 
-.ct-door {
+.cx-door {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -122,8 +127,8 @@
   text-decoration: none;
   transition: border-color 0.22s, background-color 0.22s, transform 0.22s;
 }
-.ct-door:hover { transform: translateY(-2px); background: rgba(240, 246, 242, 0.05); }
-.ct-door-k {
+.cx-door:hover { transform: translateY(-2px); background: rgba(240, 246, 242, 0.05); }
+.cx-door-k {
   display: flex;
   align-items: center;
   gap: 0.55rem;
@@ -133,7 +138,7 @@
   text-transform: uppercase;
   color: var(--bone-mute);
 }
-.ct-door-v {
+.cx-door-v {
   font-family: var(--font-manrope), sans-serif;
   font-size: 15px;
   font-weight: 600;
@@ -141,25 +146,25 @@
   color: var(--bone);
   word-break: break-word;
 }
-.ct-door-n {
+.cx-door-n {
   font-family: var(--font-manrope), sans-serif;
   font-size: 12.5px;
   line-height: 1.5;
   color: var(--bone-mute);
 }
-.ct-door--wa:hover { border-color: rgba(37, 211, 102, 0.5); }
-.ct-door--wa .ct-door-k { color: var(--wa); }
-.ct-door--mail:hover { border-color: rgba(52, 211, 153, 0.5); }
-.ct-door--mail .ct-door-k { color: var(--mint); }
-.ct-door--call:hover { border-color: rgba(110, 231, 183, 0.5); }
-.ct-door--call .ct-door-k { color: var(--mint-warm); }
+.cx-door--wa:hover { border-color: rgba(37, 211, 102, 0.5); }
+.cx-door--wa .cx-door-k { color: var(--wa); }
+.cx-door--mail:hover { border-color: rgba(52, 211, 153, 0.5); }
+.cx-door--mail .cx-door-k { color: var(--mint); }
+.cx-door--call:hover { border-color: rgba(110, 231, 183, 0.5); }
+.cx-door--call .cx-door-k { color: var(--mint-warm); }
 
 /* ── Form ground ──────────────────────────────────────────────────────── */
 /* Light, because a long message field on a dark background is a worse place
    to write than a light one. */
 
-.ct-body { background: var(--paper); color: var(--ink); padding-block: clamp(3rem, 7vw, 4.5rem); }
-.ct-eyebrow {
+.cx-body { background: var(--paper); color: var(--ink); padding-block: clamp(3rem, 7vw, 4.5rem); }
+.cx-eyebrow {
   font-family: var(--font-dm-mono), ui-monospace, monospace;
   font-size: 10px;
   letter-spacing: 0.34em;
@@ -169,8 +174,8 @@
   align-items: center;
   gap: 0.85rem;
 }
-.ct-eyebrow::after { content: ""; height: 1px; flex: 1; background: currentColor; opacity: 0.28; }
-.ct-h2 {
+.cx-eyebrow::after { content: ""; height: 1px; flex: 1; background: currentColor; opacity: 0.28; }
+.cx-h2 {
   font-family: var(--font-instrument), Georgia, serif;
   font-weight: 400;
   font-size: clamp(1.9rem, 4.6vw, 2.9rem);
@@ -179,38 +184,38 @@
   margin-top: 1.1rem;
   max-width: 22ch;
 }
-.ct-h2 em { font-style: italic; color: #1f7a4d; padding-right: 0.08em; }
+.cx-h2 em { font-style: italic; color: #1f7a4d; padding-right: 0.08em; }
 
-.ct-grid { display: grid; gap: 2.5rem; margin-top: 2.5rem; }
-@media (min-width: 1000px) { .ct-grid { grid-template-columns: 1.55fr 1fr; gap: 3rem; } }
+.cx-grid { display: grid; gap: 2.5rem; margin-top: 2.5rem; }
+@media (min-width: 1000px) { .cx-grid { grid-template-columns: 1.55fr 1fr; gap: 3rem; } }
 
-.ct-fact-k {
+.cx-fact-k {
   font-family: var(--font-dm-mono), ui-monospace, monospace;
   font-size: 10px;
   letter-spacing: 0.26em;
   text-transform: uppercase;
-  color: #7b8a83;
+  color: #64736c;
   margin-bottom: 0.5rem;
 }
-.ct-fact-v {
+.cx-fact-v {
   font-family: var(--font-manrope), sans-serif;
   font-size: 14.5px;
   line-height: 1.7;
   color: var(--ink-soft);
 }
-.ct-fact-v a {
+.cx-fact-v a {
   color: var(--ink);
   text-decoration: none;
   border-bottom: 1px solid var(--rule-light);
   transition: border-color 0.2s;
 }
-.ct-fact-v a:hover { border-bottom-color: #1f7a4d; color: #1f7a4d; }
-.ct-rail { display: grid; gap: 1.75rem; align-content: start; }
+.cx-fact-v a:hover { border-bottom-color: #1f7a4d; color: #1f7a4d; }
+.cx-rail { display: grid; gap: 1.75rem; align-content: start; }
 
 /* ── Roles ────────────────────────────────────────────────────────────── */
 
-.ct-roles { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.75rem; list-style: none; }
-.ct-roles li {
+.cx-roles { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.75rem; list-style: none; }
+.cx-roles li {
   font-family: var(--font-manrope), sans-serif;
   font-size: 12.5px;
   padding: 0.34rem 0.75rem;
@@ -220,9 +225,9 @@
   color: var(--ink-soft);
 }
 
-.ct-cards { display: grid; gap: 0.85rem; margin-top: 2rem; }
-@media (min-width: 760px) { .ct-cards { grid-template-columns: repeat(3, 1fr); } }
-.ct-card {
+.cx-cards { display: grid; gap: 0.85rem; margin-top: 2rem; }
+@media (min-width: 760px) { .cx-cards { grid-template-columns: repeat(3, 1fr); } }
+.cx-card {
   display: block;
   padding: 1.3rem 1.35rem;
   border: 1px solid var(--rule-light);
@@ -230,8 +235,8 @@
   text-decoration: none;
   transition: border-color 0.2s, transform 0.2s;
 }
-.ct-card:hover { border-color: #1f7a4d; transform: translateY(-2px); }
-.ct-card-t {
+.cx-card:hover { border-color: #1f7a4d; transform: translateY(-2px); }
+.cx-card-t {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -241,9 +246,9 @@
   font-weight: 600;
   color: var(--ink);
 }
-.ct-card-t span { color: #7b8a83; transition: transform 0.2s; }
-.ct-card:hover .ct-card-t span { transform: translateX(3px); color: #1f7a4d; }
-.ct-card-d {
+.cx-card-t span { color: #64736c; transition: transform 0.2s; }
+.cx-card:hover .cx-card-t span { transform: translateX(3px); color: #1f7a4d; }
+.cx-card-d {
   font-family: var(--font-manrope), sans-serif;
   font-size: 13px;
   line-height: 1.6;
@@ -251,16 +256,16 @@
   margin-top: 0.45rem;
 }
 
-.ct-note {
+.cx-note {
   font-family: var(--font-manrope), sans-serif;
   font-size: 12px;
   line-height: 1.7;
-  color: #7b8a83;
+  color: #64736c;
   margin-top: 2.5rem;
   max-width: 70ch;
 }
-.ct-note a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: 2px; }
+.cx-note a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: 2px; }
 
 @media (prefers-reduced-motion: reduce) {
-  .ct *, .ct-dot span:first-child { transition: none !important; animation: none !important; }
+  .cx *, .cx-dot span:first-child { transition: none !important; animation: none !important; }
 }
