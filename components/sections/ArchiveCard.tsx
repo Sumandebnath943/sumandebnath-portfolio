@@ -198,7 +198,7 @@ function CardFront({ project, isLab, isDpe, onFlip }: { project: ArchiveProject;
         <p className="font-serif italic text-xl md:text-2xl text-white/90 leading-snug">{project.positioning}</p>
         <p className="font-manrope text-[14px] md:text-[15px] text-white/65 leading-[1.75]">{project.description}</p>
         <div className="flex flex-col gap-3 pt-1">
-          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/35">{project.type}</p>
+          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/55">{project.type}</p>
           <div className="flex flex-wrap gap-1.5">
             {project.stack.map((s) => (
               <span key={s} className="font-manrope text-[11px] px-2.5 py-1 rounded-full border border-white/[0.07] bg-white/[0.02] text-white/55">
@@ -209,7 +209,7 @@ function CardFront({ project, isLab, isDpe, onFlip }: { project: ArchiveProject;
         </div>
         {project.miniItems && project.miniItems.length > 0 && (
           <div className="flex flex-col gap-2 pt-1">
-            <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/35">Selected experiments</p>
+            <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/55">Selected experiments</p>
             <ul className="flex flex-wrap gap-1.5">
               {project.miniItems.map((item) => (
                 <li key={item} className="font-manrope text-[11px] px-2.5 py-1 rounded-full border border-white/[0.06] bg-white/[0.015] text-white/55">

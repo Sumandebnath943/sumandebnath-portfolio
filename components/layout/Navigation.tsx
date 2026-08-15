@@ -271,7 +271,7 @@ export default function Navigation() {
                       onClick={link.href ? () => handleNavClick(link.href!) : undefined}
                       aria-label={link.href ? `${link.label} — open page, or hover for its sections` : undefined}
                       style={hueVars(link.color)}
-                      className={`px-2 lg:px-3 py-2 text-[12px] lg:text-[13px] font-medium text-[#a0a0a5] transition-all duration-200 rounded-full group-hover:text-[var(--c)] group-hover:bg-[var(--cb)] group-hover:shadow-[inset_0_0_0_1px_var(--cr),0_5px_18px_-8px_var(--c)] flex items-center gap-1 lg:gap-1.5 whitespace-nowrap ${
+                      className={`px-2 lg:px-3 py-2 text-[12px] lg:text-[13px] font-medium text-[#b4b4b9] transition-all duration-200 rounded-full group-hover:text-[var(--c)] group-hover:bg-[var(--cb)] group-hover:shadow-[inset_0_0_0_1px_var(--cr),0_5px_18px_-8px_var(--c)] flex items-center gap-1 lg:gap-1.5 whitespace-nowrap ${
                         link.href ? "cursor-pointer" : "cursor-default"
                       }`}
                     >
@@ -333,7 +333,7 @@ export default function Navigation() {
                   transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }}
                   onClick={() => handleNavClick(link.href!)}
                   style={hueVars(link.color)}
-                  className="px-2 lg:px-3 py-2 text-[12px] lg:text-[13px] font-medium text-[#a0a0a5] transition-all duration-200 rounded-full whitespace-nowrap hover:text-[var(--c)] hover:bg-[var(--cb)] hover:shadow-[inset_0_0_0_1px_var(--cr),0_5px_18px_-8px_var(--c)]"
+                  className="px-2 lg:px-3 py-2 text-[12px] lg:text-[13px] font-medium text-[#b4b4b9] transition-all duration-200 rounded-full whitespace-nowrap hover:text-[var(--c)] hover:bg-[var(--cb)] hover:shadow-[inset_0_0_0_1px_var(--cr),0_5px_18px_-8px_var(--c)]"
                 >
                   {link.label}
                 </m.button>

@@ -237,7 +237,7 @@ export default function ContactForm() {
         >
           {status === "sending" ? "Sending…" : "Send message"}
         </button>
-        <p className="font-manrope text-[12.5px] text-[#8a8a93]">
+        <p className="font-manrope text-[12.5px] text-[#63636D]">
           Goes straight to Suman — no mailing list, no autoresponder.
         </p>
       </div>

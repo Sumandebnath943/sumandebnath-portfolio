@@ -17,7 +17,7 @@ const principles = [
       "The future will not belong to people who merely use AI. It will belong to those who can architect around it.",
     ],
     size: "hero", // full-width dominant
-    textColor: "text-[#2E6FBF]",
+    textColor: "text-[#2E6FBF]", numberColor: "text-[#255A9C]",
     borderColor: "border-[#2E6FBF]/30",
   },
   {
@@ -30,7 +30,7 @@ const principles = [
       "The goal is no longer to simply solve problems, but to build environments where solutions continuously emerge, adapt, and evolve.",
     ],
     size: "half",
-    textColor: "text-[#10B981]",
+    textColor: "text-[#10B981]", numberColor: "text-[#0A7A55]",
     borderColor: "border-[#10B981]/30",
   },
   {
@@ -43,7 +43,7 @@ const principles = [
       "The challenge is preserving judgment, taste, instinct, perspective, and human identity inside increasingly automated systems.",
     ],
     size: "half",
-    textColor: "text-[#FF5A1F]",
+    textColor: "text-[#FF5A1F]", numberColor: "text-[#C4400E]",
     borderColor: "border-[#FF5A1F]/30",
   },
   {
@@ -56,7 +56,7 @@ const principles = [
       "Design, clarity, composition, language, and emotional precision still separate meaningful systems from disposable ones.",
     ],
     size: "half",
-    textColor: "text-[#C5A059]",
+    textColor: "text-[#C5A059]", numberColor: "text-[#8A6A28]",
     borderColor: "border-[#C5A059]/40",
   },
   {
@@ -68,7 +68,7 @@ const principles = [
       "The ability to rapidly prototype, iterate, test, and evolve systems is now a strategic advantage.",
     ],
     size: "half",
-    textColor: "text-[#7B61FF]",
+    textColor: "text-[#7B61FF]", numberColor: "text-[#5F45E0]",
     borderColor: "border-[#7B61FF]/30",
   },
   {
@@ -80,7 +80,7 @@ const principles = [
       "Design, strategy, systems thinking, automation, engineering, and AI orchestration are beginning to converge into one new operating model.",
     ],
     size: "hero",
-    textColor: "text-[#FF003C]",
+    textColor: "text-[#FF003C]", numberColor: "text-[#D10031]",
     borderColor: "border-[#FF003C]/30",
   },
 ];
@@ -107,7 +107,7 @@ function PrinciplePanel({
     >
       <div className={`border-t ${principle.borderColor} pt-8 pb-8 transition-colors duration-500`}>
         {/* Number */}
-        <p className={`font-manrope text-[10px] tracking-[0.4em] mb-5 font-bold ${principle.textColor}`}>
+        <p className={`font-manrope text-[10px] tracking-[0.4em] mb-5 font-bold ${principle.numberColor}`}>
           {principle.number}
         </p>
 
@@ -166,7 +166,7 @@ function CinematicQuote({
         {quote}
       </blockquote>
       {attribution && (
-        <p className="font-manrope text-[10px] uppercase tracking-[0.4em] text-[#555] font-bold mt-6">
+        <p className="font-manrope text-[10px] uppercase tracking-[0.4em] text-[#4A4A4A] font-bold mt-6">
           — {attribution}
         </p>
       )}

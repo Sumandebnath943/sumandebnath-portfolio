@@ -35,7 +35,7 @@ export default function ExperienceNarrative() {
             className="rounded-[2rem] bg-white border border-[#1A1917]/10 p-8 md:p-12 shadow-[0_8px_30px_rgba(26,25,23,0.04)]"
           >
             <div className="mb-8">
-              <span className="font-mono text-[10px] text-[#F04E00] uppercase tracking-[0.3em] mb-3 block">
+              <span className="font-mono text-[10px] text-[#C43F00] uppercase tracking-[0.3em] mb-3 block">
                 Part 1 (70%)
               </span>
               <h3 className="font-manrope font-semibold text-2xl md:text-3xl text-[#1A1917] mb-2">

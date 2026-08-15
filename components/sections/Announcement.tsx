@@ -93,7 +93,7 @@ function TickerItem({ a }: { a: Announcement }) {
       >
         {a.title}
       </span>
-      <span className="font-manrope text-[13px] text-white/35">{a.desc}</span>
+      <span className="font-manrope text-[13px] text-white/55">{a.desc}</span>
       <ArrowUpRight
         size={13}
         className="shrink-0 text-white/30 transition-all group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5"

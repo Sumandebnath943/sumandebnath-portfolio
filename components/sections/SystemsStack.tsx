@@ -217,7 +217,7 @@ function EcosystemPanel({
               {eco.secondary.map((tool) => (
                 <span
                   key={tool}
-                  className="font-manrope text-[11px] px-3 py-1 rounded-md border border-white/[0.06] bg-white/[0.02] text-white/30"
+                  className="font-manrope text-[11px] px-3 py-1 rounded-md border border-white/[0.06] bg-white/[0.02] text-white/55"
                 >
                   {tool}
                 </span>
@@ -309,7 +309,7 @@ export default function SystemsStack() {
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
           className="mt-24 pt-12 border-t border-white/[0.05] flex flex-col md:flex-row md:items-center md:justify-between gap-6"
         >
-          <p className="font-manrope text-sm text-white/30 leading-relaxed max-w-lg">
+          <p className="font-manrope text-sm text-white/55 leading-relaxed max-w-lg">
             This is not someone casually using AI tools.
             <br />
             This is an operator orchestrating entire AI-native ecosystems.

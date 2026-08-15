@@ -142,7 +142,7 @@ export default function Contact({
           initial={{ opacity: 0, y: 16 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.9, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
-          className={`font-manrope text-sm leading-relaxed max-w-md mb-10 ${light ? "text-[#0B3B25]/65" : "text-[#F5F5F3]/55"}`}
+          className={`font-manrope text-sm leading-relaxed max-w-md mb-10 ${light ? "text-[#0B3B25]/80" : "text-[#F5F5F3]/55"}`}
         >
           Open to meaningful collaborations, AI-native systems,
           product strategy, and future-focused conversations.
@@ -160,7 +160,7 @@ export default function Contact({
             href="tel:+917980296957"
             className={`group inline-flex items-center gap-3 px-6 py-3 rounded-full border transition-all duration-500 font-manrope text-xs tracking-wide ${
               light
-                ? "border-[#2E8B57]/25 bg-[#2E8B57]/[0.05] text-[#0B3B25]/65 hover:text-[#0B3B25] hover:border-[#2E8B57]/45 hover:bg-[#2E8B57]/[0.1]"
+                ? "border-[#2E8B57]/25 bg-[#2E8B57]/[0.05] text-[#0B3B25]/80 hover:text-[#0B3B25] hover:border-[#2E8B57]/45 hover:bg-[#2E8B57]/[0.1]"
                 : "border-[#F5F5F3]/12 bg-[#F5F5F3]/[0.04] text-[#F5F5F3]/55 hover:text-[#F5F5F3]/85 hover:border-[#F5F5F3]/22 hover:bg-[#F5F5F3]/[0.07]"
             }`}
           >
@@ -173,7 +173,7 @@ export default function Contact({
             href="mailto:sumandebnath944@gmail.com"
             className={`group inline-flex items-center gap-3 px-6 py-3 rounded-full border transition-all duration-500 font-manrope text-xs tracking-wide ${
               light
-                ? "border-[#2E8B57]/25 bg-[#2E8B57]/[0.05] text-[#0B3B25]/65 hover:text-[#0B3B25] hover:border-[#2E8B57]/45 hover:bg-[#2E8B57]/[0.1]"
+                ? "border-[#2E8B57]/25 bg-[#2E8B57]/[0.05] text-[#0B3B25]/80 hover:text-[#0B3B25] hover:border-[#2E8B57]/45 hover:bg-[#2E8B57]/[0.1]"
                 : "border-[#F5F5F3]/12 bg-[#F5F5F3]/[0.04] text-[#F5F5F3]/55 hover:text-[#F5F5F3]/85 hover:border-[#F5F5F3]/22 hover:bg-[#F5F5F3]/[0.07]"
             }`}
           >
@@ -215,11 +215,11 @@ export default function Contact({
           transition={{ duration: 1.4, delay: 0.38, ease: [0.22, 1, 0.36, 1] }}
           className={`border-t pt-12 pb-12 ${light ? "border-[#2E8B57]/[0.16]" : "border-[#F5F5F3]/[0.05]"}`}
         >
-          <p className={`font-serif italic font-normal text-xl md:text-2xl leading-relaxed ${light ? "text-[#1f7a4d]/80" : "text-[#F5F5F3]/45"}`}>
+          <p className={`font-serif italic font-normal text-xl md:text-2xl leading-relaxed ${light ? "text-[#1f7a4d]/95" : "text-[#F5F5F3]/45"}`}>
             &ldquo;Human instinct.{" "}
-            <span className={light ? "text-[#1f7a4d]/55" : "text-[#F5F5F3]/28"}>AI amplification.</span>
+            <span className={light ? "text-[#1f7a4d]/95" : "text-[#F5F5F3]/28"}>AI amplification.</span>
             <br />
-            <span className={light ? "text-[#1f7a4d]/40" : "text-[#F5F5F3]/20"}>Systemic execution.&rdquo;</span>
+            <span className={light ? "text-[#1f7a4d]/95" : "text-[#F5F5F3]/20"}>Systemic execution.&rdquo;</span>
           </p>
         </m.div>
       </div>
@@ -233,8 +233,8 @@ export default function Contact({
             <p className={`font-manrope font-semibold text-sm ${light ? "text-[#0B3B25]" : "text-[#1A1A1A]"}`}>
               Suman Debnath
             </p>
-            <span className={`text-xs px-1 ${light ? "text-[#2E8B57]/50" : "text-[#1A1A1A]/40"}`}>·</span>
-            <p className={`font-manrope text-xs font-medium ${light ? "text-[#1f7a4d]/80" : "text-[#1A1A1A]/70"}`}>
+            <span className={`text-xs px-1 ${light ? "text-[#1f7a4d]" : "text-[#1A1A1A]/60"}`}>·</span>
+            <p className={`font-manrope text-xs font-medium ${light ? "text-[#1f7a4d]/95" : "text-[#1A1A1A]/70"}`}>
               Brand Marketing Leader & AI Product Builder
             </p>
           </div>
@@ -247,24 +247,24 @@ export default function Contact({
             // genuinely runs out of room, so wider screens keep the single line.
             // Text-height links are a poor thumb target, so the anchors get
             // real vertical padding on phones and revert to inline text at md.
-            className={`flex flex-wrap items-center gap-x-4 gap-y-2 font-manrope text-xs font-medium [&_a]:py-3.5 [&_a]:touch-manipulation md:[&_a]:py-0 ${light ? "text-[#1f7a4d]/75" : "text-[#1A1A1A]/60"}`}
+            className={`flex flex-wrap items-center gap-x-4 gap-y-2 font-manrope text-xs font-medium [&_a]:py-3.5 [&_a]:touch-manipulation md:[&_a]:py-0 ${light ? "text-[#1f7a4d]/95" : "text-[#1A1A1A]/60"}`}
           >
             <a href="/projects" className={`transition-colors ${light ? "hover:text-[#0B3B25]" : "hover:text-[#1A1A1A]"}`}>
               Projects
             </a>
-            <span className={light ? "text-[#2E8B57]/35" : "text-[#1A1A1A]/30"}>·</span>
+            <span className={light ? "text-[#1f7a4d]" : "text-[#1A1A1A]/60"}>·</span>
             <a href="/faq" className={`transition-colors ${light ? "hover:text-[#0B3B25]" : "hover:text-[#1A1A1A]"}`}>
               FAQ
             </a>
-            <span className={light ? "text-[#2E8B57]/35" : "text-[#1A1A1A]/30"}>·</span>
+            <span className={light ? "text-[#1f7a4d]" : "text-[#1A1A1A]/60"}>·</span>
             <a href="/about" className={`transition-colors ${light ? "hover:text-[#0B3B25]" : "hover:text-[#1A1A1A]"}`}>
               About
             </a>
-            <span className={light ? "text-[#2E8B57]/35" : "text-[#1A1A1A]/30"}>·</span>
+            <span className={light ? "text-[#1f7a4d]" : "text-[#1A1A1A]/60"}>·</span>
             <a href="/fun-apps" className={`transition-colors ${light ? "hover:text-[#0B3B25]" : "hover:text-[#1A1A1A]"}`}>
               Fun Apps
             </a>
-            <span className={light ? "text-[#2E8B57]/35" : "text-[#1A1A1A]/30"}>·</span>
+            <span className={light ? "text-[#1f7a4d]" : "text-[#1A1A1A]/60"}>·</span>
             <a href="/privacy" className={`transition-colors ${light ? "hover:text-[#0B3B25]" : "hover:text-[#1A1A1A]"}`}>
               Privacy
             </a>
@@ -277,13 +277,13 @@ export default function Contact({
               className={`px-2 py-1 rounded text-[9px] font-bold tracking-widest uppercase transition-colors ${
                 light
                   ? "bg-[#2E8B57]/12 text-[#1f7a4d] hover:bg-[#2E8B57] hover:text-white"
-                  : "bg-red-500/10 text-red-600 hover:bg-red-500 hover:text-white"
+                  : "bg-red-500/10 text-red-700 hover:bg-red-500 hover:text-white"
               }`}
               aria-label="System Self-Destruct"
             >
               Do Not Click
             </button>
-            <p className={`font-manrope text-xs font-semibold ${light ? "text-[#1f7a4d]/70" : "text-[#1A1A1A]/60"}`}>
+            <p className={`font-manrope text-xs font-semibold ${light ? "text-[#1f7a4d]/95" : "text-[#1A1A1A]/60"}`}>
               © {new Date().getFullYear()}
             </p>
           </div>
@@ -294,7 +294,7 @@ export default function Contact({
             this site records IP addresses and runs third-party analytics, so it
             cannot be described as anonymous. */}
         <div className="max-w-5xl mx-auto px-6 pb-6 -mt-1">
-          <p className={`font-manrope text-[10px] leading-relaxed ${light ? "text-[#1f7a4d]/45" : "text-[#1A1A1A]/40"}`}>
+          <p className={`font-manrope text-[10px] leading-relaxed ${light ? "text-[#1f7a4d]/95" : "text-[#1A1A1A]/60"}`}>
             This site records visit data — pages viewed, time and scroll depth, device, your IP address and
             the approximate location and network provider derived from it — and sends it to me privately. It
             also runs Google Analytics and Vercel Analytics.{" "}

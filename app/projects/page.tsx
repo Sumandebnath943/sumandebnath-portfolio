@@ -111,7 +111,7 @@ export default function ProjectsArchivePage() {
           </div>
 
           <div className="relative max-w-6xl mx-auto">
-            <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-white/35 mb-6">
+            <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-white/55 mb-6">
               Archive
             </p>
             <h1
@@ -130,7 +130,7 @@ export default function ProjectsArchivePage() {
             </p>
 
             {/* Subtle stats row */}
-            <div className="mt-12 flex flex-wrap items-center gap-x-10 gap-y-3 text-[11px] font-mono uppercase tracking-[0.3em] text-white/35">
+            <div className="mt-12 flex flex-wrap items-center gap-x-10 gap-y-3 text-[11px] font-mono uppercase tracking-[0.3em] text-white/55">
               <span>
                 <span className="text-white/65">{archiveProjects.length}</span>{" "}
                 entries
@@ -174,7 +174,7 @@ export default function ProjectsArchivePage() {
             <p className="font-serif italic text-2xl md:text-4xl text-white/85 leading-snug">
               This is not someone building one-off demos.
             </p>
-            <p className="font-manrope text-sm md:text-base text-white/45 leading-relaxed mt-8 max-w-xl mx-auto">
+            <p className="font-manrope text-sm md:text-base text-white/60 leading-relaxed mt-8 max-w-xl mx-auto">
               This is an operator continuously building AI-native systems, tools,
               workflows, and operational infrastructure at scale.
             </p>

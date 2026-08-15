@@ -42,7 +42,7 @@ export default function NowBuilding() {
               .
             </h2>
           </div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#555]">
+          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#8A8A8A]">
             Last updated{" "}
             <time dateTime={NOW_LAST_UPDATED}>{NOW_LAST_UPDATED}</time>
           </p>

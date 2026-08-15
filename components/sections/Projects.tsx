@@ -542,7 +542,7 @@ function StackCard({
                 className="w-2.5 h-2.5 rounded-full animate-pulse"
                 style={{ background: accent }}
               />
-              <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-white/40">
+              <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-white/55">
                 Preview Coming Soon
               </span>
             </div>

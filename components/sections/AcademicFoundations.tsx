@@ -151,7 +151,7 @@ function EntryRow({
           {entry.status === "active" && (
             <span className="relative flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#0A0A0A] animate-pulse" />
-              <span className="font-manrope text-[9px] uppercase tracking-[0.3em] text-[#0A0A0A]/50">
+              <span className="font-manrope text-[9px] uppercase tracking-[0.3em] text-[#0A0A0A]/70">
                 Active
               </span>
             </span>

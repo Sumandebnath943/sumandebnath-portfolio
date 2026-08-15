@@ -21,7 +21,8 @@
   /* Text */
   --lp-text-primary:   #1A1917;
   --lp-text-secondary: #4A4743;
-  --lp-text-tertiary:  #7A7672;
+  /* Was #7A7672 — 4.39:1 on the page ground, just under AA. */
+  --lp-text-tertiary:  #6B6763;
   --lp-text-inverse:   #FAF9F6;
 
   /* Accent — orange */
@@ -78,6 +79,15 @@
   --lp-border-ai-leadership:      #D4A520;
   --lp-bg-ai-leadership:          rgba(212, 165, 32, 0.12);
   --lp-border-claude-ecosystem:   #8B8A20;
+
+/* Chip label colours. The border tokens above are chosen as borders and are
+   far too light to set 11px uppercase text in — between 2.04:1 and 4.42:1 on
+   their own tinted grounds. These are the same hues taken down to clear AA. */
+  --lp-text-ai-foundations:       #2f6698;
+  --lp-text-responsible-ai:       #41539f;
+  --lp-text-ai-strategy:          #414fa0;
+  --lp-text-ai-leadership:        #8a6a05;
+  --lp-text-claude-ecosystem:     #5f5e13;
   --lp-bg-claude-ecosystem:       rgba(139, 138, 32, 0.12);
 
   font-family: var(--lp-font-sans);
@@ -411,12 +421,12 @@ body.learnings-page::before {
 .lp-experience-card[data-domain="claude-ecosystem"]  { border-top-color: var(--lp-border-claude-ecosystem); }
 
 /* Domain chip tints per domain */
-.lp-experience-card[data-domain="ai-foundations"]    .lp-domain-chip { background-color: var(--lp-bg-ai-foundations);    color: var(--lp-border-ai-foundations);    border-color: var(--lp-border-ai-foundations); }
+.lp-experience-card[data-domain="ai-foundations"]    .lp-domain-chip { background-color: var(--lp-bg-ai-foundations);    color: var(--lp-text-ai-foundations);    border-color: var(--lp-border-ai-foundations); }
 .lp-experience-card[data-domain="prompt-engineering"].lp-domain-chip { background-color: var(--lp-bg-prompt-engineering); color: var(--lp-border-prompt-engineering); border-color: var(--lp-border-prompt-engineering); }
-.lp-experience-card[data-domain="responsible-ai"]    .lp-domain-chip { background-color: var(--lp-bg-responsible-ai);    color: var(--lp-border-responsible-ai);    border-color: var(--lp-border-responsible-ai); }
-.lp-experience-card[data-domain="ai-strategy"]       .lp-domain-chip { background-color: var(--lp-bg-ai-strategy);       color: var(--lp-border-ai-strategy);       border-color: var(--lp-border-ai-strategy); }
-.lp-experience-card[data-domain="ai-leadership"]     .lp-domain-chip { background-color: var(--lp-bg-ai-leadership);     color: var(--lp-border-ai-leadership);     border-color: var(--lp-border-ai-leadership); }
-.lp-experience-card[data-domain="claude-ecosystem"]  .lp-domain-chip { background-color: var(--lp-bg-claude-ecosystem);  color: var(--lp-border-claude-ecosystem);  border-color: var(--lp-border-claude-ecosystem); }
+.lp-experience-card[data-domain="responsible-ai"]    .lp-domain-chip { background-color: var(--lp-bg-responsible-ai);    color: var(--lp-text-responsible-ai);    border-color: var(--lp-border-responsible-ai); }
+.lp-experience-card[data-domain="ai-strategy"]       .lp-domain-chip { background-color: var(--lp-bg-ai-strategy);       color: var(--lp-text-ai-strategy);       border-color: var(--lp-border-ai-strategy); }
+.lp-experience-card[data-domain="ai-leadership"]     .lp-domain-chip { background-color: var(--lp-bg-ai-leadership);     color: var(--lp-text-ai-leadership);     border-color: var(--lp-border-ai-leadership); }
+.lp-experience-card[data-domain="claude-ecosystem"]  .lp-domain-chip { background-color: var(--lp-bg-claude-ecosystem);  color: var(--lp-text-claude-ecosystem);  border-color: var(--lp-border-claude-ecosystem); }
 
 /* ── Credential Stack ────────────────────────────────────── */
 .lp-credential-stack {
