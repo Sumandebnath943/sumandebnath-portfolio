@@ -22,6 +22,22 @@ import { X, Paperclip } from "lucide-react";
 /* ── Shared chrome ──────────────────────────────────────────────────────── */
 
 const EGG_CSS = `
+/* Scrims and panel fills.
+
+   These were Tailwind arbitrary colours carrying an opacity modifier —
+   bg-[#03060a]/97 and friends — which generate no rule at all. The overlays
+   have therefore never had a background: they only looked right because every
+   page behind them was already near-black, and backdrop-blur did the rest.
+   /journey is paper, so the blurred page showed straight through and the light
+   terminal text became unreadable.
+
+   Declared here rather than as utilities because this <style> tag is literal
+   CSS and cannot be missed by Tailwind's scanner. */
+.egg-scrim-red   { background-color: #040101f7; }
+.egg-scrim-green { background-color: #03060af7; }
+.egg-panel-red   { background-color: #0a0202e6; }
+.egg-panel-green { background-color: #050b12eb; }
+
 /* Scanlines, vignette and a slow phosphor roll. Applied to any egg surface. */
 .egg-crt::before {
   content: "";
@@ -358,7 +374,7 @@ export default function EasterEggs() {
             onClick={dismissAll}
             role="dialog"
             aria-label="System self-destruct — a joke"
-            className="egg-crt fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-[#040101]/97 px-4 backdrop-blur-md cursor-pointer"
+            className="egg-crt fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden egg-scrim-red px-4 backdrop-blur-md cursor-pointer"
           >
             <div className="egg-roll" />
 
@@ -366,7 +382,7 @@ export default function EasterEggs() {
               initial={{ scale: 0.97, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="relative z-[2] w-full max-w-2xl border border-red-500/40 bg-[#0a0202]/90 font-mono text-red-400 shadow-[0_0_120px_-20px_rgba(220,38,38,0.55)]"
+              className="relative z-[2] w-full max-w-2xl border border-red-500/40 egg-panel-red font-mono text-red-400 shadow-[0_0_120px_-20px_rgba(220,38,38,0.55)]"
             >
               {/* Title bar */}
               <div className="flex items-center gap-2.5 border-b border-red-500/25 px-5 py-3">
@@ -459,7 +475,7 @@ export default function EasterEggs() {
             onClick={dismissAll}
             role="dialog"
             aria-label="Candidate evaluation — a joke"
-            className="egg-crt fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-[#03060a]/97 px-4 backdrop-blur-md cursor-pointer"
+            className="egg-crt fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden egg-scrim-green px-4 backdrop-blur-md cursor-pointer"
           >
             <div className="egg-roll" />
 
@@ -467,7 +483,7 @@ export default function EasterEggs() {
               initial={{ scale: 0.97, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="relative z-[2] w-full max-w-2xl border border-[#34D399]/30 bg-[#050b12]/92 font-mono shadow-[0_0_120px_-20px_rgba(52,211,153,0.4)]"
+              className="relative z-[2] w-full max-w-2xl border border-[#34D399]/30 egg-panel-green font-mono shadow-[0_0_120px_-20px_rgba(52,211,153,0.4)]"
             >
               <div className="flex items-center justify-between gap-3 border-b border-[#34D399]/20 px-5 py-3">
                 <span className="flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#34D399]">

@@ -31,7 +31,7 @@ export type Interaction =
   | "grow" // hold to grow the follower counter
   | "unlock" // reveal the self-taught stack, one tool at a time
   | "travel" // Kolkata to Pune
-  | "reveal" // uncover the Illusion logo
+  | "reveal" // uncover the IllusionFX logo
   | "shut" // the door that closed
   | "open" // the portfolio that opened it again
   | "pile" // the KRAs stack up
@@ -82,26 +82,32 @@ export type Chapter = {
  * and the page's line become one line running off the screen in both
  * directions, and the image stops having a left and right edge.
  *
- * Re-measure if an illustration is ever regenerated; the detector is in the
- * commit that introduced this.
+ * Detecting this is fiddlier than it looks. Ranking rows by darkness picks up
+ * desks and train bodies; ranking by width picks up a skyline base and a row of
+ * monitors. What works is scoring each row by how close its ink comes to BOTH
+ * canvas edges, breaking ties toward more ink and toward the lower line, and
+ * merging a +/-2px band first — some grounds are drawn as two segments at
+ * slightly different heights that no single row spans. Re-measure with that if
+ * an illustration is ever regenerated, and check it by drawing the line over
+ * the art rather than trusting the number.
  */
 export const HORIZON: Record<string, number> = {
-  prologue: 84.8,
-  tutor: 69.9,
-  commerce: 79.5,
-  college: 75.4,
-  wolambo: 62.0,
-  selftaught: 75.6,
-  mba: 65.8,
-  illusion: 61.8,
-  rejected: 80.0,
-  hired: 72.4,
-  kerala: 78.5,
-  gap: 76.5,
-  pibm: 77.8,
-  ai: 81.4,
-  converge: 80.8,
-  five: 84.9,
+  prologue: 84.84,
+  tutor: 69.93,
+  commerce: 79.52,
+  college: 75.34,
+  wolambo: 73.03,
+  selftaught: 75.41,
+  mba: 65.9,
+  illusion: 78.81,
+  rejected: 79.99,
+  hired: 72.66,
+  kerala: 78.59,
+  gap: 76.42,
+  pibm: 77.78,
+  ai: 81.56,
+  converge: 80.71,
+  five: 84.84,
 };
 
 export const JOURNEY_TITLE = "Something you won't find in my resume";
@@ -283,9 +289,9 @@ export const chapters: Chapter[] = [
   {
     id: "illusion",
     when: "2016–2017 · The company that never opened",
-    title: "Illusion Effects · “Artificially Real”",
+    title: "IllusionFX · “Artificially Real”",
     lines: [
-      "I wanted to start an agency. I called it Illusion Effects, and I gave it everything a company gets except customers: a logo, an animated logo intro, brochures, leaflets, a plan.",
+      "I wanted to start an agency. I called it IllusionFX, and I gave it everything a company gets except customers: a logo, an animated logo intro, brochures, leaflets, a plan.",
       "I built all of it sitting in the college IT lab on a laptop with 4 GB of RAM, rendering motion graphics a few seconds at a time.",
       "It never opened. I have kept the logo for nine years.",
       "Its tagline was “Artificially Real”. I picked those two words in 2016 because they sounded good together. I now spend my working life building things that are exactly that, and I did not see it coming for another seven years.",
@@ -297,8 +303,8 @@ export const chapters: Chapter[] = [
     artifacts: [
       {
         src: "/journey-assets/illusion-logo.png",
-        caption: "Illusion Effects, 2016. The agency that never opened.",
-        alt: "The Illusion Effects logo in red and black, with the tagline Artificially Real.",
+        caption: "IllusionFX, 2016. The agency that never opened.",
+        alt: "The IllusionFX logo in red and black, with the tagline Artificially Real.",
         shape: "mark",
       },
     ],

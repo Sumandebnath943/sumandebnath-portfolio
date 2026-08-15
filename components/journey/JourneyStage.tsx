@@ -319,10 +319,14 @@ export default function JourneyStage() {
                       Take the résumé
                     </a>
                   </div>
+                  {/* "Two of these have their own pages" was wrong — most of
+                      them do. */}
                   <p className="jr-close-egg">
-                    Two of these have their own pages —{" "}
-                    <Link href="/slms/pentacmd">the SLM</Link> and{" "}
-                    <Link href="/llms/qdex-1.5b">the fine-tuned LLM</Link>. And try typing{" "}
+                    Most of these have their own pages —{" "}
+                    <Link href="/slms/pentacmd">the SLM</Link>,{" "}
+                    <Link href="/llms/qdex-1.5b">the fine-tuned LLM</Link>,{" "}
+                    <Link href="/agents/migi">the agent fleet</Link>, and{" "}
+                    <Link href="/projects">everything else built alone</Link>. And try typing{" "}
                     <kbd>hire</kbd> anywhere on this site.
                   </p>
                 </div>
