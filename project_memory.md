@@ -1,3 +1,9 @@
+> **SUPERSEDED — historical snapshot, early 2026.**
+> This file is kept for history only. Its file paths
+> (`c:/Users/Admin/Documents/sumandebnath/...`) and its design system no longer
+> match the codebase, and it predates the journey, agent, app, game and model
+> pages entirely. The current architectural reference is **`PROJECT_BIBLE.md`**.
+
 # Project Memory: Suman Debnath AI-Native Portfolio
 
 This document acts as the core memory bank and architectural blueprint for **Suman Debnath's AI-Native Product Builder Portfolio**. It preserves the design philosophy, file structures, component specifics, styling guidelines, and recent optimizations to maintain visual cohesion and high development speed across future agent and developer sessions.

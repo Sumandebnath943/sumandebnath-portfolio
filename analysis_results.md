@@ -1,3 +1,8 @@
+> **SUPERSEDED — historical audit, early 2026.**
+> Every bug listed here was fixed long ago, and the site has since been through
+> two full mobile and WCAG AA passes. Kept for history only. For current state
+> see **`HANDOFF.md`**; for architecture see **`PROJECT_BIBLE.md`**.
+
 # Mobile Responsive Design Audit: Suman Debnath Portfolio
 
 This document contains a comprehensive, component-by-component technical audit of the **Suman Debnath AI-Native Product Builder Portfolio** in a mobile viewport (specifically **375x812px**, representing standard mobile devices like the iPhone X/XS/11 Pro/12 Mini). 

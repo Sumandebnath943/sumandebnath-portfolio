@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Suman Debnath — Portfolio
 
-## Getting Started
+The personal site of Suman Debnath, an AI-native product marketer who builds the
+things he markets. Live at **https://sumandebnath.houseofnamus.com**.
 
-First, run the development server:
+It is not a template portfolio. Almost every route is a bespoke landing page for
+something he shipped — an autonomous agent fleet, a native Android client, a
+language model, a CLI, a game, an encrypted notepad — each with its own palette
+and its own argument.
+
+## Documentation
+
+| File | Read it for |
+|---|---|
+| **[PROJECT_BIBLE.md](PROJECT_BIBLE.md)** | Architecture, route map, design system, subsystems, conventions, known traps |
+| **[HANDOFF.md](HANDOFF.md)** | Current state, the last session's changes, next steps |
+| **[PORTFOLIO_HANDOFF.md](PORTFOLIO_HANDOFF.md)** | Voice, what each page argues, the pattern for a new product page |
+
+`project_memory.md` and `analysis_results.md` are superseded historical
+snapshots, kept only for reference.
+
+## Stack
+
+Next.js 16 (App Router, Turbopack) · React 19 · Tailwind 3.4 · framer-motion 12
+· three + React Three Fiber · Neon Postgres · Groq · deployed on Vercel.
+
+## Running locally
+
+```bash
+npm install
+```
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Build and lint before committing:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+```
 
-## Learn More
+There are pre-existing lint errors in `components/layout/Navigation.tsx` — see
+`HANDOFF.md` §3.
 
-To learn more about Next.js, take a look at the following resources:
+## Environment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`DATABASE_URL` · `TELEGRAM_BOT_TOKEN` · `TELEGRAM_CHAT_ID` ·
+`ADMIN_PASSWORD_HASH` · `ADMIN_SESSION_SECRET` · `CRON_SECRET` · `GROQ_API_KEY`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+See `PROJECT_BIBLE.md` §9 for what each one powers.
 
-## Deploy on Vercel
+## Contributing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Commits go straight to `main`; pushing deploys. Commit subjects are lowercase
+`type(scope): sentence`, and the body explains *why*.
