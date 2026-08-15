@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
@@ -507,24 +508,39 @@ export default function ResumePage() {
         <section className="rz-journey">
           <div className="rz-shell">
             <Link href="/journey" className="rz-journey-card">
-              <span className="rz-journey-eyebrow">The long version</span>
-              <span className="rz-journey-h">
-                Something you won&apos;t find in my resume.
+              <span className="rz-journey-copy">
+                <span className="rz-journey-eyebrow">The long version</span>
+                <span className="rz-journey-h">
+                  Something you won&apos;t find in my resume.
+                </span>
+                <span className="rz-journey-d">
+                  Seventeen years, from a boy who could not put one correct English
+                  sentence together to someone who ships AI products alone. A tutor
+                  who arrived by accident. A Lamborghini fan page that reached
+                  677,503 people. Four months that are a gap between two dates up
+                  there, and were not a gap to live through.
+                </span>
+                <span className="rz-journey-go">
+                  <span>Walk it with me</span>
+                  <span aria-hidden>→</span>
+                </span>
+                <span className="rz-journey-meta">
+                  16 chapters · interactive · about 8 minutes · a plain-text version
+                  is on the page
+                </span>
               </span>
-              <span className="rz-journey-d">
-                Seventeen years, from a boy who could not put one correct English
-                sentence together to someone who ships AI products alone. A tutor who
-                arrived by accident. A Lamborghini fan page that reached 677,503
-                people. Four months that are a gap between two dates up there, and
-                were not a gap to live through.
-              </span>
-              <span className="rz-journey-go">
-                <span>Walk it with me</span>
-                <span aria-hidden>→</span>
-              </span>
-              <span className="rz-journey-meta">
-                16 chapters · interactive · about 8 minutes · a plain-text version is
-                on the page
+
+              {/* The opening drawing, given its own column. It was a CSS
+                  background before, which put the figure and the horizon straight
+                  through the headline and the paragraph. */}
+              <span className="rz-journey-art" aria-hidden="true">
+                <Image
+                  src="/journey-art/prologue.png"
+                  alt=""
+                  width={1536}
+                  height={1024}
+                  sizes="(max-width: 820px) 90vw, 24rem"
+                />
               </span>
             </Link>
           </div>

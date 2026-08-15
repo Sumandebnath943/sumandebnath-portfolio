@@ -369,13 +369,18 @@
 
 /* ── Chapter navigation ───────────────────────────────────────────────── */
 
+/* Left-aligned, stacked. Nothing may sit in the bottom-right corner: the robot
+   mascot and the chat launcher are fixed there on every page, and a Next button
+   underneath them was catching the mascot instead of advancing the chapter.
+   The trailing padding keeps the last chapter's controls clear of them too. */
 .jr-nav {
-  display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 0.9rem;
   margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--rule);
+  padding-right: clamp(0rem, 14vw, 13rem);
   position: relative; z-index: 1;
 }
-.jr-next-hint { order: 1; font-size: 0.78rem; color: var(--ink-mute); text-align: right; flex: 1; }
-.jr-next { order: 2; }
+.jr-nav-btns { display: flex; gap: 0.6rem; }
+.jr-next-hint { font-size: 0.78rem; color: var(--ink-mute); }
 .jr-prev, .jr-next {
   background: none; border: 1px solid var(--rule-strong); color: var(--ink);
   padding: 0.65rem 1.25rem; border-radius: 999px; font-size: 0.88rem;
@@ -577,8 +582,7 @@
   .jr-scene-inner { max-height: none; }
   .jx-doors, .jx-facets { grid-template-columns: 1fr; }
   .jx-grid { grid-template-columns: repeat(12, 1fr); max-width: 100%; }
-  .jr-prev, .jr-next { flex: 0 0 auto; }
-  .jr-next-hint { display: none; }
+  .jr-nav { padding-right: 0; }
 }
 
 @media (max-width: 480px) {

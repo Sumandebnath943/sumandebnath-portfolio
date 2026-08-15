@@ -330,24 +330,28 @@ export default function JourneyStage() {
             </div>
           )}
 
+          {/* Both controls are grouped at the left, and nothing is placed in the
+              bottom-right corner. The mascot and the chat launcher are fixed
+              there site-wide, and a Next button under them was catching the
+              mascot instead of advancing the chapter. */}
           <div className="jr-nav">
-            <button type="button" className="jr-prev" disabled={i === 0} onClick={() => go(i - 1)}>
-              ← Back
-            </button>
-            {/* Always "Next", never the chapter's cue: on chapters whose gesture
-                is itself a button, repeating the cue here printed the same
-                sentence twice and read as two ways to do one thing. */}
-            {!last && (
-              <>
-                {/* An arrow back up to the gesture, rather than "<cue> to
-                    unlock" — several cues are already imperative sentences and
-                    "Hold to grow the page to unlock" reads as a mess. */}
-                {!isDone && (
-                  <span id="jr-next-hint" className="jr-next-hint">
-                    <span aria-hidden>↑ </span>
-                    {ch.cue}
-                  </span>
-                )}
+            {/* An arrow back up to the gesture, rather than "<cue> to unlock" —
+                several cues are already imperative sentences and "Hold to grow
+                the page to unlock" reads as a mess. */}
+            {!last && !isDone && (
+              <span id="jr-next-hint" className="jr-next-hint">
+                <span aria-hidden>↑ </span>
+                {ch.cue}
+              </span>
+            )}
+            <div className="jr-nav-btns">
+              <button type="button" className="jr-prev" disabled={i === 0} onClick={() => go(i - 1)}>
+                ← Back
+              </button>
+              {/* Always "Next", never the chapter's cue: on chapters whose
+                  gesture is itself a button, repeating the cue here printed the
+                  same sentence twice and read as two ways to do one thing. */}
+              {!last && (
                 <button
                   type="button"
                   className="jr-next"
@@ -357,8 +361,8 @@ export default function JourneyStage() {
                 >
                   Next →
                 </button>
-              </>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </article>
