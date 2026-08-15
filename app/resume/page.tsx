@@ -498,6 +498,38 @@ export default function ResumePage() {
           </div>
         </section>
 
+        {/* ── The story under the document ──────────────────────────────── */}
+        {/* Placed here on purpose: by this point the reader has the whole record
+            and none of the reason for it. The résumé cannot carry that, because
+            a résumé is a list of outcomes with every wrong turn edited out — and
+            the wrong turns are the story. So it gets its own page, and this is
+            the door. */}
+        <section className="rz-journey">
+          <div className="rz-shell">
+            <Link href="/journey" className="rz-journey-card">
+              <span className="rz-journey-eyebrow">The long version</span>
+              <span className="rz-journey-h">
+                Something you won&apos;t find in my resume.
+              </span>
+              <span className="rz-journey-d">
+                Seventeen years, from a boy who could not put one correct English
+                sentence together to someone who ships AI products alone. A tutor who
+                arrived by accident. A Lamborghini fan page that reached 677,503
+                people. Four months that are a gap between two dates up there, and
+                were not a gap to live through.
+              </span>
+              <span className="rz-journey-go">
+                <span>Walk it with me</span>
+                <span aria-hidden>→</span>
+              </span>
+              <span className="rz-journey-meta">
+                16 chapters · interactive · about 8 minutes · a plain-text version is
+                on the page
+              </span>
+            </Link>
+          </div>
+        </section>
+
         {/* ── Closing ───────────────────────────────────────────────────── */}
         <section className="rz-cta">
           <div className="rz-shell">

@@ -49,3 +49,8 @@ next-env.d.ts
 
 # Android APK binaries — distributed via GitHub Releases, not committed
 *.apk
+
+# Journey artifacts, uncropped. The originals carry other people's names and
+# faces from Facebook's sidebar plus a personal bookmarks bar; only the cropped
+# evidence in public/journey-assets/ is fit to serve.
+_source-journey-assets/
