@@ -6,7 +6,10 @@ writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
 **Last updated:** 12 August 2026
 **Branch:** `main`, clean and pushed
-**Latest commit:** `2645cca` — *feat(migi-app): rebuild page for the standalone native Android app (v2)*
+**Last feature commit:** `2645cca` — *feat(migi-app): rebuild page for the standalone native Android app (v2)*, followed by the documentation set described in §2.
+
+> Run `git log --oneline -15` before trusting this section — it is a snapshot,
+> and the commit log is the authority on what has happened since.
 
 ---
 
@@ -112,21 +115,40 @@ check if you touch that component.
 
 ---
 
+### Documentation pass (same session)
+
+The repo had no usable documentation — a stale `handoff.md` about Hero/Loader
+work, a `project_memory.md` with paths that no longer exist, and a stock
+`create-next-app` README. Replaced with the three-document set described at the
+top of this file, plus:
+
+- `AGENTS.md` now points at all three and lists the four recurring traps inline,
+  so every future session loads the map automatically.
+- `project_memory.md` and `analysis_results.md` keep their content behind a
+  superseded banner.
+- `README.md` rewritten for this project.
+- A second pass corrected product-page accents that had been **guessed rather
+  than read** — Pentashell is cyan/magenta/violet, not terminal green; PentaCMD
+  is the green one. `PROJECT_BIBLE.md` §11 now states plainly which parts of the
+  documentation are verified and which are summarised.
+
+---
+
 ## 3. Next steps
 
 Nothing is blocking. These are opportunities, roughly in value order.
 
-1. **Replace the boilerplate `README.md`.** It is still stock `create-next-app`
-   text and says nothing about this project. It should point at these three
-   documents.
+1. **Clear the pre-existing lint errors in `Navigation.tsx`** — an
+   `immutability` error on `window.location.href`, a raw `<a>` to `/` that
+   should be `<Link>`, and an `<img>` that should be `next/image`. They predate
+   recent work and fail `npm run lint` today.
 2. **Retire the two stale docs.** `project_memory.md` and `analysis_results.md`
    are early-2026 snapshots with file paths that no longer exist. They now carry
    a superseded banner; deleting them is the cleaner end state, but that is
    Suman's call.
-3. **Clear the pre-existing lint errors in `Navigation.tsx`** — an
-   `immutability` error on `window.location.href`, a raw `<a>` to `/` that
-   should be `<Link>`, and an `<img>` that should be `next/image`. They predate
-   recent work and fail `npm run lint` today.
+3. **Deepen the Bible where it is thin.** `PROJECT_BIBLE.md` §11 lists exactly
+   what is verified and what is only summarised — the product-page interiors and
+   the dossier components are the biggest gaps. Extend it opportunistically.
 4. **Consider `images.qualities` in `next.config.ts`.** Every screenshot-heavy
    page is pinned to quality 75. Adding `[75, 90]` would let device mockups and
    lightboxes render sharper.

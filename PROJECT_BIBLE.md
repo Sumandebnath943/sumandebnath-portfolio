@@ -78,14 +78,24 @@ Every route is statically prerendered unless noted.
 - `/learnings` — certificates and coursework
 - `/projects`, `/projects/[slug]` (SSG), `/projects/aegis-vault`
 
-**Products** — each is a full bespoke landing page
-- `/agents/migi` — the MIGI agent fleet
-- `/agents/pact-agent`, `/agents/pentashell`
-- `/apps/migi-app` — **MIGI Android App** (V2 native + V1 wrapper archive)
-- `/apps/forget-anything`
-- `/games/pixelville`
-- `/llms/qdex-1.5b`, `/slms/pentacmd`
-- `/fun-apps`
+**Products** — each is a full bespoke landing page with its own accent system
+
+| Route | Product | Dominant accents |
+|---|---|---|
+| `/agents/migi` | The MIGI agent fleet | Lime `#C6F24E` on cream `#F4F3ED` + ink |
+| `/apps/migi-app` | **MIGI Android App** (V2 native + V1 archive) | Lime `#C6F24E` + aqua `#35E0FF` on graphite |
+| `/agents/pact-agent` | PACT agent | Terracotta `#CF5C36` |
+| `/agents/pentashell` | Pentashell CLI | Cyan `#2FE2F0`, magenta `#F25FD0`, violet `#9B6BF2` |
+| `/slms/pentacmd` | PentaCMD model | Green `#34D399` + violet `#A78BFA` |
+| `/llms/qdex-1.5b` | Qdex-1.5B model | Green `#34D399` |
+| `/apps/forget-anything` | Forget Anything? | Gold `#D4AF37` + emerald `#50C878` |
+| `/games/pixelville` | PixelVille | Gold `#F5B94A` / warm `#ffe6b0` on night blue `#20304a` |
+| `/projects/aegis-vault` | AEGIS VAULT | Deep vault green `#07120A`, teal `#2DD4BF` |
+| `/fun-apps` | The lighter shelf | Near-black `#1a1a1a` |
+
+> **Naming trap:** **PentaCMD is the model; Pentashell is the CLI.** They are
+> different products with different pages and different palettes. Do not merge
+> or cross-reference them casually.
 
 **Private**
 - `/desk-4f7a` — the visitor analytics dashboard, plus `/login`, `/insights`, `/v/[id]`
@@ -98,6 +108,47 @@ Every route is statically prerendered unless noted.
 - `pages/api/chat.js` — the AI assistant (Pages Router, deliberately)
 
 Adding a page means touching **four** wire-in points, not one — see §8.
+
+### 3.1 Global chrome — what `app/layout.tsx` mounts on every page
+
+Beyond fonts and analytics, the root layout mounts a surprising amount:
+
+```
+RobotChatProvider                 ← context for the mascot ↔ chat handoff
+  └ SiteOnly                      ← renders children everywhere EXCEPT /desk-4f7a
+      ├ RobotMascot               ← the 3D robot
+      ├ EasterEggs
+      ├ ChatTakeover              ← full-screen chat mode
+      ├ CommandPalette            ← ⌘K / Ctrl+K, site-wide
+      ├ SiteTour                  ← driver.js, crosses routes
+      └ PrivacyNotice
+  └ VisitorPing                   ← outside SiteOnly; tracks everywhere
+```
+
+Two of these carry non-obvious reasoning already written into their source, and
+both are worth reading before you touch them:
+
+- **`SiteOnly`** filters on the client on purpose. A nested layout cannot
+  un-render what a parent placed, and reading the pathname on the *server* to
+  hide a robot on one route would make **every page dynamic**. Client-side
+  filtering keeps the whole site statically prerendered.
+- **`LoaderGate`** (mounted by `/` only, not the layout) shows the cinematic
+  loader once per session. "Has it been seen" lives in `sessionStorage`, read
+  through `useSyncExternalStore` rather than copied into state in an effect —
+  the old shape was the cascading-render pattern React now warns about. Its
+  server snapshot is `false` so the loader never flashes for everyone.
+
+### 3.2 The homepage
+
+`/` is a composition of twelve section components, in this order:
+
+`Hero` → `Announcement` → `ExperienceNarrative` → `NowBuilding` → `Experience`
+→ `SystemsStack` → `Projects` → `AIPhilosophy` → `PhilosophyFAQ` →
+`OperationalHistory` → `AcademicFoundations` → `Contact`
+
+All twelve live in `components/sections/`. Reordering the homepage means
+reordering this list in `app/page.tsx` — the sections do not know about each
+other.
 
 ---
 
@@ -137,19 +188,14 @@ each page owns its own gradients.
 
 ### Per-product palettes
 
-There is no single site accent. Each product carries its own, and the page is
-built around it:
+There is no single site accent. Each product carries its own and the page is
+built around it — the full table is in §3, with exact hex values taken from the
+pages themselves.
 
-| Product | Accent |
-|---|---|
-| MIGI | Lime `#C6F24E`, with Aqua `#35E0FF` as the app's second accent |
-| PentaCMD / Pentashell | Terminal green on near-black |
-| PixelVille | Gold on night-sky blue |
-| AEGIS VAULT | Vault steel |
-| IMPRINT / LEGATUS / CITE / EMBER / ROASmind | Ember orange · muted gold · violet · warm orange · silver |
+The one thing that *is* shared: against cream, the ink is `#12161A`, and the
+cream ramp is `#F4F3ED` → `#ECEAE2` → `#DAD8CE`.
 
-The shared ink used against cream is `#12161A`; the shared cream is `#F4F3ED`
-with `#ECEAE2` and `#DAD8CE` as its steps.
+Homepage dossiers carry their own accents too — see §7.2.
 
 ### Accessibility
 
@@ -273,6 +319,40 @@ Vercel Analytics, Vercel Speed Insights, and **two** GA4 properties
 Per-product content sits beside its components as `*-data.ts` —
 `components/migi/migi-data.ts`, `components/penta/penta-data.ts`, and so on.
 
+### 7.1 The two project datasets
+
+These are different things and are easy to confuse:
+
+| File | Drives | Key exports |
+|---|---|---|
+| `lib/projects.ts` | The **flagship** set. `/projects/[slug]` is SSG'd from it via `generateStaticParams`. | `projects`, `getProject`, `ProjectMeta`, `softwareApplicationJsonLd`, `SITE_URL` |
+| `lib/archive-projects.ts` | The **archive** shelf — everything else shipped. | `archiveProjects`, `getArchiveBySlug`, `ArchiveProject`, `ArchiveKind` |
+
+`SITE_URL` lives in `lib/projects.ts` and is imported widely; that is its home.
+`softwareApplicationJsonLd` generates per-project structured data.
+
+A product big enough for its own bespoke page gets one (`/projects/aegis-vault`,
+`/agents/migi`, …) **in addition to** its entry in the dataset — the dataset
+entry is the card that links to it.
+
+### 7.2 `components/sections/` — the homepage and dossier library
+
+Twelve of these compose `/` (§3.2). The rest are **dossiers** — long-form
+product panels used on the homepage and archive: `ImprintDossier`,
+`LegatusDossier`, `CiteDossier`, `RoasmindDossier`, `GeekCollectiblesDossier`,
+`EmberDossier`, `DPeDossier`, with `DossierMeta` and `ArchiveCard` as shared
+scaffolding. `Loader`, `Hero`, `Contact` and `ContactForm` round it out.
+
+Dossier accents, which the design system inherits from these:
+IMPRINT ember orange · LEGATUS muted gold · CITE electric violet ·
+ROASmind silver · Geek Collectibles neon crimson · EMBER warm orange.
+
+### 7.3 `components/ui/` — shared primitives
+
+`Button`, `GlassCard`, `GradientText`, `SectionWrapper`, `AnimatedBento`,
+`PrivacyNotice`, `EasterEggs`, `SiteTour`. This is the only genuinely shared
+component layer; everything else is per-product by design.
+
 ---
 
 ## 8. Adding a product page — the four wire-in points
@@ -316,6 +396,34 @@ Helper scripts: `scripts/admin-secret.mjs`, `scripts/auth-check.mjs`,
 
 ---
 
+### 9.1 Source assets — the `_source-*` folders
+
+Three folders at the repo root hold **originals that are not shipped**, and all
+three are git-ignored. They exist because the served asset is a processed
+derivative and the pipeline needs its input kept:
+
+| Folder | Holds | Becomes |
+|---|---|---|
+| `_source-fbx/` | Mixamo FBX animations (`Idle.fbx`, `Jumping.fbx`, `Running.fbx`, …) | `public/robot.glb`, via `scripts/build-robot-glb.mjs` |
+| `_source-journey-art/` | Full-size journey illustrations (`01-prologue.png` …) | Cropped/optimised art under `public/journey/` |
+| `_source-journey-assets/` | Real personal artefacts — old screenshots, logos, photos | The evidence shown on `/journey` |
+
+> **Trap:** journey art is **cropped before serving**, not with CSS. If an
+> illustration looks wrongly framed, fix the derivative in `public/`, do not add
+> `object-position` hacks — the horizon alignment on that page depends on the
+> crop being right.
+
+Because these are ignored, a fresh clone cannot rebuild `robot.glb` or reframe
+journey art. The source folders live on Suman's machine at
+`D:\project\sumandebnath\_source-*`.
+
+`/journey` itself is content-heavy rather than code-heavy: `lib/journey.ts` is
+~525 lines of story data against a ~119-line page. Edit the data, not the page.
+Its interactions are **gesture-gated** — controls are deliberately kept clear of
+the mascot and the art (see commits `9c6696e`, `3182b22`).
+
+---
+
 ## 10. Working conventions
 
 **Git.** Commit straight to `main`; this project does not use feature branches.
@@ -339,3 +447,28 @@ shell.
 **Read-only territory.** The Android sources at `D:\project\migi agent app`
 (V1) and `D:\project\migi agent native android app` (V2) are reference material
 for `/apps/migi-app`. **Never write to them.**
+
+---
+
+## 11. How much of this is verified
+
+Written 12 August 2026. Being straight about confidence, because a document that
+hides its own gaps is worse than one that admits them.
+
+**Read directly from the codebase and safe to rely on:** the stack and versions,
+the full route map, every accent hex in §3, the global chrome and homepage
+composition, the `lib/` inventory, both project datasets, env vars, the
+`_source-*` folders, `next.config.ts` / `vercel.json`, and all four traps in
+§5 and §10 — each of those was hit and diagnosed in practice.
+
+**Summarised from source comments and commit history rather than a full read:**
+the internals of the visitor notifier, the admin dashboard, the AI assistant and
+the site tour. Their *contracts* and constraints here are accurate; their
+line-level behaviour is not exhaustively documented.
+
+**Not documented in depth:** the interiors of the individual product pages other
+than `/apps/migi-app`, and the section/dossier components beyond their names and
+accents. They follow the pattern in `PORTFOLIO_HANDOFF.md` §4, but each has its
+own bespoke layout that has not been catalogued here.
+
+If you go deep in one of those areas, extend this file while you are in there.

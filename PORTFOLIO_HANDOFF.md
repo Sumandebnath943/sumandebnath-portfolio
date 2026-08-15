@@ -77,12 +77,18 @@ short rule: `VERSION 2 · STANDALONE NATIVE ANDROID`.
 | `/projects`, `/projects/[slug]` | The archive — everything shipped, with a card + static landing pattern. |
 | `/agents/migi` | The agent fleet itself: ~46 scheduled agents. Cream + lime + ink. |
 | `/apps/migi-app` | **MIGI Android App** — V2 native client, with V1 kept on the record. |
-| `/agents/pentashell`, `/slms/pentacmd` | The CLI and the model behind it. Note: PentaCMD is the *model*, Pentashell is the *CLI*. |
-| `/llms/qdex-1.5b` | A language model landing page. |
-| `/games/pixelville` | A self-governing pixel-art village. Gold on night sky. |
-| `/apps/forget-anything` | A departure companion app. |
-| `/projects/aegis-vault` | Encrypted notepad. |
-| `/fun-apps` | The lighter shelf. |
+| `/agents/pact-agent` | The PACT agent. Terracotta `#CF5C36`. |
+| `/agents/pentashell` | The **CLI**. Cyan `#2FE2F0` + magenta `#F25FD0` + violet `#9B6BF2`. |
+| `/slms/pentacmd` | The **model** behind the CLI. Green `#34D399` + violet `#A78BFA`. |
+| `/llms/qdex-1.5b` | A language model landing page. Green `#34D399`. |
+| `/games/pixelville` | A self-governing pixel-art village. Gold `#F5B94A` on night blue `#20304a`. |
+| `/apps/forget-anything` | A departure companion app. Gold `#D4AF37` + emerald `#50C878`. |
+| `/projects/aegis-vault` | Encrypted notepad. Deep vault green `#07120A` + teal `#2DD4BF`. |
+| `/fun-apps` | The lighter shelf. Near-black `#1a1a1a`. |
+
+> **PentaCMD is the model; Pentashell is the CLI.** Two products, two pages, two
+> palettes. Getting this wrong in copy is the single easiest mistake to make on
+> this site.
 | `/privacy` | Must state exactly what `layout.tsx` loads. Two GA4 properties, Vercel Analytics, Speed Insights. |
 
 ---
