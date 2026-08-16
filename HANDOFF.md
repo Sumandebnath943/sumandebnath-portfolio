@@ -4,9 +4,9 @@ Where the project stands, what changed most recently, and what is worth doing
 next. For how the system is built read **PROJECT_BIBLE.md**; for how the site
 writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
-**Last updated:** 12 August 2026
+**Last updated:** 14 August 2026
 **Branch:** `main`, clean and pushed
-**Last feature commit:** `2645cca` — *feat(migi-app): rebuild page for the standalone native Android app (v2)*, followed by the documentation set described in §2.
+**Last feature commit:** `3b66fbb` — *feat(admin): replace the bubble map with a country breakdown*, the end of a long session that rebuilt the visitor notifier and built the admin dashboard (§2).
 
 > Run `git log --oneline -15` before trusting this section — it is a snapshot,
 > and the commit log is the authority on what has happened since.
@@ -23,7 +23,11 @@ Recent history, newest first, gives an accurate picture of the trajectory:
 
 | Area | State |
 |---|---|
-| **MIGI Android App page** | Rebuilt this session for the V2 native app. Done. |
+| **Admin dashboard** (`/desk-4f7a`) | Built 13–14 Aug across five phases. Live, password-gated, recording. |
+| **Visitor notifier** | Rebuilt 13–14 Aug: journey card, crawler and scanner handling, Postgres persistence. |
+| **Privacy** (`/privacy`) | Rewritten twice as the truth changed. Now states real retention periods. |
+| **Next.js** | Upgraded 16.2.6 → 16.3.0. Production audit clean. |
+| **MIGI Android App page** | Rebuilt 12 Aug for the V2 native app. Done. |
 | **Journey** (`/journey`) | Built over ~6 commits, ending `e886cca`. Real illustrations, gated gestures. Done. |
 | **Accessibility** | Two full WCAG AA passes across every page. Done. |
 | **About / Philosophy / FAQ / Contact** | Given distinct identities in `b6e18ff`. Done. |
@@ -31,11 +35,112 @@ Recent history, newest first, gives an accurate picture of the trajectory:
 | **AI assistant** | Role-injection closed and cost bounded, `df067e5`. Model is `openai/gpt-oss-120b`. |
 | **Navigation + ⌘K** | Restructured around Home / Portfolio / About Me, mounted site-wide. |
 | **Site tour** | Crosses routes and survives navigation, `8adf5ee`. |
-| **Visitor notifier + `/desk-4f7a`** | Working, with country breakdown and crawler alerts. |
 
 ---
 
-## 2. What changed in the last session (12 Aug 2026)
+## 2. What changed in the last session (13–14 Aug 2026)
+
+**Two goals.** First, the visitor notifier was producing contradictory and
+duplicated Telegram alerts. Second, Suman wanted a private dashboard so visits
+became a searchable record rather than a chat log.
+
+### Decisions he took explicitly
+
+| Decision | Choice |
+|---|---|
+| Storage | **Neon Postgres** via the Vercel Marketplace, free plan, own project |
+| Retention | **90 days full, then a year without the IP** |
+| Dashboard path | Something **unguessable** — `/desk-4f7a` |
+| Dashboard look | **Light and colourful** (it started black) |
+| Bot/crawler alerts | Wanted them, but **one detailed message**, not three |
+| GA4 | **Keep it**, plus a notice banner that does *not* ask for consent |
+
+> **The GA4 notice is transparency, not consent.** He was told plainly that a
+> notice-only banner does not make GA4 compliant under EU/UK ePrivacy, and chose
+> it anyway. That is a reaffirmed decision. The consent question is still open
+> and is his to make — do not quietly "fix" it either way.
+
+### What was built
+
+**Visitor notifier, rebuilt** — the journey card (one message per visit,
+rewritten as it goes), crawler alerts from `proxy.ts`, scanner handling for
+hosting networks, and Postgres persistence in `after()`. Mechanisms and their
+traps are in Bible §6.1; they are not repeated here because they will outlive
+this handoff.
+
+**Admin dashboard, five phases** — storage and write path; proxy gate and login;
+visitor table and per-visit detail; filters; retention job and privacy rewrite.
+Then a richer record (14 extra columns), an insights page with six charts, a
+light theme, and the country breakdown that replaced the map.
+
+**Supporting pieces** — `scripts/admin-secret.mjs` (generates the password hash
+locally; the password never leaves his machine), `scripts/db-migrate.mjs` with
+`--check` and `--sql` modes, `vercel.json` for the daily purge cron.
+
+**Also:** Next 16.2.6 → 16.3.0, clearing two high-severity advisories in bundled
+deps. The résumé PDF was replaced with the August 2026 version, keeping the same
+filename because that URL is printed in résumés already sent.
+
+### Bugs found and fixed during verification
+
+1. **Duplicate leave summaries.** Internal links are plain `<a>`, so every
+   navigation fired `pagehide` and sent another summary. Fixed by the journey
+   card, which edits one message instead of posting more.
+2. **Active time above 100%** — 43s of activity in a 16s visit. Resuming a
+   session kept the previous page's `lastActive`, so banked seconds were counted
+   twice.
+3. **A guard that made things worse.** The first fix for (1) blocked the second
+   summary — the one carrying the complete journey. Removed the same day.
+4. **`requestAnimationFrame` in the privacy notice** meant a background tab got
+   it mounted invisible and retired unseen. rAF does not fire in a background
+   tab at all.
+5. **The notice covered the chat launcher on mobile.** `ChatTakeover` moves it
+   to bottom-left at ≤820px; Tailwind's `sm` (640px) would have left them
+   overlapping across 641–820px.
+6. **Public IPs in `172.0–15` and `172.32–255` were treated as private**, so
+   geo was skipped for them. Only `172.16–31` is private.
+7. **A recruiter filed as a scanner.** Out-of-order `after()` writes let a stale
+   "no interaction" overwrite a scroll that had happened. `interacted` is now
+   sticky true.
+8. **The status light lied.** "Connected" meant only that `DATABASE_URL`
+   existed. Production had a connection string and no schema, so every visit was
+   being dropped while the dashboard looked healthy.
+
+### Verification lessons worth keeping
+
+**Silent failure looks exactly like success — four times over.** The green
+status light, empty filter dropdowns during a network wobble, a seed reporting
+32 writes while landing 4, and code deployed ahead of its migration dropping
+every write. `saveVisit()` returns `false` and never throws, which is right for
+production and treacherous everywhere else. **Check return values; do not read
+an absence of errors as evidence.**
+
+**`next start` logs nothing per request.** An empty server log was twice
+mistaken for "nothing was sent" and reported as fact. It is not evidence. When
+Telegram traffic needs proving, count consumed message ids — they are
+sequential, so a fresh arrival's id measures exactly what the previous visit
+consumed.
+
+**Test the handover, not just the code.** Migration instructions failed twice in
+front of him — once because the file has a `#!` shebang and once because the
+Vercel query editor rejects multiple statements. Both would have been caught by
+running the steps once. Wrapping the DDL in `do $$ … $$` makes it a single
+command.
+
+### Left unverified
+
+**Nothing on the dashboard has been seen.** The browser pane never composited
+for the whole session, so no screenshot was possible. Every layout claim rests
+on computed styles and measured geometry. Suman reviewed it himself and asked
+for the light theme and the map replacement off the back of that.
+
+**The authenticated cron path.** `CRON_SECRET` is set in Vercel, but the local
+server has no way to inject it, so only the fail-closed path was tested. First
+run is ~03:20 daily.
+
+---
+
+## 2b. What changed in the session before (12 Aug 2026)
 
 **Goal:** Suman built a second, standalone native Android app for the MIGI agent
 fleet. The existing page described only V1 — a WebView wrapper of the dashboard's
@@ -138,21 +243,37 @@ top of this file, plus:
 
 Nothing is blocking. These are opportunities, roughly in value order.
 
-1. **Clear the pre-existing lint errors in `Navigation.tsx`** — an
+0. **Watch a week of real traffic before building more on the dashboard.** It
+   has never been used against real data. Pagination and CSV export are the
+   obvious next features, but which one matters will be obvious after a week and
+   is guesswork now.
+
+1. **The GA4 consent decision is still open.** Disclosed on `/privacy`, not
+   consented. If it ever needs closing, that is Consent Mode v2 with GA blocked
+   until opt-in — a real piece of work, and his call to ask for.
+
+2. **Tracking is inert under `next dev`** (StrictMode vs the `initedRef` guard,
+   Bible §6.1). Nobody can test the notifier locally without a production build.
+   Small fix, and it is why several bugs reached production unseen.
+
+3. **The visitor table has no pagination** — capped at 200 rows. Fine now, will
+   matter within months.
+
+4. **Clear the pre-existing lint errors in `Navigation.tsx`** — an
    `immutability` error on `window.location.href`, a raw `<a>` to `/` that
    should be `<Link>`, and an `<img>` that should be `next/image`. They predate
    recent work and fail `npm run lint` today.
-2. **Retire the two stale docs.** `project_memory.md` and `analysis_results.md`
+5. **Retire the two stale docs.** `project_memory.md` and `analysis_results.md`
    are early-2026 snapshots with file paths that no longer exist. They now carry
    a superseded banner; deleting them is the cleaner end state, but that is
    Suman's call.
-3. **Deepen the Bible where it is thin.** `PROJECT_BIBLE.md` §11 lists exactly
+6. **Deepen the Bible where it is thin.** `PROJECT_BIBLE.md` §11 lists exactly
    what is verified and what is only summarised — the product-page interiors and
    the dossier components are the biggest gaps. Extend it opportunistically.
-4. **Consider `images.qualities` in `next.config.ts`.** Every screenshot-heavy
+7. **Consider `images.qualities` in `next.config.ts`.** Every screenshot-heavy
    page is pinned to quality 75. Adding `[75, 90]` would let device mockups and
    lightboxes render sharper.
-5. **Weight of `public/migi-app/v2/`** — 24 screenshots at ~12 MB total. Fine
+8. **Weight of `public/migi-app/v2/`** — 24 screenshots at ~12 MB total. Fine
    today; worth watching as more product pages ship.
 
 ---

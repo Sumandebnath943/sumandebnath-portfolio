@@ -256,6 +256,62 @@ Rules baked into the code:
 - A browser can be muted with `?notrack=1`.
 - Crawlers are caught in `proxy.ts`, because a link-preview fetch never runs JS.
 
+#### The journey card — read this before touching the message flow
+
+A visit produces **one card**: a single Telegram message, opened at arrival and
+**rewritten** as the visit unfolds. Telegram does not re-notify on an edit, so
+updates are silent.
+
+This exists because **a reload and a departure are identical at unload.** There
+is no signal separating them. Earlier attempts to guess produced two
+contradictory "Visitor left" messages for one visitor. Editing one message means
+a wrong guess costs nothing — the next update corrects it.
+
+> **The card id (`smid`) must round-trip through the browser.** At unload a page
+> can fire a beacon and nothing else — it can never *learn* an id at that moment,
+> so it has to already hold one. That is why the card is created during the
+> **arrival** request, whose response the browser can still read. Do not
+> "simplify" this by having the server remember card ids: serverless instances
+> are not shared.
+
+> **Never add an at-most-one-summary guard.** One was tried and removed the same
+> day: it blocked the *second* summary, which is precisely the one carrying the
+> complete journey. With edits, a repeat send is the correction, not damage.
+
+#### Traffic categories
+
+| Category | How it is decided | Messages |
+|---|---|---|
+| `human` / returning | ordinary network, human signals | arrival + card + report |
+| `unclear` | mixed signals — still treated as a person | arrival + card + report |
+| `scanner` | hosting network (Azure/AWS/GCP) **and no interaction yet** | **one** |
+| `crawler` | identified by user agent in `lib/crawler.ts` | **one**, silent |
+
+> **A hosting network alone proves nothing.** Link checkers run a genuine
+> headless Chrome on Azure — but so does a recruiter behind a corporate proxy,
+> and that recruiter is the point of the whole system. The network only raises
+> the question; **interaction answers it.** One scroll or click and the visit
+> becomes ordinary, and the journey card opens *late* (its id comes back on the
+> live refresh, which is a `fetch` and can read a reply).
+
+> **`interacted` is sticky false → true, and a row that has seen interaction
+> cannot hold a `scanner` verdict.** Each write runs in its own `after()`, so an
+> arrival can settle *behind* the summary that followed it. Plain `coalesce` let
+> a stale "no interaction" overwrite a scroll that had already happened, and
+> filed a recruiter who read three pages as a scanner.
+
+`lib/crawler.ts` is deliberately separate from the notifier's own `isBot()`.
+That one decides whether a *beacon* deserves a visitor alert; this decides
+whether a *page request* deserves a crawler alert. Changing one must not
+quietly alter the other.
+
+> **Tracking is inert under `next dev`.** StrictMode mounts → cleans up →
+> remounts; the cleanup removes the listeners and the `initedRef` guard stops
+> them re-attaching. No clicks, scrolls or leave events are recorded locally.
+> **Verify any change to this subsystem against a production build**
+> (`.claude/launch.json` has a `prod` entry on port 3200). This is why several
+> tracking bugs reached production unseen.
+
 ### 6.2 Admin dashboard (`/desk-4f7a`)
 
 Password + signed session cookie, gated in `proxy.ts`. Tables: `visits`,
@@ -268,6 +324,48 @@ Password + signed session cookie, gated in `proxy.ts`. Tables: `visits`,
 `lib/admin-path.ts` is deliberately import-free — `lib/auth.ts` pulls in
 `node:crypto`, and importing the path from there would drag crypto into the
 client bundle.
+
+**Pages.** `/desk-4f7a` is the visitor table (filters by date, country, page,
+action, source; bots hidden by default). `/desk-4f7a/v/[id]` is the per-visit
+detail. `/desk-4f7a/insights` is the charts page.
+
+**Auth.** Password stored as a scrypt hash (`scripts/admin-secret.mjs` generates
+it locally and prints only the hash). Session is an HMAC-signed, httpOnly,
+SameSite=Strict cookie scoped to the admin path. Vercel's own password
+protection was ruled out — it is a **$150/month** Pro add-on.
+
+> **`dbHealth()` must keep checking columns, not just connectivity.** Deploying
+> code ahead of its migration makes every insert fail on the missing column; the
+> error is swallowed and the dashboard goes on showing older rows as though
+> nothing were wrong. `schema-behind` surfaces that as a banner. A status light
+> that is green precisely when you need it not to be is worse than none — this
+> shape of failure has appeared **four** times in this codebase.
+
+> **`saveVisit()` returns `false` and never throws.** Correct for production,
+> where a lost row must never break tracking — but it means **silent partial
+> failure looks exactly like success.** Any script that writes visits must check
+> the return value. One seed reported 32 writes while landing 4.
+
+**Charts** (`app/desk-4f7a/Charts.tsx`, `theme.ts`) are server-rendered SVG and
+CSS — no chart library, no client JS, hover text from `<title>`. Each panel gets
+its own hue because each is a separate single-series answer to "how much".
+
+> **The hue order in `theme.ts` is load-bearing.** Colour-blind separation is
+> measured between *neighbours*. The first ordering failed outright — green
+> beside orange at ΔE 3.2 for protanopia — and reordering is what turned it into
+> a pass. Shuffling those four hues silently breaks a check.
+
+There is **no world map**. A bubble map on a bare graticule read as broken, and
+drawing coastlines from memory would be confidently wrong. `CountryList` shows
+flag, country, share and cities instead — names and flags come from `Intl` and a
+codepoint trick, so no data file. Coordinates are still stored, so a real
+projection stays possible if proper outline data is ever added.
+
+**Retention** lives in `lib/db.ts` (`IP_RETENTION_DAYS`, `VISIT_RETENTION_DAYS`)
+and is enforced by `/api/cron/purge`, scheduled daily in `vercel.json`. The IP
+goes at 90 days, the whole visit at a year. The endpoint **fails closed** if
+`CRON_SECRET` is unset. `/privacy` imports those same constants, so the page
+cannot advertise a period the code does not apply.
 
 ### 6.3 AI assistant (`pages/api/chat.js`)
 
@@ -393,6 +491,19 @@ image, and put screenshots under `public/<slug>/`.
 
 Helper scripts: `scripts/admin-secret.mjs`, `scripts/auth-check.mjs`,
 `scripts/db-migrate.mjs`.
+
+> **`DATABASE_URL` is not the same in both places.** Vercel injects the
+> production branch, marked *Sensitive* — which also means it cannot be pulled
+> down, and cannot be attached to the Development environment at all. Local dev
+> uses a **separate Neon branch**, pasted into `.env.local` by hand, so testing
+> can never write into real visitor data. That branch carries a 7-day expiry;
+> when it lapses, make a new one in the Neon dashboard and swap the string.
+
+> **Migrating production:** `node scripts/db-migrate.mjs --sql` prints the DDL
+> without connecting to anything, for pasting into Vercel's Storage → Query
+> editor. Turn **Read-only off** first, and wrap the statements in
+> `do $$ … $$` — that editor sends everything as one prepared statement and
+> rejects multiple commands.
 
 ---
 

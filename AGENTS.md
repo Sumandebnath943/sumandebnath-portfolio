@@ -20,10 +20,20 @@ Three documents carry the full context for this repo. They do not overlap.
 history only. They are superseded by `PROJECT_BIBLE.md` and their file paths no
 longer match the codebase — do not follow them.
 
-Four things that are true regardless of the task:
+Seven things that are true regardless of the task:
 
 1. Commit straight to `main`. This project does not use feature branches.
 2. `next/image` only accepts `quality={75}` here — `images.qualities` is unset.
 3. An ancestor with `overflow-hidden` silently disables `position: sticky`.
 4. The body is the scroll container, so `window` scroll listeners never fire.
    Use `IntersectionObserver`.
+5. `middleware` is gone. This version uses **`proxy.ts`**, exporting
+   `proxy(request)` and a statically-read `config.matcher`, on the Node runtime.
+6. **Visitor tracking does nothing under `next dev`** — StrictMode's
+   mount/cleanup/remount trips an init guard and the listeners never re-attach.
+   Any change to `app/api/track`, `components/analytics/VisitorPing.tsx` or
+   `proxy.ts` must be verified against a production build (`prod` in
+   `.claude/launch.json`, port 3200).
+7. **`saveVisit()` returns `false`; it never throws.** Silent partial failure
+   looks exactly like success here — check return values, and never read an
+   absence of errors as evidence that something worked.
