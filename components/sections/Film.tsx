@@ -28,23 +28,38 @@ import { Play } from "lucide-react";
 const VIDEO_ID = "4AP2eui9720";
 
 /**
- * Vanta's own daylight palette, unmodified — the section is meant to read as a
- * bright band cut into an otherwise black page, so the sky stays a sky.
+ * The daylight palette, PRE-COMPENSATED for three.js colour management.
  *
- * That inversion is the reason every colour below this point is stated in dark
- * ink rather than inherited from the site's white-on-black default. It also means
- * the reduced-motion fallback has to be a LIGHT gradient: if it stayed dark, the
- * section would flip between a light band and a dark one depending on a setting
- * the visitor made months ago, which would look like a bug.
+ * Vanta was written for three r134, where `new Color(0xadc1de)` handed the shader
+ * the raw sRGB triple (0.678, 0.757, 0.871). Since r152, `ColorManagement.enabled`
+ * defaults to true, so the same call converts sRGB to linear and hands the shader
+ * (0.418, 0.533, 0.731) instead. Red loses far more than blue — 0.678→0.418
+ * against 0.871→0.731 — and that skew is why Vanta's own stock values rendered
+ * with a purple cast here instead of the white cloud on its demo page.
+ *
+ * The clean fix would be `THREE.ColorManagement.enabled = false`, which is exactly
+ * r134's behaviour. It is not available to us: the flag is global, and
+ * RobotMascot in app/layout.tsx puts a GLTF scene on every page sharing this same
+ * three instance. Turning colour management off site-wide to correct a background
+ * would change how the robot's materials render.
+ *
+ * So each value below is passed through linear→sRGB first, which three's
+ * sRGB→linear then undoes, landing the shader on the number Vanta expects. The
+ * originals are kept in the comments — they are what you would type into Vanta's
+ * own customiser, and what to start from if this is ever re-tuned.
+ *
+ * Cloud and shadow are additionally lifted toward white and softened: the brief
+ * was white cloud, and Vanta's stock cloud is a fairly blue grey even when it is
+ * behaving.
  */
 const CLOUD_OPTIONS = {
   backgroundColor: 0xffffff,
-  skyColor: 0x68b8d7,
-  cloudColor: 0xadc1de,
-  cloudShadowColor: 0x183550,
-  sunColor: 0xff9919,
-  sunGlareColor: 0xff6633,
-  sunlightColor: 0xff9933,
+  skyColor: 0xabdded, // 0x68b8d7
+  cloudColor: 0xf0f4f8, // 0xadc1de, lifted to white
+  cloudShadowColor: 0x93a0b1, // 0x183550, softened
+  sunColor: 0xffcb58, // 0xff9919
+  sunGlareColor: 0xffaa7c, // 0xff6633
+  sunlightColor: 0xffcb7c, // 0xff9933
   speed: 1,
   // All off: this is a background, and grabbing pointer or gyro input would
   // interfere with scrolling — especially on touch.
