@@ -163,9 +163,9 @@ export default function Film() {
               id="film-heading"
               className="font-manrope font-semibold text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight"
             >
-              No Obvious{" "}
+              Who am{" "}
               <span className="font-serif italic font-normal text-[#14171C]/70">
-                Gift
+                I?
               </span>
             </h2>
           </div>
@@ -176,7 +176,7 @@ export default function Film() {
 
         <p className="max-w-2xl text-[15px] md:text-base leading-relaxed text-[#2C333C] mb-10">
           Nine years in brand marketing, two years building AI products, and the
-          route between them. Written, animated, scored and cut for this site.
+          route between them. The whole answer, in under six minutes.
         </p>
 
         {/* The card stays dark — the poster is a night frame, and a dark object
@@ -187,7 +187,7 @@ export default function Film() {
             <iframe
               // youtube-nocookie: nothing from Google until playback starts.
               src={`https://www.youtube-nocookie.com/embed/${VIDEO_ID}?autoplay=1&rel=0&modestbranding=1`}
-              title="No Obvious Gift — a film by Suman Debnath"
+              title="Who am I? — a film by Suman Debnath"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               className="absolute inset-0 w-full h-full"
@@ -196,7 +196,8 @@ export default function Film() {
             <button
               type="button"
               onClick={() => setPlaying(true)}
-              aria-label="Play the film — 5 minutes 57 seconds"
+              aria-label="Play the film — 5 minutes 57 seconds. Nothing loads from YouTube until you press play."
+              title="Nothing loads from YouTube until you press play"
               className="group absolute inset-0 w-full h-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#14171C] focus-visible:ring-offset-2 focus-visible:ring-offset-[#DCE4E8]"
             >
               <Image
@@ -228,8 +229,11 @@ export default function Film() {
           )}
         </div>
 
+        {/* A film carries credits under it, not a cookie notice. The facade's
+            privacy behaviour is still disclosed where it belongs — on /privacy —
+            and restated on the play button itself for anyone who tabs to it. */}
         <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.3em] text-[#3A434E]">
-          Plays from YouTube &middot; nothing loads until you press play
+          Written, animated, scored and cut by Suman Debnath
         </p>
       </div>
     </section>

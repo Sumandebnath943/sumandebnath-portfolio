@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { m, useInView } from "framer-motion";
 import SectionWrapper from "@/components/ui/SectionWrapper";
+import SectionKicker from "@/components/ui/SectionKicker";
 
 // ── DATA ──────────────────────────────────────────────────────────────────────
 
@@ -96,8 +97,10 @@ const entries = [
     id: "agentic-ai",
     years: "Currently Pursuing",
     number: "05",
-    degree: "Advanced Certification in Agentic & Generative AI",
-    institution: null,
+    degree: "Generative & Agentic AI",
+    // Named here because /now and lib/resume.ts both name it; leaving this one
+    // blank made the same page state two different things about one course.
+    institution: "Saïd Business School, University of Oxford",
     description:
       "Exploring AI orchestration, agentic systems, workflow autonomy, AI-native infrastructure, and the next generation of intelligent execution models. The frontier, still being mapped.",
     disciplines: ["AI Orchestration", "Agentic Systems", "Workflow Autonomy", "AI-Native Infrastructure", "Generative Systems", "Intelligent Execution"],
@@ -238,9 +241,17 @@ export default function AcademicFoundations() {
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
           className="mb-24"
         >
-          <p className="font-manrope text-[10px] text-[#6E6E6E] uppercase tracking-[0.4em] mb-8">
+          {/* Cream ground (#FDF6EE). The Bible's rule for this surface is that
+              nothing lighter than #6E6E6E passes, so the label runs darker than
+              the default and the chip's warm-neutral tint sits on ink, not grey. */}
+          <SectionKicker
+            className="mb-8"
+            chipClassName="border-[#1A1A1A]/15 bg-[#1A1A1A]/[0.04]"
+            dotClassName="bg-[#0A0A0A]/50"
+            textClassName="text-[#4A4A4A]"
+          >
             07 / Academic Foundations
-          </p>
+          </SectionKicker>
           <h2 className="font-manrope font-semibold text-4xl md:text-5xl lg:text-6xl text-[#0A0A0A] leading-tight tracking-tight mb-8">
             Structured learning before
             <br />
@@ -263,20 +274,28 @@ export default function AcademicFoundations() {
           ))}
         </div>
 
-        {/* ── CLOSING CINEMATIC STATEMENT ── */}
-        <m.div
-          initial={{ opacity: 0, y: 20 }}
+        {/* ── CLOSING STATEMENT ──
+            Was a lone quoted sentence floating under 20px of padding with no
+            label and no attribution — it read as a stray caption someone forgot
+            to delete. Now labelled and rule-anchored, matching the closers on
+            the Evolution and Principles sections so all three read as the same
+            device rather than three accidents. */}
+        <m.figure
+          initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-          className="pt-20 mt-8 border-t border-[#1A1A1A]/[0.08]"
+          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          className="pt-10 mt-4 border-t border-[#1A1A1A]/[0.12]"
         >
-          <p className="font-serif italic font-normal text-2xl md:text-3xl lg:text-4xl text-[#0A0A0A]/90 leading-snug max-w-3xl">
-            &quot;This evolution into AI-native systems was built on years of structured thinking,
-            communication, strategy,{" "}
-            <span className="text-[#0A0A0A]/60">and continuous learning.&quot;</span>
+          <p className="font-manrope text-[10px] uppercase tracking-[0.4em] text-[#6E6E6E] mb-5">
+            The Through-Line
           </p>
-        </m.div>
+          <blockquote className="font-serif italic font-normal text-2xl md:text-3xl lg:text-[2.25rem] text-[#0A0A0A] leading-[1.35] max-w-3xl">
+            This evolution into AI-native systems was built on years of
+            structured thinking, communication, strategy,{" "}
+            <span className="text-[#0A0A0A]/60">and continuous learning.</span>
+          </blockquote>
+        </m.figure>
 
       </div>
     </SectionWrapper>

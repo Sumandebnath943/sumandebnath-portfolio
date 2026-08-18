@@ -3,64 +3,88 @@
 import { useRef } from "react";
 import { m, useInView } from "framer-motion";
 import SectionWrapper from "@/components/ui/SectionWrapper";
+import SectionKicker from "@/components/ui/SectionKicker";
+import { experience, earlierExperience } from "@/lib/resume";
 
-// ── DATA ──────────────────────────────────────────────────────────────────────
+/**
+ * Operational history.
+ *
+ * Three deliberate things about this section:
+ *
+ * 1. **The KRAs come from `lib/resume.ts`, not from prose written here.** They
+ *    are the labelled bullets transcribed verbatim from the résumé PDF, and
+ *    that file is the single source of truth for every career fact on the site
+ *    (Bible §7). This section used to paraphrase them, which is exactly how the
+ *    four surfaces drifted apart last time. When the PDF changes, change
+ *    `lib/resume.ts`; this section follows automatically.
+ *
+ * 2. **Reverse chronological.** It used to run 2016 → present, so the first
+ *    thing a recruiter met was a list of internships and the current role was
+ *    three scroll-screens down. A CV reads newest first for exactly this reason.
+ *    The `index` numbers therefore count the panels top-down; they are not years.
+ *
+ * 3. **Tight.** py-40, mb-24 and pb-14 per panel put this section past 2,000px
+ *    for three jobs. Paddings are roughly halved so the added KRA detail costs
+ *    the page far less than it otherwise would.
+ */
+
+// ── DATA — newest first ───────────────────────────────────────────────────────
+//
+// Titles, employers, periods and bullets are read from the résumé. Only the
+// display concerns that a PDF has no concept of — ordering weight and the
+// discipline tags — are declared here.
+
+const [pibm, cbs] = experience;
 
 const roles = [
   {
-    id: "early",
-    index: "01",
-    company: "Early Experience",
-    subtitle: "Internships & Foundational Roles",
-    role: null,
-    timeline: "2016 — 2018",
-    weight: "foundational",
-    paragraphs: [
-      "Worked across consumer brands, digital environments, marketing operations, and foundational campaign systems.",
-      "Included Nivea India, Ramanbyte Pvt. Ltd., and Aamrit.",
-      "This phase built the operational understanding that later evolved into systems thinking and AI-native execution.",
-    ],
-    tags: ["Consumer Brands", "Marketing Operations", "Campaign Systems", "Digital Environments"],
-  },
-  {
-    id: "cbs",
-    index: "02",
-    company: "CBS Ventures",
-    subtitle: null,
-    role: "Branding & Digital Marketing Manager",
-    timeline: "2018",
-    weight: "structured",
-    paragraphs: [
-      "Built and executed integrated digital marketing systems focused on visibility, performance, and lead generation.",
-      "Managed SEO, SEM, social ecosystems, website optimization, paid advertising, content operations, and growth-focused digital infrastructure.",
-    ],
-    tags: ["SEO / SEM", "Paid Advertising", "Social Ecosystems", "Website Optimization", "Content Operations", "Lead Generation"],
-  },
-  {
     id: "pibm",
-    index: "03",
-    company: "Pune Institute of Business Management",
+    index: "01",
+    company: pibm.org,
+    role: pibm.title,
     subtitle: null,
-    role: "Brand Marketing Manager",
-    timeline: "2019 — Present",
+    timeline: pibm.period,
+    current: pibm.current,
     weight: "dominant",
-    paragraphs: [
-      "Led brand marketing, digital infrastructure, campaign systems, and institutional growth initiatives across one of Pune's leading business schools.",
-      "Directed multi-channel campaigns, website ecosystems, launch strategies, creative production, content systems, vendor coordination, and cross-functional execution pipelines.",
-      "Oversaw brand consistency, marketing operations, digital campaigns, creative direction, and large-scale promotional infrastructure.",
-    ],
+    bullets: pibm.bullets,
     tags: [
       "Brand Marketing",
       "Digital Infrastructure",
       "Campaign Systems",
       "Creative Direction",
-      "Multi-Channel Campaigns",
-      "Vendor Coordination",
-      "Content Systems",
+      "Team Leadership",
       "Growth Strategy",
-      "Website Ecosystems",
-      "Cross-Functional Execution",
     ],
+  },
+  {
+    id: "cbs",
+    index: "02",
+    company: cbs.org,
+    role: cbs.title,
+    subtitle: null,
+    timeline: cbs.period,
+    current: cbs.current,
+    weight: "structured",
+    bullets: cbs.bullets,
+    tags: ["SEO / SEM", "Paid Advertising", "Social Ecosystems", "Lead Generation"],
+  },
+  {
+    id: "early",
+    index: "03",
+    company: "Early Experience",
+    role: null,
+    subtitle: earlierExperience,
+    timeline: "2016 — 2018",
+    current: false,
+    weight: "foundational",
+    bullets: [
+      {
+        label: "",
+        text:
+          "Consumer brands, marketing operations and foundational campaign systems — the phase that built the operational understanding everything since has been layered on.",
+      },
+    ],
+    tags: ["Consumer Brands", "Marketing Operations", "Campaign Systems"],
   },
 ];
 
@@ -78,30 +102,32 @@ function RolePanel({
 
   const isDominant = role.weight === "dominant";
   const isFoundational = role.weight === "foundational";
+  // The résumé labels its KRAs; the "Earlier experience" block has none, so the
+  // bullet renders as plain prose rather than growing an empty bold run.
+  const labelled = role.bullets.some((b) => b.label);
 
   return (
     <m.div
       ref={ref}
-      initial={{ opacity: 0, y: 36 }}
+      initial={{ opacity: 0, y: 28 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 1, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-      className="relative border-t border-[#E0D8CE] pt-10 pb-14"
+      transition={{ duration: 0.8, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+      className="relative border-t border-[#A8CCE8]/50 pt-7 pb-9 md:pt-8 md:pb-10"
     >
-      {/* Two-col grid: meta left, content right */}
-      <div className="grid grid-cols-1 md:grid-cols-[220px_1fr] gap-x-16 gap-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-x-12 gap-y-4">
 
         {/* ── LEFT: meta ── */}
-        <div className="flex flex-col gap-3 md:pt-1">
-          <span className="font-manrope text-[10px] tracking-[0.35em] text-[#C5A880]">
+        <div className="flex flex-row md:flex-col md:gap-2.5 items-baseline md:items-start gap-4 md:pt-1">
+          <span className="font-manrope text-[10px] tracking-[0.35em] text-[#3E6E93]">
             {role.index}
           </span>
-          <p className="font-manrope text-sm text-[#7A6A55] leading-relaxed">
+          <p className="font-manrope text-sm text-[#3E6E93] leading-relaxed">
             {role.timeline}
           </p>
-          {isDominant && (
-            <span className="inline-flex items-center gap-1.5 mt-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#A0866A] opacity-60" />
-              <span className="font-manrope text-[9px] uppercase tracking-[0.35em] text-[#6B573F]/90">
+          {role.current && (
+            <span className="inline-flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#1F7A4D]" />
+              <span className="font-manrope text-[9px] uppercase tracking-[0.3em] text-[#1F6B45]">
                 Current
               </span>
             </span>
@@ -110,56 +136,65 @@ function RolePanel({
 
         {/* ── RIGHT: content ── */}
         <div>
-          {/* Company */}
           <p
             className={`font-manrope font-semibold leading-tight tracking-tight mb-1 ${
               isDominant
-                ? "text-2xl md:text-3xl text-[#1A1209]"
+                ? "text-2xl md:text-[1.75rem] text-[#0D1E2E]"
                 : isFoundational
-                ? "text-lg md:text-xl text-[#1A1209]/70"
-                : "text-xl md:text-2xl text-[#1A1209]/85"
+                ? "text-lg md:text-xl text-[#0D1E2E]/75"
+                : "text-xl md:text-2xl text-[#0D1E2E]/90"
             }`}
           >
             {role.company}
           </p>
 
-          {/* Role or subtitle */}
           {role.role && (
-            <p className="font-manrope text-sm text-[#8C7A60] mb-6 tracking-wide">
+            <p className="font-manrope text-sm text-[#2F5F84] mb-4 tracking-wide">
               {role.role}
             </p>
           )}
           {role.subtitle && !role.role && (
-            <p className="font-manrope text-sm text-[#8C7A60]/70 mb-6 italic">
+            <p className="font-manrope text-sm text-[#2F5F84] mb-4 italic">
               {role.subtitle}
             </p>
           )}
-          {!role.role && !role.subtitle && <div className="mb-6" />}
 
-          {/* Body copy */}
-          <div className="space-y-4 mb-8 max-w-xl">
-            {role.paragraphs.map((para, i) => (
-              <p
-                key={i}
-                className={`font-manrope leading-[1.85] ${
-                  i === 0
-                    ? isDominant
-                      ? "text-base md:text-[17px] text-[#2A2018]/90 font-medium"
-                      : "text-sm md:text-base text-[#2A2018]/80 font-medium"
-                    : "text-sm text-[#2A2018]/70"
-                }`}
-              >
-                {para}
-              </p>
+          {/* ── KRAs, straight off the résumé ── */}
+          {labelled && (
+            <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-[#3E6E93] mb-3">
+              Key result areas
+            </p>
+          )}
+          <ul className="space-y-2.5 mb-5 max-w-2xl">
+            {role.bullets.map((b, i) => (
+              <li key={i} className="flex items-start gap-2.5">
+                <span
+                  aria-hidden
+                  className="mt-[0.55em] w-1 h-1 rounded-full bg-[#3E6E93] shrink-0"
+                />
+                <p
+                  className={`font-manrope leading-[1.7] ${
+                    isDominant
+                      ? "text-sm md:text-[15px] text-[#1A3550]"
+                      : "text-sm text-[#1A3550]/90"
+                  }`}
+                >
+                  {b.label && (
+                    <span className="font-semibold text-[#0D1E2E]">
+                      {b.label}:{" "}
+                    </span>
+                  )}
+                  {b.text}
+                </p>
+              </li>
             ))}
-          </div>
+          </ul>
 
-          {/* Tags */}
           <div className="flex flex-wrap gap-2">
             {role.tags.map((tag) => (
               <span
                 key={tag}
-                className="font-manrope text-[11px] px-3 py-1 rounded-full border border-[#7AADD0]/30 bg-[#7AADD0]/[0.08] text-[#2A5A80]/90 font-medium"
+                className="font-manrope text-[11px] px-3 py-1 rounded-full border border-[#7AADD0]/40 bg-[#7AADD0]/[0.1] text-[#22557A] font-medium"
               >
                 {tag}
               </span>
@@ -180,7 +215,7 @@ export default function OperationalHistory() {
   return (
     <SectionWrapper
       id="history"
-      className="py-20 md:py-40 px-6 bg-gradient-to-br from-[#EBF6FF] via-[#F0F8FF] to-[#E3F2FD] relative"
+      className="py-16 md:py-24 px-6 bg-gradient-to-br from-[#EBF6FF] via-[#F0F8FF] to-[#E3F2FD] relative"
       showLine={false}
     >
       <div className="max-w-5xl mx-auto">
@@ -190,43 +225,58 @@ export default function OperationalHistory() {
           ref={headerRef}
           initial={{ opacity: 0, y: 24 }}
           animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-24"
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-10 md:mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-6"
         >
-          <p className="font-manrope text-[10px] text-[#7AADD0] uppercase tracking-[0.4em] mb-8">
-            06 / Experience
-          </p>
-          <h2 className="font-manrope font-semibold text-4xl md:text-5xl lg:text-6xl text-[#0D1E2E] leading-tight tracking-tight mb-8">
-            Real-world execution
-            <br />
-            <span className="text-[#0D1E2E]/60">before the systems evolved.</span>
-          </h2>
-          <p className="font-manrope text-base text-[#1A3550]/80 leading-relaxed max-w-lg font-medium">
-            The AI-native systems work was built on years of operational execution, brand strategy, marketing infrastructure, campaign direction, and creative leadership.
+          <div className="max-w-2xl">
+            {/* Blue ground: the chip takes the section's own accent so it does
+                not read as a grey sticker dropped onto a coloured band. */}
+            <SectionKicker
+              className="mb-6"
+              chipClassName="border-[#7AADD0]/45 bg-[#7AADD0]/[0.12]"
+              dotClassName="bg-[#3E6E93]"
+              textClassName="text-[#255677]"
+            >
+              06 / Experience
+            </SectionKicker>
+            <h2 className="font-manrope font-semibold text-3xl md:text-4xl lg:text-5xl text-[#0D1E2E] leading-[1.1] tracking-tight mb-4">
+              Real-world execution{" "}
+              <span className="text-[#0D1E2E]/60">before the systems evolved.</span>
+            </h2>
+            <p className="font-manrope text-[15px] md:text-base text-[#1A3550] leading-relaxed max-w-xl">
+              The AI-native work stands on years of operational execution — brand
+              strategy, marketing infrastructure, campaign direction and creative
+              leadership.
+            </p>
+          </div>
+          <p
+            aria-hidden
+            className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#3E6E93] shrink-0 md:pb-2"
+          >
+            Newest first
           </p>
         </m.div>
 
-        {/* ── ROLE PANELS — ordered foundational → dominant ── */}
+        {/* ── ROLE PANELS — newest → earliest ── */}
         <div>
           {roles.map((role, i) => (
             <RolePanel key={role.id} role={role} index={i} />
           ))}
         </div>
 
-        {/* ── CLOSING CINEMATIC STATEMENT ── */}
-        <m.div
-          initial={{ opacity: 0, y: 20 }}
+        {/* ── CLOSING STATEMENT ── */}
+        <m.figure
+          initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
-          className="pt-24 mt-8 border-t border-[#A8CCE8]/40"
+          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          className="pt-9 mt-2 border-t border-[#A8CCE8]/50"
         >
-          <p className="font-serif italic font-normal text-3xl md:text-4xl lg:text-5xl text-[#0D1E2E]/85 leading-snug">
-            &quot;Before the systems came
-            <br />
-            <span className="text-[#0D1E2E]/60">the execution.&quot;</span>
-          </p>
-        </m.div>
+          <blockquote className="font-serif italic font-normal text-2xl md:text-3xl lg:text-[2.25rem] text-[#0D1E2E] leading-[1.35] max-w-3xl">
+            Before the systems came{" "}
+            <span className="text-[#0D1E2E]/60">the execution.</span>
+          </blockquote>
+        </m.figure>
 
       </div>
     </SectionWrapper>

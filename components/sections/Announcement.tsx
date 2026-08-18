@@ -18,9 +18,15 @@ const announcements: Announcement[] = [
   },
   {
     title: "Migi",
-    desc: "A personal suite of 30+ autonomous AI agents — finds work, tracks money, launches what I ship — plus a secure dashboard. Built with Claude Code.",
+    desc: "A fleet of 44 autonomous AI agents — finds work, tracks money, launches what I ship — held together by 500+ automated eval checks.",
     href: "/agents/migi",
     color: "#C6F24E",
+  },
+  {
+    title: "MIGI Android App",
+    desc: "The agent fleet in your pocket — a native Android client (V2), rebuilt from the ground up.",
+    href: "/apps/migi-app",
+    color: "#35E0FF",
   },
   {
     title: "PixelVille",
@@ -33,6 +39,12 @@ const announcements: Announcement[] = [
     desc: "A 1.5B coding LLM, QLoRA-tuned to follow instructions — runs locally on a 16GB laptop, no GPU.",
     href: "/llms/qdex-1.5b",
     color: "#34D399",
+  },
+  {
+    title: "The Journey",
+    desc: "The whole route — 2013 to now — told with the real artefacts, not a timeline graphic.",
+    href: "/journey",
+    color: "#E4B363",
   },
   {
     title: "Pentashell",
@@ -48,7 +60,7 @@ const announcements: Announcement[] = [
   },
   {
     title: "PentaCMD-47M",
-    desc: "A 47M-param small language model that speaks your terminal.",
+    desc: "A 47M-param small language model trained from scratch on 299K instruction→command pairs. ~87% exact match.",
     href: "/slms/pentacmd",
     color: "#A78BFA",
   },

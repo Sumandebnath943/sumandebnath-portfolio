@@ -11,17 +11,43 @@ export default function ExperienceNarrative() {
   return (
     <SectionWrapper id="experience-narrative" className="py-20 md:py-32 px-6 bg-[#FAF9F6]">
       <div className="max-w-6xl mx-auto" ref={ref}>
-        {/* Header */}
+        {/* ── Header ──
+            This used to be one 5xl italic sentence running the full width with a
+            stray rule under it — it read as a stranded caption, not a quote.
+            It is now set as an actual pull quote: labelled, measure-constrained,
+            hung off an oversized mark, and attributed. */}
         <m.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-16 md:mb-24 max-w-4xl"
+          className="mb-14 md:mb-20"
         >
-          <h2 className="font-serif italic font-normal text-3xl md:text-5xl text-[#0A0A0A] leading-tight mb-6">
-            &quot;I didn&apos;t learn marketing from a textbook. I learned it by running teams, managing budgets, and hitting targets. Then I learned AI to build the tools I always wished I had.&quot;
-          </h2>
-          <div className="w-16 h-px bg-[#D44400]/40" />
+          <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#6E6E6E] mb-8">
+            01 / The Profile
+          </p>
+
+          <figure className="relative max-w-3xl pl-8 md:pl-12">
+            {/* The mark is decoration — it must not be read out or copied. */}
+            <span
+              aria-hidden
+              className="absolute left-0 top-[-0.15em] font-serif italic text-[4.5rem] md:text-[6rem] leading-none text-[#C43F00]/25 select-none"
+            >
+              &ldquo;
+            </span>
+
+            <blockquote className="font-serif italic font-normal text-2xl md:text-[2.1rem] lg:text-[2.4rem] text-[#0A0A0A] leading-[1.35] tracking-[-0.01em]">
+              I didn&apos;t learn marketing from a textbook. I learned it by
+              running teams, managing budgets, and hitting targets. Then I
+              learned AI to build the tools I always wished I had.
+            </blockquote>
+
+            <figcaption className="mt-7 flex items-center gap-4">
+              <span className="h-px w-10 bg-[#C43F00]/50 shrink-0" />
+              <span className="font-manrope text-[11px] uppercase tracking-[0.28em] text-[#6E6E6E]">
+                Suman Debnath
+              </span>
+            </figcaption>
+          </figure>
         </m.div>
 
         {/* The Split Layout */}
@@ -36,13 +62,13 @@ export default function ExperienceNarrative() {
           >
             <div className="mb-8">
               <span className="font-mono text-[10px] text-[#C43F00] uppercase tracking-[0.3em] mb-3 block">
-                Part 1 (70%)
+                Chapter 01 &middot; 2016 — 2023
               </span>
               <h3 className="font-manrope font-semibold text-2xl md:text-3xl text-[#1A1917] mb-2">
                 The Marketer
               </h3>
               <p className="font-serif italic text-lg text-[#7A7672]">
-                9+ Years in the Trenches
+                Nine years in the trenches
               </p>
             </div>
 
@@ -91,30 +117,38 @@ export default function ExperienceNarrative() {
             <div className="absolute top-0 right-0 w-64 h-64 bg-[#F04E00]/10 blur-[80px] rounded-full pointer-events-none" />
 
             <div className="relative z-10 mb-8">
-              <span className="font-mono text-[10px] text-white/50 uppercase tracking-[0.3em] mb-3 block">
-                Part 2 (30%)
+              <span className="font-mono text-[10px] text-white/60 uppercase tracking-[0.3em] mb-3 block">
+                Chapter 02 &middot; 2024 — now
               </span>
               <h3 className="font-manrope font-semibold text-2xl md:text-3xl text-white mb-2">
                 The AI Builder
               </h3>
               <p className="font-serif italic text-lg text-white/60">
-                The Last 2 Years
+                Two years, twenty-one products
               </p>
             </div>
 
             <ul className="relative z-10 space-y-6">
               {[
                 {
-                  bold: "Shipped 10+ live AI products",
-                  text: "Independently designed, built, and launched tools from scratch using Next.js, FastAPI, and LLM APIs (writing 200,000+ lines of AI-assisted code)."
+                  bold: "Shipped 21 AI products, solo",
+                  text: "Designed, built and launched end to end with Next.js, FastAPI and LLM APIs — 200,000+ lines of AI-assisted code, and not one of them a demo."
+                },
+                {
+                  bold: "Trained a language model from scratch",
+                  text: "PentaCMD-47M, built nanoGPT-style on 299K instruction→command pairs at ~87% exact match — plus Qdex-1.5B, a QLoRA fine-tune benchmarked against HumanEval."
+                },
+                {
+                  bold: "Runs a 44-agent fleet in production",
+                  text: "MIGI handles the personal brand, job applications, expenses and uptime monitoring on its own, held together by 500+ automated eval checks."
                 },
                 {
                   bold: "Engineered ROASmind",
-                  text: "Currently developing an AI operating system designed to unify Meta, Google, and LinkedIn, eliminating 70–80% of performance marketing operational overhead."
+                  text: "An AI-native marketing operating system unifying Meta, Google and LinkedIn under one brain — built to remove 70–80% of performance marketing overhead. In private testing."
                 },
                 {
                   bold: "Automated the daily grind",
-                  text: "Built custom GenAI creative pipelines that compressed 8-hour manual design tasks into seconds, saving 2–3 hours daily per employee."
+                  text: "Custom GenAI creative pipelines compressed 8-hour manual design tasks into seconds, saving 2–3 hours daily per person on the team."
                 }
               ].map((item, i) => (
                 <li key={i} className="flex items-start gap-4">

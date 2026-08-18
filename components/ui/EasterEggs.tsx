@@ -37,6 +37,12 @@ const DESTRUCT_LINES = [
   "> ",
 ];
 
+/** Seconds of no mouse, key, scroll or click before the nudge appears, and how
+ *  long it then stays on screen. It is deliberately long in both directions: it
+ *  should feel like something noticed you had stopped, not like a pop-up. */
+const CLIPPY_IDLE_S = 60;
+const CLIPPY_VISIBLE_MS = 20_000;
+
 const EGG_CSS = `
 /* Each countdown tick snaps in rather than fading, so it reads as a clock
    rather than a progress log. */
@@ -262,6 +268,7 @@ export default function EasterEggs() {
   const [showClippy, setShowClippy] = useState(false);
   const clippyRef = useRef<HTMLDivElement>(null);
   const idleRef = useRef(0);
+  const showClippyRef = useRef(false);
   const router = useRouter();
 
   // T-10 to T-0 at roughly one a second, then it stops and stays stopped so the
@@ -350,24 +357,43 @@ export default function EasterEggs() {
   }, [anyEggOpen, dismissAll]);
 
   // 3. Clippy (idle nudge).
+  //
+  // Hiding it is always routed through here so the idle counter is reset in the
+  // same breath. Without that, an auto-hide would re-fire the card immediately:
+  // the counter is still sitting above the threshold, and a genuinely idle
+  // visitor produces no event to bring it back down.
+  const hideClippy = useCallback(() => {
+    idleRef.current = 0;
+    setShowClippy(false);
+  }, []);
+
   useEffect(() => {
-    const handleActivity = (e: Event) => {
-      // Activity *inside* the card is the visitor engaging with it, not idling
-      // away from it. Dismissing on that made the card impossible to use: the
-      // mousemove listener fired the moment the cursor travelled towards it,
-      // so "Yes, let's talk" could never be reached on a pointer device.
-      const t = e.target;
-      if (clippyRef.current && t instanceof Node && clippyRef.current.contains(t)) return;
+    // ONCE THE CARD IS UP, ACTIVITY MUST NOT DISMISS IT.
+    //
+    // This used to call setShowClippy(false) on any mousemove outside the card,
+    // which made it read as "shy of the cursor": the smallest twitch of the
+    // mouse — anywhere on the page — made it vanish before it could be read,
+    // and moving *towards* "Yes, let's talk" killed it mid-approach, because a
+    // mousemove travelling to the card targets everything in between first. An
+    // earlier fix exempted events whose target was inside the card, which does
+    // nothing for the approach — by the time the target is the card, the cursor
+    // has already crossed the page.
+    //
+    // Activity now only feeds the idle counter, and only while the card is
+    // hidden. Once it is up it stays up until the visitor dismisses it, acts on
+    // it, or the visible timer expires.
+    const handleActivity = () => {
+      if (showClippyRef.current) return;
       idleRef.current = 0;
-      if (showClippy) setShowClippy(false);
     };
 
-    window.addEventListener("mousemove", handleActivity);
+    window.addEventListener("mousemove", handleActivity, { passive: true });
     window.addEventListener("keypress", handleActivity);
-    window.addEventListener("scroll", handleActivity);
+    window.addEventListener("scroll", handleActivity, { passive: true });
     window.addEventListener("click", handleActivity);
 
     const interval = setInterval(() => {
+      if (showClippyRef.current) return;
       // The card is anchored bottom-left, which on a phone is exactly where
       // the hero's "Check Experience" / "View Projects" row lands — it was
       // covering them outright. While the hero is still on screen those
@@ -376,7 +402,7 @@ export default function EasterEggs() {
       const pastHero =
         typeof window !== "undefined" && window.scrollY > window.innerHeight * 0.6;
       idleRef.current += 1;
-      if (idleRef.current >= 60 && !showClippy && pastHero) setShowClippy(true);
+      if (idleRef.current >= CLIPPY_IDLE_S && pastHero) setShowClippy(true);
     }, 1000);
 
     return () => {
@@ -386,7 +412,21 @@ export default function EasterEggs() {
       window.removeEventListener("click", handleActivity);
       clearInterval(interval);
     };
+  }, []);
+
+  // Mirror of showClippy for the listeners above, which are attached once and
+  // must not be torn down and rebuilt every time the card opens or closes.
+  useEffect(() => {
+    showClippyRef.current = showClippy;
   }, [showClippy]);
+
+  // It stays until dismissed — but not forever. A nudge that never leaves is a
+  // banner.
+  useEffect(() => {
+    if (!showClippy) return;
+    const id = setTimeout(hideClippy, CLIPPY_VISIBLE_MS);
+    return () => clearTimeout(id);
+  }, [showClippy, hideClippy]);
 
   // 4. Command-palette and footer triggers.
   useEffect(() => {
@@ -737,7 +777,7 @@ export default function EasterEggs() {
           >
             <div className="relative w-full rounded-xl border border-black bg-[#FFFFE1] p-4 font-sans text-black shadow-[4px_4px_0px_rgba(0,0,0,1)] md:w-64">
               <button
-                onClick={() => setShowClippy(false)}
+                onClick={hideClippy}
                 className="absolute right-2 top-2 text-black/40 transition-colors hover:text-black"
                 aria-label="Dismiss"
               >
@@ -746,13 +786,19 @@ export default function EasterEggs() {
               <div className="mb-1">
                 <span className="text-[11px] font-bold uppercase tracking-wider">Assistant</span>
               </div>
+              {/* The Clippy cadence is the joke, so the sentence keeps its
+                  shape. What changed is the claim inside it: "a 10x Product
+                  Builder" was the site describing itself in the language of a
+                  job ad, which is the one register this portfolio otherwise
+                  never uses. */}
               <p className="pr-4 text-sm font-medium leading-relaxed">
-                It looks like you&apos;re trying to hire a 10x Product Builder. Would
-                you like some help with that?
+                It looks like you&apos;re trying to hire someone who can do the
+                marketing <em>and</em> build the product. Would you like some
+                help with that?
               </p>
               <button
                 onClick={() => {
-                  setShowClippy(false);
+                  hideClippy();
                   router.push("/contact");
                 }}
                 className="mt-3 w-full rounded bg-black py-2 text-xs font-bold text-white shadow-[2px_2px_0px_rgba(0,0,0,0.3)] transition-colors hover:bg-gray-800 active:translate-y-px active:shadow-none"
