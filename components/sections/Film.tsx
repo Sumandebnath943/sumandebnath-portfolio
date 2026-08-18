@@ -1,36 +1,132 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Play } from "lucide-react";
 
 /**
- * The film, under the hero.
+ * The film, on the home page.
  *
- * Deliberately NOT a YouTube iframe on load. The embed pulls well over a megabyte
- * of Google JavaScript, and paying that on every homepage visit — including the
- * majority who will never press play — would show up directly in this page's LCP.
+ * Two deliberate constraints, both about not paying for something nobody asked
+ * for on the site's most important page.
  *
- * So this is a facade: our own poster frame, and the player only mounts on click.
- * Two things follow from that beyond speed. Nothing from Google touches a visitor
- * unless they choose to watch, which is a far cleaner thing to disclose on
- * /privacy; and the poster is a frame we chose (the opening rooftop) rather than
- * whatever YouTube's auto-thumbnail lands on, which is usually a dissolve.
+ * 1. The player is a facade. A YouTube iframe pulls well over a megabyte of
+ *    Google JavaScript; loading it for the majority who never press play would
+ *    land straight on this page's LCP. So we render our own poster and mount the
+ *    player only on click — which also means nothing from Google touches a
+ *    visitor unless they choose to watch, exactly as /privacy now states.
+ *
+ * 2. The Vanta background is lazy and conditional. three.js is already a
+ *    dependency here but it is code-split behind the robot mascot, so it is NOT
+ *    in this page's initial bundle and importing it eagerly would put it there.
+ *    Both three and the effect are dynamically imported, and only once the
+ *    section is actually on screen. Reduced-motion and small screens skip it
+ *    entirely and keep the gradient underneath, which is why that gradient is a
+ *    real background rather than a placeholder.
  */
 
 const VIDEO_ID = "4AP2eui9720";
 
+/**
+ * Vanta's defaults are a bright blue daytime sky, which would fight every other
+ * section on a black site and make white type unreadable. These are re-pitched to
+ * the film's own palette: near-black ground, deep blue-grey cloud, and the site's
+ * accent blue/violet/cyan standing in for sun and glare.
+ */
+const CLOUD_OPTIONS = {
+  backgroundColor: 0x07090f,
+  skyColor: 0x0b1226,
+  cloudColor: 0x1c2740,
+  cloudShadowColor: 0x04060b,
+  sunColor: 0x4da3ff,
+  sunGlareColor: 0x7b61ff,
+  sunlightColor: 0x2fe2f0,
+  speed: 0.55,
+  // All off: this is a background, and grabbing pointer or gyro input would
+  // interfere with scrolling — especially on touch.
+  mouseControls: false,
+  touchControls: false,
+  gyroControls: false,
+  minHeight: 200,
+  minWidth: 200,
+};
+
 export default function Film() {
   const [playing, setPlaying] = useState(false);
+  const hostRef = useRef<HTMLDivElement | null>(null);
+  const effectRef = useRef<{ destroy: () => void } | null>(null);
+
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!host) return;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const small = window.matchMedia("(max-width: 767px)").matches;
+    if (reduced || small) return;
+
+    let cancelled = false;
+
+    // The body is the scroll container on this site, so window scroll listeners
+    // never fire — IntersectionObserver is the only thing that works here.
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries[0]?.isIntersecting || effectRef.current || cancelled) return;
+        observer.disconnect();
+
+        Promise.all([
+          import("three"),
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error — vanta ships no types
+          import("vanta/dist/vanta.clouds.min"),
+        ])
+          .then(([THREE, vanta]) => {
+            if (cancelled || !hostRef.current) return;
+            const CLOUDS = (vanta as { default: (o: object) => { destroy: () => void } })
+              .default;
+            effectRef.current = CLOUDS({
+              el: hostRef.current,
+              THREE,
+              ...CLOUD_OPTIONS,
+            });
+          })
+          .catch(() => {
+            // A failed background is not worth a broken section; the gradient
+            // underneath is already a finished design.
+          });
+      },
+      { rootMargin: "200px" }
+    );
+
+    observer.observe(host);
+    return () => {
+      cancelled = true;
+      observer.disconnect();
+      effectRef.current?.destroy();
+      effectRef.current = null;
+    };
+  }, []);
 
   return (
     <section
       id="film"
       aria-labelledby="film-heading"
-      className="relative bg-black text-white border-y border-white/[0.06]"
+      className="relative overflow-hidden border-y border-white/[0.06] text-white"
     >
-      <div className="max-w-5xl mx-auto px-6 md:px-10 py-20 md:py-24">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-10 gap-6">
+      {/* Fallback ground and Vanta host. Painted even when the effect never
+          loads, so the section is never a flat black rectangle. */}
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-[#07090F] bg-[radial-gradient(ellipse_75%_60%_at_50%_35%,#0F1A33_0%,#07090F_70%)]"
+      />
+      <div ref={hostRef} aria-hidden className="absolute inset-0" />
+      {/* Keeps type legible whatever the clouds are doing behind it. */}
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/45 to-black/80"
+      />
+
+      <div className="relative max-w-5xl mx-auto px-6 md:px-10 py-20 md:py-24">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-8 gap-6">
           <div>
             <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#86868B] mb-4">
               The film
@@ -39,29 +135,26 @@ export default function Film() {
               id="film-heading"
               className="font-manrope font-semibold text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight"
             >
-              Seventeen years,{" "}
+              No Obvious{" "}
               <span className="font-serif italic font-normal text-white/70">
-                in six minutes
+                Gift
               </span>
-              .
             </h2>
           </div>
           <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#8A8A8A]">
-            5:57 &middot; Animated
+            5:57 &middot; Animated documentary
           </p>
         </div>
 
         <p className="max-w-2xl text-[15px] md:text-base leading-relaxed text-white/60 mb-10">
-          An animated documentary about the part underneath the r&eacute;sum&eacute; &mdash;
-          a boy who could not speak one correct English sentence, a Lamborghini
-          page that reached 677,503 people, four months nobody asks about, and
-          twenty AI products built by someone who cannot code.
+          Nine years in brand marketing, two years building AI products, and the
+          route between them. Written, animated, scored and cut for this site.
         </p>
 
-        <div className="relative rounded-lg overflow-hidden border border-white/10 bg-[#07090F] aspect-video">
+        <div className="relative rounded-lg overflow-hidden border border-white/10 bg-[#07090F] aspect-video shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9)]">
           {playing ? (
             <iframe
-              // youtube-nocookie: no cookies until playback actually starts.
+              // youtube-nocookie: nothing from Google until playback starts.
               src={`https://www.youtube-nocookie.com/embed/${VIDEO_ID}?autoplay=1&rel=0&modestbranding=1`}
               title="No Obvious Gift — a film by Suman Debnath"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -84,11 +177,10 @@ export default function Film() {
                 // value next/image accepts here.
                 quality={75}
                 className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-                priority={false}
               />
               <span
                 aria-hidden
-                className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/30"
+                className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/25"
               />
               <span
                 aria-hidden
@@ -100,12 +192,6 @@ export default function Film() {
                     fill="currentColor"
                   />
                 </span>
-              </span>
-              <span
-                aria-hidden
-                className="absolute left-5 bottom-4 md:left-7 md:bottom-6 font-serif italic text-lg md:text-2xl text-white/85"
-              >
-                No Obvious Gift
               </span>
             </button>
           )}

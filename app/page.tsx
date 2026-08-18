@@ -46,8 +46,8 @@ export default function Home() {
       {/* Page sections — server-rendered so all content lives in initial HTML */}
       <main>
         <Hero />
-        <Film />
         <Announcement />
+        <Film />
         <ExperienceNarrative />
         <NowBuilding />
         <Experience />
