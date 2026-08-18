@@ -140,15 +140,23 @@ both are worth reading before you touch them:
 
 ### 3.2 The homepage
 
-`/` is a composition of twelve section components, in this order:
+`/` is a composition of thirteen section components, in this order:
 
-`Hero` → `Announcement` → `ExperienceNarrative` → `NowBuilding` → `Experience`
-→ `SystemsStack` → `Projects` → `AIPhilosophy` → `PhilosophyFAQ` →
+`Hero` → `Announcement` → **`Film`** → `ExperienceNarrative` → `NowBuilding` →
+`Experience` → `SystemsStack` → `Projects` → `AIPhilosophy` → `PhilosophyFAQ` →
 `OperationalHistory` → `AcademicFoundations` → `Contact`
 
-All twelve live in `components/sections/`. Reordering the homepage means
+All thirteen live in `components/sections/`. Reordering the homepage means
 reordering this list in `app/page.tsx` — the sections do not know about each
 other.
+
+`Film` (added 18 Aug 2026) is the one **light** section on an otherwise black
+page — a daylight band carrying the six-minute film. It is deliberately the
+exception, and §6.7 covers what that costs.
+
+> The page is known to read as **structurally ambiguous** — thirteen separate
+> claims with no spine. That is an open piece of work, not an oversight; see
+> HANDOFF §3.
 
 ---
 
@@ -199,10 +207,34 @@ Homepage dossiers carry their own accents too — see §7.2.
 
 ### Accessibility
 
-The site has been through **two full WCAG AA contrast passes** (see commits
-`38029b6`, `00a90a9`). Small labels are the usual offender. If you add a label
-below ~13px on a dark ground, keep it at `text-white/45` or lighter-weight
-equivalent, not `/30`, and check it.
+The site has been through **three full WCAG AA contrast passes** (`38029b6`,
+`00a90a9`, and `eafc88d` + `c328ee7` on 16 Aug). Small labels are the usual
+offender, and the 9–10px mono label system is deliberate art direction — 118 of
+120 on the homepage carry wide tracking and 88 are uppercase. **Fix contrast,
+not size.** Colour changes cost no layout; size changes break tight badges and
+rows.
+
+> **`text-white/45` is not a safe floor — use `/50`.** Earlier guidance here
+> said `/45`. Measured against the real surfaces it computes to *exactly* 4.5:1
+> with nothing spare, so every `/45` label was failing. The floor on dark
+> grounds is **`/50`**; on cream (`#FDF6EE`) nothing lighter than **`#6E6E6E`**
+> passes, which is slightly stricter than pure white.
+
+**Measure with alpha compositing over the full ancestor stack, including
+gradient stops.** A naive `color` vs `backgroundColor` comparison reports false
+1.0 ratios for text on translucent same-hue backgrounds (e.g. `text-[#8C7B60]`
+on `bg-[#8C7B60]/[0.08]`) and cannot see `background-image` gradients at all —
+both patterns are common here.
+
+**Low contrast usually traces to one shared value, not scattered one-offs.**
+`#5A6286` accounted for 19 of 21 failures on PentaCMD *and* 16 of 17 on Qdex;
+migi's `muted` token carried 21 nodes by itself. Group failures by computed
+colour before editing anything.
+
+**Brand-coloured ordinals are deliberately left failing.** The golds, greens,
+oranges and violets used as decorative section numbers score 2.1–4.2 on white.
+Darkening them enough to pass would visibly shift the palette for text that
+carries no information. That is a standing decision, not an oversight.
 
 ---
 
@@ -226,7 +258,7 @@ Every page wraps its own content:
 </MotionProvider>
 ```
 
-### Two motion traps that have already cost real debugging time
+### Three motion traps that have already cost real debugging time
 
 **1. `overflow-hidden` silently kills `position: sticky`.**
 An ancestor with `overflow: hidden` becomes the sticky element's scroll
@@ -239,6 +271,32 @@ touching the sticky code.
 `document.body` computes to `overflow: hidden auto`, so **`window` scroll
 listeners never fire.** Anything scroll-driven must use `IntersectionObserver`
 (or listen on the right element), never `window.addEventListener("scroll")`.
+
+**3. three.js colour management silently re-tints anything written before r152.**
+`ColorManagement.enabled` defaults to `true` since three **r152**, so
+`new THREE.Color(0xadc1de)` no longer hands a shader the raw sRGB triple — it
+converts to linear first. `(0.678, 0.757, 0.871)` becomes `(0.418, 0.533, 0.731)`.
+Red loses far more than blue, so **anything expecting the old behaviour drifts
+violet.** This is what made the Vanta clouds purple on `Film` while Vanta's own
+demo page, running identical hex values on r134, looked white.
+
+Nothing errors. It just looks subtly wrong, which is why it is worth knowing
+before you reach for any WebGL library that predates r152.
+
+The obvious fix — `THREE.ColorManagement.enabled = false` — is **not available
+here.** The flag is global, and `RobotMascot` in `app/layout.tsx` puts a GLTF
+scene on every page sharing the same `three` instance; disabling colour
+management site-wide to correct a background would change how the robot renders.
+
+Compensate locally instead: pass each colour through linear→sRGB first, which
+three's sRGB→linear then undoes, landing the shader on the intended value. See
+`CLOUD_OPTIONS` in `components/sections/Film.tsx`, where the pre-compensated hex
+and the original are both recorded.
+
+> **Verify by sampling the canvas, not by eye.** `drawImage` the WebGL canvas
+> into a 2D canvas and read pixels. Warm white cloud reads **R ≥ G > B**; a
+> violet cast is blue over green with red suppressed. That check is the only
+> reason the fix could be confirmed at all — see §11.
 
 ---
 
@@ -395,6 +453,58 @@ Vercel Analytics, Vercel Speed Insights, and **two** GA4 properties
 > `layout.tsx` actually loads. If you add or remove a tracker, update the
 > privacy page in the same commit.
 
+A **third party now reaches the site from outside `layout.tsx`**: the YouTube
+embed in `Film`. It is disclosed on `/privacy` in the same terms it behaves —
+nothing from Google loads until the visitor presses play (§6.7).
+
+---
+
+### 6.7 The film and the facade embed (`components/sections/Film.tsx`)
+
+`No Obvious Gift` — a 5:57 animated documentary — sits on the homepage between
+`Announcement` and `ExperienceNarrative`. YouTube ID `4AP2eui9720`.
+
+**It is a facade, not an embed.** A YouTube iframe pulls well over a megabyte of
+Google JavaScript. Paying that on every homepage visit, for the majority who
+never press play, lands directly on this page's LCP. So the section renders its
+own poster (`public/film-poster.jpg`, cut from the master at 7.5s) and mounts the
+player only on click, against `youtube-nocookie.com`.
+
+Three things follow, and all three are load-bearing:
+
+- **Privacy.** Nothing from Google touches a visitor unless they choose to watch,
+  which is exactly what `/privacy` claims. Replacing the facade with a plain
+  iframe makes that page untrue.
+- **The poster is chosen.** YouTube's auto-thumbnails tend to land on a dissolve.
+- **It is the one light section on a dark site.** Vanta CLOUDS renders a daylight
+  sky; the type is dark ink; the video card stays dark so it reads as a
+  deliberate band rather than a section that lost its background.
+
+**Consequences of that inversion, each of which was a bug first:**
+
+| Concern | Resolution |
+|---|---|
+| Reduced-motion fallback | Must be a **light** gradient. A dark one made the section appear light or dark depending on a visitor's OS setting — a page that looks like two different designs. |
+| Small-type contrast | Dark-on-light broke it: eyebrow 4.23:1, caption 3.57:1, both under the 4.5:1 floor. Now `#3A434E` at 7.49:1 against the measured sky. |
+| Cloud shadow | `cloudShadowColor` is dark enough to fail contrast under **any** usable veil. Not solved by the veil — solved by geometry: CLOUDS renders clear sky at the top of the frame where all the type sits, and drops shadow lower, where the opaque card covers it. **If you move type down this section, that protection is gone.** |
+
+**Loading.** `three` is already a dependency but is code-split behind the robot
+mascot, so it is *not* in the homepage's initial bundle — importing it eagerly
+would put it there and undo the point of the facade. Both `three` and
+`vanta/dist/vanta.clouds.min` are dynamically imported, and only once the section
+intersects the viewport. Reduced-motion and screens under 768px skip the effect
+entirely, which is why the gradient underneath is a finished design.
+
+Pointer, touch and gyro controls are all **off** — it is a backdrop, and
+capturing those fights scrolling on touch.
+
+> Not a bug: the canvas draws at ~1/3 resolution and upscales
+> (`vanta.clouds` sets `scale: 3`, `scaleMobile: 12`). The shader is expensive
+> and cloud is soft enough that the upscale is invisible. It is why the effect is
+> cheap enough to justify at all.
+
+See §5 trap 3 for why the colours are pre-compensated.
+
 ---
 
 ## 7. Data layer — `lib/`
@@ -509,8 +619,8 @@ Helper scripts: `scripts/admin-secret.mjs`, `scripts/auth-check.mjs`,
 
 ### 9.1 Source assets — the `_source-*` folders
 
-Three folders at the repo root hold **originals that are not shipped**, and all
-three are git-ignored. They exist because the served asset is a processed
+Four folders at the repo root hold **originals that are not shipped**, and all
+four are git-ignored. They exist because the served asset is a processed
 derivative and the pipeline needs its input kept:
 
 | Folder | Holds | Becomes |
@@ -518,15 +628,62 @@ derivative and the pipeline needs its input kept:
 | `_source-fbx/` | Mixamo FBX animations (`Idle.fbx`, `Jumping.fbx`, `Running.fbx`, …) | `public/robot.glb`, via `scripts/build-robot-glb.mjs` |
 | `_source-journey-art/` | Full-size journey illustrations (`01-prologue.png` …) | Cropped/optimised art under `public/journey/` |
 | `_source-journey-assets/` | Real personal artefacts — old screenshots, logos, photos | The evidence shown on `/journey` |
+| `_source-film/` | The whole film production: 30 Veo clips, 3 stills, 23 narration files, 3 music beds, and a Remotion studio | `No-Obvious-Gift-master.mp4` → YouTube; `public/film-poster.jpg` |
+
+**The film pipeline** (`_source-film/studio/`) is a Remotion project, 24fps to
+match the source footage — rendering 24fps material into a 30fps timeline judders
+on every camera move in all 30 clips. Its shape is worth knowing before touching
+it:
+
+| File | Role |
+|---|---|
+| `src/film/timeline.ts` | The clock. 23 chapters, each with a **measured** narration duration and a trailing gap. Everything else derives from these. |
+| `src/film/edit.ts` | The cut. Shots declared per chapter as **weights**, not seconds, so re-recording a line re-flows the pictures instead of leaving the edit permanently offset. |
+| `src/film/Sequences.tsx` | The 13 coded sequences — anything with a number, UI or type in it. |
+| `src/film/Film.tsx` | Draws each shot; owns the grade, the scene joints and the audio mix. |
+| `scripts/normalize-vo.py` | Matches every narration file to −16 dB speech RMS. |
+| `scripts/build-beds.py` | Loops the music with crossfades (see trap below). |
+| `scripts/render-chunks.py` | Renders in 1000-frame chunks against a pre-built bundle, then joins with `-c copy`. |
+
+> **Render in chunks.** A single 8,576-frame 1080p pass exceeded the free space on
+> this machine and died with a native crash that reported exit code 0. Chunking
+> caps peak scratch usage and is resumable — finished parts are reused, so a
+> failure part-way through does not discard an hour. Bundle once
+> (`npx remotion bundle`) and render every chunk against it.
+
+> **Trap: `<Audio>` does not loop — it stops.** The music tracks are 111–144s and
+> the first bed has to cover 248s, so the film ran in **silence from 1:54 to
+> 4:06** — nine chapters — and it presented as "the music is inconsistent"
+> rather than as an outright fault. `scripts/build-beds.py` now builds
+> `*-bed.mp3` long enough for their spans, joined with 6s crossfades because a
+> hard loop point is audible as a click. **Check bed length against span before
+> trusting a mix.**
+
+> **Trap: pace reveals to the CHAPTER, not the shot.** Sequences receive two
+> clocks, `p` (their own shot) and `cp` (the whole chapter). A reveal paced to
+> `p` finishes when its shot ends — which is why the tool list raced ahead of the
+> narration and then got cut away from mid-sentence. Anything timed to speech
+> uses `cp`.
+
+> **Cut to measured phrase boundaries, not by eye.** Weights set by feel put the
+> budget card 2.2s late, the traffic card 4.1s and the delivery card 3.9s — the
+> error accumulated because each shot pushed the next along. `ffmpeg`
+> `silencedetect=noise=-34dB:d=0.22` gives real sentence boundaries.
 
 > **Trap:** journey art is **cropped before serving**, not with CSS. If an
 > illustration looks wrongly framed, fix the derivative in `public/`, do not add
 > `object-position` hacks — the horizon alignment on that page depends on the
 > crop being right.
 
-Because these are ignored, a fresh clone cannot rebuild `robot.glb` or reframe
-journey art. The source folders live on Suman's machine at
-`D:\project\sumandebnath\_source-*`.
+Because these are ignored, a fresh clone cannot rebuild `robot.glb`, reframe
+journey art, or **re-render the film**. The source folders live on Suman's
+machine at `D:\project\sumandebnath\_source-*`.
+
+> `_source-film/` is the only copy of the film's inputs and of the studio that
+> assembles them. The published MP4 and the YouTube upload are outputs; they
+> cannot be edited back into a new cut. **If that folder is lost, the film can be
+> replayed but never revised.** It is worth a backup somewhere other than this
+> disk.
 
 `/journey` itself is content-heavy rather than code-heavy: `lib/journey.ts` is
 ~525 lines of story data against a ~119-line page. Edit the data, not the page.
@@ -583,3 +740,30 @@ accents. They follow the pattern in `PORTFOLIO_HANDOFF.md` §4, but each has its
 own bespoke layout that has not been catalogued here.
 
 If you go deep in one of those areas, extend this file while you are in there.
+
+### Added 18 August 2026 — and how it was checked
+
+§6.7, §9.1's film pipeline and §5 trap 3 were all written from work done that
+day. Everything in them was verified by **measurement rather than by eye**, which
+matters because it had to be: the browser pane would not composite for that whole
+session, so no screenshot was ever possible.
+
+What that meant in practice, and what to reuse:
+
+- **DOM assertions instead of screenshots.** Section order was confirmed with
+  `compareDocumentPosition`, not by looking. The facade was proven by checking
+  that no `iframe` exists before the click and that its `src` is
+  `youtube-nocookie.com` after.
+- **Canvas pixel sampling** for the colour fix — `drawImage` into a 2D canvas,
+  then read points. This is the only reason "the clouds are white now" is a fact
+  rather than a hope.
+- **Computed contrast ratios**, blending each foreground against the background
+  *after* the veil's alpha. The accessibility notes in §4 warn that naive
+  `color` vs `backgroundColor` checks report false ratios and cannot see
+  gradients at all; that warning is what caught the 4.23:1 and 3.57:1 failures.
+
+**Still unverified: how any of it actually looks.** The band against the black
+sections above and below, the sun glare's position behind the card, and the
+mobile fallback have been reasoned about and never seen. If something looks
+wrong there, the documentation is not lying to you — it simply never covered
+appearance.

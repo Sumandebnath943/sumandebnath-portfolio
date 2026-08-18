@@ -4,9 +4,16 @@ Where the project stands, what changed most recently, and what is worth doing
 next. For how the system is built read **PROJECT_BIBLE.md**; for how the site
 writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
-**Last updated:** 14 August 2026
-**Branch:** `main`, clean and pushed
-**Last feature commit:** `3b66fbb` — *feat(admin): replace the bubble map with a country breakdown*, the end of a long session that rebuilt the visitor notifier and built the admin dashboard (§2).
+**Last updated:** 18 August 2026
+**Branch:** `main`, pushed. One file dirty — see the warning below.
+**Last feature commit:** `b151dc1` — *fix(home): white clouds — compensate for three.js colour management*, closing a session that produced a six-minute film and put it on the homepage (§2).
+
+> **`PROJECT_BIBLE.md` has uncommitted changes that are not from that session.**
+> They were already in the working tree when it began: a third WCAG contrast pass
+> recording that `text-white/45` computes to *exactly* 4.5:1 and so was failing
+> everywhere (the floor is `/50`), plus the finding that naive
+> `color` vs `backgroundColor` checks report false ratios and cannot see
+> gradients. Real work, deliberately left for whoever wrote it to commit.
 
 > Run `git log --oneline -15` before trusting this section — it is a snapshot,
 > and the commit log is the authority on what has happened since.
@@ -35,10 +42,103 @@ Recent history, newest first, gives an accurate picture of the trajectory:
 | **AI assistant** | Role-injection closed and cost bounded, `df067e5`. Model is `openai/gpt-oss-120b`. |
 | **Navigation + ⌘K** | Restructured around Home / Portfolio / About Me, mounted site-wide. |
 | **Site tour** | Crosses routes and survives navigation, `8adf5ee`. |
+| **The film** (`No Obvious Gift`) | Made 17–18 Aug. 5:57, on YouTube as `4AP2eui9720`, embedded on the homepage. Done. |
+| **Homepage structure** | **Known weak.** Thirteen sections, no spine. Diagnosed, deliberately not addressed — §3. |
 
 ---
 
-## 2. What changed in the last session (13–14 Aug 2026)
+## 2. What changed in the last session (17–18 Aug 2026)
+
+**One goal, stated in the first message:** the site was "really ambiguous" and
+did not give "a structured view and a concrete view into what I have actually
+done." The fix was to be a video plus concrete achievements on the homepage.
+
+**The video was built. The achievements block was not** — see §3. Read that
+before assuming the original request is closed.
+
+### The film — `No Obvious Gift`
+
+A 5:57 animated documentary, on YouTube as `4AP2eui9720`, embedded on the
+homepage. Assembled from 30 AI-generated clips, 3 stills, 13 coded sequences and
+23 narration files. Pipeline and traps: Bible §9.1.
+
+The division of labour that made it work: **Suman generated every clip, still and
+voice line; the assembly, timing, grade, sequences and mix were code.** Veo
+carried places, weather, rooms and the character; code carried anything with a
+number, an interface or type in it, because Veo renders letterforms badly and
+invents signage.
+
+### Decisions he took explicitly
+
+- **Animated documentary**, in the tradition of *Flee* — after rejecting both a
+  line-art treatment ("complete trash") and an abstract one ("too abstract").
+  Photoreal was never attempted; it is where AI video is weakest.
+- **One clip of his real face**, once, on the closing ask. His own reasoning was
+  right: identity drift is only visible by comparison, so a single appearance has
+  no tell — and it becomes the only human face in six minutes.
+- **The résumé opens the film**, then the story undercuts it. Opening on "I was
+  never a talented child" led with weakness before anything had been earned.
+- **Four months of unemployment became four months freelancing in Bangalore
+  while interviewing** — truthful and far stronger.
+- **Keep the Google AI watermark.** Offered removal by `delogo` (smears on
+  detail) or reframing (costs 11% of frame); he chose to keep it.
+- **Employer stays unnamed** throughout; CBS Ventures named only where it credits
+  the CEO who hired him. All four KRA numbers on screen.
+
+### Bugs found by measurement, not by watching
+
+Each of these would have shipped unnoticed on a casual viewing:
+
+- **132 seconds of silence.** `<Audio>` does not loop; the 114s music bed had to
+  cover 248s, so nine chapters ran dry. Presented as "the music is inconsistent",
+  and I initially misdiagnosed it as a level problem and spent a fix on duck
+  depth before measuring and finding `-91 dB`.
+- **A training-loss chart that climbed.** SVG y grows downward and the
+  exponential was added rather than subtracted — a graph labelled TRAINING LOSS
+  going up, in the one sequence meant to prove a technical claim.
+- **The 21-person team collapsed into a vertical stack of dots** —
+  `AbsoluteFill` defaults to `flex-direction: column`.
+- **Two signatures crossing each other.** I assumed generated video could not
+  produce his signature and composited the real logo on top; Veo produced it too.
+- **Panels 2–4s behind the narration**, because their weights were set by eye.
+  Fixed against `silencedetect` phrase boundaries.
+
+### The homepage section
+
+`components/sections/Film.tsx`, between `Announcement` and
+`ExperienceNarrative`. A facade rather than an embed, and the one light section
+on a dark site. Full rationale and the three consequences of that inversion:
+Bible §6.7.
+
+`/privacy` was updated in the same commit — the repo's own rule is that it must
+match what the page actually loads.
+
+**A three.js trap worth knowing beyond this section:** Vanta's stock colours
+rendered purple because `ColorManagement.enabled` defaults true since r152 and
+silently converts sRGB to linear. Anything written before r152 will hit this, and
+nothing errors. Bible §5, trap 3.
+
+### Left unverified
+
+**How any of it looks.** The browser pane would not composite for the entire
+session, so no screenshot was ever taken. Every check was structural (DOM),
+computed (contrast ratios) or sampled (canvas pixels). The band against the black
+sections above and below, the sun glare behind the card, and the mobile fallback
+have never been seen.
+
+Also unconfirmed: whether the YouTube video is Public or Unlisted (either embeds;
+Private does not).
+
+### Two open editorial calls
+
+- The page clip shows **82,000 likes** while the narration says "eighty
+  thousand". Both true, both on screen.
+- The title *No Obvious Gift* is his own line — arresting, and the first thing a
+  recruiter reads.
+
+---
+
+## 2b. What changed in the session before (13–14 Aug 2026)
 
 **Two goals.** First, the visitor notifier was producing contradictory and
 duplicated Telegram alerts. Second, Suman wanted a private dashboard so visits
@@ -140,7 +240,7 @@ run is ~03:20 daily.
 
 ---
 
-## 2b. What changed in the session before (12 Aug 2026)
+## 2c. What changed two sessions before (12 Aug 2026)
 
 **Goal:** Suman built a second, standalone native Android app for the MIGI agent
 fleet. The existing page described only V1 — a WebView wrapper of the dashboard's
@@ -241,25 +341,59 @@ top of this file, plus:
 
 ## 3. Next steps
 
-Nothing is blocking. These are opportunities, roughly in value order.
+**The one genuinely unfinished thing is at the top.** The rest are
+opportunities, roughly in value order.
 
-0. **Watch a week of real traffic before building more on the dashboard.** It
+0. **Finish the homepage restructure — the original request is only half done.**
+   The 17–18 Aug session opened with "the entire website is really ambiguous…
+   it does not give a structured view and a concrete view into what I have
+   actually done." The film answers that; the concrete achievements do not exist
+   yet. Asked how far to go, he chose *"just the film for now, decide the rest
+   after"* — so this is deferred by decision, not forgotten.
+
+   The diagnosis is that nothing is missing; nothing is **ordered**. Thirteen
+   sections make thirteen separate claims with no spine.
+
+   He has already picked the proof to lead with — all four themes, when offered:
+
+   | Theme | The specifics to draw from |
+   |---|---|
+   | The AI build record | 20+ shipped products, 46 agents, an SLM trained from scratch, an LLM fine-tuned — by someone who cannot code |
+   | The scale of the job | 21 people across three functions, ₹30–40L vendor budget, 20+ programme launches, 99%+ on time over six years |
+   | The growth numbers | 40–50% traffic growth, 677,503 reached on one post, 80,000 followers with no budget or team |
+   | The speed feats | A 200-page brochure in a day, five SEO'd sites with payment gateways in a month, 100+ decks |
+
+   Those need cutting to five or six specifics — *"ten things communicate
+   nothing"* was the note. The film section (Bible §6.7) is the nearest example
+   of the intended register.
+
+0b. **Back up `_source-film/` off this disk.** It is git-ignored and is the only
+   copy of the film's inputs and the studio that assembles them. The MP4 and the
+   YouTube upload are outputs — they cannot be edited back into a new cut. Lose
+   the folder and the film can be replayed but never revised.
+
+0c. **Free disk space.** Both drives sat at 97–98% through the last session and
+   it caused a real failure: a render died with a native crash that reported exit
+   code 0, and the actual cause was `ENOSPC` during the bundle copy. `~2.3 GB`
+   free is not enough for another film render.
+
+1. **Watch a week of real traffic before building more on the dashboard.** It
    has never been used against real data. Pagination and CSV export are the
    obvious next features, but which one matters will be obvious after a week and
    is guesswork now.
 
-1. **The GA4 consent decision is still open.** Disclosed on `/privacy`, not
+2. **The GA4 consent decision is still open.** Disclosed on `/privacy`, not
    consented. If it ever needs closing, that is Consent Mode v2 with GA blocked
    until opt-in — a real piece of work, and his call to ask for.
 
-2. **Tracking is inert under `next dev`** (StrictMode vs the `initedRef` guard,
+3. **Tracking is inert under `next dev`** (StrictMode vs the `initedRef` guard,
    Bible §6.1). Nobody can test the notifier locally without a production build.
    Small fix, and it is why several bugs reached production unseen.
 
-3. **The visitor table has no pagination** — capped at 200 rows. Fine now, will
+4. **The visitor table has no pagination** — capped at 200 rows. Fine now, will
    matter within months.
 
-4. **Clear the pre-existing lint errors in `Navigation.tsx`** — an
+5. **Clear the pre-existing lint errors in `Navigation.tsx`** — an
    `immutability` error on `window.location.href`, a raw `<a>` to `/` that
    should be `<Link>`, and an `<img>` that should be `next/image`. They predate
    recent work and fail `npm run lint` today.

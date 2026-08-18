@@ -67,7 +67,7 @@ short rule: `VERSION 2 · STANDALONE NATIVE ANDROID`.
 
 | Page | The argument |
 |---|---|
-| `/` | He builds AI-native systems, and here they are. |
+| `/` | He builds AI-native systems, and here they are. Carries **the film** (§3b). |
 | `/journey` | The story a résumé cannot tell — interactive, illustrated, gesture-gated. |
 | `/resume` | Career as a page, not a PDF. Two registers that converge. |
 | `/about`, `/philosophy` | How he thinks; each has its own identity, not a shared template. |
@@ -89,7 +89,46 @@ short rule: `VERSION 2 · STANDALONE NATIVE ANDROID`.
 > **PentaCMD is the model; Pentashell is the CLI.** Two products, two pages, two
 > palettes. Getting this wrong in copy is the single easiest mistake to make on
 > this site.
-| `/privacy` | Must state exactly what `layout.tsx` loads. Two GA4 properties, Vercel Analytics, Speed Insights. |
+| `/privacy` | Must state exactly what `layout.tsx` loads. Two GA4 properties, Vercel Analytics, Speed Insights — **and the YouTube embed in the homepage `Film` section**, which loads nothing until a visitor presses play. |
+
+### 3b. The film — `No Obvious Gift`
+
+A 5:57 animated documentary on the homepage (`components/sections/Film.tsx`,
+YouTube `4AP2eui9720`). Made 17–18 Aug 2026. It is the longest single piece of
+argument on the site, and its structure is the clearest statement of the voice in
+§2, so it is worth understanding before writing anything else in this register.
+
+**What it argues, in order:** here is the résumé — *"That is the résumé. It is
+accurate, and it explains nothing"* — and now here is the part underneath it.
+Establish standing, then undercut it. The first cut opened on *"I was never a
+talented child"* and was wrong for exactly the reason §2 warns about: it led with
+weakness before anything had been earned.
+
+**Rules it follows, which are the site's rules:**
+
+- **Numbers are shown, not claimed.** 677,503 is the real post; 82,000 is the
+  real page; the KRA figures are on screen unattributed.
+- **The employer is never named.** CBS Ventures appears only where it credits the
+  CEO who hired him on the strength of the work.
+- **The vulnerable beats stay in** — the rejection, the deleted page, the four
+  months. They are what make the rest believable.
+- **One human face, once**, on the closing ask. Nothing else in six minutes.
+
+**The section copy is the register to match** — the film's own title, one flat
+sentence, no trailer language:
+
+> **No Obvious *Gift*** — 5:57 · Animated documentary
+> Nine years in brand marketing, two years building AI products, and the route
+> between them. Written, animated, scored and cut for this site.
+
+An earlier draft read *"Seventeen years, in six minutes"* over a breathless list
+of the film's contents. It was rejected as childish, and correctly: it was a
+trailer for itself. The closing clause does more work than the list did, because
+it is a credential rather than a tease.
+
+> Two open calls, both live on the page: **82,000 vs "eighty thousand"** (the
+> clip and the narration disagree, both true), and whether *No Obvious Gift* —
+> his own line — should be the first thing a recruiter reads.
 
 ---
 
