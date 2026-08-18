@@ -102,8 +102,9 @@ export default function PrivacyPage() {
               visit is deleted after a year.
             </Bullet>
             <Bullet>
-              This site also runs Google Analytics and Vercel Analytics. Those are
-              third parties with their own data practices — details below.
+              This site also runs Google Analytics and Vercel Analytics, and embeds a
+              film from YouTube that loads only if you press play. Those are third
+              parties with their own data practices — details below.
             </Bullet>
             <Bullet>
               You can switch my visit alerts off for your browser in one click. See{" "}
@@ -187,6 +188,15 @@ export default function PrivacyPage() {
             <Bullet>
               <span className="text-white/85">Vercel Analytics &amp; Speed Insights</span>{" "}
               — aggregate page-view counts and page-load performance.
+            </Bullet>
+            <Bullet>
+              <span className="text-white/85">YouTube</span> — hosts the film on the
+              home page, and only if you press play. Until then the page shows a
+              still image and loads nothing from Google; there is no YouTube cookie,
+              request or script on the page unless you start the video. When you do,
+              it plays from youtube-nocookie.com, which does not set tracking cookies
+              for ads, though YouTube still receives your IP address and playback
+              data as it would on any embed.
             </Bullet>
             <Bullet>
               <span className="text-white/85">Vercel</span> — hosts this site, so it

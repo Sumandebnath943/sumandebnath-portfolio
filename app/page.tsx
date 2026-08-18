@@ -3,6 +3,7 @@ import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import LoaderGate from "@/components/layout/LoaderGate";
 import Hero from "@/components/sections/Hero";
+import Film from "@/components/sections/Film";
 import Announcement from "@/components/sections/Announcement";
 import ExperienceNarrative from "@/components/sections/ExperienceNarrative";
 import NowBuilding from "@/components/sections/NowBuilding";
@@ -45,6 +46,7 @@ export default function Home() {
       {/* Page sections — server-rendered so all content lives in initial HTML */}
       <main>
         <Hero />
+        <Film />
         <Announcement />
         <ExperienceNarrative />
         <NowBuilding />

@@ -55,3 +55,8 @@ next-env.d.ts
 # evidence in public/journey-assets/ is fit to serve.
 _source-journey-assets/
 _source-journey-art/
+
+# Film masters: raw voiceover exports and intermediate frame renders. The
+# finished film is served from public/; none of the source audio or the
+# thousands of PNG frames behind it belong in git.
+_source-film/
