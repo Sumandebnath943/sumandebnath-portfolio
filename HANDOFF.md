@@ -4,16 +4,9 @@ Where the project stands, what changed most recently, and what is worth doing
 next. For how the system is built read **PROJECT_BIBLE.md**; for how the site
 writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
-**Last updated:** 18 August 2026
-**Branch:** `main`, pushed. One file dirty — see the warning below.
-**Last feature commit:** `b151dc1` — *fix(home): white clouds — compensate for three.js colour management*, closing a session that produced a six-minute film and put it on the homepage (§2).
-
-> **`PROJECT_BIBLE.md` has uncommitted changes that are not from that session.**
-> They were already in the working tree when it began: a third WCAG contrast pass
-> recording that `text-white/45` computes to *exactly* 4.5:1 and so was failing
-> everywhere (the floor is `/50`), plus the finding that naive
-> `color` vs `backgroundColor` checks report false ratios and cannot see
-> gradients. Real work, deliberately left for whoever wrote it to commit.
+**Last updated:** 19 August 2026
+**Branch:** `main`.
+**Last session:** an editorial and density pass over eleven homepage sections — see §2.
 
 > Run `git log --oneline -15` before trusting this section — it is a snapshot,
 > and the commit log is the authority on what has happened since.
@@ -42,12 +35,126 @@ Recent history, newest first, gives an accurate picture of the trajectory:
 | **AI assistant** | Role-injection closed and cost bounded, `df067e5`. Model is `openai/gpt-oss-120b`. |
 | **Navigation + ⌘K** | Restructured around Home / Portfolio / About Me, mounted site-wide. |
 | **Site tour** | Crosses routes and survives navigation, `8adf5ee`. |
-| **The film** (`No Obvious Gift`) | Made 17–18 Aug. 5:57, on YouTube as `4AP2eui9720`, embedded on the homepage. Done. |
-| **Homepage structure** | **Known weak.** Thirteen sections, no spine. Diagnosed, deliberately not addressed — §3. |
+| **The film** (`Who am I?`) | Made 17–18 Aug. 5:57, on YouTube as `4AP2eui9720`, embedded on the homepage. Retitled 19 Aug. Done. |
+| **Homepage density** | Reworked 19 Aug. Three sections roughly halved in height, two closers restyled, three copy blocks refreshed — §2. |
+| **Homepage structure** | **Still weak.** Thirteen sections, no spine. The 19 Aug pass fixed density and copy, not order — §3. |
 
 ---
 
-## 2. What changed in the last session (17–18 Aug 2026)
+## 2. What changed in the last session (19 Aug 2026)
+
+**One brief, eleven numbered complaints**, all against the homepage: sections
+that were factually stale, closing statements that read as strays, and three
+sections that spent enormous scroll height saying very little. Everything asked
+for was done; nothing was deferred.
+
+### Decisions he took explicitly
+
+| Decision | Choice |
+|---|---|
+| Film title | **`Who am I?`** — his own replacement, chosen over two suggested alternatives |
+| The `/now` section | **Lead with MIGI**, rather than syncing the existing ROASmind copy |
+
+### What changed, by section
+
+| Section | File | Change |
+|---|---|---|
+| Live feed ticker | `Announcement.tsx` | MIGI corrected 30+ → **44 agents**; MIGI Android App and `/journey` added; PentaCMD given its real numbers |
+| The profile quote | `ExperienceNarrative.tsx` | Was a full-width 5xl italic sentence with a stray rule. Now a labelled, measure-constrained pull quote with a hung mark and an attribution |
+| The AI Builder card | `ExperienceNarrative.tsx` | "10+ products" → **21**; the SLM, the fine-tune and the 44-agent fleet added; `Part 1 (70%) / Part 2 (30%)` → dated chapters |
+| Now / Currently | `NowBuilding.tsx` | MIGI promoted to a lead panel with three figures; ROASmind demoted to "Also building"; Oxford named; date bumped |
+| The film | `Film.tsx` | Retitled; standfirst rewritten; the privacy caption under the player replaced with credits |
+| The Evolution | `Experience.tsx` | Three stacked full-width cards → a **horizontal snap rail**. 3,000px+ → **1,124px** |
+| Operating Principles | `AIPhilosophy.tsx` | Hero/quote/pair/quote/pair/hero → **one uniform 6-card grid**, one closing quote. ~2,500px → **1,396px** |
+| Experience | `OperationalHistory.tsx` | **Reversed to newest-first**; paddings halved; older roles summarised. ~2,200px → **1,350px** |
+| Three closers | `Experience`, `AIPhilosophy`, `AcademicFoundations` | All three closing quotes now use one device: rule, label, single left-aligned blockquote |
+
+### Follow-up pass, same day
+
+Four more items, all homepage:
+
+| Ask | What was done |
+|---|---|
+| Make the Evolution rail move with the page scroll | The section now **pins**: `sticky top-0 h-screen`, header as a fixed left column, cards driven across by `useScroll`. Track height is `100vh + measured travel`, so it costs no more scroll than the movement it buys |
+| A fourth Evolution card? | Yes — **"Ahead / 2026 →"**, light violet. The only card in the future tense, deliberately, so it cannot read as something already shipped |
+| Put the real KRAs in the Experience section | The section now **imports `experience` and `earlierExperience` from `lib/resume.ts`** and renders the labelled bullets verbatim. It used to paraphrase them |
+| Clippy hides whenever the cursor moves | Fixed — see below. Copy rewritten: "a 10x Product Builder" was the site describing itself in job-ad language |
+
+> **A regression the pin caused, and the lesson in it.** Moving the header into
+> a pinned left column, I also shrank it — `text-3xl`, a 14px standfirst, 340px
+> wide. Nothing was removed, but beside four large cards it stopped reading as a
+> section header, and it was reported as *"the section lost its title and
+> description"*. It is now `text-4xl xl:text-5xl` in a 400px column, which costs
+> no height at all: the header measures 339px against a 533px card, and the card
+> is what sets the pane height. **Shrinking type to fit a new layout is a
+> content change, even when no content is deleted.**
+
+The section kicker is now a **pill** on all four numbered sections, via
+`components/ui/SectionKicker.tsx` (Bible §7.3). Shape is shared; colour is not —
+each section passes its own palette because they sit on white, pale blue and
+cream. Measured with full alpha compositing, the four run 6.6–8.4:1.
+
+> **`min-height: 640px` was the wrong way to decide whether the pin fits.**
+> CSS pixels are not screen pixels: a 1080p Windows machine at the 150% display
+> scaling Windows itself recommends reports a viewport around **1280×600**, and
+> browser zoom does the same. The guard silently dropped a large share of
+> ordinary desktops to the swipe rail, and it was reported as *"the scroll
+> pinning is gone"* — from a machine where it had never engaged.
+>
+> It now **measures the card** (`height + 56 ≤ innerHeight`) instead of guessing
+> a breakpoint, which is correct at every scale factor. Confirmed pinning at
+> 1280×600 and correctly falling back at 1280×500. **Any viewport-size
+> breakpoint in this codebase should be read as a statement about CSS pixels,
+> and checked against a scaled display before it is trusted.**
+
+**The Clippy bug was in the dismissal rule, not the timing.** `handleActivity`
+called `setShowClippy(false)` on *any* mousemove outside the card, so the
+smallest twitch anywhere on the page killed it — and moving toward "Yes, let's
+talk" killed it mid-approach, because a mousemove travelling to the card targets
+everything in between first. An earlier fix exempted events targeting the card,
+which does nothing for the approach. Activity now only feeds the idle counter,
+and only while the card is hidden; once up it stays up for 20s or until
+dismissed. Verified by dispatching mousemove/scroll/click at it and confirming
+it survived.
+
+> **Window scroll events do fire on this site.** Bible §5 trap 2 says they never
+> do because the body is the scroll container. Measured on the current build,
+> `document.scrollingElement` is `<html>`, `window.scrollY` tracks, and a scroll
+> listener fired 19 times across one programmatic scroll — which is why
+> `useScroll` works for the pin at all. The trap is still worth knowing (it was
+> true when it was written, and `IntersectionObserver` remains the safer
+> default) but do not assume it blocks a scroll-driven design without measuring.
+
+### Two things worth knowing before touching this again
+
+- **The era rail's pin is gated on width, motion preference, and a measured
+  fit.** `min-width: 1024px`, no `prefers-reduced-motion`, and the first card's
+  height plus 56px must fit the viewport. The fit clause is not
+  belt-and-braces: a pinned pane is exactly one viewport tall, so on a short
+  window the card is cut off by the very overflow that makes the pin work, and
+  unlike normal overflow there is nothing the visitor can do to reach it. When
+  any clause fails it falls back to the swipe rail, which keeps its
+  `tabIndex={0}` and `role`/`aria-label` — an `overflow-x-auto` container is not
+  reachable by keyboard without them.
+- **The pinned row is clipped by its flex cell, not by the sticky pane.** Clipped
+  at the pane, cards translating left slid straight over the pinned header and
+  buried it.
+- **The film's privacy promise moved, it did not disappear.** The visible
+  caption under the player is now credits; the promise lives on `/privacy` and
+  on the play button's `aria-label` and `title`. `/privacy` is still accurate —
+  but if the facade is ever replaced with a plain iframe, that page becomes
+  untrue, exactly as Bible §6.7 says.
+
+### Verified
+
+`npx next build` clean. The whole pass was checked in the browser at 1280 and
+375 — the rail scrolls and the page itself never overflows horizontally at
+either width, and no console errors. This is the first session in four where the
+Browser pane actually composited.
+
+---
+
+## 2a. What changed the session before (17–18 Aug 2026)
 
 **One goal, stated in the first message:** the site was "really ambiguous" and
 did not give "a structured view and a concrete view into what I have actually
@@ -56,7 +163,7 @@ done." The fix was to be a video plus concrete achievements on the homepage.
 **The video was built. The achievements block was not** — see §3. Read that
 before assuming the original request is closed.
 
-### The film — `No Obvious Gift`
+### The film — then `No Obvious Gift`, now `Who am I?`
 
 A 5:57 animated documentary, on YouTube as `4AP2eui9720`, embedded on the
 homepage. Assembled from 30 AI-generated clips, 3 stills, 13 coded sequences and
@@ -133,12 +240,13 @@ Private does not).
 
 - The page clip shows **82,000 likes** while the narration says "eighty
   thousand". Both true, both on screen.
-- The title *No Obvious Gift* is his own line — arresting, and the first thing a
-  recruiter reads.
+- ~~The title *No Obvious Gift* is his own line — arresting, and the first thing a
+  recruiter reads.~~ **Closed 19 Aug:** it was arresting and it explained
+  nothing. Retitled *Who am I?*.
 
 ---
 
-## 2b. What changed in the session before (13–14 Aug 2026)
+## 2b. What changed two sessions before (13–14 Aug 2026)
 
 **Two goals.** First, the visitor notifier was producing contradictory and
 duplicated Telegram alerts. Second, Suman wanted a private dashboard so visits
@@ -240,7 +348,7 @@ run is ~03:20 daily.
 
 ---
 
-## 2c. What changed two sessions before (12 Aug 2026)
+## 2c. What changed three sessions before (12 Aug 2026)
 
 **Goal:** Suman built a second, standalone native Android app for the MIGI agent
 fleet. The existing page described only V1 — a WebView wrapper of the dashboard's

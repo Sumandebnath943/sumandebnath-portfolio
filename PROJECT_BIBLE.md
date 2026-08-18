@@ -158,6 +158,12 @@ exception, and §6.7 covers what that costs.
 > claims with no spine. That is an open piece of work, not an oversight; see
 > HANDOFF §3.
 
+`Experience` is the one **scroll-pinned** section: above 1024×640 and without
+`prefers-reduced-motion`, it holds still for one viewport while the page scroll
+drives four era cards sideways. Everything about that is documented in the file's
+own header comment, including why the pin is gated on viewport *height* and why
+the row is clipped by its flex cell rather than by the sticky pane.
+
 ---
 
 ## 4. Design system
@@ -231,6 +237,14 @@ both patterns are common here.
 migi's `muted` token carried 21 nodes by itself. Group failures by computed
 colour before editing anything.
 
+> **Tailwind's opacity modifier only accepts values on its scale — steps of
+> five.** `border-[#1A1A1A]/12` compiles to *nothing*, and the element silently
+> falls back to the preflight border grey `#E5E7EB`. It looks close enough to a
+> hairline to survive a visual check; it was caught only by reading
+> `getComputedStyle().borderColor`. Use a bracketed value — `/[0.12]` — for
+> anything off the scale, and **verify new colour work by computed style, not by
+> looking at it.** `/45`, `/15` and the rest of the multiples of five are fine.
+
 **Brand-coloured ordinals are deliberately left failing.** The golds, greens,
 oranges and violets used as decorative section numbers score 2.1–4.2 on white.
 Darkening them enough to pass would visibly shift the palette for text that
@@ -267,10 +281,19 @@ the page. This broke the sticky showcase on `/apps/migi-app`. If a sticky
 column is not pinning, check every ancestor for `overflow-hidden` before
 touching the sticky code.
 
-**2. The body is the scroll container.**
-`document.body` computes to `overflow: hidden auto`, so **`window` scroll
-listeners never fire.** Anything scroll-driven must use `IntersectionObserver`
-(or listen on the right element), never `window.addEventListener("scroll")`.
+**2. The body is the scroll container — but window scroll events do still fire.**
+`document.body` computes to `overflow: hidden auto`, which is why
+`document.body.scrollTop` reads 0 and scrolling it does nothing.
+`IntersectionObserver` remains the right default for reveal-on-scroll work.
+
+> **Measured 19 Aug 2026, and the older wording here was too absolute.**
+> `document.scrollingElement` is `<html>`, `window.scrollY` tracks correctly, and
+> a `window` scroll listener fired 19 times across a single programmatic scroll.
+> That is what makes framer-motion's `useScroll` work, and the pinned era rail in
+> `components/sections/Experience.tsx` depends on it. **Do not rule out a
+> scroll-driven design on the strength of this trap without measuring first** —
+> but do keep writing to `window`/`document.scrollingElement`, never
+> `document.body.scrollTop`.
 
 **3. three.js colour management silently re-tints anything written before r152.**
 `ColorManagement.enabled` defaults to `true` since three **r152**, so
@@ -461,8 +484,10 @@ nothing from Google loads until the visitor presses play (§6.7).
 
 ### 6.7 The film and the facade embed (`components/sections/Film.tsx`)
 
-`No Obvious Gift` — a 5:57 animated documentary — sits on the homepage between
-`Announcement` and `ExperienceNarrative`. YouTube ID `4AP2eui9720`.
+`Who am I?` — a 5:57 animated documentary — sits on the homepage between
+`Announcement` and `ExperienceNarrative`. YouTube ID `4AP2eui9720`. It shipped as
+*No Obvious Gift* and was renamed on 19 Aug 2026; the master MP4 in
+`_source-film/` keeps the old filename.
 
 **It is a facade, not an embed.** A YouTube iframe pulls well over a megabyte of
 Google JavaScript. Paying that on every homepage visit, for the majority who
@@ -511,7 +536,7 @@ See §5 trap 3 for why the colours are pre-compensated.
 
 | File | Role |
 |---|---|
-| `resume.ts` | **Single source of truth for career facts.** Feeds `/resume`, the AI system prompt and `/contact`. Edit this, never the consumers. |
+| `resume.ts` | **Single source of truth for career facts.** Feeds `/resume`, the AI system prompt, `/contact`, and the KRA bullets in `components/sections/OperationalHistory.tsx` (homepage + `/about`). Edit this, never the consumers. |
 | `projects.ts`, `archive-projects.ts` | Project cards and the archive |
 | `journey.ts` | `/journey` content |
 | `learnings-data.ts` | Certificates |
@@ -557,9 +582,16 @@ ROASmind silver · Geek Collectibles neon crimson · EMBER warm orange.
 
 ### 7.3 `components/ui/` — shared primitives
 
-`Button`, `GlassCard`, `GradientText`, `SectionWrapper`, `AnimatedBento`,
-`PrivacyNotice`, `EasterEggs`, `SiteTour`. This is the only genuinely shared
-component layer; everything else is per-product by design.
+`Button`, `GlassCard`, `GradientText`, `SectionWrapper`, `SectionKicker`,
+`AnimatedBento`, `PrivacyNotice`, `EasterEggs`, `SiteTour`. This is the only
+genuinely shared component layer; everything else is per-product by design.
+
+`SectionKicker` is the numbered pill above each long-form homepage heading —
+`02 / The Evolution`, `05 / Operating Principles`, `06 / Experience`,
+`07 / Academic Foundations`. It is shared precisely because the point is that all
+four are the same shape; **colour is not shared**, and each caller passes its own
+chip, dot and text classes, because the four sit on white, pale blue and cream
+and one hard-coded ink fails contrast on at least one of them.
 
 ---
 

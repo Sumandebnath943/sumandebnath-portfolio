@@ -91,7 +91,13 @@ short rule: `VERSION 2 · STANDALONE NATIVE ANDROID`.
 > this site.
 | `/privacy` | Must state exactly what `layout.tsx` loads. Two GA4 properties, Vercel Analytics, Speed Insights — **and the YouTube embed in the homepage `Film` section**, which loads nothing until a visitor presses play. |
 
-### 3b. The film — `No Obvious Gift`
+### 3b. The film — `Who am I?`
+
+> **Renamed 19 Aug 2026.** It was `No Obvious Gift` — his own line, and the
+> better line — but it told a recruiter nothing about what they were about to
+> watch. `Who am I?` was his own replacement, chosen over two suggested
+> alternatives. The MP4 in `_source-film/` still carries the old name; only the
+> on-page title changed.
 
 A 5:57 animated documentary on the homepage (`components/sections/Film.tsx`,
 YouTube `4AP2eui9720`). Made 17–18 Aug 2026. It is the longest single piece of
@@ -117,18 +123,24 @@ weakness before anything had been earned.
 **The section copy is the register to match** — the film's own title, one flat
 sentence, no trailer language:
 
-> **No Obvious *Gift*** — 5:57 · Animated documentary
+> **Who am *I?*** — 5:57 · Animated documentary
 > Nine years in brand marketing, two years building AI products, and the route
-> between them. Written, animated, scored and cut for this site.
+> between them. The whole answer, in under six minutes.
 
 An earlier draft read *"Seventeen years, in six minutes"* over a breathless list
 of the film's contents. It was rejected as childish, and correctly: it was a
 trailer for itself. The closing clause does more work than the list did, because
 it is a credential rather than a tease.
 
-> Two open calls, both live on the page: **82,000 vs "eighty thousand"** (the
-> clip and the narration disagree, both true), and whether *No Obvious Gift* —
-> his own line — should be the first thing a recruiter reads.
+**Under the player go credits, not a cookie notice.** The caption used to read
+*"Plays from YouTube · nothing loads until you press play"*, which nobody puts
+under a film. It is now *"Written, animated, scored and cut by Suman Debnath"*.
+The facade's privacy behaviour is unchanged and still disclosed on `/privacy`;
+it is also restated on the play button's `aria-label` and `title`, so the
+promise is still made at the point of use without shouting it.
+
+> One open call still live on the page: **82,000 vs "eighty thousand"** — the
+> clip and the narration disagree, and both are true.
 
 ---
 
