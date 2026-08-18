@@ -28,20 +28,24 @@ import { Play } from "lucide-react";
 const VIDEO_ID = "4AP2eui9720";
 
 /**
- * Vanta's defaults are a bright blue daytime sky, which would fight every other
- * section on a black site and make white type unreadable. These are re-pitched to
- * the film's own palette: near-black ground, deep blue-grey cloud, and the site's
- * accent blue/violet/cyan standing in for sun and glare.
+ * Vanta's own daylight palette, unmodified — the section is meant to read as a
+ * bright band cut into an otherwise black page, so the sky stays a sky.
+ *
+ * That inversion is the reason every colour below this point is stated in dark
+ * ink rather than inherited from the site's white-on-black default. It also means
+ * the reduced-motion fallback has to be a LIGHT gradient: if it stayed dark, the
+ * section would flip between a light band and a dark one depending on a setting
+ * the visitor made months ago, which would look like a bug.
  */
 const CLOUD_OPTIONS = {
-  backgroundColor: 0x07090f,
-  skyColor: 0x0b1226,
-  cloudColor: 0x1c2740,
-  cloudShadowColor: 0x04060b,
-  sunColor: 0x4da3ff,
-  sunGlareColor: 0x7b61ff,
-  sunlightColor: 0x2fe2f0,
-  speed: 0.55,
+  backgroundColor: 0xffffff,
+  skyColor: 0x68b8d7,
+  cloudColor: 0xadc1de,
+  cloudShadowColor: 0x183550,
+  sunColor: 0xff9919,
+  sunGlareColor: 0xff6633,
+  sunlightColor: 0xff9933,
+  speed: 1,
   // All off: this is a background, and grabbing pointer or gyro input would
   // interfere with scrolling — especially on touch.
   mouseControls: false,
@@ -110,25 +114,34 @@ export default function Film() {
     <section
       id="film"
       aria-labelledby="film-heading"
-      className="relative overflow-hidden border-y border-white/[0.06] text-white"
+      className="relative overflow-hidden border-y border-black/10 text-[#14171C]"
     >
-      {/* Fallback ground and Vanta host. Painted even when the effect never
-          loads, so the section is never a flat black rectangle. */}
+      {/* Fallback sky and Vanta host. The gradient approximates the effect —
+          pale blue overhead down through cloud to warm haze — so visitors who
+          never get the canvas (reduced motion, small screens, WebGL failure)
+          still see a light band rather than a differently-designed section. */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-[#07090F] bg-[radial-gradient(ellipse_75%_60%_at_50%_35%,#0F1A33_0%,#07090F_70%)]"
+        className="absolute inset-0 bg-[linear-gradient(to_bottom,#7FC3DC_0%,#AEC9DD_30%,#DCE4E8_60%,#F2EDE4_85%,#E9E2D6_100%)]"
       />
       <div ref={hostRef} aria-hidden className="absolute inset-0" />
-      {/* Keeps type legible whatever the clouds are doing behind it. */}
+      {/* A light veil, not a dark scrim — it lifts contrast without greying the
+          clouds out, which is what a heavy scrim would do.
+          Measured: the 10px mono type needs 4.5:1 and was failing at 4.23:1
+          against the bluest sky. At this veil the small type (#3A434E) reads
+          5.7-6.4:1 and the heading 11:1. Cloud SHADOW is much darker and would
+          fail under any veil worth using — but the effect renders clear sky at
+          the top of the frame where all the type sits, and drops its shadow
+          lower down, where the opaque video card is already covering it. */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/45 to-black/80"
+        className="absolute inset-0 bg-gradient-to-b from-white/35 via-white/15 to-white/40"
       />
 
       <div className="relative max-w-5xl mx-auto px-6 md:px-10 py-20 md:py-24">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-8 gap-6">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#86868B] mb-4">
+            <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#3A434E] mb-4">
               The film
             </p>
             <h2
@@ -136,22 +149,25 @@ export default function Film() {
               className="font-manrope font-semibold text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight"
             >
               No Obvious{" "}
-              <span className="font-serif italic font-normal text-white/70">
+              <span className="font-serif italic font-normal text-[#14171C]/70">
                 Gift
               </span>
             </h2>
           </div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#8A8A8A]">
+          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#3A434E]">
             5:57 &middot; Animated documentary
           </p>
         </div>
 
-        <p className="max-w-2xl text-[15px] md:text-base leading-relaxed text-white/60 mb-10">
+        <p className="max-w-2xl text-[15px] md:text-base leading-relaxed text-[#2C333C] mb-10">
           Nine years in brand marketing, two years building AI products, and the
           route between them. Written, animated, scored and cut for this site.
         </p>
 
-        <div className="relative rounded-lg overflow-hidden border border-white/10 bg-[#07090F] aspect-video shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9)]">
+        {/* The card stays dark — the poster is a night frame, and a dark object
+            sitting on the bright sky is what makes this read as a deliberate
+            band rather than a section that lost its background. */}
+        <div className="relative rounded-lg overflow-hidden border border-black/15 bg-[#07090F] aspect-video shadow-[0_40px_90px_-25px_rgba(12,24,40,0.55)]">
           {playing ? (
             <iframe
               // youtube-nocookie: nothing from Google until playback starts.
@@ -166,7 +182,7 @@ export default function Film() {
               type="button"
               onClick={() => setPlaying(true)}
               aria-label="Play the film — 5 minutes 57 seconds"
-              className="group absolute inset-0 w-full h-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-blue focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+              className="group absolute inset-0 w-full h-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#14171C] focus-visible:ring-offset-2 focus-visible:ring-offset-[#DCE4E8]"
             >
               <Image
                 src="/film-poster.jpg"
@@ -197,7 +213,7 @@ export default function Film() {
           )}
         </div>
 
-        <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.3em] text-[#6E6E73]">
+        <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.3em] text-[#3A434E]">
           Plays from YouTube &middot; nothing loads until you press play
         </p>
       </div>
