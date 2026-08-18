@@ -84,15 +84,10 @@ export default function Contact({
       {/* ── MAIN CONTENT ── */}
       <div className="relative z-10 max-w-5xl mx-auto px-6 pt-24 pb-0">
 
-        {/* Section label */}
-        <m.p
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className={`font-manrope text-[10px] uppercase tracking-[0.4em] mb-3 ${light ? "text-[#2E8B57]/80" : "text-[#F5F5F3]/55"}`}
-        >
-          08 / Contact
-        </m.p>
+        {/* No numbered kicker here, deliberately. This section is the closing
+            CTA on EVERY page, not the eighth section of the homepage — "08"
+            was only ever true on `/`. Numbered kickers belong to the homepage's
+            own long-form sections, which is where SectionKicker is used. */}
 
         {/* Headline — reduced 20–25% from original */}
         <div className="relative mb-8">
