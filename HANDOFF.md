@@ -6,7 +6,7 @@ writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
 **Last updated:** 19 August 2026
 **Branch:** `main`.
-**Last session:** a performance pass against the 19 Aug Lighthouse/PSI reports — see §1.1.
+**Last session:** two performance passes plus an intro/loader rebuild — §1.1, §1.2.
 **Session before:** an editorial and density pass over eleven homepage sections — see §2.
 
 > Run `git log --oneline -15` before trusting this section — it is a snapshot,
@@ -39,7 +39,7 @@ Recent history, newest first, gives an accurate picture of the trajectory:
 | **The film** (`Who am I?`) | Made 17–18 Aug. 5:57, on YouTube as `4AP2eui9720`, embedded on the homepage. Retitled 19 Aug. Done. |
 | **Homepage density** | Reworked 19 Aug. Three sections roughly halved in height, two closers restyled, three copy blocks refreshed — §2. |
 | **Homepage structure** | **Still weak.** Thirteen sections, no spine. The 19 Aug pass fixed density and copy, not order — §3. |
-| **Performance** | Tier A done 19 Aug — §1.1. Asset weight and third parties addressed. **TBT is not**, and it is the largest remaining deficit. |
+| **Performance** | Tiers A and B done 19 Aug — §1.1, §1.2. Page weight halved, render loop halved, a11y/BP/SEO all 100. **Tier C was considered and declined on purpose** — the remaining cost is the mascot itself, and it stays. |
 
 ### 1.1 Performance pass — Tier A (19 Aug 2026)
 
@@ -91,11 +91,71 @@ from the environment map, and `<Environment>` sits behind
 is the mascot's react-three-fiber canvas running `frameloop="always"` — a
 permanent rAF loop, on every page, that never lets the main thread go quiet.
 It is why PSI reports TTI of 21 s / 41 s (its timeout, not a real number) and
-why Speed Index never settles. **No amount of asset work will move it.** The
-options — capping frame rate, lowering `dpr`, dropping antialias, or letting the
-robot settle into a paused pose — are Tier B/C and were left for a decision,
-because the honest trade is that a permanently animating 3D character and a good
-lab TBT score are mutually exclusive.
+why Speed Index never settles. **No amount of asset work will move it.** That
+became Tier B — §1.2.
+
+### 1.2 Performance pass — Tier B, and why there is no Tier C (19 Aug 2026)
+
+Tier B made the mascot cheaper without changing how it looks or behaves. Every
+item is documented with a per-item undo in **`ROBOT_ROLLBACK.md`**, which is
+indexed by symptom; the fallback tag is `checkpoint-pre-tier-b`.
+
+| Change | Result |
+|---|---|
+| `frameloop="demand"` + `FrameLimiter` — 30fps idle, 60 while running/jumping | **119 → 59 draw calls/sec**, on every page |
+| `dpr` ceiling 2 → 1.5 (antialiasing kept on) | 56% of the pixels on a 2× display, 25% on a 3× phone |
+| `robot-v2.glb` — textures 1024² → 512² | file 1071 → 802 KB; **838 → 572 KB** over the wire |
+| `hdri/city-256.hdr` — env map 1024×512 → 256×128 | **1505 → 128 KB**, plus an RGBE decode and a PMREM generation off the main thread |
+| Full-size originals moved to `_masters/` | ~2.5 MB out of the deployment; byte-identical to pre-Tier-B, sha256-verified |
+
+Verified on a production build: lighting unchanged by canvas sampling (mean RGB
+26.65/25.62/26.63 against 26.56/25.57/26.58 at full size — inside 0.1/255, and
+both materials are `metalness: 1.0` so a wrong map would have shown at once);
+structure of the shrunk glb identical (1 skin, 65 joints, 9 clips, 477 channels,
+27,038 vertices); FCP and LCP both **152 ms**, and *unchanged by whether the
+loader plays* — the hero paints underneath before the cover goes up, so the
+loader costs Speed Index only.
+
+Page weight overall: **3,791 KiB → ~1,785 KiB**.
+
+#### The scores moved oddly, and the reason matters more than the scores
+
+| | After Tier A | After Tier B |
+|---|---|---|
+| Lighthouse desktop | 87 | **94** |
+| PSI desktop | 72 | **79** |
+| Lighthouse mobile | 65 | **67** |
+| PSI mobile | 92 | **67** |
+
+Three went up; PSI mobile fell. Two things explain it, and both are worth
+knowing before anyone "fixes" a number here again:
+
+1. **PSI mobile on this page is noise.** It has read 30, then 92, then 67 across
+   three runs of substantially similar builds. Its filmstrip keeps ending inside
+   the loader. **Take the median of three runs per form factor, or do not quote
+   it.**
+2. **Smaller assets made the score worse, honestly.** The env map went 1505 KB →
+   128 KB, so the robot now finishes loading and starts rendering *sooner* —
+   which means more of its work falls inside the trace. Tier B made the page
+   cheaper and made Lighthouse see more of the expensive part, at the same time.
+
+The lab score largely measures *how much of the mascot the trace happened to
+catch*. **`Vercel Speed Insights` is already installed and is the number to
+trust** — real-visitor LCP and INP, which cannot be distorted by where a trace
+ends.
+
+#### Tier C was proposed and declined — do not re-propose it
+
+| Option | Decision |
+|---|---|
+| Freeze the robot after ~10s of no activity so the page reaches main-thread quiet | **Rejected.** Would move TBT more than everything else combined, and was still rejected: a mascot that holds still is a different mascot. |
+| Skip the mascot on phones | **Rejected.** It is the site's one living thing; a portfolio that is fun on desktop and inert on mobile is the worse trade. |
+| Defer or split the two GA4 properties (~193 KB, ~180 ms) | **Deferred, not rejected.** Both properties must keep full coverage. The option worth trying first is consolidating them in the **GA4 admin** ("connected site tags"), which would remove the second container with no data loss and no code. That is a look in the admin, not a code task. |
+
+**The remaining cost is the mascot, and that is a deliberate purchase.** The
+score is near its practical ceiling for this design. Anyone picking this up
+should optimise something else, or accept the trade that has already been made
+twice, on purpose.
 
 ---
 
