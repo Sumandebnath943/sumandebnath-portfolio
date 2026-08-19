@@ -14,11 +14,28 @@ const manrope = Manrope({
   display: "swap",
 });
 
+// `preload: false` — the only one of the four.
+//
+// next/font preloads by default, so all four families were emitting
+// high-priority <link rel="preload"> on every page and racing the LCP image for
+// bandwidth. On Slow 4G that mattered: the hero portrait's own download is 40ms,
+// but it waits 630ms to start, behind ~158 KiB of document, CSS and fonts.
+//
+// Instrument Serif is the one that can go. It is used widely as `font-serif`
+// (106 times) but never in the first screenful — the hero is Anton plus the
+// system monospace stack, and the loader is Anton plus DM Mono. Everything here
+// is `display: "swap"`, so it still renders immediately in a fallback and
+// swaps when it arrives; dropping the *preload* only stops it competing.
+//
+// Do not extend this to Anton or DM Mono: both are on screen within the first
+// second (the hero headline, the loader's counter and boot log), and a swap
+// there would be visible in the one moment the brand is doing the talking.
 const instrumentSerif = Instrument_Serif({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-instrument",
   display: "swap",
+  preload: false,
 });
 
 // Condensed display face for the cinematic hero headline.
