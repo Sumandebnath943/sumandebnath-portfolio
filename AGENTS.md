@@ -19,6 +19,10 @@ Three documents carry the full context for this repo. They do not overlap.
   mascot looks or behaves wrong.** It is indexed by symptom — frozen, too dark,
   blurry, sliding in, arriving late — and gives the cause, the check, and the
   exact way to undo that one thing without disturbing the rest.
+- **`PAGE_OPTIMIZATION.md`** — **read this before running any performance test
+  or proposing any performance work.** How to measure this site without fooling
+  yourself, what has already been changed and measured, the standing rules, and
+  the list of things that were considered and refused on purpose.
 
 `project_memory.md` and `analysis_results.md` are early-2026 snapshots, kept for
 history only. They are superseded by `PROJECT_BIBLE.md` and their file paths no

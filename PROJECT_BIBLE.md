@@ -244,6 +244,12 @@ colour before editing anything.
 > `getComputedStyle().borderColor`. Use a bracketed value — `/[0.12]` — for
 > anything off the scale, and **verify new colour work by computed style, not by
 > looking at it.** `/45`, `/15` and the rest of the multiples of five are fine.
+>
+> **This recurred on 19 Aug**, in a session where this very paragraph was in the
+> repo. `bg-white/12` on the loader's progress track compiled to nothing and the
+> track was invisible; it was found by reading `backgroundColor` and seeing
+> `rgba(0, 0, 0, 0)`. Knowing the rule is not enough — **grep your diff for
+> `/\d` opacity modifiers before you ship.**
 
 **Brand-coloured ordinals are deliberately left failing.** The golds, greens,
 oranges and violets used as decorative section numbers score 2.1–4.2 on white.
@@ -272,7 +278,34 @@ Every page wraps its own content:
 </MotionProvider>
 ```
 
-### Three motion traps that have already cost real debugging time
+### Six motion traps that have already cost real debugging time
+
+**Traps 4–6 were all found on 19 Aug 2026 while building the mascot's entrance
+and the chat launcher. Each of them fails silently.**
+
+**4. `animation-fill-mode: both` outranks your `:hover`.**
+An animated value beats a normal declaration in the cascade, so a forwards fill
+leaves the animation's final frame in force forever. A `to { transform: none }`
+entrance on the chat pill would have permanently killed its `:hover` lift and
+`:active` press — with nothing in the code to point at. **Use `backwards`**
+unless you genuinely need the end state pinned.
+
+**5. A transition and its target set in the same React commit do not animate.**
+The browser sees both in one style recalculation and has nothing to animate
+*from*, so the element snaps. The mascot's entrance did this **intermittently**,
+because whether it worked depended on commit timing — it would run correctly for
+a dozen reloads and then slide with no movement at all. **One-shot entrances
+belong in CSS keyframes**, which start on mount and cannot race.
+
+**6. A CSS animation restarts every time its element mounts.**
+`RobotMascot` returns `null` while the chat is open, so *closing* the chat
+re-mounts the subtree and replayed the entrance every single time. Guarding the
+effect is not enough — **guard the class** with one-shot state, or the animation
+comes back whenever React re-creates the node.
+
+---
+
+**The original three:**
 
 **1. `overflow-hidden` silently kills `position: sticky`.**
 An ancestor with `overflow: hidden` becomes the sticky element's scroll
@@ -732,8 +765,16 @@ Deploys follow `main` automatically. Commit subjects are lowercase
 
 **Verification.** `npx next build` and `npx eslint <changed files>` before
 calling anything done. There are pre-existing lint errors in
-`components/layout/Navigation.tsx` — they are not yours, do not "fix" them
-incidentally.
+`components/layout/Navigation.tsx`, `components/robot/RobotMascot.tsx`,
+`components/robot/RobotModel.tsx` and `components/robot/ChatTakeover.tsx` —
+`react-hooks/set-state-in-effect`, `purity` and `immutability`. **They are not
+yours, do not "fix" them incidentally.** Count them before and after your change
+and confirm the number is unchanged; that is the check, not zero.
+
+**Performance.** Before running any test or proposing any performance work, read
+**`PAGE_OPTIMIZATION.md`**. This page has properties that break the usual
+assumptions — a single PageSpeed run is noise, and a trace frequently ends
+before the mascot has even loaded.
 
 **Browser verification.** Use the Browser pane tools, never `npm run dev` in a
 shell.
@@ -743,6 +784,18 @@ shell.
 > are all suspended.** Scroll-driven UI will look permanently broken when it is
 > fine. Verify with `getBoundingClientRect` maths, `read_page` and the build
 > instead, and say plainly that scroll behaviour is unverified.
+>
+> **It is worse than that, learned 19 Aug.** In this state R3F canvases stay
+> frozen at their default `300×150`, framer-motion never advances a single
+> frame, and **layout reads return `0` for elements with explicit pixel
+> widths** — an impossibility in a working engine, and the tell that the
+> measurements rather than the CSS are broken. Hours went into chasing a
+> "progress bar stuck at 0" that was rendering correctly the whole time.
+>
+> **Prove rAF is alive before diagnosing anything animated:**
+> `let t=0;const f=()=>{t++;requestAnimationFrame(f)};f();setTimeout(()=>console.log('rAF/sec',t/2),2000)`
+> — expect ~60. If it prints 0, every animation observation from that session is
+> void; fall back to DOM state (inline styles, class lists), which needs no rAF.
 
 **Read-only territory.** The Android sources at `D:\project\migi agent app`
 (V1) and `D:\project\migi agent native android app` (V2) are reference material

@@ -39,7 +39,13 @@ Recent history, newest first, gives an accurate picture of the trajectory:
 | **The film** (`Who am I?`) | Made 17–18 Aug. 5:57, on YouTube as `4AP2eui9720`, embedded on the homepage. Retitled 19 Aug. Done. |
 | **Homepage density** | Reworked 19 Aug. Three sections roughly halved in height, two closers restyled, three copy blocks refreshed — §2. |
 | **Homepage structure** | **Still weak.** Thirteen sections, no spine. The 19 Aug pass fixed density and copy, not order — §3. |
-| **Performance** | Tiers A and B done 19 Aug — §1.1, §1.2. Page weight halved, render loop halved, a11y/BP/SEO all 100. **Tier C was considered and declined on purpose** — the remaining cost is the mascot itself, and it stays. |
+| **Performance** | **Done — see `PAGE_OPTIMIZATION.md`**, which is now the standing reference and should be read before any further perf work or any test run. PSI **94 mobile / 88 desktop**, other four categories 100. TBT 18,775 → 83 ms, weight 3,791 → 861 KiB. Tier C and the GA work were **declined on purpose**; do not re-propose them. |
+
+> **§1.1 and §1.2 below are the session narrative — what was decided, when, and
+> why.** The durable reference is **`PAGE_OPTIMIZATION.md`**: how to measure this
+> site without fooling yourself, every change with its measured effect, the
+> standing rules, the verification snippets, and the list of things refused on
+> purpose. Start there; come back here for the story.
 
 ### 1.1 Performance pass — Tier A (19 Aug 2026)
 
@@ -150,12 +156,46 @@ ends.
 |---|---|
 | Freeze the robot after ~10s of no activity so the page reaches main-thread quiet | **Rejected.** Would move TBT more than everything else combined, and was still rejected: a mascot that holds still is a different mascot. |
 | Skip the mascot on phones | **Rejected.** It is the site's one living thing; a portfolio that is fun on desktop and inert on mobile is the worse trade. |
-| Defer or split the two GA4 properties (~193 KB, ~180 ms) | **Deferred, not rejected.** Both properties must keep full coverage. The option worth trying first is consolidating them in the **GA4 admin** ("connected site tags"), which would remove the second container with no data loss and no code. That is a look in the admin, not a code task. |
+| Defer or split the two GA4 properties (~358 KB, ~470 ms CPU) | **Dropped until further notice**, 19 Aug. Both properties keep full coverage. If it is ever revisited, `PAGE_OPTIMIZATION.md` §5.1 has the mechanism and the reason to try the **GA4 admin** route first — it removes the payload entirely with no data loss, where deferring only moves it. |
 
 **The remaining cost is the mascot, and that is a deliberate purchase.** The
 score is near its practical ceiling for this design. Anyone picking this up
 should optimise something else, or accept the trade that has already been made
 twice, on purpose.
+
+### 1.3 Fonts, and where it finished (19 Aug 2026)
+
+One last change after Tier B. The LCP breakdown showed the hero portrait
+downloading in **40 ms** but waiting **630 ms to start** and **340 ms to
+paint** — bandwidth, not the image. All four typefaces were declared without a
+`preload` option, so `next/font` emitted **five high-priority font preloads on
+every page**, racing the LCP image, despite every one being `display: "swap"`
+and therefore unnecessary for first paint.
+
+`Instrument_Serif` got `preload: false` — used 106 times as `font-serif`, never
+in the first screenful. Anton and DM Mono keep theirs: both are on screen inside
+the first second. Five preloads became four.
+
+**Final measured state (PSI, production):**
+
+| | Mobile | Desktop |
+|---|---|---|
+| Performance | **94** | **88** |
+| Accessibility · Best Practices · SEO · Agentic | 100 · 100 · 100 · 100 | 100 · 100 · 100 · 100 |
+| TBT | 83 ms | 284 ms |
+| LCP | 2.78 s | 0.58 s |
+| Page weight | 861 KiB | 1,050 KiB |
+
+From a starting point of **30 / 60**, with TBT at **18,775 ms** and 3,791 KiB.
+
+Only three weighted audits remain below pass, and each traces to something
+already weighed and kept: mobile LCP (render-blocking CSS, ~4 pts), mobile Speed
+Index (the loader's black screen *is* the Speed Index, ~2 pts), desktop TBT
+(script evaluation, ~11 pts). Everything else in the red carries **weight 0**.
+
+**Stop point agreed with Suman: the site is done being optimised.** The
+`browserslist` change was offered and declined as not worth touching the build
+config for zero points.
 
 ---
 

@@ -219,6 +219,41 @@ Numbers are the site's main credibility device, so they carry rules:
 - Approximate honestly — `~15 MB`, `20+ routes`.
 - If a number will age badly, say what it counted and when.
 
+### The loader is copy, not decoration (19 Aug 2026)
+
+The cinematic loader used to say `INITIALIZING SYSTEMS…` and `Loading identity
+architecture…` for six seconds. It was the first thing every visitor read and it
+said nothing.
+
+It now runs a boot log of **real claims**, in DM Mono, one per beat:
+
+> `9+ years in brand marketing` → `2+ years shipping AI-native products` →
+> `44 agents. Two language models.` → `Entering the system`
+
+Rules if you ever edit it (`components/sections/Loader.tsx`):
+
+- **Every line must be sourceable**, same as any other number on the site. These
+  come from `lib/resume.ts` and the model pages. They are **copied, not
+  imported** — pulling ~500 lines of résumé data into the homepage's initial
+  bundle to print four strings would cost the exact metric this work protected.
+  **Keep them in step with `lib/resume.ts` by hand.**
+- **A beat is a second.** Three claims that can be read beat four that cannot.
+  The first version ran five lines at 620 ms through an `AnimatePresence
+  mode="wait"`, which plays each exit fully before the next enter — so every
+  claim was legible for **160–320 ms** and a full second of the loader had
+  nothing readable in it. Anything added here has to earn its beat.
+
+### Accessible names must contain the visible text
+
+Two buttons carried `aria-label`s that did not include their own visible words,
+which silently breaks speech input — a user says what they see and nothing
+happens. The fix does not cost the joke:
+
+> visible `Do Not Click` · label `"Do Not Click — system self-destruct"`
+
+Keep the visible text first, then extend. Same for the chat launcher:
+`"Ask about Suman — open chat with Suman's assistant"`.
+
 ---
 
 ## 7. Privacy and sanitization
