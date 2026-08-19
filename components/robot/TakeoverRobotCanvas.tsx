@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useRef } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment } from "@react-three/drei";
 import * as THREE from "three";
@@ -86,8 +86,19 @@ export default function TakeoverRobotCanvas({
   targets?: RobotTargets;
   onFinished?: (clip: ClipName) => void;
 }) {
+  // Rebuild on WebGL context restore — see RobotCanvas.tsx for why.
+  const [glGeneration, setGlGeneration] = useState(0);
+
   return (
     <Canvas
+      key={glGeneration}
+      onCreated={({ gl }) => {
+        gl.domElement.addEventListener(
+          "webglcontextrestored",
+          () => setGlGeneration((g) => g + 1),
+          { once: true },
+        );
+      }}
       gl={{ alpha: true, antialias: true }}
       dpr={[1, 2]}
       camera={{ position: [0, 0.5, 7], fov: 30 }}

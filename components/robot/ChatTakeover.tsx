@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
-import { useChatReveal } from "@/lib/intro";
+import { useReveal, CHAT_INTRO_MS, CHAT_PLAIN_MS } from "@/lib/intro";
 import { useRobotChat } from "./RobotChatContext";
 import { useWebSpeech } from "./useWebSpeech";
 import type { ClipName } from "./RobotModel";
@@ -71,10 +71,9 @@ const MOBILE_TARGETS: RobotTargets = {
 };
 
 export default function ChatTakeover() {
-  // A flat seven seconds from load on every page — not tied to the loader,
-  // which only ever runs on a first landing. The launcher used to arrive at
-  // three seconds and draw over the loading screen. See lib/intro.ts.
-  const revealed = useChatReveal();
+  // Last of the three to arrive, on both clocks, so the order is always
+  // nav → mascot → chat. See lib/intro.ts.
+  const revealed = useReveal(CHAT_INTRO_MS, CHAT_PLAIN_MS);
   const { open, openChat, closeChat } = useRobotChat();
 
   // ── Chat state ──
@@ -418,6 +417,20 @@ const TAKEOVER_CSS = `
     font-family: var(--font-manrope, 'Inter', sans-serif); letter-spacing: -0.01em; white-space: nowrap;
     transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s;
     box-shadow: 0 2px 8px rgba(0,0,0,0.18), 0 8px 24px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.08);
+    /* It used to appear on the spot. Same rise and easing as the nav pill, so
+       the two read as one system arriving in sequence.
+       Fill is "backwards", never "both": a forwards fill keeps the animation's
+       final transform in force, and an animated value outranks a normal
+       declaration — which would silently kill the :hover lift and :active
+       press below. (Note: this block is a JS template literal. No backticks.) */
+    animation: ct-launch-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+  @keyframes ct-launch-in {
+    from { opacity: 0; transform: translateY(14px) scale(0.96); }
+    to   { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ct-launch { animation: none; }
   }
   .ct-launch:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.22), 0 12px 32px rgba(240,78,0,0.18); }
   .ct-launch:active { transform: scale(0.97); }

@@ -6,7 +6,9 @@ import {
   LOADER_SEEN_KEY,
   INTRO_CLASS,
   INTRO_NAV_CLASS,
+  INTRO_OUT_CLASS,
   NAV_DELAY_MS,
+  COVER_FADE_MS,
   hasSeenLoader,
   introRunsThisLoad,
   markIntroDone,
@@ -74,10 +76,23 @@ export default function LoaderGate() {
   useEffect(() => {
     if (introRunsThisLoad() && !dismissed) return;
     const root = document.documentElement;
-    root.classList.remove(INTRO_CLASS);
+
+    // Fade the cover out rather than dropping it on a frame, then take it off
+    // the tree once the transition has run. `markIntroDone` fires immediately:
+    // the sequence downstream is measured from the loader ending, not from the
+    // fade finishing, and the fade is a reveal of what is already there.
+    root.classList.add(INTRO_OUT_CLASS);
     markIntroDone();
-    const t = setTimeout(() => root.classList.remove(INTRO_NAV_CLASS), NAV_DELAY_MS);
-    return () => clearTimeout(t);
+
+    const lift = setTimeout(() => {
+      root.classList.remove(INTRO_CLASS, INTRO_OUT_CLASS);
+    }, COVER_FADE_MS);
+    const nav = setTimeout(() => root.classList.remove(INTRO_NAV_CLASS), NAV_DELAY_MS);
+
+    return () => {
+      clearTimeout(lift);
+      clearTimeout(nav);
+    };
   }, [dismissed]);
 
   if (!visible) return null;

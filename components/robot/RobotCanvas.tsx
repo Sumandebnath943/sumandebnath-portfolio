@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Environment } from "@react-three/drei";
 import { RobotModel, type ClipName } from "./RobotModel";
@@ -26,8 +26,31 @@ export default function RobotCanvas({
   /** Extra back light so the dark robot reads against dark backgrounds. */
   rimLight?: boolean;
 }) {
+  // Browsers discard the WebGL context of a backgrounded tab. three re-uploads
+  // image-backed textures on restore, but the environment map ends up as a
+  // GPU-side PMREM cubemap that nothing regenerates — and with both robot
+  // materials at metalness 1.0, losing it drops nearly all of their light. The
+  // robot comes back near-black with no reflections on its skin, which is
+  // exactly what an alt-tab-and-return used to produce.
+  //
+  // drei only guards this for gainmap formats (webp/jpg) and returns early for
+  // .hdr, so nothing upstream handles it. Remounting the whole canvas is the
+  // blunt fix, and the right one: it is a full, certain rebuild of a state that
+  // is already broken, and it costs nothing until a context is actually lost.
+  // three itself calls preventDefault on `webglcontextlost`, which is what
+  // makes the restore fire at all.
+  const [glGeneration, setGlGeneration] = useState(0);
+
   return (
     <Canvas
+      key={glGeneration}
+      onCreated={({ gl }) => {
+        gl.domElement.addEventListener(
+          "webglcontextrestored",
+          () => setGlGeneration((g) => g + 1),
+          { once: true },
+        );
+      }}
       gl={{ alpha: true, antialias: true, preserveDrawingBuffer: false }}
       dpr={[1, 2]}
       camera={{ position: cameraPosition, fov: cameraFov }}

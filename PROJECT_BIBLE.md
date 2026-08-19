@@ -755,14 +755,24 @@ before touching `LoaderGate`, the loader's z-index, or when the mascot reveals.
 
 Measured against a production build:
 
-| | When | Driven by |
-|---|---|---|
-| Black cover | ~150 ms, before first paint | inline script in `app/layout.tsx` |
-| Loader | on hydration | `LoaderGate` |
-| Cover lifts | loader ends | `LoaderGate` |
-| Navigation | +1.0 s | `.sd-intro-nav` in `globals.css` |
-| Mascot, running in from the right | +5.0 s | `useRevealAfterIntro` |
-| Chat launcher | 7 s from load, **every** page | `useChatReveal` |
+| | First visit | Reload / other route | Driven by |
+|---|---|---|---|
+| Black cover | ~150 ms, before first paint | — | inline script in `app/layout.tsx` |
+| Loader | on hydration, ~3.8 s | — | `LoaderGate` |
+| Cover fades out | loader ends, over 600 ms | — | `.sd-intro-out` |
+| Navigation | +1.0 s | immediate | `.sd-intro-nav` in `globals.css` |
+| Mascot (runs in from the right) | +2.5 s | +0.8 s | `useReveal` |
+| Chat launcher | +3.5 s | +1.4 s | `useReveal` |
+
+> **All three are on one clock, and that is the point.** Chat briefly ran on a
+> flat timer from page load while the other two keyed off the loader, so a first
+> visit showed chat five seconds *before* the robot and a reload showed the
+> robot first — same code, opposite order. If you change one delay, keep the
+> ordering intact.
+
+> The reload delays are short rather than zero on purpose: the mascot pulls
+> ~2.4 MB and starts WebGL, and firing that during first paint is what costs
+> LCP. Under a second is imperceptible and keeps it off the critical path.
 
 Four things here are load-bearing, and each was a bug first:
 
@@ -787,6 +797,34 @@ Four things here are load-bearing, and each was a bug first:
 > flight — leaving `busyRef` true forever, so the robot reached its corner and
 > then ignored every hover and tap, its whole chase dead. `enteredRef` makes it
 > run once; teardown is unmount-only.
+
+> **The entrance travel is a CSS keyframe, not a transition on `x`.** The
+> transition version set the transition and the target in the same React commit,
+> so the browser saw both in one style recalculation, had nothing to animate
+> from, and snapped the robot home while the Running clip played on the spot.
+> It was *intermittent*, because it depended on commit timing. A keyframe
+> starts on mount and cannot race. It rides its own wrapper so it never contends
+> with the inline `translateX` the chase writes.
+
+> **Fill mode is `backwards`, never `both`,** on the entrance, the chat
+> launcher and the loader's signature wipe. An animated value outranks a normal
+> declaration, so a forwards fill would leave the animation's end state in force
+> — killing the chat pill's `:hover` lift, and pinning the mascot under a
+> transform the chase is trying to drive.
+
+#### WebGL context loss — why the robot came back black
+
+Browsers discard the WebGL context of a backgrounded tab. three re-uploads
+image-backed textures on restore, but the environment map ends up as a GPU-side
+PMREM cubemap that nothing regenerates — and with both robot materials at
+`metalness: 1.0`, losing it removes nearly all of their light. Alt-tab away,
+come back, and the robot is near-black with no reflections on its skin.
+
+drei guards this **only for gainmap formats** (`webp`/`jpg`) and returns early
+for `.hdr`, which is what this project uses, so nothing upstream handles it.
+Both canvases now listen for `webglcontextrestored` and remount themselves via a
+`key`. Blunt, and correct: it is a certain rebuild of a state that is already
+broken, and it costs nothing until a context is actually lost.
 
 The nav is held by **CSS, not React state**, because it is server-rendered:
 gating it on a client value would hide it in the HTML from crawlers and from

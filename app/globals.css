@@ -40,11 +40,92 @@ html.sd-intro body::before {
   inset: 0;
   background: #000;
   z-index: 99998;
+  opacity: 1;
+  /* The cover used to be removed on a single frame, which snapped the page
+     into view. LoaderGate now adds `.sd-intro-out` first and strips both a
+     beat later, so black gives way to the page instead of vanishing. */
+  transition: opacity 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html.sd-intro.sd-intro-out body::before {
+  opacity: 0;
 }
 
 html.sd-intro-nav #tour-nav {
   opacity: 0 !important;
   transform: translateY(-20px) !important;
+}
+
+/* The mascot's first-visit entrance. A keyframe rather than a transition on
+   its inline transform: the transition version set the transition and the
+   target in one React commit, so the browser saw both in a single style
+   recalculation, had nothing to animate from, and snapped the robot home while
+   the Running clip played on the spot. Intermittent, because it depended on
+   commit timing. A keyframe starts on mount and cannot race.
+   No forwards fill — it ends at translateX(0), which is where the element
+   already sits, and a lingering animated transform would outrank the inline
+   one the chase writes. */
+@keyframes sd-robot-enter {
+  from {
+    transform: translateX(320px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.sd-robot-enter {
+  animation: sd-robot-enter 900ms linear backwards;
+}
+
+/* The loader's signature, written left to right — the direction a signature is
+   actually made in. A mask wipe rather than a stroke animation, because the
+   mark exists only as raster art; see the note at the top of Loader.tsx. */
+@keyframes sd-loader-sign {
+  from {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+  }
+  to {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+  }
+}
+
+.sd-loader-sign {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    #000 0 33.333%,
+    rgba(0, 0, 0, 0.15) 41%,
+    transparent 50%
+  );
+  mask-image: linear-gradient(
+    to right,
+    #000 0 33.333%,
+    rgba(0, 0, 0, 0.15) 41%,
+    transparent 50%
+  );
+  -webkit-mask-size: 300% 100%;
+  mask-size: 300% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  animation: sd-loader-sign 1150ms cubic-bezier(0.33, 0, 0.2, 1) 120ms both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.sd-intro body::before {
+    transition: none;
+  }
+  .sd-robot-enter {
+    animation: none;
+  }
+  /* No wipe, and crucially no lingering mask — a `both` fill would otherwise
+     leave the signature partly erased for anyone who asked for less motion. */
+  .sd-loader-sign {
+    animation: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
 }
 
 /* ─── Base Styles ────────────────────────────────────────────────────── */
@@ -68,19 +149,36 @@ body {
   line-height: 1.6;
 }
 
-/* ─── Custom Scrollbar ───────────────────────────────────────────────── */
+/* ─── Custom Scrollbar ─────────────────────────────────────────────────
+   The track used to be `var(--bg-deep)`, which is #F5F5F7 — so the site was
+   deliberately painting a near-white stripe down the right edge of what is,
+   on almost every route, a black page. That was the "white gap", and it was
+   ours rather than the browser's.
+
+   It is now site chrome: a near-black track with a light thumb. This is
+   global, so the handful of light surfaces (/contact, /apps/forget-anything,
+   /desk-4f7a) carry the same dark scrollbar — which reads as deliberate
+   rather than as a seam, and is what the rest of the web does.
+
+   `scrollbar-color`/`scrollbar-width` cover Firefox, which ignores the
+   ::-webkit- pseudo-elements entirely. */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.22) #0a0a0c;
+}
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-deep);
+  background: #0a0a0c;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.22);
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.36);
 }
 
 /* ─── Selection ──────────────────────────────────────────────────────── */

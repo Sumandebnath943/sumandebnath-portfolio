@@ -13,15 +13,23 @@ import { TOUR_POSITION_KEY } from "@/lib/tour-steps";
  * server-rendered so it was there from the first paint; the mascot and chat
  * arrived three seconds after `load`, roughly halfway through a ~5.8s loader.
  *
- * The order now, measured from the loader finishing:
+ * Everything is on ONE clock so the order never changes: nav, then mascot, then
+ * chat. It briefly was not, and the result was that a first visit showed chat
+ * five seconds before the robot while a reload showed the robot first — same
+ * code, opposite order, because chat ran on a flat timer and the other two did
+ * not.
  *
- *   +0.0s  loader ends, the pre-paint cover lifts
- *   +1.0s  navigation
- *   +5.0s  the mascot, running in from the right edge
- *   +1.8s  the privacy notice (its own existing delay, just started later)
+ *   first visit          reload / any other page
+ *   ───────────          ───────────────────────
+ *   +1.0s  navigation    immediate
+ *   +2.5s  mascot        +0.8s
+ *   +3.5s  chat          +1.4s
+ *   +1.8s  privacy notice (its own existing delay, just started later)
  *
- * The chat launcher is deliberately NOT on this clock — it appears seven
- * seconds after load on every page, loader or not.
+ * The reload delays are short on purpose rather than zero: the mascot pulls
+ * ~2.4 MB (robot.glb + the environment map) and spins up WebGL, and firing that
+ * during first paint is exactly what costs LCP. Under a second is imperceptible
+ * and keeps it off the critical path.
  *
  * ── Two things to keep in step ────────────────────────────────────────────
  *
@@ -40,12 +48,18 @@ export const LOADER_SEEN_KEY = "sd-loader-seen";
 export const INTRO_CLASS = "sd-intro";
 /** On `<html>` for one second longer — holds the nav back. */
 export const INTRO_NAV_CLASS = "sd-intro-nav";
+/** Added for the length of the cover's fade-out, then both come off together. */
+export const INTRO_OUT_CLASS = "sd-intro-out";
 
-/** How long after the loader each piece arrives. */
-export const NAV_DELAY_MS = 1_000;
-export const MASCOT_DELAY_MS = 5_000;
-/** Flat, from page load, every page — not tied to the loader. */
-export const CHAT_DELAY_MS = 7_000;
+/** After the loader (first visit) / after mount (everything else). */
+export const NAV_DELAY_MS = 1_000; // intro only; other loads show it at once
+export const MASCOT_INTRO_MS = 2_500;
+export const MASCOT_PLAIN_MS = 800;
+export const CHAT_INTRO_MS = 3_500;
+export const CHAT_PLAIN_MS = 1_400;
+
+/** How long the black cover takes to fade once the loader is finished. */
+export const COVER_FADE_MS = 600;
 
 export function hasSeenLoader(): boolean {
   try {
@@ -119,46 +133,38 @@ export function useIntroRuns(): boolean {
   return runs;
 }
 
+/** A tour mid-script needs its target on screen now — see `useReveal`. */
+function tourInProgress(): boolean {
+  try {
+    return sessionStorage.getItem(TOUR_POSITION_KEY) !== null;
+  } catch {
+    return false; // storage unavailable — fall through to the normal delay
+  }
+}
+
 /**
- * `true` once the intro has finished and `delayMs` has passed.
+ * `true` after the appropriate delay: `introMs` measured from the loader
+ * finishing, or `plainMs` from mount when no loader ran.
+ *
+ * A tour in progress skips the wait entirely. `#tour-chat` is the tour's final
+ * step and `#tour-nav` its first, and the runner gives a step's element four
+ * seconds to appear (`ELEMENT_TIMEOUT_MS`) — less than the intro delays, so the
+ * step would otherwise fall back to a centred popover pointing at nothing.
  *
  * State is only ever set from a timer callback, never synchronously in the
  * effect body — `react-hooks/set-state-in-effect` is an error in this repo.
  */
-export function useRevealAfterIntro(delayMs: number): boolean {
+export function useReveal(introMs: number, plainMs: number): boolean {
   const introDone = useIntroDone();
+  const introRuns = useIntroRuns();
   const [revealed, setRevealed] = useState(false);
 
   useEffect(() => {
-    if (!introDone) return;
-    const t = setTimeout(() => setRevealed(true), delayMs);
+    if (introRuns && !introDone) return;
+    const delay = tourInProgress() ? 0 : introRuns ? introMs : plainMs;
+    const t = setTimeout(() => setRevealed(true), delay);
     return () => clearTimeout(t);
-  }, [introDone, delayMs]);
-
-  return revealed;
-}
-
-/**
- * The chat launcher's own clock: a flat delay from page load, every page.
- *
- * The one exception is a tour in progress. `#tour-chat` is the tour's final
- * step, and the runner gives a step's element four seconds to appear
- * (`ELEMENT_TIMEOUT_MS`) — shorter than this delay, so the last step would
- * fall back to a centred popover pointing at nothing.
- */
-export function useChatReveal(delayMs: number = CHAT_DELAY_MS): boolean {
-  const [revealed, setRevealed] = useState(false);
-
-  useEffect(() => {
-    let tourInProgress = false;
-    try {
-      tourInProgress = sessionStorage.getItem(TOUR_POSITION_KEY) !== null;
-    } catch {
-      /* storage unavailable — fall through to the normal delay */
-    }
-    const t = setTimeout(() => setRevealed(true), tourInProgress ? 0 : delayMs);
-    return () => clearTimeout(t);
-  }, [delayMs]);
+  }, [introRuns, introDone, introMs, plainMs]);
 
   return revealed;
 }
