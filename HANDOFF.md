@@ -43,16 +43,31 @@ Recent history, newest first, gives an accurate picture of the trajectory:
 
 ### 1.1 Performance pass — Tier A (19 Aug 2026)
 
-Driven by four reports in `Page performance report - 19 August/`. Read those
-before re-measuring, and read this first — **two of the four are misleading**:
+Driven by four runs taken on 19 Aug 2026 — Lighthouse and PageSpeed Insights,
+desktop and mobile, against production. The JSON was never committed, so the
+baseline is recorded here instead:
 
-- The **local Lighthouse** runs scored Performance 98 (desktop) because their
-  trace ended *before the mascot revealed* — no `robot.glb` and no HDRI appear
-  in their network logs at all. They also scored Best Practices 73 purely from
-  Chrome extensions in the profile. **Run local Lighthouse from a clean profile,
-  and trust PSI over it.**
-- **PSI is the honest measurement**: Performance 60 desktop / 30 mobile, and
-  Best Practices 100.
+| | Local Lighthouse | **PSI** |
+|---|---|---|
+| Performance (desktop / mobile) | 98 / 58 | **60 / 30** |
+| Best Practices | 73 | **100** |
+| TBT (desktop / mobile) | 84 ms / 1,594 ms | **15,630 ms / 18,775 ms** |
+| Page weight | 1,078 KiB | **3,791 KiB** |
+
+**Two of those four runs are misleading, and the trap generalises — read this
+before re-measuring anything.**
+
+- The **local Lighthouse** runs scored 98 because the trace ended *before the
+  mascot revealed*: no `robot.glb` and no HDRI appear in their network logs at
+  all, which is also why they saw a third of the real page weight. They scored
+  Best Practices 73 purely from Chrome extensions in the profile. **Run local
+  Lighthouse from a clean/incognito profile, and let it run long enough to
+  catch the mascot.**
+- **PSI is the honest measurement here**, and it is the one to compare against.
+
+More generally: this page has a permanent rAF loop, so it never reaches
+main-thread quiet and Lighthouse runs to its own timeout. A short trace will
+always flatter it.
 
 **What was changed** (all verified against a production build, with the live
 site used as the "before"):
