@@ -44,13 +44,20 @@ import Image from "next/image";
 
 type Beat = { text: string; duration: number };
 
-/** Real facts. See the note above before editing. */
+/**
+ * Real facts. See the note above before editing.
+ *
+ * Three claims, not four, and 850ms each rather than 620ms. The first cut ran
+ * five lines at 620ms through an `AnimatePresence mode="wait"`, which plays the
+ * exit fully *before* the enter — 520ms of animation inside a 620ms beat, so
+ * each line was actually legible for 160–320ms and the log read as an empty
+ * gap. Anything added here has to earn its beat, and a beat is a second.
+ */
 const SEQUENCE: Beat[] = [
-  { text: "9+ years in brand marketing", duration: 620 },
-  { text: "2+ years shipping AI-native products", duration: 620 },
-  { text: "A 44-agent fleet. Two language models.", duration: 620 },
-  { text: "Production cycles: weeks compressed to hours", duration: 620 },
-  { text: "Entering the system", duration: 420 },
+  { text: "9+ years in brand marketing", duration: 850 },
+  { text: "2+ years shipping AI-native products", duration: 850 },
+  { text: "44 agents. Two language models.", duration: 850 },
+  { text: "Entering the system", duration: 450 },
 ];
 
 const TOTAL_MS = SEQUENCE.reduce((sum, s) => sum + s.duration, 0);
@@ -182,20 +189,26 @@ export default function Loader({ onComplete }: LoaderProps) {
               />
             </div>
 
-            {/* ── The boot log ── */}
+            {/* ── The boot log ──
+                No `mode="wait"`: that plays each line's exit to completion
+                before the next one begins, which at these durations left every
+                claim legible for a fifth of a second. The lines now cross over
+                each other, which needs them stacked in the same place — hence
+                the relative box and the absolute children. Measured after:
+                ~630ms fully opaque per line, against 160–320ms before. */}
             <div
-              className="mt-6 flex h-6 w-full items-center"
+              className="relative mt-6 h-6 w-full"
               role="status"
               aria-live="polite"
             >
-              <AnimatePresence mode="wait">
+              <AnimatePresence>
                 <m.p
                   key={step}
-                  initial={{ opacity: 0, y: 8 }}
+                  initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
-                  className={`font-dmmono text-[11px] sm:text-xs tracking-[0.14em] uppercase ${
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                  className={`absolute inset-x-0 top-0 font-dmmono text-[11px] sm:text-xs tracking-[0.14em] uppercase ${
                     step === SEQUENCE.length - 1 ? "text-[#FF8000]" : "text-white/70"
                   }`}
                 >
