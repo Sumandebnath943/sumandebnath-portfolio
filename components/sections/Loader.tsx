@@ -55,7 +55,12 @@ export default function Loader({ onComplete }: LoaderProps) {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 1.04 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-black overflow-hidden"
+          // Was z-200, which put it *under* the chat launcher (1000), the
+          // mascot (9999) and the nav (10000) — all three drew straight over
+          // the loading screen. It now sits above them, and above the
+          // pre-paint cover (99998) it hands over from. Still below the tour
+          // overlay (999998), which can never be running during the intro.
+          className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-black overflow-hidden"
         >
           {/* Background mesh */}
           <div className="absolute inset-0 bg-mesh-hero opacity-60" />

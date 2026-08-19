@@ -16,6 +16,37 @@
   --border-accent: rgba(0, 0, 0, 0.15);
 }
 
+/* ─── First-visit intro ──────────────────────────────────────────────────
+   Driven entirely by classes that the pre-paint script in app/layout.tsx puts
+   on <html>, and that LoaderGate takes off again. See lib/intro.ts.
+
+   `.sd-intro` is the cover that hides the server-rendered homepage until the
+   loader mounts. It sits above the nav (10000) and below the loader, which is
+   raised to 99999 for exactly this reason. The loader is black too, so the
+   handover between them is invisible.
+
+   `.sd-intro-nav` holds the nav down for a second longer. It has to be CSS
+   rather than React state: the nav is server-rendered, and gating it on a
+   client value would leave it hidden in the HTML for crawlers and for anyone
+   without JavaScript. This way, no script means no class means no change.
+   `!important` is needed because framer-motion writes its entrance animation
+   to the element's inline style, which would otherwise win.
+
+   Nothing here needs its own transition — the nav pill already carries
+   `transition-all duration-500`, so simply dropping the class animates it. */
+html.sd-intro body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 99998;
+}
+
+html.sd-intro-nav #tour-nav {
+  opacity: 0 !important;
+  transform: translateY(-20px) !important;
+}
+
 /* ─── Base Styles ────────────────────────────────────────────────────── */
 * {
   box-sizing: border-box;

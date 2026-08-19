@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
-import { useDeferredReveal } from "@/lib/useDeferredReveal";
+import { useChatReveal } from "@/lib/intro";
 import { useRobotChat } from "./RobotChatContext";
 import { useWebSpeech } from "./useWebSpeech";
 import type { ClipName } from "./RobotModel";
@@ -71,7 +71,10 @@ const MOBILE_TARGETS: RobotTargets = {
 };
 
 export default function ChatTakeover() {
-  const revealed = useDeferredReveal();
+  // A flat seven seconds from load on every page — not tied to the loader,
+  // which only ever runs on a first landing. The launcher used to arrive at
+  // three seconds and draw over the loading screen. See lib/intro.ts.
+  const revealed = useChatReveal();
   const { open, openChat, closeChat } = useRobotChat();
 
   // ── Chat state ──

@@ -326,6 +326,38 @@ export default function RootLayout({
         className="bg-bg-deep text-text-primary font-sans antialiased"
         suppressHydrationWarning
       >
+        {/*
+          Pre-paint intro cover — kills the hero flash on a first visit.
+
+          `LoaderGate` deliberately renders nothing on the server (showing the
+          loader server-side would flash it for returning visitors too), so the
+          static HTML *is* the homepage. The loader only mounts once React has
+          hydrated, which is why the hero was visible for a beat first.
+
+          This runs synchronously before the rest of the body parses, so the
+          cover is up before anything paints. It must stay a raw inline script:
+          `next/script` cannot guarantee "before first paint", and importing
+          lib/intro.ts is impossible this early — hence the duplicated
+          condition, which is called out at the top of that file.
+
+          The timeout is the failsafe for "React never arrived" — a 404'd or
+          throwing bundle would otherwise leave the visitor on a black screen
+          indefinitely. It is cancellable, and LoaderGate cancels it as soon as
+          the loader is on screen: hydration on a slow device plus a ~6s loader
+          can exceed any fixed deadline, and a failsafe that fires mid-loader
+          releases the nav early and lifts the cover under a running intro.
+          With scripting off entirely nothing here runs, so the page simply
+          renders as normal.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              'try{if(location.pathname==="/"&&!sessionStorage.getItem("sd-loader-seen")){' +
+              'var r=document.documentElement;r.classList.add("sd-intro","sd-intro-nav");' +
+              'window.__sdIntroFailsafe=setTimeout(function(){' +
+              'r.classList.remove("sd-intro","sd-intro-nav")},8000)}}catch(e){}',
+          }}
+        />
         <Script
           id="ld-person"
           type="application/ld+json"

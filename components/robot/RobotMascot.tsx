@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useDeferredReveal } from "@/lib/useDeferredReveal";
+import { useIntroRuns, useRevealAfterIntro, MASCOT_DELAY_MS } from "@/lib/intro";
 import { useRobotChat } from "./RobotChatContext";
 import type { ClipName } from "./RobotModel";
 
@@ -76,6 +77,12 @@ const JUMP_TIMESCALE = 1.2;
 const FACE_LEFT = -Math.PI / 2;
 const FACE_RIGHT = Math.PI / 2;
 
+// First-visit entrance: the robot runs in from off the right edge once the
+// cinematic loader has finished. 320px clears its own box at both breakpoints
+// (200px desktop, 132px mobile) plus the corner overhang.
+const ENTRANCE_START_X = 320;
+const ENTRANCE_MS = 900;
+
 const RESUME_HREF = "/Suman_Debnath_Resume.pdf";
 
 function clamp(v: number, lo: number, hi: number) {
@@ -83,7 +90,15 @@ function clamp(v: number, lo: number, hi: number) {
 }
 
 export default function RobotMascot() {
-  const revealed = useDeferredReveal();
+  // Two clocks, because a first landing and every other load are different
+  // occasions. With the cinematic loader running, the mascot waits for it to
+  // finish and then runs in from the right; otherwise it keeps the behaviour
+  // it has always had — a few seconds after `load`, or as soon as the visitor
+  // scrolls. Both hooks always run; only one is read. See lib/intro.ts.
+  const introRuns = useIntroRuns();
+  const deferredReveal = useDeferredReveal();
+  const introReveal = useRevealAfterIntro(MASCOT_DELAY_MS);
+  const revealed = introRuns ? introReveal : deferredReveal;
   const { open: chatOpen } = useRobotChat();
 
   const [isMobile, setIsMobile] = useState(false);
@@ -100,7 +115,13 @@ export default function RobotMascot() {
 
   const [anim, setAnim] = useState<ClipName>("Waving");
   const [rotationY, setRotationY] = useState(0);
-  const [x, setXState] = useState(0); // horizontal travel from home (px, <=0 moves left)
+  // Start off the right edge when this load gets the entrance. It has to be the
+  // initial value rather than something an effect assigns: the component
+  // renders `null` until `revealed`, so the first frame it *does* render would
+  // otherwise show the robot parked at home for ~16ms before jumping right.
+  const [x, setXState] = useState(() => (introRuns ? ENTRANCE_START_X : 0));
+  const entranceFrames = useRef<number[]>([]);
+  const entranceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [hopY, setHopY] = useState(0); // vertical hop (px, negative = up)
   const [travelTransition, setTravelTransition] = useState("none");
   const [hops, setHops] = useState(0);
@@ -112,7 +133,8 @@ export default function RobotMascot() {
   const busyRef = useRef(false);
   const lastMouseMove = useRef(Date.now());
   const escapeMsgTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const xRef = useRef(0); // current x, read inside timer callbacks to avoid stale closures
+  const xRef = useRef(introRuns ? ENTRANCE_START_X : 0); // current x, read inside timer callbacks to avoid stale closures
+  const enteredRef = useRef(false); // the entrance run happens at most once
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -139,6 +161,55 @@ export default function RobotMascot() {
     window.addEventListener("mousemove", onMove, { passive: true });
     return () => window.removeEventListener("mousemove", onMove);
   }, []);
+
+  // Tear the entrance down on unmount only — see the effect below for why this
+  // is deliberately not that effect's own cleanup.
+  useEffect(() => () => {
+    entranceFrames.current.forEach(cancelAnimationFrame);
+    if (entranceTimer.current) clearTimeout(entranceTimer.current);
+  }, []);
+
+  // First-visit entrance: run in from the right edge, then hand over to the
+  // ordinary state machine. Driven directly rather than through `runTo`, which
+  // assumes the robot is already on stage — `bounds()` caps travel at x <= 0,
+  // and the entrance starts at +320.
+  //
+  // Every setState below sits inside a callback, never in the effect body:
+  // `react-hooks/set-state-in-effect` is an error in this repo.
+  //
+  // NOTE: this effect returns no cleanup, and that is the point. It first did,
+  // and a re-run cancelled the arrival timer of an entrance already in flight —
+  // which left `busyRef` true forever, so the robot reached its corner and then
+  // ignored every hover and tap, its whole chase dead. `enteredRef` already
+  // makes this run once; unmount teardown is handled above.
+  useEffect(() => {
+    if (!revealed || !introRuns || enteredRef.current) return;
+    enteredRef.current = true;
+    busyRef.current = true; // a ref, so hover/tap is blocked without a render
+
+    entranceFrames.current.push(
+      requestAnimationFrame(() => {
+        setResting(false);
+        setRotationY(FACE_LEFT); // face the direction of travel
+        setAnim("Running");
+        // A second frame so the browser has a start value to animate from —
+        // setting the transition and the target together would just snap.
+        entranceFrames.current.push(
+          requestAnimationFrame(() => {
+            setTravelTransition(`transform ${ENTRANCE_MS}ms linear`);
+            setX(0);
+          }),
+        );
+        entranceTimer.current = setTimeout(() => {
+          setRotationY(0);
+          setAnim("Idle");
+          setTravelTransition("none");
+          busyRef.current = false; // must always run, or the chase is dead
+          setResting(true);
+        }, ENTRANCE_MS);
+      }),
+    );
+  }, [revealed, introRuns, setX]);
 
   // After the first-load wave, drop into the resting ambient loop.
   useEffect(() => {

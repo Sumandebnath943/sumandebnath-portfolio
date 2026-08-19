@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useIntroDone } from "@/lib/intro";
 
 /**
  * A one-time disclosure notice, not a consent gate.
@@ -25,8 +26,14 @@ const AUTO_DISMISS_MS = 14_000;
 export default function PrivacyNotice() {
   const [mounted, setMounted] = useState(false); // in the DOM
   const [shown, setShown] = useState(false); // slid into view
+  // On a first landing this used to appear 1.8s in — over the loading screen.
+  // The delay below now starts from the loader finishing instead; on every
+  // other load this is already true and nothing changes. See lib/intro.ts.
+  const introDone = useIntroDone();
 
   useEffect(() => {
+    if (!introDone) return;
+
     // Redundant on the page it links to.
     if (window.location.pathname.startsWith("/privacy")) return;
 
@@ -68,7 +75,7 @@ export default function PrivacyNotice() {
       document.removeEventListener("visibilitychange", onVisible);
       timers.forEach(clearTimeout);
     };
-  }, []);
+  }, [introDone]);
 
   function dismiss() {
     setShown(false);

@@ -1,6 +1,19 @@
 import type { Alignment, Side } from "driver.js";
 
 /**
+ * Where the runner stores its position, in sessionStorage — a tour is a visit,
+ * not a preference.
+ *
+ * It lives here rather than in `SiteTour.tsx` because a second reader needs it:
+ * `ChatTakeover` holds its launcher back for seven seconds after load, and the
+ * tour's final step points at that launcher (`#tour-chat`). A tour resuming
+ * mid-script has to be able to say "skip the delay" — and importing it from
+ * `SiteTour` would drag driver.js into the chat bundle. Two copies of the
+ * literal would be worse: change one, change both.
+ */
+export const TOUR_POSITION_KEY = "site-tour-position";
+
+/**
  * The guided tour, as an ordered script across the whole site.
  *
  * The previous tour was nine steps that never left the homepage — two of them

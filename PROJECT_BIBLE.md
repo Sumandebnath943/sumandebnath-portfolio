@@ -748,6 +748,53 @@ shell.
 (V1) and `D:\project\migi agent native android app` (V2) are reference material
 for `/apps/migi-app`. **Never write to them.**
 
+### 10.0 The first-visit intro sequence
+
+`lib/intro.ts` owns the order things appear in on a first landing on `/`. Read it
+before touching `LoaderGate`, the loader's z-index, or when the mascot reveals.
+
+Measured against a production build:
+
+| | When | Driven by |
+|---|---|---|
+| Black cover | ~150 ms, before first paint | inline script in `app/layout.tsx` |
+| Loader | on hydration | `LoaderGate` |
+| Cover lifts | loader ends | `LoaderGate` |
+| Navigation | +1.0 s | `.sd-intro-nav` in `globals.css` |
+| Mascot, running in from the right | +5.0 s | `useRevealAfterIntro` |
+| Chat launcher | 7 s from load, **every** page | `useChatReveal` |
+
+Four things here are load-bearing, and each was a bug first:
+
+> **The loader was `z-200` — below the chat launcher (1000), the mascot (9999)
+> and the nav (10000).** All three drew straight over the loading screen. It is
+> now `z-99999`. Raising anything above that puts it back on top of the intro.
+
+> **`LoaderGate` must not key off `!visible`.** During hydration
+> `useSyncExternalStore` returns the *server* snapshot first — "already seen" —
+> so `visible` is false for one render. Keying off it lifted the cover the
+> instant React booted and started the mascot's clock so early it revealed
+> *during* the loader. Key off `dismissed` and `introRunsThisLoad()`.
+
+> **The inline script's 8 s failsafe must stay cancellable.** It exists for
+> "React never arrived", but slow hydration plus a ~6 s loader can exceed any
+> fixed deadline — and a failsafe firing mid-loader frees the nav early and
+> lifts the cover under a running intro. `LoaderGate` clears it once the loader
+> is on screen.
+
+> **The mascot's entrance effect returns no cleanup, deliberately.** It did
+> once, and a re-run cancelled the arrival timer of an entrance already in
+> flight — leaving `busyRef` true forever, so the robot reached its corner and
+> then ignored every hover and tap, its whole chase dead. `enteredRef` makes it
+> run once; teardown is unmount-only.
+
+The nav is held by **CSS, not React state**, because it is server-rendered:
+gating it on a client value would hide it in the HTML from crawlers and from
+anyone without JavaScript. No script means no class means no change.
+
+Repeat visits and every other route are untouched — no cover, no nav hold, and
+the mascot keeps its old `useDeferredReveal` timing with no entrance.
+
 ### 10.1 Immutable static assets — a standing rule
 
 `next.config.ts` serves two paths with

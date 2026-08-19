@@ -12,7 +12,7 @@ import { driver, type Driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import { Sparkles, X } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
-import { chapterFor, TOUR_STEPS } from "@/lib/tour-steps";
+import { chapterFor, TOUR_STEPS, TOUR_POSITION_KEY } from "@/lib/tour-steps";
 
 /**
  * The site tour.
@@ -27,8 +27,8 @@ import { chapterFor, TOUR_STEPS } from "@/lib/tour-steps";
  * version could never leave it.
  */
 
-/** sessionStorage, not localStorage: a tour is a visit, not a preference. */
-const STATE_KEY = "site-tour-position";
+/** Defined in lib/tour-steps.ts — ChatTakeover reads it too. See the note there. */
+const STATE_KEY = TOUR_POSITION_KEY;
 /** Kept in localStorage — whether the prompt has been shown before. */
 const SEEN_KEY = "hasSeenTour";
 
