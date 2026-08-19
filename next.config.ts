@@ -24,15 +24,20 @@ const nextConfig: NextConfig = {
   // revalidate them. Replacing either file in place ships nothing to anyone who
   // has already visited — you MUST give the new file a new name (robot-v2.glb,
   // city-v2.hdr) and update its reference. See PROJECT_BIBLE.md §10.1.
-  //   • /hdri/*     — Poly Haven env map (CC0), referenced by both robot canvases
-  //   • /robot.glb  — built by scripts/build-robot-glb.mjs from _source-fbx/
+  //   • /hdri/*       — Poly Haven env map (CC0), used by both robot canvases
+  //   • /robot-v2.glb — scripts/build-robot-glb.mjs, then shrink-robot-textures
+  //
+  // The glb is matched literally, not by pattern: `/robot-:version*.glb` reads
+  // fine and is rejected by path-to-regexp at build time ("cannot repeat
+  // without a prefix and suffix"). A rename means editing this line too, which
+  // is already part of the rule.
   async headers() {
     const immutable = [
       { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
     ];
     return [
       { source: "/hdri/:file*", headers: immutable },
-      { source: "/robot.glb", headers: immutable },
+      { source: "/robot-v2.glb", headers: immutable },
     ];
   },
 };

@@ -32,7 +32,14 @@ export function RobotModel({
   onFinished?: (clip: ClipName) => void;
 }) {
   const group = useRef<THREE.Group>(null);
-  const { scene, animations } = useGLTF("/robot.glb");
+  // `robot-v2.glb`, not `robot.glb`: same rig, same nine clips, textures at 512
+  // instead of 1024 (414 KB -> 145 KB) because the model never draws larger
+  // than a few hundred pixels. `robot.glb` stays on disk as the full-resolution
+  // output of scripts/build-robot-glb.mjs and the input to
+  // scripts/shrink-robot-textures.mjs — it is no longer served.
+  // Renamed rather than replaced in place because /robot*.glb is cached
+  // immutable for a year; see PROJECT_BIBLE.md §10.1.
+  const { scene, animations } = useGLTF("/robot-v2.glb");
   // Clone (skeleton-aware) so the same model can render in the corner AND the
   // chat takeover without two canvases fighting over one scene object.
   const cloned = useMemo(() => skeletonClone(scene), [scene]);
@@ -86,4 +93,4 @@ export function RobotModel({
   return <primitive ref={group} object={cloned} />;
 }
 
-useGLTF.preload("/robot.glb");
+useGLTF.preload("/robot-v2.glb");

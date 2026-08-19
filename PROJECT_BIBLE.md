@@ -812,6 +812,27 @@ Four things here are load-bearing, and each was a bug first:
 > — killing the chat pill's `:hover` lift, and pinning the mascot under a
 > transform the chase is trying to drive.
 
+#### The mascot renders on demand, not on every frame
+
+Both canvases run `frameloop="demand"` with a `FrameLimiter` (in
+`RobotCanvas.tsx`) calling `invalidate()` on a rAF clock — **30fps while the
+robot is idling, 60 while it is running or jumping**, and 60 in the chat
+takeover while the rig is flying between corner and panel. Measured: **119 →
+59 draw calls per second at rest**, which is the largest single saving
+available on this page.
+
+- rAF, never `setInterval` — rAF stops in a background tab; a timer would go on
+  redrawing a robot nobody is looking at.
+- `RobotMascot` derives the rate from `anim`, so it is state-driven and the
+  escalation happens on the same render that starts the run.
+- **If the robot ever appears frozen, look here first.** Under `demand`,
+  nothing renders unless something asks; a broken limiter shows a single
+  static frame rather than an error.
+- `dpr` is capped at **1.5**, not 2 — 56% of the pixels on a 2× display, 25% on
+  a 3× phone. Antialiasing stays **on** deliberately: the robot is a dark
+  silhouette on a transparent background, which is exactly where jagged edges
+  show, and pixel count is the cheaper lever.
+
 #### WebGL context loss — why the robot came back black
 
 Browsers discard the WebGL context of a backgrounded tab. three re-uploads
@@ -840,8 +861,12 @@ the mascot keeps its old `useDeferredReveal` timing with no entrance.
 
 | URL | What it is | Rebuilt by |
 |---|---|---|
-| `/hdri/*` | The environment map both robot canvases light from (Poly Haven, CC0) | hand — downloaded once |
-| `/robot.glb` | The mascot model | `scripts/build-robot-glb.mjs` from `_source-fbx/` |
+| `/hdri/city-256.hdr` | The environment map both robot canvases light from (Poly Haven, CC0) | `scripts/shrink-hdri.mjs` from `city.hdr` |
+| `/robot-v2.glb` | The mascot model | `scripts/build-robot-glb.mjs` → `scripts/shrink-robot-textures.mjs` |
+
+Two full-size masters sit beside them and are **not served**: `hdri/city.hdr`
+(1.5 MB) and `robot.glb` (1.07 MB). They are the inputs to the two shrink
+scripts, so keep them.
 
 Everything else under `public/` keeps Next's default
 `public, max-age=0`, which revalidates on every visit. These two are exempt

@@ -5,6 +5,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment } from "@react-three/drei";
 import * as THREE from "three";
 import { RobotModel, type ClipName } from "./RobotModel";
+import { FrameLimiter } from "./RobotCanvas";
 
 export type TakeoverPhase = "intro" | "idle" | "outro";
 // sx = horizontal SCREEN fraction (0 = left edge, 1 = right edge). The rig
@@ -99,11 +100,16 @@ export default function TakeoverRobotCanvas({
           { once: true },
         );
       }}
-      gl={{ alpha: true, antialias: true }}
-      dpr={[1, 2]}
+      // Matches RobotCanvas — see the note there.
+      gl={{ alpha: true, antialias: true, powerPreference: "low-power" }}
+      dpr={[1, 1.5]}
+      frameloop="demand"
       camera={{ position: [0, 0.5, 7], fov: 30 }}
       style={{ width: "100%", height: "100%", background: "transparent" }}
     >
+      {/* 60 while the rig is flying between corner and panel — that tween runs
+          in useFrame, so it only advances on rendered frames — 30 once parked. */}
+      <FrameLimiter fps={phase === "idle" ? 30 : 60} />
       <ambientLight intensity={0.95} />
       <directionalLight position={[3, 5, 4]} intensity={1.7} />
       <directionalLight position={[-4, 2, -2]} intensity={0.45} />
@@ -116,7 +122,7 @@ export default function TakeoverRobotCanvas({
           canvases must stay in step or the takeover re-introduces the
           third-party fetch on its own. */}
       <Suspense fallback={null}>
-        <Environment files="/hdri/city.hdr" />
+        <Environment files="/hdri/city-256.hdr" />
       </Suspense>
     </Canvas>
   );

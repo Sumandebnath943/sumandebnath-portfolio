@@ -395,6 +395,11 @@ export default function RobotMascot() {
   if (!revealed || chatOpen) return null;
 
   const timeScale = anim === "Running" ? RUN_TIMESCALE : anim === "Jumping" ? JUMP_TIMESCALE : 1;
+  // Full rate only while the robot is travelling — the chase and the entrance
+  // are the two moments where a dropped frame would read as a stutter. The
+  // ambient idle clips are slow enough that half rate is invisible, and idle is
+  // very nearly all of the time. See FrameLimiter in RobotCanvas.
+  const fps = anim === "Running" || anim === "Jumping" ? 60 : 30;
 
   return (
     <div
@@ -473,6 +478,7 @@ export default function RobotMascot() {
               cameraPosition={[0, 0.7, 6.4]}
               cameraFov={30}
               groupY={-1.55}
+              fps={fps}
             />
             {isMobile && (
               // Tracks the robot's own footprint at the right of the box, clear
