@@ -43,9 +43,15 @@ export default function RobotCanvas({
           <RobotModel animation={animation} timeScale={timeScale} onFinished={onFinished} />
         </group>
       </Suspense>
-      {/* Separate boundary so the HDR (CDN) never suspends/hides the robot. */}
+      {/* Separate boundary so the HDR never suspends/hides the robot.
+          `preset="city"` resolved to a 1.5 MB HDRI on raw.githack.com, which
+          redirects to raw.githubusercontent.com — two round trips to a third
+          party on every page load, for a file this site's lighting depends on.
+          Same asset, self-hosted (CC0, Poly Haven via pmndrs/drei-assets).
+          Not optional: both robot materials are metallicFactor 1.0, so the
+          environment supplies nearly all of their diffuse light. */}
       <Suspense fallback={null}>
-        <Environment preset="city" />
+        <Environment files="/hdri/city.hdr" />
       </Suspense>
     </Canvas>
   );

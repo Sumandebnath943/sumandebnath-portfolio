@@ -397,6 +397,11 @@ export default function RobotMascot() {
               // desktop keeps the whole box, hover-to-chase included.
               pointerEvents: isMobile ? "none" : "auto",
             }}
+            // `aria-label` on a div with no role is ignored outright, so the
+            // mascot was announcing nothing at all. `role="img"` is the honest
+            // description — it is a picture with a name, not a control; the
+            // résumé it guards is reachable from /resume and the nav.
+            role="img"
             aria-label="Suman's robot assistant"
           >
             <RobotCanvas

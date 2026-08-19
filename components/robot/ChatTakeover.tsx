@@ -281,8 +281,14 @@ export default function ChatTakeover() {
     <>
       <style>{TAKEOVER_CSS}</style>
 
+      {/* The label has to contain the visible text — see Contact.tsx. */}
       {!open && (
-        <button id="tour-chat" className="ct-launch" onClick={openChat} aria-label="Open chat with Suman's assistant">
+        <button
+          id="tour-chat"
+          className="ct-launch"
+          onClick={openChat}
+          aria-label="Ask about Suman — open chat with Suman's assistant"
+        >
           <span className="ct-launch-spark" />
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style={{ opacity: 0.85 }}>
             <path d="M8 1C4.134 1 1 3.686 1 7c0 1.592.683 3.032 1.8 4.1L2 15l4.1-1.3A7.3 7.3 0 008 14c3.866 0 7-2.686 7-6s-3.134-6-7-6z" fill="currentColor" />

@@ -748,6 +748,38 @@ shell.
 (V1) and `D:\project\migi agent native android app` (V2) are reference material
 for `/apps/migi-app`. **Never write to them.**
 
+### 10.1 Immutable static assets — a standing rule
+
+`next.config.ts` serves two paths with
+`Cache-Control: public, max-age=31536000, immutable`:
+
+| URL | What it is | Rebuilt by |
+|---|---|---|
+| `/hdri/*` | The environment map both robot canvases light from (Poly Haven, CC0) | hand — downloaded once |
+| `/robot.glb` | The mascot model | `scripts/build-robot-glb.mjs` from `_source-fbx/` |
+
+Everything else under `public/` keeps Next's default
+`public, max-age=0`, which revalidates on every visit. These two are exempt
+because the mascot is mounted in the **root layout**, so both files are fetched
+on *every page*, and together they are ~2.4 MB.
+
+> **The rule: `immutable` means a browser will not revalidate for a year.
+> Replacing either file in place ships the change to nobody who has already
+> visited the site.** There is no cache-bust, no 304, no "hard refresh will fix
+> it" for real visitors. If either asset is ever regenerated it **must get a new
+> filename** — `robot-v2.glb`, `city-v2.hdr` — and every reference updated with
+> it. For `robot.glb` those references are `components/robot/RobotModel.tsx`
+> (both `useGLTF("/robot.glb")` and its `useGLTF.preload`); for the HDR they are
+> `components/robot/RobotCanvas.tsx` and `TakeoverRobotCanvas.tsx`, which must
+> always stay in step with each other.
+
+`scripts/build-robot-glb.mjs` prints this reminder when it finishes, because
+that is the moment it becomes relevant.
+
+Adding a new long-cached asset means adding it to the table above as well as to
+`next.config.ts`. If an asset's content changes on a schedule you do not
+control, it does not belong here — give it `max-age` in days instead.
+
 ---
 
 ## 11. How much of this is verified

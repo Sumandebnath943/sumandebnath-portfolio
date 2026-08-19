@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { m, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 type SubMenu = {
   label: string;
@@ -246,10 +247,19 @@ export default function Navigation() {
                 the logo and it are on a collision course at the md breakpoint —
                 six dropdowns need every pixel between 768px and 1024px. */}
             <div className="relative h-8 w-28 lg:w-36 flex items-center justify-start">
-              <img 
-                src="/branding/logo_navbar_v2.png" 
-                alt="Suman Debnath Logo" 
-                className="h-full w-full object-contain object-left"
+              {/* The source is 1520x348 and this box is at most 144x32, so a
+                  plain <img> shipped ~100 KB to draw a thumbnail. next/image
+                  resizes and serves AVIF/WebP instead.
+                  `loading="eager"` rather than `priority` on purpose: priority
+                  injects a preload <link> that would compete with the hero
+                  portrait, which is this page's LCP element. */}
+              <Image
+                src="/branding/logo_navbar_v2.png"
+                alt="Suman Debnath Logo"
+                fill
+                sizes="144px"
+                loading="eager"
+                className="object-contain object-left"
               />
             </div>
           </m.a>

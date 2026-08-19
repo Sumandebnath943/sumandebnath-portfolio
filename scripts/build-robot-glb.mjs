@@ -119,3 +119,17 @@ base.createExtension(EXTMeshoptCompression).setRequired(true);
 await io.write('public/robot.glb', base);
 rmSync(tmp, { recursive: true, force: true });
 console.log('WROTE public/robot.glb', base.getRoot().listAnimations().map((a) => a.getName()));
+
+// next.config.ts serves /robot.glb with `max-age=31536000, immutable`, because
+// the mascot is in the root layout and this file is fetched on every page.
+// Immutable means browsers do not revalidate — overwriting it in place ships
+// the new model to nobody who has visited before. See PROJECT_BIBLE.md §10.1.
+console.log(`
+  ⚠  /robot.glb is served IMMUTABLE for one year.
+     Returning visitors will keep the OLD model unless you rename this file.
+     To ship a change:
+       1. write it as public/robot-v2.glb (bump the number)
+       2. update useGLTF("/robot.glb") AND useGLTF.preload(...) in
+          components/robot/RobotModel.tsx
+       3. update the asset table in PROJECT_BIBLE.md §10.1
+`);

@@ -6,7 +6,8 @@ writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
 **Last updated:** 19 August 2026
 **Branch:** `main`.
-**Last session:** an editorial and density pass over eleven homepage sections — see §2.
+**Last session:** a performance pass against the 19 Aug Lighthouse/PSI reports — see §1.1.
+**Session before:** an editorial and density pass over eleven homepage sections — see §2.
 
 > Run `git log --oneline -15` before trusting this section — it is a snapshot,
 > and the commit log is the authority on what has happened since.
@@ -38,10 +39,52 @@ Recent history, newest first, gives an accurate picture of the trajectory:
 | **The film** (`Who am I?`) | Made 17–18 Aug. 5:57, on YouTube as `4AP2eui9720`, embedded on the homepage. Retitled 19 Aug. Done. |
 | **Homepage density** | Reworked 19 Aug. Three sections roughly halved in height, two closers restyled, three copy blocks refreshed — §2. |
 | **Homepage structure** | **Still weak.** Thirteen sections, no spine. The 19 Aug pass fixed density and copy, not order — §3. |
+| **Performance** | Tier A done 19 Aug — §1.1. Asset weight and third parties addressed. **TBT is not**, and it is the largest remaining deficit. |
+
+### 1.1 Performance pass — Tier A (19 Aug 2026)
+
+Driven by four reports in `Page performance report - 19 August/`. Read those
+before re-measuring, and read this first — **two of the four are misleading**:
+
+- The **local Lighthouse** runs scored Performance 98 (desktop) because their
+  trace ended *before the mascot revealed* — no `robot.glb` and no HDRI appear
+  in their network logs at all. They also scored Best Practices 73 purely from
+  Chrome extensions in the profile. **Run local Lighthouse from a clean profile,
+  and trust PSI over it.**
+- **PSI is the honest measurement**: Performance 60 desktop / 30 mobile, and
+  Best Practices 100.
+
+**What was changed** (all verified against a production build, with the live
+site used as the "before"):
+
+| Change | Result |
+|---|---|
+| `<Environment preset="city">` → self-hosted `/hdri/city.hdr` in both robot canvases | 1.5 MB and the `raw.githack.com` → `raw.githubusercontent.com` redirect pair removed from the third-party graph |
+| Three raw `<img>` logos → `next/image`; dropped a `?v=3` that was downloading the same file twice | 315.0 KB → 15.2 KB on the homepage |
+| CSS-mask logo → `logo_v2_mask.png` at 880w | 107.5 KB → 46.8 KB on `/contact` and `/apps/forget-anything` |
+| `immutable` caching for `/hdri/*` and `/robot.glb` | ~2.4 MB stops revalidating on every page — **carries a standing rule, Bible §10.1** |
+| `role="img"` on the mascot; two `aria-label`s that did not contain their visible text | Three real a11y defects, not score-chasing |
+
+Robot lighting was confirmed unchanged by **canvas pixel sampling** against
+production — mean RGB within ~1/255 per channel. That check mattered: both
+materials are `metallicFactor: 1.0`, so they take nearly all their diffuse light
+from the environment map, and `<Environment>` sits behind
+`<Suspense fallback={null}>` where a broken path fails *silently*.
+
+**What Tier A deliberately did not touch, and why it matters most:** TBT is
+15,630 ms desktop / 18,770 ms mobile, and main-thread "Other" is 25–35 s. That
+is the mascot's react-three-fiber canvas running `frameloop="always"` — a
+permanent rAF loop, on every page, that never lets the main thread go quiet.
+It is why PSI reports TTI of 21 s / 41 s (its timeout, not a real number) and
+why Speed Index never settles. **No amount of asset work will move it.** The
+options — capping frame rate, lowering `dpr`, dropping antialias, or letting the
+robot settle into a paused pose — are Tier B/C and were left for a decision,
+because the honest trade is that a permanently animating 3D character and a good
+lab TBT score are mutually exclusive.
 
 ---
 
-## 2. What changed in the last session (19 Aug 2026)
+## 2. What changed in the session before (19 Aug 2026)
 
 **One brief, eleven numbered complaints**, all against the homepage: sections
 that were factually stale, closing statements that read as strays, and three

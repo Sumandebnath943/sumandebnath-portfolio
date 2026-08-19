@@ -100,9 +100,12 @@ export default function TakeoverRobotCanvas({
       <Suspense fallback={null}>
         <Rig phase={phase} animation={animation} rotationY={rotationY} targets={targets} onFinished={onFinished} />
       </Suspense>
-      {/* Separate boundary so the HDR (CDN) never suspends/hides the robot. */}
+      {/* Separate boundary so the HDR never suspends/hides the robot.
+          Self-hosted rather than drei's `preset` — see RobotCanvas.tsx. Both
+          canvases must stay in step or the takeover re-introduces the
+          third-party fetch on its own. */}
       <Suspense fallback={null}>
-        <Environment preset="city" />
+        <Environment files="/hdri/city.hdr" />
       </Suspense>
     </Canvas>
   );

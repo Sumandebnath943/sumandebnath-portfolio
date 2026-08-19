@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { m, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 const SEQUENCE = [
   { text: "INITIALIZING SYSTEMS...", duration: 1400 },
@@ -90,9 +91,18 @@ export default function Loader({ onComplete }: LoaderProps) {
                   className="absolute left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-accent-blue/60 to-transparent"
                   style={{ animation: "scan-line 2.5s ease-in-out infinite" }}
                 />
-                <img 
-                  src="/branding/logo_v2.png?v=3" 
-                  alt="Suman Debnath Logo" 
+                {/* The `?v=3` cache-bust made this a different URL from the
+                    identical file in Contact.tsx, so the homepage downloaded
+                    the same 108 KB PNG twice. next/image content-hashes its
+                    own URLs, so busting by hand is no longer needed. Eager:
+                    this is the first thing the loader shows. */}
+                <Image
+                  src="/branding/logo_v2.png"
+                  alt="Suman Debnath Logo"
+                  width={1774}
+                  height={887}
+                  sizes="320px"
+                  loading="eager"
                   className="relative z-10 w-full h-full object-contain"
                 />
               </div>

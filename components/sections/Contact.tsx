@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRef } from "react";
 import { m, useInView } from "framer-motion";
 
@@ -111,8 +112,15 @@ export default function Contact({
                 className="h-full w-full"
                 style={{
                   background: "#1f7a4d",
-                  WebkitMaskImage: "url(/branding/logo_v2.png)",
-                  maskImage: "url(/branding/logo_v2.png)",
+                  // A CSS mask takes a URL, so next/image cannot reach it —
+                  // this stayed a raw 107 KB fetch after the other three logos
+                  // were optimised. A mask reads only the alpha channel, and
+                  // `contain` paints it at 440x220 here, so 880w covers retina
+                  // at less than half the bytes. Kept as PNG on purpose: if a
+                  // mask image fails to load the element paints SOLID, and a
+                  // green block across the footer is a bad way to save 14 KB.
+                  WebkitMaskImage: "url(/branding/logo_v2_mask.png)",
+                  maskImage: "url(/branding/logo_v2_mask.png)",
                   WebkitMaskSize: "contain",
                   maskSize: "contain",
                   WebkitMaskRepeat: "no-repeat",
@@ -124,9 +132,16 @@ export default function Contact({
             </div>
           ) : (
             <div className="md:absolute right-0 bottom-[-60px] mt-6 md:mt-0 w-full md:w-[580px] h-40 md:h-[220px] flex items-center justify-start md:justify-end mix-blend-screen opacity-85 hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-              <img
+              {/* width/height rather than `fill`: this wrapper is only
+                  positioned from md up (`md:absolute`), so `fill` would break
+                  the mobile layout. The intrinsic ratio is 2:1 and CSS still
+                  drives the painted size. */}
+              <Image
                 src="/branding/logo_v2.png"
                 alt="Suman Debnath Signature"
+                width={1774}
+                height={887}
+                sizes="(min-width: 768px) 580px, 100vw"
                 className="h-full w-full object-contain object-left md:object-right"
               />
             </div>
@@ -275,7 +290,9 @@ export default function Contact({
                   ? "bg-[#2E8B57]/[0.12] text-[#1f7a4d] hover:bg-[#2E8B57] hover:text-white"
                   : "bg-red-500/10 text-red-700 hover:bg-red-500 hover:text-white"
               }`}
-              aria-label="System Self-Destruct"
+              // Must start with the visible text, or speech-input users say
+              // "Do Not Click" and nothing happens. The joke survives.
+              aria-label="Do Not Click — system self-destruct"
             >
               Do Not Click
             </button>
