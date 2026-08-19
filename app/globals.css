@@ -78,53 +78,12 @@ html.sd-intro-nav #tour-nav {
   animation: sd-robot-enter 900ms linear backwards;
 }
 
-/* The loader's signature, written left to right — the direction a signature is
-   actually made in. A mask wipe rather than a stroke animation, because the
-   mark exists only as raster art; see the note at the top of Loader.tsx. */
-@keyframes sd-loader-sign {
-  from {
-    -webkit-mask-position: 100% 0;
-    mask-position: 100% 0;
-  }
-  to {
-    -webkit-mask-position: 0 0;
-    mask-position: 0 0;
-  }
-}
-
-.sd-loader-sign {
-  -webkit-mask-image: linear-gradient(
-    to right,
-    #000 0 33.333%,
-    rgba(0, 0, 0, 0.15) 41%,
-    transparent 50%
-  );
-  mask-image: linear-gradient(
-    to right,
-    #000 0 33.333%,
-    rgba(0, 0, 0, 0.15) 41%,
-    transparent 50%
-  );
-  -webkit-mask-size: 300% 100%;
-  mask-size: 300% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  animation: sd-loader-sign 1150ms cubic-bezier(0.33, 0, 0.2, 1) 120ms both;
-}
-
 @media (prefers-reduced-motion: reduce) {
   html.sd-intro body::before {
     transition: none;
   }
   .sd-robot-enter {
     animation: none;
-  }
-  /* No wipe, and crucially no lingering mask — a `both` fill would otherwise
-     leave the signature partly erased for anyone who asked for less motion. */
-  .sd-loader-sign {
-    animation: none;
-    -webkit-mask-image: none;
-    mask-image: none;
   }
 }
 

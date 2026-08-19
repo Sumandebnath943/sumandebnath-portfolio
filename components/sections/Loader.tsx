@@ -23,16 +23,19 @@ import Image from "next/image";
  *  · **The counter is the page's own display face.** An oversized Anton numeral
  *    over a hairline rule, matching the numbered-section system, instead of a
  *    generic gradient progress bar.
- *  · **The signature is written, not revealed.** A left-to-right wipe, which is
- *    the direction a signature is actually made in.
+ *  · **The signature carries the left.** It sits on the same rule as the
+ *    counter rather than centred above it — the previous version had the mark
+ *    centred over a container whose other contents were left-aligned, so
+ *    nothing lined up with anything and the whole screen read as slightly off.
  *
- * > The wipe is a stand-in for a true stroke animation. That needs the mark as
- * > vector art, and no vector source exists in this repo — only the raster
- * > logos in public/branding. Auto-tracing would give a *filled outline*, and
- * > stroking an outline draws the edges of the letters rather than the pen's
- * > path, which looks wrong. If the original Illustrator/Figma art ever turns
- * > up, swap the <Image> for an inline <svg> and animate `stroke-dashoffset`;
- * > nothing else here has to change.
+ * > It had a left-to-right wipe for a while — the direction a signature is
+ * > actually written — and it was cut because the screen already has a counter
+ * > running, a rule filling and a log cycling, and a fourth thing moving was
+ * > one too many. If it is ever wanted back, it was a mask-position keyframe;
+ * > a true stroke animation is not available, because that needs the mark as
+ * > vector art and no vector source exists in this repo. Tracing the raster
+ * > would give a filled outline, and stroking an outline draws the edges of the
+ * > letters rather than the pen's path.
  *
  * Timing: ~2.9s of sequence, then a short hold and a 600ms exit. Everything
  * downstream (nav, mascot, chat) is measured from `onComplete`, so changing the
@@ -125,35 +128,42 @@ export default function Loader({ onComplete }: LoaderProps) {
             }}
           />
 
-          <div className="relative z-10 flex w-full max-w-[34rem] flex-col items-center">
-            {/* ── The signature, written left to right ── */}
-            <div className="sd-loader-sign relative mb-10 h-24 w-full max-w-[20rem] sm:h-28">
+          <div className="relative z-10 flex w-full max-w-[46rem] flex-col">
+            {/* ── Signature left, counter right, both sitting on the rule ──
+                One alignment axis, not two. The signature used to be centred
+                over a container whose other contents were left-aligned, which
+                is what read as "off" — nothing lined up with anything.
+                `items-end` puts both boxes on the rule; `object-left-bottom`
+                drops the mark itself to the bottom of its box, since the source
+                PNG carries transparent padding around the strokes. */}
+            <div className="flex items-end justify-between gap-6 sm:gap-10">
+              {/* `logo_v2_wordmark.png`, not `logo_v2.png`. The shared logo's
+                  canvas is 1774x887 but its ink is only 1482x305 — **65.6% of
+                  the height is transparent padding**. Rendered at any box size
+                  the signature came out a third of the height it appeared to
+                  ask for, which is why it read as tiny, and the padding held it
+                  floating well clear of the rule, which is why it would not
+                  align however the boxes were arranged. Cropped before serving
+                  rather than nudged with object-position — the house rule, see
+                  PROJECT_BIBLE §9.1. */}
               <Image
-                src="/branding/logo_v2.png"
+                src="/branding/logo_v2_wordmark.png"
                 alt="Suman Debnath"
-                width={1774}
-                height={887}
-                sizes="320px"
+                width={1482}
+                height={305}
+                sizes="(min-width: 768px) 350px, 260px"
                 loading="eager"
-                className="h-full w-full object-contain"
+                className="h-[3.25rem] w-auto object-contain sm:h-16 md:h-[4.5rem]"
               />
+              <span
+                className="font-anton shrink-0 leading-[0.78] text-[clamp(3.25rem,10vw,5.5rem)] tabular-nums text-[#F5F0E6]"
+                aria-hidden
+              >
+                {String(shown).padStart(2, "0")}
+              </span>
             </div>
 
-            {/* ── Anton counter over a hairline rule ── */}
-            <div className="w-full">
-              <div className="flex items-end justify-between">
-                <span
-                  className="font-anton leading-[0.82] text-[clamp(3.5rem,14vw,6.5rem)] tabular-nums text-[#F5F0E6]"
-                  aria-hidden
-                >
-                  {String(shown).padStart(2, "0")}
-                </span>
-                <span className="font-dmmono mb-2 text-[10px] uppercase tracking-[0.28em] text-white/50">
-                  Loading
-                </span>
-              </div>
-
-              {/* The rule *is* the progress bar — no track, no gradient.
+            {/* The rule *is* the progress bar — no track, no gradient.
                   Driven by scaleX rather than a percentage width: the width
                   version measured 0 at every sample against a 1px-tall parent,
                   and animating `width` 30 times a second re-runs layout each
@@ -162,15 +172,14 @@ export default function Loader({ onComplete }: LoaderProps) {
                   element's own box, so there is nothing to resolve wrongly.
                   `/[0.12]` in brackets, not `/12` — Tailwind's opacity modifier
                   only takes multiples of five and silently drops anything else. */}
-              <div className="mt-3 h-px w-full overflow-hidden bg-white/[0.12]">
-                <div
-                  className="h-px w-full origin-left bg-[#FF5500]"
-                  style={{
-                    transform: `scaleX(${progress / 100})`,
-                    transition: "transform 120ms linear",
-                  }}
-                />
-              </div>
+            <div className="mt-3 h-px w-full overflow-hidden bg-white/[0.12]">
+              <div
+                className="h-px w-full origin-left bg-[#FF5500]"
+                style={{
+                  transform: `scaleX(${progress / 100})`,
+                  transition: "transform 120ms linear",
+                }}
+              />
             </div>
 
             {/* ── The boot log ── */}
