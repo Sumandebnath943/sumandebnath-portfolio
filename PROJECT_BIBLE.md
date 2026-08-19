@@ -814,6 +814,9 @@ Four things here are load-bearing, and each was a bug first:
 
 #### The mascot renders on demand, not on every frame
 
+> If the robot looks or behaves wrong, go to **`ROBOT_ROLLBACK.md`** — it is
+> indexed by symptom and carries the per-item undo for everything below.
+
 Both canvases run `frameloop="demand"` with a `FrameLimiter` (in
 `RobotCanvas.tsx`) calling `invalidate()` on a rAF clock — **30fps while the
 robot is idling, 60 while it is running or jumping**, and 60 in the chat

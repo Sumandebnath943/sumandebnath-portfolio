@@ -15,6 +15,10 @@ Three documents carry the full context for this repo. They do not overlap.
   session, and what is worth doing next.
 - **`PORTFOLIO_HANDOFF.md`** — how the site writes. Voice, what each page
   argues, and the repeatable pattern for building a new product page.
+- **`ROBOT_ROLLBACK.md`** — **read this the moment anything about the 3D robot
+  mascot looks or behaves wrong.** It is indexed by symptom — frozen, too dark,
+  blurry, sliding in, arriving late — and gives the cause, the check, and the
+  exact way to undo that one thing without disturbing the rest.
 
 `project_memory.md` and `analysis_results.md` are early-2026 snapshots, kept for
 history only. They are superseded by `PROJECT_BIBLE.md` and their file paths no

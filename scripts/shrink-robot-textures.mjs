@@ -29,7 +29,7 @@ import { textureCompress } from '@gltf-transform/functions';
 import { MeshoptEncoder, MeshoptDecoder } from 'meshoptimizer';
 import sharp from 'sharp';
 
-const SRC = 'public/robot.glb';
+const SRC = '_masters/robot.glb';
 const OUT = process.argv[2] ?? 'public/robot-v2.glb';
 const SIZE = 512;
 

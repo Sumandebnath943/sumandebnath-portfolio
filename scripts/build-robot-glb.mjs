@@ -1,5 +1,5 @@
 /**
- * Builds public/robot.glb from the Mixamo .fbx sources in /_source-fbx.
+ * Builds _masters/robot.glb from the Mixamo .fbx sources in /_source-fbx.
  *
  * Each .fbx is one Mixamo clip (mesh + skeleton + a single "mixamo.com"
  * animation). They all share the same 65-joint rig, so we keep ONE mesh and
@@ -9,6 +9,14 @@
  *   npm i -D fbx2gltf @gltf-transform/core @gltf-transform/extensions \
  *            @gltf-transform/functions meshoptimizer sharp
  *   node scripts/build-robot-glb.mjs
+ *
+ * This is STEP ONE OF TWO and its output is not served. The site loads a
+ * half-resolution derivative, because the robot never draws larger than a few
+ * hundred pixels and 1024² textures are pure waste at that size:
+ *
+ *   node scripts/shrink-robot-textures.mjs      # -> public/robot-v2.glb
+ *
+ * See _masters/README.md and ROBOT_ROLLBACK.md.
  */
 import { mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
@@ -116,20 +124,22 @@ await base.transform(
 );
 base.createExtension(EXTMeshoptCompression).setRequired(true);
 
-await io.write('public/robot.glb', base);
+await io.write('_masters/robot.glb', base);
 rmSync(tmp, { recursive: true, force: true });
-console.log('WROTE public/robot.glb', base.getRoot().listAnimations().map((a) => a.getName()));
+console.log('WROTE _masters/robot.glb', base.getRoot().listAnimations().map((a) => a.getName()));
 
-// next.config.ts serves /robot.glb with `max-age=31536000, immutable`, because
-// the mascot is in the root layout and this file is fetched on every page.
-// Immutable means browsers do not revalidate — overwriting it in place ships
-// the new model to nobody who has visited before. See PROJECT_BIBLE.md §10.1.
+// The served glb is cached `max-age=31536000, immutable`, because the mascot is
+// in the root layout and is fetched on every page. Immutable means browsers do
+// not revalidate — overwriting a served file in place ships the new model to
+// nobody who has visited before. See PROJECT_BIBLE.md §10.1.
 console.log(`
-  ⚠  /robot.glb is served IMMUTABLE for one year.
-     Returning visitors will keep the OLD model unless you rename this file.
-     To ship a change:
-       1. write it as public/robot-v2.glb (bump the number)
-       2. update useGLTF("/robot.glb") AND useGLTF.preload(...) in
-          components/robot/RobotModel.tsx
-       3. update the asset table in PROJECT_BIBLE.md §10.1
+  ⚠  NOTHING IS SERVED YET — this wrote the master, not the site's model.
+
+     1. node scripts/shrink-robot-textures.mjs public/robot-v3.glb
+        (bump the number — the served glb is IMMUTABLE for a year, so
+         returning visitors keep the old model unless the name changes)
+     2. update useGLTF("/robot-v2.glb") AND useGLTF.preload(...) in
+        components/robot/RobotModel.tsx
+     3. update the literal in next.config.ts headers()
+     4. update the asset table in PROJECT_BIBLE.md §10.1
 `);

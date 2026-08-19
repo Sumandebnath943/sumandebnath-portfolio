@@ -118,6 +118,16 @@ export default function RobotMascot() {
   const [anim, setAnim] = useState<ClipName>(() => (introRuns ? "Running" : "Waving"));
   const [rotationY, setRotationY] = useState(() => (introRuns ? FACE_LEFT : 0));
   const [x, setXState] = useState(0); // horizontal travel from home (px, <=0 moves left)
+  // Whether the entrance keyframe is still allowed to be on the element.
+  //
+  // This has to be state, and it has to be turned off. Opening the chat makes
+  // this component return `null`, so closing it *re-mounts* the subtree — and a
+  // CSS animation restarts on mount. Keyed off `introRuns` alone, the entrance
+  // replayed every time the chat closed, for the whole session: the robot slid
+  // in from 320px while standing still, because the chat-close reset had
+  // already set the clip to "Idle". `enteredRef` guards the effect below; this
+  // guards the class.
+  const [entering, setEntering] = useState(introRuns);
   const entranceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [hopY, setHopY] = useState(0); // vertical hop (px, negative = up)
   const [travelTransition, setTravelTransition] = useState("none");
@@ -195,6 +205,11 @@ export default function RobotMascot() {
       setAnim("Idle");
       busyRef.current = false; // must always run, or the chase is dead
       setResting(true);
+      // Retire the keyframe now it has finished. Safe at exactly this moment:
+      // the animation ends at translateX(0), which is where the element already
+      // sits, so dropping the class changes nothing on screen — and it stops
+      // the entrance replaying on every later re-mount.
+      setEntering(false);
     }, ENTRANCE_MS);
   }, [revealed, introRuns]);
 
@@ -415,7 +430,7 @@ export default function RobotMascot() {
       >
         {/* The entrance rides its own wrapper so its keyframe never contends
             with the inline translateX the chase writes to the box above. */}
-        <div className={introRuns ? "sd-robot-enter" : undefined}>
+        <div className={entering ? "sd-robot-enter" : undefined}>
           <div style={{ transform: `translateY(${hopY}px)`, transition: "transform 0.26s ease-out" }}>
           {/* Escape quips are short and stay on one line. The résumé prompts are
               full sentences, so the bubble wraps and caps its width against the
