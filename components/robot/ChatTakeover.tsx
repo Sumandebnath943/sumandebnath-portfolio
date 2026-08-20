@@ -48,6 +48,10 @@ const FACE_LEFT = -Math.PI / 2;
 const FACE_RIGHT = Math.PI / 2;
 const LOOKING_AFTER_MS = 25_000; // chat-inactivity before the robot "looks around"
 
+/** Cursor distance at which the launcher starts leaning, and how far it goes. */
+const MAGNET_RADIUS = 130;
+const MAGNET_MAX = 7;
+
 // Ambient idle rotation (panel): Idle → HappyIdle → Idle → SadIdle.
 //
 // Nodding is deliberately NOT here. It is the "thinking" pose now — played
@@ -100,6 +104,7 @@ export default function ChatTakeover() {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const launchRef = useRef<HTMLButtonElement>(null);
   const typewriterRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // ── Robot state ──
@@ -130,6 +135,73 @@ export default function ChatTakeover() {
   }, []);
 
   const clearPhaseTimers = () => { phaseTimers.current.forEach(clearTimeout); phaseTimers.current = []; };
+
+  /**
+   * The launcher leans toward the cursor.
+   *
+   * Deliberate counterpoint to the mascot standing beside it: the robot runs
+   * *away* from your cursor, the chat chip leans *in*. Two objects in the same
+   * corner behaving in opposite ways is free characterisation.
+   *
+   * Written as CSS custom properties, never as an inline transform — inline
+   * beats the stylesheet, so it would silently override the :hover lift and
+   * :active press.
+   *
+   * The rect is cached rather than measured per frame: the button is
+   * `position: fixed`, so only a resize can move it, and calling
+   * getBoundingClientRect on every mousemove forces layout on a listener that
+   * runs on every page of the site.
+   *
+   * Skipped entirely without a fine pointer (no hover on touch, and a
+   * "magnetic" element you cannot approach is just a jump) and under
+   * prefers-reduced-motion.
+   */
+  useEffect(() => {
+    if (open || !revealed || solo) return;
+    const el = launchRef.current;
+    if (!el || typeof window === "undefined" || !window.matchMedia) return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let rect = el.getBoundingClientRect();
+    const remeasure = () => { rect = el.getBoundingClientRect(); };
+
+    let raf = 0;
+    let px = 0;
+    let py = 0;
+    const apply = () => {
+      raf = 0;
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = px - cx;
+      const dy = py - cy;
+      const dist = Math.hypot(dx, dy);
+      if (dist > MAGNET_RADIUS || dist < 0.001) {
+        el.style.setProperty("--mx", "0px");
+        el.style.setProperty("--my", "0px");
+        return;
+      }
+      const pull = (1 - dist / MAGNET_RADIUS) * MAGNET_MAX;
+      el.style.setProperty("--mx", ((dx / dist) * pull).toFixed(2) + "px");
+      el.style.setProperty("--my", ((dy / dist) * pull).toFixed(2) + "px");
+    };
+
+    const onMove = (e: MouseEvent) => {
+      px = e.clientX;
+      py = e.clientY;
+      if (!raf) raf = requestAnimationFrame(apply);
+    };
+
+    window.addEventListener("mousemove", onMove, { passive: true });
+    window.addEventListener("resize", remeasure, { passive: true });
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("resize", remeasure);
+      if (raf) cancelAnimationFrame(raf);
+      el.style.removeProperty("--mx");
+      el.style.removeProperty("--my");
+    };
+  }, [open, revealed, solo]);
 
   // Open: robot jumps from the corner across to the panel, then settles.
   useEffect(() => {
@@ -318,13 +390,17 @@ export default function ChatTakeover() {
           id="tour-chat"
           className="ct-launch"
           onClick={openChat}
+          ref={launchRef}
           aria-label="Ask about Suman — open chat with Suman's assistant"
         >
-          <span className="ct-launch-spark" />
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style={{ opacity: 0.85 }}>
-            <path d="M8 1C4.134 1 1 3.686 1 7c0 1.592.683 3.032 1.8 4.1L2 15l4.1-1.3A7.3 7.3 0 008 14c3.866 0 7-2.686 7-6s-3.134-6-7-6z" fill="currentColor" />
-          </svg>
-          Ask about Suman
+          {/* A terminal prompt rather than a speech bubble. The rounded-bubble
+              glyph is the universal mark of a bought support widget, and this
+              site's own register is DM Mono, ⌘K and "> resolving the address
+              you asked for". Decorative, so it stays out of the a11y tree —
+              the accessible name still contains the visible words. */}
+          <span className="ct-launch-prompt" aria-hidden="true">&gt;</span>
+          <span className="ct-launch-label">Ask about Suman</span>
+          <span className="ct-launch-caret" aria-hidden="true" />
         </button>
       )}
 
@@ -442,13 +518,37 @@ const TAKEOVER_CSS = `
   /* ── Launcher pill ── */
   .ct-launch {
     position: fixed; bottom: 30px; right: 138px; z-index: 1000;
-    display: flex; align-items: center; gap: 8px;
-    padding: 11px 20px 11px 16px;
-    background: #1D1D1F; color: #F5F5F7; border: none; border-radius: 50px;
-    cursor: pointer; font-size: 13.5px; font-weight: 600;
-    font-family: var(--font-manrope, 'Inter', sans-serif); letter-spacing: -0.01em; white-space: nowrap;
-    transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.18), 0 8px 24px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.08);
+    display: flex; align-items: center; gap: 7px;
+    padding: 9px 15px;
+    /* Same material as the nav pill — rgba ground, heavy blur+saturate, a
+       white hairline and an inset top highlight. It used to be flat #1D1D1F
+       with no border, sitting 30px from a nav built this way, which is most of
+       why it read as somebody else's widget bolted on. 14px rather than a 50px
+       pill for the same reason: the fully round chat bubble is the shape every
+       support tool on the web already uses. */
+    background: rgba(10,10,12,0.75);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    backdrop-filter: blur(24px) saturate(180%);
+    color: #E9E7E4; border: 1px solid rgba(255,255,255,0.15); border-radius: 14px;
+    cursor: pointer; font-size: 12px; font-weight: 500;
+    font-family: var(--font-dm-mono, ui-monospace, monospace);
+    /* Sentence case, not lowercase and not the uppercase used elsewhere.
+       All 169 mono blocks on this site are UPPERCASE, but every one of them
+       is a kicker or a label — section headers, spec chips, meta rows. None
+       is a call to action, and the site's actual CTAs are Manrope sentence
+       case. Uppercase here would make a button look like a caption.
+       Lowercase was worse for a simpler reason: it lowercased his name.
+       The 404 log and the easter eggs are lowercase because they are machine
+       OUTPUT; this is the visitor's input line, where you would capitalise a
+       name as you typed it. */
+    letter-spacing: 0.01em; white-space: nowrap;
+    /* --mx/--my carry the magnetic lean, written by JS as custom properties
+       rather than as an inline transform. An inline transform would win over
+       the stylesheet and silently kill the :hover lift and :active press
+       below; composing through variables lets all three coexist. */
+    transform: translate(var(--mx, 0px), var(--my, 0px));
+    transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s, border-color 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.28), 0 10px 30px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.22);
     /* It used to appear on the spot. Same rise and easing as the nav pill, so
        the two read as one system arriving in sequence.
        Fill is "backwards", never "both": a forwards fill keeps the animation's
@@ -463,11 +563,32 @@ const TAKEOVER_CSS = `
   }
   @media (prefers-reduced-motion: reduce) {
     .ct-launch { animation: none; }
+    .ct-launch-caret { animation: none; opacity: 1; }
   }
-  .ct-launch:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.22), 0 12px 32px rgba(240,78,0,0.18); }
-  .ct-launch:active { transform: scale(0.97); }
-  .ct-launch-spark { width: 6px; height: 6px; border-radius: 50%; background: linear-gradient(135deg,#F04E00,#FF8A33); box-shadow: 0 0 6px rgba(240,78,0,0.7); animation: ct-spark 2.4s ease-in-out infinite; }
-  @keyframes ct-spark { 0%,100%{opacity:1} 50%{opacity:.6} }
+  /* Every state keeps the magnet offset, or approaching the button would snap
+     it back to centre at the moment the cursor arrives. */
+  .ct-launch:hover {
+    transform: translate(var(--mx, 0px), calc(var(--my, 0px) - 2px));
+    border-color: rgba(255,255,255,0.28);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.32), 0 14px 36px rgba(240,78,0,0.20), inset 0 1px 0 rgba(255,255,255,0.28);
+  }
+  .ct-launch:active { transform: translate(var(--mx, 0px), var(--my, 0px)) scale(0.97); }
+  .ct-launch:focus-visible { outline: 2px solid #FFA45C; outline-offset: 3px; }
+
+    /* #FFA45C, not the #FF8A33 used elsewhere in the chat. The chip is 75%
+     opaque, so its ground depends on the page behind it: over the cream of
+     /resume or the 404 it composites to rgb(69,68,68), where #FF8A33 scores
+     only 4.12:1 at 12px. This measures 4.95:1 there and 10.09:1 over a dark
+     page. Cream is the worst case, so passing it passes everywhere. */
+  .ct-launch-prompt { color: #FFA45C; font-weight: 500; }
+  .ct-launch-label { color: #E9E7E4; }
+  /* The caret is the live signal, and it replaces the old pulsing dot. A
+     blinking cursor says "waiting for you to type" without a second element. */
+  .ct-launch-caret {
+    width: 6px; height: 12px; background: #FFA45C; display: inline-block;
+    margin-left: 1px; animation: ct-caret 1.05s step-end infinite;
+  }
+  @keyframes ct-caret { 50% { opacity: 0; } }
 
   /* ── Takeover root ── */
   .ct-root { position: fixed; inset: 0; z-index: 2147483000; font-family: var(--font-manrope,'Inter',sans-serif); }
