@@ -29,8 +29,11 @@ import { textureCompress } from '@gltf-transform/functions';
 import { MeshoptEncoder, MeshoptDecoder } from 'meshoptimizer';
 import sharp from 'sharp';
 
-const SRC = '_masters/robot.glb';
+// Input defaults to the full master, but takes an override so it can shrink the
+// core file that scripts/split-robot-clips.mjs produces.
+//   node scripts/shrink-robot-textures.mjs [outfile] [infile]
 const OUT = process.argv[2] ?? 'public/robot-v2.glb';
+const SRC = process.argv[3] ?? '_masters/robot.glb';
 const SIZE = 512;
 
 await MeshoptEncoder.ready;

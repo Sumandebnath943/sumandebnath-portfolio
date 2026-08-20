@@ -25,7 +25,7 @@ const nextConfig: NextConfig = {
   // has already visited — you MUST give the new file a new name (robot-v2.glb,
   // city-v2.hdr) and update its reference. See PROJECT_BIBLE.md §10.1.
   //   • /hdri/*       — Poly Haven env map (CC0), used by both robot canvases
-  //   • /robot-v2.glb — scripts/build-robot-glb.mjs, then shrink-robot-textures
+  //   • /robot-v3.glb — scripts/build-robot-glb.mjs, then shrink-robot-textures
   //
   // The glb is matched literally, not by pattern: `/robot-:version*.glb` reads
   // fine and is rejected by path-to-regexp at build time ("cannot repeat
@@ -37,7 +37,7 @@ const nextConfig: NextConfig = {
     ];
     return [
       { source: "/hdri/:file*", headers: immutable },
-      { source: "/robot-v2.glb", headers: immutable },
+      { source: "/robot-v3.glb", headers: immutable },
     ];
   },
 };

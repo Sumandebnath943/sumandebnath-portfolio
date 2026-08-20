@@ -28,6 +28,12 @@ import { MeshoptEncoder, MeshoptDecoder } from 'meshoptimizer';
 import sharp from 'sharp';
 
 // [source .fbx basename, exported clip name]
+//
+// Every clip must come from the SAME Mixamo character. Channels are matched to
+// bones by name below, and an unmatched channel is skipped silently — a clip
+// from a different rig loads, plays, and moves nothing. Verify with
+// scripts/inspect-robot-glb.mjs after building; a healthy clip carries ~50+
+// channels, and single digits mean the rig did not match.
 const CLIPS = [
   ['Idle', 'Idle'],
   ['Happy Idle', 'HappyIdle'],
@@ -38,6 +44,16 @@ const CLIPS = [
   ['Talking', 'Talking'],
   ['Talking 2', 'Talking2'],
   ['Waving', 'Waving'],
+  // Added 20 Aug 2026. `Typing` was deliberately not taken: the pose is seated
+  // at a desk with the hands at keyboard height, and with no desk in the scene
+  // the robot mimes at thin air. See HANDOFF.
+  ['Nodding', 'Nodding'],
+  ['Sitting Idle', 'SittingIdle'],
+  ['Pointing', 'Pointing'],
+  ['Silly Dancing', 'SillyDancing'],
+  ['Clapping', 'Clapping'],
+  ['Sleeping', 'Sleeping'],
+  ['Salute', 'Salute'],
 ];
 
 await MeshoptEncoder.ready;
