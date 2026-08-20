@@ -1,9 +1,70 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
-import { Canvas, useThree } from "@react-three/fiber";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { Canvas, useThree, useFrame } from "@react-three/fiber";
 import { Environment } from "@react-three/drei";
+import * as THREE from "three";
 import { RobotModel, type ClipName } from "./RobotModel";
+
+/**
+ * Eases the camera toward a target position and field of view.
+ *
+ * Exists because a standing figure and a figure lying on the floor cannot share
+ * one framing. Centred on the standing robot, the sleeping body falls out of
+ * the bottom of the canvas; framed for the sleeping body, the standing robot
+ * wastes the top third. Measured on the 404 at fov 30, standing filled 17%–71%
+ * of the canvas and lying was clipped.
+ *
+ * So the caller moves the camera per clip, and this glides rather than cuts —
+ * a hard camera jump on every clip change would be far more distracting than
+ * the dead space it fixes.
+ *
+ * The smoothing is frame-rate independent (`1 - pow(k, dt)`), which matters
+ * here: this canvas runs at 30fps while idling and 60 elsewhere, and a plain
+ * `lerp(a, b, 0.1)` would travel at two different speeds.
+ */
+/** Scratch vector, so the per-frame loop allocates nothing. */
+const tmpAim = new THREE.Vector3();
+
+function CameraRig({
+  position,
+  lookAt,
+  fov,
+}: {
+  position: [number, number, number];
+  lookAt: [number, number, number];
+  fov: number;
+}) {
+  // The camera is read from useFrame's own state rather than useThree.
+  // Functionally identical, and it keeps react-hooks/immutability satisfied:
+  // driving a camera per frame *is* mutation, and it is exactly what R3F
+  // intends, but a value returned from a hook may not be written to.
+  const wantPos = useRef(new THREE.Vector3(...position));
+  // Aim is tracked separately and re-applied every frame. React Three Fiber
+  // calls `camera.lookAt(0, 0, 0)` exactly ONCE, at creation
+  // (events-*.js: `if (!state.camera && !cameraOptions?.rotation)`), and never
+  // again. Move the camera afterwards and it keeps that frozen orientation, so
+  // it no longer points where it did — dropping it to frame a body on the floor
+  // just aimed it past him. Nothing errors; the subject simply leaves frame.
+  const wantAim = useRef(new THREE.Vector3(...lookAt));
+
+  useFrame((state, dt) => {
+    const camera = state.camera as THREE.PerspectiveCamera;
+    // Clamp dt so a backgrounded tab returning does not teleport the camera.
+    const k = 1 - Math.pow(0.02, Math.min(dt, 0.1));
+    wantPos.current.set(position[0], position[1], position[2]);
+    camera.position.lerp(wantPos.current, k);
+    // Ease the aim too, or the camera swings while the body is still settling.
+    wantAim.current.lerp(tmpAim.set(lookAt[0], lookAt[1], lookAt[2]), k);
+    camera.lookAt(wantAim.current);
+    if (Math.abs(camera.fov - fov) > 0.005) {
+      camera.fov += (fov - camera.fov) * k;
+      camera.updateProjectionMatrix();
+    }
+  });
+
+  return null;
+}
 
 /**
  * Drives the canvas at a fixed frame rate.
@@ -53,10 +114,25 @@ export default function RobotCanvas({
   groupY = -1.3,
   rimLight = false,
   fps = 30,
+  playOnce = false,
+  fade,
+  smoothCamera = false,
+  cameraLookAt = [0, 0, 0],
 }: {
+  /** World point the camera aims at while `smoothCamera` is on. */
+  cameraLookAt?: [number, number, number];
+  /**
+   * Ease to `cameraPosition` / `cameraFov` instead of snapping. Off by default:
+   * the mascot never moves its camera, and this costs a per-frame callback.
+   */
+  smoothCamera?: boolean;
   animation: ClipName;
   timeScale?: number;
   onFinished?: (clip: ClipName) => void;
+  /** Play the current clip once and fire `onFinished`. See RobotModel. */
+  playOnce?: boolean;
+  /** Crossfade seconds between clips. See RobotModel. */
+  fade?: number;
   /** Y rotation (radians) so the robot can face its running direction. */
   rotationY?: number;
   cameraPosition?: [number, number, number];
@@ -110,6 +186,9 @@ export default function RobotCanvas({
       style={{ width: "100%", height: "100%", background: "transparent" }}
     >
       <FrameLimiter fps={fps} />
+      {smoothCamera && (
+        <CameraRig position={cameraPosition} lookAt={cameraLookAt} fov={cameraFov} />
+      )}
       <ambientLight intensity={0.9} />
       <directionalLight position={[3, 5, 4]} intensity={1.6} />
       <directionalLight position={[-4, 2, -2]} intensity={0.4} />
@@ -117,7 +196,13 @@ export default function RobotCanvas({
       <Suspense fallback={null}>
         {/* Feet sit near y=0; lift camera target to mid-body via group offset. */}
         <group position={[0, groupY, 0]} rotation={[0, rotationY, 0]}>
-          <RobotModel animation={animation} timeScale={timeScale} onFinished={onFinished} />
+          <RobotModel
+            animation={animation}
+            timeScale={timeScale}
+            onFinished={onFinished}
+            playOnce={playOnce}
+            fade={fade}
+          />
         </group>
       </Suspense>
       {/* Separate boundary so the HDR never suspends/hides the robot.

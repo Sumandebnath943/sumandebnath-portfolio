@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
 import {
   useIntroRuns,
@@ -69,6 +70,60 @@ const AMBIENT_SEQ: [ClipName, number][] = [
   ["SadIdle", 4_500],
 ];
 
+/**
+ * Ambient rotations for pages where the robot has something to do.
+ *
+ * This is the whole point of giving him more clips: a mascot that idles
+ * identically everywhere is decoration, and one that reacts to where you are is
+ * a character. Keyed on pathname, and anything not listed falls back to
+ * AMBIENT_SEQ.
+ *
+ * Both of these are still *idles* — they never interrupt the chase, the
+ * entrance or the give-up, which own the robot while they are running.
+ */
+const PAGE_AMBIENT: Record<string, [ClipName, number][]> = {
+  // He sits down to read the story with you. SittingIdle is 10.8s, so it gets
+  // its full length rather than being cut off mid-settle.
+  "/journey": [
+    ["SittingIdle", 10_800],
+    ["Idle", 6_000],
+    ["SittingIdle", 10_800],
+    ["HappyIdle", 4_000],
+  ],
+  // On the résumé he points at it. Twice a cycle rather than once: at 2.5s in a
+  // 34s rotation the gesture was there but nobody saw it.
+  "/resume": [
+    ["Idle", 9_000],
+    ["Pointing", 2_500],
+    ["HappyIdle", 3_500],
+    ["Idle", 9_000],
+    ["Pointing", 2_500],
+    ["SadIdle", 3_500],
+  ],
+};
+
+/**
+ * How far to lift the robot while he is sitting.
+ *
+ * 30px is not arbitrary — it is the chat launcher's own bottom offset, measured
+ * from the live page (`innerHeight - launcher.bottom`). The mascot's canvas is
+ * flush with the bottom of the viewport, which is fine for a standing figure
+ * whose lowest point is a pair of feet, but a seated pose puts a wide mass of
+ * body right on the edge, where it crowds the OS taskbar. Lining his base up
+ * with the chat pill's base puts him back on the same floor as the rest of the
+ * page furniture.
+ *
+ * Applied through the hop transform, which already carries a 0.26s ease, so the
+ * lift glides in with the clip instead of snapping.
+ */
+const SIT_LIFT_PX = 30;
+
+/** One-shot reactions, with how long to hold them before returning to idle. */
+const REACTION_MS: Partial<Record<ClipName, number>> = {
+  Clapping: 1_400, // 1.33s clip
+  Salute: 2_900, // 2.83s clip
+};
+
 // Run feel.
 const JUMP_MS = 300; // time spent in the up-hop before the run starts
 const RUN_PX_PER_MS = 0.62; // higher = faster run travel
@@ -98,7 +153,8 @@ export default function RobotMascot() {
   // right; otherwise it arrives shortly after mount. See lib/intro.ts.
   const introRuns = useIntroRuns();
   const revealed = useReveal(MASCOT_INTRO_MS, MASCOT_PLAIN_MS);
-  const { open: chatOpen } = useRobotChat();
+  const { open: chatOpen, solo } = useRobotChat();
+  const pathname = usePathname();
 
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -136,6 +192,9 @@ export default function RobotMascot() {
   const [resting, setResting] = useState(false); // idle in corner → run ambient loop
   const [escapeMsg, setEscapeMsg] = useState<string | null>(null);
   const [promptMsg, setPromptMsg] = useState<string | null>(null);
+  // A one-shot gesture that temporarily overrides the ambient idle.
+  const [reaction, setReaction] = useState<ClipName | null>(null);
+  const reactionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const busyRef = useRef(false);
   const lastMouseMove = useRef(Date.now());
@@ -162,11 +221,29 @@ export default function RobotMascot() {
     if (escapeMsgTimer.current) clearTimeout(escapeMsgTimer.current);
   }, [clearTimers]);
 
-  // Track mouse activity so the robot can "look" for an idle visitor.
+  /**
+   * Track visitor activity so the robot can "look" for someone who has gone.
+   *
+   * **Scroll and touch count, not just mousemove** — and that is a fix, not a
+   * nicety. Reading a long page is twenty seconds of scrolling with the mouse
+   * perfectly still, so the old listener declared an actively-reading visitor
+   * absent, switched to `Looking`, and stayed there: the tick re-checks the same
+   * condition every 6.5s and keeps returning early. That is why `Pointing` never
+   * appeared on `/resume` — the page you are most likely to read without moving
+   * the mouse is exactly where the page-specific idle could never run.
+   */
   useEffect(() => {
-    const onMove = () => { lastMouseMove.current = Date.now(); };
-    window.addEventListener("mousemove", onMove, { passive: true });
-    return () => window.removeEventListener("mousemove", onMove);
+    const seen = () => { lastMouseMove.current = Date.now(); };
+    window.addEventListener("mousemove", seen, { passive: true });
+    window.addEventListener("scroll", seen, { passive: true });
+    window.addEventListener("touchstart", seen, { passive: true });
+    window.addEventListener("keydown", seen, { passive: true });
+    return () => {
+      window.removeEventListener("mousemove", seen);
+      window.removeEventListener("scroll", seen);
+      window.removeEventListener("touchstart", seen);
+      window.removeEventListener("keydown", seen);
+    };
   }, []);
 
   // Tear the entrance down on unmount only — see the effect below for why this
@@ -221,9 +298,14 @@ export default function RobotMascot() {
   }, [revealed]);
 
   // Ambient idle loop: Idle → HappyIdle → Idle → SadIdle, an occasional wave,
-  // and "Looking" when the visitor's mouse has been still for a while.
+  // and "Looking" when the visitor's mouse has been still for a while. On some
+  // routes the rotation is different — see PAGE_AMBIENT.
   useEffect(() => {
     if (!resting || givenUp) return;
+    // Paused while a one-shot reaction owns the robot, or the two would fight
+    // over setAnim and the reaction would be cut off mid-gesture.
+    if (reaction) return;
+    const seq = PAGE_AMBIENT[pathname ?? ""] ?? AMBIENT_SEQ;
     let i = 0;
     let timer: ReturnType<typeof setTimeout>;
     const tick = () => {
@@ -234,13 +316,70 @@ export default function RobotMascot() {
       }
       let clip: ClipName; let dur: number;
       if (Math.random() < 0.12) { clip = "Waving"; dur = 3200; } // not too frequent
-      else { [clip, dur] = AMBIENT_SEQ[i % AMBIENT_SEQ.length]; i += 1; }
+      else { [clip, dur] = seq[i % seq.length]; i += 1; }
       setAnim(clip);
       timer = setTimeout(tick, dur);
     };
     tick();
     return () => clearTimeout(timer);
-  }, [resting, givenUp]);
+  }, [resting, givenUp, pathname, reaction]);
+
+  /**
+   * One-shot reactions — Clapping when the contact form actually sends, Salute
+   * when the visitor reaches the closing strip.
+   *
+   * Fired as window events so the trigger can live wherever the thing happens
+   * (ContactForm is nowhere near this component), matching how the easter eggs
+   * are already wired. Never interrupts a chase: `busyRef` is true while the
+   * robot is jumping or running, and a gesture that cancels the one interaction
+   * a visitor deliberately started is worse than no gesture.
+   */
+  useEffect(() => {
+    const play = (clip: ClipName) => {
+      if (busyRef.current || givenUp) return;
+      setReaction(clip);
+      if (reactionTimer.current) clearTimeout(reactionTimer.current);
+      reactionTimer.current = setTimeout(() => setReaction(null), REACTION_MS[clip] ?? 2_000);
+    };
+    const celebrate = () => play("Clapping");
+    const farewell = () => play("Salute");
+    window.addEventListener("robot-celebrate", celebrate);
+    window.addEventListener("robot-farewell", farewell);
+    return () => {
+      window.removeEventListener("robot-celebrate", celebrate);
+      window.removeEventListener("robot-farewell", farewell);
+    };
+  }, [givenUp]);
+
+  /**
+   * Salute when the closing strip comes into view — once per page.
+   *
+   * IntersectionObserver rather than exit intent, which was considered and
+   * dropped: `mouseout` with `relatedTarget === null` is desktop-only, does not
+   * exist on touch at all, false-fires on a reach for the bookmarks bar, and
+   * reads like a marketing exit popup. "You got to the bottom" is a real signal
+   * on every device.
+   *
+   * `#contact` is the anchor because `Footer` renders null — the Contact
+   * section owns the closing strip. Pages without one simply never salute.
+   */
+  useEffect(() => {
+    if (!revealed) return;
+    const el = document.querySelector("#contact");
+    if (!el) return;
+    let fired = false;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (fired || !entries.some((e) => e.isIntersecting)) return;
+        fired = true;
+        io.disconnect();
+        window.dispatchEvent(new Event("robot-farewell"));
+      },
+      { threshold: 0.25 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [revealed, pathname]);
 
   // Résumé call-outs while the robot is parked in the corner. Suppressed once
   // it has given up (that state shows its own résumé card), while it is
@@ -406,20 +545,30 @@ export default function RobotMascot() {
     handleApproach(); // also lets touch users trigger the chase
   }, [givenUp, downloadResume, handleApproach]);
 
-  // The chat takeover shows its own (big) robot, so hide the corner one.
-  if (!revealed || chatOpen) return null;
+  // The chat takeover shows its own (big) robot, so hide the corner one — and
+  // so does any page that has claimed the robot for itself (`solo`, currently
+  // the 404). One canvas per page; see RobotChatContext.
+  if (!revealed || chatOpen || solo) return null;
 
-  const timeScale = anim === "Running" ? RUN_TIMESCALE : anim === "Jumping" ? JUMP_TIMESCALE : 1;
+  // A one-shot reaction outranks whatever the ambient loop last set.
+  const played: ClipName = reaction ?? anim;
+  const timeScale = played === "Running" ? RUN_TIMESCALE : played === "Jumping" ? JUMP_TIMESCALE : 1;
   // Full rate only while the robot is travelling — the chase and the entrance
   // are the two moments where a dropped frame would read as a stutter. The
   // ambient idle clips are slow enough that half rate is invisible, and idle is
   // very nearly all of the time. See FrameLimiter in RobotCanvas.
-  const fps = anim === "Running" || anim === "Jumping" ? 60 : 30;
+  const fps = played === "Running" || played === "Jumping" ? 60 : 30;
 
   return (
     <div
       className="fixed inset-0 pointer-events-none z-[9999] overflow-hidden"
       style={{ opacity: appear ? 1 : 0, transition: "opacity 0.35s ease" }}
+      // Which clip is on screen right now. The robot draws into a WebGL canvas
+      // with `preserveDrawingBuffer: false`, so its pose cannot be read back
+      // from the DOM or sampled from pixels — at 200px, "standing" and "sitting"
+      // are also genuinely hard to tell apart in a screenshot. This is the only
+      // way to assert what the mascot is doing.
+      data-clip={played}
     >
       <div
         // On mobile every layer here stays inert and the small hotspot over the
@@ -431,7 +580,13 @@ export default function RobotMascot() {
         {/* The entrance rides its own wrapper so its keyframe never contends
             with the inline translateX the chase writes to the box above. */}
         <div className={entering ? "sd-robot-enter" : undefined}>
-          <div style={{ transform: `translateY(${hopY}px)`, transition: "transform 0.26s ease-out" }}>
+          <div
+            style={{
+              // The sitting lift rides the hop so it inherits its easing.
+              transform: `translateY(${hopY - (played === "SittingIdle" ? SIT_LIFT_PX : 0)}px)`,
+              transition: "transform 0.26s ease-out",
+            }}
+          >
           {/* Escape quips are short and stay on one line. The résumé prompts are
               full sentences, so the bubble wraps and caps its width against the
               viewport — nowrap would have run it off both edges of a phone.
@@ -486,7 +641,7 @@ export default function RobotMascot() {
             aria-label="Suman's robot assistant"
           >
             <RobotCanvas
-              animation={anim}
+              animation={played}
               rotationY={rotationY}
               timeScale={timeScale}
               rimLight

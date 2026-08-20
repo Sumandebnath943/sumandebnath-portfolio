@@ -28,20 +28,36 @@ const SUGGESTED_QUESTIONS = [
   "Why hire a marketer who ships products?",
 ];
 
-const TYPEWRITER_SPEED_MS = 14;
-const CHARS_PER_TICK = 2;
+/**
+ * Reply typing speed.
+ *
+ * Was 2 characters every 14ms — about 140 a second, which is not typing, it is
+ * a reveal. Two things went wrong with it: it read as instant rather than
+ * composed, and it regularly finished before the robot's Talking clip had got
+ * anywhere, so the animation cut off mid-gesture on every short answer.
+ *
+ * One character every 20ms is ~50 a second. Still comfortably faster than a
+ * person, but it reads as being written, and it gives the 2.4s Talking clips
+ * room to play through.
+ */
+const TYPEWRITER_SPEED_MS = 20;
+const CHARS_PER_TICK = 1;
 
 const PHASE_MS = 880; // must be >= TWEEN_MS in TakeoverRobotCanvas
 const FACE_LEFT = -Math.PI / 2;
 const FACE_RIGHT = Math.PI / 2;
 const LOOKING_AFTER_MS = 25_000; // chat-inactivity before the robot "looks around"
 
-// Ambient idle rotation (panel): Idle (long) → HappyIdle → Idle → SadIdle.
+// Ambient idle rotation (panel): Idle → HappyIdle → Idle → SadIdle.
+//
+// Nodding is deliberately NOT here. It is the "thinking" pose now — played
+// while the three dots are up — and a gesture that also appears at random
+// while idling cannot be read as a status. See the robot effect below.
 const AMBIENT_SEQ: [ClipName, number][] = [
-  ["Idle", 15_000],
-  ["HappyIdle", 5_000],
-  ["Idle", 15_000],
-  ["SadIdle", 5_000],
+  ["Idle", 14_000],
+  ["HappyIdle", 4_500],
+  ["Idle", 14_000],
+  ["SadIdle", 4_500],
 ];
 
 // Friendly nudges the robot shows over its head while idling in the panel.
@@ -74,7 +90,7 @@ export default function ChatTakeover() {
   // Last of the three to arrive, on both clocks, so the order is always
   // nav → mascot → chat. See lib/intro.ts.
   const revealed = useReveal(CHAT_INTRO_MS, CHAT_PLAIN_MS);
-  const { open, openChat, closeChat } = useRobotChat();
+  const { open, openChat, closeChat, solo } = useRobotChat();
 
   // ── Chat state ──
   const [messages, setMessages] = useState<Message[]>([INITIAL_MESSAGE]);
@@ -134,6 +150,17 @@ export default function ChatTakeover() {
   useEffect(() => {
     if (!open || phase !== "idle") return;
 
+    // Thinking. While the three dots are up, the robot nods — it loops on its
+    // own (Nodding is not in ONCE_CLIPS), so setting it once is enough.
+    //
+    // This is why Nodding is no longer in AMBIENT_SEQ: a gesture that also
+    // shows up at random while idling is decoration, and cannot be read as
+    // "it is working on it". Here it means exactly one thing.
+    if (isLoading) {
+      setRobotAnim("Nodding");
+      return;
+    }
+
     if (isAnimating || speech.speaking) {
       // Two talking clips, alternating.
       setRobotAnim(Math.random() < 0.5 ? "Talking" : "Talking2");
@@ -160,7 +187,7 @@ export default function ChatTakeover() {
     };
     tick();
     return () => clearTimeout(timer);
-  }, [open, phase, isAnimating, speech.speaking]);
+  }, [open, phase, isAnimating, speech.speaking, isLoading]);
 
   // Friendly idle nudges over the robot's head while it's just standing there.
   useEffect(() => {
@@ -277,7 +304,9 @@ export default function ChatTakeover() {
   const canSend = !isLoading && !isAnimating && input.trim().length > 0;
   const panelIn = open && phase !== "outro";
 
-  if (!revealed) return null;
+  // `solo`: a page owning the whole screen (the 404) gets no floating chat
+  // pill. It would also mount a second robot canvas the moment it opened.
+  if (!revealed || solo) return null;
 
   return (
     <>
@@ -304,7 +333,10 @@ export default function ChatTakeover() {
           <div className={`ct-backdrop ${panelIn ? "in" : ""}`} />
 
           {/* Full-viewport robot canvas — flies corner ↔ panel in 3D */}
-          <div className="ct-robot">
+          {/* `data-clip` mirrors RobotMascot: the pose lives in a WebGL canvas
+              with preserveDrawingBuffer off, so this is the only way to assert
+              what the robot is doing. */}
+          <div className="ct-robot" data-clip={robotAnim}>
             <TakeoverRobotCanvas
               phase={phase}
               animation={robotAnim}

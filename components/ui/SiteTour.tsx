@@ -13,6 +13,7 @@ import "driver.js/dist/driver.css";
 import { Sparkles, X } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
 import { chapterFor, TOUR_STEPS, TOUR_POSITION_KEY } from "@/lib/tour-steps";
+import { useRobotChat } from "@/components/robot/RobotChatContext";
 
 /**
  * The site tour.
@@ -117,6 +118,9 @@ function waitForElement(selector: string | undefined): Promise<void> {
 }
 
 export default function SiteTour() {
+  // A page owning the whole screen (the 404) gets no tour tab. Read before any
+  // early return so the hook order stays stable across renders.
+  const { solo } = useRobotChat();
   const [showPrompt, setShowPrompt] = useState(false);
   const position = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const inProgress = position !== null;
@@ -321,6 +325,11 @@ export default function SiteTour() {
     window.addEventListener("start-tour", handler);
     return () => window.removeEventListener("start-tour", handler);
   }, [startTour]);
+
+  // After every hook, never before — the tab is hidden on a page that owns the
+  // screen, but a tour already in progress keeps its saved position and resumes
+  // when the visitor navigates back onto a real page.
+  if (solo) return null;
 
   return (
     <>

@@ -69,6 +69,11 @@ export default function ContactForm() {
 
       form.reset();
       setStatus("sent");
+      // The mascot applauds. Fired as a window event because the robot is
+      // mounted by the root layout and has no relationship to this form — the
+      // same wiring the easter eggs use. Nothing listens on /desk-4f7a or the
+      // 404, where the mascot is not mounted, and an unheard event is harmless.
+      window.dispatchEvent(new Event("robot-celebrate"));
     } catch {
       setError(
         "Couldn't reach the server. Check your connection, or email sumandebnath944@gmail.com directly.",
