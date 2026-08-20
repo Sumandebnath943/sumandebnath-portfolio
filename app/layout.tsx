@@ -327,6 +327,7 @@ import PrivacyNotice from "@/components/ui/PrivacyNotice";
 import SiteOnly from "@/components/layout/SiteOnly";
 import SiteTour from "@/components/ui/SiteTour";
 import CommandPalette from "@/components/layout/CommandPalette";
+import MotionProvider from "@/components/providers/MotionProvider";
 
 export default function RootLayout({
   children,
@@ -393,21 +394,41 @@ export default function RootLayout({
               is a working tool and not somewhere a mascot belongs. VisitorPing
               excludes itself separately, so that reading your own records never
               records the reading. */}
-          <SiteOnly>
-            <RobotMascot />
-            <EasterEggs />
-            <ChatTakeover />
-            {/* The nav's ⌘K badge fires an `open-command-palette` event from
-                every page, but the listener was mounted only on the homepage —
-                so on /resume, /faq and the rest both the badge and the keyboard
-                shortcut did nothing at all. Same mistake SiteTour had. */}
-            <CommandPalette />
-            {/* Mounted here rather than on the homepage, which is what confined
-                the tour to a single page — it now walks the whole site and has
-                to survive the navigations between. */}
-            <SiteTour />
-            <PrivacyNotice />
-          </SiteOnly>
+          {/*
+            MotionProvider is NOT optional here, and its absence was a real bug.
+
+            `CommandPalette` and `SiteTour` animate with `m.*`, and `m` takes its
+            animation features from `LazyMotion` **through context**. Every page
+            wraps its own content in MotionProvider — but this chrome is a
+            sibling of {children}, not a descendant, so it had no provider at
+            all. The features never loaded, `animate` never ran, and both
+            components sat frozen on their `initial` values.
+
+            For ⌘K that meant a palette rendered at `opacity: 0` with a
+            `pointer-events: auto` backdrop at z-10090 — above the nav. It
+            opened, swallowed every click, and was invisible; the ⌘K button
+            appeared to stick because it never got a `mouseleave`.
+
+            `EasterEggs` was unaffected only because it imports the full
+            `motion` bundle rather than `m`, which is what hid this for so long.
+          */}
+          <MotionProvider>
+            <SiteOnly>
+              <RobotMascot />
+              <EasterEggs />
+              <ChatTakeover />
+              {/* The nav's ⌘K badge fires an `open-command-palette` event from
+                  every page, but the listener was mounted only on the homepage —
+                  so on /resume, /faq and the rest both the badge and the keyboard
+                  shortcut did nothing at all. Same mistake SiteTour had. */}
+              <CommandPalette />
+              {/* Mounted here rather than on the homepage, which is what confined
+                  the tour to a single page — it now walks the whole site and has
+                  to survive the navigations between. */}
+              <SiteTour />
+              <PrivacyNotice />
+            </SiteOnly>
+          </MotionProvider>
           <VisitorPing />
         </RobotChatProvider>
 
