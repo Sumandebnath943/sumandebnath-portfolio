@@ -193,7 +193,7 @@ export const archiveProjects: ArchiveProject[] = [
     stack: ["React Native", "Whisper", "Node.js"],
     accent: "#E86A33",
     accentB: "#2A1409",
-    liveUrl: "https://ember.houseofnamus.com",
+    liveUrl: "https://v0-meet-ember-ai.vercel.app",
     detailUrl: "/projects/ember",
     logo: "/tools/ember.png",
     poster: "/product-images/ember.webp",

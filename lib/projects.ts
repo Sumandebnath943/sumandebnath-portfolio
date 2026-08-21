@@ -132,7 +132,7 @@ export const projects: ProjectMeta[] = [
     description:
       "EMBER is a burnout recovery companion that rebuilds you one small win at a time. Audio journaling, AI vent companion, immediate de-burn mode, guided grounding, EMBER score tracking, and life reassessment — built around quiet warmth and cognitive relief.",
     category: "Burnout Recovery System",
-    url: "https://ember.houseofnamus.com",
+    url: "https://v0-meet-ember-ai.vercel.app",
     status: "Live",
     applicationCategory: "HealthApplication",
     capabilities: [

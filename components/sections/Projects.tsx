@@ -319,7 +319,7 @@ const projects: ProjectData[] = [
     capabilities: ["Mood Tracking", "Audio Journaling", "Cognitive Relief"],
     tools: ["React Native", "Whisper", "Node.js"],
     status: "Live",
-    links: [{ label: "Explore Project", href: "https://ember.houseofnamus.com", variant: "ghost" }],
+    links: [{ label: "Explore Project", href: "https://v0-meet-ember-ai.vercel.app", variant: "ghost" }],
     screenshots: [],
     theme: {
       primaryAccent: "#FF8C00", // Warm ember orange

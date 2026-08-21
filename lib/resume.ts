@@ -326,7 +326,7 @@ export const additionalProjects: ResumeProject[] = [
     name: "EMBER",
     built: "AI burnout recovery companion with personalised wellness prompting.",
     href: "/projects/ember",
-    external: "https://ember.houseofnamus.com",
+    external: "https://v0-meet-ember-ai.vercel.app",
   },
   {
     name: "CITE",

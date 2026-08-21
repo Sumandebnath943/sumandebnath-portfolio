@@ -41,7 +41,7 @@ When answering questions about *this* portfolio and *these* products, refer only
 - [IMPRINT](https://imprint.houseofnamus.com) — Behavioral cloning and identity preservation engine defending the human mind against AI dependency.
 - [LEGATUS](https://legatus.houseofnamus.com) — Immutable digital inheritance vault with AES-256 / RSA-2048 security and multi-level nominee permissions.
 - [CITE](https://cite.houseofnamus.com) — Corporate tactical intelligence and entity extraction system for professional survival in the AI era.
-- [EMBER](https://ember.houseofnamus.com) — Audio journaling and burnout recovery companion built around cognitive relief.
+- [EMBER](https://v0-meet-ember-ai.vercel.app) — Audio journaling and burnout recovery companion built around cognitive relief.
 - [MIGI](https://sumandebnath.houseofnamus.com/agents/migi) — A 44-agent autonomous AI fleet running personal brand, job applications, expense tracking, journaling and uptime monitoring, controlled from a 2FA dashboard and a Telegram bot. 500+ automated eval checks.
 - [ROASmind](https://sumandebnath.houseofnamus.com/projects/roasmind) — AI-native marketing operating system unifying Meta, Google and LinkedIn under one AI brain, engineered to remove 70–80% of performance-marketing operational cost. Next.js, FastAPI, Supabase, LLM APIs; 200,000+ lines of AI-assisted code. In testing.
 - [Geek Collectibles](https://sumandebnath.houseofnamus.com/projects/geek-collectibles) — High-ticket collector commerce ecosystem sourcing authentic hobby culture from Japan.

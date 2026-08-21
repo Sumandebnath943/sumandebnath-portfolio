@@ -137,7 +137,7 @@ export default function EmberDossier() {
               </div>
               <div className="px-4 py-1.5 rounded-full bg-white/[0.02]">
                 <span className="text-[10px] font-mono text-white/40 tracking-widest uppercase">
-                  https://ember.houseofnamus.com
+                  https://v0-meet-ember-ai.vercel.app
                 </span>
               </div>
               <div className="w-16" />

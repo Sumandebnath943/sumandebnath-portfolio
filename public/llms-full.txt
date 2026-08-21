@@ -217,7 +217,7 @@ Technology: Shopify, Liquid, Next.js.
 Positioning: Audio journaling & cognitive relief.
 Category: Burnout Recovery System
 Status: Live
-URL: https://ember.houseofnamus.com
+URL: https://v0-meet-ember-ai.vercel.app
 Dossier: https://sumandebnath.houseofnamus.com/projects/ember
 
 EMBER is a burnout recovery companion that rebuilds you one small win at a time. Audio journaling, AI vent companion, immediate de-burn mode, guided grounding, EMBER score tracking, and life reassessment — built around quiet warmth and cognitive relief.
