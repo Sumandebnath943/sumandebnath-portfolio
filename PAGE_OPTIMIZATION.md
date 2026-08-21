@@ -194,7 +194,177 @@ there lands in the one moment the brand is doing the talking.
 
 ---
 
+### 3.5 Scroll jank on the home page — 21 Aug 2026
+
+Two separate complaints, two unrelated causes, both measured on a production
+build before anything was changed.
+
+#### The hero → film stutter (desktop)
+
+Scrolling off the hero stalled for most of a second, once per page load.
+
+```
+long task  870 ms  at scrollY = 100
+frame gap  871 ms  at scrollY = 100
+second pass over the same range:  0 long tasks, 0 gaps
+```
+
+**Vanta's animation loop is wrapped in an `isOnScreen()` guard**
+(`vanta/src/_base.js`), so creating the effect draws *nothing*. The first
+`renderer.render()` — and with it the CLOUDS fragment-shader compile and program
+link — happens the instant the section crosses into view, synchronously. Because
+`Film` sits directly under the hero, that lands on the first scroll gesture every
+visitor makes. It never recurs, because the program is cached from then on.
+
+Fixed by warming the program off the scroll path: `renderer.compileAsync()` right
+after `CLOUDS()` returns (KHR_parallel_shader_compile, so the link runs on a
+driver thread), falling back to one forced render inside `requestIdleCallback`.
+**After: 0 long tasks, 0 dropped frames over the same range**, Vanta still live.
+
+> The guard is why the effect looks "lazy" when it is not. Do not conclude the
+> effect is cheap because init was cheap — init and first draw are different
+> events, and the expensive one is triggered by scrolling.
+
+#### The deck tearing itself apart (mobile only)
+
+`04 / Selected Systems` glitched badly on a real phone while being perfectly
+smooth in every desktop-sized viewport. Video of the device showed card titles
+rendered **twice, at two different scroll offsets, with a horizontal seam between
+them**, blocks of one card drawn over another, and bands of the screen flashing
+white.
+
+That is not an animation bug. The transform maths was swept end-to-end and is
+continuous and correct. It is the compositor **presenting a frame it had not
+finished rasterising** — some tiles from the previous scroll offset, some from
+the current one.
+
+Nine of the seventeen cards are on screen at once, and each was asking for:
+
+| Per card, per frame | Cost |
+|---|---|
+| `filter: brightness()` | renders the **whole card subtree** to an offscreen surface, filters it, composites it |
+| `blur-[100px]` on a 288px glow | a second render surface, 200px-wide kernel |
+| box-shadows at 40px and 120px | two large blur rasters — **and both were black-on-black, casting nothing** |
+
+All three are gone. The glow is a `radial-gradient` (one Skia draw, no surface),
+the invisible shadows are deleted, and the recede dim is now a black scrim at
+`1 - brightness` alpha, which is arithmetically the same picture
+(`c·k ≡ c·(1-α)`, `α = 1-k`) with no filter anywhere. Verified by computed style:
+**17 cards, `filter: none` on every one, zero blur filters left in the deck.**
+
+> **The dim must be `background-color` alpha, not the element's `opacity`.**
+> Driving `opacity` promotes each of the seventeen overlays to its own
+> compositing layer, on top of seventeen card subtrees a filter is no longer
+> flattening — that combination **killed the renderer outright**, "This page
+> couldn't load" before first paint, reproducibly. An alpha inside the colour
+> repaints one solid rounded rect and promotes nothing.
+
+**Still unverified: whether this is enough on the actual device.** The glitch has
+never been reproduced locally — a desktop GPU at a 375px viewport ran the deck at
+17 ms/frame with two dropped frames in a 187-frame sweep. Viewport emulation is
+not device emulation. The changes are each a strict reduction in per-frame raster
+work, and the white flashing is separately fixed below, but the fix is reasoned
+from the mechanism, not measured on the phone.
+
+#### Deck geometry audit — the numbers behind the card height
+
+Measured with every image forced to load, `scrollHeight` per block so the
+receded cards' `scale(0.9)` could not distort it.
+
+**What the content actually needs**, left column including padding and gap:
+
+| Layout | Tallest card | Needs |
+|---|---|---|
+| 375px, stacked | PixelVille | **567px** |
+| 1280px, two columns | Migi / PixelVille | **455px** |
+| Right panel, any width | 16:9 image + padding | ~380px |
+
+That 112px spread is why the ceiling is **per breakpoint** and not one number.
+The left column is `overflow-hidden`, so a ceiling below the stacked figure cuts
+the copy off *silently* — there is no scrollbar and no overflow to notice.
+
+**What the old shared 660 ceiling cost on desktop**, at 1167px wide:
+
+| Card height | Clipped | Dead space above/below the image |
+|---|---|---|
+| 660 (old) | none | **175–213px** |
+| 500 (now) | none | **95–133px** |
+
+> **Every static cover image was already perfectly centred** — `gapTop` equalled
+> `gapBottom` to the pixel on all ten, and none was cropped. What reads as "some
+> are centred, some sit high" is the *gap* changing size between cards, because
+> the covers run 1.758 to 2.336 in aspect: a 16:9 shot leaves 118px a side while
+> Pentashell and Forget Anything leave 157px. Halving the dead space halves that
+> jump. Removing it entirely would mean forcing one aspect with `object-cover`,
+> which crops real content off wide screenshots — not done.
+
+#### The card that set the floor was set by its chips, not its prose
+
+PixelVille was the tallest card in the deck — 567px stacked — and the floor every
+other card's height was measured against. The obvious suspect was its copy, so
+that was measured first, by swapping strings in the live DOM:
+
+| `emotion` string | Rendered height |
+|---|---|
+| "Its citizens have minds — they remember, decide, vote and rebuild." (66 ch) | 46px |
+| "Its citizens remember, decide, vote and rebuild." (47 ch) | **46px** |
+| "They remember, decide, vote and rebuild." (39 ch) | **46px** |
+
+Two lines in all three cases, so **shortening the sentence saves nothing.** The
+prose was left alone.
+
+The capability chips were the whole difference. At 375px each of
+`Knowledge · Memory · Minds` / `Self-Governing Democracy` /
+`Everything Procedural` was too wide to share a row, so they took three:
+
+| Chips | Chip block | Card need |
+|---|---|---|
+| Original three | 111px | 567px |
+| `Memory · Minds` / `Self-Governing` / `Fully Procedural` | **71px** | **527px** |
+
+Deck floor 567 → 545 (Migi and Qdex are now the tallest); on desktop PixelVille
+went 455 → 415. **Measure which element wraps before editing the sentence that
+looks longest.**
+
+> **Pre-existing, not introduced:** on a viewport under ~610px tall the card is
+> viewport-limited and the tallest card's last line can clip. It clipped at the
+> old numbers too, and worse — the card was 440px there. `a31b594` chose "fits by
+> construction" over "never clips", and this is the edge of that trade.
+
+#### Only genuinely tall captures belong in `SCREENSHOTS`
+
+That map feeds an `overflow-y-auto` box, which **top-aligns** its content —
+correct for a 1366×12096 page capture, wrong for anything that fits. `ember.png`
+(1536×864) and `d-pe.png` (1672×941) are ordinary 16:9 landscape shots and were
+in it by mistake. They rendered pinned to the top of the panel with **128px of
+void beneath**, under a "Landing page · scroll" badge and fade masks, in a box
+that could not scroll — measured `gapTop: 0, gapBot: 128, scrollable: false`.
+
+Moved to `coverImage`, which centres them like every other landscape shot:
+**80 / 80**. The aspect ratios left in `SCREENSHOTS` run **0.11 to 0.53**; if a
+new one is anywhere near 1, it belongs on `coverImage`.
+
 ## 4. Standing rules this session established
+
+### 4.0 The body background is also the colour of a dropped frame
+
+`body` was `var(--bg-deep)` — **#F5F5F7, near-white, on a site that is black
+everywhere.** Every page paints over it, so it was invisible right up until it
+wasn't: Chrome fills a tile with the page's base background colour when the
+rasteriser has not finished it, so every dropped tile on the phone flashed
+**white**. The nav's `backdrop-blur-2xl` then sampled those white tiles and went
+pale in the same frames, which is why the glitch looked like it involved the
+whole screen rather than one section.
+
+It is now `#050505`, set in `globals.css` only — the `bg-bg-deep` class came off
+`<body>` in `layout.tsx` because a Tailwind utility would win over the rule.
+**`--bg-deep` itself is deliberately unchanged**: `Button.tsx` uses it as a
+*text* colour on the blue button, where near-white is correct.
+
+This is the third time this token has leaked through as a near-white artefact on
+a black page (the scrollbar track was the first — §3.2). If you find a fourth,
+suspect `--bg-deep` before anything else.
+
 
 Break any of these and the failure is silent.
 
