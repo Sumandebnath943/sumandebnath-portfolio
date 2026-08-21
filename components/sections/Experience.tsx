@@ -14,7 +14,12 @@ import SectionKicker from "@/components/ui/SectionKicker";
  * marketing. It became a swipeable rail, and is now **pinned**: the section
  * holds still while the page scroll drives the cards across.
  *
- * Three things about that which are load-bearing:
+ * The heading sits **above** the rail, on the same grid as every other section
+ * on the site. It cannot live inside the pinned pane — see `SectionHeader` for
+ * the measurements — but it does not need to, because the pane only ever holds
+ * the cards.
+ *
+ * Four things about that which are load-bearing:
  *
  * 1. **The track is exactly as tall as the travel.** `height: 100vh + travel`,
  *    where travel is measured, not guessed. Scroll-jacking that invents extra
@@ -30,6 +35,12 @@ import SectionKicker from "@/components/ui/SectionKicker";
  *    falls back to the native swipe rail. Hijacking scroll on a touch device
  *    fights the gesture the visitor already has, and pinning is precisely the
  *    kind of motion `prefers-reduced-motion` is asking us not to do.
+ *
+ * 4. **No travel means no pin.** With the rail spanning the full width, a wide
+ *    monitor shows all four cards at once. Pinning then would hold a motionless
+ *    section for a whole viewport of scroll, so `pinned` requires `travel > 0`.
+ *    That makes the pin decision depend on a measurement, which is why the
+ *    travel effect must not itself be gated on `pinned`.
  */
 
 // ── ERA DATA ──────────────────────────────────────────────────────────────────
@@ -255,13 +266,21 @@ function EraCard({
 // ── MAIN SECTION ──────────────────────────────────────────────────────────────
 
 /**
- * Header copy, in both arrangements.
+ * Header copy — always stacked above the rail, on the same grid as every other
+ * section heading on the site.
  *
- * Pinned, it becomes a fixed left column beside the moving cards. That is not
- * decoration: stacked above them it needs ~740px of viewport before a single
- * card is fully visible, which a 13" laptop does not have, and the sticky pane
- * would simply clip. Side by side, the section needs only the height of one
- * card.
+ * **It must stay outside the pinned track, and that is the whole trick.** This
+ * used to be a fixed left column beside the moving cards, because inside a
+ * pinned pane the header genuinely does not fit: measured at 1366×728 the
+ * header is 339px and a card is 533px, so stacking them needs 872px of a 728px
+ * viewport and the sticky pane simply clips — with no way for the visitor to
+ * reach what was cut. That constraint has not gone away.
+ *
+ * What resolves it is that the pane only ever has to hold the *cards*. The
+ * header scrolls past normally before the rail pins, exactly like every other
+ * section on the site, and the pane then needs card height alone. As a bonus
+ * the rail gets the ~450px the left column used to occupy, which is what made
+ * the section look lopsided on a wide monitor.
  */
 function SectionHeader({ pinned }: { pinned: boolean }) {
   const headerRef = useRef<HTMLDivElement>(null);
@@ -273,33 +292,15 @@ function SectionHeader({ pinned }: { pinned: boolean }) {
       initial={{ opacity: 0, y: 24 }}
       animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-      className={
-        pinned
-          ? "w-[340px] xl:w-[400px] shrink-0"
-          : "max-w-6xl mx-auto w-full px-6 mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-6"
-      }
+      className="max-w-6xl mx-auto w-full px-6 mb-10 md:mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-6"
     >
-      <div className={pinned ? "" : "max-w-2xl"}>
+      <div className="max-w-2xl">
         <SectionKicker>02 / The Evolution</SectionKicker>
-        {/* The pinned heading keeps full section weight. An earlier version
-            dropped it to text-3xl with a 14px standfirst to save room, and
-            beside four large cards it stopped reading as a section header at
-            all — the section looked like it had lost its title. The column is
-            wide enough that this costs no height: the header is still shorter
-            than a card, which is what sets the pane height. */}
-        <h2
-          className={`font-manrope font-semibold text-[#0A0A0A] leading-[1.1] tracking-tight mb-5 ${
-            pinned ? "text-4xl xl:text-5xl" : "text-3xl md:text-4xl lg:text-5xl"
-          }`}
-        >
+        <h2 className="font-manrope font-semibold text-[#0A0A0A] leading-[1.1] tracking-tight mb-5 text-3xl md:text-4xl lg:text-5xl">
           Before the systems came{" "}
           <span className="text-[#0A0A0A]/60">the foundation.</span>
         </h2>
-        <p
-          className={`font-manrope text-[#555] leading-relaxed ${
-            pinned ? "text-[15px]" : "text-[15px] md:text-base max-w-xl"
-          }`}
-        >
+        <p className="font-manrope text-[#555] leading-relaxed text-[15px] md:text-base max-w-xl">
           The move into AI-native systems was built on nearly a decade of
           branding, growth, execution and creative direction.
         </p>
@@ -310,9 +311,7 @@ function SectionHeader({ pinned }: { pinned: boolean }) {
           unpinned it is a swipe. */}
       <p
         aria-hidden
-        className={`font-mono text-[10px] uppercase tracking-[0.3em] text-[#6E6E6E] shrink-0 ${
-          pinned ? "mt-8" : "md:pb-2"
-        }`}
+        className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#6E6E6E] shrink-0 md:pb-2"
       >
         {pinned ? "Keep scrolling →" : "Swipe the eras →"}
       </p>
@@ -332,7 +331,11 @@ export default function Experience() {
   const [allowPin, setAllowPin] = useState(false);
   const [fits, setFits] = useState(false);
   const [travel, setTravel] = useState(0);
-  const pinned = allowPin && fits;
+  // `travel > 0` matters now that the rail spans the full width instead of
+  // sharing it with a 400px header column. On a wide monitor all four cards are
+  // already visible, so there is nothing to move sideways — pinning there would
+  // spend a whole viewport of scroll holding a still image.
+  const pinned = allowPin && fits && travel > 0;
 
   useEffect(() => {
     const wide = window.matchMedia("(min-width: 1024px)");
@@ -380,16 +383,17 @@ export default function Experience() {
   // How far the row has to move for its last card to reach the right edge. This
   // is measured rather than derived from card widths, because the widths are
   // viewport-relative and the gaps change at the sm breakpoint.
+  // Deliberately NOT gated on `pinned` any more. `pinned` now depends on
+  // `travel`, so measuring only while pinned would be circular — the section
+  // could never pin, because travel would never be measured. This is safe only
+  // because the rail's container and row are now the same box in both modes:
+  // same width, same padding, so the measurement does not change when the pin
+  // engages and it cannot oscillate.
   useEffect(() => {
-    if (!pinned) return;
     const measure = () => {
       const row = rowRef.current;
       const vp = viewportRef.current;
       if (!row || !vp) return;
-      // The flex cell already runs from the header to the right edge of the
-      // window, so its own width IS the visible strip. It is also what clips
-      // the row: without that, cards translating left simply slid over the
-      // pinned header and buried it.
       setTravel(Math.max(0, row.scrollWidth - vp.clientWidth));
     };
     // ResizeObserver fires once for each element the moment it is observed, so
@@ -400,10 +404,19 @@ export default function Experience() {
     if (viewportRef.current) ro.observe(viewportRef.current);
     ro.observe(document.documentElement);
     return () => ro.disconnect();
+  }, []);
+
+  // The pinned rail positions cards purely by transform, which assumes the
+  // container itself is at scrollLeft 0. It is the same element as the swipe
+  // rail now, so it can arrive carrying a scroll offset — from scroll-snap, or
+  // from a visitor who swiped mid-rail before widening the window. That offset
+  // survives the switch to `overflow: hidden` and shifts every card by it.
+  useEffect(() => {
+    if (pinned && viewportRef.current) viewportRef.current.scrollLeft = 0;
   }, [pinned]);
 
-  // Gated rather than zeroed in the effect, for the same reason: unpinning must
-  // not schedule a state update.
+  // Gated rather than zeroed in the effect, so unpinning does not schedule a
+  // state update.
   const travelPx = pinned ? travel : 0;
 
   const { scrollYProgress } = useScroll({
@@ -418,6 +431,8 @@ export default function Experience() {
           Exactly one viewport tall plus the horizontal travel, so the section
           never costs more scroll than the movement it buys. Unpinned it has no
           height of its own and simply wraps the swipe rail. */}
+      <SectionHeader pinned={pinned} />
+
       <div
         ref={trackRef}
         className="relative"
@@ -428,40 +443,48 @@ export default function Experience() {
             pinned ? "sticky top-0 h-screen flex items-center overflow-hidden" : ""
           }
         >
-          {pinned ? (
-            /* The gutter matches the max-w-6xl grid the rest of the page sits
-               on, so the pinned header lines up with every other section
-               heading instead of drifting to the window edge on a wide screen. */
-            <div className="flex w-full items-center gap-12 xl:gap-16 pl-[max(1.5rem,calc((100vw-72rem)/2))]">
-              <SectionHeader pinned />
-              <div ref={viewportRef} className="flex-1 min-w-0 overflow-hidden">
-                <m.div ref={rowRef} style={{ x }} className="flex gap-6 w-max pr-6">
-                  {eras.map((era, i) => (
-                    <EraCard
-                      key={era.id}
-                      era={era}
-                      cardRef={i === 0 ? cardRef : undefined}
-                    />
-                  ))}
-                </m.div>
-              </div>
-            </div>
-          ) : (
-            <>
-            <SectionHeader pinned={false} />
-            {/* tabIndex + role make the overflow container reachable and
-                scrollable by keyboard; without them the copy inside is
-                focus-trapped for anyone not using a pointer. */}
-            <div
-              role="group"
-              aria-label="Career eras, scroll horizontally"
-              tabIndex={0}
-              className="
-                flex gap-5 overflow-x-auto snap-x snap-mandatory
-                px-6 pb-4 -mb-4 scroll-px-6
-                [scrollbar-width:thin]
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A0A0A]/30 focus-visible:ring-offset-4 focus-visible:ring-offset-white
-              "
+          {/* One rail, two behaviours. Pinned it is clipped and driven by the
+              page scroll; unpinned it is a native swipe rail. Keeping it a
+              single box — same width, same padding — is what lets `travel` be
+              measured in either mode.
+
+              tabIndex + role only when it actually scrolls: announcing a
+              scrollable group that cannot scroll is worse than not announcing
+              it, and a tabbable div that does nothing is a dead stop for
+              keyboard users. */}
+          <div
+            ref={viewportRef}
+            {...(pinned
+              ? {}
+              : {
+                  role: "group" as const,
+                  "aria-label": "Career eras, scroll horizontally",
+                  tabIndex: 0,
+                })}
+            /* scroll-padding must equal the row's own left gutter, or
+               scroll-snap parks the first card at a non-zero scrollLeft — which
+               `overflow:hidden` then silently inherits when the pin engages,
+               offsetting every card by that amount. */
+            className={`w-full ${
+              pinned
+                ? "overflow-hidden"
+                : "overflow-x-auto snap-x snap-mandatory pb-4 -mb-4 scroll-pl-[max(1.5rem,calc((100%-72rem)/2+1.5rem))] [scrollbar-width:thin] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A0A0A]/30 focus-visible:ring-offset-4 focus-visible:ring-offset-white"
+            }`}
+          >
+            {/* The left gutter matches the max-w-6xl grid the rest of the page
+                sits on, so the first card lines up with the section heading
+                above it instead of drifting to the window edge. The row runs to
+                the right window edge on purpose — cards bleeding off that side
+                is the cue that there are more of them.
+
+                `100%` not `100vw`, and `+1.5rem` for the grid's own px-6:
+                percentages resolve against this row's container, whereas 100vw
+                includes the scrollbar. Using 100vw put the cards 19px left of
+                the heading on any window with a classic scrollbar. */}
+            <m.div
+              ref={rowRef}
+              style={{ x }}
+              className="flex gap-6 w-max pl-[max(1.5rem,calc((100%-72rem)/2+1.5rem))] pr-6"
             >
               {eras.map((era, i) => (
                 <EraCard
@@ -470,11 +493,8 @@ export default function Experience() {
                   cardRef={i === 0 ? cardRef : undefined}
                 />
               ))}
-              {/* Trailing spacer so the final card can snap clear of the edge. */}
-              <div aria-hidden className="shrink-0 w-2" />
-            </div>
-            </>
-          )}
+            </m.div>
+          </div>
         </div>
       </div>
 
