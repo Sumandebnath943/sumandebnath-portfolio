@@ -168,3 +168,87 @@ export function useReveal(introMs: number, plainMs: number): boolean {
 
   return revealed;
 }
+
+/* ── The hero gate ────────────────────────────────────────────────────────
+   On a phone the homepage hero puts its three CTAs in both bottom corners —
+   which is where the mascot and the chat launcher park. Measured at 375×812:
+   the launcher over "Career Journey" by 128×28px, the mascot's canvas over
+   "View Projects" by 61×41px.
+
+   `.sd-hero-lock` in globals.css already clears them out of the way while the
+   hero is on screen, but hiding something that has *already* revealed threw the
+   mascot's entrance away: on a phone it revealed at +2.5s with the hero still
+   up, so the run-in played behind `visibility: hidden` and nobody ever saw it.
+
+   So the gate belongs on the reveal, not on the paint. Held here, the first
+   appearance happens the moment the hero is scrolled past — and it is a real
+   first appearance, running the same entrance the desktop gets rather than a
+   second animation path invented for phones. Going back to the hero afterwards
+   is still just the CSS fade; there is no exit animation, deliberately.
+
+   The gate is decided once, at first render, and only for a phone-width first
+   load of `/`. A client-side navigation *to* `/` therefore does not arm it —
+   the mascot lives in the root layout and never re-mounts — but `.sd-hero-lock`
+   still keeps it off the CTAs there, so the overlap stays fixed either way.
+   What is lost in that case is only the run-in, which is a first-load moment. */
+
+/** Above this width the hero has room for the mascot and the launcher. */
+const HERO_GATE_MAX_WIDTH = 767;
+
+/** How long chat trails the mascot once the hero clears. Matches the 1s gap the
+ *  intro already puts between them, and lands just after the 900ms entrance. */
+export const HERO_GATE_CHAT_MS = 1_000;
+
+/** Does this load need to wait for the hero before revealing floating chrome? */
+function heroGateApplies(): boolean {
+  if (typeof window === "undefined") return false;
+  // A tour mid-script needs its target on screen now — same carve-out useReveal
+  // makes, and for the same reason: `#tour-chat` is the final step.
+  if (tourInProgress()) return false;
+  return (
+    window.location.pathname === "/" && window.innerWidth <= HERO_GATE_MAX_WIDTH
+  );
+}
+
+/**
+ * `gated` — this load is waiting for the hero, so the entrance should be armed
+ * even on a reload, where `introRuns` is false and nothing would otherwise run.
+ * `cleared` — the hero has been scrolled past; reveal now.
+ *
+ * `trailMs` staggers a consumer behind the others so nav → mascot → chat
+ * survives here too. All of them would otherwise unblock on the same frame,
+ * their own timers having elapsed long ago.
+ */
+export function useHeroGate(trailMs = 0): { gated: boolean; cleared: boolean } {
+  const [gated] = useState(heroGateApplies);
+  const [cleared, setCleared] = useState(!gated);
+
+  useEffect(() => {
+    if (!gated || cleared) return;
+    const hero = document.getElementById("hero");
+    if (!hero) {
+      // No hero after all — never strand the mascot off-screen.
+      const t = setTimeout(() => setCleared(true), 0);
+      return () => clearTimeout(t);
+    }
+    // IntersectionObserver, not a scroll listener — see AGENTS.md.
+    let trail: ReturnType<typeof setTimeout> | undefined;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) return;
+        io.disconnect();
+        // setState from a callback, never synchronously in the effect body —
+        // `react-hooks/set-state-in-effect` is an error in this repo.
+        trail = setTimeout(() => setCleared(true), trailMs);
+      },
+      { threshold: 0 },
+    );
+    io.observe(hero);
+    return () => {
+      io.disconnect();
+      if (trail) clearTimeout(trail);
+    };
+  }, [gated, cleared, trailMs]);
+
+  return { gated, cleared };
+}

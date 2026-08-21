@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
 import {
   useIntroRuns,
+  useHeroGate,
   useReveal,
   MASCOT_INTRO_MS,
   MASCOT_PLAIN_MS,
@@ -152,7 +153,14 @@ export default function RobotMascot() {
   // With the loader running the mascot waits for it and then runs in from the
   // right; otherwise it arrives shortly after mount. See lib/intro.ts.
   const introRuns = useIntroRuns();
-  const revealed = useReveal(MASCOT_INTRO_MS, MASCOT_PLAIN_MS);
+  // On a phone the first appearance waits for the hero to be scrolled past, so
+  // the run-in happens where it can actually be seen. See useHeroGate.
+  const { gated: heroGated, cleared: heroCleared } = useHeroGate();
+  const revealed = useReveal(MASCOT_INTRO_MS, MASCOT_PLAIN_MS) && heroCleared;
+  // The entrance is armed by the loader OR by that gate. Without the second
+  // term a reload on a phone would gate the reveal and then arrive with no
+  // animation at all, since `introRuns` is false on every load but the first.
+  const entranceArmed = introRuns || heroGated;
   const { open: chatOpen, solo } = useRobotChat();
   const pathname = usePathname();
 
@@ -171,8 +179,8 @@ export default function RobotMascot() {
   // The entrance poses the robot from its first rendered frame — mid-stride and
   // facing left — so the CSS keyframe that carries it across has something
   // coherent to move.
-  const [anim, setAnim] = useState<ClipName>(() => (introRuns ? "Running" : "Waving"));
-  const [rotationY, setRotationY] = useState(() => (introRuns ? FACE_LEFT : 0));
+  const [anim, setAnim] = useState<ClipName>(() => (entranceArmed ? "Running" : "Waving"));
+  const [rotationY, setRotationY] = useState(() => (entranceArmed ? FACE_LEFT : 0));
   const [x, setXState] = useState(0); // horizontal travel from home (px, <=0 moves left)
   // Whether the entrance keyframe is still allowed to be on the element.
   //
@@ -183,7 +191,7 @@ export default function RobotMascot() {
   // in from 320px while standing still, because the chat-close reset had
   // already set the clip to "Idle". `enteredRef` guards the effect below; this
   // guards the class.
-  const [entering, setEntering] = useState(introRuns);
+  const [entering, setEntering] = useState(entranceArmed);
   const entranceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [hopY, setHopY] = useState(0); // vertical hop (px, negative = up)
   const [travelTransition, setTravelTransition] = useState("none");
@@ -273,7 +281,7 @@ export default function RobotMascot() {
    * makes this run once; unmount teardown is handled above.
    */
   useEffect(() => {
-    if (!revealed || !introRuns || enteredRef.current) return;
+    if (!revealed || !entranceArmed || enteredRef.current) return;
     enteredRef.current = true;
     busyRef.current = true; // a ref, so hover/tap is blocked without a render
 
@@ -288,7 +296,7 @@ export default function RobotMascot() {
       // the entrance replaying on every later re-mount.
       setEntering(false);
     }, ENTRANCE_MS);
-  }, [revealed, introRuns]);
+  }, [revealed, entranceArmed]);
 
   // After the first-load wave, drop into the resting ambient loop.
   useEffect(() => {

@@ -2,7 +2,13 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
-import { useReveal, CHAT_INTRO_MS, CHAT_PLAIN_MS } from "@/lib/intro";
+import {
+  useReveal,
+  useHeroGate,
+  CHAT_INTRO_MS,
+  CHAT_PLAIN_MS,
+  HERO_GATE_CHAT_MS,
+} from "@/lib/intro";
 import { useRobotChat } from "./RobotChatContext";
 import { useWebSpeech } from "./useWebSpeech";
 import type { ClipName } from "./RobotModel";
@@ -93,7 +99,12 @@ const MOBILE_TARGETS: RobotTargets = {
 export default function ChatTakeover() {
   // Last of the three to arrive, on both clocks, so the order is always
   // nav → mascot → chat. See lib/intro.ts.
-  const revealed = useReveal(CHAT_INTRO_MS, CHAT_PLAIN_MS);
+  // On a phone this waits for the hero to be scrolled past, then trails the
+  // mascot by HERO_GATE_CHAT_MS so the launcher still arrives *after* the robot.
+  // Both of their own timers elapsed long ago, so without the stagger they would
+  // unblock on the same frame and appear together. See useHeroGate.
+  const { cleared: heroCleared } = useHeroGate(HERO_GATE_CHAT_MS);
+  const revealed = useReveal(CHAT_INTRO_MS, CHAT_PLAIN_MS) && heroCleared;
   const { open, openChat, closeChat, solo } = useRobotChat();
 
   // ── Chat state ──
