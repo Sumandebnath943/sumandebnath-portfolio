@@ -770,12 +770,15 @@ export default function EasterEggs() {
             transition={{ type: "spring", stiffness: 260, damping: 20 }}
             // On a phone this sat at bottom-left on top of the "Ask about
             // Suman" launcher, and the paperclip avatar below the card made the
-            // stack taller than the space available. Mobile now spans the width
-            // with margins and sits clear above the launcher; desktop keeps the
-            // original bottom-left card-plus-avatar arrangement.
-            className="pointer-events-auto fixed bottom-24 left-4 right-4 z-[9998] flex flex-col items-stretch gap-4 md:bottom-6 md:left-6 md:right-auto md:flex-row-reverse md:items-end"
+            // stack taller than the space available. It then went full-bleed —
+            // `left-4 right-4` — which cleared the launcher but turned a small
+            // retro nudge into a 343px cream slab across the screen, reading as
+            // a cookie banner rather than a joke. It is now a card on a phone
+            // too: pinned bottom-left, capped at 17rem, and only as wide as it
+            // needs to be. Desktop keeps the original card-plus-avatar row.
+            className="pointer-events-auto fixed bottom-24 left-4 z-[9998] w-[min(17rem,calc(100vw-2rem))] flex flex-col items-stretch gap-4 md:bottom-6 md:left-6 md:w-auto md:flex-row-reverse md:items-end"
           >
-            <div className="relative w-full rounded-xl border border-black bg-[#FFFFE1] p-4 font-sans text-black shadow-[4px_4px_0px_rgba(0,0,0,1)] md:w-64">
+            <div className="relative w-full rounded-xl border border-black bg-[#FFFFE1] p-3.5 font-sans text-black shadow-[4px_4px_0px_rgba(0,0,0,1)] md:w-64 md:p-4">
               <button
                 onClick={hideClippy}
                 className="absolute right-2 top-2 text-black/40 transition-colors hover:text-black"
@@ -791,10 +794,20 @@ export default function EasterEggs() {
                   Builder" was the site describing itself in the language of a
                   job ad, which is the one register this portfolio otherwise
                   never uses. */}
-              <p className="pr-4 text-sm font-medium leading-relaxed">
+              {/* The `pr` on the <em> is optical compensation, not a missing
+                  space. The word space after the italic is really there —
+                  measured at 2.61px at this size — but the `d` of "and" leans
+                  right across nearly all of it, so "and build" rendered as
+                  "andbuild". The padding takes the glyph gap 2.59px → 4.14px.
+
+                  Keep this comment OUT of the sentence. A `{ }` expression
+                  between two words splits the text node, and JSX drops the
+                  trailing space before it — putting it after "the" silently
+                  rendered "themarketing". */}
+              <p className="pr-4 text-[13px] font-medium leading-relaxed md:text-sm">
                 It looks like you&apos;re trying to hire someone who can do the
-                marketing <em>and</em> build the product. Would you like some
-                help with that?
+                marketing <em className="pr-[0.12em]">and</em> build the product.
+                Would you like some help with that?
               </p>
               <button
                 onClick={() => {

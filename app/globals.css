@@ -87,6 +87,49 @@ html.sd-intro-nav #tour-nav {
   }
 }
 
+/* ─── Hero lock (phones only) ─────────────────────────────────────────────
+   `.sd-hero-lock` goes on <html> while the homepage hero is on screen — see
+   useHeroLock in components/sections/Hero.tsx for why.
+
+   At 375×812 the hero's three CTAs land in both bottom corners, which is where
+   the mascot and the chat launcher park. Measured overlaps: the launcher over
+   "Career Journey" by 128×28px, the mascot's canvas over "View Projects" by
+   61×41px. From `md` up there is room for all of them and nothing changes.
+
+   **`visibility` is what actually does the hiding here, not `opacity`.**
+   The launcher runs a `ct-launch-in` keyframe on reveal, and an animated value
+   outranks a normal declaration (PROJECT_BIBLE §5, trap 4) — so a plain
+   `opacity: 0` loses for the 0.55s that animation is playing and the pill
+   flashes over the buttons. The mascot is worse: its wrapper carries an *inline*
+   opacity, which beats any stylesheet rule outright. `visibility` is in neither,
+   so it wins in both cases; opacity is here only to make it a fade rather than a
+   pop, which is why the mascot's needs `!important` to get past that inline
+   style. */
+@media (max-width: 767px) {
+  .sd-mascot,
+  .ct-launch {
+    transition: opacity 260ms ease, visibility 0s linear 0s;
+  }
+
+  html.sd-hero-lock .sd-mascot,
+  html.sd-hero-lock .ct-launch {
+    opacity: 0 !important;
+    visibility: hidden;
+    pointer-events: none;
+    /* hold visibility until the fade has finished */
+    transition: opacity 260ms ease, visibility 0s linear 260ms;
+  }
+}
+
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+  .sd-mascot,
+  .ct-launch,
+  html.sd-hero-lock .sd-mascot,
+  html.sd-hero-lock .ct-launch {
+    transition: none;
+  }
+}
+
 /* ─── Base Styles ────────────────────────────────────────────────────── */
 * {
   box-sizing: border-box;
@@ -101,7 +144,19 @@ html {
 }
 
 body {
-  background-color: var(--bg-deep);
+  /* Deliberately NOT var(--bg-deep). That token is #F5F5F7 — a near-white left
+     over from an earlier light design — and every page paints its own
+     background over it, so it was invisible right up until it wasn't.
+
+     The body colour is also the base colour Chrome fills a tile with when the
+     rasteriser has not finished it yet. On an all-black site that turned every
+     dropped tile into a white flash, and the nav's `backdrop-blur` sampled
+     those white tiles and went pale in the same frames. Same class of bug as
+     the scrollbar track that was painted --bg-deep (see PAGE_OPTIMIZATION §3.2).
+
+     --bg-deep itself is left alone: `Button.tsx` uses it as a *text* colour on
+     the blue button, where near-white is correct. */
+  background-color: #050505;
   color: var(--text-primary);
   font-family: var(--font-manrope), system-ui, sans-serif;
   overflow-x: hidden;

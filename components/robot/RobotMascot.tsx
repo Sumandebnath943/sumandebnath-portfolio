@@ -561,7 +561,12 @@ export default function RobotMascot() {
 
   return (
     <div
-      className="fixed inset-0 pointer-events-none z-[9999] overflow-hidden"
+      // `sd-mascot` is a styling hook only — globals.css uses it to clear the
+      // robot off the hero on phones, where its canvas overlapped the hero CTAs.
+      // Nothing reads it in JS, and it must stay a *class* on this wrapper: the
+      // robot cannot be re-rendered or unmounted for that, so the hiding is done
+      // entirely in CSS from an ancestor.
+      className="sd-mascot fixed inset-0 pointer-events-none z-[9999] overflow-hidden"
       style={{ opacity: appear ? 1 : 0, transition: "opacity 0.35s ease" }}
       // Which clip is on screen right now. The robot draws into a WebGL canvas
       // with `preserveDrawingBuffer: false`, so its pose cannot be read back

@@ -1,9 +1,47 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { m } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+
+/* ── Hero lock ──────────────────────────────────────────────────────────
+   Puts `.sd-hero-lock` on <html> while the hero is on screen, which
+   globals.css uses to clear the mascot and the chat launcher out of the way
+   **on phones only**.
+
+   Measured at 375×812, with the hero at the top of the page:
+     · the "Ask about Suman" launcher overlapped "Career Journey" by 128×28px
+     · the mascot's canvas overlapped "View Projects" by 61×41px
+   Both corners the hero puts its CTAs in are the same corners those two park
+   in, and at 375px there is no room for both.
+
+   EasterEggs already reached this conclusion for the Clippy nudge and gates it
+   on `scrollY > innerHeight * 0.6` for exactly this reason — its comment notes
+   that while the hero is up, its buttons are the better prompt anyway. This is
+   the same rule, applied to the other two floating things.
+
+   An observer rather than a scroll handler, per AGENTS.md. The class goes on
+   <html> rather than into React state because the mascot must NOT re-render or
+   re-mount for this: its entrance is a CSS keyframe that restarts on mount, and
+   its entrance effect deliberately returns no cleanup (PROJECT_BIBLE §10.0).
+   Toggling a class on an ancestor touches neither. */
+function useHeroLock(ref: React.RefObject<HTMLElement | null>) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const root = document.documentElement;
+    const io = new IntersectionObserver(
+      ([entry]) => root.classList.toggle("sd-hero-lock", entry.isIntersecting),
+      { threshold: 0 },
+    );
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      root.classList.remove("sd-hero-lock");
+    };
+  }, [ref]);
+}
 
 /* ── Live dual-clock hook ───────────────────────────────────────────────
    Renders nothing until mounted so the server/client markup matches and
@@ -33,9 +71,12 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 export default function Hero() {
   const localHour = useClock("Asia/Kolkata");
   const usaHour = useClock("America/New_York");
+  const heroRef = useRef<HTMLElement>(null);
+  useHeroLock(heroRef);
 
   return (
     <section
+      ref={heroRef}
       id="hero"
       // svh, not vh: on a phone `100vh` is the *large* viewport, so with the
       // browser toolbar showing the CTA row at the bottom of the hero can sit

@@ -341,7 +341,10 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body
-        className="bg-bg-deep text-text-primary font-sans antialiased"
+        // No background class here: globals.css sets the body background, and a
+        // Tailwind utility would win over it. See the comment on `body` there
+        // for why it must not be the near-white --bg-deep.
+        className="text-text-primary font-sans antialiased"
         suppressHydrationWarning
       >
         {/*
