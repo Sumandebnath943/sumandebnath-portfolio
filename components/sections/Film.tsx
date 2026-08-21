@@ -70,6 +70,56 @@ const CLOUD_OPTIONS = {
   minWidth: 200,
 };
 
+/**
+ * Compile the CLOUDS shader before anyone scrolls into it.
+ *
+ * Vanta's animation loop is wrapped in an `isOnScreen()` guard (see
+ * `vanta/src/_base.js`), so creating the effect does NOT draw anything — the
+ * very first `renderer.render()` happens the moment the section crosses into
+ * view. That first draw is where three compiles and links the CLOUDS fragment
+ * shader, and it is synchronous on the main thread.
+ *
+ * Measured on a production build: a single **669 ms** long task at the exact
+ * scroll offset where the guard flips, which on this page is a few dozen pixels
+ * under the hero. One frame, 671 ms late. It never recurs, because the program
+ * is cached from then on — which is precisely why it reads as "the scroll
+ * sticks once, just below the hero, then frees up".
+ *
+ * So: pay for it early and off the scroll path. `compileAsync` links through
+ * KHR_parallel_shader_compile where the driver supports it, so the work lands
+ * on a driver thread rather than ours. Where it does not exist, one forced
+ * render inside an idle callback still moves the cost out of the gesture.
+ */
+function warmShader(effect: unknown) {
+  const e = effect as {
+    renderer?: {
+      compileAsync?: (s: object, c: object) => Promise<unknown>;
+      render?: (s: object, c: object) => void;
+    };
+    scene?: object;
+    camera?: object;
+  } | null;
+  if (!e?.renderer || !e.scene || !e.camera) return;
+  const { renderer, scene, camera } = e;
+
+  if (typeof renderer.compileAsync === "function") {
+    renderer.compileAsync(scene, camera).catch(() => {});
+    return;
+  }
+  const idle =
+    typeof window.requestIdleCallback === "function"
+      ? window.requestIdleCallback
+      : (cb: () => void) => window.setTimeout(cb, 1);
+  idle(() => {
+    try {
+      renderer.render?.(scene, camera);
+    } catch {
+      // A warm-up that fails costs nothing — the first on-screen frame will
+      // compile it the old way.
+    }
+  });
+}
+
 export default function Film() {
   const [playing, setPlaying] = useState(false);
   const hostRef = useRef<HTMLDivElement | null>(null);
@@ -107,6 +157,7 @@ export default function Film() {
               THREE,
               ...CLOUD_OPTIONS,
             });
+            warmShader(effectRef.current);
           })
           .catch(() => {
             // A failed background is not worth a broken section; the gradient
