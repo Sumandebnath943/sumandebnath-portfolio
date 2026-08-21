@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
+  cubicBezier,
   m,
   useScroll,
   useTransform,
@@ -363,54 +364,154 @@ const projects: ProjectData[] = [
   },
 ];
 
+// ── DECK GEOMETRY ─────────────────────────────────────────────────────────────
+//
+// Every number the sticky deck depends on lives here, because they are not
+// independent — they have to sum to less than the viewport or later cards hang
+// off the bottom. That is exactly what used to happen: cards were `84vh` tall
+// and each one sat `8px` lower than the last, so a card only fit when
+//   navClearance + index*8 + 0.84*vh <= vh
+// which at 17 cards needs a 1400px-tall screen. Cards 10-17 overflowed on every
+// real display.
+//
+// The fix is to spend a *fixed* budget instead of a per-card one:
+//   • FAN_TOTAL is shared across the whole deck, so the fanned edges occupy the
+//     same strip whether there are 5 projects or 50. Adding a project no longer
+//     steals room from every card after it.
+//   • Card height is derived from what is actually left over, so it fits by
+//     construction, and is capped so it does not balloon into an empty void on
+//     a tall monitor.
+const NAV_CLEARANCE = 88; // room under the fixed pill nav
+const FAN_TOTAL = 56; // total fanned-edge strip, divided across ALL cards
+const BOTTOM_BREATH = 44; // gap kept below the pinned card
+const CARD_MIN = 440;
+const CARD_MAX = 660; // stops cards ballooning on a 1440p screen
+
+// Cards used to sit flush in the flex column: stride between them was exactly
+// card height, so the instant one pinned, the next card's top edge landed on its
+// bottom edge with nothing between them. Two equally-bright panels touching read
+// as one slab — the "stuck together" look. This gap keeps real background
+// visible between a pinned card and the one climbing toward it.
+const DECK_GAP = 28;
+
+// Easing for the recede/arrive transitions. Linear interpolation is what made
+// the movement feel mechanical.
+const EASE_ENTER = cubicBezier(0.33, 1, 0.68, 1); // out-cubic: arrives, settles
+const EASE_RECEDE = cubicBezier(0.65, 0, 0.35, 1); // in-out-cubic: eases both ends
+
+const ENTER_SCALE = 0.96; // arriving card grows into place
+const RECEDE_SCALE = 0.9; // covered card sinks back
+const RECEDE_BRIGHTNESS = 0.5;
+
+// Space a card can occupy once the nav, the fan and the bottom gap are paid for.
+const CARD_HEIGHT = `clamp(${CARD_MIN}px, calc(100svh - ${
+  NAV_CLEARANCE + FAN_TOTAL + BOTTOM_BREATH
+}px), ${CARD_MAX}px)`;
+
+// Once cards hit CARD_MAX there is slack left over, so centre the deck in the
+// viewport rather than letting it sit high with dead space underneath. On short
+// screens the max() floors this back to plain nav clearance.
+const stickyTop = (fan: number) =>
+  `calc(max(${NAV_CLEARANCE}px, (100svh - ${CARD_MAX}px) / 2) + ${fan.toFixed(2)}px)`;
+
 // ── STACK CARD ────────────────────────────────────────────────────────────────
+
+/** Measured deck geometry, used to phase the recede animation correctly. */
+interface DeckGeometry {
+  /** Layout distance between consecutive cards — card height plus DECK_GAP. */
+  stride: number;
+  /** Full scroll height of the deck. */
+  deckH: number;
+  /** Sticky top of card 0, which carries no fan offset. */
+  baseTop: number;
+  vh: number;
+}
 
 function StackCard({
   project,
   index,
   total,
   progress,
+  geometry,
 }: {
   project: ProjectData;
   index: number;
   total: number;
   progress: MotionValue<number>;
+  geometry: DeckGeometry | null;
 }) {
   const accent = project.theme.primaryAccent;
   const isLast = index === total - 1;
   const screenshot = SCREENSHOTS[project.id];
-  // Image-only cards (wide 16:9 cover) are shorter so the framed image fills
-  // the panel snugly instead of leaving a tall empty void.
-  const isImageCard = !!project.coverImage;
+
+  // Share of the fixed fan strip. Divided across the deck, so the offset of the
+  // last card is FAN_TOTAL no matter how many projects exist.
+  const fan = total > 1 ? (index / (total - 1)) * FAN_TOTAL : 0;
 
   // As later cards rise to cover this one, recede it: scale + dim. The last
   // card never gets covered, so it stays at full size.
-  const start = index / total;
-  const end = (index + 1) / total;
-  const scale = useTransform(progress, [start, end], [1, isLast ? 1 : 0.9], {
-    clamp: true,
-  });
-  const brightnessVal = useTransform(progress, [start, end], [1, isLast ? 1 : 0.5], {
-    clamp: true,
-  });
+  //
+  // The window has to be derived from real geometry, not from index/total.
+  // `progress` runs over the deck's scrollable range, which is
+  // deckHeight - viewportHeight — not the deck's full height — and each card
+  // pins at `top` rather than at 0. Ignoring both put the recede a full
+  // card-slice early: a card sat at brightness(0.5) and scale(0.9) while it was
+  // still the card being read. Card i is covered exactly when the deck has been
+  // scrolled by (i + 1) * stride - top.
+  let start = index / total;
+  let end = (index + 1) / total;
+  let enter = start - 1 / total;
+  if (geometry) {
+    const range = geometry.deckH - geometry.vh;
+    if (range > 0) {
+      const top = geometry.baseTop + fan;
+      // stride, not card height: the deck gap is part of the distance scrolled
+      // between one card pinning and the next.
+      start = (index * geometry.stride - top) / range;
+      end = ((index + 1) * geometry.stride - top) / range;
+      enter = start - geometry.stride / range;
+    }
+  }
+
+  // Three stops, so each card has a full life: it grows in as it rises (ease
+  // out), holds at rest while it is the card being read, then sinks back as the
+  // next one climbs over it (ease in-out). Previously this was a single linear
+  // ramp, which is why the movement felt mechanical.
+  const scale = useTransform(
+    progress,
+    [enter, start, end],
+    [ENTER_SCALE, 1, isLast ? 1 : RECEDE_SCALE],
+    { clamp: true, ease: [EASE_ENTER, EASE_RECEDE] },
+  );
+  const brightnessVal = useTransform(
+    progress,
+    [enter, start, end],
+    [1, 1, isLast ? 1 : RECEDE_BRIGHTNESS],
+    { clamp: true, ease: [EASE_ENTER, EASE_RECEDE] },
+  );
   const filter = useMotionTemplate`brightness(${brightnessVal})`;
 
   return (
     <m.div
       style={{
-        top: `${96 + index * 8}px`,
+        top: stickyTop(fan),
+        height: CARD_HEIGHT,
         scale,
         filter,
         zIndex: index + 1,
       }}
-      className={`sticky origin-top px-2 md:px-0 ${isImageCard ? "h-[64vh] lg:h-[490px] min-h-[440px]" : "h-[78vh] lg:h-[84vh] min-h-[480px]"}`}
+      className="sticky origin-top px-2 md:px-0"
     >
       <div
-        className="h-full w-full overflow-hidden rounded-[1.75rem] border bg-[#0A0A0C] flex lg:grid lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] shadow-[0_30px_120px_-30px_rgba(0,0,0,0.8)]"
+        // The outer shadow here is black-on-black (#050505 section, #0A0A0C
+        // card) so it casts nothing and gave the stack no depth. The inset
+        // highlight does the work instead: a lit top edge reads as a layer
+        // boundary when one card overlaps another.
+        className="h-full w-full overflow-hidden rounded-[1.75rem] border bg-[#0A0A0C] flex lg:grid lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.07),0_-12px_40px_-12px_rgba(0,0,0,0.9),0_30px_120px_-30px_rgba(0,0,0,0.8)]"
         style={{ borderColor: `${accent}40` }}
       >
         {/* ── LEFT: system info (full card on mobile) ── */}
-        <div className="relative flex flex-1 flex-col justify-center lg:justify-between gap-8 lg:gap-6 p-7 md:p-10 lg:p-12 lg:h-full overflow-hidden">
+        <div className="relative flex flex-1 flex-col justify-center lg:justify-between gap-8 lg:gap-6 p-7 md:p-10 lg:p-12 2xl:p-14 lg:h-full overflow-hidden">
           {/* ambient accent glow */}
           <div
             className="absolute -top-24 -left-24 w-72 h-72 rounded-full blur-[100px] pointer-events-none opacity-50"
@@ -431,14 +532,14 @@ function StackCard({
               </span>
             </div>
 
-            <h3 className="font-manrope font-semibold text-3xl md:text-4xl lg:text-[44px] leading-[1.05] tracking-tight text-white mb-4">
+            <h3 className="font-manrope font-semibold text-3xl md:text-4xl lg:text-[44px] 2xl:text-[52px] leading-[1.05] tracking-tight text-white mb-4">
               {project.title}
             </h3>
 
-            <p className="font-serif italic text-base md:text-lg text-white/70 leading-snug mb-3">
+            <p className="font-serif italic text-base md:text-lg 2xl:text-xl text-white/70 leading-snug mb-3">
               {project.positioning}
             </p>
-            <p className="font-manrope text-sm text-[#86868B] leading-relaxed max-w-md">
+            <p className="font-manrope text-sm 2xl:text-base text-[#86868B] leading-relaxed max-w-md 2xl:max-w-lg">
               {project.emotion}
             </p>
           </div>
@@ -500,7 +601,9 @@ function StackCard({
             <div className="relative h-full w-full flex items-center justify-center p-6 lg:p-7 overflow-hidden">
               {/* soft accent glow fills the slim margin around the framed image */}
               <div className="absolute inset-0 opacity-55 pointer-events-none" style={{ background: project.theme.glow }} />
-              <div className="relative w-full rounded-xl overflow-hidden border border-white/10 shadow-[0_24px_60px_-18px_rgba(0,0,0,0.75)]">
+              {/* max-h-full so a cover image can never push past the card's
+                  fitted height on a short viewport — it crops instead. */}
+              <div className="relative w-full max-h-full rounded-xl overflow-hidden border border-white/10 shadow-[0_24px_60px_-18px_rgba(0,0,0,0.75)]">
                 <Image
                   src={project.coverImage}
                   alt={`${project.title} preview`}
@@ -555,6 +658,11 @@ function StackCard({
 
 // ── MAIN SECTION ──────────────────────────────────────────────────────────────
 
+// useLayoutEffect warns during SSR; the deck renders fine without geometry on
+// the first pass (it falls back to the index/total window), so defer on server.
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
+
 export default function Projects() {
   const deckRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -562,11 +670,43 @@ export default function Projects() {
     offset: ["start start", "end end"],
   });
 
+  // Card height and sticky top are set in CSS (clamp/max against 100svh), so
+  // they are measured rather than recomputed here — one source of truth. The
+  // recede window is phased off these, and re-measured on resize because both
+  // values are viewport-derived.
+  const [geometry, setGeometry] = useState<DeckGeometry | null>(null);
+
+  useIsomorphicLayoutEffect(() => {
+    const measure = () => {
+      const deck = deckRef.current;
+      const first = deck?.children[0] as HTMLElement | undefined;
+      if (!deck || !first) return;
+      // Every value read here must be scroll-independent, because a resize can
+      // fire while the reader is deep inside the deck. Do NOT derive stride from
+      // two cards' offsetTop: a *pinned* sticky element reports its stuck
+      // position, so mid-deck that returns the fan step (~4px) instead of the
+      // real stride. offsetHeight and the computed gap/top are unaffected.
+      const gap = parseFloat(getComputedStyle(deck).rowGap) || 0;
+      setGeometry({
+        stride: first.offsetHeight + gap,
+        deckH: deck.offsetHeight,
+        // card 0 carries no fan offset, so this is the deck's base top
+        baseTop: parseFloat(getComputedStyle(first).top) || 0,
+        vh: window.innerHeight,
+      });
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
   return (
     <SectionWrapper id="projects" className="py-16 px-6 bg-[#050505] relative text-white" showLine={false}>
       <div className="absolute inset-0 bg-[#050505] -z-10" />
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      {/* Widens past the usual 7xl cap on very large monitors so the deck fills
+          the screen proportionally instead of sitting as a small island. */}
+      <div className="max-w-7xl 2xl:max-w-[1520px] mx-auto relative z-10">
         {/* Header */}
         <div className="mb-10 max-w-2xl">
           <p className="text-[10px] font-mono text-[#86868B] uppercase tracking-widest mb-4">
@@ -584,7 +724,11 @@ export default function Projects() {
         </div>
 
         {/* Stacked card deck */}
-        <div ref={deckRef} className="relative flex flex-col">
+        <div
+          ref={deckRef}
+          className="relative flex flex-col"
+          style={{ gap: `${DECK_GAP}px` }}
+        >
           {projects.map((project, i) => (
             <StackCard
               key={project.id}
@@ -592,6 +736,7 @@ export default function Projects() {
               index={i}
               total={projects.length}
               progress={scrollYProgress}
+              geometry={geometry}
             />
           ))}
         </div>
