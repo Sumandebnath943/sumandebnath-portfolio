@@ -35,6 +35,9 @@ export interface ProjectData {
   dossierHref?: string;
   /** Optional representative image shown object-cover in the card's right panel. */
   coverImage?: string;
+  /** Line under the redacted panel when there is no preview to show. Keep it a
+   *  checkable fact — "Preview coming soon" is not one. */
+  previewNote?: string;
   theme: {
     primaryAccent: string;
     glow: string;
@@ -43,13 +46,21 @@ export interface ProjectData {
 
 // Tall landing-page screenshots shown (scrollable) in each card's right
 // window. ROASmind has no screenshot yet (Coming Soon) → styled placeholder.
+//
+// **Only genuinely tall captures belong here.** This branch renders into an
+// `overflow-y-auto` box, which top-aligns its content — correct for a 1366×12096
+// page capture, wrong for anything that fits. `ember.png` (1536×864) and
+// `d-pe.png` (1672×941) are ordinary 16:9 landscape shots and sat in this map by
+// mistake: they pinned to the top of the panel with ~128px of void beneath, under
+// a "Landing page · scroll" badge and fade masks, in a box that could not scroll.
+// They are `coverImage` entries now, which centres them like every other
+// landscape shot. Aspect ratios currently in this map run 0.11 to 0.53 — if a new
+// one is anywhere near 1, it belongs on `coverImage` instead.
 const SCREENSHOTS: Record<string, string> = {
   imprint: "/screenshots/imprint.png",
   legatus: "/screenshots/legatus.png",
   cite: "/screenshots/cite.png",
   "geek-collectibles": "/screenshots/geekcollectibles.png",
-  ember: "/screenshots/ember.png",
-  "d-pe": "/screenshots/d-pe.png",
 };
 
 const projects: ProjectData[] = [
@@ -98,7 +109,17 @@ const projects: ProjectData[] = [
     positioning: "A self-governing pixel-art village that remembers.",
     emotion: "Its citizens have minds — they remember, decide, vote and rebuild.",
     atmosphere: "~11,700 lines of vanilla JS. Zero dependencies. Zero image assets.",
-    capabilities: ["Knowledge · Memory · Minds", "Self-Governing Democracy", "Everything Procedural"],
+    // Shortened from "Knowledge · Memory · Minds" / "Self-Governing Democracy" /
+    // "Everything Procedural". At 375px each of those was too wide to share a
+    // row, so the chips took three rows — 111px — and made PixelVille the
+    // tallest card in the deck at 567px, which is what set the floor for every
+    // card's height. Two rows instead: **111px → 71px, card 567 → 527**.
+    //
+    // The prose lines were the obvious suspect and were measured first: the
+    // `emotion` line renders at 46px whether it is 66 characters or 39, because
+    // it wraps to two lines either way. Cutting it saves nothing. The chips were
+    // the whole difference.
+    capabilities: ["Memory · Minds", "Self-Governing", "Fully Procedural"],
     tools: ["Vanilla JS", "HTML5 Canvas", "WebAudio"],
     status: "Live",
     links: [{ label: "Explore PixelVille", href: "/games/pixelville", variant: "primary" }],
@@ -287,6 +308,7 @@ const projects: ProjectData[] = [
     status: "Coming Soon",
     links: [{ label: "Join Waitlist", href: "#roasmind", variant: "ghost" }],
     screenshots: [],
+    previewNote: "200,000+ lines of orchestrated architecture — not ready to be seen.",
     theme: {
       primaryAccent: "#F5F5F7", // White/Silver
       glow: "radial-gradient(ellipse 50% 50% at 50% 50%, rgba(255, 255, 255, 0.08), transparent 70%)",
@@ -321,6 +343,8 @@ const projects: ProjectData[] = [
     status: "Live",
     links: [{ label: "Explore Project", href: "https://v0-meet-ember-ai.vercel.app", variant: "ghost" }],
     screenshots: [],
+    // 1536×864 — a landscape shot, not a page capture. See SCREENSHOTS above.
+    coverImage: "/screenshots/ember.png",
     theme: {
       primaryAccent: "#FF8C00", // Warm ember orange
       glow: "radial-gradient(ellipse 50% 50% at 50% 50%, rgba(255, 140, 0, 0.12), transparent 70%)",
@@ -338,6 +362,8 @@ const projects: ProjectData[] = [
     status: "Live",
     links: [{ label: "Access Workspace", href: "https://d-pe.houseofnamus.com/", variant: "primary" }],
     screenshots: [],
+    // 1672×941 — a landscape shot, not a page capture. See SCREENSHOTS above.
+    coverImage: "/screenshots/d-pe.png",
     theme: {
       primaryAccent: "#3fb950", // GitHub green
       glow: "radial-gradient(ellipse 50% 50% at 50% 50%, rgba(63, 185, 80, 0.15), transparent 70%)",
@@ -374,18 +400,42 @@ const projects: ProjectData[] = [
 // which at 17 cards needs a 1400px-tall screen. Cards 10-17 overflowed on every
 // real display.
 //
-// The fix is to spend a *fixed* budget instead of a per-card one:
-//   • FAN_TOTAL is shared across the whole deck, so the fanned edges occupy the
-//     same strip whether there are 5 projects or 50. Adding a project no longer
-//     steals room from every card after it.
-//   • Card height is derived from what is actually left over, so it fits by
-//     construction, and is capped so it does not balloon into an empty void on
-//     a tall monitor.
+// The fix is to spend a *fixed* budget instead of a per-card one: card height is
+// derived from what is actually left over, so it fits by construction, and is
+// capped so it does not balloon into an empty void on a tall monitor.
+//
+// ── There is no fan any more ──
+// Every card pins at exactly the same `top`, so each one lands precisely on the
+// last and nothing of the previous card shows above it.
+//
+// There used to be a FAN_TOTAL of 56px spread across the deck to leave a stack
+// of edges visible at the top. It was right when this deck held eight cards —
+// 7px each reads as a card behind a card. At seventeen it divides down to
+// **3.5px each**, which is under the width where an edge reads as depth at all:
+// on a phone the seventeen edges blur into a single multicoloured band that
+// looks like a rendering fault rather than a stack. Removing it is what makes
+// the deck read as one card at a time.
+//
+// Its 56px went back into CARD_HEIGHT, since the only reason that budget was
+// reserved was to keep the fanned edges clear of the card.
 const NAV_CLEARANCE = 88; // room under the fixed pill nav
-const FAN_TOTAL = 56; // total fanned-edge strip, divided across ALL cards
 const BOTTOM_BREATH = 44; // gap kept below the pinned card
 const CARD_MIN = 440;
-const CARD_MAX = 660; // stops cards ballooning on a 1440p screen
+
+// Two ceilings, because the two layouts hold genuinely different amounts.
+//
+// Below lg the card IS the left column — stacked, `justify-center`, and at 375px
+// the copy wraps hard: PixelVille's needs **567px**. The left column is
+// `overflow-hidden`, so a ceiling under that silently cuts the text off.
+//
+// From lg the card is two columns side by side, and the same content needs only
+// **455px**. At the old shared 660 that left ~170px of slack, which
+// `justify-between` spent as a hole in the middle of the left column and
+// `items-center` spent as ~118px of dead panel above and below a 16:9 image.
+// Both are what "too tall" looks like. Measured, not guessed — see the deck
+// audit in PAGE_OPTIMIZATION §3.5.
+const CARD_MAX = 660; // below lg
+const CARD_MAX_LG = 500; // lg+ — 455 of content plus room to breathe
 
 // Cards used to sit flush in the flex column: stride between them was exactly
 // card height, so the instant one pinned, the next card's top edge landed on its
@@ -403,16 +453,46 @@ const ENTER_SCALE = 0.96; // arriving card grows into place
 const RECEDE_SCALE = 0.9; // covered card sinks back
 const RECEDE_BRIGHTNESS = 0.5;
 
-// Space a card can occupy once the nav, the fan and the bottom gap are paid for.
-const CARD_HEIGHT = `clamp(${CARD_MIN}px, calc(100svh - ${
-  NAV_CLEARANCE + FAN_TOTAL + BOTTOM_BREATH
-}px), ${CARD_MAX}px)`;
+// The recede dim used to be `filter: brightness(RECEDE_BRIGHTNESS)` on the card.
+// It is now a black scrim at this opacity, which is the SAME PICTURE and a very
+// different cost — see the scrim in StackCard for why.
+//   brightness(k) → c·k
+//   black at α over c → c·(1-α) + 0·α = c·(1-α)
+// so α = 1 - k renders identically.
+const RECEDE_SCRIM = 1 - RECEDE_BRIGHTNESS;
 
-// Once cards hit CARD_MAX there is slack left over, so centre the deck in the
-// viewport rather than letting it sit high with dead space underneath. On short
-// screens the max() floors this back to plain nav clearance.
-const stickyTop = (fan: number) =>
-  `calc(max(${NAV_CLEARANCE}px, (100svh - ${CARD_MAX}px) / 2) + ${fan.toFixed(2)}px)`;
+// Space a card can occupy once the nav and the bottom gap are paid for.
+// Height and sticky top both depend on the ceiling, and the ceiling is now
+// breakpoint-dependent — so they are CSS custom properties rather than inline
+// strings. It has to be a media query and not a JS breakpoint read: measuring
+// the viewport on the client would mismatch the server render, and would have to
+// re-run on every resize, which is exactly the mid-scroll churn the resize
+// handler below already works to avoid.
+//
+// Once cards hit the ceiling there is slack left over, so the top centres the
+// deck in the viewport rather than letting it sit high with dead space
+// underneath. On short screens the max() floors it back to plain nav clearance.
+//
+// `--deck-top` is one value for the whole deck — this is what makes every card
+// land on the same spot. Give it a per-card offset and the fan is back.
+const DECK_VARS = `
+#projects{
+  --deck-card-h: clamp(${CARD_MIN}px, calc(100svh - ${
+    NAV_CLEARANCE + BOTTOM_BREATH
+  }px), ${CARD_MAX}px);
+  --deck-top: max(${NAV_CLEARANCE}px, (100svh - ${CARD_MAX}px) / 2);
+}
+@media (min-width: 1024px){
+  #projects{
+    --deck-card-h: clamp(${CARD_MIN}px, calc(100svh - ${
+      NAV_CLEARANCE + BOTTOM_BREATH
+    }px), ${CARD_MAX_LG}px);
+    --deck-top: max(${NAV_CLEARANCE}px, (100svh - ${CARD_MAX_LG}px) / 2);
+  }
+}`;
+
+const CARD_HEIGHT = "var(--deck-card-h)";
+const STICKY_TOP = "var(--deck-top)";
 
 // ── STACK CARD ────────────────────────────────────────────────────────────────
 
@@ -422,7 +502,7 @@ interface DeckGeometry {
   stride: number;
   /** Full scroll height of the deck. */
   deckH: number;
-  /** Sticky top of card 0, which carries no fan offset. */
+  /** The sticky top every card pins at. */
   baseTop: number;
   vh: number;
 }
@@ -444,10 +524,6 @@ function StackCard({
   const isLast = index === total - 1;
   const screenshot = SCREENSHOTS[project.id];
 
-  // Share of the fixed fan strip. Divided across the deck, so the offset of the
-  // last card is FAN_TOTAL no matter how many projects exist.
-  const fan = total > 1 ? (index / (total - 1)) * FAN_TOTAL : 0;
-
   // As later cards rise to cover this one, recede it: scale + dim. The last
   // card never gets covered, so it stays at full size.
   //
@@ -464,7 +540,8 @@ function StackCard({
   if (geometry) {
     const range = geometry.deckH - geometry.vh;
     if (range > 0) {
-      const top = geometry.baseTop + fan;
+      // Every card shares this top now that there is no per-card fan offset.
+      const top = geometry.baseTop;
       // stride, not card height: the deck gap is part of the distance scrolled
       // between one card pinning and the next.
       start = (index * geometry.stride - top) / range;
@@ -483,39 +560,58 @@ function StackCard({
     [ENTER_SCALE, 1, isLast ? 1 : RECEDE_SCALE],
     { clamp: true, ease: [EASE_ENTER, EASE_RECEDE] },
   );
-  const brightnessVal = useTransform(
+  // Coverage of the black scrim that dims a covered card — the recede
+  // "brightness" expressed as opacity rather than as a filter.
+  //
+  // Driven as `background-color` alpha, NOT as the element's `opacity`.
+  // Animating `opacity` promotes every one of these overlays to its own
+  // compositing layer, and seventeen of those stacked over seventeen cards
+  // that a filter is no longer flattening was enough to take the renderer
+  // out entirely — the page died before first paint. An alpha in the colour
+  // repaints one solid rounded rect and promotes nothing.
+  const scrimColor = useMotionTemplate`rgba(0, 0, 0, ${useTransform(
     progress,
     [enter, start, end],
-    [1, 1, isLast ? 1 : RECEDE_BRIGHTNESS],
+    [0, 0, isLast ? 0 : RECEDE_SCRIM],
     { clamp: true, ease: [EASE_ENTER, EASE_RECEDE] },
-  );
-  const filter = useMotionTemplate`brightness(${brightnessVal})`;
+  )})`;
 
   return (
     <m.div
       style={{
-        top: stickyTop(fan),
+        top: STICKY_TOP,
         height: CARD_HEIGHT,
         scale,
-        filter,
         zIndex: index + 1,
       }}
       className="sticky origin-top px-2 md:px-0"
     >
+      {/* Wrapper exists so the scrim can overlay the card *including* its 1px
+          accent border, which an `inset-0` child of the clipped card cannot
+          reach. It adds no box of its own — it matches the card exactly. */}
+      <div className="relative h-full w-full">
       <div
-        // The outer shadow here is black-on-black (#050505 section, #0A0A0C
-        // card) so it casts nothing and gave the stack no depth. The inset
-        // highlight does the work instead: a lit top edge reads as a layer
-        // boundary when one card overlaps another.
-        className="h-full w-full overflow-hidden rounded-[1.75rem] border bg-[#0A0A0C] flex lg:grid lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.07),0_-12px_40px_-12px_rgba(0,0,0,0.9),0_30px_120px_-30px_rgba(0,0,0,0.8)]"
+        // Only the inset highlight is kept. The two outer shadows this used to
+        // carry were black-on-black (#050505 section, #0A0A0C card) so they
+        // cast nothing — but a 40px and a 120px blur still had to be
+        // rasterised, seventeen times, every frame of the deck. Cost with no
+        // picture. The lit top edge is what actually reads as a layer boundary
+        // when one card overlaps another, and it is free.
+        className="h-full w-full overflow-hidden rounded-[1.75rem] border bg-[#0A0A0C] flex lg:grid lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.07)]"
         style={{ borderColor: `${accent}40` }}
       >
         {/* ── LEFT: system info (full card on mobile) ── */}
         <div className="relative flex flex-1 flex-col justify-center lg:justify-between gap-8 lg:gap-6 p-7 md:p-10 lg:p-12 2xl:p-14 lg:h-full overflow-hidden">
-          {/* ambient accent glow */}
+          {/* Ambient accent glow. Drawn as a radial gradient, NOT as a solid
+              disc under `blur-[100px]`. Same soft bloom; a gradient is one
+              Skia draw, while the blur forced a separate render surface and a
+              200px-wide kernel per card. Seventeen of those, live, was a large
+              part of what made this deck tear on a phone. */}
           <div
-            className="absolute -top-24 -left-24 w-72 h-72 rounded-full blur-[100px] pointer-events-none opacity-50"
-            style={{ background: accent }}
+            className="absolute -top-64 -left-64 w-[36rem] h-[36rem] pointer-events-none"
+            style={{
+              background: `radial-gradient(closest-side, ${accent}47 0%, ${accent}2E 28%, ${accent}14 50%, ${accent}00 72%)`,
+            }}
           />
 
           <div className="relative">
@@ -639,18 +735,90 @@ function StackCard({
               </div>
             </>
           ) : (
-            // No screenshot (e.g. ROASmind, Coming Soon) → styled placeholder
-            <div className="h-full w-full flex flex-col items-center justify-center gap-4">
+            // No screenshot yet (ROASmind) → a *withheld* preview rather than a
+            // missing one. The old version was a dot and the words "Preview
+            // Coming Soon" floating in an empty panel, which read as a gap in the
+            // page. This draws the shape of the interface with its content
+            // redacted, so the panel has the same visual weight as the sixteen
+            // screenshots around it and the absence looks deliberate.
+            //
+            // Everything here is a gradient, a border or a solid — no `blur()`.
+            // This panel sits in the same deck as the rest, and a blur surface
+            // per card is precisely what was taken out of it.
+            <div className="relative h-full w-full overflow-hidden">
+              {/* blueprint grid */}
               <div
-                className="w-2.5 h-2.5 rounded-full animate-pulse"
-                style={{ background: accent }}
+                className="absolute inset-0 opacity-[0.07]"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to right, rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.6) 1px, transparent 1px)",
+                  backgroundSize: "34px 34px",
+                }}
               />
-              <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-white/55">
-                Preview Coming Soon
-              </span>
+              <div
+                className="absolute inset-0 opacity-60 pointer-events-none"
+                style={{ background: project.theme.glow }}
+              />
+
+              <div className="relative h-full w-full flex flex-col items-center justify-center gap-6 p-8 lg:p-10">
+                {/* The redacted interface */}
+                <div
+                  className="w-full max-w-[300px] rounded-xl border bg-black/40 p-4 space-y-3"
+                  style={{ borderColor: `${accent}1F` }}
+                >
+                  <div className="flex items-center gap-1.5 pb-1">
+                    <span className="h-1.5 w-1.5 rounded-full bg-white/20" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-white/20" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-white/20" />
+                  </div>
+                  <div className="h-2 w-2/5 rounded-full bg-white/[0.14]" />
+                  <div className="h-14 w-full rounded-md bg-white/[0.05]" />
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="h-8 rounded-md bg-white/[0.05]" />
+                    <div className="h-8 rounded-md bg-white/[0.05]" />
+                    <div className="h-8 rounded-md bg-white/[0.05]" />
+                  </div>
+                  <div className="h-2 w-3/5 rounded-full bg-white/[0.09]" />
+                </div>
+
+                <div className="flex items-center gap-2.5">
+                  <span
+                    className="h-1.5 w-1.5 rounded-full animate-pulse"
+                    style={{ background: accent }}
+                  />
+                  <span className="font-mono text-[10px] uppercase tracking-[0.35em] text-white/70">
+                    In stealth
+                  </span>
+                </div>
+
+                {project.previewNote && (
+                  <p className="font-mono text-[10px] leading-relaxed text-center text-white/55 max-w-[270px]">
+                    {project.previewNote}
+                  </p>
+                )}
+              </div>
             </div>
           )}
         </div>
+      </div>
+
+        {/* The recede dim. This was `filter: brightness()` on the sticky
+            element, which is the same picture at a wildly different price: a
+            filter forces the browser to render the WHOLE card subtree into an
+            offscreen surface, filter it, then composite it — every frame, for
+            each of the nine cards on screen at once. On a phone the rasteriser
+            could not keep up, and Chrome presented what it had: tiles from the
+            previous scroll offset next to tiles from the current one, which is
+            why titles appeared twice with a seam between them.
+
+            A black scrim at (1 - brightness) is arithmetically identical
+            (c·k ≡ c·(1-α) with α = 1-k) but it is one solid rounded rect on
+            the compositor, and the card underneath needs no surface at all. */}
+        <m.div
+          aria-hidden
+          style={{ backgroundColor: scrimColor }}
+          className="pointer-events-none absolute inset-0 rounded-[1.75rem]"
+        />
       </div>
     </m.div>
   );
@@ -677,6 +845,7 @@ export default function Projects() {
   const [geometry, setGeometry] = useState<DeckGeometry | null>(null);
 
   useIsomorphicLayoutEffect(() => {
+    let raf = 0;
     const measure = () => {
       const deck = deckRef.current;
       const first = deck?.children[0] as HTMLElement | undefined;
@@ -684,24 +853,49 @@ export default function Projects() {
       // Every value read here must be scroll-independent, because a resize can
       // fire while the reader is deep inside the deck. Do NOT derive stride from
       // two cards' offsetTop: a *pinned* sticky element reports its stuck
-      // position, so mid-deck that returns the fan step (~4px) instead of the
-      // real stride. offsetHeight and the computed gap/top are unaffected.
+      // position, and every card is now pinned at the SAME top, so mid-deck that
+      // subtraction returns 0 rather than the real stride — it was already wrong
+      // when the fan made it return ~4px. offsetHeight and the computed gap/top
+      // are unaffected.
       const gap = parseFloat(getComputedStyle(deck).rowGap) || 0;
-      setGeometry({
+      const next: DeckGeometry = {
         stride: first.offsetHeight + gap,
         deckH: deck.offsetHeight,
-        // card 0 carries no fan offset, so this is the deck's base top
+        // every card shares this top, so card 0's is the deck's
         baseTop: parseFloat(getComputedStyle(first).top) || 0,
         vh: window.innerHeight,
-      });
+      };
+      // Bail on a no-op. Re-rendering seventeen cards rebuilds thirty-four
+      // MotionValues, and on a phone this handler fires far more than it looks
+      // like it should: hiding and showing the URL bar is a `resize`, so simply
+      // scrolling the deck retriggers it over and over, mid-scroll.
+      setGeometry((prev) =>
+        prev &&
+        prev.stride === next.stride &&
+        prev.deckH === next.deckH &&
+        prev.baseTop === next.baseTop &&
+        prev.vh === next.vh
+          ? prev
+          : next,
+      );
+    };
+    // Coalesce a burst of resize events (the URL-bar slide emits a stream of
+    // them) into one measurement on the next frame.
+    const onResize = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(measure);
     };
     measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
+    window.addEventListener("resize", onResize);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", onResize);
+    };
   }, []);
 
   return (
     <SectionWrapper id="projects" className="py-16 px-6 bg-[#050505] relative text-white" showLine={false}>
+      <style dangerouslySetInnerHTML={{ __html: DECK_VARS }} />
       <div className="absolute inset-0 bg-[#050505] -z-10" />
 
       {/* Widens past the usual 7xl cap on very large monitors so the deck fills

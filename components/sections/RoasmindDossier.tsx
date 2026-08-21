@@ -116,42 +116,56 @@ export default function RoasmindDossier() {
               <div className="w-16" /> {/* Spacer for balance */}
             </div>
 
-            {/* Heavily Blurred Interior */}
+            {/* Redacted interior.
+                This used to be a fake UI at opacity-20 sitting under a
+                `backdrop-blur-2xl` scrim, with a padlock and the words COMING
+                SOON — a stock "locked content" treatment that said nothing about
+                the product. It now shows the *shape* of the system with its
+                contents struck out, which is the honest picture: the thing
+                exists, it is large, and none of it is being shown yet. Matches
+                the redacted panel on the homepage card. */}
             <div className="relative h-[400px] md:h-[600px] overflow-hidden bg-[#020202]">
-              {/* Internal Structure (Faked UI for blurring) */}
-              <div className="absolute inset-0 opacity-20 pointer-events-none">
-                <div className="w-full h-full p-8 flex flex-col gap-6">
-                  <div className="w-1/3 h-8 bg-white/10 rounded" />
-                  <div className="w-full h-32 bg-white/5 rounded" />
-                  <div className="grid grid-cols-3 gap-6">
-                    <div className="h-40 bg-white/5 rounded" />
-                    <div className="h-40 bg-white/5 rounded" />
-                    <div className="h-40 bg-white/5 rounded" />
-                  </div>
-                  <div className="w-2/3 h-8 bg-white/10 rounded mt-auto" />
-                </div>
-              </div>
+              {/* blueprint grid */}
+              <div
+                className="absolute inset-0 opacity-[0.06]"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to right, rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.6) 1px, transparent 1px)",
+                  backgroundSize: "44px 44px",
+                }}
+              />
 
-              {/* The Cinematic Obscuration Layer */}
-              <div className="absolute inset-0 backdrop-blur-2xl bg-black/60 flex flex-col items-center justify-center z-20">
-                {/* Visual Lock */}
-                <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center mb-6 relative">
-                  <div className="absolute inset-0 rounded-full border border-[#F4A300]/20 animate-[spin_4s_linear_infinite]" />
-                  <svg className="w-5 h-5 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6">
+                <div className="w-full max-w-md rounded-xl border border-[#F4A300]/15 bg-black/50 p-5 md:p-6 space-y-4">
+                  <div className="flex items-center gap-1.5 pb-1">
+                    <span className="h-1.5 w-1.5 rounded-full bg-white/20" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-white/20" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-white/20" />
+                  </div>
+                  <div className="h-2.5 w-2/5 rounded-full bg-white/[0.14]" />
+                  <div className="h-20 md:h-24 w-full rounded-md bg-white/[0.05]" />
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="h-12 rounded-md bg-white/[0.05]" />
+                    <div className="h-12 rounded-md bg-white/[0.05]" />
+                    <div className="h-12 rounded-md bg-white/[0.05]" />
+                  </div>
+                  <div className="h-2.5 w-3/5 rounded-full bg-white/[0.09]" />
                 </div>
-                <h3 className="font-serif italic text-3xl md:text-4xl text-white tracking-tight mb-2">
-                  COMING SOON
-                </h3>
-                <p className="font-mono text-xs text-[#F4A300]/70 tracking-widest mt-8 uppercase">
-                  Architecture In Progress
+
+                <div className="mt-8 flex items-center gap-3">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#F4A300] animate-pulse" />
+                  <span className="font-mono text-[10px] uppercase tracking-[0.45em] text-white/70">
+                    In stealth
+                  </span>
+                </div>
+                <p className="mt-4 font-mono text-[11px] text-center text-white/45 max-w-sm leading-relaxed">
+                  200,000+ lines of orchestrated architecture — not ready to be seen.
                 </p>
               </div>
-              
+
               {/* Top and Bottom Fade Masks */}
-              <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none" />
-              <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#050505] to-transparent pointer-events-none" />
+              <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-20" />
+              <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#050505] to-transparent pointer-events-none z-20" />
             </div>
           </m.div>
         </m.div>
