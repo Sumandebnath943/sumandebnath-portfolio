@@ -91,11 +91,20 @@ Every route is statically prerendered unless noted.
 | `/apps/forget-anything` | Forget Anything? | Gold `#D4AF37` + emerald `#50C878` |
 | `/games/pixelville` | PixelVille | Gold `#F5B94A` / warm `#ffe6b0` on night blue `#20304a` |
 | `/projects/aegis-vault` | AEGIS VAULT | Deep vault green `#07120A`, teal `#2DD4BF` |
+| `/banking/rm-copilot` | **Banking Co-pilot** (AI RM copilot) | Petrol `#4FA3D8` + brass `#D9A961` on `#070E14` |
 | `/fun-apps` | The lighter shelf | Near-black `#1a1a1a` |
 
 > **Naming trap:** **PentaCMD is the model; Pentashell is the CLI.** They are
 > different products with different pages and different palettes. Do not merge
 > or cross-reference them casually.
+
+> **Naming trap:** the Banking Co-pilot's source folder is called
+> `IDBI Sarthi`. **That name appears nowhere on the site and must not.** Naming
+> a real bank implies a client engagement; the product's own docs and its UI
+> both call it Banking Co-pilot. Its palette inverts the product's own petrol
+> blue and brass for a black ground, and it carries the product's rule with it —
+> brand hues stay clear of the red/amber/green band, because there those three
+> mean risk band, health score and KYC state.
 
 **Private**
 - `/desk-4f7a` — the visitor analytics dashboard, plus `/login`, `/insights`, `/v/[id]`
@@ -107,7 +116,7 @@ Every route is statically prerendered unless noted.
 - `app/api/cron/purge` — retention purge, daily at 03:20 UTC (`vercel.json`)
 - `pages/api/chat.js` — the AI assistant (Pages Router, deliberately)
 
-Adding a page means touching **four** wire-in points, not one — see §8.
+Adding a page means touching **five** wire-in points, not one — see §8.
 
 ### 3.1 Global chrome — what `app/layout.tsx` mounts on every page
 
@@ -313,6 +322,15 @@ container, and since it never scrolls, the sticky child just scrolls away with
 the page. This broke the sticky showcase on `/apps/migi-app`. If a sticky
 column is not pinning, check every ancestor for `overflow-hidden` before
 touching the sticky code.
+
+> **The same rule eats a straddling legend.** Both PACT signature panels label
+> themselves with a `-top-[10px]` legend that crosses the card's own border, and
+> both cards carried `overflow-hidden` for a decorative sweep beam — so 9px of a
+> 17px label was clipped and neither legend had ever rendered (fixed 22 Aug).
+> When a card must clip something decorative *and* let a child escape its
+> bounds, **put `overflow-hidden` on a wrapper around the decoration**, not on
+> the card. To measure rather than squint: put the rule back temporarily and
+> compare `getBoundingClientRect().top` against the clipping ancestor's.
 
 **2. The body is the scroll container — but window scroll events do still fire.**
 `document.body` computes to `overflow: hidden auto`, which is why
@@ -616,8 +634,17 @@ ROASmind silver · Geek Collectibles neon crimson · EMBER warm orange.
 ### 7.3 `components/ui/` — shared primitives
 
 `Button`, `GlassCard`, `GradientText`, `SectionWrapper`, `SectionKicker`,
-`AnimatedBento`, `PrivacyNotice`, `EasterEggs`, `SiteTour`. This is the only
-genuinely shared component layer; everything else is per-product by design.
+`AnimatedBento`, `PrivacyNotice`, `EasterEggs`, `SiteTour`, `HeroLock`. This is
+the only genuinely shared component layer; everything else is per-product by
+design.
+
+`HeroLock` is shared because it is site furniture, not page identity: it clears
+the chat launcher and the mascot out of a hero's CTAs on phones. It exports a
+`useHeroLock(ref)` hook for client components that already ref their own hero
+(`Hero.tsx`) and a default `<HeroLock />` component for the product pages, which
+are server components and cannot hold a ref. The component **observes its parent
+element**, so it belongs directly inside the hero `<section>` and nowhere
+deeper; it renders a `hidden` span, so it has no box and no layout effect.
 
 `SectionKicker` is the numbered pill above each long-form homepage heading —
 `02 / The Evolution`, `05 / Operating Principles`, `06 / Experience`,
@@ -628,7 +655,7 @@ and one hard-coded ink fails contrast on at least one of them.
 
 ---
 
-## 8. Adding a product page — the four wire-in points
+## 8. Adding a product page — the five wire-in points
 
 Missing one of these is the most common defect in this repo. A new page needs:
 
@@ -636,13 +663,24 @@ Missing one of these is the most common defect in this repo. A new page needs:
    `components/<slug>/<Slug>Visuals.tsx` for its client pieces and optionally
    `<slug>-data.ts`.
 2. **`components/layout/Navigation.tsx`** — add the entry under the right
-   submenu, with the product's accent colour.
+   submenu, with the product's accent colour. A new category (a new sub-menu
+   such as **Banking**) is just a nested `submenus` array; the phone sheet
+   renders from the same structure, so both menus pick it up at once.
 3. **`components/layout/CommandPalette.tsx`** — add id, `/command`, label,
    description, href, icon.
 4. **`app/sitemap.ts`** — add the URL with `changeFrequency` and `priority`.
+5. **`<HeroLock />`** — mount `components/ui/HeroLock.tsx` as a **direct child
+   of the hero `<section>`**. Without it the chat launcher and the mascot cover
+   the hero's own CTAs on a phone. See PORTFOLIO_HANDOFF.md §4 for the measured
+   overlap on every page.
 
 Also set page-level `metadata` with `alternates.canonical` and an `openGraph`
 image, and put screenshots under `public/<slug>/`.
+
+If the page should be findable by answer engines as well as Google, add it to
+**`public/llms.txt`** and **`public/llms-full.txt`** too — every other product
+already has an entry there, and a page missing from them is invisible to that
+route even when its JSON-LD is perfect.
 
 ### Page skeleton conventions
 

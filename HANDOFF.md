@@ -4,10 +4,10 @@ Where the project stands, what changed most recently, and what is worth doing
 next. For how the system is built read **PROJECT_BIBLE.md**; for how the site
 writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
-**Last updated:** 19 August 2026
+**Last updated:** 22 August 2026
 **Branch:** `main`.
-**Last session:** two performance passes plus an intro/loader rebuild — §1.1, §1.2.
-**Session before:** an editorial and density pass over eleven homepage sections — see §2.
+**Last session:** a new Banking Co-pilot product page, the hero lock extended to every product page, and the PACT panels' clipped legends — §1.4.
+**Session before:** two performance passes plus an intro/loader rebuild — §1.1, §1.2.
 
 > Run `git log --oneline -15` before trusting this section — it is a snapshot,
 > and the commit log is the authority on what has happened since.
@@ -24,6 +24,8 @@ Recent history, newest first, gives an accurate picture of the trajectory:
 
 | Area | State |
 |---|---|
+| **Banking Co-pilot** (`/banking/rm-copilot`) | Built 22 Aug. New **Banking** group under Portfolio. Fully prerendered; 382 KB of WebP, one eager image. Done. |
+| **Hero lock** | Extended 22 Aug from the homepage to all ten product pages — `components/ui/HeroLock.tsx`. Done. |
 | **Admin dashboard** (`/desk-4f7a`) | Built 13–14 Aug across five phases. Live, password-gated, recording. |
 | **Visitor notifier** | Rebuilt 13–14 Aug: journey card, crawler and scanner handling, Postgres persistence. |
 | **Privacy** (`/privacy`) | Rewritten twice as the truth changed. Now states real retention periods. |
@@ -196,6 +198,70 @@ Index (the loader's black screen *is* the Speed Index, ~2 pts), desktop TBT
 **Stop point agreed with Suman: the site is done being optimised.** The
 `browserslist` change was offered and declined as not worth touching the build
 config for zero points.
+
+---
+
+### 1.4 Banking Co-pilot, the hero lock, and two clipped legends (22 Aug 2026)
+
+Three pieces of work, in the order they were asked for.
+
+**The Banking Co-pilot page** (`ac33e22`). A showcase page for an AI copilot for
+bank Relationship Managers, at `/banking/rm-copilot`, under a new **Banking**
+group in the Portfolio menu. Source material was the product's own
+`docs/PORTFOLIO_HANDOFF.md`, `SECURITY_POSTURE.md` and `HANDOFF.md`.
+
+Decisions he took explicitly:
+
+- **Named "Banking Co-pilot", with no bank named.** The source folder is
+  `IDBI Sarthi`; that name is nowhere on the site. See the naming trap in
+  Bible §3.
+- **Live site linked, repo not.** `bankingcopilot.houseofnamus.com`. Its
+  marketing page is public but the twelve modules are behind sign-in, and the
+  login page does not self-serve demo credentials — so the CTA says "Open the
+  live site", not "try the demo", and no credentials are published.
+- **Full page, image-light**, rather than the short version its own handoff
+  offers, plus a dedicated security section — which is the largest thing on the
+  page and carries the diagrams: a four-layer defence spine, and 404-vs-403 drawn
+  as two request/response pairs collapsing into one indistinguishable answer.
+
+The source folder was **read-only** and nothing was written into it. All eight
+captures already existed in its `docs/assets/screenshots`, so the app never had
+to be run. Four of the twenty were skipped as empty-state shots that would read
+as an unfinished product; those modules are described in prose instead.
+
+**The hero lock, everywhere** (`96e3df8`). `f87d26c` fixed the chat launcher and
+mascot covering the homepage hero's CTAs on a phone, but nothing carried it to
+the product pages. Measured at 375×812: **all ten collide**, five of them via
+the mascot rather than the launcher. `useHeroLock` moved to
+`components/ui/HeroLock.tsx` and gained a component form for the server-component
+pages. Full table and reasoning in that file; the rule is now wire-in point 5 in
+Bible §8 and a section in PORTFOLIO_HANDOFF §4.
+
+**Two clipped legends** (`69b9903`). Both PACT signature panels had `overflow-hidden`
+eating the legend that straddles their top border — 9px of a 17px label, so
+neither had ever rendered. The clip moved onto a wrapper around the sweep beam
+that actually needed it. See the note under motion trap 1 in Bible §5.
+
+**A verification lesson worth keeping.** Twice this session the Browser pane went
+undisplayed, which suspends compositing — and with it `IntersectionObserver`,
+which delivers *nothing*, not even its initial observation. The hero lock looked
+broken when it was fine. Two things that rescue the session rather than guessing:
+
+1. **Run a known-good control.** The shipped homepage lock failed identically,
+   which isolated the fault to the pane in one call.
+2. **Split at the class boundary.** Add the class by hand and test the CSS half
+   properly — `getComputedStyle` for the declarations, and
+   `document.elementFromPoint` at the contested pixel for what a tap actually
+   reaches. Only the observer's *delivery* is then unverified, and that is a
+   browser guarantee rather than our code.
+
+Layout still computes with the pane hidden, so clipping and wrapping bugs — the
+PACT legends — are fully measurable either way, and measuring beats squinting:
+"9px of 17px" is a better bug report than "looks cut off".
+
+**Left unverified:** nothing outstanding. The lock was confirmed end to end on a
+composited pane across all ten pages plus the homepage, and both legends were
+checked at 375 and 1280.
 
 ---
 

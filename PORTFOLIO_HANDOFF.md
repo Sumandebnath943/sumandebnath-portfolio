@@ -84,11 +84,17 @@ short rule: `VERSION 2 · STANDALONE NATIVE ANDROID`.
 | `/games/pixelville` | A self-governing pixel-art village. Gold `#F5B94A` on night blue `#20304a`. |
 | `/apps/forget-anything` | A departure companion app. Gold `#D4AF37` + emerald `#50C878`. |
 | `/projects/aegis-vault` | Encrypted notepad. Deep vault green `#07120A` + teal `#2DD4BF`. |
+| `/banking/rm-copilot` | **Banking Co-pilot** — an AI copilot for bank Relationship Managers. The argument is *restraint*: the scoring is deterministic and no LLM takes a credit decision, because a bank cannot defend what it cannot reconstruct. Security is the largest section, not a badge strip. Petrol `#4FA3D8` + brass `#D9A961` on `#070E14`. |
 | `/fun-apps` | The lighter shelf. Near-black `#1a1a1a`. |
 
 > **PentaCMD is the model; Pentashell is the CLI.** Two products, two pages, two
 > palettes. Getting this wrong in copy is the single easiest mistake to make on
 > this site.
+
+> **Never call the Banking Co-pilot "IDBI Sarthi."** That is only the name of
+> its source folder. No real bank is named anywhere on the page, because doing
+> so would imply a client engagement. Its own docs and its own UI say Banking
+> Co-pilot.
 | `/privacy` | Must state exactly what `layout.tsx` loads. Two GA4 properties, Vercel Analytics, Speed Insights — **and the YouTube embed in the homepage `Film` section**, which loads nothing until a visitor presses play. |
 
 ### 3b. The film — `Who am I?`

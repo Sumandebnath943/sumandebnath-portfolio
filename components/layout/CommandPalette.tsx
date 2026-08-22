@@ -104,6 +104,14 @@ const commands: Command[] = [
     icon: "🛡",
   },
   {
+    id: "banking-copilot",
+    command: "/banking",
+    label: "Banking Co-pilot",
+    description: "AI copilot for bank Relationship Managers — 12 modules, deterministic scoring, 38 security tests",
+    href: "/banking/rm-copilot",
+    icon: "🏦",
+  },
+  {
     id: "stack",
     command: "/stack",
     label: "Systems Stack",
