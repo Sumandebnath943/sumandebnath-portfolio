@@ -14,6 +14,16 @@
  * When the PDF changes, change this file and bump RESUME_UPDATED. Nothing else
  * needs touching.
  *
+ * ── One deliberate divergence from the PDF, as of 22 Aug 2026 ──────────────
+ * The MIGI fleet size here reads **46**, which the PDF does not say. The PDF
+ * disagrees with *itself*: its project heading says "Fleet of 40+ AI Agents"
+ * while the line under it says "44-agent autonomous AI fleet". Neither is
+ * current — the fleet repo has 46 workflow files today (4 of them plumbing:
+ * hello, register-commands, telegram-webhook, evals). The whole site was
+ * squared to 46; the PDF is a Word export and can only be fixed at the source.
+ * **Fix the .docx and re-export, then delete this note.** Until then the page
+ * and the file a recruiter downloads will differ on this one number.
+ *
  * Deliberately NOT here: expected CTC. Compensation stays a conversation, so
  * it must not leak into the page, the structured data, or the assistant.
  */
@@ -200,12 +210,12 @@ export type ResumeProject = {
 
 export const flagshipProjects: ResumeProject[] = [
   {
-    name: "MIGI — Fleet of 40+ AI Agents Working Independently",
+    name: "MIGI — Fleet of 46 AI Agents Working Independently",
     status: "Live",
     problem:
       "No single system autonomously manages personal brand, career, finances, and infrastructure monitoring for a solo founder.",
     built:
-      "44-agent autonomous AI fleet covering LinkedIn autopilot, job applications, expense tracking, journaling, uptime monitoring and more, controlled via a dashboard with 2FA and a Telegram bot. 500+ automated eval checks.",
+      "46-agent autonomous AI fleet covering LinkedIn autopilot, job applications, expense tracking, journaling, uptime monitoring and more, controlled via a dashboard with 2FA and a Telegram bot. 500+ automated eval checks.",
     href: "/agents/migi",
   },
   {

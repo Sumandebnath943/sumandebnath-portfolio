@@ -131,7 +131,7 @@ export const TOUR_STEPS: TourStep[] = [
   {
     route: "/agents/migi",
     element: "#fleet",
-    title: "Forty-Four Agents",
+    title: "Forty-Six Agents",
     description:
       "MIGI is an autonomous fleet that runs a personal brand, job applications, expenses, journaling and uptime monitoring — without being asked each time.",
     side: "top",

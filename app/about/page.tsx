@@ -91,7 +91,7 @@ export default function AboutPage() {
                 <ul className="ab-facts">
                   <li>21 AI systems designed, built and shipped independently</li>
                   <li>A 47M-parameter language model trained from scratch</li>
-                  <li>A 44-agent autonomous fleet running in production</li>
+                  <li>A 46-agent autonomous fleet running in production</li>
                   <li>Prompt and context engineering, agentic systems, full-stack delivery</li>
                 </ul>
               </div>
@@ -142,7 +142,7 @@ export default function AboutPage() {
               instruction-to-command pairs, reaching roughly 87% exact match;{" "}
               <Link href="/llms/qdex-1.5b">Qdex-1.5B</Link> is a QLoRA fine-tuning
               pipeline benchmarked against HumanEval; and{" "}
-              <Link href="/agents/migi">MIGI</Link> is a fleet of 44 agents running a
+              <Link href="/agents/migi">MIGI</Link> is a fleet of 46 agents running a
               personal brand, job applications, expenses and uptime monitoring on
               their own, held together by 500+ automated eval checks.
             </p>

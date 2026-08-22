@@ -25,7 +25,7 @@ export const MIGI = {
 
 /* ── Headline numbers (hero band) ─────────────────────────────────────────── */
 export const STATS: { value: number; suffix?: string; prefix?: string; label: string; sub: string }[] = [
-  { value: 30, suffix: "+", label: "autonomous agents", sub: "one job each, all running" },
+  { value: 46, label: "autonomous agents", sub: "one job each, all running" },
   { value: 3, label: "identities, one panel", sub: "fleet · MAS · ECHO" },
   { value: 1, label: "right brain per job", sub: "a fallback for every agent" },
   { value: 24, suffix: "/7", label: "in the cloud", sub: "no servers, no paid infra" },
@@ -48,9 +48,9 @@ export const PILLARS: {
     badge: "the doer",
     name: "MIGI",
     role: "the fleet",
-    tagline: "30+ agents that run my career & ops.",
-    body: "The original fleet: 30+ cloud agents that monitor, learn, create and run my day — each doing one job and reporting back, plus a staff layer that runs the fleet itself.",
-    points: ["30+ scheduled + on-demand agents", "Monitors, curates, drafts, job-hunts, tracks money", "Reaches me on Telegram + email"],
+    tagline: "46 agents that run my career & ops.",
+    body: "The original fleet: 46 cloud agents that monitor, learn, create and run my day — each doing one job and reporting back, plus a staff layer that runs the fleet itself.",
+    points: ["46 scheduled + on-demand agents", "Monitors, curates, drafts, job-hunts, tracks money", "Reaches me on Telegram + email"],
   },
   {
     id: "mas",
@@ -415,7 +415,7 @@ export const UNDERHOOD: { title: string; body: string; icon: string }[] = [
 
 /* ── Architecture flow (agents → LLMs → channels → state → dashboard) ─────── */
 export const FLOW: { id: string; label: string; sub: string }[] = [
-  { id: "agents", label: "30+ Agents", sub: "GitHub Actions · cron + on-demand" },
+  { id: "agents", label: "46 Agents", sub: "GitHub Actions · cron + on-demand" },
   { id: "llms", label: "Routed LLMs", sub: "right brain per job · free + premium" },
   { id: "channels", label: "Telegram + Email", sub: "instant pings · designed digests" },
   { id: "state", label: "Supabase", sub: "shared brain · memory" },
@@ -518,7 +518,7 @@ export const SECURITY_FEATURES: { title: string; body: string; icon: string }[] 
 
 /* ── How it was built ─────────────────────────────────────────────────────── */
 export const BUILD: { title: string; body: string }[] = [
-  { title: "Built with Claude Code", body: "From architecture to 30+ agents to a secure dashboard — designed and shipped by orchestrating an AI coding agent, solo." },
+  { title: "Built with Claude Code", body: "From architecture to 46 agents to a secure dashboard — designed and shipped by orchestrating an AI coding agent, solo." },
   { title: "On free infrastructure", body: "GitHub Actions, free LLM tiers, Supabase and Vercel free plans. The whole fleet runs 24/7 at zero running cost." },
   { title: "Humans in the loop", body: "Drafts and queues, never auto-send to the outside world. LinkedIn is draft-only; nothing leaves without approval." },
   { title: "One repo, many agents", body: "A single public monorepo with a shared lib/ foundation — one place to add an agent, one brain they all share." },

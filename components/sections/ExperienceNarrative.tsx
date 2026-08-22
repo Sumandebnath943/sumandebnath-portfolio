@@ -139,7 +139,7 @@ export default function ExperienceNarrative() {
                   text: "PentaCMD-47M, built nanoGPT-style on 299K instruction→command pairs at ~87% exact match — plus Qdex-1.5B, a QLoRA fine-tune benchmarked against HumanEval."
                 },
                 {
-                  bold: "Runs a 44-agent fleet in production",
+                  bold: "Runs a 46-agent fleet in production",
                   text: "MIGI handles the personal brand, job applications, expenses and uptime monitoring on its own, held together by 500+ automated eval checks."
                 },
                 {

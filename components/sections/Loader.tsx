@@ -56,7 +56,7 @@ type Beat = { text: string; duration: number };
 const SEQUENCE: Beat[] = [
   { text: "9+ years in brand marketing", duration: 850 },
   { text: "2+ years shipping AI-native products", duration: 850 },
-  { text: "44 agents. Two language models.", duration: 850 },
+  { text: "46 agents. Two language models.", duration: 850 },
   { text: "Entering the system", duration: 450 },
 ];
 

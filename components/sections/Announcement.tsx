@@ -18,7 +18,7 @@ const announcements: Announcement[] = [
   },
   {
     title: "Migi",
-    desc: "A fleet of 44 autonomous AI agents — finds work, tracks money, launches what I ship — held together by 500+ automated eval checks.",
+    desc: "A fleet of 46 autonomous AI agents — finds work, tracks money, launches what I ship — held together by 500+ automated eval checks.",
     href: "/agents/migi",
     color: "#C6F24E",
   },

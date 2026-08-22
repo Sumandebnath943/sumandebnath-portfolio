@@ -62,9 +62,9 @@ import {
 /* ── SEO ───────────────────────────────────────────────────────────────── */
 const SITE = "https://sumandebnath.houseofnamus.com";
 export const metadata: Metadata = {
-  title: "Migi · A Three-Pillar Operator OS — 30+ AI Agents, a Multi-Agent System & a Knowledge Brain",
+  title: "Migi · A Three-Pillar Operator OS — 46 AI Agents, a Multi-Agent System & a Knowledge Brain",
   description:
-    "Migi grew from a fleet of 30+ self-running AI agents into a three-pillar operator OS: MIGI (the fleet), MIGI MAS (a multi-agent system you hand a goal), and MIGI ECHO (a knowledge brain you talk to) — one secure control panel, three identities. Now with intelligent model routing (the right AI per job, a fallback for every agent), self-testing and self-healing, and independently security-audited + hardened. Built solo with Claude Code, on entirely free infrastructure.",
+    "Migi grew from a fleet of 46 self-running AI agents into a three-pillar operator OS: MIGI (the fleet), MIGI MAS (a multi-agent system you hand a goal), and MIGI ECHO (a knowledge brain you talk to) — one secure control panel, three identities. Now with intelligent model routing (the right AI per job, a fallback for every agent), self-testing and self-healing, and independently security-audited + hardened. Built solo with Claude Code, on entirely free infrastructure.",
   keywords: [
     "Migi", "AI agent fleet", "multi-agent system", "MAS", "RAG knowledge brain", "autonomous agents",
     "agent orchestration", "GitHub Actions agents", "Claude Code", "AI generalist", "personal AI automation",
@@ -75,7 +75,7 @@ export const metadata: Metadata = {
     type: "website",
     title: "Migi · A Three-Pillar Operator OS — fleet + multi-agent system + knowledge brain",
     description:
-      "30+ self-running AI agents, a multi-agent system you hand a goal, and a second brain you talk to — one secure control panel. Built solo with Claude Code, on free infrastructure.",
+      "46 self-running AI agents, a multi-agent system you hand a goal, and a second brain you talk to — one secure control panel. Built solo with Claude Code, on free infrastructure.",
     url: `${SITE}/agents/migi`,
     images: [{ url: "/migi-agent/overview.png", width: 1350, height: 767, alt: "The Migi mission-control dashboard" }],
   },
@@ -89,7 +89,7 @@ const appLd = {
   applicationCategory: "BusinessApplication",
   operatingSystem: "Cloud (GitHub Actions + Vercel)",
   description:
-    "A personal three-pillar operator OS: MIGI, a fleet of 30+ autonomous AI agents; MIGI MAS, a multi-agent system that plans and executes goals; and MIGI ECHO, a personal knowledge brain (RAG) you talk to. Orchestrated on GitHub Actions and commanded through one secure Next.js control panel.",
+    "A personal three-pillar operator OS: MIGI, a fleet of 46 autonomous AI agents; MIGI MAS, a multi-agent system that plans and executes goals; and MIGI ECHO, a personal knowledge brain (RAG) you talk to. Orchestrated on GitHub Actions and commanded through one secure Next.js control panel.",
   url: `${SITE}/agents/migi`,
   author: { "@type": "Person", name: "Suman Debnath", url: SITE },
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
@@ -97,11 +97,11 @@ const appLd = {
 const articleLd = {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  headline: "Migi — a personal suite of 30+ autonomous AI agents",
+  headline: "Migi — a personal suite of 46 autonomous AI agents",
   author: { "@type": "Person", name: "Suman Debnath" },
   publisher: { "@type": "Person", name: "Suman Debnath" },
   description:
-    "How one operator designed, built and now runs a 30+ agent fleet and a secure control dashboard end to end with Claude Code, on free infrastructure.",
+    "How one operator designed, built and now runs a 46 agent fleet and a secure control dashboard end to end with Claude Code, on free infrastructure.",
   mainEntityOfPage: `${SITE}/agents/migi`,
 };
 
@@ -277,7 +277,7 @@ export default function MigiPage() {
             <Reveal delay={0.12}>
               <h1 className="font-manrope font-extrabold text-[2.1rem] sm:text-[2.9rem] md:text-[3.3rem] leading-[1.08] tracking-[-0.04em] mt-7 mb-5" style={{ color: MIGI.ink }}>
                 It started as{" "}
-                <span className="inline-block rounded-xl px-3 py-0.5 leading-[1.12] align-baseline" style={{ background: MIGI.ink, color: MIGI.lime }}>30+ AI agents</span>.
+                <span className="inline-block rounded-xl px-3 py-0.5 leading-[1.12] align-baseline" style={{ background: MIGI.ink, color: MIGI.lime }}>46 AI agents</span>.
                 <br />
                 Now it&rsquo;s an operator OS.
               </h1>
@@ -286,7 +286,7 @@ export default function MigiPage() {
             <Reveal delay={0.18}>
               <p className="text-[0.97rem] md:text-[1.08rem] leading-relaxed max-w-2xl mb-8" style={{ color: "rgba(22,23,28,0.72)" }}>
                 Migi grew from a fleet that does my work into three identities I switch between in one
-                control panel: <span style={{ color: MIGI.ink, fontWeight: 700 }}>MIGI</span>, the 30+ agent
+                control panel: <span style={{ color: MIGI.ink, fontWeight: 700 }}>MIGI</span>, the 46 agent
                 fleet; <span style={{ color: MIGI.ink, fontWeight: 700 }}>MIGI MAS</span>, a multi-agent
                 system I hand a goal to; and <span style={{ color: MIGI.ink, fontWeight: 700 }}>MIGI ECHO</span>,
                 a second brain I can talk to. <span style={{ color: MIGI.ink, fontWeight: 700 }}>Built entirely with Claude Code, on free infrastructure.</span>
@@ -1468,7 +1468,7 @@ export default function MigiPage() {
                 Built solo — the AI-native way.
               </h2>
               <p className="text-[15px] leading-relaxed max-w-2xl mb-12" style={{ color: MIGI.muted }}>
-                From architecture to 30+ agents to a multi-agent system, a knowledge brain and a secure
+                From architecture to 46 agents to a multi-agent system, a knowledge brain and a secure
                 dashboard: designed and shipped by one person orchestrating an AI coding agent, end to
                 end, on entirely free infrastructure.
               </p>

@@ -220,7 +220,7 @@ WHAT MAKES SUMAN DIFFERENT:
 Most senior marketers use AI tools. Suman builds them. He has 9+ years
 of real marketing domain expertise plus 2+ years of independently
 shipping AI-native products — including a 47M-parameter language model
-trained from scratch and a 44-agent autonomous fleet. He knows what
+trained from scratch and a 46-agent autonomous fleet. He knows what
 marketing teams need because he has run one. He knows what AI can
 deliver because he builds with it.
 
@@ -243,7 +243,7 @@ Never invent a path that is not on this list.
 /projects/d-pe        D-PE.ai dossier
 /projects/geek-collectibles  Geek Collectibles dossier
 /projects/aegis-vault Aegis Vault — zero-knowledge encrypted notepad
-/agents/migi          MIGI — the 44-agent fleet
+/agents/migi          MIGI — the 46-agent fleet
 /agents/pentashell    Pentashell CLI
 /agents/pact-agent    PACT Agent
 /slms/pentacmd        PentaCMD-47M

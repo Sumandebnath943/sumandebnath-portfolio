@@ -247,7 +247,7 @@ Technology: Next.js, OpenAI API, Groq.
 
 ## MODELS, AGENTS & DEVELOPER TOOLING
 
-MIGI — A fleet of 44 AI agents working independently. Live at https://sumandebnath.houseofnamus.com/agents/migi. The problem: no single system autonomously manages personal brand, career, finances, and infrastructure monitoring for a solo founder. The build: a 44-agent autonomous fleet covering LinkedIn autopilot, job applications, expense tracking, journaling and uptime monitoring, controlled through a dashboard with 2FA and a Telegram bot, and held together by 500+ automated eval checks. A native Android client exists at https://sumandebnath.houseofnamus.com/apps/migi-app.
+MIGI — A fleet of 46 AI agents working independently. Live at https://sumandebnath.houseofnamus.com/agents/migi. The problem: no single system autonomously manages personal brand, career, finances, and infrastructure monitoring for a solo founder. The build: a 46-agent autonomous fleet covering LinkedIn autopilot, job applications, expense tracking, journaling and uptime monitoring, controlled through a dashboard with 2FA and a Telegram bot, and held together by 500+ automated eval checks. A native Android client exists at https://sumandebnath.houseofnamus.com/apps/migi-app.
 
 PentaCMD-47M — A small language model trained from scratch. Live at https://sumandebnath.houseofnamus.com/slms/pentacmd. A 47M-parameter SLM built nanoGPT-style, trained on 299,000 instruction-to-command pairs spanning five terminal families, reaching roughly 87% exact-match accuracy. Not a fine-tune of someone else's model — a model trained from zero.
 

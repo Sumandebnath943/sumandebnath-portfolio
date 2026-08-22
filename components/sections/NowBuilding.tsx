@@ -10,7 +10,7 @@ const NOW_LAST_UPDATED = "2026-08-19";
 // and look at, and it is the strongest single proof of the claim the rest of the
 // page makes. Numbers are read off lib/resume.ts — keep them in step with it.
 const migiStats = [
-  { figure: "44", label: "Autonomous agents" },
+  { figure: "46", label: "Autonomous agents" },
   { figure: "500+", label: "Automated eval checks" },
   { figure: "24/7", label: "Running unattended" },
 ];
@@ -77,7 +77,7 @@ export default function NowBuilding() {
                 </span>
               </h3>
               <p className="font-manrope text-[15px] leading-[1.7] text-white/80 max-w-xl">
-                A fleet of 44 agents that runs my personal brand, applies for
+                A fleet of 46 agents that runs my personal brand, applies for
                 jobs, tracks expenses, keeps a journal and watches uptime &mdash;
                 without me. Controlled from a 2FA dashboard, a Telegram bot and a
                 native Android client, and kept honest by 500+ automated eval

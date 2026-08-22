@@ -30,7 +30,7 @@ const INITIAL_MESSAGE: Message = {
 const SUGGESTED_QUESTIONS = [
   "What roles is Suman looking for?",
   "He trained his own language model?",
-  "Tell me about the 44-agent AI fleet",
+  "Tell me about the 46-agent AI fleet",
   "Why hire a marketer who ships products?",
 ];
 
@@ -79,7 +79,7 @@ const IDLE_MESSAGES = [
   "Need his résumé? Just ask.",
   "Psst… ask me about ROASmind.",
   "He trained a 47M-param model. Ask me.",
-  "44 AI agents. Running on their own.",
+  "46 AI agents. Running on their own.",
   "Want the quick pitch on Suman?",
   "I can walk you through his projects!",
 ];

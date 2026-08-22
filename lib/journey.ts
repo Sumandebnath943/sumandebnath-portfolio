@@ -456,7 +456,7 @@ export const chapters: Chapter[] = [
     cue: "Ship them",
     stats: [
       { value: "20+", label: "AI products shipped" },
-      { value: "40+", label: "autonomous agents" },
+      { value: "46", label: "autonomous agents" },
       { value: "1 + 1", label: "own SLM · fine-tuned LLM" },
     ],
     depth: {
@@ -468,7 +468,7 @@ export const chapters: Chapter[] = [
         "AI-assisted coding",
         "Scalable product development with AI",
         "20+ working AI products in ~2 years",
-        "40+ AI agents running autonomously",
+        "46 AI agents running autonomously",
         "Built an SLM of my own (PentaCMD)",
         "Fine-tuned an LLM (Qdex-1.5B)",
         "Prompt engineering and context engineering",
@@ -509,7 +509,7 @@ export const chapters: Chapter[] = [
         "Made 100+ PPTs, product decks and business decks (and I hate making PPTs)",
         "I design, I actually use AI, I edit video, I run ads, I write strategy, I ideate, I ship products",
         "Built my own SLM, and fine-tuned an LLM",
-        "Built 40+ AI agents that run on their own",
+        "Built 46 AI agents that run on their own",
         "Write context-aware prompts as a discipline — prompt and context engineering",
         "This website. Try typing “hire” anywhere on it.",
       ],

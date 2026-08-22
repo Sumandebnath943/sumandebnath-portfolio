@@ -28,7 +28,7 @@ import {
 export const metadata: Metadata = {
   title: { absolute: `${identity.name} — Résumé | ${identity.headline}` },
   description:
-    "The full résumé of Suman Debnath: 9+ years in brand and product marketing, 2+ years shipping AI-native products — a 44-agent autonomous fleet, a 47M-parameter language model trained from scratch, and 21 live systems.",
+    "The full résumé of Suman Debnath: 9+ years in brand and product marketing, 2+ years shipping AI-native products — a 46-agent autonomous fleet, a 47M-parameter language model trained from scratch, and 21 live systems.",
   alternates: { canonical: "/resume" },
   keywords: [
     "Suman Debnath resume",
