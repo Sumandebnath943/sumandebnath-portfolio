@@ -101,6 +101,13 @@ const navLinks: NavLink[] = [
           { label: "Pixelville", href: "/games/pixelville", color: "#F5B94A" },
         ],
       },
+      {
+        label: "Banking",
+        color: "#4FA3D8",
+        submenus: [
+          { label: "Banking RM Copilot", href: "/banking/rm-copilot", color: "#D9A961" },
+        ],
+      },
       { label: "Fun Apps", href: "/fun-apps", color: "#FF8C00" },
     ],
   },

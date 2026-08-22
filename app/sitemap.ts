@@ -28,6 +28,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE}/apps/forget-anything`, changeFrequency: "monthly" as const, priority: 0.8 },
     { url: `${SITE}/apps/migi-app`, changeFrequency: "monthly" as const, priority: 0.8 },
     { url: `${SITE}/games/pixelville`, changeFrequency: "monthly" as const, priority: 0.8 },
+    { url: `${SITE}/banking/rm-copilot`, changeFrequency: "monthly" as const, priority: 0.8 },
     { url: `${SITE}/fun-apps`, changeFrequency: "monthly" as const, priority: 0.7 },
     { url: `${SITE}/privacy`, changeFrequency: "yearly" as const, priority: 0.3 },
 

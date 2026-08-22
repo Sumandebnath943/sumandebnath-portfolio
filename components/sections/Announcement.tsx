@@ -11,6 +11,12 @@ type Announcement = {
 
 const announcements: Announcement[] = [
   {
+    title: "Banking Co-pilot",
+    desc: "An AI copilot for bank Relationship Managers — 12 modules, deterministic scoring, cited policy answers, and 38 tests holding the security model in place.",
+    href: "/banking/rm-copilot",
+    color: "#D9A961",
+  },
+  {
     title: "AEGIS VAULT",
     desc: "A zero-knowledge encrypted notepad — encrypted in your browser, unreadable to the server. Argon2id + AES-256-GCM.",
     href: "/projects/aegis-vault",
