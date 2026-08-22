@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE}/resume`, changeFrequency: "monthly" as const, priority: 0.95 },
     { url: `${SITE}/journey`, changeFrequency: "monthly" as const, priority: 0.9 },
     { url: `${SITE}/about`, changeFrequency: "monthly" as const, priority: 0.9 },
+    { url: `${SITE}/profile`, changeFrequency: "monthly" as const, priority: 0.9 },
     { url: `${SITE}/contact`, changeFrequency: "monthly" as const, priority: 0.9 },
     { url: `${SITE}/projects`, changeFrequency: "weekly" as const, priority: 0.9 },
     { url: `${SITE}/learnings`, changeFrequency: "monthly" as const, priority: 0.9 },

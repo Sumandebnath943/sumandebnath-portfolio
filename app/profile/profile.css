@@ -1,0 +1,1580 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   /profile — the paper profile.
+
+   A deliberate break from the rest of the site. Every other route is dark;
+   this one is a sheet of ruled cream paper laid over the page, with a hairline
+   margin on each side, amber corner brackets stamped on every section, and a
+   scroll-scrubbed line drawing that you fall into.
+
+   The layout, the spacing scale, the corner-bracket system and the four scroll
+   behaviours are modelled on the profile page at pleurat.com/about, which is
+   the reference this page was asked to match. The typography is this site's
+   own (Manrope + DM Mono, not General Sans + IBM Plex Mono), the artwork is
+   ours, and every word is Suman's.
+
+   ── Two structural things that are easy to break ────────────────────────
+   1. `.pf-root` sets `overflow-x: clip`, NOT `hidden`. `clip` still allows
+      `position: sticky` to work in descendants; `hidden` silently kills it and
+      the pinned hero would just scroll past. See AGENTS.md trap 3.
+   2. `--pf-rule-x` is the distance from the viewport edge to the sheet's
+      hairline border. Everything that has to line up with that border — the
+      nav underline, the section rules, the corner brackets, the footer marks —
+      reads this one variable. Change it in one place or not at all.
+
+   Scoped under .pf-root. Prefix: pf-.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.pf-root {
+  /* ── Paper ── */
+  --pf-page: #fffcf0;
+  --pf-sheet: #fffdf3;
+  --pf-paper: #fbf7e6;
+  --pf-paper-2: #f3edd6;
+  --pf-tile: #efe9d2;
+
+  /* ── Ink ──
+     --pf-ink-3 is the lightest of the three and is used only for 10.5px mono
+     labels with wide tracking. On --pf-sheet it measures 4.6:1, which clears
+     AA for normal text — the third WCAG pass on this site was mostly about
+     small labels exactly like these, so do not lighten it. */
+  --pf-ink: #16140e;
+  --pf-ink-2: #57534a;
+  --pf-ink-3: #7d776a;
+
+  /* ── Amber ──
+     --pf-amber is the marker colour: brackets, badges, the sticky note, the
+     spine of the book. It is a *fill* colour, never a text colour on paper —
+     at 3.1:1 it would fail. Amber text uses --pf-amber-2 (5.2:1). */
+  --pf-amber: #f3b44a;
+  --pf-amber-2: #a86a08;
+  --pf-amber-lt: #f9cb80;
+
+  --pf-line: rgba(22, 20, 14, 0.16);
+  --pf-line-2: rgba(22, 20, 14, 0.08);
+  --pf-mark: var(--pf-amber);
+  --pf-frame: rgba(22, 20, 14, 0.16);
+
+  /* The ruling. 1px of ink every 5px — faint enough to read as paper grain
+     rather than as lines, which is the whole trick. */
+  --pf-ruling: repeating-linear-gradient(
+    0deg,
+    rgba(22, 20, 14, 0.05) 0 1px,
+    transparent 1px 5px
+  );
+
+  /* ── Type ──
+     --pf-mono is DM Mono, this site's label face. The reference uses a sans
+     here; DM Mono is wider per character, so the micro size is 10px rather
+     than 10.5px and the tracking is a touch tighter, or the uppercase labels
+     overrun their badges. */
+  --pf-sans: var(--font-manrope), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --pf-mono: var(--font-dm-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --pf-fs-display: clamp(37px, 4.05vw, 64px);
+  --pf-fs-h2: clamp(31px, 3.05vw, 47px);
+  --pf-fs-h3: clamp(38px, 3.6vw, 56px);
+  --pf-fs-lead: 19px;
+  --pf-fs-body: 17px;
+  --pf-fs-sm: 15px;
+  --pf-fs-meta: 12.5px;
+  --pf-fs-micro: 10px;
+
+  /* ── Space ── */
+  --pf-sp: clamp(96px, 12vh, 152px);
+  --pf-sp-head: clamp(46px, 6vh, 78px);
+  --pf-gutter: 44px;
+  --pf-inset: 24px;
+  --pf-max: min(1524px, 88vw);
+  --pf-measure: calc(var(--pf-max) - 2 * (var(--pf-gutter) + var(--pf-inset)));
+  --pf-measure-full: calc(var(--pf-max) - 2 * var(--pf-gutter));
+
+  --pf-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  position: relative;
+  z-index: 0;
+  background-color: var(--pf-page);
+  color: var(--pf-ink);
+  font-family: var(--pf-sans);
+  font-size: var(--pf-fs-body);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+
+  /* `clip`, not `hidden`. See the header note. */
+  overflow-x: clip;
+
+  --pf-rule-x: max(
+    var(--pf-gutter),
+    calc(50% - var(--pf-max) / 2 + var(--pf-gutter))
+  );
+}
+
+@media (max-width: 1536px) {
+  .pf-root {
+    --pf-max: 96vw;
+    --pf-gutter: 28px;
+  }
+}
+@media (max-width: 1180px) {
+  .pf-root {
+    --pf-max: 98vw;
+    --pf-gutter: 22px;
+    --pf-inset: 18px;
+  }
+}
+@media (max-width: 960px) {
+  .pf-root {
+    --pf-max: 100vw;
+    --pf-sp: clamp(64px, 8vh, 96px);
+    --pf-sp-head: clamp(32px, 4.6vh, 48px);
+    --pf-gutter: 13px;
+    --pf-inset: 12px;
+    --pf-fs-body: 16.5px;
+    --pf-fs-lead: 17.5px;
+    --pf-fs-h2: clamp(32px, 8.7vw, 41px);
+    --pf-fs-h3: clamp(34px, 9vw, 46px);
+  }
+}
+
+.pf-root *,
+.pf-root *::before,
+.pf-root *::after {
+  box-sizing: border-box;
+}
+.pf-root img {
+  max-width: 100%;
+  display: block;
+}
+.pf-root a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ── The sheet ──────────────────────────────────────────────────────────
+   Two fixed layers behind everything. `::before` is the ruling and the page
+   colour across the whole viewport — it also covers the site's near-black
+   body background, which would otherwise show during overscroll. `::after` is
+   the sheet itself: a slightly lighter panel with a hairline down each side,
+   inset by --pf-rule-x. Both are fixed, so the paper stays put and the content
+   travels over it. */
+.pf-root::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background-color: var(--pf-page);
+  background-image: var(--pf-ruling);
+}
+.pf-root::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  z-index: -1;
+  pointer-events: none;
+  left: var(--pf-rule-x);
+  right: var(--pf-rule-x);
+  background: var(--pf-sheet);
+  border-left: 1px solid var(--pf-frame);
+  border-right: 1px solid var(--pf-frame);
+}
+
+/* ── Corner brackets and section badges ─────────────────────────────────
+   Every major block gets two amber right-angle brackets at its top corners,
+   drawn as four 2px gradient slivers in a single background shorthand. A block
+   with a `data-badge` swaps its left bracket for a filled amber tab carrying
+   the label — the bracket and the tab occupy the same corner, so you get one
+   or the other, never both. */
+.pf-marked,
+.pf-wrap.pf-pad,
+.pf-hero {
+  position: relative;
+}
+
+.pf-marked::after,
+.pf-wrap.pf-pad::after,
+.pf-hero::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: var(--pf-rule-x);
+  right: var(--pf-rule-x);
+  height: 20px;
+  pointer-events: none;
+  z-index: 3;
+  background:
+    linear-gradient(var(--pf-mark), var(--pf-mark)) 0 0 / 20px 2px no-repeat,
+    linear-gradient(var(--pf-mark), var(--pf-mark)) 0 0 / 2px 20px no-repeat,
+    linear-gradient(var(--pf-mark), var(--pf-mark)) 100% 0 / 20px 2px no-repeat,
+    linear-gradient(var(--pf-mark), var(--pf-mark)) 100% 0 / 2px 20px no-repeat;
+}
+
+.pf-marked[data-badge]::after,
+.pf-wrap.pf-pad[data-badge]::after,
+.pf-hero[data-badge]::after {
+  background:
+    linear-gradient(var(--pf-mark), var(--pf-mark)) 100% 0 / 20px 2px no-repeat,
+    linear-gradient(var(--pf-mark), var(--pf-mark)) 100% 0 / 2px 20px no-repeat;
+}
+
+.pf-marked[data-badge]::before,
+.pf-wrap.pf-pad[data-badge]::before,
+.pf-hero[data-badge]::before {
+  content: attr(data-badge);
+  position: absolute;
+  top: 0;
+  left: var(--pf-rule-x);
+  z-index: 4;
+  background: var(--pf-amber);
+  color: var(--pf-ink);
+  font-family: var(--pf-mono);
+  font-size: var(--pf-fs-micro);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1;
+  padding: 9px 13px 8px;
+  pointer-events: none;
+}
+
+/* ── Shell ──────────────────────────────────────────────────────────────
+   `.pf-pad` also paints the 1px rule that separates one section from the next,
+   as a background-image rather than a border so it can stop short of the sheet
+   edge by exactly one gutter. */
+.pf-wrap {
+  max-width: var(--pf-max);
+  margin: 0 auto;
+  padding: 0 calc(var(--pf-gutter) + var(--pf-inset));
+}
+.pf-wrap.pf-pad {
+  background-image: linear-gradient(var(--pf-frame), var(--pf-frame));
+  background-repeat: no-repeat;
+  background-size: calc(100% - 2 * var(--pf-gutter)) 1px;
+  background-position: var(--pf-gutter) 0;
+}
+.pf-pad {
+  padding-top: var(--pf-sp);
+  padding-bottom: var(--pf-sp);
+}
+.pf-head {
+  margin-bottom: var(--pf-sp-head);
+}
+
+.pf-root h1 {
+  font-size: var(--pf-fs-display);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+  margin: 0;
+}
+.pf-root h2 {
+  font-size: var(--pf-fs-h2);
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+  max-width: 24ch;
+  margin: 0;
+}
+.pf-dim {
+  color: var(--pf-ink-3);
+}
+
+/* ── Buttons ────────────────────────────────────────────────────────────── */
+.pf-btn {
+  font-family: var(--pf-sans);
+  font-size: var(--pf-fs-sm);
+  font-weight: 600;
+  padding: 13px 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  border: 0;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.pf-btn svg {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+  transition: transform 0.15s var(--pf-ease);
+}
+.pf-btn:hover svg {
+  transform: translate(3px, -3px);
+}
+.pf-btn--amber {
+  background: var(--pf-amber);
+  color: var(--pf-ink);
+}
+.pf-btn--amber:hover {
+  background: var(--pf-amber-lt);
+}
+.pf-btn--line {
+  background: none;
+  color: var(--pf-ink);
+  box-shadow: inset 0 0 0 1px var(--pf-frame);
+}
+.pf-btn--line:hover {
+  background: var(--pf-tile);
+  box-shadow: inset 0 0 0 1px var(--pf-ink-3);
+}
+
+/* ═══ 1. Curtain ═════════════════════════════════════════════════════════
+   Eight columns of ruled paper drop over the viewport and lift again, 38ms
+   apart, left to right on the way in and right to left on the way out. The
+   name sits behind them and is wiped in by a gradient on `--p`.
+
+   `visibility: hidden` by default so it costs nothing and is unreachable
+   before the client component turns it on — and it is removed outright under
+   prefers-reduced-motion. */
+.pf-curtain {
+  position: fixed;
+  inset: 0;
+  /* Above the nav (10000), the mascot (9999) and the chat launcher (1000), and
+     one below the site loader (99999) so a first landing still shows the
+     loader on top. See PROJECT_BIBLE §10.0 for that stack. */
+  z-index: 99998;
+  pointer-events: none;
+  visibility: hidden;
+  --n: 8;
+  --cw: 12.5vw;
+  --stagger: 38ms;
+}
+.pf-curtain.is-on {
+  visibility: visible;
+}
+.pf-curtain-col {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  left: calc(var(--i) * var(--cw));
+  /* the +1.5px closes the sub-pixel seam between columns */
+  width: calc(var(--cw) + 1.5px);
+  background-color: #fbf7e6;
+  background-image: repeating-linear-gradient(
+      0deg,
+      rgba(22, 20, 14, 0.04) 0 1px,
+      transparent 1px 4px
+    ),
+    linear-gradient(#fbf7e6, #f3edd6);
+  transform: translateY(-101%);
+  will-change: transform;
+  transition: transform 0.52s cubic-bezier(0.2, 0.85, 0.2, 1);
+  transition-delay: calc(var(--i) * var(--stagger));
+}
+.pf-curtain-col::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: #f3b44a;
+  opacity: 0.9;
+}
+.pf-curtain.is-covered .pf-curtain-col {
+  transform: translateY(0);
+  transition: none;
+}
+.pf-curtain.is-reveal .pf-curtain-col {
+  transform: translateY(-101%);
+  transition-delay: calc((var(--n) - 1 - var(--i)) * var(--stagger));
+}
+.pf-curtain-label {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  text-align: center;
+  color: #16140e;
+  opacity: 0;
+  transition: opacity 0.3s;
+  --p: 0;
+}
+.pf-curtain.show-label .pf-curtain-label {
+  opacity: 1;
+}
+.pf-curtain-label .name {
+  font-family: var(--pf-sans);
+  font-weight: 600;
+  font-size: max(42px, 5.6vw);
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+  display: inline-block;
+  /* the wipe: ink up to --p%, 17% ink after it */
+  background-image: linear-gradient(
+    90deg,
+    #16140e 0,
+    #16140e calc(var(--p) * 1.03% - 3%),
+    #16140e2b calc(var(--p) * 1.03%),
+    #16140e2b
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.pf-curtain-label .name .d {
+  color: #a86a08;
+  -webkit-text-fill-color: #a86a08;
+}
+.pf-curtain-label .sub {
+  font-family: var(--pf-mono);
+  font-size: var(--pf-fs-micro);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #57534a;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pf-curtain {
+    display: none !important;
+  }
+}
+
+/* ═══ 2. Hero ════════════════════════════════════════════════════════════
+   280vh of scroll with a 100svh sticky child. The paragraph rises 320px and
+   fades on a cubed curve while the drawing's viewBox is lerped from the whole
+   room down to the monitor's screen — so the words leave exactly as the screen
+   arrives. Both are driven from the same 0→1 progress in ProfileVisuals.
+
+   On phones the pin is dropped entirely: the section becomes ordinary flow,
+   the paragraph's inline transform is overridden away, and the drawing zooms
+   off its own position instead. A 280vh pin on a 640px-tall viewport is four
+   full screens of nothing happening. */
+.pf-hero {
+  height: 280vh;
+  position: relative;
+  background-image: none;
+}
+.pf-hero-pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  padding-top: clamp(48px, 9vh, 104px);
+  padding-bottom: clamp(20px, 4.5vh, 56px);
+}
+.pf-hero-inner {
+  margin-block: auto;
+  max-width: min(900px, 86vw);
+  padding: 0 clamp(20px, 4vw, 56px);
+  text-align: center;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+}
+.pf-hero-inner .lead {
+  font-size: clamp(21px, 2.1vw, 30px);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.55;
+  max-width: 49ch;
+  margin: 0 auto;
+  text-wrap: balance;
+}
+
+/* The drawing is pinned to the bottom of the hero and capped so that at short
+   viewport heights it shrinks rather than colliding with the paragraph. The
+   6.02 is the scene's aspect ratio (1820/430 ≈ 4.23) with headroom. */
+.pf-hero-pin > .pf-desk-wrap {
+  margin-top: auto;
+  max-width: min(var(--pf-measure-full), max(560px, (100svh - 470px) * 6.02));
+}
+
+.pf-desk-wrap {
+  position: relative;
+  width: 100%;
+  max-width: var(--pf-measure-full);
+  margin: 0 auto;
+}
+.pf-desk-view {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  /* No transition — the viewBox is set per frame from rAF. A transition here
+     would fight the scrub and lag behind the scroll by its own duration. */
+  transition: none;
+}
+.pf-desk-view svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  transition: none;
+}
+/* Strokes must not thicken as the viewBox shrinks, or the whole drawing turns
+   into a blob at the end of the zoom. */
+.pf-desk-view :is(path, rect, circle, ellipse, line, polygon) {
+  vector-effect: non-scaling-stroke;
+}
+
+/* ── The drawing's palette ──────────────────────────────────────────────
+   One ink for every outline (#8a8272, a grey warmed towards the paper) and a
+   small set of flat washes over it. The whole scene is 1px strokes plus fills:
+   no gradients, no shadows, nothing that would resolve into mush when the
+   viewBox drops from 1820 units wide to 250. */
+.pf-desk-view .ln {
+  fill: none;
+  stroke: #8a8272;
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.pf-desk-view :is(.back, .side, .desk, .fore)
+  :is(path, rect, circle, ellipse):not(.ln):not(.screen *) {
+  stroke: #8a8272;
+  stroke-width: 1;
+  stroke-linejoin: round;
+}
+.pf-desk-view .back {
+  opacity: 0.78;
+}
+.pf-desk-view .back .floor {
+  stroke-width: 1.4;
+}
+.pf-desk-view .back .skirt {
+  stroke: #c7bfa9;
+}
+
+/* Window */
+.pf-desk-view .glass {
+  fill: #dce7ec;
+}
+.pf-desk-view .light {
+  fill: #fbf3dc;
+  stroke: none;
+  opacity: 0.8;
+}
+.pf-desk-view .sun {
+  fill: #f9cb80;
+  stroke: none;
+}
+.pf-desk-view .hill {
+  fill: #bfd0b4;
+  stroke: none;
+}
+.pf-desk-view .hill.far {
+  fill: #d3ddc9;
+}
+.pf-desk-view .crown {
+  fill: #a8c194;
+  stroke: none;
+}
+.pf-desk-view .crown.c2,
+.pf-desk-view .crown.c3 {
+  fill: #b9cfa6;
+}
+.pf-desk-view .out-trunk {
+  stroke: #8a7357;
+}
+.pf-desk-view .mullion,
+.pf-desk-view .sill {
+  stroke: #8a8272;
+}
+
+/* Shelf and pictures */
+.pf-desk-view .shelf {
+  stroke: #b4ac98;
+  stroke-width: 2;
+}
+.pf-desk-view .book {
+  stroke-width: 0.9;
+}
+.pf-desk-view .bk0 {
+  fill: #93b579;
+}
+.pf-desk-view .bk1 {
+  fill: #d2a88e;
+}
+.pf-desk-view .bk2 {
+  fill: #9db8c7;
+}
+.pf-desk-view .lean {
+  fill: #e0cfb8;
+}
+.pf-desk-view .pot,
+.pf-desk-view .pot2 {
+  fill: #e0cfc0;
+}
+.pf-desk-view .vine,
+.pf-desk-view .frond {
+  stroke: #6e9155;
+}
+.pf-desk-view .leaf {
+  fill: #8fae74;
+  stroke: #6e9155;
+}
+.pf-desk-view .frame {
+  fill: #efe9da;
+}
+.pf-desk-view .frame.f1 {
+  fill: #e9afa0;
+}
+.pf-desk-view .frame.f2 {
+  fill: #9db8c7;
+}
+.pf-desk-view .dial {
+  fill: #fbf7e9;
+}
+.pf-desk-view .hands {
+  stroke: #57534a;
+  stroke-width: 1.4;
+}
+.pf-desk-view .clock .pin {
+  fill: #57534a;
+  stroke: none;
+}
+
+/* Sofa, cat, lamp */
+.pf-desk-view .couch-back {
+  fill: #8fa9bc;
+}
+.pf-desk-view .couch-seat {
+  fill: #7a94a9;
+}
+.pf-desk-view .arm {
+  fill: #a3b9c9;
+}
+.pf-desk-view .cush {
+  fill: #bdd0da;
+}
+.pf-desk-view .cush.p1 {
+  fill: #f3b44a;
+}
+.pf-desk-view .c-body,
+.pf-desk-view .c-head {
+  fill: #d8c4a8;
+}
+.pf-desk-view .c-ear {
+  fill: #b49a72;
+}
+.pf-desk-view .c-eye,
+.pf-desk-view .c-tail {
+  stroke: #57534a;
+  stroke-width: 1.6;
+  fill: none;
+}
+.pf-desk-view .shade {
+  fill: #efe4c6;
+}
+.pf-desk-view .glow {
+  fill: #f9cb80;
+  stroke: none;
+  opacity: 0.22;
+  animation: pf-breathe 9s ease-in-out infinite;
+}
+.pf-desk-view .pole,
+.pf-desk-view .base,
+.pf-desk-view .top,
+.pf-desk-view .legs {
+  stroke: #8a8272;
+}
+.pf-desk-view .mug {
+  fill: #c4867a;
+}
+
+/* Desk and person */
+.pf-desk-view .desk .top {
+  fill: #c9a06a;
+  stroke: #8a8272;
+}
+.pf-desk-view .desk .legs,
+.pf-desk-view .desk .modesty {
+  stroke: #a08a63;
+}
+.pf-desk-view .seat,
+.pf-desk-view .chair-back {
+  fill: #6e778c;
+}
+.pf-desk-view .torso {
+  fill: #7a835f;
+}
+.pf-desk-view .arm {
+  stroke-width: 7;
+  stroke: #7a835f;
+  fill: none;
+  stroke-linecap: round;
+}
+.pf-desk-view .hand,
+.pf-desk-view .head {
+  fill: #e8be9b;
+}
+.pf-desk-view .hair {
+  fill: #3f3229;
+  stroke: none;
+}
+.pf-desk-view .neck {
+  stroke: #d8a87f;
+  stroke-width: 6;
+}
+.pf-desk-view .thigh,
+.pf-desk-view .shin {
+  stroke: #a9b7c6;
+  stroke-width: 12;
+  fill: none;
+  stroke-linecap: round;
+}
+.pf-desk-view .shoe {
+  fill: #333d52;
+}
+.pf-desk-view .kbd,
+.pf-desk-view .pad {
+  fill: #e5dfcd;
+}
+.pf-desk-view .phone {
+  fill: #4a453d;
+}
+.pf-desk-view .bezel {
+  fill: #4a453d;
+}
+.pf-desk-view .stand-neck,
+.pf-desk-view .stand-foot {
+  fill: #9aa0a8;
+}
+/* Foreground */
+.pf-desk-view .rug {
+  fill: #d9c9b4;
+}
+.pf-desk-view .rug-ln {
+  stroke: #bda98e;
+}
+.pf-desk-view .bk-a {
+  fill: #93b579;
+}
+.pf-desk-view .bk-b {
+  fill: #d2a88e;
+}
+.pf-desk-view .bk-c {
+  fill: #9db8c7;
+}
+
+/* ── The screen ─────────────────────────────────────────────────────────
+   Nothing in here carries the scene's outline stroke — a 1px non-scaling
+   stroke around a 5-unit label is a solid block by the time the zoom lands.
+   Everything is fill only. */
+.pf-desk-view .screen * {
+  stroke: none;
+}
+.pf-desk-view .screen .glassy {
+  fill: #1b1a16;
+}
+.pf-desk-view .screen .bar {
+  fill: #272520;
+}
+.pf-desk-view .screen .dot {
+  fill: #6b665c;
+}
+.pf-desk-view .screen .side-bg {
+  fill: #232119;
+}
+.pf-desk-view .screen .nav-row {
+  fill: #3a372e;
+}
+.pf-desk-view .screen .nav-row.is-on {
+  fill: #f3b44a;
+}
+.pf-desk-view .screen .live {
+  fill: #8fae74;
+}
+.pf-desk-view .screen .cursor {
+  fill: #fffdf3;
+}
+.pf-desk-view .screen text {
+  font-family: var(--pf-mono);
+}
+.pf-desk-view .screen .bar-t {
+  font-size: 4.4px;
+  letter-spacing: 0.06em;
+  fill: #8b8577;
+}
+.pf-desk-view .screen .col-h {
+  font-size: 4.2px;
+  letter-spacing: 0.22em;
+  fill: #8b8577;
+}
+.pf-desk-view .screen .row-n {
+  font-size: 4.8px;
+  letter-spacing: 0.02em;
+  fill: #ece7da;
+}
+.pf-desk-view .screen .row-s {
+  font-size: 3.9px;
+  letter-spacing: 0.04em;
+  fill: #8b8577;
+}
+.pf-desk-view .screen .note rect {
+  fill: #f3b44a;
+}
+.pf-desk-view .screen .note-k {
+  font-size: 4.4px;
+  letter-spacing: 0.26em;
+  fill: #8a6410;
+}
+.pf-desk-view .screen .note-l {
+  font-family: var(--pf-sans);
+  font-size: 9.4px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  fill: #16140e;
+}
+
+@keyframes pf-breathe {
+  0%,
+  100% {
+    opacity: 0.16;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pf-desk-view .glow {
+    animation: none;
+  }
+}
+
+@media (max-width: 960px) {
+  .pf-hero {
+    height: auto;
+  }
+  .pf-hero-pin {
+    position: static;
+    height: auto;
+    padding: clamp(90px, 18vh, 180px) 0;
+  }
+  .pf-hero-inner {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* ═══ 3. Statement ═══════════════════════════════════════════════════════ */
+.pf-statement-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: clamp(40px, 6vw, 96px);
+  align-items: end;
+}
+.pf-statement h2 {
+  max-width: 26ch;
+  font-size: clamp(28px, 2.6vw, 42px);
+  line-height: 1.26;
+}
+.pf-statement .aside .eye {
+  font-family: var(--pf-mono);
+  font-size: var(--pf-fs-micro);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--pf-ink-3);
+}
+.pf-statement .aside p {
+  font-size: var(--pf-fs-body);
+  line-height: 1.7;
+  color: var(--pf-ink-2);
+  margin: 18px 0 0;
+  max-width: 44ch;
+}
+
+/* ═══ 4. Filmstrip ═══════════════════════════════════════════════════════
+   Scroll-linked, not auto-playing: the track's x offset is a function of how
+   far the strip has travelled through the viewport, so it drifts while you
+   scroll and stops when you do. The scanline overlay on each frame is the same
+   1px-in-3 comb used on the sheet, in paper rather than ink, which knocks the
+   line art back just enough to sit on the page instead of on top of it. */
+.pf-lf {
+  margin-top: clamp(18px, 2.6vh, 40px);
+  width: 100%;
+  max-width: var(--pf-measure);
+  margin-inline: auto;
+  overflow: hidden;
+}
+.pf-lf-track {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: max-content;
+  will-change: transform;
+}
+.pf-lf-card {
+  flex: 0 0 auto;
+  margin: 0;
+  position: relative;
+  background: #fff;
+  border: 1px solid var(--pf-line);
+}
+.pf-lf-card img {
+  display: block;
+  height: clamp(180px, 23vh, 280px);
+  width: auto;
+  object-fit: cover;
+}
+.pf-lf-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(251, 247, 230, 0.14) 0 1px,
+    transparent 1px 3px
+  );
+}
+.pf-lf-card figcaption {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 3;
+  font-family: var(--pf-mono);
+  font-size: var(--pf-fs-micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pf-ink-2);
+  background: var(--pf-paper);
+  border-top: 1px solid var(--pf-line-2);
+  border-right: 1px solid var(--pf-line-2);
+  padding: 6px 10px 5px;
+}
+
+/* ═══ 5. Credo ═══════════════════════════════════════════════════════════
+   The left column sticks; the right one reads itself in one word at a time as
+   the block crosses the viewport. Each `.w` starts at 14% opacity, blurred
+   3.5px and dropped 0.2em, and resolves as the scrub passes its index. */
+.pf-credo-grid {
+  display: grid;
+  grid-template-columns: 0.82fr 1.18fr;
+  gap: clamp(40px, 7vw, 120px);
+  align-items: start;
+}
+.pf-credo .aside {
+  position: sticky;
+  top: 18vh;
+  align-self: start;
+}
+.pf-credo .aside h2 {
+  font-size: clamp(24px, 2.2vw, 34px);
+  line-height: 1.16;
+  max-width: 18ch;
+}
+.pf-credo .aside .meta {
+  display: block;
+  font-family: var(--pf-mono);
+  font-size: var(--pf-fs-micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pf-ink-3);
+  margin-top: 20px;
+}
+.pf-credo .main {
+  min-width: 0;
+  padding-top: 6px;
+}
+.pf-credo .lead {
+  font-size: var(--pf-fs-h3);
+  font-weight: 600;
+  line-height: 1.34;
+  letter-spacing: -0.02em;
+  max-width: 22ch;
+  margin: 0;
+}
+.pf-credo .lead .w {
+  display: inline-block;
+  margin-right: 0.26em;
+  opacity: 0.14;
+  will-change: opacity, transform, filter;
+}
+.pf-credo .tail {
+  margin-top: clamp(28px, 4vh, 48px);
+  font-size: var(--pf-fs-lead);
+  line-height: 1.62;
+  color: var(--pf-ink-2);
+  max-width: 46ch;
+}
+.pf-credo .tail .hl {
+  color: var(--pf-amber-2);
+}
+.pf-credo .tags {
+  list-style: none;
+  margin: clamp(34px, 5vh, 56px) 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.pf-credo .tags li {
+  font-family: var(--pf-mono);
+  font-size: var(--pf-fs-micro);
+  letter-spacing: 0.1em;
+  padding: 9px 16px;
+  border: 1px solid var(--pf-line);
+  color: var(--pf-ink-2);
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+.pf-credo .tags li:hover {
+  background: var(--pf-ink);
+  color: var(--pf-paper);
+  border-color: var(--pf-ink);
+}
+
+@media (max-width: 960px) {
+  .pf-statement-grid,
+  .pf-credo-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .pf-credo .aside {
+    position: static;
+    margin-bottom: clamp(22px, 4vh, 36px);
+  }
+  .pf-credo .aside h2 {
+    max-width: none;
+  }
+  .pf-credo .lead {
+    max-width: none;
+    font-size: clamp(21px, 5.6vw, 27px);
+  }
+}
+
+/* ═══ 6. The board ═══════════════════════════════════════════════════════
+   A five-across grid of hairline cells that reads as one ruled table rather
+   than as ten cards. The last cell in each row and every cell in the last row
+   drop their border so the grid closes cleanly — and every one of those rules
+   has to be restated at each breakpoint, because the row length changes. */
+.pf-board {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border-block: 1px solid var(--pf-line);
+  margin-inline: calc(-1 * var(--pf-inset));
+}
+.pf-card {
+  position: relative;
+  padding: 30px 24px 34px;
+  border-right: 1px solid var(--pf-line-2);
+  border-bottom: 1px solid var(--pf-line-2);
+  transition: background 0.25s;
+}
+.pf-card:nth-child(5n) {
+  border-right: 0;
+}
+.pf-card:nth-last-child(-n + 5) {
+  border-bottom: 0;
+}
+.pf-card:hover {
+  background: var(--pf-paper-2);
+}
+.pf-card .ix {
+  font-family: var(--pf-mono);
+  font-size: var(--pf-fs-micro);
+  letter-spacing: 0.14em;
+  color: var(--pf-ink-3);
+  transition: color 0.25s;
+}
+.pf-card:hover .ix {
+  color: var(--pf-amber-2);
+}
+.pf-card h3 {
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 18px 0 0;
+}
+.pf-card .role {
+  display: block;
+  font-family: var(--pf-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pf-ink-2);
+  margin-top: 8px;
+}
+.pf-card p {
+  font-size: 14.5px;
+  color: var(--pf-ink-2);
+  margin: 18px 0 0;
+}
+.pf-card a.pf-card-hit::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+@media (max-width: 960px) {
+  .pf-board {
+    grid-template-columns: 1fr 1fr;
+  }
+  .pf-card {
+    padding: 24px 18px 26px;
+  }
+  .pf-card:nth-child(5n) {
+    border-right: 1px solid var(--pf-line-2);
+  }
+  .pf-card:nth-child(2n) {
+    border-right: 0;
+  }
+  .pf-card:nth-last-child(-n + 5) {
+    border-bottom: 1px solid var(--pf-line-2);
+  }
+  .pf-card:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+  .pf-card h3 {
+    font-size: 19px;
+    margin-top: 14px;
+  }
+  .pf-card p {
+    margin-top: 14px;
+  }
+}
+@media (max-width: 640px) {
+  .pf-board {
+    grid-template-columns: 1fr !important;
+    margin-inline: calc(-1 * var(--pf-inset));
+  }
+  .pf-card {
+    border-right: 0 !important;
+    border-bottom: 1px solid var(--pf-line-2) !important;
+    padding: 26px 20px 30px;
+  }
+  .pf-card:last-child {
+    border-bottom: 0 !important;
+  }
+  .pf-card h3 {
+    font-size: 24px;
+    margin-top: 14px;
+  }
+  .pf-card p {
+    font-size: 16px;
+    line-height: 1.55;
+    margin-top: 14px;
+  }
+}
+
+/* ═══ 7. The notebook plate ══════════════════════════════════════════════
+   Where the reference sells an e-book, this sells the writing that already
+   exists on the site. Same plate: a cover with an amber spine, a block of
+   page-edges peeking out behind it, and a soft shadow on a shelf rule. */
+.pf-book-grid {
+  display: grid;
+  grid-template-columns: 0.92fr 1.08fr;
+  gap: clamp(40px, 6vw, 96px);
+  align-items: center;
+}
+.pf-book-plate {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+.pf-book-plate .book {
+  position: relative;
+  width: min(340px, 92%);
+  aspect-ratio: 3 / 4.1;
+  transform: rotate(-2.2deg);
+  transition: transform 0.5s var(--pf-ease);
+}
+.pf-book-plate:hover .book {
+  transform: rotate(-0.6deg) translateY(-5px);
+}
+.pf-book-plate .pages {
+  position: absolute;
+  inset: 5px 0 0 6px;
+  background: repeating-linear-gradient(
+    #f4eedd 0 2px,
+    #e4ddc8 2px 3px
+  );
+  border: 1px solid var(--pf-line);
+}
+.pf-book-plate .cover {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: clamp(20px, 2.4vw, 30px);
+  background: var(--pf-paper);
+  border: 1px solid var(--pf-ink);
+  box-shadow: 14px 16px rgba(22, 20, 14, 0.07);
+}
+.pf-book-plate .spine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 13px;
+  background: var(--pf-amber);
+  border-right: 1px solid var(--pf-ink);
+}
+.pf-book-plate .k {
+  font-family: var(--pf-mono);
+  font-size: var(--pf-fs-micro);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--pf-amber-2);
+  padding-left: 12px;
+}
+.pf-book-plate .ttl {
+  font-size: clamp(30px, 3vw, 44px);
+  font-weight: 600;
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  color: var(--pf-ink);
+  padding-left: 12px;
+  margin-top: auto;
+}
+.pf-book-plate .rule {
+  display: block;
+  width: 46px;
+  height: 2px;
+  background: var(--pf-amber);
+  margin-left: 12px;
+}
+.pf-book-plate .by {
+  font-family: var(--pf-mono);
+  font-size: var(--pf-fs-micro);
+  letter-spacing: 0.14em;
+  color: var(--pf-ink-3);
+  padding-left: 12px;
+}
+.pf-book-plate .shelf {
+  display: block;
+  width: min(392px, 100%);
+  height: 1px;
+  background: var(--pf-line);
+  margin-top: 18px;
+  position: relative;
+}
+.pf-book-plate .shelf::before {
+  content: "";
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  top: -9px;
+  height: 9px;
+  background: var(--pf-ink);
+  opacity: 0.06;
+  filter: blur(3px);
+  border-radius: 50%;
+}
+.pf-book-read h2 {
+  max-width: 14ch;
+}
+.pf-book-lead {
+  margin-top: 20px;
+  max-width: 52ch;
+  font-size: var(--pf-fs-lead);
+  line-height: 1.6;
+  color: var(--pf-ink-2);
+}
+.pf-book-points {
+  list-style: none;
+  margin: clamp(28px, 4vh, 44px) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-top: 1px solid var(--pf-line);
+}
+.pf-book-points li {
+  position: relative;
+  padding: 15px 0 15px 30px;
+  border-bottom: 1px solid var(--pf-line-2);
+  font-size: var(--pf-fs-body);
+  line-height: 1.5;
+  color: var(--pf-ink);
+}
+.pf-book-points li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 23px;
+  width: 7px;
+  height: 7px;
+  background: var(--pf-amber);
+}
+.pf-book-cta {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: clamp(28px, 3.6vh, 44px);
+}
+.pf-book-cta .note {
+  font-family: var(--pf-mono);
+  font-size: var(--pf-fs-micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pf-ink-3);
+}
+@media (max-width: 960px) {
+  .pf-book-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .pf-book-plate {
+    align-items: flex-start;
+  }
+  .pf-book-plate .book {
+    width: 268px;
+  }
+}
+
+/* ═══ 8. The kit strip ═══════════════════════════════════════════════════
+   A row of shopfronts, one per tool, that slides sideways with the scroll and
+   fades out at both edges through a mask. Whichever front is nearest the
+   centre lights amber and names itself in the readout above. */
+.pf-kit-lead {
+  display: flex;
+  justify-content: center;
+  margin-bottom: clamp(22px, 3.4vh, 38px);
+}
+.pf-kit-read {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 10px;
+  min-height: 24px;
+}
+.pf-kit-read .ix {
+  font-family: var(--pf-mono);
+  font-size: var(--pf-fs-micro);
+  letter-spacing: 0.16em;
+  color: var(--pf-amber-2);
+}
+.pf-kit-read .say {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  animation: pf-say 0.5s var(--pf-ease) both;
+}
+.pf-kit-read .name {
+  font-size: var(--pf-fs-body);
+  font-weight: 600;
+}
+.pf-kit-read .role {
+  font-size: var(--pf-fs-sm);
+  color: var(--pf-ink-3);
+}
+@keyframes pf-say {
+  from {
+    opacity: 0;
+    transform: translateY(9px);
+  }
+}
+.pf-kit-view {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: var(--pf-measure-full);
+  margin: 0 auto;
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 7%,
+    #000 93%,
+    transparent
+  );
+}
+.pf-kit-view svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.pf-kit-view :is(path, rect, circle, line) {
+  vector-effect: non-scaling-stroke;
+}
+.pf-kit-view .ln {
+  fill: none;
+  stroke: #8a8272;
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.pf-kit-view .front {
+  fill: var(--pf-paper);
+  stroke: #8a8272;
+  stroke-width: 1;
+}
+.pf-kit-view .awn {
+  fill: #e0d5b4;
+  stroke: #8a8272;
+  stroke-width: 1;
+}
+.pf-kit-view .pane {
+  fill: #dce7ec;
+  stroke: #8a8272;
+  stroke-width: 1;
+}
+.pf-kit-view .door {
+  fill: #efe9d2;
+  stroke: #8a8272;
+  stroke-width: 1;
+}
+.pf-kit-view .sign {
+  font-family: var(--pf-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  fill: var(--pf-ink-2);
+  text-transform: uppercase;
+}
+.pf-kit-view .code {
+  font-family: var(--pf-mono);
+  font-size: 7px;
+  letter-spacing: 0.12em;
+  fill: #b4ac98;
+}
+.pf-kit-view .shop {
+  opacity: 0.62;
+  transition: opacity 0.5s var(--pf-ease);
+}
+.pf-kit-view .shop.is-on {
+  opacity: 1;
+}
+.pf-kit-view .shop.is-on .awn {
+  fill: var(--pf-amber);
+}
+.pf-kit-view .shop.is-on .sign {
+  fill: var(--pf-ink);
+}
+.pf-kit-view .kerb {
+  stroke: #b4ac98;
+  stroke-width: 1.4;
+  fill: none;
+}
+
+/* ═══ 9. Footer ══════════════════════════════════════════════════════════ */
+.pf-footer {
+  position: relative;
+  padding: 70px 0 44px;
+}
+.pf-footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--pf-rule-x);
+  right: var(--pf-rule-x);
+  background-image: var(--pf-ruling);
+  pointer-events: none;
+  z-index: 0;
+}
+.pf-footer > * {
+  position: relative;
+  z-index: 1;
+}
+/* Closing brackets, mirrored from the ones that open each section. */
+.pf-foot-marks {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 20px;
+  pointer-events: none;
+  z-index: 2;
+}
+.pf-foot-marks::before,
+.pf-foot-marks::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 20px;
+  height: 20px;
+  border-bottom: 2px solid var(--pf-mark);
+}
+.pf-foot-marks::before {
+  left: var(--pf-rule-x);
+  border-left: 2px solid var(--pf-mark);
+}
+.pf-foot-marks::after {
+  right: var(--pf-rule-x);
+  border-right: 2px solid var(--pf-mark);
+}
+.pf-foot-lead {
+  padding-bottom: clamp(24px, 4vh, 44px);
+}
+.pf-foot-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 40px;
+}
+.pf-foot-grid h4 {
+  font-family: var(--pf-mono);
+  font-size: var(--pf-fs-micro);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--pf-ink-3);
+  margin: 0 0 16px;
+  font-weight: 400;
+}
+.pf-foot-grid a,
+.pf-foot-grid span {
+  display: block;
+  font-size: var(--pf-fs-sm);
+  color: var(--pf-ink-2);
+  padding: 4px 0;
+}
+.pf-foot-grid a:hover {
+  color: var(--pf-ink);
+}
+.pf-foot-mail {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--pf-ink) !important;
+  word-break: break-word;
+}
+.pf-foot-base {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: clamp(40px, 6vh, 72px);
+  padding-top: 20px;
+  border-top: 1px solid var(--pf-line-2);
+  font-family: var(--pf-mono);
+  font-size: var(--pf-fs-micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pf-ink-3);
+}
+@media (max-width: 960px) {
+  .pf-foot-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+  .pf-foot-mail {
+    font-size: 21px;
+  }
+}
+@media (max-width: 520px) {
+  .pf-foot-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Reduced motion ─────────────────────────────────────────────────────
+   Every scrub in ProfileVisuals bails out before attaching when this matches,
+   leaving the elements at their authored values. These two rules cover the
+   authored values that are *not* the resting state. */
+@media (prefers-reduced-motion: reduce) {
+  .pf-hero {
+    height: auto;
+  }
+  .pf-hero-pin {
+    position: static;
+    height: auto;
+    padding: clamp(120px, 22vh, 240px) 0;
+  }
+  .pf-credo .lead .w {
+    opacity: 1;
+  }
+}

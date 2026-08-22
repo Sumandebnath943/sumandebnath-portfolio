@@ -4,10 +4,10 @@ Where the project stands, what changed most recently, and what is worth doing
 next. For how the system is built read **PROJECT_BIBLE.md**; for how the site
 writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
-**Last updated:** 22 August 2026
+**Last updated:** 23 August 2026
 **Branch:** `main`.
-**Last session:** a new Banking Co-pilot product page, the hero lock extended to every product page, and the PACT panels' clipped legends — §1.4.
-**Session before:** two performance passes plus an intro/loader rebuild — §1.1, §1.2.
+**Last session:** `/profile` — a new light, paper-stock profile page built to match a supplied reference — §1.5.
+**Session before:** a new Banking Co-pilot product page, the hero lock extended to every product page, and the PACT panels' clipped legends — §1.4.
 
 > Run `git log --oneline -15` before trusting this section — it is a snapshot,
 > and the commit log is the authority on what has happened since.
@@ -24,6 +24,7 @@ Recent history, newest first, gives an accurate picture of the trajectory:
 
 | Area | State |
 |---|---|
+| **Profile** (`/profile`) | Built 23 Aug. The only light page on the site — ruled cream paper, a 280vh pinned hero that zooms into a drawn monitor, a scroll-driven word reveal and a shopfront marquee. Modelled on a reference the user supplied. Done — §1.5. |
 | **Banking Co-pilot** (`/banking/rm-copilot`) | Built 22 Aug. New **Banking** group under Portfolio. Fully prerendered; 382 KB of WebP, one eager image. Done. |
 | **Hero lock** | Extended 22 Aug from the homepage to all ten product pages — `components/ui/HeroLock.tsx`. Done. |
 | **Admin dashboard** (`/desk-4f7a`) | Built 13–14 Aug across five phases. Live, password-gated, recording. |
@@ -262,6 +263,66 @@ PACT legends — are fully measurable either way, and measuring beats squinting:
 **Left unverified:** nothing outstanding. The lock was confirmed end to end on a
 composited pane across all ten pages plus the homepage, and both legends were
 checked at 375 and 1280.
+
+---
+
+### 1.5 `/profile` — a paper page in a dark site (23 Aug 2026)
+
+**What was asked for.** The user pointed at the profile page on
+**pleurat.com/about** and asked for the same page — design, layout, animations —
+carrying Suman's content instead. Four choices were settled before any code: a
+new `/profile` route rather than replacing `/about`; the reference's cream
+paper system verbatim but with this site's own fonts; the drawings redrawn
+rather than lifted; and the reference's e-book block repurposed to point at
+`/learnings` and `/philosophy`.
+
+**What it is.** Nine blocks, four of them scroll-scrubbed:
+
+| Block | Behaviour |
+|---|---|
+| Curtain | eight columns of paper drop over the viewport, the name wipes in, they lift right-to-left |
+| Hero | 280vh with a 100svh sticky child; the paragraph rises 320px and fades on a cubed curve while a drawn room zooms into the monitor's screen |
+| Statement | 1.3fr / 0.7fr, headline against a small aside |
+| Filmstrip | the `/journey` chapter artwork, drifting sideways in proportion to its trip through the viewport |
+| Credo | sticky left column, right column resolving one word at a time |
+| Board | ten hairline cells: two employers, eight builds |
+| Notebook | the reference's e-book plate, pointing at `/learnings` |
+| Kit strip | a shopfront per tool, sliding on scroll, the centre one lit and named |
+| Footer | its own ruled footer with closing amber brackets |
+
+**Three things worth knowing.**
+
+> **No scroll listeners anywhere on this page.** `body` carries
+> `overflow-x: hidden`, so scroll events fired on it never reach `window` —
+> AGENTS.md trap 4, and it fails silently. Every scrub runs through one
+> `useScrub` hook: an IntersectionObserver decides whether an element is worth
+> watching, and while it is, a rAF loop reads `getBoundingClientRect()`. Rect
+> reads are true whichever element scrolls, and the loop stops when the section
+> leaves the screen.
+
+> **The nav was invisible for the first pass, with no error.** `Navigation` is a
+> framer-motion `m` component that animates itself in from `opacity: 0`. Without
+> `MotionProvider`'s `LazyMotion` above it there is no animation to run, so the
+> inline `opacity:0` simply stays. Every page that mounts `Navigation` needs
+> `MotionProvider`.
+
+> **`HeroLock` observes its own `parentElement`.** Mounted as a sibling of the
+> hero it observed `<main>` and kept the mascot and chat launcher hidden for the
+> entire page. It is now passed into `ProfileHero` as `children` so it sits
+> inside the `<section>`.
+
+**Verified.** Production build clean, `/profile` prerendered static. The hero's
+final viewBox measures `571.0 173.5 250.0 59.1` — the zoom lands on the drawn
+screen to the tenth of a unit. Checked at 1440×900 and 375×812; the pin is
+dropped below 960px and the drawing zooms off its own position instead.
+
+**Deliberate departures from the reference**, all four worth knowing before
+someone reports them as bugs: it is **light only** (the reference has a dark
+theme and a toggle); it uses the **site's own dark nav** rather than the
+reference's paper nav bar; the drawings are simpler than the reference's (which
+carries two figures, a dog, a cat and a click-to-wave interaction); and there is
+**no once-per-session guard on the curtain** — see §4.1 of the Bible for why it
+cannot live in the component.
 
 ---
 

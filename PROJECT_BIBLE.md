@@ -73,6 +73,11 @@ Every route is statically prerendered unless noted.
 **Core**
 - `/` — home
 - `/about`, `/philosophy`, `/faq`, `/contact`, `/privacy`
+- `/profile` — **the only light page on the site.** Ruled cream paper, amber
+  corner brackets, a 280vh pinned hero you fall into. It is a second answer to
+  "who is this": `/about` argues the *transition* in gold on near-black,
+  `/profile` states the profile itself. Its layout is modelled on
+  pleurat.com/about at the user's request — see §4.1.
 - `/resume` — the résumé as a page, not a PDF
 - `/journey` — interactive life story
 - `/learnings` — certificates and coursework
@@ -219,6 +224,52 @@ The one thing that *is* shared: against cream, the ink is `#12161A`, and the
 cream ramp is `#F4F3ED` → `#ECEAE2` → `#DAD8CE`.
 
 Homepage dossiers carry their own accents too — see §7.2.
+
+### 4.1 `/profile` — the paper system
+
+`/profile` does not use any of the above. It is the one route that opts out of
+the dark site entirely, and it carries a self-contained token set scoped under
+`.pf-root` in `app/profile/profile.css`. It was built to match the profile page
+at **pleurat.com/about**, which the user supplied as the reference — the spacing
+scale, the corner-bracket system, the 280vh pinned hero, the word-by-word reveal
+and the shopfront marquee all come from there. The typography is ours (Manrope +
+DM Mono in place of General Sans + IBM Plex Mono), the drawings are ours, and the
+words are Suman's.
+
+| Token | Value | What it is |
+|---|---|---|
+| `--pf-page` / `--pf-sheet` | `#FFFCF0` / `#FFFDF3` | the viewport, then the panel on it |
+| `--pf-ink` / `-2` / `-3` | `#16140E` / `#57534A` / `#7D776A` | body, secondary, 10px labels |
+| `--pf-amber` / `--pf-amber-2` | `#F3B44A` / `#A86A08` | marker fill; amber **text** |
+| `--pf-rule-x` | `max(gutter, 50% - max/2 + gutter)` | the sheet's hairline, and the one number everything aligns to |
+
+Four things here will break if you touch them without reading the file:
+
+> **`--pf-amber` is a fill colour and never a text colour.** At 3.1:1 on paper
+> it fails AA. Amber text is `--pf-amber-2` at 5.2:1. The reference's own amber
+> text colour was too light and was darkened for this reason.
+
+> **`.pf-root` uses `overflow-x: clip`, not `hidden`.** `clip` still permits
+> `position: sticky` in descendants. `hidden` kills it silently and the pinned
+> hero would simply scroll past — AGENTS.md trap 3.
+
+> **Nothing in the drawing that has to be read may sit above y=178 or below
+> y=231.** The hero's final viewBox is `571 173.5 250 59.1`, which trims 7.5
+> units off the top and bottom of the monitor's screen. The screen rect
+> (`566,166 260×74`) and `FOCUS` (`696,203`) are a matched pair — move one and
+> the zoom stops landing on the screen.
+
+> **The curtain renders *covered* on the server.** Deciding to cover after mount
+> would paint the page first and drop the curtain onto it a few hundred ms
+> later. There is deliberately no once-per-session guard: it could not live in
+> the component without a flash, and would have to be an inline script stamping
+> `<html>` before paint, the way `sd-intro` does.
+
+The page mounts the site's own `<Navigation />` (so the dark bar floats over the
+paper) but **not** the shared `<Footer />` — a black footer under a cream sheet
+reads as the page having been cut off. It ends in its own ruled footer instead,
+which repeats every link that matters. It is also **light only**: there is no
+dark variant and no theme toggle, unlike the reference.
 
 ### Accessibility
 

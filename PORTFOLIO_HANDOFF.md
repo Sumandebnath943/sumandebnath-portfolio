@@ -71,6 +71,7 @@ short rule: `VERSION 2 · STANDALONE NATIVE ANDROID`.
 | `/journey` | The story a résumé cannot tell — interactive, illustrated, gesture-gated. |
 | `/resume` | Career as a page, not a PDF. Two registers that converge. |
 | `/about`, `/philosophy` | How he thinks; each has its own identity, not a shared template. |
+| `/profile` | The decade in short — what it adds up to, where the work has been, what he uses every day. `/about` argues the *crossing* from marketing to AI; this states the profile itself and asks nothing of the reader. **The only light page on the site**: cream paper, amber marks. Copy runs plainer and shorter than anywhere else — the paper is doing the arguing. |
 | `/faq` | Answers real questions, and feeds FAQ schema for AEO. |
 | `/contact` | A form that actually sends, with intent routing. |
 | `/learnings` | Certificates and coursework, honestly framed. |

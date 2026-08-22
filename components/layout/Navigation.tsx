@@ -115,6 +115,7 @@ const navLinks: NavLink[] = [
     label: "About Me",
     color: "#FB7185",
     submenus: [
+      { label: "Profile", href: "/profile", color: "#F3B44A" },
       { label: "The Story", href: "/about", color: "#FB7185" },
       { label: "Philosophy", href: "/philosophy", color: "#F472B6" },
     ],

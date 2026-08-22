@@ -379,6 +379,7 @@ Founder: Suman Debnath
 - Résumé: https://sumandebnath.houseofnamus.com/resume
 - Contact: https://sumandebnath.houseofnamus.com/contact
 - About: https://sumandebnath.houseofnamus.com/about
+- Profile: https://sumandebnath.houseofnamus.com/profile
 - Philosophy: https://sumandebnath.houseofnamus.com/philosophy
 - Project Archive: https://sumandebnath.houseofnamus.com/projects
 - FAQ: https://sumandebnath.houseofnamus.com/faq

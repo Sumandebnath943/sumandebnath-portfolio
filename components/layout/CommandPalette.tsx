@@ -160,6 +160,14 @@ const commands: Command[] = [
     icon: "▤",
   },
   {
+    id: "profile",
+    command: "/profile",
+    label: "Profile",
+    description: "The paper profile — a decade in short, where the work has been, the daily kit",
+    href: "/profile",
+    icon: "❖",
+  },
+  {
     id: "about",
     command: "/about",
     label: "About",
