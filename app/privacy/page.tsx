@@ -301,6 +301,31 @@ export default function PrivacyPage() {
           </p>
         </section>
 
+        {/* ── Using this work ─────────────────────────────────────────────── */}
+        <section className={section}>
+          <h2 className={h2}>Using this work</h2>
+          <p className={`${p} mb-6`}>
+            A different question, but it gets asked in the same breath, so it is
+            worth answering here. This page covers what I do with{" "}
+            <span className="text-white/85">your</span> data. What you may do with{" "}
+            <span className="text-white/85">mine</span> — the code, the writing, the
+            models — is its own page.
+          </p>
+          <p className={`${p} mb-6`}>
+            The short version: it is my personal work and none of it is open source.
+            Reading it, linking to it and quoting a line with credit are all fine.
+            Copying the code, cloning a repository into something of your own, or
+            republishing the writing needs an email first — and the answer is
+            usually yes.
+          </p>
+          <a
+            href="/terms"
+            className="font-manrope text-[15px] text-white/85 underline underline-offset-4 decoration-white/25 hover:decoration-white/60 transition-colors"
+          >
+            Terms of use
+          </a>
+        </section>
+
         {/* ── Rights ──────────────────────────────────────────────────────── */}
         <section className={section}>
           <h2 className={h2}>Your rights, and getting in touch</h2>

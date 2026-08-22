@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
 import { useRef } from "react";
 import { m, useInView } from "framer-motion";
@@ -237,7 +236,9 @@ export default function Contact({
 
       {/* ── FOOTER STRIP ── */}
       <div className={`relative z-10 border-t ${light ? "bg-white border-[#2E8B57]/[0.18]" : "bg-white border-[#E8E8E8]"}`}>
-        <div className="max-w-5xl mx-auto px-6 py-7 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        {/* `sd-mascot-clear` pulls the right edge in from under the corner
+            robot on narrow desktops — see the rule in globals.css. */}
+        <div className="sd-mascot-clear max-w-5xl mx-auto px-6 py-7 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
 
           {/* Left */}
           <div className="flex items-baseline gap-2">
@@ -253,36 +254,33 @@ export default function Contact({
           {/* Center — utility links */}
           <nav
             aria-label="Footer utility"
-            // Five links plus separators overran a 320px phone and the Privacy
-            // link fell off the right edge. Wrapping only engages when the row
-            // genuinely runs out of room, so wider screens keep the single line.
+            // Deliberately short: FAQ, Privacy, Terms. Projects, About and Fun
+            // Apps were dropped — all three are reachable from the main nav and
+            // from the command palette, and the shorter row is what keeps this
+            // strip on one line on a phone. Adding a fourth link brings back the
+            // wrap that Terms first caused, so weigh that before growing it.
             // Text-height links are a poor thumb target, so the anchors get
             // real vertical padding on phones and revert to inline text at md.
             className={`flex flex-wrap items-center gap-x-4 gap-y-2 font-manrope text-xs font-medium [&_a]:py-3.5 [&_a]:touch-manipulation md:[&_a]:py-0 ${light ? "text-[#1f7a4d]/95" : "text-[#1A1A1A]/60"}`}
           >
-            <Link href="/projects" className={`transition-colors ${light ? "hover:text-[#0B3B25]" : "hover:text-[#1A1A1A]"}`}>
-              Projects
-            </Link>
-            <span className={light ? "text-[#1f7a4d]" : "text-[#1A1A1A]/60"}>·</span>
             <a href="/faq" className={`transition-colors ${light ? "hover:text-[#0B3B25]" : "hover:text-[#1A1A1A]"}`}>
               FAQ
-            </a>
-            <span className={light ? "text-[#1f7a4d]" : "text-[#1A1A1A]/60"}>·</span>
-            <a href="/about" className={`transition-colors ${light ? "hover:text-[#0B3B25]" : "hover:text-[#1A1A1A]"}`}>
-              About
-            </a>
-            <span className={light ? "text-[#1f7a4d]" : "text-[#1A1A1A]/60"}>·</span>
-            <a href="/fun-apps" className={`transition-colors ${light ? "hover:text-[#0B3B25]" : "hover:text-[#1A1A1A]"}`}>
-              Fun Apps
             </a>
             <span className={light ? "text-[#1f7a4d]" : "text-[#1A1A1A]/60"}>·</span>
             <a href="/privacy" className={`transition-colors ${light ? "hover:text-[#0B3B25]" : "hover:text-[#1A1A1A]"}`}>
               Privacy
             </a>
+            <span className={light ? "text-[#1f7a4d]" : "text-[#1A1A1A]/60"}>·</span>
+            <a href="/terms" className={`transition-colors ${light ? "hover:text-[#0B3B25]" : "hover:text-[#1A1A1A]"}`}>
+              Terms
+            </a>
           </nav>
 
-          {/* Right */}
-          <div className="flex items-center gap-3">
+          {/* Right — stays a bare year on purpose. "All rights reserved" was
+              tried here and pushed the utility row past max-w-5xl at every
+              desktop width; it lives in the disclosure block below instead,
+              where a full-width line can carry it legibly. */}
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
             <button
               onClick={() => window.dispatchEvent(new Event("easter-egg-destruct"))}
               className={`px-2 py-1 rounded text-[9px] font-bold tracking-widest uppercase transition-colors ${
@@ -306,7 +304,7 @@ export default function Contact({
         {/* Visit-data disclosure. Must stay factually in step with /privacy —
             this site records IP addresses and runs third-party analytics, so it
             cannot be described as anonymous. */}
-        <div className="max-w-5xl mx-auto px-6 pb-6 -mt-1">
+        <div className="sd-mascot-clear max-w-5xl mx-auto px-6 pb-6 -mt-1">
           <p className={`font-manrope text-[10px] leading-relaxed ${light ? "text-[#1f7a4d]/95" : "text-[#1A1A1A]/60"}`}>
             This site records visit data — pages viewed, time and scroll depth, device, your IP address and
             the approximate location and network provider derived from it — and sends it to me privately. It
@@ -316,6 +314,19 @@ export default function Contact({
               className={`underline underline-offset-2 transition-colors ${light ? "decoration-[#1f7a4d]/30 hover:text-[#0B3B25]" : "decoration-[#1A1A1A]/30 hover:text-[#1A1A1A]"}`}
             >
               Full detail and how to opt out
+            </a>
+            .
+          </p>
+          {/* Rights reservation. Sits here rather than in the row above because
+              this line has the full container width to itself. */}
+          <p className={`font-manrope text-[10px] leading-relaxed mt-1.5 ${light ? "text-[#1f7a4d]/95" : "text-[#1A1A1A]/60"}`}>
+            This site, its code and its content are © {new Date().getFullYear()} Suman Debnath. All rights
+            reserved — none of it is open source, and copying it needs permission first.{" "}
+            <a
+              href="/terms"
+              className={`underline underline-offset-2 transition-colors ${light ? "decoration-[#1f7a4d]/30 hover:text-[#0B3B25]" : "decoration-[#1A1A1A]/30 hover:text-[#1A1A1A]"}`}
+            >
+              Terms of use
             </a>
             .
           </p>

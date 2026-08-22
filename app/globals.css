@@ -140,6 +140,28 @@ html.sd-intro-nav #tour-nav {
   }
 }
 
+/* ─── Mascot clearance for right-aligned footer content ──────────────────
+   The corner robot is a 200px-wide canvas pinned to the *viewport's* right
+   edge. Footer content is right-aligned inside a centred `max-w-5xl`
+   container, so on a narrow desktop the two land on top of each other: the
+   container's right edge sits at (100vw + 1024px) / 2 while the robot starts
+   at 100vw − 196px. Measured at 1073px wide, the whole "Do Not Click ©" group
+   (877→1020) fell inside the robot's box (877→1077).
+
+   Note the row is `justify-between`, so *removing* links from the middle of it
+   does nothing — the right-hand group stays pinned to the container edge
+   regardless of what is beside it. Only moving that edge fixes the overlap.
+
+   `724px − 50vw` is exactly the overlap plus a 16px gap, and `max()` retires it
+   back to the normal px-6 once the window is wide enough (~1400px) that the
+   container clears the robot unaided. Phones are unaffected: the row stacks to
+   a column there and its content is left-aligned, nowhere near the robot. */
+@media (min-width: 768px) {
+  .sd-mascot-clear {
+    padding-right: max(1.5rem, calc(724px - 50vw));
+  }
+}
+
 /* ─── Base Styles ────────────────────────────────────────────────────── */
 * {
   box-sizing: border-box;

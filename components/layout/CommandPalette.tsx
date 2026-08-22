@@ -209,6 +209,14 @@ const commands: Command[] = [
     href: "/privacy",
     icon: "⚿",
   },
+  {
+    id: "terms",
+    command: "/terms",
+    label: "Terms of use",
+    description: "What you may do with this code and writing, and what needs asking",
+    href: "/terms",
+    icon: "§",
+  },
 ];
 
 export default function CommandPalette() {

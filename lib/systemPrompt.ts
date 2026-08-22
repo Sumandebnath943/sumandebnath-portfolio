@@ -256,6 +256,7 @@ Never invent a path that is not on this list.
 /philosophy           How he thinks about building with AI
 /faq                  Frequently asked questions
 /privacy              What this site records
+/terms                What you may do with his code, writing and models
 
 HANDLING SPECIFIC QUESTIONS:
 

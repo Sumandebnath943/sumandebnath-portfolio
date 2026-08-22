@@ -1,0 +1,59 @@
+Copyright (c) 2026 Suman Debnath. All rights reserved.
+
+This repository is personal work. It is NOT open source, and no open-source
+licence is granted by its being public.
+
+Everything here is covered: the source code, the written content, the design and
+layout, the images and screenshots, and any model weights, datasets or
+configuration published alongside it.
+
+
+WHAT YOU MAY DO WITHOUT ASKING
+
+  - Read the code and the content, and link to any of it.
+  - Quote a short passage — a couple of sentences — with attribution to
+    Suman Debnath and a link back to https://sumandebnath.com.
+  - Learn from it. Techniques, approaches and ideas are not ownable and I make
+    no claim on them. It is the specific expression — this code, these words —
+    that is mine.
+  - Fork this repository on GitHub. That permission comes from GitHub's Terms
+    of Service, which let any user fork a public repository, and I am not
+    pretending otherwise. It does not extend to taking the fork off GitHub,
+    relicensing it, or shipping it.
+
+
+WHAT REQUIRES WRITTEN PERMISSION FIRST
+
+  - Copying any part of this code into another project, commercial or not.
+  - Mirroring, re-uploading or redistributing this repository anywhere outside
+    GitHub.
+  - Republishing the written content in whole or in substantial part, including
+    translated or reworded versions.
+  - Using the design or layout as a template for another site.
+  - Including any of this in a paid product, client deliverable, or course.
+  - Bulk-scraping it to build a dataset, or training a model on it.
+  - Presenting any of it as your own work — in a portfolio, a résumé, or a
+    take-home assignment.
+
+
+PRECEDENCE
+
+  - A model published on Hugging Face is governed by the licence declared on
+    its model card. That licence controls the model; this file does not.
+  - If another file in this repository carries its own licence header, that
+    header controls that file.
+  - This file is the default wherever neither of the above applies.
+
+
+ASKING
+
+  sumandebnath944@gmail.com — say what you want to use and where. For learning,
+  study and non-commercial work the answer is almost always yes, and I do not
+  want anything for it. It is the not-asking I mind.
+
+
+NO WARRANTY
+
+  This work is provided as-is, without warranty of any kind, express or
+  implied. The author is not liable for any claim, damages or other liability
+  arising from it or from its use.
