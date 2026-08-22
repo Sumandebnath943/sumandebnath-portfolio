@@ -24,7 +24,7 @@ Recent history, newest first, gives an accurate picture of the trajectory:
 
 | Area | State |
 |---|---|
-| **Profile** (`/profile`) | Built 23 Aug. The only light page on the site — ruled cream paper, a 280vh pinned hero that zooms into a drawn monitor, a scroll-driven word reveal and a shopfront marquee. Modelled on a reference the user supplied. Done — §1.5. |
+| **Profile** (`/profile`) | Built 23 Aug over two passes. The only light page on the site — ruled cream paper, a 280vh pinned hero that zooms into a drawn monitor, a word reveal, and a conveyor street with a walking robot. Modelled on a reference the user supplied, then pulled back towards the site's own type, pills, accents and closing. **The figure and the dog still need redrawing** — §1.5. |
 | **Banking Co-pilot** (`/banking/rm-copilot`) | Built 22 Aug. New **Banking** group under Portfolio. Fully prerendered; 382 KB of WebP, one eager image. Done. |
 | **Hero lock** | Extended 22 Aug from the homepage to all ten product pages — `components/ui/HeroLock.tsx`. Done. |
 | **Admin dashboard** (`/desk-4f7a`) | Built 13–14 Aug across five phases. Live, password-gated, recording. |
@@ -271,34 +271,36 @@ checked at 375 and 1280.
 **What was asked for.** The user pointed at the profile page on
 **pleurat.com/about** and asked for the same page — design, layout, animations —
 carrying Suman's content instead. Four choices were settled before any code: a
-new `/profile` route rather than replacing `/about`; the reference's cream
-paper system verbatim but with this site's own fonts; the drawings redrawn
-rather than lifted; and the reference's e-book block repurposed to point at
-`/learnings` and `/philosophy`.
+new `/profile` route rather than replacing `/about`; the reference's cream paper
+system verbatim but with this site's own fonts; the drawings redrawn rather than
+lifted; and the reference's e-book block repurposed.
 
-**What it is.** Nine blocks, four of them scroll-scrubbed:
+**Then a second pass**, off sixteen points of feedback, which is what the route
+actually looks like now. The theme of nearly all of it was the same: *keep the
+character, stop being a guest on the site.* That produced the five continuity
+devices now written up in Bible §4.1 — the site's own type and headline pattern,
+`SectionKicker` pills in place of amber corner tabs, per-product accents on the
+work board, rounded buttons, and `<Contact variant="light" />` as the closing.
+
+**What it is now.** Seven blocks:
 
 | Block | Behaviour |
 |---|---|
-| Curtain | eight columns of paper drop over the viewport, the name wipes in, they lift right-to-left |
 | Hero | 280vh with a 100svh sticky child; the paragraph rises 320px and fades on a cubed curve while a drawn room zooms into the monitor's screen |
 | Statement | 1.3fr / 0.7fr, headline against a small aside |
-| Filmstrip | the `/journey` chapter artwork, drifting sideways in proportion to its trip through the viewport |
+| Filmstrip | eight photographs of Suman, drifting sideways in proportion to their trip through the viewport |
 | Credo | sticky left column, right column resolving one word at a time |
-| Board | ten hairline cells: two employers, eight builds |
-| Notebook | the reference's e-book plate, pointing at `/learnings` |
-| Kit strip | a shopfront per tool, sliding on scroll, the centre one lit and named |
-| Footer | its own ruled footer with closing amber brackets |
+| Board | ten hairline cells, each carrying its product's accent, over a row of ways out to the rest of the site |
+| The Experience Book | a cover with the figure on it, and both jobs' responsibilities as a ruled ledger with the number each was measured by |
+| The street | a constant-speed conveyor of named buildings with a robot walking it |
 
-**Three things worth knowing.**
+**Six things that were bugs first.**
 
 > **No scroll listeners anywhere on this page.** `body` carries
 > `overflow-x: hidden`, so scroll events fired on it never reach `window` —
 > AGENTS.md trap 4, and it fails silently. Every scrub runs through one
 > `useScrub` hook: an IntersectionObserver decides whether an element is worth
-> watching, and while it is, a rAF loop reads `getBoundingClientRect()`. Rect
-> reads are true whichever element scrolls, and the loop stops when the section
-> leaves the screen.
+> watching, and while it is, a rAF loop reads `getBoundingClientRect()`.
 
 > **The nav was invisible for the first pass, with no error.** `Navigation` is a
 > framer-motion `m` component that animates itself in from `opacity: 0`. Without
@@ -308,21 +310,41 @@ rather than lifted; and the reference's e-book block repurposed to point at
 
 > **`HeroLock` observes its own `parentElement`.** Mounted as a sibling of the
 > hero it observed `<main>` and kept the mascot and chat launcher hidden for the
-> entire page. It is now passed into `ProfileHero` as `children` so it sits
-> inside the `<section>`.
+> entire page. It is now passed into `ProfileHero` as `children`.
 
-**Verified.** Production build clean, `/profile` prerendered static. The hero's
-final viewBox measures `571.0 173.5 250.0 59.1` — the zoom lands on the drawn
-screen to the tenth of a unit. Checked at 1440×900 and 375×812; the pin is
-dropped below 960px and the drawing zooms off its own position instead.
+> **Removing the hero drawing's width cap cut the screen off.** The cap looked
+> arbitrary and was deleted; on a 620px-tall window the full-width drawing then
+> overflowed the `overflow: hidden` pin and the bottom of the monitor — the
+> payoff of the whole zoom — was clipped. It is back as an explicit budget,
+> `(100svh − 360px) × 4.233`, and Bible §4.1 says what the 360 is made of.
 
-**Deliberate departures from the reference**, all four worth knowing before
-someone reports them as bugs: it is **light only** (the reference has a dark
-theme and a toggle); it uses the **site's own dark nav** rather than the
-reference's paper nav bar; the drawings are simpler than the reference's (which
-carries two figures, a dog, a cat and a click-to-wave interaction); and there is
-**no once-per-session guard on the curtain** — see §4.1 of the Bible for why it
-cannot live in the component.
+> **The reaching arm has to paint after the keyboard.** Drawn inside the sitter
+> group it disappeared behind the monitor bezel from x=556 onwards, because the
+> hand rests on a keyboard that stands in front of the screen. (Moot for now —
+> see below — but the insertion point is commented for whoever redraws it.)
+
+> **`vector-effect: non-scaling-stroke` is wrong for the robot.** It is right
+> for the street's hairlines and wrong for limbs that *are* 6-unit strokes: it
+> pins them to 6 device pixels, and the robot turns to wire as the frame scales.
+> The rule now exempts `.pf-bot`.
+
+**Verified.** Production build clean, `/profile` prerendered static, lint clean.
+The hero's final viewBox measures `571.0 173.5 250.0 59.1` — the zoom lands on
+the drawn screen to the tenth of a unit. Checked at 1280×620, 1440×900 and
+375×812; the pin is dropped below 960px and the drawing zooms off its own
+position instead. The conveyor was measured moving at its stated 34 units/sec
+with the readout tracking the robot.
+
+> **Watch the browser pane's real surface.** It reports `window.innerHeight` as
+> whatever you set, but composites a shorter one, so a screenshot looks clipped
+> when the layout is fine. Measure `getBoundingClientRect()` and believe that,
+> not the picture. Setting the viewport to ~1280×620 makes the two agree.
+
+**Left undone, on purpose:** the seated figure and the dog are **not** in the
+drawing. Both were drawn, judged not good enough, and pulled rather than shipped
+half-right — the empty chair reads as somebody who has just stepped away. The
+two insertion points are commented in `SceneDesk` and `SceneFore`. **This is the
+next thing to do on this route.**
 
 ---
 

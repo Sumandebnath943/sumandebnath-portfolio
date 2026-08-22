@@ -3,14 +3,21 @@
 
    A deliberate break from the rest of the site. Every other route is dark;
    this one is a sheet of ruled cream paper laid over the page, with a hairline
-   margin on each side, amber corner brackets stamped on every section, and a
+   margin on each side, amber corner brackets on every section, and a
    scroll-scrubbed line drawing that you fall into.
 
-   The layout, the spacing scale, the corner-bracket system and the four scroll
-   behaviours are modelled on the profile page at pleurat.com/about, which is
-   the reference this page was asked to match. The typography is this site's
-   own (Manrope + DM Mono, not General Sans + IBM Plex Mono), the artwork is
-   ours, and every word is Suman's.
+   The layout is modelled on the profile page at pleurat.com/about, which the
+   user supplied as the reference. **Where it deliberately parts company with
+   that reference is what keeps it a sibling of this site rather than a guest
+   on it**, and those four places are worth knowing:
+
+     · Type is Manrope + DM Mono, and headlines carry the site's
+       sans-plus-serif-italic pattern (PROJECT_BIBLE §4).
+     · Section labels are the shared `SectionKicker` pill, not the reference's
+       filled amber corner tabs. Same pill as the homepage sections.
+     · The work board carries per-card accents drawn from the products' own
+       palettes, so the one section listing the portfolio looks like it.
+     · The page closes on the site's own `<Contact variant="light" />`.
 
    ── Two structural things that are easy to break ────────────────────────
    1. `.pf-root` sets `overflow-x: clip`, NOT `hidden`. `clip` still allows
@@ -18,8 +25,8 @@
       the pinned hero would just scroll past. See AGENTS.md trap 3.
    2. `--pf-rule-x` is the distance from the viewport edge to the sheet's
       hairline border. Everything that has to line up with that border — the
-      nav underline, the section rules, the corner brackets, the footer marks —
-      reads this one variable. Change it in one place or not at all.
+      section rules and the corner brackets — reads this one variable. Change
+      it in one place or not at all.
 
    Scoped under .pf-root. Prefix: pf-.
    ───────────────────────────────────────────────────────────────────────── */
@@ -33,7 +40,7 @@
   --pf-tile: #efe9d2;
 
   /* ── Ink ──
-     --pf-ink-3 is the lightest of the three and is used only for 10.5px mono
+     --pf-ink-3 is the lightest of the three and is used only for 10px mono
      labels with wide tracking. On --pf-sheet it measures 4.6:1, which clears
      AA for normal text — the third WCAG pass on this site was mostly about
      small labels exactly like these, so do not lighten it. */
@@ -42,9 +49,9 @@
   --pf-ink-3: #7d776a;
 
   /* ── Amber ──
-     --pf-amber is the marker colour: brackets, badges, the sticky note, the
-     spine of the book. It is a *fill* colour, never a text colour on paper —
-     at 3.1:1 it would fail. Amber text uses --pf-amber-2 (5.2:1). */
+     --pf-amber is a fill colour: brackets, the sticky note, the spine of the
+     book. At 3.1:1 on paper it is never a text colour. Amber text is
+     --pf-amber-2 at 5.2:1. */
   --pf-amber: #f3b44a;
   --pf-amber-2: #a86a08;
   --pf-amber-lt: #f9cb80;
@@ -63,12 +70,13 @@
   );
 
   /* ── Type ──
-     --pf-mono is DM Mono, this site's label face. The reference uses a sans
-     here; DM Mono is wider per character, so the micro size is 10px rather
-     than 10.5px and the tracking is a touch tighter, or the uppercase labels
-     overrun their badges. */
+     The same three families the rest of the site uses, from app/layout.tsx:
+     Manrope for everything structural, DM Mono for labels and figures, and
+     Instrument Serif for the italic phrase inside a headline. Nothing here is
+     loaded specially for this page. */
   --pf-sans: var(--font-manrope), "Helvetica Neue", Helvetica, Arial, sans-serif;
   --pf-mono: var(--font-dm-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --pf-serif: var(--font-instrument), Georgia, "Times New Roman", serif;
 
   --pf-fs-display: clamp(37px, 4.05vw, 64px);
   --pf-fs-h2: clamp(31px, 3.05vw, 47px);
@@ -76,7 +84,6 @@
   --pf-fs-lead: 19px;
   --pf-fs-body: 17px;
   --pf-fs-sm: 15px;
-  --pf-fs-meta: 12.5px;
   --pf-fs-micro: 10px;
 
   /* ── Space ── */
@@ -154,8 +161,12 @@
    colour across the whole viewport — it also covers the site's near-black
    body background, which would otherwise show during overscroll. `::after` is
    the sheet itself: a slightly lighter panel with a hairline down each side,
-   inset by --pf-rule-x. Both are fixed, so the paper stays put and the content
-   travels over it. */
+   inset by --pf-rule-x.
+
+   These two borders are the page's spine. They are what make it read as a
+   sheet of paper rather than as a light-mode accident, and dropping them
+   would cost more character than it would buy in continuity — the continuity
+   is bought by the type, the pills, the card accents and the closing instead. */
 .pf-root::before {
   content: "";
   position: fixed;
@@ -179,21 +190,16 @@
   border-right: 1px solid var(--pf-frame);
 }
 
-/* ── Corner brackets and section badges ─────────────────────────────────
-   Every major block gets two amber right-angle brackets at its top corners,
-   drawn as four 2px gradient slivers in a single background shorthand. A block
-   with a `data-badge` swaps its left bracket for a filled amber tab carrying
-   the label — the bracket and the tab occupy the same corner, so you get one
-   or the other, never both. */
-.pf-marked,
-.pf-wrap.pf-pad,
-.pf-hero {
+/* ── Corner brackets ────────────────────────────────────────────────────
+   Two amber right-angles at the top corners of every block, drawn as four 2px
+   gradient slivers in a single background shorthand. The reference fills the
+   left one with a labelled amber tab; here the label is a `SectionKicker`
+   pill in the flow instead, so both corners stay open. */
+.pf-wrap.pf-pad {
   position: relative;
 }
 
-.pf-marked::after,
-.pf-wrap.pf-pad::after,
-.pf-hero::after {
+.pf-wrap.pf-pad::after {
   content: "";
   position: absolute;
   top: 0;
@@ -207,34 +213,6 @@
     linear-gradient(var(--pf-mark), var(--pf-mark)) 0 0 / 2px 20px no-repeat,
     linear-gradient(var(--pf-mark), var(--pf-mark)) 100% 0 / 20px 2px no-repeat,
     linear-gradient(var(--pf-mark), var(--pf-mark)) 100% 0 / 2px 20px no-repeat;
-}
-
-.pf-marked[data-badge]::after,
-.pf-wrap.pf-pad[data-badge]::after,
-.pf-hero[data-badge]::after {
-  background:
-    linear-gradient(var(--pf-mark), var(--pf-mark)) 100% 0 / 20px 2px no-repeat,
-    linear-gradient(var(--pf-mark), var(--pf-mark)) 100% 0 / 2px 20px no-repeat;
-}
-
-.pf-marked[data-badge]::before,
-.pf-wrap.pf-pad[data-badge]::before,
-.pf-hero[data-badge]::before {
-  content: attr(data-badge);
-  position: absolute;
-  top: 0;
-  left: var(--pf-rule-x);
-  z-index: 4;
-  background: var(--pf-amber);
-  color: var(--pf-ink);
-  font-family: var(--pf-mono);
-  font-size: var(--pf-fs-micro);
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  line-height: 1;
-  padding: 9px 13px 8px;
-  pointer-events: none;
 }
 
 /* ── Shell ──────────────────────────────────────────────────────────────
@@ -278,23 +256,45 @@
 .pf-dim {
   color: var(--pf-ink-3);
 }
+/* The site's headline pattern: a bold sans phrase, then a serif italic one.
+   This is the single strongest thing tying the page to the other routes. */
+.pf-em {
+  font-family: var(--pf-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--pf-amber-2);
+}
+.pf-em--ink {
+  color: var(--pf-ink-2);
+}
 
-/* ── Buttons ────────────────────────────────────────────────────────────── */
+/* The kicker pill sits in the flow above a heading; its own margin is passed
+   by the caller. Nothing here beyond making sure it clears the bracket. */
+.pf-kick {
+  position: relative;
+  z-index: 4;
+}
+
+/* ── Buttons ────────────────────────────────────────────────────────────
+   Rounded, like every other button on the site, rather than the reference's
+   square ones. */
 .pf-btn {
   font-family: var(--pf-sans);
   font-size: var(--pf-fs-sm);
   font-weight: 600;
-  padding: 13px 22px;
+  padding: 12px 22px;
+  border-radius: 999px;
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   cursor: pointer;
   border: 0;
-  transition: background 0.2s, box-shadow 0.2s;
+  transition: background 0.2s, box-shadow 0.2s, color 0.2s;
 }
 .pf-btn svg {
-  width: 17px;
-  height: 17px;
+  width: 15px;
+  height: 15px;
   flex: 0 0 auto;
   transition: transform 0.15s var(--pf-ease);
 }
@@ -318,136 +318,23 @@
   box-shadow: inset 0 0 0 1px var(--pf-ink-3);
 }
 
-/* ═══ 1. Curtain ═════════════════════════════════════════════════════════
-   Eight columns of ruled paper drop over the viewport and lift again, 38ms
-   apart, left to right on the way in and right to left on the way out. The
-   name sits behind them and is wiped in by a gradient on `--p`.
+/* ═══ 1. Hero ════════════════════════════════════════════════════════════
+   280vh with a 100svh sticky child. The paragraph rises 320px and fades on a
+   cubed curve while the drawing's viewBox is lerped from the whole room down
+   to the monitor's screen — so the words leave exactly as the screen arrives.
 
-   `visibility: hidden` by default so it costs nothing and is unreachable
-   before the client component turns it on — and it is removed outright under
-   prefers-reduced-motion. */
-.pf-curtain {
-  position: fixed;
-  inset: 0;
-  /* Above the nav (10000), the mascot (9999) and the chat launcher (1000), and
-     one below the site loader (99999) so a first landing still shows the
-     loader on top. See PROJECT_BIBLE §10.0 for that stack. */
-  z-index: 99998;
-  pointer-events: none;
-  visibility: hidden;
-  --n: 8;
-  --cw: 12.5vw;
-  --stagger: 38ms;
-}
-.pf-curtain.is-on {
-  visibility: visible;
-}
-.pf-curtain-col {
-  position: absolute;
-  top: 0;
-  height: 100%;
-  left: calc(var(--i) * var(--cw));
-  /* the +1.5px closes the sub-pixel seam between columns */
-  width: calc(var(--cw) + 1.5px);
-  background-color: #fbf7e6;
-  background-image: repeating-linear-gradient(
-      0deg,
-      rgba(22, 20, 14, 0.04) 0 1px,
-      transparent 1px 4px
-    ),
-    linear-gradient(#fbf7e6, #f3edd6);
-  transform: translateY(-101%);
-  will-change: transform;
-  transition: transform 0.52s cubic-bezier(0.2, 0.85, 0.2, 1);
-  transition-delay: calc(var(--i) * var(--stagger));
-}
-.pf-curtain-col::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 2px;
-  background: #f3b44a;
-  opacity: 0.9;
-}
-.pf-curtain.is-covered .pf-curtain-col {
-  transform: translateY(0);
-  transition: none;
-}
-.pf-curtain.is-reveal .pf-curtain-col {
-  transform: translateY(-101%);
-  transition-delay: calc((var(--n) - 1 - var(--i)) * var(--stagger));
-}
-.pf-curtain-label {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 22px;
-  text-align: center;
-  color: #16140e;
-  opacity: 0;
-  transition: opacity 0.3s;
-  --p: 0;
-}
-.pf-curtain.show-label .pf-curtain-label {
-  opacity: 1;
-}
-.pf-curtain-label .name {
-  font-family: var(--pf-sans);
-  font-weight: 600;
-  font-size: max(42px, 5.6vw);
-  letter-spacing: -0.045em;
-  line-height: 0.92;
-  display: inline-block;
-  /* the wipe: ink up to --p%, 17% ink after it */
-  background-image: linear-gradient(
-    90deg,
-    #16140e 0,
-    #16140e calc(var(--p) * 1.03% - 3%),
-    #16140e2b calc(var(--p) * 1.03%),
-    #16140e2b
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-}
-.pf-curtain-label .name .d {
-  color: #a86a08;
-  -webkit-text-fill-color: #a86a08;
-}
-.pf-curtain-label .sub {
-  font-family: var(--pf-mono);
-  font-size: var(--pf-fs-micro);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #57534a;
-}
-@media (prefers-reduced-motion: reduce) {
-  .pf-curtain {
-    display: none !important;
-  }
-}
-
-/* ═══ 2. Hero ════════════════════════════════════════════════════════════
-   280vh of scroll with a 100svh sticky child. The paragraph rises 320px and
-   fades on a cubed curve while the drawing's viewBox is lerped from the whole
-   room down to the monitor's screen — so the words leave exactly as the screen
-   arrives. Both are driven from the same 0→1 progress in ProfileVisuals.
+   The top padding clears the floating nav, which is `position: fixed` and so
+   contributes nothing to the flow. `--sd-nav-clear` is that bar's height plus
+   its top offset plus breathing room; the paragraph must never start under it.
 
    On phones the pin is dropped entirely: the section becomes ordinary flow,
    the paragraph's inline transform is overridden away, and the drawing zooms
    off its own position instead. A 280vh pin on a 640px-tall viewport is four
    full screens of nothing happening. */
 .pf-hero {
+  --sd-nav-clear: 132px;
   height: 280vh;
   position: relative;
-  background-image: none;
 }
 .pf-hero-pin {
   position: sticky;
@@ -458,12 +345,12 @@
   align-items: center;
   justify-content: flex-start;
   overflow: hidden;
-  padding-top: clamp(48px, 9vh, 104px);
+  padding-top: var(--sd-nav-clear);
   padding-bottom: clamp(20px, 4.5vh, 56px);
 }
 .pf-hero-inner {
   margin-block: auto;
-  max-width: min(900px, 86vw);
+  max-width: min(940px, 88vw);
   padding: 0 clamp(20px, 4vw, 56px);
   text-align: center;
   transform-origin: 50% 50%;
@@ -472,19 +359,32 @@
 .pf-hero-inner .lead {
   font-size: clamp(21px, 2.1vw, 30px);
   font-weight: 500;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.012em;
   line-height: 1.55;
   max-width: 49ch;
   margin: 0 auto;
   text-wrap: balance;
 }
 
-/* The drawing is pinned to the bottom of the hero and capped so that at short
-   viewport heights it shrinks rather than colliding with the paragraph. The
-   6.02 is the scene's aspect ratio (1820/430 ≈ 4.23) with headroom. */
+/* The drawing is pinned to the bottom of the hero, and wants the full width of
+   the sheet — but the pin is `overflow: hidden`, so on a short window a
+   full-width drawing is simply cut off at the bottom and you lose the very
+   thing the zoom lands on.
+
+   The cap is that budget written down. The pin has to fit: the nav clearance,
+   the paragraph (about 200px at its smallest), the drawing, and the bottom
+   padding. What is left for the drawing is `100svh − 360px`, and the scene's
+   aspect ratio is 1820/430 = 4.233, so that height buys this much width. On a
+   900px window the sum comes out well over the sheet and the drawing simply
+   runs full width; the cap only bites when it needs to.
+
+   **If you change --sd-nav-clear or the lead's size, change the 360 with it.** */
 .pf-hero-pin > .pf-desk-wrap {
   margin-top: auto;
-  max-width: min(var(--pf-measure-full), max(560px, (100svh - 470px) * 6.02));
+  max-width: min(
+    var(--pf-measure-full),
+    max(480px, (100svh - 360px) * 4.233)
+  );
 }
 
 .pf-desk-wrap {
@@ -515,11 +415,28 @@
   vector-effect: non-scaling-stroke;
 }
 
+@media (max-width: 960px) {
+  .pf-hero {
+    --sd-nav-clear: 104px;
+    height: auto;
+  }
+  .pf-hero-pin {
+    position: static;
+    height: auto;
+    padding-top: var(--sd-nav-clear);
+    padding-bottom: clamp(40px, 8vh, 80px);
+  }
+  .pf-hero-inner {
+    transform: none !important;
+    opacity: 1 !important;
+    padding-block: clamp(40px, 10vh, 90px);
+  }
+}
+
 /* ── The drawing's palette ──────────────────────────────────────────────
    One ink for every outline (#8a8272, a grey warmed towards the paper) and a
-   small set of flat washes over it. The whole scene is 1px strokes plus fills:
-   no gradients, no shadows, nothing that would resolve into mush when the
-   viewBox drops from 1820 units wide to 250. */
+   small set of flat washes over it. No gradients and no shadows: both resolve
+   into mush when the viewBox drops from 1820 units wide to 250. */
 .pf-desk-view .ln {
   fill: none;
   stroke: #8a8272;
@@ -532,9 +449,10 @@
   stroke: #8a8272;
   stroke-width: 1;
   stroke-linejoin: round;
+  stroke-linecap: round;
 }
 .pf-desk-view .back {
-  opacity: 0.78;
+  opacity: 0.8;
 }
 .pf-desk-view .back .floor {
   stroke-width: 1.4;
@@ -550,7 +468,7 @@
 .pf-desk-view .light {
   fill: #fbf3dc;
   stroke: none;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 .pf-desk-view .sun {
   fill: #f9cb80;
@@ -574,15 +492,14 @@
 .pf-desk-view .out-trunk {
   stroke: #8a7357;
 }
-.pf-desk-view .mullion,
-.pf-desk-view .sill {
-  stroke: #8a8272;
-}
 
-/* Shelf and pictures */
+/* Shelf, bookcase, pictures */
 .pf-desk-view .shelf {
   stroke: #b4ac98;
   stroke-width: 2;
+}
+.pf-desk-view .case-body {
+  fill: #e0cfb8;
 }
 .pf-desk-view .book {
   stroke-width: 0.9;
@@ -599,8 +516,7 @@
 .pf-desk-view .lean {
   fill: #e0cfb8;
 }
-.pf-desk-view .pot,
-.pf-desk-view .pot2 {
+.pf-desk-view .pot {
   fill: #e0cfc0;
 }
 .pf-desk-view .vine,
@@ -620,6 +536,13 @@
 .pf-desk-view .frame.f2 {
   fill: #9db8c7;
 }
+.pf-desk-view .frame.f3 {
+  fill: #f2ecdb;
+}
+.pf-desk-view .art {
+  stroke: #c4867a;
+  stroke-width: 2;
+}
 .pf-desk-view .dial {
   fill: #fbf7e9;
 }
@@ -630,6 +553,28 @@
 .pf-desk-view .clock .pin {
   fill: #57534a;
   stroke: none;
+}
+
+/* Record cabinet */
+.pf-desk-view .unit {
+  fill: #c08f61;
+}
+.pf-desk-view .deck {
+  fill: #d9d3c2;
+}
+.pf-desk-view .disc {
+  fill: #2c2a26;
+}
+.pf-desk-view .spindle {
+  fill: #fbf7e9;
+  stroke: none;
+}
+.pf-desk-view .tone {
+  stroke: #57534a;
+  stroke-width: 1.6;
+}
+.pf-desk-view .sleeve {
+  fill: #9db8c7;
 }
 
 /* Sofa, cat, lamp */
@@ -647,6 +592,9 @@
 }
 .pf-desk-view .cush.p1 {
   fill: #f3b44a;
+}
+.pf-desk-view .throw {
+  fill: #c4867a;
 }
 .pf-desk-view .c-body,
 .pf-desk-view .c-head {
@@ -667,23 +615,20 @@
 .pf-desk-view .glow {
   fill: #f9cb80;
   stroke: none;
-  opacity: 0.22;
+  opacity: 0.2;
   animation: pf-breathe 9s ease-in-out infinite;
-}
-.pf-desk-view .pole,
-.pf-desk-view .base,
-.pf-desk-view .top,
-.pf-desk-view .legs {
-  stroke: #8a8272;
 }
 .pf-desk-view .mug {
   fill: #c4867a;
 }
+.pf-desk-view .steam {
+  stroke: #c7bfa9;
+  opacity: 0.7;
+}
 
-/* Desk and person */
+/* Desk */
 .pf-desk-view .desk .top {
-  fill: #c9a06a;
-  stroke: #8a8272;
+  fill: #cdae7d;
 }
 .pf-desk-view .desk .legs,
 .pf-desk-view .desk .modesty {
@@ -693,43 +638,26 @@
 .pf-desk-view .chair-back {
   fill: #6e778c;
 }
-.pf-desk-view .torso {
-  fill: #7a835f;
-}
-.pf-desk-view .arm {
-  stroke-width: 7;
-  stroke: #7a835f;
-  fill: none;
-  stroke-linecap: round;
-}
-.pf-desk-view .hand,
-.pf-desk-view .head {
-  fill: #e8be9b;
-}
-.pf-desk-view .hair {
-  fill: #3f3229;
-  stroke: none;
-}
-.pf-desk-view .neck {
-  stroke: #d8a87f;
-  stroke-width: 6;
-}
-.pf-desk-view .thigh,
-.pf-desk-view .shin {
-  stroke: #a9b7c6;
-  stroke-width: 12;
-  fill: none;
-  stroke-linecap: round;
-}
-.pf-desk-view .shoe {
-  fill: #333d52;
-}
+
+/* The person and the dog are not in the drawing at present — both were pulled
+   to be redrawn, and their rules went with them rather than sitting here
+   matching nothing. The two insertion points are commented in
+   ProfileVisuals.tsx (`SceneDesk` and `SceneFore`), and the constraint worth
+   remembering is that limbs must be *stroked* paths, not filled ones: a filled
+   limb pinches at the outside of every curve. */
+
+/* Desk clutter */
 .pf-desk-view .kbd,
 .pf-desk-view .pad {
   fill: #e5dfcd;
 }
-.pf-desk-view .phone {
+.pf-desk-view .phone,
+.pf-desk-view .speaker {
   fill: #4a453d;
+}
+.pf-desk-view .sp-cone {
+  fill: #8a8272;
+  stroke: none;
 }
 .pf-desk-view .bezel {
   fill: #4a453d;
@@ -738,6 +666,7 @@
 .pf-desk-view .stand-foot {
   fill: #9aa0a8;
 }
+
 /* Foreground */
 .pf-desk-view .rug {
   fill: #d9c9b4;
@@ -763,25 +692,40 @@
   stroke: none;
 }
 .pf-desk-view .screen .glassy {
-  fill: #1b1a16;
+  fill: #17160f;
 }
 .pf-desk-view .screen .bar {
-  fill: #272520;
+  fill: #242219;
 }
 .pf-desk-view .screen .dot {
   fill: #6b665c;
 }
 .pf-desk-view .screen .side-bg {
-  fill: #232119;
+  fill: #201e16;
+}
+.pf-desk-view .screen .mark {
+  fill: var(--pf-amber);
 }
 .pf-desk-view .screen .nav-row {
   fill: #3a372e;
 }
 .pf-desk-view .screen .nav-row.is-on {
-  fill: #f3b44a;
+  fill: #6f6752;
 }
-.pf-desk-view .screen .live {
-  fill: #8fae74;
+.pf-desk-view .screen .cell {
+  fill: #3a372e;
+}
+.pf-desk-view .screen .cell.ok {
+  fill: #6f9c5b;
+}
+.pf-desk-view .screen .cell.warn {
+  fill: var(--pf-amber);
+}
+.pf-desk-view .screen .bar-track {
+  fill: #302d24;
+}
+.pf-desk-view .screen .bar-fill {
+  fill: #6f9c5b;
 }
 .pf-desk-view .screen .cursor {
   fill: #fffdf3;
@@ -789,37 +733,32 @@
 .pf-desk-view .screen text {
   font-family: var(--pf-mono);
 }
-.pf-desk-view .screen .bar-t {
-  font-size: 4.4px;
-  letter-spacing: 0.06em;
-  fill: #8b8577;
-}
 .pf-desk-view .screen .col-h {
-  font-size: 4.2px;
-  letter-spacing: 0.22em;
+  font-size: 4.4px;
+  letter-spacing: 0.2em;
+  fill: #a9a293;
+}
+.pf-desk-view .screen .col-s {
+  font-size: 3.8px;
+  letter-spacing: 0.2em;
   fill: #8b8577;
 }
-.pf-desk-view .screen .row-n {
-  font-size: 4.8px;
-  letter-spacing: 0.02em;
+.pf-desk-view .screen .col-n {
+  font-size: 8px;
+  letter-spacing: -0.01em;
   fill: #ece7da;
 }
-.pf-desk-view .screen .row-s {
-  font-size: 3.9px;
-  letter-spacing: 0.04em;
-  fill: #8b8577;
-}
 .pf-desk-view .screen .note rect {
-  fill: #f3b44a;
+  fill: var(--pf-amber);
 }
 .pf-desk-view .screen .note-k {
-  font-size: 4.4px;
+  font-size: 4.2px;
   letter-spacing: 0.26em;
   fill: #8a6410;
 }
 .pf-desk-view .screen .note-l {
   font-family: var(--pf-sans);
-  font-size: 9.4px;
+  font-size: 8.8px;
   font-weight: 600;
   letter-spacing: -0.02em;
   fill: #16140e;
@@ -828,34 +767,14 @@
 @keyframes pf-breathe {
   0%,
   100% {
-    opacity: 0.16;
+    opacity: 0.14;
   }
   50% {
-    opacity: 0.3;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .pf-desk-view .glow {
-    animation: none;
+    opacity: 0.28;
   }
 }
 
-@media (max-width: 960px) {
-  .pf-hero {
-    height: auto;
-  }
-  .pf-hero-pin {
-    position: static;
-    height: auto;
-    padding: clamp(90px, 18vh, 180px) 0;
-  }
-  .pf-hero-inner {
-    transform: none !important;
-    opacity: 1 !important;
-  }
-}
-
-/* ═══ 3. Statement ═══════════════════════════════════════════════════════ */
+/* ═══ 2. Statement ═══════════════════════════════════════════════════════ */
 .pf-statement-grid {
   display: grid;
   grid-template-columns: 1.3fr 0.7fr;
@@ -882,12 +801,12 @@
   max-width: 44ch;
 }
 
-/* ═══ 4. Filmstrip ═══════════════════════════════════════════════════════
+/* ═══ 3. Filmstrip ═══════════════════════════════════════════════════════
    Scroll-linked, not auto-playing: the track's x offset is a function of how
    far the strip has travelled through the viewport, so it drifts while you
-   scroll and stops when you do. The scanline overlay on each frame is the same
-   1px-in-3 comb used on the sheet, in paper rather than ink, which knocks the
-   line art back just enough to sit on the page instead of on top of it. */
+   scroll and stops when you do. The scanline overlay is the same 1px-in-3
+   comb used on the sheet, in paper rather than ink, which sits the photographs
+   *on* the page instead of on top of it. */
 .pf-lf {
   margin-top: clamp(18px, 2.6vh, 40px);
   width: 100%;
@@ -898,7 +817,7 @@
 .pf-lf-track {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
+  gap: 12px;
   width: max-content;
   will-change: transform;
 }
@@ -906,14 +825,15 @@
   flex: 0 0 auto;
   margin: 0;
   position: relative;
-  background: #fff;
   border: 1px solid var(--pf-line);
+  background: var(--pf-paper);
 }
 .pf-lf-card img {
   display: block;
-  height: clamp(180px, 23vh, 280px);
+  height: clamp(230px, 30vh, 340px);
   width: auto;
   object-fit: cover;
+  filter: saturate(0.94) contrast(1.02);
 }
 .pf-lf-card::after {
   content: "";
@@ -923,7 +843,7 @@
   pointer-events: none;
   background-image: repeating-linear-gradient(
     0deg,
-    rgba(251, 247, 230, 0.14) 0 1px,
+    rgba(251, 247, 230, 0.16) 0 1px,
     transparent 1px 3px
   );
 }
@@ -943,7 +863,7 @@
   padding: 6px 10px 5px;
 }
 
-/* ═══ 5. Credo ═══════════════════════════════════════════════════════════
+/* ═══ 4. Credo ═══════════════════════════════════════════════════════════
    The left column sticks; the right one reads itself in one word at a time as
    the block crosses the viewport. Each `.w` starts at 14% opacity, blurred
    3.5px and dropped 0.2em, and resolves as the scrub passes its index. */
@@ -1012,7 +932,9 @@
   font-family: var(--pf-mono);
   font-size: var(--pf-fs-micro);
   letter-spacing: 0.1em;
+  text-transform: uppercase;
   padding: 9px 16px;
+  border-radius: 999px;
   border: 1px solid var(--pf-line);
   color: var(--pf-ink-2);
   transition: background-color 0.3s, color 0.3s, border-color 0.3s;
@@ -1042,11 +964,20 @@
   }
 }
 
-/* ═══ 6. The board ═══════════════════════════════════════════════════════
+/* ═══ 5. The board ═══════════════════════════════════════════════════════
    A five-across grid of hairline cells that reads as one ruled table rather
-   than as ten cards. The last cell in each row and every cell in the last row
-   drop their border so the grid closes cleanly — and every one of those rules
-   has to be restated at each breakpoint, because the row length changes. */
+   than as ten cards.
+
+   **Colour is the point of this section.** Every other block on the page is
+   ink on paper; this one lists the portfolio, so each cell carries its own
+   product's accent — a 3px cap along the top, the index, the arrow, and a
+   wash of the same hue on hover. The accents are the products' real palettes
+   from PROJECT_BIBLE §3, darkened to clear 4.5:1 on cream, because a lime that
+   reads beautifully on near-black is invisible here.
+
+   The last cell in each row and every cell in the last row drop their border
+   so the grid closes cleanly — and every one of those rules has to be
+   restated at each breakpoint, because the row length changes. */
 .pf-board {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -1055,10 +986,23 @@
 }
 .pf-card {
   position: relative;
-  padding: 30px 24px 34px;
+  padding: 32px 24px 34px;
   border-right: 1px solid var(--pf-line-2);
   border-bottom: 1px solid var(--pf-line-2);
   transition: background 0.25s;
+  /* Fallback so a card with no accent still renders sensibly. */
+  --a: var(--pf-ink-2);
+}
+.pf-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--a);
+  opacity: 0.85;
+  transition: opacity 0.25s;
 }
 .pf-card:nth-child(5n) {
   border-right: 0;
@@ -1067,23 +1011,22 @@
   border-bottom: 0;
 }
 .pf-card:hover {
-  background: var(--pf-paper-2);
+  background: color-mix(in srgb, var(--a) 7%, transparent);
+}
+.pf-card:hover::before {
+  opacity: 1;
 }
 .pf-card .ix {
   font-family: var(--pf-mono);
   font-size: var(--pf-fs-micro);
   letter-spacing: 0.14em;
-  color: var(--pf-ink-3);
-  transition: color 0.25s;
-}
-.pf-card:hover .ix {
-  color: var(--pf-amber-2);
+  color: var(--a);
 }
 .pf-card h3 {
   font-size: 21px;
   font-weight: 600;
   letter-spacing: -0.02em;
-  margin: 18px 0 0;
+  margin: 16px 0 0;
 }
 .pf-card .role {
   display: block;
@@ -1097,12 +1040,50 @@
 .pf-card p {
   font-size: 14.5px;
   color: var(--pf-ink-2);
-  margin: 18px 0 0;
+  margin: 16px 0 0;
 }
+.pf-card .go {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 16px;
+  font-family: var(--pf-mono);
+  font-size: var(--pf-fs-micro);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--a);
+}
+.pf-card .go svg {
+  width: 11px;
+  height: 11px;
+  transition: transform 0.2s var(--pf-ease);
+}
+.pf-card:hover .go svg {
+  transform: translate(2px, -2px);
+}
+/* The whole cell is the hit area. */
 .pf-card a.pf-card-hit::after {
   content: "";
   position: absolute;
   inset: 0;
+}
+
+/* The row of buttons under the board — the way out to everything the ten
+   cells do not show. */
+.pf-board-more {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: clamp(28px, 4vh, 44px);
+}
+.pf-board-more .note {
+  font-family: var(--pf-mono);
+  font-size: var(--pf-fs-micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pf-ink-3);
+  margin-left: auto;
 }
 
 @media (max-width: 960px) {
@@ -1110,7 +1091,7 @@
     grid-template-columns: 1fr 1fr;
   }
   .pf-card {
-    padding: 24px 18px 26px;
+    padding: 26px 18px 28px;
   }
   .pf-card:nth-child(5n) {
     border-right: 1px solid var(--pf-line-2);
@@ -1126,43 +1107,40 @@
   }
   .pf-card h3 {
     font-size: 19px;
-    margin-top: 14px;
   }
-  .pf-card p {
-    margin-top: 14px;
+  .pf-board-more .note {
+    margin-left: 0;
+    width: 100%;
   }
 }
 @media (max-width: 640px) {
   .pf-board {
     grid-template-columns: 1fr !important;
-    margin-inline: calc(-1 * var(--pf-inset));
   }
   .pf-card {
     border-right: 0 !important;
     border-bottom: 1px solid var(--pf-line-2) !important;
-    padding: 26px 20px 30px;
+    padding: 28px 20px 30px;
   }
   .pf-card:last-child {
     border-bottom: 0 !important;
   }
   .pf-card h3 {
     font-size: 24px;
-    margin-top: 14px;
   }
   .pf-card p {
     font-size: 16px;
     line-height: 1.55;
-    margin-top: 14px;
   }
 }
 
-/* ═══ 7. The notebook plate ══════════════════════════════════════════════
-   Where the reference sells an e-book, this sells the writing that already
-   exists on the site. Same plate: a cover with an amber spine, a block of
-   page-edges peeking out behind it, and a soft shadow on a shelf rule. */
+/* ═══ 6. The experience book ═════════════════════════════════════════════
+   Where the reference sells an e-book, this is the record of two jobs: a
+   cover on the left with the number on it, and the actual responsibilities on
+   the right as a ruled ledger with the figure at the end of each row. */
 .pf-book-grid {
   display: grid;
-  grid-template-columns: 0.92fr 1.08fr;
+  grid-template-columns: 0.86fr 1.14fr;
   gap: clamp(40px, 6vw, 96px);
   align-items: center;
 }
@@ -1186,10 +1164,7 @@
 .pf-book-plate .pages {
   position: absolute;
   inset: 5px 0 0 6px;
-  background: repeating-linear-gradient(
-    #f4eedd 0 2px,
-    #e4ddc8 2px 3px
-  );
+  background: repeating-linear-gradient(#f4eedd 0 2px, #e4ddc8 2px 3px);
   border: 1px solid var(--pf-line);
 }
 .pf-book-plate .cover {
@@ -1197,8 +1172,8 @@
   inset: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: clamp(20px, 2.4vw, 30px);
+  gap: 10px;
+  padding: clamp(22px, 2.4vw, 32px);
   background: var(--pf-paper);
   border: 1px solid var(--pf-ink);
   box-shadow: 14px 16px rgba(22, 20, 14, 0.07);
@@ -1221,13 +1196,33 @@
   padding-left: 12px;
 }
 .pf-book-plate .ttl {
-  font-size: clamp(30px, 3vw, 44px);
+  font-size: clamp(28px, 2.8vw, 40px);
   font-weight: 600;
-  line-height: 1.06;
+  line-height: 1.04;
   letter-spacing: -0.03em;
   color: var(--pf-ink);
   padding-left: 12px;
   margin-top: auto;
+}
+/* The figure on the cover. Anton is the site's display numeral face — the
+   homepage uses it for exactly this job. */
+.pf-book-plate .fig {
+  font-family: var(--font-anton), Impact, sans-serif;
+  font-size: clamp(46px, 5vw, 74px);
+  line-height: 0.86;
+  letter-spacing: 0.01em;
+  color: var(--pf-amber-2);
+  padding-left: 12px;
+  margin-top: 14px;
+}
+.pf-book-plate .fig small {
+  display: block;
+  font-family: var(--pf-mono);
+  font-size: var(--pf-fs-micro);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--pf-ink-3);
+  margin-top: 10px;
 }
 .pf-book-plate .rule {
   display: block;
@@ -1263,56 +1258,81 @@
   filter: blur(3px);
   border-radius: 50%;
 }
+
+/* The ledger */
 .pf-book-read h2 {
-  max-width: 14ch;
+  max-width: 16ch;
 }
 .pf-book-lead {
-  margin-top: 20px;
+  margin-top: 18px;
   max-width: 52ch;
   font-size: var(--pf-fs-lead);
   line-height: 1.6;
   color: var(--pf-ink-2);
 }
-.pf-book-points {
-  list-style: none;
-  margin: clamp(28px, 4vh, 44px) 0 0;
-  padding: 0;
+.pf-job {
+  margin-top: clamp(30px, 4vh, 46px);
+}
+.pf-job-head {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-  border-top: 1px solid var(--pf-line);
-}
-.pf-book-points li {
-  position: relative;
-  padding: 15px 0 15px 30px;
-  border-bottom: 1px solid var(--pf-line-2);
-  font-size: var(--pf-fs-body);
-  line-height: 1.5;
-  color: var(--pf-ink);
-}
-.pf-book-points li::before {
-  content: "";
-  position: absolute;
-  left: 4px;
-  top: 23px;
-  width: 7px;
-  height: 7px;
-  background: var(--pf-amber);
-}
-.pf-book-cta {
-  display: flex;
-  align-items: center;
-  gap: 18px;
+  align-items: baseline;
+  gap: 12px;
   flex-wrap: wrap;
-  margin-top: clamp(28px, 3.6vh, 44px);
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--pf-line);
 }
-.pf-book-cta .note {
+.pf-job-head .org {
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.pf-job-head .role,
+.pf-job-head .when {
   font-family: var(--pf-mono);
   font-size: var(--pf-fs-micro);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--pf-ink-3);
 }
+.pf-job-head .when {
+  margin-left: auto;
+  color: var(--pf-amber-2);
+}
+.pf-kra {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.pf-kra li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px 20px;
+  align-items: baseline;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--pf-line-2);
+}
+.pf-kra .what {
+  font-size: var(--pf-fs-body);
+  line-height: 1.45;
+  color: var(--pf-ink);
+}
+/* The figure at the end of the row. DM Mono keeps the column optically
+   aligned without needing tabular figures. */
+.pf-kra .num {
+  font-family: var(--pf-mono);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: var(--pf-amber-2);
+  white-space: nowrap;
+}
+.pf-book-cta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: clamp(28px, 3.6vh, 44px);
+}
+
 @media (max-width: 960px) {
   .pf-book-grid {
     grid-template-columns: 1fr;
@@ -1324,49 +1344,53 @@
   .pf-book-plate .book {
     width: 268px;
   }
+  .pf-job-head .when {
+    margin-left: 0;
+    width: 100%;
+  }
 }
 
-/* ═══ 8. The kit strip ═══════════════════════════════════════════════════
-   A row of shopfronts, one per tool, that slides sideways with the scroll and
-   fades out at both edges through a mask. Whichever front is nearest the
-   centre lights amber and names itself in the readout above. */
+/* ═══ 7. The street ══════════════════════════════════════════════════════
+   A conveyor: the street slides at a constant speed and a robot walks it,
+   with whatever it is passing lit and named above. Nothing here is tied to
+   the scroll — the only thing the scroll decides is whether it runs at all. */
 .pf-kit-lead {
   display: flex;
   justify-content: center;
-  margin-bottom: clamp(22px, 3.4vh, 38px);
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: clamp(26px, 4vh, 44px);
 }
 .pf-kit-read {
   display: flex;
   justify-content: center;
   align-items: baseline;
   gap: 12px;
-  margin-bottom: 10px;
-  min-height: 24px;
-}
-.pf-kit-read .ix {
-  font-family: var(--pf-mono);
-  font-size: var(--pf-fs-micro);
-  letter-spacing: 0.16em;
-  color: var(--pf-amber-2);
+  margin-bottom: 6px;
+  min-height: 28px;
 }
 .pf-kit-read .say {
   display: flex;
   align-items: baseline;
   gap: 12px;
-  animation: pf-say 0.5s var(--pf-ease) both;
+  animation: pf-say 0.45s var(--pf-ease) both;
 }
 .pf-kit-read .name {
-  font-size: var(--pf-fs-body);
+  font-size: 20px;
   font-weight: 600;
+  letter-spacing: -0.02em;
 }
 .pf-kit-read .role {
-  font-size: var(--pf-fs-sm);
-  color: var(--pf-ink-3);
+  font-family: var(--pf-mono);
+  font-size: var(--pf-fs-micro);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--pf-amber-2);
 }
 @keyframes pf-say {
   from {
     opacity: 0;
-    transform: translateY(9px);
+    transform: translateY(8px);
   }
 }
 .pf-kit-view {
@@ -1375,12 +1399,16 @@
   width: 100%;
   max-width: var(--pf-measure-full);
   margin: 0 auto;
-  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  /* Matches VIEW_W / VIEW_H in ProfileVisuals — change both or the street
+     gets letterboxed inside its own frame. */
+  aspect-ratio: 950 / 200;
+  max-height: 320px;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
   -webkit-mask-image: linear-gradient(
     90deg,
     transparent,
-    #000 7%,
-    #000 93%,
+    #000 8%,
+    #000 92%,
     transparent
   );
 }
@@ -1389,7 +1417,10 @@
   width: 100%;
   height: 100%;
 }
-.pf-kit-view :is(path, rect, circle, line) {
+/* Hairlines on the street stay hairlines whatever the frame does. The robot
+   is exempt: its limbs *are* strokes 6 units thick, and pinning those to 6
+   device pixels turns it into wire the moment the frame scales up. */
+.pf-kit-view :is(path, rect, circle):not(.pf-bot *) {
   vector-effect: non-scaling-stroke;
 }
 .pf-kit-view .ln {
@@ -1399,172 +1430,259 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+.pf-kit-view .kerb {
+  stroke: #8a8272;
+  stroke-width: 1.4;
+  fill: none;
+}
+.pf-kit-view .kerb-2 {
+  stroke: #cdc5b0;
+  stroke-width: 1;
+  fill: none;
+}
+
+/* Each stop dims until the robot reaches it. */
+.pf-kit-view .pf-bld {
+  opacity: 0.55;
+  transition: opacity 0.45s var(--pf-ease);
+}
+.pf-kit-view .pf-bld.is-on {
+  opacity: 1;
+}
+.pf-kit-view .pf-bld :is(path, rect, circle) {
+  stroke: #8a8272;
+  stroke-width: 1;
+  stroke-linejoin: round;
+}
 .pf-kit-view .front {
   fill: var(--pf-paper);
-  stroke: #8a8272;
-  stroke-width: 1;
+}
+.pf-kit-view .house .front {
+  fill: #f2e7cf;
+}
+.pf-kit-view .cafe .front {
+  fill: #f0e3d3;
+}
+.pf-kit-view .office .front {
+  fill: #e9e4d6;
+}
+.pf-kit-view .tower .front {
+  fill: #e4e2d8;
+}
+.pf-kit-view .kiosk .front {
+  fill: #f2ecdb;
+}
+.pf-kit-view .roof {
+  fill: #c4867a;
+}
+.pf-kit-view .cornice,
+.pf-kit-view .chimney {
+  fill: #ddd4bd;
 }
 .pf-kit-view .awn {
-  fill: #e0d5b4;
-  stroke: #8a8272;
-  stroke-width: 1;
+  fill: #d9b06a;
 }
 .pf-kit-view .pane {
   fill: #dce7ec;
-  stroke: #8a8272;
-  stroke-width: 1;
+}
+.pf-kit-view .pane.lit {
+  fill: #f6e2b4;
 }
 .pf-kit-view .door {
-  fill: #efe9d2;
-  stroke: #8a8272;
-  stroke-width: 1;
+  fill: #b98d5e;
+}
+.pf-kit-view .knob {
+  fill: #f2ecdb;
+}
+.pf-kit-view .grass {
+  fill: #bfd0b4;
+  stroke: none;
+}
+.pf-kit-view .crown {
+  fill: #a8c194;
+}
+.pf-kit-view .crown.c2 {
+  fill: #b9cfa6;
+}
+.pf-kit-view .bench {
+  fill: #c08f61;
+}
+.pf-kit-view .lamp-head {
+  fill: #ddd4bd;
+}
+.pf-kit-view .lamp-lit {
+  fill: var(--pf-amber);
+  stroke: none;
+  opacity: 0.55;
+}
+.pf-kit-view .is-on .lamp-lit {
+  opacity: 1;
+}
+
+/* Name boards. The board of whichever stop the robot is at goes amber, which
+   is the visual half of the readout above. */
+.pf-kit-view .board rect {
+  fill: var(--pf-sheet);
+}
+.pf-kit-view .is-on .board rect {
+  fill: var(--pf-amber);
 }
 .pf-kit-view .sign {
   font-family: var(--pf-mono);
   font-size: 9px;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.06em;
   fill: var(--pf-ink-2);
-  text-transform: uppercase;
+  stroke: none;
 }
-.pf-kit-view .code {
-  font-family: var(--pf-mono);
-  font-size: 7px;
-  letter-spacing: 0.12em;
-  fill: #b4ac98;
+.pf-kit-view .sign.big {
+  font-size: 15px;
+  letter-spacing: 0.04em;
 }
-.pf-kit-view .shop {
-  opacity: 0.62;
-  transition: opacity 0.5s var(--pf-ease);
-}
-.pf-kit-view .shop.is-on {
-  opacity: 1;
-}
-.pf-kit-view .shop.is-on .awn {
-  fill: var(--pf-amber);
-}
-.pf-kit-view .shop.is-on .sign {
+.pf-kit-view .is-on .sign {
   fill: var(--pf-ink);
 }
-.pf-kit-view .kerb {
-  stroke: #b4ac98;
-  stroke-width: 1.4;
+
+/* ── The robot ──
+   Each joint group's *local* origin is its pivot; `transform-box: view-box`
+   makes `transform-origin: 0 0` mean that local origin rather than the
+   element's bounding box. The b-side limbs run the same keyframes half a
+   cycle out of phase, and that is the entire walk. */
+.pf-kit-view .pf-bot :is(path, circle, ellipse) {
+  stroke: #6e675c;
+  stroke-width: 1.1;
+  stroke-linejoin: round;
+}
+.pf-kit-view .pf-bot .bot-shadow {
+  fill: var(--pf-ink);
+  opacity: 0.14;
+  stroke: none;
+}
+.pf-kit-view .pf-bot .body {
+  fill: #c6cbd3;
+}
+.pf-kit-view .pf-bot .head {
+  fill: #d6dae0;
+}
+.pf-kit-view .pf-bot .neck {
+  fill: #9aa0a8;
+}
+.pf-kit-view .pf-bot .visor {
+  fill: #2c2a26;
+}
+.pf-kit-view .pf-bot .core,
+.pf-kit-view .pf-bot .ant-led {
+  fill: var(--pf-amber);
+  animation: pf-core 1.6s ease-in-out infinite;
+}
+.pf-kit-view .pf-bot .ant-led {
+  animation-delay: 0.3s;
+}
+.pf-kit-view .pf-bot .ant {
   fill: none;
+  stroke-width: 1.4;
+}
+.pf-kit-view .pf-bot .limb {
+  fill: none;
+  stroke: #b4bac3;
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+.pf-kit-view .pf-bot .limb.thin {
+  stroke-width: 4.4;
+}
+.pf-kit-view .pf-bot .foot,
+.pf-kit-view .pf-bot .grip {
+  fill: #4a453d;
 }
 
-/* ═══ 9. Footer ══════════════════════════════════════════════════════════ */
-.pf-footer {
-  position: relative;
-  padding: 70px 0 44px;
+.pf-kit-view .pf-bot :is(.thigh, .knee, .shoulder, .elbow) {
+  transform-box: view-box;
+  transform-origin: 0 0;
 }
-.pf-footer::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: var(--pf-rule-x);
-  right: var(--pf-rule-x);
-  background-image: var(--pf-ruling);
-  pointer-events: none;
-  z-index: 0;
+.pf-kit-view .pf-bot .leg-a .thigh,
+.pf-kit-view .pf-bot .leg-b .thigh {
+  animation: pf-hip 0.52s ease-in-out infinite;
 }
-.pf-footer > * {
-  position: relative;
-  z-index: 1;
+.pf-kit-view .pf-bot .leg-a .knee,
+.pf-kit-view .pf-bot .leg-b .knee {
+  animation: pf-knee 0.52s ease-in-out infinite;
 }
-/* Closing brackets, mirrored from the ones that open each section. */
-.pf-foot-marks {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 20px;
-  pointer-events: none;
-  z-index: 2;
+.pf-kit-view .pf-bot .arm-a .shoulder,
+.pf-kit-view .pf-bot .arm-b .shoulder {
+  animation: pf-swing 0.52s ease-in-out infinite;
 }
-.pf-foot-marks::before,
-.pf-foot-marks::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  width: 20px;
-  height: 20px;
-  border-bottom: 2px solid var(--pf-mark);
+.pf-kit-view .pf-bot .arm-a .elbow,
+.pf-kit-view .pf-bot .arm-b .elbow {
+  animation: pf-forearm 0.52s ease-in-out infinite;
 }
-.pf-foot-marks::before {
-  left: var(--pf-rule-x);
-  border-left: 2px solid var(--pf-mark);
+/* Half a cycle out of phase — this is what makes it a walk and not a hop. */
+.pf-kit-view .pf-bot .leg-b .thigh,
+.pf-kit-view .pf-bot .leg-b .knee,
+.pf-kit-view .pf-bot .arm-a .shoulder,
+.pf-kit-view .pf-bot .arm-a .elbow {
+  animation-delay: -0.26s;
 }
-.pf-foot-marks::after {
-  right: var(--pf-rule-x);
-  border-right: 2px solid var(--pf-mark);
-}
-.pf-foot-lead {
-  padding-bottom: clamp(24px, 4vh, 44px);
-}
-.pf-foot-grid {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr 1fr;
-  gap: 40px;
-}
-.pf-foot-grid h4 {
-  font-family: var(--pf-mono);
-  font-size: var(--pf-fs-micro);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--pf-ink-3);
-  margin: 0 0 16px;
-  font-weight: 400;
-}
-.pf-foot-grid a,
-.pf-foot-grid span {
-  display: block;
-  font-size: var(--pf-fs-sm);
-  color: var(--pf-ink-2);
-  padding: 4px 0;
-}
-.pf-foot-grid a:hover {
-  color: var(--pf-ink);
-}
-.pf-foot-mail {
-  font-size: 26px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: var(--pf-ink) !important;
-  word-break: break-word;
-}
-.pf-foot-base {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin-top: clamp(40px, 6vh, 72px);
-  padding-top: 20px;
-  border-top: 1px solid var(--pf-line-2);
-  font-family: var(--pf-mono);
-  font-size: var(--pf-fs-micro);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--pf-ink-3);
-}
-@media (max-width: 960px) {
-  .pf-foot-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
+
+@keyframes pf-hip {
+  0%,
+  100% {
+    transform: rotate(-24deg);
   }
-  .pf-foot-mail {
-    font-size: 21px;
+  50% {
+    transform: rotate(20deg);
   }
 }
-@media (max-width: 520px) {
-  .pf-foot-grid {
-    grid-template-columns: 1fr;
+@keyframes pf-knee {
+  0%,
+  60%,
+  100% {
+    transform: rotate(2deg);
+  }
+  80% {
+    transform: rotate(34deg);
+  }
+}
+@keyframes pf-swing {
+  0%,
+  100% {
+    transform: rotate(16deg);
+  }
+  50% {
+    transform: rotate(-14deg);
+  }
+}
+@keyframes pf-forearm {
+  0%,
+  100% {
+    transform: rotate(6deg);
+  }
+  50% {
+    transform: rotate(22deg);
+  }
+}
+@keyframes pf-core {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 760px) {
+  .pf-kit-view {
+    /* A 950-unit window on a 360px screen makes every board unreadable, so
+       the frame narrows and the street is simply cropped harder. */
+    aspect-ratio: 540 / 200;
   }
 }
 
 /* ── Reduced motion ─────────────────────────────────────────────────────
    Every scrub in ProfileVisuals bails out before attaching when this matches,
-   leaving the elements at their authored values. These two rules cover the
-   authored values that are *not* the resting state. */
+   leaving the elements at their authored values. These rules cover the
+   authored values that are *not* the resting state, and stop the two purely
+   decorative CSS loops. */
 @media (prefers-reduced-motion: reduce) {
   .pf-hero {
     height: auto;
@@ -1572,9 +1690,17 @@
   .pf-hero-pin {
     position: static;
     height: auto;
-    padding: clamp(120px, 22vh, 240px) 0;
+    padding-block: clamp(120px, 22vh, 240px);
   }
   .pf-credo .lead .w {
+    opacity: 1;
+  }
+  .pf-desk-view .glow,
+  .pf-kit-view .pf-bot *,
+  .pf-kit-view .pf-bot {
+    animation: none !important;
+  }
+  .pf-kit-view .pf-bld {
     opacity: 1;
   }
 }

@@ -2,17 +2,17 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
+import Contact from "@/components/sections/Contact";
 import HeroLock from "@/components/ui/HeroLock";
+import SectionKicker from "@/components/ui/SectionKicker";
 import {
   Credo,
-  Curtain,
   Filmstrip,
   KitStrip,
   ProfileHero,
-  type Kit,
   type Shot,
+  type Stop,
 } from "@/components/profile/ProfileVisuals";
-import { identity } from "@/lib/resume";
 import { SITE_URL } from "@/lib/projects";
 import "./profile.css";
 
@@ -24,22 +24,18 @@ import "./profile.css";
    profile itself: what the decade adds up to, laid out on a sheet of ruled
    cream paper that the rest of the site does not use anywhere else.
 
-   The layout is modelled on the profile page at pleurat.com/about — the
-   spacing scale, the corner-bracket system, the 280vh pinned hero, the
-   word-by-word reveal and the shopfront marquee all come from there, and
-   app/profile/profile.css carries the measurements. The typography is this
-   site's (Manrope + DM Mono), the drawing is ours, and every word below is
-   Suman's.
+   The layout is modelled on the profile page at pleurat.com/about, which the
+   user supplied as the reference. Four things pull it back towards the rest of
+   this site — see the note at the top of profile.css for why each one:
 
-   ── Deliberately light ─────────────────────────────────────────────────
-   This page does NOT mount the site's dark <Footer />. It ends in its own
-   ruled footer, because a black footer under a cream sheet reads as the page
-   having been cut off rather than finished. Every link the shared footer
-   carries that matters here is repeated in `footerCols` below — if you add a
-   route to the shared footer, consider whether it belongs there too.
+     · Manrope + DM Mono + Instrument Serif, and the site's headline pattern
+       (bold sans, then a serif italic phrase).
+     · `<SectionKicker>` pills instead of the reference's amber corner tabs.
+     · Per-card product accents on the work board.
+     · The site's own `<Contact variant="light" />` as the closing.
 
-   Content lives in the consts at the top of this file, per the skeleton
-   convention in PROJECT_BIBLE §8. Anything that moves is in
+   Content lives in the consts below, per the skeleton convention in
+   PROJECT_BIBLE §8. Anything that moves is in
    components/profile/ProfileVisuals.tsx.
    ───────────────────────────────────────────────────────────────────────── */
 
@@ -77,17 +73,17 @@ const breadcrumbsJsonLd = {
 
 /* ── Content ────────────────────────────────────────────────────────────── */
 
-/** Chapter art from /journey, reused as the strip. Labels are that page's
- *  own chapter titles, shortened — not new claims. */
+/** Built from `_source-profile-photos/` by scripts/build-profile-photos.mjs.
+ *  All 576×720 WebP, all lazy, all below the fold. */
 const shots: Shot[] = [
-  { src: "/journey-art/prologue.png", label: "Never the talented one" },
-  { src: "/journey-art/wolambo.png", label: "A page about supercars" },
-  { src: "/journey-art/selftaught.png", label: "YouTube, on dial-up" },
-  { src: "/journey-art/mba.png", label: "Marketing, by elimination" },
-  { src: "/journey-art/hired.png", label: "Hired on the spot" },
-  { src: "/journey-art/pibm.png", label: "Seven years, one building" },
-  { src: "/journey-art/ai.png", label: "Teaching myself again" },
-  { src: "/journey-art/converge.png", label: "Master of many" },
+  { src: "/profile/portrait.webp", label: "Mid-thought" },
+  { src: "/profile/dog.webp", label: "The one who runs the house" },
+  { src: "/profile/forest-road.webp", label: "Forest road, helmet on" },
+  { src: "/profile/summit.webp", label: "Top of something" },
+  { src: "/profile/poster.webp", label: "A poster, on a Sunday" },
+  { src: "/profile/rider.webp", label: "Two wheels, most weekends" },
+  { src: "/profile/occasion.webp", label: "Dressed for the occasion" },
+  { src: "/profile/friday.webp", label: "Friday, eventually" },
 ];
 
 type BoardEntry = {
@@ -96,6 +92,8 @@ type BoardEntry = {
   role: string;
   note: string;
   href?: string;
+  /** The product's own accent, darkened to clear 4.5:1 on cream. See §4.1. */
+  accent: string;
 };
 
 /** Two employers and eight things I built. The order is chronological for the
@@ -106,12 +104,14 @@ const board: BoardEntry[] = [
     name: "PIBM",
     role: "Senior Brand Marketing Manager",
     note: "Nine years of brand, web and campaigns. A 21-person team, 20+ programme launches, a ₹30–40L annual budget.",
+    accent: "#a8630b",
   },
   {
     ix: "A2",
     name: "CBS Ventures",
     role: "Branding & Digital Marketing Manager",
     note: "Built the digital function from nothing — SEO, SEM, paid social, and the website itself.",
+    accent: "#6d4aa8",
   },
   {
     ix: "A3",
@@ -119,6 +119,7 @@ const board: BoardEntry[] = [
     role: "46-agent autonomous fleet",
     note: "An agent fleet that runs my career, finances and infrastructure. 500+ automated eval checks.",
     href: "/agents/migi",
+    accent: "#276b43",
   },
   {
     ix: "A4",
@@ -126,6 +127,7 @@ const board: BoardEntry[] = [
     role: "AI marketing operating system",
     note: "Meta, Google and LinkedIn under one AI brain. 200,000+ lines of AI-assisted code.",
     href: "/projects/roasmind",
+    accent: "#b03a5b",
   },
   {
     ix: "A5",
@@ -133,6 +135,7 @@ const board: BoardEntry[] = [
     role: "47M-parameter SLM",
     note: "A small language model trained from scratch on 299K instruction→command pairs. ~87% exact match.",
     href: "/slms/pentacmd",
+    accent: "#5a44a3",
   },
   {
     ix: "A6",
@@ -140,6 +143,7 @@ const board: BoardEntry[] = [
     role: "AI identity preservation",
     note: "Ideation to a live product in about a week. The kind of problem most people do not know they have yet.",
     href: "/projects/imprint",
+    accent: "#2f6fa8",
   },
   {
     ix: "A7",
@@ -147,6 +151,7 @@ const board: BoardEntry[] = [
     role: "Digital legacy vault",
     note: "An end-of-life vault for everything you leave behind online. No direct market equivalent.",
     href: "/projects/legatus",
+    accent: "#4a6b8a",
   },
   {
     ix: "A8",
@@ -154,6 +159,7 @@ const board: BoardEntry[] = [
     role: "Zero-knowledge notepad",
     note: "AES-256-GCM over Argon2id envelope encryption. The server never holds a key it could use.",
     href: "/projects/aegis-vault",
+    accent: "#0f7466",
   },
   {
     ix: "A9",
@@ -161,6 +167,7 @@ const board: BoardEntry[] = [
     role: "Trust-first CLI agent",
     note: "Every file write and every shell command passes an explicit human-approval contract first.",
     href: "/agents/pact-agent",
+    accent: "#b4552c",
   },
   {
     ix: "A10",
@@ -168,6 +175,7 @@ const board: BoardEntry[] = [
     role: "Whatever is next",
     note: "Twenty more systems in the archive, and the next one already half-written.",
     href: "/projects",
+    accent: "#5a6b23",
   },
 ];
 
@@ -180,64 +188,118 @@ const credoTags = [
   "Next.js",
 ];
 
-const notebookPoints = [
-  "The traps that cost real debugging time, and the fix that actually worked",
-  "Where AI-assisted building genuinely helps, and where it confidently lies",
-  "What a marketer learns by shipping software with nobody to hand it to",
-  "The questions worth asking before a single line gets written",
-];
+/* ── The experience book ────────────────────────────────────────────────
+   Responsibilities, not achievements — this is what the two jobs were, with
+   the number each one is measured by. Every line traces back to lib/resume.ts;
+   if the résumé changes, change it there first and mirror it here. */
+type Job = {
+  org: string;
+  role: string;
+  when: string;
+  kras: Array<[what: string, num: string]>;
+};
 
-/** The strip along the bottom. `code` is decorative — a shop number, nothing
- *  more — and `role` is what the tool is actually for. */
-const kit: Kit[] = [
-  { name: "Claude Code", role: "the pair", code: "C4" },
-  { name: "Next.js", role: "the site", code: "N16" },
-  { name: "Vercel", role: "the ship", code: "V1" },
-  { name: "Supabase", role: "the store", code: "S7" },
-  { name: "Neon", role: "the ledger", code: "N9" },
-  { name: "n8n", role: "the wiring", code: "N8" },
-  { name: "Cursor", role: "the edits", code: "C9" },
-  { name: "Codex", role: "the second pair", code: "X1" },
-  { name: "Replit", role: "the sketchpad", code: "R1" },
-  { name: "Figma", role: "the layouts", code: "F3" },
-  { name: "Telegram", role: "the pager", code: "T2" },
-  { name: "GitHub", role: "the record", code: "G4" },
-];
-
-const footerCols: Array<{ head: string; links: Array<[string, string]> }> = [
+const jobs: Job[] = [
   {
-    head: "Sitemap",
-    links: [
-      ["Home", "/"],
-      ["Projects", "/projects"],
-      ["Résumé", "/resume"],
-      ["Journey", "/journey"],
-      ["About", "/about"],
+    org: "PIBM",
+    role: "Senior Brand Marketing Manager",
+    when: "Mar 2019 — now",
+    kras: [
+      ["Lead a cross-functional team across digital, design and web", "21 people"],
+      ["Own institutional SEO, content architecture and the site itself", "+40–50% traffic"],
+      ["Run go-to-market end to end for every new programme", "20+ launches"],
+      ["Hold the vendor budget across print, OOH and digital production", "₹30–40L a year"],
+      ["Build the GenAI creative pipeline the design team runs on", "7–8 hrs/week back"],
+      ["Deliver on time and on budget, year after year", "99%+ of projects"],
     ],
   },
   {
-    head: "Elsewhere",
-    links: [
-      ["LinkedIn ↗", "https://linkedin.com/in/suman-debnath-a528653a1"],
-      ["GitHub ↗", "https://github.com/Sumandebnath943"],
-      ["Learnings", "/learnings"],
-      ["FAQ", "/faq"],
+    org: "CBS Ventures",
+    role: "Branding & Digital Marketing Manager",
+    when: "Jan — Oct 2018",
+    kras: [
+      ["Build the digital function from zero — SEO, SEM, paid, organic", "4 channels"],
+      ["Own website design, development oversight and UX", "1 site, end to end"],
+      ["Take brand identity from strategy through to execution", "Full rebuild"],
+      ["Manage every external creative agency and vendor", "All relationships"],
     ],
   },
+];
+
+/* ── The street ─────────────────────────────────────────────────────────
+   What the robot walks past. Read left to right it is roughly a career: the
+   marketing half first, then the metrics, then the build stack — so the strip
+   tells the same story the rest of the page does.
+
+   `w` is the slot width in world units. Varying it is what stops the street
+   reading as wallpaper; `gap` slots carry a lamp and a bench and no board. */
+const stops: Stop[] = [
+  { name: "Branding", role: "where it starts", kind: "office", w: 190 },
+  { name: "Marketing", role: "the whole funnel", kind: "house", w: 160 },
+  { kind: "gap", w: 90 },
+  { name: "Digital Marketing", role: "nine years of it", kind: "tower", w: 230 },
+  { name: "Performance", role: "paid, everywhere", kind: "cafe", w: 190 },
+  { name: "Growth", role: "the point of it", kind: "kiosk", w: 130 },
+  { kind: "gap", w: 80 },
+  { name: "Social Media", role: "planning and cadence", kind: "office", w: 210 },
+  { name: "Ads", role: "Google and Meta", kind: "kiosk", w: 120 },
+  { name: "Analytics", role: "what actually happened", kind: "house", w: 170 },
+  { name: "GTM", role: "20+ launches", kind: "sign", w: 150 },
+  { kind: "park", w: 200, name: "SEO" },
+  { name: "ROAS", role: "the number that matters", kind: "office", w: 160 },
+  { name: "CTR", role: "measured", kind: "kiosk", w: 110 },
+  { name: "CPC", role: "measured", kind: "kiosk", w: 110 },
+  { name: "CPA", role: "measured", kind: "kiosk", w: 110 },
+  { kind: "gap", w: 90 },
+  { name: "Photoshop", role: "since forever", kind: "house", w: 170 },
+  { name: "Illustrator", role: "when it has to scale", kind: "house", w: 175 },
+  { name: "Canva", role: "when it has to ship", kind: "kiosk", w: 130 },
+  { name: "Figma", role: "the layouts", kind: "cafe", w: 160 },
+  { kind: "gap", w: 80 },
+  { name: "Claude Code", role: "the pair", kind: "tower", w: 210 },
+  { name: "Codex", role: "the second pair", kind: "office", w: 170 },
+  { name: "Antigravity", role: "the new one", kind: "office", w: 190 },
+  { name: "Cursor", role: "the edits", kind: "house", w: 150 },
+  { name: "ChatGPT", role: "the sounding board", kind: "cafe", w: 170 },
+  { kind: "gap", w: 80 },
+  { name: "Next.js", role: "the site", kind: "tower", w: 165 },
+  { name: "React", role: "underneath it", kind: "office", w: 150 },
+  { name: "Vercel", role: "the ship", kind: "sign", w: 145 },
+  { name: "Supabase", role: "the store", kind: "office", w: 180 },
+  { name: "Neon", role: "the ledger", kind: "kiosk", w: 125 },
+  { name: "n8n", role: "the wiring", kind: "house", w: 130 },
+  { name: "Lovable", role: "the sketchpad", kind: "cafe", w: 165 },
+  { name: "Replit", role: "the other sketchpad", kind: "kiosk", w: 135 },
+  { kind: "park", w: 190, name: "GitHub" },
 ];
 
 /** The north-east arrow that every button and link in this design carries. */
-function Arrow() {
+function Arrow({ small }: { small?: boolean } = {}) {
   return (
     <svg viewBox="0 0 17 17" fill="none" aria-hidden="true">
       <path
         d="M4.5 12.5 12.5 4.5M6 4.5h6.5V11"
         stroke="currentColor"
-        strokeWidth="1.6"
+        strokeWidth={small ? "2" : "1.6"}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
     </svg>
+  );
+}
+
+/** The page's own flavour of the shared kicker: amber dot, ink label, on paper.
+ *  Same component the homepage sections use — see components/ui/SectionKicker. */
+function Kick({ children }: { children: React.ReactNode }) {
+  return (
+    <SectionKicker
+      className="pf-kick mb-7"
+      chipClassName="border-[#16140E]/[0.14] bg-[#16140E]/[0.03]"
+      dotClassName="bg-[#A86A08]"
+      textClassName="text-[#57534A]"
+    >
+      {children}
+    </SectionKicker>
   );
 }
 
@@ -257,7 +319,6 @@ export default function ProfilePage() {
       />
 
       <Navigation />
-      <Curtain name={identity.name} />
 
       <div className="pf-root">
         <main>
@@ -283,12 +344,13 @@ export default function ProfilePage() {
           </ProfileHero>
 
           {/* ── 2. Statement ──────────────────────────────────────────── */}
-          <section className="pf-wrap pf-pad pf-statement" data-badge="In short">
+          <section className="pf-wrap pf-pad pf-statement">
+            <Kick>In short</Kick>
             <div className="pf-statement-grid">
               <h2>
                 Started in 2016 as a marketer, taught myself to build somewhere
                 around 2024, shipped thirty-odd products since,{" "}
-                <span className="pf-dim">and never went back.</span>
+                <span className="pf-em">and never went back.</span>
               </h2>
               <div className="aside">
                 <span className="eye">The short version</span>
@@ -308,11 +370,11 @@ export default function ProfilePage() {
 
           {/* ── 4. Credo ──────────────────────────────────────────────── */}
           <Credo
-            badge="How I work"
+            kicker={<Kick>How I work</Kick>}
             title={
               <>
-                Long story short, I&rsquo;ve been marketing for nine years and
-                building for two
+                Long story short, I&rsquo;ve been marketing for nine years and{" "}
+                <span className="pf-em">building AI products for two</span>
               </>
             }
             meta="2016 — now · Pune, IST"
@@ -328,15 +390,20 @@ export default function ProfilePage() {
           />
 
           {/* ── 5. Board ──────────────────────────────────────────────── */}
-          <section className="pf-wrap pf-pad" data-badge="Track" id="work">
+          <section className="pf-wrap pf-pad" id="work">
             <div className="pf-head">
+              <Kick>Track record</Kick>
               <h2>
-                Where the work <span className="pf-dim">has been</span>
+                Where the work <span className="pf-em">has been</span>
               </h2>
             </div>
             <div className="pf-board">
               {board.map((e) => (
-                <article className="pf-card" key={e.ix}>
+                <article
+                  className="pf-card"
+                  key={e.ix}
+                  style={{ ["--a" as string]: e.accent }}
+                >
                   <span className="ix">{e.ix}</span>
                   <h3>
                     {e.href ? (
@@ -349,24 +416,48 @@ export default function ProfilePage() {
                   </h3>
                   <span className="role">{e.role}</span>
                   <p>{e.note}</p>
+                  {e.href && (
+                    <span className="go">
+                      Open <Arrow small />
+                    </span>
+                  )}
                 </article>
               ))}
             </div>
+
+            {/* Ten cells is a selection, not the archive. */}
+            <div className="pf-board-more">
+              <Link href="/projects" className="pf-btn pf-btn--amber">
+                See all projects <Arrow />
+              </Link>
+              <Link href="/resume" className="pf-btn pf-btn--line">
+                The full résumé <Arrow />
+              </Link>
+              <Link href="/journey" className="pf-btn pf-btn--line">
+                How it happened <Arrow />
+              </Link>
+              <span className="note">30+ shipped · 10 shown</span>
+            </div>
           </section>
 
-          {/* ── 6. Notebook ───────────────────────────────────────────── */}
-          <section className="pf-wrap pf-pad" data-badge="Notebook">
+          {/* ── 6. The experience book ────────────────────────────────── */}
+          <section className="pf-wrap pf-pad">
+            <Kick>Experience</Kick>
             <div className="pf-book-grid">
               <div className="pf-book-plate">
                 <div className="book">
                   <span className="pages" />
                   <div className="cover">
                     <span className="spine" />
-                    <span className="k">Notes · ongoing</span>
+                    <span className="k">Employment · 2018 — now</span>
                     <span className="ttl">
-                      The Build
+                      The Experience
                       <br />
-                      Notebook.
+                      Book.
+                    </span>
+                    <span className="fig">
+                      Nine years
+                      <small>Two companies · one discipline</small>
                     </span>
                     <span className="rule" />
                     <span className="by">Suman Debnath</span>
@@ -377,94 +468,69 @@ export default function ProfilePage() {
 
               <div className="pf-book-read">
                 <h2>
-                  What broke, and <span className="pf-dim">what fixed it.</span>
+                  What I was actually{" "}
+                  <span className="pf-em">responsible for.</span>
                 </h2>
                 <p className="pf-book-lead">
-                  The engineering notebook behind every build on this site —
-                  what went wrong, what the fix actually turned out to be, and
-                  which part of it generalises. Written while the bug was still
-                  warm, not tidied up afterwards.
+                  Not the highlight reel — the job description, as it was
+                  actually lived. Two employers, ten responsibilities, and the
+                  number each one was measured by.
                 </p>
-                <ul className="pf-book-points">
-                  {notebookPoints.map((p) => (
-                    <li key={p}>{p}</li>
-                  ))}
-                </ul>
+
+                {jobs.map((job) => (
+                  <div className="pf-job" key={job.org}>
+                    <div className="pf-job-head">
+                      <span className="org">{job.org}</span>
+                      <span className="role">{job.role}</span>
+                      <span className="when">{job.when}</span>
+                    </div>
+                    <ul className="pf-kra">
+                      {job.kras.map(([what, num]) => (
+                        <li key={what}>
+                          <span className="what">{what}</span>
+                          <span className="num">{num}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+
                 <div className="pf-book-cta">
-                  <Link href="/learnings" className="pf-btn pf-btn--amber">
-                    Read the learnings <Arrow />
+                  <Link href="/resume" className="pf-btn pf-btn--amber">
+                    The full résumé <Arrow />
                   </Link>
-                  <Link href="/philosophy" className="pf-btn pf-btn--line">
-                    AI philosophy <Arrow />
+                  <Link href="/learnings" className="pf-btn pf-btn--line">
+                    What I learned building <Arrow />
                   </Link>
-                  <span className="note">Free · no sign-up</span>
                 </div>
               </div>
             </div>
           </section>
 
-          {/* ── 7. Kit strip ──────────────────────────────────────────── */}
-          <section className="pf-wrap pf-pad" data-badge="Daily kit" id="kit">
-            <div className="pf-kit-lead">
+          {/* ── 7. The street ─────────────────────────────────────────── */}
+          <section className="pf-wrap pf-pad" id="kit">
+            <div className="pf-head">
+              <Kick>Daily kit</Kick>
+              <h2>
+                Everything I touch <span className="pf-em">in a week.</span>
+              </h2>
+            </div>
+            <KitStrip stops={stops} />
+            <div className="pf-kit-lead" style={{ marginTop: "clamp(28px,4vh,44px)", marginBottom: 0 }}>
               <Link href="/projects" className="pf-btn pf-btn--amber">
                 Explore the portfolio <Arrow />
               </Link>
+              <Link href="/faq" className="pf-btn pf-btn--line">
+                Questions people ask <Arrow />
+              </Link>
             </div>
-            <KitStrip kit={kit} />
           </section>
         </main>
-
-        {/* ── 8. Footer ───────────────────────────────────────────────── */}
-        <footer className="pf-footer">
-          <div className="pf-wrap">
-            <div className="pf-foot-grid">
-              <div>
-                <h4>Contact</h4>
-                <a className="pf-foot-mail" href={`mailto:${identity.email}`}>
-                  {identity.email}
-                </a>
-                <span>Let&rsquo;s get in touch.</span>
-                <span>Usually a reply within a day.</span>
-              </div>
-
-              {footerCols.map((col) => (
-                <div key={col.head}>
-                  <h4>{col.head}</h4>
-                  {col.links.map(([label, href]) =>
-                    href.startsWith("http") ? (
-                      <a
-                        key={label}
-                        href={href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {label}
-                      </a>
-                    ) : (
-                      <Link key={label} href={href}>
-                        {label}
-                      </Link>
-                    ),
-                  )}
-                </div>
-              ))}
-
-              <div>
-                <h4>Desk</h4>
-                <span>{identity.location}</span>
-                <span>Brand · AI products · Agents</span>
-                <span>{identity.availability}</span>
-              </div>
-            </div>
-
-            <div className="pf-foot-base">
-              <span>© 2026 Suman Debnath — all rights reserved</span>
-              <Link href="/privacy">Privacy</Link>
-            </div>
-          </div>
-          <span className="pf-foot-marks" aria-hidden="true" />
-        </footer>
       </div>
+
+      {/* The site's own closing, in its light variant. A page this bright
+          cannot end on the dark one without reading as a cut-off. */}
+      <Contact variant="light" />
     </MotionProvider>
   );
 }

@@ -60,3 +60,6 @@ _source-journey-art/
 # finished film is served from public/; none of the source audio or the
 # thousands of PNG frames behind it belong in git.
 _source-film/
+
+# Originals for the /profile filmstrip — served copies live in public/profile/
+_source-profile-photos/

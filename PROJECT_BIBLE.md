@@ -229,21 +229,46 @@ Homepage dossiers carry their own accents too — see §7.2.
 
 `/profile` does not use any of the above. It is the one route that opts out of
 the dark site entirely, and it carries a self-contained token set scoped under
-`.pf-root` in `app/profile/profile.css`. It was built to match the profile page
-at **pleurat.com/about**, which the user supplied as the reference — the spacing
-scale, the corner-bracket system, the 280vh pinned hero, the word-by-word reveal
-and the shopfront marquee all come from there. The typography is ours (Manrope +
-DM Mono in place of General Sans + IBM Plex Mono), the drawings are ours, and the
-words are Suman's.
+`.pf-root` in `app/profile/profile.css`. Its layout was built to match the
+profile page at **pleurat.com/about**, which the user supplied as the reference:
+the spacing scale, the corner brackets, the 280vh pinned hero, the word-by-word
+reveal and the marquee along the bottom all come from there.
 
 | Token | Value | What it is |
 |---|---|---|
 | `--pf-page` / `--pf-sheet` | `#FFFCF0` / `#FFFDF3` | the viewport, then the panel on it |
 | `--pf-ink` / `-2` / `-3` | `#16140E` / `#57534A` / `#7D776A` | body, secondary, 10px labels |
 | `--pf-amber` / `--pf-amber-2` | `#F3B44A` / `#A86A08` | marker fill; amber **text** |
+| `--pf-serif` | Instrument Serif | the italic half of a headline |
 | `--pf-rule-x` | `max(gutter, 50% - max/2 + gutter)` | the sheet's hairline, and the one number everything aligns to |
 
-Four things here will break if you touch them without reading the file:
+#### What makes it a sibling rather than a guest
+
+The page is bright and the rest of the site is not, so the continuity has to be
+carried by everything *except* the background. Five things do it, and none of
+them are decoration — removing any one of them measurably loosens the page from
+the site:
+
+1. **Type is the site's.** Manrope, DM Mono and Instrument Serif, straight from
+   `app/layout.tsx`; nothing is loaded specially for this route. Headlines use
+   the house pattern from §4 — a bold sans phrase, then a serif italic one —
+   through `.pf-em`.
+2. **Section labels are `components/ui/SectionKicker`**, the same pill the
+   homepage sections use, with a paper palette passed in. The reference's filled
+   amber corner tabs are gone; both corner brackets stay open.
+3. **The work board carries per-card accents** taken from each product's real
+   palette in §3 and darkened to clear 4.5:1 on cream. A lime that reads
+   beautifully on near-black is invisible here.
+4. **Buttons and chips are rounded**, like every other button on the site,
+   rather than the reference's square ones.
+5. **It closes on `<Contact variant="light" />`** — the site's own ending, in
+   its existing light variant.
+
+What deliberately stays foreign is the **sheet**: the ruled paper, and the
+hairline border down each side. That is the page's spine, and it is the reason
+the route exists as something other than a light-mode `/about`.
+
+#### Five things that will break if you touch them without reading the file
 
 > **`--pf-amber` is a fill colour and never a text colour.** At 3.1:1 on paper
 > it fails AA. Amber text is `--pf-amber-2` at 5.2:1. The reference's own amber
@@ -259,17 +284,39 @@ Four things here will break if you touch them without reading the file:
 > (`566,166 260×74`) and `FOCUS` (`696,203`) are a matched pair — move one and
 > the zoom stops landing on the screen.
 
-> **The curtain renders *covered* on the server.** Deciding to cover after mount
-> would paint the page first and drop the curtain onto it a few hundred ms
-> later. There is deliberately no once-per-session guard: it could not live in
-> the component without a flash, and would have to be an inline script stamping
-> `<html>` before paint, the way `sd-intro` does.
+> **The hero drawing's width cap is a budget, not a taste call.** The pin is
+> `overflow: hidden`, so the drawing may be at most `(100svh − 360px) × 4.233`
+> wide — nav clearance, plus the lead paragraph, plus bottom padding, with
+> 4.233 being the scene's aspect ratio. Raise `--sd-nav-clear` or the lead's
+> size and the 360 has to move with it, or short windows cut the screen off at
+> the exact moment the zoom lands on it.
 
-The page mounts the site's own `<Navigation />` (so the dark bar floats over the
-paper) but **not** the shared `<Footer />` — a black footer under a cream sheet
-reads as the page having been cut off. It ends in its own ruled footer instead,
-which repeats every link that matters. It is also **light only**: there is no
-dark variant and no theme toggle, unlike the reference.
+> **`VIEW_W` / `VIEW_H` in `ProfileVisuals.tsx` and the `aspect-ratio` on
+> `.pf-kit-view` are the same numbers twice.** They are the street's window,
+> not its world. Change one without the other and the street is letterboxed
+> inside its own frame.
+
+#### Departures from the reference, all deliberate
+
+- **No entry transition.** The reference opens on an eight-column curtain wipe.
+  It was built here and then removed: no other route has one, and a single page
+  that does reads as a glitch. If one is ever wanted it belongs in
+  `app/layout.tsx`, applied everywhere, and carrying the site logo rather than
+  a name.
+- **The bottom marquee is a street, not a circuit board.** The reference walks
+  its robot along a PCB whose chips carry tool names. This one walks a drawn
+  cousin of the site's 3D mascot down a street of houses, offices, cafés,
+  kiosks and parks, every one of them carrying a name board. Same mechanic —
+  constant-speed conveyor, whatever the robot passes lights up and names itself
+  — different world.
+- **Light only.** No dark variant and no theme toggle.
+- **The site's dark nav** floats over the paper, rather than the reference's
+  own paper nav bar.
+- **The figure and the dog are not in the drawing.** Both were drawn, judged
+  not good enough, and pulled rather than shipped half-right. The two insertion
+  points are commented in `SceneDesk` and `SceneFore`; the constraint to
+  remember is that limbs must be *stroked* paths, because a filled limb pinches
+  at the outside of every curve.
 
 ### Accessibility
 
