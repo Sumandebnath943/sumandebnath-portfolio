@@ -371,13 +371,22 @@ export default function PactAgentPage() {
                 {/* Permission contract */}
                 <Reveal>
                   <Brackets className="h-full p-1.5">
-                    <div className="relative h-full rounded-xl border border-[#CF5C36]/35 bg-[#100c0a]/80 px-5 sm:px-6 pt-7 pb-6 overflow-hidden">
-                      <span
-                        aria-hidden
-                        className="absolute left-0 right-0 h-16 pointer-events-none bg-[linear-gradient(to_bottom,transparent,rgba(207,92,54,0.12),transparent)]"
-                        style={{ animation: "pact-sweep 4.2s linear infinite" }}
-                      />
-                      <span className="absolute -top-[10px] left-5 px-2 font-dmmono text-[10.5px] tracking-[0.18em] uppercase text-[#CF5C36] bg-[#0a0807]">
+                    <div className="relative h-full rounded-xl border border-[#CF5C36]/35 bg-[#100c0a]/80 px-5 sm:px-6 pt-7 pb-6">
+                      {/* The sweep runs past both edges of the card, so it has to be
+                          clipped — but the clip belongs on the beam alone. Put
+                          `overflow-hidden` on the card itself and it also crops the
+                          legend below, which straddles the top border by design. */}
+                      <span aria-hidden className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none">
+                        <span
+                          className="absolute left-0 right-0 h-16 bg-[linear-gradient(to_bottom,transparent,rgba(207,92,54,0.12),transparent)]"
+                          style={{ animation: "pact-sweep 4.2s linear infinite" }}
+                        />
+                      </span>
+                      {/* Legend straddling the top border. It needs 335px on one line
+                          but a 375px phone leaves 295px, so the type steps down below
+                          `sm` — otherwise it wraps to two lines and fills the card's
+                          top padding with a page-coloured slab. */}
+                      <span className="absolute -top-[10px] left-5 px-2 font-dmmono whitespace-nowrap text-[9px] tracking-[0.1em] sm:text-[10.5px] sm:tracking-[0.18em] uppercase text-[#CF5C36] bg-[#0a0807]">
                         Permission Contract — Awaiting Approval
                       </span>
                       <div className="relative font-dmmono text-[12.5px]">

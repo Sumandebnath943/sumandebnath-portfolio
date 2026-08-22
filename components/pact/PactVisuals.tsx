@@ -250,25 +250,30 @@ export function VerdictCycle() {
 
   return (
     <div
-      className="relative rounded-xl border bg-[#0c0f0b]/80 px-5 sm:px-6 pt-7 pb-6 h-full flex flex-col overflow-hidden transition-colors duration-700"
+      className="relative rounded-xl border bg-[#0c0f0b]/80 px-5 sm:px-6 pt-7 pb-6 h-full flex flex-col transition-colors duration-700"
       style={{ borderColor: `${v.color}80` }}
     >
+      {/* Scanning beam. It travels past both edges of the card, so it has to be
+          clipped — but the clip belongs on the beam alone. Put `overflow-hidden`
+          on the card itself and it also crops the legend below, which straddles
+          the top border by design. Ordered before the legend so the translucent
+          beam passes behind it rather than tinting the text. */}
+      <span aria-hidden className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none">
+        <span
+          className="absolute left-0 right-0 h-16"
+          style={{
+            background: `linear-gradient(to bottom, transparent, ${v.color}22, transparent)`,
+            animation: "pact-sweep 3.6s linear infinite",
+          }}
+        />
+      </span>
+
       <span
-        className="absolute -top-[10px] left-5 px-2 font-dmmono text-[10.5px] tracking-[0.18em] uppercase bg-[#0a0807] transition-colors duration-700"
+        className="absolute -top-[10px] left-5 px-2 font-dmmono whitespace-nowrap text-[9px] tracking-[0.1em] sm:text-[10.5px] sm:tracking-[0.18em] uppercase bg-[#0a0807] transition-colors duration-700"
         style={{ color: v.color }}
       >
         Independent Verification
       </span>
-
-      {/* scanning beam */}
-      <span
-        aria-hidden
-        className="absolute left-0 right-0 h-16 pointer-events-none"
-        style={{
-          background: `linear-gradient(to bottom, transparent, ${v.color}22, transparent)`,
-          animation: "pact-sweep 3.6s linear infinite",
-        }}
-      />
 
       <div className="relative font-dmmono text-[13px] flex-1">
         <div className="flex items-center gap-3">
