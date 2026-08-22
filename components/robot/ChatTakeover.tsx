@@ -558,7 +558,16 @@ const TAKEOVER_CSS = `
        the stylesheet and silently kill the :hover lift and :active press
        below; composing through variables lets all three coexist. */
     transform: translate(var(--mx, 0px), var(--my, 0px));
-    transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s, border-color 0.2s;
+    /* opacity/visibility are here, not in globals.css, because this block is a
+       <style> element rendered by this component — it lands in the DOM *after*
+       the globals stylesheet, so at equal specificity it wins. The hero-gate
+       rules tried to add an opacity transition from there and were silently
+       overridden, which is why the launcher cut in and out on a phone instead
+       of fading. Adding it to the launcher's own transition is the fix; the
+       hero rule then only has to restate the shorthand for the hidden state,
+       where losing the hover transitions costs nothing. */
+    transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s, border-color 0.2s,
+                opacity 0.28s ease, visibility 0s linear 0s;
     box-shadow: 0 2px 8px rgba(0,0,0,0.28), 0 10px 30px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.22);
     /* It used to appear on the spot. Same rise and easing as the nav pill, so
        the two read as one system arriving in sequence.

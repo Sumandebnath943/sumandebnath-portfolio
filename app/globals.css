@@ -96,34 +96,43 @@ html.sd-intro-nav #tour-nav {
    "Career Journey" by 128×28px, the mascot's canvas over "View Projects" by
    61×41px. From `md` up there is room for all of them and nothing changes.
 
-   **`visibility` is what actually does the hiding here, not `opacity`.**
-   The launcher runs a `ct-launch-in` keyframe on reveal, and an animated value
-   outranks a normal declaration (PROJECT_BIBLE §5, trap 4) — so a plain
-   `opacity: 0` loses for the 0.55s that animation is playing and the pill
-   flashes over the buttons. The mascot is worse: its wrapper carries an *inline*
-   opacity, which beats any stylesheet rule outright. `visibility` is in neither,
-   so it wins in both cases; opacity is here only to make it a fade rather than a
-   pop, which is why the mascot's needs `!important` to get past that inline
-   style. */
-@media (max-width: 767px) {
-  .sd-mascot,
-  .ct-launch {
-    transition: opacity 260ms ease, visibility 0s linear 0s;
-  }
+   **`visibility` does the hiding, `opacity` does the fade, and they need
+   different timing in each direction.** Hiding must hold `visibility: visible`
+   until the fade has finished, or the element is gone before anyone sees it
+   move; showing must flip to `visible` at once, or the fade plays on something
+   that is not being painted. Hence the delay on one side and none on the other.
 
+   Both halves were overridden the first time round, which is why this cut
+   rather than faded:
+     · the mascot carried an inline `transition`, and inline beats every
+       stylesheet rule — its transition now lives on `.sd-mascot` below.
+     · `.ct-launch`'s transition is declared in TAKEOVER_CSS, a <style> the chat
+       component renders, so it lands after this file and wins at equal
+       specificity — opacity/visibility are declared there now instead.
+   `opacity` still needs `!important` for the mascot: that one really is inline,
+   because it is React state. */
+
+/* Replaces the inline transition removed from RobotMascot. */
+.sd-mascot {
+  transition: opacity 350ms ease, visibility 0s linear 0s;
+}
+
+@media (max-width: 767px) {
   html.sd-hero-lock .sd-mascot,
   html.sd-hero-lock .ct-launch {
     opacity: 0 !important;
     visibility: hidden;
     pointer-events: none;
-    /* hold visibility until the fade has finished */
-    transition: opacity 260ms ease, visibility 0s linear 260ms;
+    /* Hold visibility until the fade has finished. The `html.` prefix is
+       load-bearing on `.ct-launch` — it lifts this to (0,2,1) so it outranks
+       TAKEOVER_CSS's own `.ct-launch` rule. Losing the hover transitions here
+       costs nothing: the pill is hidden and inert in this state. */
+    transition: opacity 280ms ease, visibility 0s linear 280ms;
   }
 }
 
-@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: reduce) {
   .sd-mascot,
-  .ct-launch,
   html.sd-hero-lock .sd-mascot,
   html.sd-hero-lock .ct-launch {
     transition: none;

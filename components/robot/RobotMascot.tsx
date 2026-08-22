@@ -575,7 +575,11 @@ export default function RobotMascot() {
       // robot cannot be re-rendered or unmounted for that, so the hiding is done
       // entirely in CSS from an ancestor.
       className="sd-mascot fixed inset-0 pointer-events-none z-[9999] overflow-hidden"
-      style={{ opacity: appear ? 1 : 0, transition: "opacity 0.35s ease" }}
+      // Opacity stays inline — it is React state. The *transition* moved to
+      // `.sd-mascot` in globals.css: an inline transition outranks every
+      // stylesheet rule, so the hero gate could not add `visibility` to it and
+      // the robot cut off the screen instead of fading. Do not put it back here.
+      style={{ opacity: appear ? 1 : 0 }}
       // Which clip is on screen right now. The robot draws into a WebGL canvas
       // with `preserveDrawingBuffer: false`, so its pose cannot be read back
       // from the DOM or sampled from pixels — at 200px, "standing" and "sitting"
@@ -616,7 +620,15 @@ export default function RobotMascot() {
             </div>
           )}
           {givenUp && (
-            <div className="absolute left-1/2 -translate-x-1/2 top-[40%] -translate-y-full w-56 bg-white rounded-2xl shadow-xl border border-black/10 px-4 py-3 text-center">
+            // `pointer-events-auto` is required, not decorative. The wrapper
+            // above turns pointer events OFF on a phone so the mascot's empty
+            // canvas margin stops swallowing taps, and only the small hotspot
+            // over the robot turns them back on. This bubble is a sibling of
+            // that hotspot, so it inherited the dead state and its "Download
+            // résumé" button could not be tapped at all — the robot could be
+            // caught on a phone and then refused to hand the file over. Desktop
+            // never showed it because the wrapper is live there.
+            <div className="pointer-events-auto absolute left-1/2 -translate-x-1/2 top-[40%] -translate-y-full w-56 bg-white rounded-2xl shadow-xl border border-black/10 px-4 py-3 text-center">
               <p className="text-[13px] leading-snug text-[#1D1D1F] font-medium">
                 Ok, you win. Here&apos;s the resume of Suman Debnath.
               </p>
