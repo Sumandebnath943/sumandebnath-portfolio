@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
+import HeroLock from "@/components/ui/HeroLock";
 import { Reveal, StatCounter, CopyCommand } from "@/components/penta/PentaWidgets";
 import { QDEX, SPECTRUM, HUMANEVAL } from "@/components/qdex/qdex-data";
 import { HumanEvalBars, ParamRing, LossSpark } from "@/components/qdex/QdexVisuals";
@@ -145,6 +146,7 @@ export default function QdexPage() {
         <div className="relative z-10">
           {/* ════════════════════ HERO ════════════════════ */}
           <section className="relative min-h-[100svh] flex flex-col pt-28 pb-8 px-6 md:px-14 overflow-hidden">
+            <HeroLock />
             <div className="flex-1 flex items-center justify-center w-full">
               <div className="max-w-4xl mx-auto flex flex-col items-center text-center w-full">
                 <Reveal>

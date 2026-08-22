@@ -5,6 +5,7 @@ import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import Contact from "@/components/sections/Contact";
+import HeroLock from "@/components/ui/HeroLock";
 import { Reveal, StatCounter } from "@/components/penta/PentaWidgets";
 import { ScreenshotFrame, EnvelopeDiagram } from "@/components/aegis/AegisVisuals";
 import {
@@ -131,6 +132,7 @@ export default function AegisVaultPage() {
       >
         {/* ════════════════════════════ HERO ════════════════════════════ */}
         <section className="relative px-6 pt-28 pb-16 md:pt-28 md:pb-24 overflow-hidden">
+          <HeroLock />
           {/* atmospheric emerald glow */}
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[900px] h-[560px] rounded-full blur-3xl" style={{ background: "radial-gradient(ellipse at top, rgba(34,197,94,0.12) 0%, transparent 70%)" }} />

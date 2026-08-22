@@ -3,6 +3,7 @@ import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
+import HeroLock from "@/components/ui/HeroLock";
 import { Reveal, StatCounter } from "@/components/penta/PentaWidgets";
 import { AutoRoadDemo, ElectionBanner, SeasonStrip } from "@/components/pixelville/PixelvilleVisuals";
 import {
@@ -166,6 +167,7 @@ export default function PixelVillePage() {
             decor) with the screenshot presented as a framed product shot
             below the copy — no text over a busy image. */}
         <section className="relative" style={{ background: `radial-gradient(120% 80% at 50% 0%, #12203a 0%, ${PV.night} 45%, ${PV.nightDeep} 100%)` }}>
+          <HeroLock />
           {/* pixel-sky decor */}
           <div aria-hidden className="absolute inset-0 overflow-hidden pointer-events-none">
             {/* faint tile grid */}

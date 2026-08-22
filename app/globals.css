@@ -88,11 +88,12 @@ html.sd-intro-nav #tour-nav {
 }
 
 /* ─── Hero lock (phones only) ─────────────────────────────────────────────
-   `.sd-hero-lock` goes on <html> while the homepage hero is on screen — see
-   useHeroLock in components/sections/Hero.tsx for why.
+   `.sd-hero-lock` goes on <html> while a page's hero is on screen — see
+   components/ui/HeroLock.tsx for why, and for the measured overlap on each of
+   the eleven pages that mount it.
 
-   At 375×812 the hero's three CTAs land in both bottom corners, which is where
-   the mascot and the chat launcher park. Measured overlaps: the launcher over
+   At 375×812 a hero's CTAs land in the bottom corners, which is where the
+   mascot and the chat launcher park. On the homepage: the launcher over
    "Career Journey" by 128×28px, the mascot's canvas over "View Projects" by
    61×41px. From `md` up there is room for all of them and nothing changes.
 

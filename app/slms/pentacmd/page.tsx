@@ -3,6 +3,7 @@ import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
+import HeroLock from "@/components/ui/HeroLock";
 import {
   Reveal,
   StatCounter,
@@ -167,6 +168,7 @@ export default function PentaCmdPage() {
         <div className="relative z-10">
           {/* ════════════════════ HERO ════════════════════ */}
           <section className="relative min-h-[100svh] flex flex-col pt-28 pb-8 px-6 md:px-14 overflow-hidden">
+            <HeroLock />
             {/* premium signal field — confined to the hero, fades out at the bottom */}
             <div
               aria-hidden

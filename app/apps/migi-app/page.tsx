@@ -4,6 +4,7 @@ import Link from "next/link";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
+import HeroLock from "@/components/ui/HeroLock";
 import Contact from "@/components/sections/Contact";
 import {
   Reveal,
@@ -269,6 +270,7 @@ export default function MigiAppPage() {
           className="mg-grain relative overflow-hidden"
           style={{ background: "radial-gradient(130% 80% at 50% -10%, #16210E 0%, #0D140C 38%, #090D0B 72%, #0A0E0C 100%)" }}
         >
+          <HeroLock />
           <Aurora />
           <GridField tone="dark" />
 

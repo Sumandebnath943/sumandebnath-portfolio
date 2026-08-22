@@ -3,6 +3,7 @@ import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
+import HeroLock from "@/components/ui/HeroLock";
 import { Reveal, LiveToolbar, CopyCommand } from "@/components/pact/PactWidgets";
 import {
   Brackets,
@@ -104,6 +105,7 @@ export default function PactAgentPage() {
         <div className="relative z-10">
           {/* ════════════════════ HERO ════════════════════ */}
           <section className="pt-36 md:pt-44 pb-12 px-6 md:px-14">
+            <HeroLock />
             <div className="max-w-5xl mx-auto flex flex-col items-center text-center">
               <Reveal>
                 <div className="inline-flex items-center gap-2.5 font-dmmono text-[11px] uppercase tracking-[0.25em] text-[#d8b3a3] mb-10">

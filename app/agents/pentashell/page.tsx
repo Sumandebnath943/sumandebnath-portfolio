@@ -3,6 +3,7 @@ import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
+import HeroLock from "@/components/ui/HeroLock";
 import {
   Reveal,
   AmbientBackground,
@@ -123,6 +124,7 @@ export default function PentashellPage() {
 
           {/* ════════════════════════════ HERO ════════════════════════════ */}
           <section className="px-6 pt-24 md:pt-28 pb-10">
+            <HeroLock />
             <div className="max-w-5xl mx-auto flex flex-col items-center text-center">
               <Reveal><Kicker>The default CLI for PentaCMD-47M</Kicker></Reveal>
 

@@ -3,6 +3,7 @@ import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
+import HeroLock from "@/components/ui/HeroLock";
 import { Reveal, StatCounter } from "@/components/penta/PentaWidgets";
 import { DashboardShowcase, ArchitectureFlow } from "@/components/migi/MigiVisuals";
 import MigiVideo from "@/components/migi/MigiVideo";
@@ -242,6 +243,7 @@ export default function MigiPage() {
       >
         {/* ════════════════════════════ HERO · lime canvas ════════════════════════════ */}
         <section className="relative px-6 pt-24 pb-20 md:pb-28 overflow-hidden" style={{ background: MIGI.lime }}>
+          <HeroLock />
           {/* faint ink texture rings */}
           <span aria-hidden className="absolute -top-24 -left-24 w-80 h-80 rounded-full" style={{ border: "1.5px solid rgba(22,23,28,0.07)" }} />
           <span aria-hidden className="absolute -bottom-40 -right-16 w-[28rem] h-[28rem] rounded-full" style={{ border: "1.5px solid rgba(22,23,28,0.06)" }} />

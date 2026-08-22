@@ -3,6 +3,7 @@ import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
+import HeroLock from "@/components/ui/HeroLock";
 import Contact from "@/components/sections/Contact";
 import { Reveal, GoldShimmerButton } from "@/components/forget-anything/ForgetAnythingVisuals";
 import {
@@ -105,6 +106,7 @@ export default function ForgetAnythingPage() {
 
         {/* ════════════════════════════ HERO ════════════════════════════ */}
         <section className="relative overflow-hidden" style={{ background: "radial-gradient(125% 75% at 50% -5%, #103a28 0%, #0a2418 35%, #061009 70%, #040a07 100%)" }}>
+          <HeroLock />
           <FlowField tone="hero" pattern="grid" particles />
           <div className="relative z-10 max-w-5xl mx-auto px-6 pt-28 md:pt-32 text-center">
             <Reveal><Kicker>Privacy-first Android app · by Suman Debnath</Kicker></Reveal>

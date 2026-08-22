@@ -193,6 +193,29 @@ starting point for a new app page:
 Copy the file into a new `components/<slug>/` and retheme it. Do **not** try to
 generalise it into a shared library — per-page ownership is deliberate.
 
+### Every product page must mount `<HeroLock />`
+
+The one thing that *is* shared, because it is site furniture rather than page
+identity. Drop it as a **direct child of the hero `<section>`**:
+
+```tsx
+<section className="relative px-6 pt-28 …">
+  <HeroLock />          // components/ui/HeroLock.tsx
+```
+
+On phones the chat launcher and the robot mascot park in the bottom corners —
+exactly where a hero puts its CTAs. Measured at 375×812, **all ten product pages
+collided** before this went in, several of them on two separate buttons; the
+worst blocked 141×28px of "Open live demo". `HeroLock` puts `.sd-hero-lock` on
+`<html>` while the hero is on screen and globals.css clears both out of the way,
+releasing them again as soon as you scroll past.
+
+It observes **its parent element**, so it belongs directly inside the hero and
+nowhere deeper. It renders a `hidden` span, so it has no box and no layout
+effect — verified at zero pixels inside a flex hero — and needs no
+`position: relative` on the parent. A client component that already holds a ref
+on its own hero uses the `useHeroLock(ref)` export instead, as `Hero.tsx` does.
+
 ---
 
 ## 5. Screenshots and assets
