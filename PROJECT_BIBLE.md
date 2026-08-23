@@ -304,7 +304,7 @@ wanted on `/profile` rather than on ours, so all four live here:
 | Section | Component | Mechanism |
 |---|---|---|
 | **Where the hours go** | `Tracks` | Four disciplines; an isometric drawing swaps with the arrows |
-| **The decade, counted** | `Counted` | 240vh pin; four bars on a **log scale**, filling and counting up together |
+| **The decade, counted** | `Counted` | Nine **horizontal** bars on a log scale, filling and counting up as the section crosses the viewport |
 | **The software** | `ToolWall` | Two rows of brand marks drifting in opposite directions on scroll |
 | **Everything shipped** | `Mosaic` | 300vh pin; opens full-bleed on one screenshot and pulls back to all twenty |
 
@@ -324,12 +324,13 @@ stylesheet uses is defined in `profile.css`**; it declares none of its own.
 > `max-width`, because a `max-height` fighting an `aspect-ratio` just changes
 > the ratio again.
 
-> **`.pf-wrap` needs `width: 100%` inside either pin.** It carries
+> **`.pf-wrap` needs `width: 100%` inside a column flex pin.** It carries
 > `margin: 0 auto`, and in a *column* flex container an auto margin on the
 > cross axis switches off `align-items: stretch` — so the wrap sized itself to
 > its content, 569px instead of the sheet's 1229, and dragged the mosaic
 > window down with it through the aspect ratio. It presents as "the section
-> is mysteriously narrow", not as a margin problem.
+> is mysteriously narrow", not as a margin problem. Only the mosaic's pin
+> is affected now that the chart has none.
 
 > **The mosaic measures its focus tile off the DOM.** Once the grid grew gaps
 > and padding, a cell's centre stopped being `(col + 0.5) / 5` of the width,
@@ -339,11 +340,19 @@ stylesheet uses is defined in `profile.css`**; it declares none of its own.
 > the frame. The tile it opens on is the `focus` prop — currently 7, IMPRINT,
 > which is row 1 column 2 and therefore dead centre horizontally.
 
-> **Nine bars need `grid-template-rows: subgrid`.** A column whose label wraps
-> to three lines is taller than one that wraps to two, `align-items: end`
-> pushes it up, and the nine tracks stop sharing a baseline — which is the
-> entire point of a bar chart. Each `.pf-bar` spans three subgrid rows so the
-> numeral, the track and the label align across all nine.
+> **The chart is horizontal, and that is not a style choice.** It was nine
+> vertical bars first. Nine columns across the sheet is 116px each, which
+> forced the numerals down to 25px and the labels to 9px wrapping over three
+> lines — it read as a spreadsheet. Nine *rows* gives every label a full line
+> and every numeral room to be one, and comparing lengths along a shared left
+> edge beats comparing heights across narrow columns. **If someone adds a
+> tenth figure, add a row; do not go back to columns.**
+
+> **`Counted` is not pinned.** The pin existed to buy the count-up running
+> time, and nine rows is a tall block on its own. It keys off the section's
+> ordinary trip up the viewport instead — which also deleted the branch where
+> the pinned and unpinned measures disagreed below 700px, and gave the page
+> back ~1,400px of scroll.
 
 > **The isometric scenes animate, and `transform-box: view-box` is what makes
 > that work.** Without it a `translateY(-6px)` is six *device* pixels —

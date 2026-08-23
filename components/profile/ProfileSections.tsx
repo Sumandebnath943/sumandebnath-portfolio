@@ -354,21 +354,34 @@ function ArtProduct() {
 }
 
 /* ═══ 2. The decade, counted ═════════════════════════════════════════════
-   Four bars in a pinned frame. Both the fill height and the number are
-   functions of one scroll progress, so the count and the growth land
-   together.
+   Nine figures as horizontal bars.
 
-   **The scale is logarithmic.** These four run 9 → 500; on a linear scale
-   the first three would be slivers under one tall bar and the section would
-   say nothing. `log10` maps them to a readable spread, which is what the
-   reference does with its own 10 / 150 / 50 / 10.
+   ── Why horizontal ─────────────────────────────────────────────────────
+   It was nine vertical bars first, and it looked cramped and slightly silly:
+   nine columns across the sheet is 116px each, which forced the numerals down
+   to 25px and the labels to 9px wrapping over three lines. Nine *rows* is
+   comfortable — each label gets a full line, each numeral can be large, and
+   comparing lengths along a shared left edge is easier than comparing heights
+   across narrow columns anyway.
+
+   ── Why there is no pin ────────────────────────────────────────────────
+   The 240vh pin existed to buy the count-up some running time. Nine rows is a
+   tall block on its own, so the fill can key off the section's ordinary trip
+   up the viewport instead — which is what the mobile path already did. That
+   removes a pin, drops ~1,400px of scroll from an already long page, and
+   deletes the branch where those two measures disagreed.
+
+   ── The scale is logarithmic ───────────────────────────────────────────
+   The figures run 9 → 1,000. On a linear scale the first five are slivers
+   against the last, and these are different units anyway — the bars are there
+   to give the numbers a sense of magnitude, not to invite arithmetic.
    ───────────────────────────────────────────────────────────────────────── */
 
 export type Stat = { value: number; suffix?: string; label: string };
 
 const LOG_MIN = 0.82; // just under log10(9)
 const LOG_MAX = 3.06; // just over log10(1000)
-const FLOOR = 0.16; // shortest bar, as a fraction of the track
+const FLOOR = 0.12; // shortest bar, as a fraction of the track
 
 const barFraction = (v: number) =>
   FLOOR +
@@ -391,44 +404,27 @@ export function Counted({
   const barsRef = useRef<HTMLDivElement>(null);
 
   const frame = useCallback(() => {
-    const section = sectionRef.current;
     const bars = barsRef.current;
-    if (!section || !bars) return;
+    if (!bars) return;
 
     const vh = window.innerHeight;
+    const r = bars.getBoundingClientRect();
+    const p = clamp((vh * 0.92 - r.top) / (vh * 0.6));
 
-    // Below 700px the CSS drops the pin and the section collapses to its own
-    // height — at which point "how far through the pin are we" is a distance
-    // of a couple of hundred pixels, and the chart sits on zeros for the
-    // whole time it is on screen. Unpinned, progress comes from the bars'
-    // own trip up the viewport instead.
-    let p: number;
-    if (section.offsetHeight > vh * 1.5) {
-      const travelled = -section.getBoundingClientRect().top;
-      const total = Math.max(1, section.offsetHeight - vh);
-      // Full well before the pin releases, or the last third of the scroll is
-      // spent looking at a finished chart.
-      p = clamp(travelled / total / 0.72);
-    } else {
-      const br = bars.getBoundingClientRect();
-      p = clamp((vh * 0.92 - br.top) / (vh * 0.55));
-    }
-
-    const cols = bars.querySelectorAll<HTMLElement>(".pf-bar");
-    cols.forEach((col, n) => {
-      // Each bar starts a little after the one before it.
-      const own = clamp((p - n * 0.06) / (1 - n * 0.06));
+    const rows = bars.querySelectorAll<HTMLElement>(".pf-bar");
+    rows.forEach((row, n) => {
+      // Each row starts a little after the one above it, so the chart draws
+      // itself downward rather than arriving all at once.
+      const own = clamp((p - n * 0.05) / (1 - n * 0.05));
       const eased = 1 - Math.pow(1 - own, 3);
-      const target = Number(col.dataset.frac);
-      const value = Number(col.dataset.value);
+      const target = Number(row.dataset.frac);
+      const value = Number(row.dataset.value);
 
-      const fill = col.querySelector<HTMLElement>(".fill");
-      const num = col.querySelector<HTMLElement>(".num");
-      if (fill) fill.style.height = `${(eased * target * 100).toFixed(2)}%`;
-      // en-US rather than the default locale: this is a design decision about
-      // the glyph, not about the reader — "1,000" is the intended shape and
-      // an en-IN render would make it "1,000" here but "1,00,000" if the
-      // figures ever grow.
+      const fill = row.querySelector<HTMLElement>(".fill");
+      const num = row.querySelector<HTMLElement>(".num");
+      if (fill) fill.style.width = `${(eased * target * 100).toFixed(2)}%`;
+      // en-US rather than the default locale: "1,000" is the intended shape,
+      // and an en-IN render would group larger figures as "1,00,000".
       if (num) num.textContent = Math.round(eased * value).toLocaleString("en-US");
     });
   }, []);
@@ -436,50 +432,46 @@ export function Counted({
   useScrub(sectionRef, frame);
 
   return (
-    <section className="pf-chart-sec" ref={sectionRef} id="counted">
-      <div className="pf-chart-pin">
-        <div className="pf-wrap">
-          {kicker}
-          <div className="pf-chart-head">
-            <h2>{title}</h2>
-            <p className="sub">{sub}</p>
-            <Link href={cta.href} className="pf-chart-cta">
-              {cta.label}
-              <svg viewBox="0 0 17 17" fill="none" aria-hidden="true">
-                <path
-                  d="M3.5 8.5h10M9 4l4.5 4.5L9 13"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </Link>
-          </div>
+    <section className="pf-wrap pf-pad pf-chart-sec" ref={sectionRef} id="counted">
+      {kicker}
+      <div className="pf-head pf-chart-head">
+        <h2>{title}</h2>
+        <p className="sub">{sub}</p>
+        <Link href={cta.href} className="pf-chart-cta">
+          {cta.label}
+          <svg viewBox="0 0 17 17" fill="none" aria-hidden="true">
+            <path
+              d="M3.5 8.5h10M9 4l4.5 4.5L9 13"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </Link>
+      </div>
 
-          <div className="pf-bars" ref={barsRef}>
-            {stats.map((s) => (
-              <div
-                className="pf-bar"
-                key={s.label}
-                data-frac={barFraction(s.value)}
-                data-value={s.value}
-              >
-                <span className="big">
-                  {/* Server-rendered at the final value so the section still
-                      reads correctly with JS off and under reduced motion,
-                      where the scrub never attaches. */}
-                  <span className="num">{s.value.toLocaleString("en-US")}</span>
-                  {s.suffix ?? "+"}
-                </span>
-                <div className="track">
-                  <div className="fill" />
-                </div>
-                <span className="lbl">{s.label}</span>
-              </div>
-            ))}
+      <div className="pf-bars" ref={barsRef}>
+        {stats.map((s) => (
+          <div
+            className="pf-bar"
+            key={s.label}
+            data-frac={barFraction(s.value)}
+            data-value={s.value}
+          >
+            <span className="lbl">{s.label}</span>
+            <span className="big">
+              {/* Server-rendered at the final value, so the section still reads
+                  correctly with JS off and under reduced motion, where the
+                  scrub never attaches. */}
+              <span className="num">{s.value.toLocaleString("en-US")}</span>
+              {s.suffix ?? "+"}
+            </span>
+            <div className="track">
+              <div className="fill" />
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </section>
   );

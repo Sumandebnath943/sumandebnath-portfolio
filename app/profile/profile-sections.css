@@ -40,8 +40,8 @@
   color: var(--pf-ink-2);
 }
 .pf-tracks .pf-kick,
+.pf-chart-sec .pf-kick,
 .pf-tools-sec .pf-kick,
-.pf-chart-pin .pf-kick,
 .pf-mos-pin .pf-kick {
   display: flex;
   justify-content: center;
@@ -330,32 +330,18 @@
 }
 
 /* ═══ 2. The decade, counted ═════════════════════════════════════════════
-   A tall section with a sticky child, so the chart holds still while the
-   scroll fills it. **The height is what buys the animation its running
-   time** — shorten it and the bars snap up in a few frames. */
-.pf-chart-sec {
-  position: relative;
-  height: 240vh;
-  background-image: linear-gradient(var(--pf-frame), var(--pf-frame));
-  background-repeat: no-repeat;
-  background-size: calc(100% - 2 * var(--pf-gutter)) 1px;
-  background-position: var(--pf-gutter) 0;
-}
-.pf-chart-pin {
-  position: sticky;
-  top: 0;
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-block: clamp(80px, 12vh, 140px);
-  overflow: hidden;
-}
+   Nine horizontal bars. It was nine vertical ones first: nine columns across
+   the sheet is 116px each, which squeezed the numerals to 25px and the labels
+   to 9px over three lines, and the whole thing read as a spreadsheet. Nine
+   *rows* gives every label a full line and every numeral room to be a numeral.
+
+   No pin — see the note in ProfileSections.tsx. This is an ordinary section
+   now, and the fill keys off its own trip up the viewport. */
 .pf-chart-cta {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-top: 22px;
+  margin-top: 20px;
   font-size: var(--pf-fs-sm);
   font-weight: 600;
   color: var(--pf-amber-2);
@@ -369,115 +355,83 @@
   transform: translateX(3px);
 }
 
-/* Nine bars in one row. That is the whole point of the section — the
-   comparison only exists if they sit side by side — so the numerals and the
-   gaps shrink rather than the row wrapping. It steps down to five and then
-   three as the columns get too narrow to read. */
 .pf-bars {
   display: grid;
-  grid-template-columns: repeat(9, 1fr);
-  /* Three named rows, and every bar is a subgrid spanning them — otherwise a
-     column whose label wraps to three lines is taller than one that wraps to
-     two, `align-items: end` pushes it up, and the nine tracks stop sharing a
-     baseline. Which defeats the entire point of a bar chart. */
-  grid-template-rows: auto auto auto;
-  gap: clamp(6px, 0.8vw, 14px);
-  align-items: end;
-  margin: clamp(30px, 5vh, 60px) auto 0;
+  gap: clamp(18px, 2.6vh, 30px);
   max-width: var(--pf-measure-full);
+  margin: clamp(36px, 6vh, 68px) auto 0;
   width: 100%;
 }
+
+/* Label and figure share the top line; the track spans both columns beneath
+   them. The figures right-align into a column of their own, which is what
+   stops nine rows of mixed units reading as a jumble. */
 .pf-bar {
   display: grid;
-  grid-template-rows: subgrid;
-  grid-row: span 3;
-  min-width: 0;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 24px;
+  row-gap: 9px;
+  align-items: baseline;
 }
-/* Fallback for anything without subgrid: keeps the drift to one line rather
-   than three. */
-@supports not (grid-template-rows: subgrid) {
-  .pf-bar {
-    display: flex;
-    flex-direction: column;
-  }
-  .pf-bar .lbl {
-    min-height: 3.2em;
-  }
+.pf-bar .lbl {
+  grid-column: 1;
+  font-family: var(--pf-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pf-ink-2);
 }
 /* Anton, the site's display numeral face — the same job it does on the
    homepage hero and on the Experience Book's cover. */
 .pf-bar .big {
+  grid-column: 2;
+  justify-self: end;
   font-family: var(--font-anton), Impact, sans-serif;
-  font-size: clamp(19px, 2vw, 34px);
+  font-size: clamp(24px, 2.5vw, 40px);
   line-height: 1;
   letter-spacing: 0.01em;
   color: var(--pf-ink);
   white-space: nowrap;
-  align-self: end;
-  padding-bottom: 10px;
 }
 .pf-bar .track {
-  position: relative;
-  height: clamp(150px, 26vh, 260px);
+  grid-column: 1 / -1;
+  height: clamp(14px, 1.8vh, 20px);
   border: 1px solid var(--pf-line);
   background-image: repeating-linear-gradient(
     -45deg,
     rgba(22, 20, 14, 0.05) 0 1px,
     transparent 1px 7px
   );
-  display: flex;
-  align-items: flex-end;
 }
 .pf-bar .fill {
-  width: 100%;
-  height: 0;
+  height: 100%;
+  width: 0;
   background-color: var(--pf-amber);
   background-image: repeating-linear-gradient(
     -45deg,
     rgba(22, 20, 14, 0.07) 0 1px,
     transparent 1px 7px
   );
-  border-top: 1px solid var(--pf-ink);
-  /* No transition: the height is written every frame by the scrub, and a
+  border-right: 1px solid var(--pf-ink);
+  /* No transition: the width is written every frame by the scrub, and a
      transition here would lag the scroll by its own duration. */
   transition: none;
 }
-.pf-bar .lbl {
-  padding-top: 12px;
-  font-family: var(--pf-mono);
-  font-size: 9px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--pf-ink-2);
-  line-height: 1.55;
-  /* Nine columns is narrow enough that a long word would otherwise push the
-     grid wider than its track. */
-  overflow-wrap: anywhere;
-}
 
-@media (max-width: 1180px) {
-  .pf-bars {
-    grid-template-columns: repeat(5, 1fr);
-    row-gap: 30px;
-  }
-}
 @media (max-width: 700px) {
-  .pf-chart-sec {
-    height: auto;
-  }
-  .pf-chart-pin {
-    position: static;
-    min-height: 0;
-  }
   .pf-bars {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 26px 12px;
+    gap: 16px;
   }
-  .pf-bar .track {
-    height: clamp(96px, 17vh, 150px);
+  .pf-bar {
+    column-gap: 14px;
+    row-gap: 7px;
+  }
+  .pf-bar .lbl {
+    font-size: 10px;
+    letter-spacing: 0.1em;
   }
   .pf-bar .big {
-    font-size: clamp(20px, 6vw, 30px);
+    font-size: clamp(21px, 6vw, 30px);
   }
 }
 
@@ -600,8 +554,7 @@
    wrap sized itself to its content — 569px instead of the sheet's 1229 — and
    dragged the window down with it via the aspect ratio. The same applies to
    the chart's wrap. */
-.pf-mos-inner,
-.pf-chart-pin > .pf-wrap {
+.pf-mos-inner {
   width: 100%;
 }
 .pf-mos-inner {
@@ -716,11 +669,9 @@
 /* Under reduced motion neither pin animates, so both sections collapse to
    their finished state rather than reserving 240–300vh of empty scroll. */
 @media (prefers-reduced-motion: reduce) {
-  .pf-chart-sec,
   .pf-mos-sec {
     height: auto;
   }
-  .pf-chart-pin,
   .pf-mos-pin {
     position: static;
     min-height: 0;

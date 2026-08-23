@@ -421,7 +421,11 @@ resolving to a 5 × 4 grid with tiles measuring exactly 1.78:1.
   about the drawings changed; only their behaviour.
 - **The chart went from four bars to nine**, adding the marketing volume
   figures. Ascending, so it reads as a rising staircase, and on a log range
-  now reaching 1,000.
+  now reaching 1,000. **Then from vertical to horizontal** — nine columns
+  across the sheet is 116px each, which squeezed the numerals to 25px and the
+  labels to 9px over three lines, and the user's verdict was that it looked
+  stupid. He was right. Nine rows gives every label a line and every numeral
+  room, and the pin came out with it.
 - **The mosaic roughly doubled**, opens on IMPRINT at the centre of the grid
   rather than a corner tile, and the tiles have gaps and borders instead of
   butting together.
