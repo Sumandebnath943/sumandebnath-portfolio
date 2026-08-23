@@ -413,6 +413,25 @@ static. Checked at 1280×620 and 375×812: all four arts, all four bars filling
 on a log scale, both tool rows drifting, the mosaic opening full-bleed and
 resolving to a 5 × 4 grid with tiles measuring exactly 1.78:1.
 
+**Then a follow-up pass**, same day, on three of the four:
+
+- **The scenes move.** Four looping CSS animations on the isometric drawings —
+  blocks lifting in sequence, a write travelling up the database stack, tokens
+  cycling in and out of the component grid, the connectors flowing. Nothing
+  about the drawings changed; only their behaviour.
+- **The chart went from four bars to nine**, adding the marketing volume
+  figures. Ascending, so it reads as a rising staircase, and on a log range
+  now reaching 1,000.
+- **The mosaic roughly doubled**, opens on IMPRINT at the centre of the grid
+  rather than a corner tile, and the tiles have gaps and borders instead of
+  butting together.
+
+Three more traps out of that pass, all in Bible §4.1: `.pf-wrap` needs
+`width: 100%` inside a column flex pin or its auto margins collapse it to
+content width; nine bars need `subgrid` or their tracks stop sharing a
+baseline; and the mosaic has to measure its focus tile off the DOM once the
+grid has gaps.
+
 **Still undone:** the seated figure and the dog in the hero drawing, unchanged
 from §1.5. That remains the next job on this route.
 

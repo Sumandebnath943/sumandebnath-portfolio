@@ -324,6 +324,35 @@ stylesheet uses is defined in `profile.css`**; it declares none of its own.
 > `max-width`, because a `max-height` fighting an `aspect-ratio` just changes
 > the ratio again.
 
+> **`.pf-wrap` needs `width: 100%` inside either pin.** It carries
+> `margin: 0 auto`, and in a *column* flex container an auto margin on the
+> cross axis switches off `align-items: stretch` — so the wrap sized itself to
+> its content, 569px instead of the sheet's 1229, and dragged the mosaic
+> window down with it through the aspect ratio. It presents as "the section
+> is mysteriously narrow", not as a margin problem.
+
+> **The mosaic measures its focus tile off the DOM.** Once the grid grew gaps
+> and padding, a cell's centre stopped being `(col + 0.5) / 5` of the width,
+> and a computed focus drifted by tens of pixels at 5×. `offsetLeft` /
+> `offsetWidth` are exact. The opening scale is measured the same way, times
+> `OPEN_OVERFILL`, so the gaps either side of the opening tile stay outside
+> the frame. The tile it opens on is the `focus` prop — currently 7, IMPRINT,
+> which is row 1 column 2 and therefore dead centre horizontally.
+
+> **Nine bars need `grid-template-rows: subgrid`.** A column whose label wraps
+> to three lines is taller than one that wraps to two, `align-items: end`
+> pushes it up, and the nine tracks stop sharing a baseline — which is the
+> entire point of a bar chart. Each `.pf-bar` spans three subgrid rows so the
+> numeral, the track and the label align across all nine.
+
+> **The isometric scenes animate, and `transform-box: view-box` is what makes
+> that work.** Without it a `translateY(-6px)` is six *device* pixels —
+> invisible on a small screen, enormous on a large one. With it, six units of
+> the 264 × 196 viewBox. The vocabulary is `.lift` / `.bob` / `.tok` /
+> `.write` / `.flow` on a shared 4.4s bar with `.l1`–`.l4` and `.k1`/`.k2`
+> doing the stagger, modelled on the reference's `sv-lift` / `sv-build` /
+> `sv-tok`. **These animate the drawings; they do not change them.**
+
 > **`Counted` needs two progress measures.** Below 700px the CSS drops the pin,
 > at which point "how far through the pin are we" is a couple of hundred
 > pixels and the chart sits on zeros the whole time it is on screen. Unpinned,

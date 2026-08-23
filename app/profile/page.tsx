@@ -271,14 +271,24 @@ const tracks: Track[] = [
 ];
 
 /* ── The decade, counted ────────────────────────────────────────────────
-   Four figures that span 9 to 500 on purpose. The chart is on a log scale
-   (see ProfileSections.tsx) and four numbers of similar size would draw four
-   identical bars, which says nothing. */
+   Nine figures spanning 9 to 1,000. The chart is on a log scale (see
+   ProfileSections.tsx) — on a linear one the first five would be slivers under
+   the last.
+
+   **Ascending on purpose.** A rising staircase reads as "and it kept going",
+   which is the argument the section is making; sorted any other way it is just
+   a table with bars behind it. */
 const stats: Stat[] = [
   { value: 9, label: "Years building brands" },
+  { value: 20, label: "Programme launches" },
   { value: 30, label: "AI products shipped solo" },
-  { value: 46, label: "Agents running autonomously" },
+  // The only exact figure here, so the only one without a "+".
+  { value: 46, suffix: "", label: "Agents running autonomously" },
+  { value: 50, label: "Campaigns strategised" },
+  { value: 150, label: "Decks designed & repaired" },
+  { value: 500, label: "Marketing materials designed" },
   { value: 500, label: "Automated eval checks" },
+  { value: 1000, label: "Marketing & graphic designs" },
 ];
 
 /** Built from the user's screenshot folder by scripts/build-mosaic.mjs.
@@ -286,12 +296,13 @@ const stats: Stat[] = [
 const tiles: Tile[] = [
   { slug: "roasmind", label: "ROASmind" },
   { slug: "migi", label: "MIGI" },
-  { slug: "imprint", label: "IMPRINT" },
   { slug: "legatus", label: "LEGATUS" },
   { slug: "pact-agent", label: "PACT Agent" },
   { slug: "pentacmd", label: "PentaCMD" },
   { slug: "pentashell", label: "Pentashell" },
   { slug: "qdex", label: "Qdex-1.5B" },
+  // Index 7 — the tile the zoom opens on. See `focus` on <Mosaic />.
+  { slug: "imprint", label: "IMPRINT" },
   { slug: "aegis-vault", label: "AEGIS VAULT" },
   { slug: "d-pe", label: "D-PE.ai" },
   { slug: "cite", label: "CITE" },
@@ -545,6 +556,7 @@ export default function ProfilePage() {
             sub="Pull back far enough and the decade fits in one frame."
             href="/projects"
             tiles={tiles}
+            focus={7}
           />
 
           {/* ── 9. The experience book ────────────────────────────────── */}

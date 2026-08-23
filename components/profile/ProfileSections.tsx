@@ -247,14 +247,14 @@ function ArtBrand() {
   return (
     <g className="scene">
       <Plate />
-      <Box x={-42} y={-40} w={34} d={26} h={44} cls="hero" />
-      <Box x={-42} y={2} w={34} d={26} h={16} />
-      <Box x={4} y={-40} w={26} d={26} h={26} />
-      <Box x={4} y={2} w={26} d={26} h={9} cls="hero" />
+      <Box x={-42} y={-40} w={34} d={26} h={44} cls="hero lift l1" />
+      <Box x={-42} y={2} w={34} d={26} h={16} cls="lift l2" />
+      <Box x={4} y={-40} w={26} d={26} h={26} cls="lift l3" />
+      <Box x={4} y={2} w={26} d={26} h={9} cls="hero lift l4" />
       {/* The out-of-home panel, on legs */}
       <Box x={30} y={-30} w={4} d={4} h={46} />
       <Box x={30} y={-8} w={4} d={4} h={46} />
-      <Box x={22} y={-34} w={22} d={34} z={46} h={4} cls="hero" />
+      <Box x={22} y={-34} w={22} d={34} z={46} h={4} cls="hero bob" />
       <Note side="left" text="REACH" />
       <Note side="right" text="OOH" />
       <Caption text="1 BRAND · 20 LAUNCHES" />
@@ -268,14 +268,14 @@ function ArtBuild() {
     <g className="scene">
       <Plate />
       {/* three stacked discs read as a database */}
-      <Box x={-46} y={-18} w={36} d={36} h={9} />
-      <Box x={-46} y={-18} z={11} w={36} d={36} h={9} />
-      <Box x={-46} y={-18} z={22} w={36} d={36} h={9} cls="hero" />
+      <Box x={-46} y={-18} w={36} d={36} h={9} cls="write w1" />
+      <Box x={-46} y={-18} z={11} w={36} d={36} h={9} cls="write w2" />
+      <Box x={-46} y={-18} z={22} w={36} d={36} h={9} cls="hero write w3" />
       {/* the service */}
       <Box x={2} y={-18} w={22} d={36} h={52} />
       {/* the shipped surface, floating */}
-      <Box x={30} y={-30} z={26} w={30} d={40} h={5} cls="hero" />
-      <path className="iso-ln" d={`M${P(38, -10, 26)} L${P(38, -10, 5)}`} />
+      <Box x={30} y={-30} z={26} w={30} d={40} h={5} cls="hero bob" />
+      <path className="iso-ln flow" d={`M${P(38, -10, 26)} L${P(38, -10, 5)}`} />
       <Note side="left" text="DATA" />
       <Note side="right" text="LIVE" />
       <Caption text="IDEA → SHIPPED · ~1 WEEK" />
@@ -298,7 +298,9 @@ function ArtSystems() {
           w={18}
           d={18}
           h={10}
-          cls={lifted ? "hero" : ""}
+          /* The two lifted ones cycle; the rest take a slow staggered breath
+             so the grid never looks frozen behind them. */
+          cls={lifted ? `hero tok ${r === 1 ? "k1" : "k2"}` : `lift l${((r + c) % 4) + 1}`}
         />,
       );
     }
@@ -328,7 +330,9 @@ function ArtProduct() {
             w={20}
             d={24}
             h={n === 2 ? 40 : 20}
-            cls={n === 2 ? "hero" : ""}
+            /* Staggered so the eye reads them in order: plan, build, check,
+               ship. `l1`–`l4` are the delays. */
+            cls={`${n === 2 ? "hero " : ""}lift l${n + 1}`}
           />
           <Tick
             x={-42 + n * 27}
@@ -341,7 +345,7 @@ function ArtProduct() {
       ))}
       {/* the thread running through them */}
       <path
-        className="iso-ln"
+        className="iso-ln flow"
         d={`M${P(-52, 0, 22)} L${P(28, 0, 22)}`}
       />
       <Caption text="500+ EVAL CHECKS" />
@@ -362,9 +366,9 @@ function ArtProduct() {
 
 export type Stat = { value: number; suffix?: string; label: string };
 
-const LOG_MIN = 0.8; // just under log10(9)
-const LOG_MAX = 2.78; // just over log10(500)
-const FLOOR = 0.18; // shortest bar, as a fraction of the track
+const LOG_MIN = 0.82; // just under log10(9)
+const LOG_MAX = 3.06; // just over log10(1000)
+const FLOOR = 0.16; // shortest bar, as a fraction of the track
 
 const barFraction = (v: number) =>
   FLOOR +
@@ -421,7 +425,11 @@ export function Counted({
       const fill = col.querySelector<HTMLElement>(".fill");
       const num = col.querySelector<HTMLElement>(".num");
       if (fill) fill.style.height = `${(eased * target * 100).toFixed(2)}%`;
-      if (num) num.textContent = String(Math.round(eased * value));
+      // en-US rather than the default locale: this is a design decision about
+      // the glyph, not about the reader — "1,000" is the intended shape and
+      // an en-IN render would make it "1,000" here but "1,00,000" if the
+      // figures ever grow.
+      if (num) num.textContent = Math.round(eased * value).toLocaleString("en-US");
     });
   }, []);
 
@@ -461,7 +469,7 @@ export function Counted({
                   {/* Server-rendered at the final value so the section still
                       reads correctly with JS off and under reduced motion,
                       where the scrub never attaches. */}
-                  <span className="num">{s.value}</span>
+                  <span className="num">{s.value.toLocaleString("en-US")}</span>
                   {s.suffix ?? "+"}
                 </span>
                 <div className="track">
@@ -589,29 +597,32 @@ export function ToolWall({
 }
 
 /* ═══ 4. The mosaic ══════════════════════════════════════════════════════
-   A pinned window that opens full-bleed on one screenshot and pulls back to
-   reveal the whole grid.
+   A pinned window that opens full-bleed on one tile and pulls back to reveal
+   the whole grid.
 
-   ── The transform, which is the only tricky part ────────────────────────
-   The grid is exactly window-sized and laid out 5 × 4, so at `scale(1)` it
-   fits the frame precisely. At `scale(5)` a single column fills the width.
-
+   ── The transform ──────────────────────────────────────────────────────
    To keep a chosen point under the middle of the window at any scale:
 
        tx = cx − fx · s      where (cx, cy) is the window centre
        ty = cy − fy · s            (fx, fy) the focus point in grid pixels
 
-   The focus is lerped too — from the first tile's centre to the grid's own
-   centre — because a fixed focus at scale 1 leaves the grid off to one side.
-   Both ends then fall out of the same expression: at p=1 the focus *is* the
+   The focus is lerped from the opening tile's centre to the grid's own
+   centre, because a fixed focus at scale 1 leaves the grid off to one side.
+   Both ends then fall out of the same expression: at p = 1 the focus *is* the
    centre, so tx = ty = 0.
+
+   **`fx`, `fy` and the opening scale are measured off the DOM, not computed
+   from the column count.** Once the grid grew gaps and padding, a cell's
+   centre stopped being `(col + 0.5) / 5` of the width, and a computed focus
+   drifted by tens of pixels at 5×. `offsetLeft`/`offsetWidth` are exact and
+   cost one layout read per frame on an element that is already laid out.
    ───────────────────────────────────────────────────────────────────────── */
 
 export type Tile = { slug: string; label: string };
 
-const COLS = 5;
-const ROWS = 4;
-const ZOOM = COLS; // one column fills the window
+/** A little over the exact fit, so the gaps either side of the opening tile
+ *  stay outside the frame instead of showing as slivers down the edges. */
+const OPEN_OVERFILL = 1.06;
 
 export function Mosaic({
   kicker,
@@ -619,12 +630,15 @@ export function Mosaic({
   sub,
   href,
   tiles,
+  focus = 0,
 }: {
   kicker: React.ReactNode;
   title: React.ReactNode;
   sub: string;
   href: string;
   tiles: Tile[];
+  /** Index of the tile the zoom opens on. */
+  focus?: number;
 }) {
   const sectionRef = useRef<HTMLElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
@@ -636,6 +650,9 @@ export function Mosaic({
     const win = windowRef.current;
     if (!section || !grid || !win) return;
 
+    const cell = grid.children[focus] as HTMLElement | undefined;
+    if (!cell) return;
+
     const vh = window.innerHeight;
     const travelled = -section.getBoundingClientRect().top;
     const total = Math.max(1, section.offsetHeight - vh);
@@ -645,23 +662,30 @@ export function Mosaic({
 
     const W = win.clientWidth;
     const H = win.clientHeight;
-    const s = ZOOM + (1 - ZOOM) * p;
-    // First tile's centre, as a fraction of the grid.
-    const fx = (0.5 / COLS + (0.5 - 0.5 / COLS) * p) * W;
-    const fy = (0.5 / ROWS + (0.5 - 0.5 / ROWS) * p) * H;
+    if (!W || !H || !cell.offsetWidth) return;
+
+    // Whatever it takes for the opening tile to cover the window.
+    const open =
+      Math.max(W / cell.offsetWidth, H / cell.offsetHeight) * OPEN_OVERFILL;
+    const s = open + (1 - open) * p;
+
+    const cx = cell.offsetLeft + cell.offsetWidth / 2;
+    const cy = cell.offsetTop + cell.offsetHeight / 2;
+    const fx = cx + (W / 2 - cx) * p;
+    const fy = cy + (H / 2 - cy) * p;
 
     grid.style.transform = `translate(${(W / 2 - fx * s).toFixed(1)}px, ${(
       H / 2 -
       fy * s
     ).toFixed(1)}px) scale(${s.toFixed(4)})`;
-  }, []);
+  }, [focus]);
 
   useScrub(sectionRef, frame);
 
   return (
     <section className="pf-mos-sec" ref={sectionRef} id="mosaic">
       <div className="pf-mos-pin">
-        <div className="pf-wrap">
+        <div className="pf-wrap pf-mos-inner">
           {kicker}
           <div className="pf-mos-head">
             <h2>{title}</h2>
@@ -677,9 +701,9 @@ export function Mosaic({
                     alt={tile.label}
                     width={800}
                     height={450}
-                    /* The first tile is the whole section at p=0 — lazy-loading
-                       it means the frame opens empty. */
-                    loading={n === 0 ? "eager" : "lazy"}
+                    /* The focus tile is the whole section at p = 0 — lazy
+                       loading it means the frame opens empty. */
+                    loading={n === focus ? "eager" : "lazy"}
                     decoding="async"
                     draggable={false}
                   />
