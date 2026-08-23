@@ -354,28 +354,36 @@ next thing to do on this route.**
 user wanted — its Tracks carousel, its by-the-numbers bar chart, its AI-tools
 logo wall, and the mosaic that zooms out over twenty screenshots. The initial
 plan put three on `/profile` and the mosaic on the homepage; the user chose all
-four on `/profile`, and renamed two of them: **Where the hours go** and **The
-decade, counted**.
+four on `/profile`, and renamed two: **Where the hours go** and **The decade,
+counted**. Three rounds of revision followed in the same session, and what is
+described below is where it finished, not where it started.
 
 **Where they landed.** `/profile` now runs eleven sections: hero, statement,
 filmstrip, **tracks**, credo, **counted**, board, **mosaic**, experience book,
-**tool wall**, street. New code is
-`components/profile/ProfileSections.tsx` + `app/profile/profile-sections.css`.
+**tool wall**, street. New code is `components/profile/ProfileSections.tsx` +
+`app/profile/profile-sections.css`. Two new build scripts:
+`build-tool-logos.mjs` and `build-mosaic.mjs`.
 
-**The street lost its software.** It was carrying all 33 tool names on
-name boards, and the tool wall lists the same 33. Two sections saying the same
-thing on one page is worse than either. The street now carries **disciplines
-and metrics only** — Branding, Performance, GTM, ROAS, CTR, Budgets — and the
-wall has the software.
+| Section | What it does |
+|---|---|
+| **Where the hours go** | Four disciplines, one isometric drawing each, swapped by arrows. Every scene carries a looping CSS animation — blocks lifting in sequence, a write travelling up a database stack, tokens cycling through a component grid, connectors flowing. |
+| **The decade, counted** | Nine horizontal bars on a log scale, filling and counting up as the section crosses the viewport. |
+| **The tool wall** | 33 brand marks in two rows drifting opposite ways. 28 are real logos. |
+| **Everything shipped** | A 300vh pin opening full-bleed on IMPRINT and pulling back to all twenty screenshots, with gaps and borders between tiles. |
+
+**The street lost its software.** It was carrying all 33 tool names on name
+boards, and the wall lists the same 33. Two sections saying the same thing on
+one page is worse than either. The street now carries **disciplines and metrics
+only** — Branding, Performance, GTM, ROAS, CTR, Budgets.
 
 **The logos are real.** `scripts/build-tool-logos.mjs` fetches 28 of the 33 as
 actual brand marks and records every source URL in the generated manifest's
-header. Five have no mark anywhere and render as monogram tiles: Adobe
-Firefly, Seedream, Nano Banana, Kling AI, Wan. **To fill one, drop the SVG in
-`public/tool-logos/` and give it a `direct` entry** — the script handles the
-rest. Bible §4.1 has the three-tier sourcing.
+header. Five have no mark anywhere and render as monogram tiles: Adobe Firefly,
+Seedream, Nano Banana, Kling AI, Wan. **To fill one, drop the SVG in
+`public/tool-logos/` and give it a `direct` entry** — the script does the rest.
+Bible §4.1 has the three-tier sourcing.
 
-**Five things that were bugs first.**
+**Six things that were bugs first.**
 
 > **The tool wall looked like it had one row.** Row two was translated to
 > `+max` and then had `p × span` *added* to it, which pushed it off the right
@@ -388,10 +396,17 @@ rest. Bible §4.1 has the three-tier sourcing.
 > is capped through `max-width`, because a `max-height` fighting an
 > `aspect-ratio` simply changes the ratio again.
 
-> **The bar chart sat on zeros on mobile.** Below 700px the CSS drops the pin,
-> so "progress through the pin" became a couple of hundred pixels and the
-> chart was visible, complete, and reading 0+ the whole time. Unpinned, it now
-> measures the bars' own trip up the viewport.
+> **`.pf-wrap` collapsed to content width inside the mosaic's pin.** It carries
+> `margin: 0 auto`, and in a *column* flex container an auto margin on the
+> cross axis switches off `align-items: stretch` — so the wrap sized itself to
+> 569px instead of the sheet's 1229 and dragged the window down with it through
+> the aspect ratio. It presents as "this section is mysteriously narrow",
+> nowhere near a margin. It needs an explicit `width: 100%`.
+
+> **The mosaic's focus has to be measured, not computed.** Once the grid grew
+> gaps and padding, a cell's centre stopped being `(col + 0.5) / 5` of the
+> width and the computed focus drifted by tens of pixels at 5×. It reads
+> `offsetLeft` / `offsetWidth` now, and derives the opening scale the same way.
 
 > **Isometric labels cannot be placed isometrically.** A point far enough
 > outside a scene to clear it is also far enough along the other axis to land
@@ -403,38 +418,31 @@ rest. Bible §4.1 has the three-tier sourcing.
 > 200, which was written out as a 122 KB "PNG" and rendered as a broken image.
 > The fetcher checks magic bytes now.
 
+**The chart was rebuilt twice, and the second one is the lesson.** It began as
+four vertical bars. The user asked for five more figures, so it became nine
+vertical bars — and at nine columns across the sheet each is 116px, which
+forced the numerals down to 25px and the labels to 9px wrapping over three
+lines. His verdict was that it looked stupid, and he was right: it read as a
+spreadsheet, and comparing "9 years" to "1,000 designs" as two heights never
+meant much anyway. It is **nine horizontal rows** now — label left, figure
+right-aligned into its own column, bar spanning the full width beneath — and
+the 240vh pin came out with it, because nine rows is a tall block on its own.
+That also deleted a branch where the pinned and unpinned progress measures
+disagreed below 700px, and returned ~1,400px of scroll to a long page.
+
+> **If someone adds a tenth figure, add a row. Do not go back to columns.**
+
 **Also worth knowing:** an earlier pass quietly added Figma, Photoshop,
 Illustrator, Canva, Codex, Grok and Next.js to the tool list because they
 appear elsewhere on the site. They had not been asked for. **The list in
 `build-tool-logos.mjs` is the user's, exactly — do not extend it.**
 
 **Verified.** Lint and production build clean, `/profile` still prerendered
-static. Checked at 1280×620 and 375×812: all four arts, all four bars filling
-on a log scale, both tool rows drifting, the mosaic opening full-bleed and
-resolving to a 5 × 4 grid with tiles measuring exactly 1.78:1.
-
-**Then a follow-up pass**, same day, on three of the four:
-
-- **The scenes move.** Four looping CSS animations on the isometric drawings —
-  blocks lifting in sequence, a write travelling up the database stack, tokens
-  cycling in and out of the component grid, the connectors flowing. Nothing
-  about the drawings changed; only their behaviour.
-- **The chart went from four bars to nine**, adding the marketing volume
-  figures. Ascending, so it reads as a rising staircase, and on a log range
-  now reaching 1,000. **Then from vertical to horizontal** — nine columns
-  across the sheet is 116px each, which squeezed the numerals to 25px and the
-  labels to 9px over three lines, and the user's verdict was that it looked
-  stupid. He was right. Nine rows gives every label a line and every numeral
-  room, and the pin came out with it.
-- **The mosaic roughly doubled**, opens on IMPRINT at the centre of the grid
-  rather than a corner tile, and the tiles have gaps and borders instead of
-  butting together.
-
-Three more traps out of that pass, all in Bible §4.1: `.pf-wrap` needs
-`width: 100%` inside a column flex pin or its auto margins collapse it to
-content width; nine bars need `subgrid` or their tracks stop sharing a
-baseline; and the mosaic has to measure its focus tile off the DOM once the
-grid has gaps.
+static. Checked at 1280×620 and 375×812: all four scenes animating, nine bars
+filling on a log scale and sharing a left edge, both tool rows drifting, the
+mosaic opening on IMPRINT and resolving to a 5 × 4 grid with tiles measuring
+1.78:1. The chart is better on a phone than the vertical version ever was —
+all nine rows sit on one screen.
 
 **Still undone:** the seated figure and the dog in the hero drawing, unchanged
 from §1.5. That remains the next job on this route.

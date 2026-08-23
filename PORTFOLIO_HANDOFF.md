@@ -71,7 +71,7 @@ short rule: `VERSION 2 · STANDALONE NATIVE ANDROID`.
 | `/journey` | The story a résumé cannot tell — interactive, illustrated, gesture-gated. |
 | `/resume` | Career as a page, not a PDF. Two registers that converge. |
 | `/about`, `/philosophy` | How he thinks; each has its own identity, not a shared template. |
-| `/profile` | The decade in short — what it adds up to, where the work has been, what he uses every day. `/about` argues the *crossing* from marketing to AI; this states the profile itself and asks nothing of the reader. **The only light page on the site**: cream paper, amber marks. Copy runs plainer and shorter than anywhere else — the paper is doing the arguing. |
+| `/profile` | The decade in short — what it adds up to, where the work has been, what he uses every day. `/about` argues the *crossing* from marketing to AI; this states the profile itself and asks nothing of the reader. **The only light page on the site**: cream paper, amber marks. Eleven sections and the longest page on the site, built to be scrolled rather than read — copy runs plainer and shorter than anywhere else, because the paper, the drawings and the charts are doing the arguing. |
 | `/faq` | Answers real questions, and feeds FAQ schema for AEO. |
 | `/contact` | A form that actually sends, with intent routing. |
 | `/learnings` | Certificates and coursework, honestly framed. |
@@ -87,6 +87,7 @@ short rule: `VERSION 2 · STANDALONE NATIVE ANDROID`.
 | `/projects/aegis-vault` | Encrypted notepad. Deep vault green `#07120A` + teal `#2DD4BF`. |
 | `/banking/rm-copilot` | **Banking Co-pilot** — an AI copilot for bank Relationship Managers. The argument is *restraint*: the scoring is deterministic and no LLM takes a credit decision, because a bank cannot defend what it cannot reconstruct. Security is the largest section, not a badge strip. Petrol `#4FA3D8` + brass `#D9A961` on `#070E14`. |
 | `/fun-apps` | The lighter shelf. Near-black `#1a1a1a`. |
+| `/privacy` | Must state exactly what `layout.tsx` loads. Two GA4 properties, Vercel Analytics, Speed Insights — **and the YouTube embed in the homepage `Film` section**, which loads nothing until a visitor presses play. |
 
 > **PentaCMD is the model; Pentashell is the CLI.** Two products, two pages, two
 > palettes. Getting this wrong in copy is the single easiest mistake to make on
@@ -96,7 +97,6 @@ short rule: `VERSION 2 · STANDALONE NATIVE ANDROID`.
 > its source folder. No real bank is named anywhere on the page, because doing
 > so would imply a client engagement. Its own docs and its own UI say Banking
 > Co-pilot.
-| `/privacy` | Must state exactly what `layout.tsx` loads. Two GA4 properties, Vercel Analytics, Speed Insights — **and the YouTube embed in the homepage `Film` section**, which loads nothing until a visitor presses play. |
 
 ### 3b. The film — `Who am I?`
 
