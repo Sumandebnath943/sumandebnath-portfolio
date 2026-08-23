@@ -4,10 +4,10 @@ Where the project stands, what changed most recently, and what is worth doing
 next. For how the system is built read **PROJECT_BIBLE.md**; for how the site
 writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
-**Last updated:** 23 August 2026
+**Last updated:** 24 August 2026
 **Branch:** `main`.
-**Last session:** `/profile` — a new light, paper-stock profile page built to match a supplied reference — §1.5.
-**Session before:** a new Banking Co-pilot product page, the hero lock extended to every product page, and the PACT panels' clipped legends — §1.4.
+**Last session:** four more sections on `/profile` — tracks, a counted bar chart, a brand-mark wall and a zoom-out mosaic — §1.6.
+**Session before:** `/profile` itself, a new light paper-stock page built to match a supplied reference — §1.5.
 
 > Run `git log --oneline -15` before trusting this section — it is a snapshot,
 > and the commit log is the authority on what has happened since.
@@ -24,7 +24,7 @@ Recent history, newest first, gives an accurate picture of the trajectory:
 
 | Area | State |
 |---|---|
-| **Profile** (`/profile`) | Built 23 Aug over two passes. The only light page on the site — ruled cream paper, a 280vh pinned hero that zooms into a drawn monitor, a word reveal, and a conveyor street with a walking robot. Modelled on a reference the user supplied, then pulled back towards the site's own type, pills, accents and closing. **The figure and the dog still need redrawing** — §1.5. |
+| **Profile** (`/profile`) | Built 23 Aug over two passes, extended 24 Aug with four more sections (§1.6). The only light page on the site — ruled cream paper, a 280vh pinned hero that zooms into a drawn monitor, a word reveal, and a conveyor street with a walking robot. Modelled on a reference the user supplied, then pulled back towards the site's own type, pills, accents and closing. **The figure and the dog still need redrawing** — §1.5. |
 | **Banking Co-pilot** (`/banking/rm-copilot`) | Built 22 Aug. New **Banking** group under Portfolio. Fully prerendered; 382 KB of WebP, one eager image. Done. |
 | **Hero lock** | Extended 22 Aug from the homepage to all ten product pages — `components/ui/HeroLock.tsx`. Done. |
 | **Admin dashboard** (`/desk-4f7a`) | Built 13–14 Aug across five phases. Live, password-gated, recording. |
@@ -345,6 +345,76 @@ drawing. Both were drawn, judged not good enough, and pulled rather than shipped
 half-right — the empty chair reads as somebody who has just stepped away. The
 two insertion points are commented in `SceneDesk` and `SceneFore`. **This is the
 next thing to do on this route.**
+
+---
+
+### 1.6 Four more sections on `/profile` (24 Aug 2026)
+
+**What was asked for.** The reference's *homepage* carries four devices the
+user wanted — its Tracks carousel, its by-the-numbers bar chart, its AI-tools
+logo wall, and the mosaic that zooms out over twenty screenshots. The initial
+plan put three on `/profile` and the mosaic on the homepage; the user chose all
+four on `/profile`, and renamed two of them: **Where the hours go** and **The
+decade, counted**.
+
+**Where they landed.** `/profile` now runs eleven sections: hero, statement,
+filmstrip, **tracks**, credo, **counted**, board, **mosaic**, experience book,
+**tool wall**, street. New code is
+`components/profile/ProfileSections.tsx` + `app/profile/profile-sections.css`.
+
+**The street lost its software.** It was carrying all 33 tool names on
+name boards, and the tool wall lists the same 33. Two sections saying the same
+thing on one page is worse than either. The street now carries **disciplines
+and metrics only** — Branding, Performance, GTM, ROAS, CTR, Budgets — and the
+wall has the software.
+
+**The logos are real.** `scripts/build-tool-logos.mjs` fetches 28 of the 33 as
+actual brand marks and records every source URL in the generated manifest's
+header. Five have no mark anywhere and render as monogram tiles: Adobe
+Firefly, Seedream, Nano Banana, Kling AI, Wan. **To fill one, drop the SVG in
+`public/tool-logos/` and give it a `direct` entry** — the script handles the
+rest. Bible §4.1 has the three-tier sourcing.
+
+**Five things that were bugs first.**
+
+> **The tool wall looked like it had one row.** Row two was translated to
+> `+max` and then had `p × span` *added* to it, which pushed it off the right
+> edge entirely. Both rows now travel inside `[-span, 0]`; the second just runs
+> it backwards.
+
+> **The mosaic cropped every screenshot.** The window was 16:9 and the grid
+> inside is 5 × 4, which makes each tile 3:1 — so `object-fit: cover` took a
+> band out of the middle of all twenty. The window is 20:9 now, and its height
+> is capped through `max-width`, because a `max-height` fighting an
+> `aspect-ratio` simply changes the ratio again.
+
+> **The bar chart sat on zeros on mobile.** Below 700px the CSS drops the pin,
+> so "progress through the pin" became a couple of hundred pixels and the
+> chart was visible, complete, and reading 0+ the whole time. Unpinned, it now
+> measures the bars' own trip up the viewport.
+
+> **Isometric labels cannot be placed isometrically.** A point far enough
+> outside a scene to clear it is also far enough along the other axis to land
+> back on top of it — "16 PARTS · AA" rendered across the token grid. Corner
+> labels and captions are placed in screen space; only the stage labels, which
+> track their own boxes, still use `Tick`.
+
+> **A 200 is not a file.** Kling's logo URL returns its SPA's HTML shell with a
+> 200, which was written out as a 122 KB "PNG" and rendered as a broken image.
+> The fetcher checks magic bytes now.
+
+**Also worth knowing:** an earlier pass quietly added Figma, Photoshop,
+Illustrator, Canva, Codex, Grok and Next.js to the tool list because they
+appear elsewhere on the site. They had not been asked for. **The list in
+`build-tool-logos.mjs` is the user's, exactly — do not extend it.**
+
+**Verified.** Lint and production build clean, `/profile` still prerendered
+static. Checked at 1280×620 and 375×812: all four arts, all four bars filling
+on a log scale, both tool rows drifting, the mosaic opening full-bleed and
+resolving to a 5 × 4 grid with tiles measuring exactly 1.78:1.
+
+**Still undone:** the seated figure and the dog in the hero drawing, unchanged
+from §1.5. That remains the next job on this route.
 
 ---
 

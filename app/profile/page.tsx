@@ -13,8 +13,18 @@ import {
   type Shot,
   type Stop,
 } from "@/components/profile/ProfileVisuals";
+import {
+  Counted,
+  Mosaic,
+  ToolWall,
+  Tracks,
+  type Stat,
+  type Tile,
+  type Track,
+} from "@/components/profile/ProfileSections";
 import { SITE_URL } from "@/lib/projects";
 import "./profile.css";
+import "./profile-sections.css";
 
 /* ─────────────────────────────────────────────────────────────────────────
    /profile — the paper profile.
@@ -226,10 +236,80 @@ const jobs: Job[] = [
   },
 ];
 
+/* ── Where the hours go ─────────────────────────────────────────────────
+   Four disciplines, each with the years attached. The isometric drawings are
+   picked by `art`; there are four and they are not interchangeable. */
+const tracks: Track[] = [
+  {
+    name: "Full-stack brand marketing",
+    years: "9+ years",
+    blurb:
+      "Positioning, campaigns, budgets and the team that runs them. The whole funnel owned end to end — brief to billboard to lead, without handing it off.",
+    art: "brand",
+  },
+  {
+    name: "AI-native product development",
+    years: "3+ years",
+    blurb:
+      "Idea to live product, alone: the model, the code, the deploy, the domain. Thirty-odd of them so far, most inside a week.",
+    art: "build",
+  },
+  {
+    name: "Design systems",
+    years: "9+ years",
+    blurb:
+      "Tokens, templates and briefs that let twenty-one people produce work that looks like it came from one hand — and keep it that way for six years.",
+    art: "systems",
+  },
+  {
+    name: "AI product management",
+    years: "2 years",
+    blurb:
+      "Deciding what an agent should and should not be trusted to do, then proving it holds with five hundred automated checks.",
+    art: "product",
+  },
+];
+
+/* ── The decade, counted ────────────────────────────────────────────────
+   Four figures that span 9 to 500 on purpose. The chart is on a log scale
+   (see ProfileSections.tsx) and four numbers of similar size would draw four
+   identical bars, which says nothing. */
+const stats: Stat[] = [
+  { value: 9, label: "Years building brands" },
+  { value: 30, label: "AI products shipped solo" },
+  { value: 46, label: "Agents running autonomously" },
+  { value: 500, label: "Automated eval checks" },
+];
+
+/** Built from the user's screenshot folder by scripts/build-mosaic.mjs.
+ *  The first tile is the one the zoom opens on, so it should be the strongest. */
+const tiles: Tile[] = [
+  { slug: "roasmind", label: "ROASmind" },
+  { slug: "migi", label: "MIGI" },
+  { slug: "imprint", label: "IMPRINT" },
+  { slug: "legatus", label: "LEGATUS" },
+  { slug: "pact-agent", label: "PACT Agent" },
+  { slug: "pentacmd", label: "PentaCMD" },
+  { slug: "pentashell", label: "Pentashell" },
+  { slug: "qdex", label: "Qdex-1.5B" },
+  { slug: "aegis-vault", label: "AEGIS VAULT" },
+  { slug: "d-pe", label: "D-PE.ai" },
+  { slug: "cite", label: "CITE" },
+  { slug: "crawl-daddy", label: "Crawl Daddy" },
+  { slug: "brief-killer", label: "Brief Killer 2" },
+  { slug: "repurpose-ai", label: "Repurpose AI" },
+  { slug: "slide-doctor", label: "Slide Doctor" },
+  { slug: "geek-collectibles", label: "Geek Collectibles" },
+  { slug: "forget-anything", label: "Forget Anything?" },
+  { slug: "pixelville", label: "PixelVille" },
+  { slug: "soul-canvas", label: "Soul Canvas" },
+  { slug: "museum", label: "3D Museum" },
+];
+
 /* ── The street ─────────────────────────────────────────────────────────
-   What the robot walks past. Read left to right it is roughly a career: the
-   marketing half first, then the metrics, then the build stack — so the strip
-   tells the same story the rest of the page does.
+   What the robot walks past. **Disciplines and metrics only** — the software
+   moved to the tool wall above when that section arrived, and having both
+   sections list the same names was the worst of both.
 
    `w` is the slot width in world units. Varying it is what stops the street
    reading as wallpaper; `gap` slots carry a lamp and a bench and no board. */
@@ -246,31 +326,16 @@ const stops: Stop[] = [
   { name: "Analytics", role: "what actually happened", kind: "house", w: 170 },
   { name: "GTM", role: "20+ launches", kind: "sign", w: 150 },
   { kind: "park", w: 200, name: "SEO" },
+  { kind: "gap", w: 80 },
   { name: "ROAS", role: "the number that matters", kind: "office", w: 160 },
   { name: "CTR", role: "measured", kind: "kiosk", w: 110 },
   { name: "CPC", role: "measured", kind: "kiosk", w: 110 },
   { name: "CPA", role: "measured", kind: "kiosk", w: 110 },
   { kind: "gap", w: 90 },
-  { name: "Photoshop", role: "since forever", kind: "house", w: 170 },
-  { name: "Illustrator", role: "when it has to scale", kind: "house", w: 175 },
-  { name: "Canva", role: "when it has to ship", kind: "kiosk", w: 130 },
-  { name: "Figma", role: "the layouts", kind: "cafe", w: 160 },
-  { kind: "gap", w: 80 },
-  { name: "Claude Code", role: "the pair", kind: "tower", w: 210 },
-  { name: "Codex", role: "the second pair", kind: "office", w: 170 },
-  { name: "Antigravity", role: "the new one", kind: "office", w: 190 },
-  { name: "Cursor", role: "the edits", kind: "house", w: 150 },
-  { name: "ChatGPT", role: "the sounding board", kind: "cafe", w: 170 },
-  { kind: "gap", w: 80 },
-  { name: "Next.js", role: "the site", kind: "tower", w: 165 },
-  { name: "React", role: "underneath it", kind: "office", w: 150 },
-  { name: "Vercel", role: "the ship", kind: "sign", w: 145 },
-  { name: "Supabase", role: "the store", kind: "office", w: 180 },
-  { name: "Neon", role: "the ledger", kind: "kiosk", w: 125 },
-  { name: "n8n", role: "the wiring", kind: "house", w: 130 },
-  { name: "Lovable", role: "the sketchpad", kind: "cafe", w: 165 },
-  { name: "Replit", role: "the other sketchpad", kind: "kiosk", w: 135 },
-  { kind: "park", w: 190, name: "GitHub" },
+  { name: "Content", role: "the engine room", kind: "house", w: 170 },
+  { name: "Campaigns", role: "brief to billboard", kind: "tower", w: 200 },
+  { name: "Budgets", role: "₹60L a year", kind: "office", w: 175 },
+  { kind: "park", w: 190, name: "Teams" },
 ];
 
 /** The north-east arrow that every button and link in this design carries. */
@@ -368,6 +433,18 @@ export default function ProfilePage() {
           {/* ── 3. Filmstrip ──────────────────────────────────────────── */}
           <Filmstrip shots={shots} />
 
+          {/* ── 4. Where the hours go ─────────────────────────────────── */}
+          <Tracks
+            kicker={<Kick>Where the hours go</Kick>}
+            title={
+              <>
+                Four tracks, <span className="pf-em">one operator.</span>
+              </>
+            }
+            sub="A decade of shipping, settled into four disciplines that keep sharpening each other."
+            tracks={tracks}
+          />
+
           {/* ── 4. Credo ──────────────────────────────────────────────── */}
           <Credo
             kicker={<Kick>How I work</Kick>}
@@ -389,7 +466,24 @@ export default function ProfilePage() {
             tags={credoTags}
           />
 
-          {/* ── 5. Board ──────────────────────────────────────────────── */}
+          {/* ── 6. The decade, counted ────────────────────────────────── */}
+          <Counted
+            kicker={<Kick>The decade, counted</Kick>}
+            title={
+              <>
+                {/* No number in this headline on purpose: the kicker already
+                    says "the decade" and the first bar says "9+ years", and a
+                    third, different figure in between just invites the reader
+                    to check the arithmetic. */}
+                A decade, <span className="pf-em">added up.</span>
+              </>
+            }
+            sub="Brands built, products shipped, agents kept running — the parts of it that can be counted rather than described."
+            cta={{ href: "/resume", label: "Read the full résumé" }}
+            stats={stats}
+          />
+
+          {/* ── 7. Board ──────────────────────────────────────────────── */}
           <section className="pf-wrap pf-pad" id="work">
             <div className="pf-head">
               <Kick>Track record</Kick>
@@ -440,7 +534,20 @@ export default function ProfilePage() {
             </div>
           </section>
 
-          {/* ── 6. The experience book ────────────────────────────────── */}
+          {/* ── 8. The mosaic ─────────────────────────────────────────── */}
+          <Mosaic
+            kicker={<Kick>Everything shipped</Kick>}
+            title={
+              <>
+                Twenty of them, <span className="pf-em">all at once.</span>
+              </>
+            }
+            sub="Pull back far enough and the decade fits in one frame."
+            href="/projects"
+            tiles={tiles}
+          />
+
+          {/* ── 9. The experience book ────────────────────────────────── */}
           <section className="pf-wrap pf-pad">
             <Kick>Experience</Kick>
             <div className="pf-book-grid">
@@ -507,7 +614,18 @@ export default function ProfilePage() {
             </div>
           </section>
 
-          {/* ── 7. The street ─────────────────────────────────────────── */}
+          {/* ── 10. The tool wall ─────────────────────────────────────── */}
+          <ToolWall
+            kicker={<Kick>The software</Kick>}
+            title={
+              <>
+                AI is how I work now, <span className="pf-em">every day.</span>
+              </>
+            }
+            sub="Not a novelty — a daily practice. These are the tools I reach for to get from a rough idea to a shipped, working product."
+          />
+
+          {/* ── 11. The street ────────────────────────────────────────── */}
           <section className="pf-wrap pf-pad" id="kit">
             <div className="pf-head">
               <Kick>Daily kit</Kick>

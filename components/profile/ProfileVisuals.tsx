@@ -47,7 +47,7 @@ import {
 
 /* ═══ Shared ═════════════════════════════════════════════════════════════ */
 
-const clamp = (v: number, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, v));
+export const clamp = (v: number, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, v));
 const easeInOutCubic = (p: number) =>
   p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
 
@@ -65,7 +65,7 @@ const prefersReducedMotion = () =>
  *
  * `onFrame` must be a stable reference — wrap it in `useCallback`.
  */
-function useScrub(
+export function useScrub(
   ref: RefObject<HTMLElement | null>,
   onFrame: (now: number) => void,
 ): void {

@@ -296,6 +296,70 @@ the route exists as something other than a light-mode `/about`.
 > not its world. Change one without the other and the street is letterboxed
 > inside its own frame.
 
+#### The four sections borrowed from the reference's *homepage*
+
+Added 24 Aug. The reference carries four devices on its homepage that the user
+wanted on `/profile` rather than on ours, so all four live here:
+
+| Section | Component | Mechanism |
+|---|---|---|
+| **Where the hours go** | `Tracks` | Four disciplines; an isometric drawing swaps with the arrows |
+| **The decade, counted** | `Counted` | 240vh pin; four bars on a **log scale**, filling and counting up together |
+| **The software** | `ToolWall` | Two rows of brand marks drifting in opposite directions on scroll |
+| **Everything shipped** | `Mosaic` | 300vh pin; opens full-bleed on one screenshot and pulls back to all twenty |
+
+They live in `components/profile/ProfileSections.tsx` and
+`app/profile/profile-sections.css`, split out because `profile.css` already
+owns the tokens and the first seven sections. **Every custom property the new
+stylesheet uses is defined in `profile.css`**; it declares none of its own.
+
+> **The bar chart is logarithmic and has to be.** The four figures run 9 → 500.
+> On a linear scale the first three are slivers under one tall bar and the
+> section says nothing. `barFraction()` maps `log10` onto a 0.18–1.0 band.
+
+> **The mosaic window is 20:9, not 16:9.** The grid inside is 5 × 4 and the
+> screenshots are 16:9, so the window has to be (5/4) × (16/9) for a tile to
+> come out 16:9. At 16:9 the tiles were 3:1 and `object-fit: cover` cropped a
+> band out of the middle of every screenshot. Its height is capped through
+> `max-width`, because a `max-height` fighting an `aspect-ratio` just changes
+> the ratio again.
+
+> **`Counted` needs two progress measures.** Below 700px the CSS drops the pin,
+> at which point "how far through the pin are we" is a couple of hundred
+> pixels and the chart sits on zeros the whole time it is on screen. Unpinned,
+> it reads the bars' own trip up the viewport instead.
+
+> **Isometric corner labels go in screen space, not through `P()`.** An
+> isometric point far enough outside a scene to clear it is also far enough
+> along the other axis to land back on top of it — "16 PARTS · AA" rendered
+> across the token grid. `Note` and `Caption` place in screen space; only the
+> stage labels, which have to track their own boxes, use `Tick`.
+
+#### Where the brand marks come from
+
+`scripts/build-tool-logos.mjs` fetches them; `lib/tool-logos.ts` is generated
+and records every source URL in its header. Three tiers, in order:
+
+1. **svgl.app** — full-colour official marks, 21 of the 33.
+2. **A direct URL from the product's own site** — 4 more, for brands no library
+   carries. The most brittle entries here: a redesign moves the file.
+3. **simple-icons** (a devDependency) — 3, monochrome. Adobe, OpenAI, Canva and
+   others had their marks *removed* from that package over trademark policy,
+   which is why it is the fallback and not the primary.
+
+Anything none of the three covers renders as a monogram tile — currently Adobe
+Firefly, Seedream, Nano Banana, Kling AI and Wan. To promote one, drop the file
+into `public/tool-logos/` and give it a `direct` or `svgl` entry.
+
+> **Validate the bytes, not the status.** Kling's logo path returns a 200
+> carrying its SPA's HTML shell, which sailed through as a 122 KB "PNG" and
+> rendered as a broken-image icon. An unchecked binary download is the one
+> failure here that looks exactly like success.
+
+> **The tool list is the user's, exactly.** An earlier pass added Figma,
+> Photoshop, Illustrator, Canva, Codex, Grok and Next.js because they appear
+> elsewhere on the site. They were not asked for. Do not add to that list.
+
 #### Departures from the reference, all deliberate
 
 - **No entry transition.** The reference opens on an eight-column curtain wipe.

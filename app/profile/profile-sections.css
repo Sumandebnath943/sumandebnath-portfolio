@@ -1,0 +1,526 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   /profile — the four sections modelled on the reference's homepage.
+
+     Tracks    "Where the hours go"    — a carousel of isometric drawings
+     Counted   "The decade, counted"   — a pinned bar chart on a log scale
+     ToolWall                          — two drifting rows of brand marks
+     Mosaic                            — a pinned zoom-out over 20 tiles
+
+   Split out of profile.css, which owns the page's tokens and its first seven
+   sections and was long enough already. **Every custom property used here is
+   defined there**, on `.pf-root` — this file inherits and defines none of its
+   own. Markup is in components/profile/ProfileSections.tsx.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* ── Shared head ────────────────────────────────────────────────────────
+   These four centre their heading where the older sections range left. That
+   is deliberate: they are interludes between the reading sections, and a
+   centred head is the signal to stop reading and look. */
+.pf-tracks-head,
+.pf-tools-head,
+.pf-chart-head,
+.pf-mos-head {
+  text-align: center;
+}
+.pf-tracks-head h2,
+.pf-tools-head h2,
+.pf-chart-head h2,
+.pf-mos-head h2 {
+  max-width: none;
+  margin-inline: auto;
+}
+.pf-tracks-head .sub,
+.pf-tools-head .sub,
+.pf-chart-head .sub,
+.pf-mos-head .sub {
+  margin: 18px auto 0;
+  max-width: 54ch;
+  font-size: var(--pf-fs-lead);
+  line-height: 1.6;
+  color: var(--pf-ink-2);
+}
+.pf-tracks .pf-kick,
+.pf-tools-sec .pf-kick,
+.pf-chart-pin .pf-kick,
+.pf-mos-pin .pf-kick {
+  display: flex;
+  justify-content: center;
+}
+
+/* ═══ 1. Tracks ══════════════════════════════════════════════════════════ */
+.pf-inst {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(32px, 5vw, 80px);
+  align-items: center;
+}
+.pf-art {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* The isometric palette: three tones of the same paper, so a cuboid reads as
+   one solid rather than three planes, plus amber for whichever part of the
+   scene is the point of it. */
+.pf-art .f-top {
+  fill: #f6f0dd;
+}
+.pf-art .f-east {
+  fill: #e6dec5;
+}
+.pf-art .f-south {
+  fill: #d6cdb0;
+}
+.pf-art .iso polygon {
+  stroke: #8a8272;
+  stroke-width: 1;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.pf-art .plate .f-top {
+  fill: #fffdf3;
+}
+.pf-art .plate polygon {
+  stroke: #b4ac98;
+}
+.pf-art .hero .f-top {
+  fill: var(--pf-amber);
+}
+.pf-art .hero .f-east {
+  fill: #dd9c2c;
+}
+.pf-art .hero .f-south {
+  fill: #c1841c;
+}
+.pf-art .iso-ln {
+  fill: none;
+  stroke: var(--pf-amber-2);
+  stroke-width: 1.6;
+  stroke-dasharray: 5 4;
+  vector-effect: non-scaling-stroke;
+}
+.pf-art .iso-tick {
+  font-family: var(--pf-mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  fill: var(--pf-ink-3);
+}
+
+.pf-inst-read h3 {
+  font-size: clamp(26px, 2.4vw, 36px);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin: 0;
+  animation: pf-say 0.4s var(--pf-ease) both;
+}
+.pf-inst-read .years {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--pf-mono);
+  font-size: var(--pf-fs-micro);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--pf-amber-2);
+}
+.pf-inst-read p {
+  margin: 22px 0 0;
+  max-width: 40ch;
+  font-size: var(--pf-fs-body);
+  line-height: 1.65;
+  color: var(--pf-ink-2);
+}
+.pf-inst-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: clamp(28px, 4vh, 44px);
+}
+.pf-inst-nav button {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--pf-line);
+  background: none;
+  color: var(--pf-ink);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, opacity 0.2s;
+}
+.pf-inst-nav button svg {
+  width: 16px;
+  height: 16px;
+}
+.pf-inst-nav button:hover:not(:disabled) {
+  background: var(--pf-tile);
+  border-color: var(--pf-ink-3);
+}
+.pf-inst-nav button:disabled {
+  opacity: 0.32;
+  cursor: default;
+}
+.pf-inst-nav .count {
+  margin-left: 6px;
+  font-family: var(--pf-mono);
+  font-size: var(--pf-fs-micro);
+  letter-spacing: 0.16em;
+  color: var(--pf-ink-3);
+}
+
+@media (max-width: 860px) {
+  .pf-inst {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .pf-dial-box {
+    max-width: 420px;
+    margin-inline: auto;
+  }
+}
+
+/* ═══ 2. The decade, counted ═════════════════════════════════════════════
+   A tall section with a sticky child, so the chart holds still while the
+   scroll fills it. **The height is what buys the animation its running
+   time** — shorten it and the bars snap up in a few frames. */
+.pf-chart-sec {
+  position: relative;
+  height: 240vh;
+  background-image: linear-gradient(var(--pf-frame), var(--pf-frame));
+  background-repeat: no-repeat;
+  background-size: calc(100% - 2 * var(--pf-gutter)) 1px;
+  background-position: var(--pf-gutter) 0;
+}
+.pf-chart-pin {
+  position: sticky;
+  top: 0;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: clamp(80px, 12vh, 140px);
+  overflow: hidden;
+}
+.pf-chart-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 22px;
+  font-size: var(--pf-fs-sm);
+  font-weight: 600;
+  color: var(--pf-amber-2);
+}
+.pf-chart-cta svg {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.2s var(--pf-ease);
+}
+.pf-chart-cta:hover svg {
+  transform: translateX(3px);
+}
+
+.pf-bars {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(12px, 2vw, 28px);
+  align-items: end;
+  margin: clamp(40px, 7vh, 80px) auto 0;
+  max-width: var(--pf-measure-full);
+  width: 100%;
+}
+.pf-bar {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+/* Anton, the site's display numeral face — the same job it does on the
+   homepage hero and on the Experience Book's cover. */
+.pf-bar .big {
+  font-family: var(--font-anton), Impact, sans-serif;
+  font-size: clamp(28px, 3.6vw, 56px);
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: var(--pf-ink);
+  margin-bottom: 12px;
+}
+.pf-bar .track {
+  position: relative;
+  height: clamp(150px, 26vh, 260px);
+  border: 1px solid var(--pf-line);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(22, 20, 14, 0.05) 0 1px,
+    transparent 1px 7px
+  );
+  display: flex;
+  align-items: flex-end;
+}
+.pf-bar .fill {
+  width: 100%;
+  height: 0;
+  background-color: var(--pf-amber);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(22, 20, 14, 0.07) 0 1px,
+    transparent 1px 7px
+  );
+  border-top: 1px solid var(--pf-ink);
+  /* No transition: the height is written every frame by the scrub, and a
+     transition here would lag the scroll by its own duration. */
+  transition: none;
+}
+.pf-bar .lbl {
+  margin-top: 14px;
+  font-family: var(--pf-mono);
+  font-size: var(--pf-fs-micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pf-ink-2);
+  line-height: 1.5;
+}
+
+@media (max-width: 700px) {
+  .pf-chart-sec {
+    height: auto;
+  }
+  .pf-chart-pin {
+    position: static;
+    min-height: 0;
+  }
+  .pf-bars {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px 14px;
+  }
+  .pf-bar .track {
+    height: clamp(110px, 20vh, 170px);
+  }
+}
+
+/* ═══ 3. The tool wall ═══════════════════════════════════════════════════
+   Two rows drifting in opposite directions as the section crosses the
+   viewport. Masked at both edges so a tile fades out rather than being
+   sliced off mid-logo.
+
+   Deliberately unlike the street below it: that one is a walk past
+   disciplines with a robot in it, this one is a flat wall of marks. */
+.pf-tools {
+  margin-top: clamp(36px, 6vh, 68px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 6%,
+    #000 94%,
+    transparent
+  );
+}
+.pf-tools-row {
+  display: flex;
+  gap: 14px;
+  width: max-content;
+  will-change: transform;
+}
+.pf-tool {
+  flex: 0 0 auto;
+  width: clamp(92px, 9vw, 118px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.pf-tool .mark {
+  width: 100%;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  background: var(--pf-tile);
+  border: 1px solid var(--pf-line-2);
+  transition: background 0.25s, border-color 0.25s;
+}
+.pf-tool:hover .mark {
+  background: var(--pf-paper);
+  border-color: var(--pf-line);
+}
+.pf-tool .mark img,
+.pf-tool .mark svg {
+  width: 46%;
+  height: 46%;
+  object-fit: contain;
+  display: block;
+}
+/* Emergent's only published asset is a wordmark rather than a glyph, and a
+   wordmark squeezed into 46% of a square is unreadable. It gets the room. */
+.pf-tool .mark img[src*="emergent"] {
+  width: 76%;
+}
+.pf-tool .mark .mono {
+  font-family: var(--pf-mono);
+  font-size: clamp(15px, 1.6vw, 19px);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--pf-ink-2);
+}
+.pf-tool .name {
+  font-family: var(--pf-mono);
+  font-size: var(--pf-fs-micro);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--pf-ink-3);
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* ═══ 4. The mosaic ══════════════════════════════════════════════════════
+   Pinned, like the chart. The window is a fixed 16:9 frame; the grid inside
+   is exactly window-sized at scale 1 and is scaled to 5 at the start, so one
+   tile fills the frame and the scroll pulls back to all twenty. */
+.pf-mos-sec {
+  position: relative;
+  height: 300vh;
+  background-image: linear-gradient(var(--pf-frame), var(--pf-frame));
+  background-repeat: no-repeat;
+  background-size: calc(100% - 2 * var(--pf-gutter)) 1px;
+  background-position: var(--pf-gutter) 0;
+}
+.pf-mos-pin {
+  position: sticky;
+  top: 0;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: clamp(70px, 10vh, 120px);
+}
+/* ── The window's aspect ratio is not a taste call ──
+   The grid inside is 5 × 4, and the screenshots are 16:9. For a tile to *be*
+   16:9, the window has to be (5/4) × (16/9) = 20:9. At 16:9 the tiles came
+   out 3:1 and `object-fit: cover` cropped a band out of the middle of every
+   screenshot.
+
+   The height is capped through `max-width` rather than `max-height`, because
+   a max-height fighting an aspect-ratio just changes the ratio again and puts
+   the crop straight back. */
+.pf-mos-window {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: min(var(--pf-measure-full), calc(52svh * 20 / 9));
+  margin: clamp(30px, 5vh, 56px) auto 0;
+  aspect-ratio: 20 / 9;
+  overflow: hidden;
+  border: 1px solid var(--pf-frame);
+  background: var(--pf-tile);
+}
+.pf-mos-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  transform-origin: 0 0;
+  will-change: transform;
+}
+.pf-mos-grid .tile {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  background: var(--pf-paper-2);
+  /* A 1px border in the grid's own coordinates would be 5px thick at the
+     opening scale, so the seam is an inset shadow instead. */
+  box-shadow: inset 0 0 0 0.5px rgba(22, 20, 14, 0.18);
+}
+.pf-mos-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* The same treatment the filmstrip gives the photographs, for the same
+     reason: twenty full-colour app screenshots on cream paper would
+     otherwise be the loudest thing on the page by a wide margin. */
+  filter: saturate(0.88) contrast(0.98);
+}
+.pf-mos-grid figcaption {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  font-family: var(--pf-mono);
+  font-size: 7px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pf-ink-2);
+  background: var(--pf-paper);
+  padding: 3px 5px 2px;
+  /* Right in the grid, absurd at 5× — the captions belong to the zoomed-out
+     state, so they arrive with it. */
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.pf-mos-window:hover .pf-mos-grid figcaption {
+  opacity: 1;
+}
+.pf-mos-cue {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--pf-amber);
+  color: var(--pf-ink);
+  font-size: var(--pf-fs-sm);
+  font-weight: 600;
+  box-shadow: 0 6px 18px -10px rgba(22, 20, 14, 0.7);
+  transition: background 0.2s;
+}
+.pf-mos-cue svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.15s var(--pf-ease);
+}
+.pf-mos-window:hover .pf-mos-cue {
+  background: var(--pf-amber-lt);
+}
+.pf-mos-window:hover .pf-mos-cue svg {
+  transform: translate(3px, -3px);
+}
+
+@media (max-width: 760px) {
+  .pf-mos-sec {
+    height: 220vh;
+  }
+  .pf-mos-window {
+    max-width: min(var(--pf-measure-full), calc(40svh * 20 / 9));
+  }
+  .pf-mos-cue {
+    right: 10px;
+    bottom: 10px;
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+}
+
+/* Under reduced motion neither pin animates, so both sections collapse to
+   their finished state rather than reserving 240–300vh of empty scroll. */
+@media (prefers-reduced-motion: reduce) {
+  .pf-chart-sec,
+  .pf-mos-sec {
+    height: auto;
+  }
+  .pf-chart-pin,
+  .pf-mos-pin {
+    position: static;
+    min-height: 0;
+  }
+  .pf-mos-grid {
+    transform: none !important;
+  }
+  .pf-mos-grid figcaption {
+    opacity: 1;
+  }
+}
