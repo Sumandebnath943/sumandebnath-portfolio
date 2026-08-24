@@ -255,41 +255,41 @@ export function pagesInGroup(group: PageGroup): PageEntry[] {
 // to anywhere else on the site, and the nav menus were the only path between
 // them.
 const RELATED: Record<string, string[]> = {
-  "/": ["/projects", "/resume", "/notebook"],
+  "/": ["/projects", "/notebook", "/resume"],
   "/projects": ["/agents/migi", "/slms/pentacmd", "/banking/rm-copilot"],
-  "/resume": ["/projects", "/journey", "/contact"],
-  "/contact": ["/resume", "/projects", "/faq"],
+  "/resume": ["/journey", "/contact", "/learnings"],
+  "/contact": ["/resume", "/faq", "/projects"],
 
-  "/agents/pact-agent": ["/agents/pentashell", "/agents/migi", "/projects/aegis-vault"],
+  "/about": ["/journey", "/philosophy", "/profile"],
+  "/journey": ["/about", "/profile", "/learnings"],
+  "/profile": ["/resume", "/journey", "/fun-apps"],
+  "/philosophy": ["/about", "/faq", "/notebook"],
+
+  "/notebook": ["/learnings", "/projects", "/faq"],
+  "/learnings": ["/notebook", "/resume", "/profile"],
+  "/faq": ["/about", "/contact", "/philosophy"],
+
+  "/agents/pact-agent": ["/agents/pentashell", "/projects/aegis-vault", "/notebook"],
   "/agents/pentashell": ["/slms/pentacmd", "/agents/pact-agent", "/llms/qdex-1.5b"],
-  "/agents/migi": ["/apps/migi-app", "/agents/pact-agent", "/projects"],
+  "/agents/migi": ["/apps/migi-app", "/agents/pact-agent", "/banking/rm-copilot"],
 
   "/slms/pentacmd": ["/agents/pentashell", "/llms/qdex-1.5b", "/notebook"],
   "/llms/qdex-1.5b": ["/slms/pentacmd", "/agents/pentashell", "/projects"],
 
-  "/banking/rm-copilot": ["/projects/aegis-vault", "/agents/migi", "/resume"],
-  "/projects/aegis-vault": ["/banking/rm-copilot", "/agents/pact-agent", "/projects"],
+  "/banking/rm-copilot": ["/projects/aegis-vault", "/agents/migi", "/llms/qdex-1.5b"],
+  "/projects/aegis-vault": ["/banking/rm-copilot", "/agents/pact-agent", "/apps/forget-anything"],
   "/apps/migi-app": ["/agents/migi", "/apps/forget-anything", "/games/pixelville"],
-  "/apps/forget-anything": ["/apps/migi-app", "/games/pixelville", "/projects"],
-  "/games/pixelville": ["/fun-apps", "/apps/forget-anything", "/projects"],
-  "/fun-apps": ["/games/pixelville", "/journey", "/philosophy"],
-
-  "/notebook": ["/learnings", "/projects", "/faq"],
-  "/learnings": ["/resume", "/notebook", "/projects"],
-  "/faq": ["/about", "/resume", "/contact"],
+  "/apps/forget-anything": ["/apps/migi-app", "/games/pixelville", "/fun-apps"],
+  "/games/pixelville": ["/fun-apps", "/apps/migi-app", "/profile"],
+  "/fun-apps": ["/games/pixelville", "/apps/forget-anything", "/philosophy"],
 
   // The legal pages get real destinations rather than each other. Without an
   // entry here the fallback is same-group siblings, and the "legal" group is
   // only these two — so /privacy would have offered exactly one card, pointing
   // at /terms, which is the least useful link on the site for someone who has
   // just finished reading a privacy policy.
-  "/privacy": ["/contact", "/about", "/terms"],
-  "/terms": ["/contact", "/projects", "/privacy"],
-
-  "/profile": ["/resume", "/journey", "/learnings"],
-  "/about": ["/journey", "/resume", "/philosophy"],
-  "/journey": ["/about", "/profile", "/philosophy"],
-  "/philosophy": ["/about", "/faq", "/notebook"],
+  "/privacy": ["/contact", "/terms", "/about"],
+  "/terms": ["/contact", "/privacy", "/projects"],
 };
 
 /**

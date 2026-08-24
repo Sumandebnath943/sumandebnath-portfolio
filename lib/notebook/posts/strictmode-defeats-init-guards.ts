@@ -8,6 +8,8 @@ const post: Post = {
   description:
     "Why a one-time initialisation guard plus React StrictMode leaves event listeners permanently detached in development, how to tell it apart from a real bug, and the two ways to fix it.",
   published: "2026-08-24",
+  category: "React",
+  pick: true,
   tags: ["React", "Debugging", "StrictMode"],
   readingMinutes: 5,
   facts: [

@@ -7,6 +7,7 @@ import Contact from "@/components/sections/Contact";
 import ArchiveCard from "@/components/sections/ArchiveCard";
 import { archiveProjects } from "@/lib/archive-projects";
 import { SITE_URL } from "@/lib/projects";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 export const metadata: Metadata = {
   title: { absolute: "AI Products & Tools by Suman Debnath" },
@@ -65,24 +66,10 @@ const collectionJsonLd = {
   },
 };
 
-const breadcrumbsJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    {
-      "@type": "ListItem",
-      position: 1,
-      name: "Home",
-      item: SITE_URL,
-    },
-    {
-      "@type": "ListItem",
-      position: 2,
-      name: "Project Archive",
-      item: `${SITE_URL}/projects`,
-    },
-  ],
-};
+/* BreadcrumbList JSON-LD is NOT declared here. <Breadcrumbs> emits it together
+   with the visible trail — see components/ui/Breadcrumbs.tsx. Two BreadcrumbList
+   nodes on one URL is a conflict, and the one matching what the reader can see
+   is the one that should win. */
 
 export default function ProjectsArchivePage() {
   return (
@@ -90,10 +77,6 @@ export default function ProjectsArchivePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }}
       />
 
       <Navigation />
@@ -183,6 +166,12 @@ export default function ProjectsArchivePage() {
         </section>
       </main>
 
+      <Breadcrumbs
+        trail={[
+          { label: "Projects", href: "/projects" },
+        ]}
+        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
+      />
       <PageFaq href="/projects" />
       <RelatedPages href="/projects" />
       <Contact />

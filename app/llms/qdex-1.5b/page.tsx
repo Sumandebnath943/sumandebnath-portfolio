@@ -8,6 +8,7 @@ import HeroLock from "@/components/ui/HeroLock";
 import { Reveal, StatCounter, CopyCommand } from "@/components/penta/PentaWidgets";
 import { QDEX, SPECTRUM, HUMANEVAL } from "@/components/qdex/qdex-data";
 import { HumanEvalBars, ParamRing, LossSpark } from "@/components/qdex/QdexVisuals";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 const GITHUB = "https://github.com/Sumandebnath943/Qdex-1.5B";
 const HF = "https://huggingface.co/SumanDebnath943/Qdex-1.5B-GGUF";
@@ -692,6 +693,13 @@ export default function QdexPage() {
         </div>
       </main>
 
+      <Breadcrumbs
+        trail={[
+          { label: "LLMs", href: null },
+          { label: "Qdex-1.5B", href: "/llms/qdex-1.5b" },
+        ]}
+        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
+      />
       <PageFaq href="/llms/qdex-1.5b" />
       <RelatedPages href="/llms/qdex-1.5b" />
       <Contact

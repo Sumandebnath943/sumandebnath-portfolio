@@ -26,6 +26,7 @@ import { SITE_URL } from "@/lib/projects";
 import "./profile.css";
 import "./profile-sections.css";
 import RelatedPages from "@/components/ui/RelatedPages";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 /* ─────────────────────────────────────────────────────────────────────────
    /profile — the paper profile.
@@ -73,14 +74,10 @@ const profilePageJsonLd = {
   mainEntity: { "@id": `${SITE_URL}/#person` },
 };
 
-const breadcrumbsJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-    { "@type": "ListItem", position: 2, name: "Profile", item: `${SITE_URL}/profile` },
-  ],
-};
+/* BreadcrumbList JSON-LD is NOT declared here. <Breadcrumbs> emits it together
+   with the visible trail — see components/ui/Breadcrumbs.tsx. Two BreadcrumbList
+   nodes on one URL is a conflict, and the one matching what the reader can see
+   is the one that should win. */
 
 /* ── Content ────────────────────────────────────────────────────────────── */
 
@@ -390,10 +387,6 @@ export default function ProfilePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(profilePageJsonLd) }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }}
-      />
 
       <Navigation />
 
@@ -661,6 +654,13 @@ export default function ProfilePage() {
 
       {/* The site's own closing, in its light variant. A page this bright
           cannot end on the dark one without reading as a cut-off. */}
+      <Breadcrumbs
+        trail={[
+          { label: "Profile", href: "/profile" },
+        ]}
+        variant="paper"
+        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
+      />
       <RelatedPages href="/profile" variant="paper" />
       <Contact variant="light" />
     </MotionProvider>

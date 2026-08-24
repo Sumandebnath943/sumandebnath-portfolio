@@ -1,0 +1,383 @@
+/* Blog index — the front page of /notebook.
+ *
+ * Separate from notebook.css, which styles the *reading* surface (prose, code,
+ * callouts, tables). This file styles the *browsing* surface: the curated rail,
+ * the filter bar, the lead card and the grid. They share the `.nb` token block
+ * defined in notebook.css and are imported together by the index page.
+ *
+ * All of it renders on paper, and all of it is present in the server HTML
+ * before any filter runs — see the note at the top of NotebookBrowser.tsx.
+ */
+
+.nb-section-label {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--nb-ink-mute);
+  margin: 0 0 0.85rem;
+  font-weight: 400;
+}
+
+/* ── Start here ─────────────────────────────────────────────────────────── */
+
+.nb-picks {
+  margin: 0 0 3.5rem;
+  padding: 1.5rem 1.75rem;
+  border: 1px solid var(--nb-rule);
+  border-radius: 0.9rem;
+  background: rgba(25, 21, 18, 0.02);
+}
+
+.nb-picks-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nb-picks-list li + li {
+  border-top: 1px solid var(--nb-rule);
+}
+
+.nb-picks-list a {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: baseline;
+  gap: 0.9rem;
+  padding: 0.7rem 0;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.2s;
+}
+
+.nb-picks-list a:hover {
+  opacity: 0.65;
+}
+
+.nb-picks-num {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.7rem;
+  color: var(--nb-ink-mute);
+}
+
+.nb-picks-title {
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  color: var(--nb-ink);
+}
+
+.nb-picks-cat {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@media (max-width: 34rem) {
+  .nb-picks-list a {
+    grid-template-columns: auto 1fr;
+  }
+  .nb-picks-cat {
+    grid-column: 2;
+  }
+}
+
+/* ── Filter bar ─────────────────────────────────────────────────────────── */
+
+.nb-filters {
+  margin: 0 0 2.5rem;
+  padding-bottom: 1.75rem;
+  border-bottom: 1px solid var(--nb-rule);
+}
+
+.nb-filter-row + .nb-filter-row {
+  margin-top: 1.5rem;
+}
+
+.nb-filter-row--end {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.nb-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.nb-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-manrope), system-ui, sans-serif;
+  font-size: 0.8125rem;
+  line-height: 1;
+  /* 0.55rem vertical keeps the hit area near 34px. Chips are the one control on
+     this page a reader taps repeatedly, and text-height targets on a phone are
+     the fastest way to make a filter feel broken. */
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--nb-rule);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--nb-ink-soft);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+
+.nb-chip:hover {
+  border-color: var(--nb-rule-strong);
+  color: var(--nb-ink);
+}
+
+.nb-chip.is-on {
+  background: var(--nb-ink);
+  border-color: var(--nb-ink);
+  color: var(--nb-paper);
+}
+
+.nb-chip.is-on .nb-chip-n {
+  color: rgba(242, 236, 224, 0.6);
+}
+
+.nb-chip--tag {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+}
+
+.nb-chip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  flex: none;
+}
+
+.nb-chip-n {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  color: var(--nb-ink-mute);
+}
+
+.nb-sort {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.nb-sort .nb-section-label {
+  margin: 0;
+}
+
+.nb-select {
+  font-family: var(--font-manrope), system-ui, sans-serif;
+  font-size: 0.8125rem;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--nb-rule);
+  border-radius: 0.5rem;
+  background: var(--nb-paper);
+  color: var(--nb-ink);
+  cursor: pointer;
+}
+
+.nb-reset {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--nb-rule);
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--nb-ink-soft);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, opacity 0.2s;
+}
+
+.nb-reset:hover:not(:disabled) {
+  border-color: var(--nb-clay);
+  color: var(--nb-clay);
+}
+
+.nb-reset:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.nb-reset.is-inline {
+  margin-top: 1rem;
+}
+
+/* ── Results ────────────────────────────────────────────────────────────── */
+
+.nb-count {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: var(--nb-ink-mute);
+  margin: 0 0 1.5rem;
+}
+
+.nb-empty {
+  padding: 3rem 0 4rem;
+  text-align: center;
+  color: var(--nb-ink-mute);
+}
+
+.nb-empty p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.nb-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  gap: 1.75rem;
+}
+
+/* ── Cards ──────────────────────────────────────────────────────────────── */
+
+.nb-card {
+  border: 1px solid var(--nb-rule);
+  border-radius: 0.9rem;
+  overflow: hidden;
+  background: #faf7f1;
+  transition: border-color 0.25s, transform 0.25s;
+}
+
+.nb-card:hover {
+  border-color: var(--nb-rule-strong);
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nb-card:hover {
+    transform: none;
+  }
+}
+
+.nb-card-link {
+  display: block;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+.nb-card-cover {
+  aspect-ratio: 40 / 26;
+  width: 100%;
+}
+
+.nb-card-body {
+  padding: 1.25rem 1.35rem 1.5rem;
+}
+
+.nb-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  color: var(--nb-ink-mute);
+  margin: 0 0 0.7rem;
+}
+
+.nb-card-cat {
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.nb-card-sep {
+  color: var(--nb-rule-strong);
+}
+
+.nb-card-title {
+  font-size: 1.0625rem;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+  color: var(--nb-ink);
+  margin: 0 0 0.6rem;
+  text-wrap: balance;
+}
+
+.nb-card-excerpt {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--nb-ink-soft);
+  margin: 0;
+  /* Three lines, then clip. The excerpt is the post's `answer` field, written to
+     stand alone at full length on the post itself — here it only has to earn the
+     click, and ragged card heights cost more than the lost words. */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.nb-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+}
+
+.nb-card-tags li {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+  color: var(--nb-ink-mute);
+  border: 1px solid var(--nb-rule);
+  border-radius: 999px;
+  padding: 0.15rem 0.5rem;
+}
+
+/* ── The lead card ──────────────────────────────────────────────────────── */
+
+.nb-card--lead {
+  margin-bottom: 1.75rem;
+}
+
+.nb-card--lead .nb-card-link {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  align-items: stretch;
+}
+
+.nb-card-cover--lead {
+  aspect-ratio: auto;
+  min-height: 100%;
+}
+
+.nb-card--lead .nb-card-body {
+  padding: 2rem 2.25rem;
+  align-self: center;
+}
+
+.nb-card--lead .nb-card-title {
+  font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+  line-height: 1.2;
+}
+
+.nb-card--lead .nb-card-excerpt {
+  font-size: 0.9375rem;
+  -webkit-line-clamp: 4;
+}
+
+@media (max-width: 46rem) {
+  .nb-card--lead .nb-card-link {
+    grid-template-columns: 1fr;
+  }
+  .nb-card-cover--lead {
+    aspect-ratio: 40 / 26;
+    min-height: 0;
+  }
+  .nb-card--lead .nb-card-body {
+    padding: 1.25rem 1.35rem 1.5rem;
+  }
+}

@@ -883,10 +883,16 @@ Missing one of these is the most common defect in this repo. A new page needs:
    content is:
 
    ```tsx
+   <Breadcrumbs trail={[{ label: "Agents", href: null },
+                        { label: "Your Page", href: "/your/path" }]} />
    <PageFaq href="/your/path" variant="dark" />        // or "paper"
    <RelatedPages href="/your/path" variant="dark" />   // must match PageFaq
    <Contact closingBg="…" glowColor="…" hazeColor="…" />
    ```
+
+   `<Breadcrumbs>` emits the visible trail *and* the `BreadcrumbList` JSON-LD —
+   do not also hand-roll one. Pass `href: null` for a section with no route:
+   `/agents`, `/apps`, `/slms`, `/llms`, `/games` and `/banking` all 404.
 
    `<Contact />` **is the footer** — the closing panel, the four-column sitemap
    and the white legal strip. It is mounted per page, never from the layout,

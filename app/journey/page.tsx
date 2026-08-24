@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import Contact from "@/components/sections/Contact";
 import RelatedPages from "@/components/ui/RelatedPages";
@@ -13,6 +14,7 @@ import {
   JOURNEY_TITLE,
 } from "@/lib/journey";
 import "./journey.css";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 export const metadata: Metadata = {
   title: { absolute: `${JOURNEY_TITLE} — ${identity.name}` },
@@ -62,7 +64,23 @@ const articleJsonLd = {
 
 export default function JourneyPage() {
   return (
-    <>
+    /*
+      MotionProvider is NOT optional, and its absence was the bug that made this
+      page look like it had no navbar and no footer.
+
+      This was the only page on the site rendering <Navigation /> outside a
+      MotionProvider. Both `Navigation` and `Contact` animate with `m.*`, and `m`
+      takes its animation features from `LazyMotion` **through context**. With no
+      provider the features never load, `animate` never runs, and the element
+      sits on its `initial` value forever — for the nav that is
+      `{ y: -20, opacity: 0 }`, i.e. invisible.
+
+      Nothing errors. The markup is all there and a crawler reads it fine, which
+      is why the page tested clean on every structural check while being visibly
+      broken. Exactly the failure already recorded in app/layout.tsx for
+      CommandPalette and SiteTour — same cause, different victim.
+    */
+    <MotionProvider>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
@@ -119,8 +137,15 @@ export default function JourneyPage() {
 
       {/* Both in the paper register — this page is cream and ink throughout, and
           the dark closing would read as the page having been cut off. */}
+      <Breadcrumbs
+        trail={[
+          { label: "The Journey", href: "/journey" },
+        ]}
+        variant="paper"
+        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
+      />
       <RelatedPages href="/journey" variant="paper" />
       <Contact variant="light" />
-    </>
+    </MotionProvider>
   );
 }

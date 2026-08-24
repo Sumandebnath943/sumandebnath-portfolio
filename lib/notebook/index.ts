@@ -13,7 +13,7 @@
 //
 // Nothing else. The index page, the sitemap, the feed and llms.txt all derive.
 
-import type { Post } from "./types";
+import { CATEGORIES, type Category, type Post } from "./types";
 
 import overflowHiddenKillsPositionSticky from "./posts/overflow-hidden-kills-position-sticky";
 import nextjs16MiddlewareIsNowProxy from "./posts/nextjs-16-middleware-is-now-proxy";
@@ -21,7 +21,8 @@ import strictmodeDefeatsInitGuards from "./posts/strictmode-defeats-init-guards"
 import threeJsR152ColourManagement from "./posts/three-js-r152-colour-management";
 import theTrapIWroteDownWasWrong from "./posts/the-trap-i-wrote-down-was-wrong";
 
-export type { Post, Block, PostFact } from "./types";
+export type { Post, Block, PostFact, Category } from "./types";
+export { CATEGORIES, CATEGORY_ACCENT } from "./types";
 
 /** Newest first. `allPosts()` sorts by date, so ordering here is not load-bearing. */
 const POSTS: Post[] = [
@@ -59,6 +60,31 @@ export function notebookModified(): string {
   return allPosts()
     .map(postModified)
     .reduce((newest, d) => (d > newest ? d : newest), "1970-01-01");
+}
+
+/** Categories that actually have posts, with counts — the filter bar is built
+ *  from this rather than from CATEGORIES, so an empty category never renders a
+ *  chip that filters to nothing. */
+export function activeCategories(): { category: Category; count: number }[] {
+  const counts = new Map<Category, number>();
+  for (const p of POSTS) counts.set(p.category, (counts.get(p.category) ?? 0) + 1);
+  return CATEGORIES.filter((c) => counts.has(c)).map((c) => ({
+    category: c,
+    count: counts.get(c)!,
+  }));
+}
+
+/** The lead post for the index. Newest among those flagged `featured`, falling
+ *  back to the newest post overall so the slot is never empty. */
+export function featuredPost(): Post {
+  const flagged = allPosts().filter((p) => p.featured);
+  return flagged[0] ?? allPosts()[0];
+}
+
+/** The hand-picked "Start here" set. See the note on `pick` in types.ts for why
+ *  this is not called `popular`. */
+export function pickedPosts(): Post[] {
+  return allPosts().filter((p) => p.pick);
 }
 
 /** Every distinct tag, ordered by how many posts carry it. */

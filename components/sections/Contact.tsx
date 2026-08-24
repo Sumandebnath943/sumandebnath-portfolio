@@ -63,6 +63,12 @@ const FOOTER_GROUPS: {
       { label: "The Story", href: "/about" },
       { label: "The Journey", href: "/journey" },
       { label: "Résumé", href: "/resume" },
+      // Five, not four. /contact was missing from the footer entirely, which
+      // for a portfolio whose whole purpose is being hired is the one link that
+      // cannot be absent. The nav's "Let's Talk" button covers it visually, but
+      // a button is not what a crawler weights, and a reader who has scrolled
+      // to the bottom of a page has scrolled past the nav.
+      { label: "Contact", href: "/contact" },
     ],
   },
   {

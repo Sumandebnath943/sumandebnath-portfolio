@@ -663,6 +663,22 @@ export function ProfileHero({
   return (
     <section className="pf-hero" ref={sectionRef} id="top">
       {children}
+      {/*
+        /profile was the only page on the site with **no `<h1>` at all** — ten
+        `<h2>`s and fifteen `<h3>`s under nothing. That is a genuine defect:
+        the h1 is the strongest on-page signal of what a page is about, and a
+        document whose outline starts at h2 is malformed for a screen reader
+        as well as for a crawler.
+
+        It is `sr-only` rather than visible because the hero is deliberately a
+        lead paragraph over the desk scene, with no headline — that is the
+        design, and the lead itself is far too long to promote to an h1. A
+        visually-hidden h1 fixes the outline without touching the composition.
+      */}
+      <h1 className="sr-only">
+        Suman Debnath — Profile: Senior Brand Marketing Manager and AI-native
+        product builder
+      </h1>
       <div className="pf-hero-pin">
         <div className="pf-hero-inner" ref={innerRef}>
           <p className="lead">{lead}</p>

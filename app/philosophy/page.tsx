@@ -8,6 +8,7 @@ import PhilosophyFAQ from "@/components/sections/PhilosophyFAQ";
 import Contact from "@/components/sections/Contact";
 import { SITE_URL } from "@/lib/projects";
 import "./philosophy.css";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 /**
  * The six principles, in the accents AIPhilosophy already assigns them, so the
@@ -41,22 +42,14 @@ export const metadata: Metadata = {
   },
 };
 
-const breadcrumbsJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-    { "@type": "ListItem", position: 2, name: "Philosophy", item: `${SITE_URL}/philosophy` },
-  ],
-};
+/* BreadcrumbList JSON-LD is NOT declared here. <Breadcrumbs> emits it together
+   with the visible trail — see components/ui/Breadcrumbs.tsx. Two BreadcrumbList
+   nodes on one URL is a conflict, and the one matching what the reader can see
+   is the one that should win. */
 
 export default function PhilosophyPage() {
   return (
     <MotionProvider>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }}
-      />
       <Navigation />
       <main className="ph">
         {/* ── The manifesto opening ───────────────────────────────────────
@@ -105,6 +98,12 @@ export default function PhilosophyPage() {
           </div>
         </section>
       </main>
+      <Breadcrumbs
+        trail={[
+          { label: "Philosophy", href: "/philosophy" },
+        ]}
+        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
+      />
       <PageFaq href="/philosophy" />
       <RelatedPages href="/philosophy" />
       <Contact />

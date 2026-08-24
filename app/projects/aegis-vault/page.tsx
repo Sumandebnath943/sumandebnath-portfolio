@@ -21,6 +21,7 @@ import {
   SHOTS,
 } from "@/components/aegis/aegis-data";
 import { SITE_URL } from "@/lib/projects";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 /* ── SEO ───────────────────────────────────────────────────────────────── */
 const URL = `${SITE_URL}/projects/aegis-vault`;
@@ -75,15 +76,10 @@ const articleLd = {
     "How a full-stack notes app applies a password manager's zero-knowledge security model to note-taking, using envelope encryption, httpOnly sessions and Postgres Row-Level Security.",
   mainEntityOfPage: URL,
 };
-const breadcrumbLd = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-    { "@type": "ListItem", position: 2, name: "Project Archive", item: `${SITE_URL}/projects` },
-    { "@type": "ListItem", position: 3, name: "AEGIS VAULT", item: URL },
-  ],
-};
+/* BreadcrumbList JSON-LD is NOT declared here. <Breadcrumbs> emits it together
+   with the visible trail — see components/ui/Breadcrumbs.tsx. Two BreadcrumbList
+   nodes on one URL is a conflict, and the one matching what the reader can see
+   is the one that should win. */
 
 /* ── small building blocks ──────────────────────────────────────────────── */
 function SectionLabel({ index, kicker }: { index: string; kicker: string }) {
@@ -124,7 +120,6 @@ export default function AegisVaultPage() {
     <MotionProvider>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(appLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <Navigation />
 
       <main
@@ -506,6 +501,13 @@ export default function AegisVaultPage() {
         </section>
       </main>
 
+      <Breadcrumbs
+        trail={[
+          { label: "Projects", href: "/projects" },
+          { label: "AEGIS VAULT", href: "/projects/aegis-vault" },
+        ]}
+        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
+      />
       <PageFaq href="/projects/aegis-vault" />
       <RelatedPages href="/projects/aegis-vault" />
       <Contact />

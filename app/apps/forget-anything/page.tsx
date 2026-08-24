@@ -19,6 +19,7 @@ import {
   FadeIn,
 } from "@/components/forget-anything/ForgetAnythingScene";
 import { TECH_STACK, AI_ASSISTED_FILES } from "@/components/forget-anything/forget-anything-data";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 /* ── SEO ───────────────────────────────────────────────────────────────── */
 const SITE = "https://sumandebnath.houseofnamus.com";
@@ -570,6 +571,13 @@ export default function ForgetAnythingPage() {
       </main>
 
       {/* white footer with green fonts & accents (this page only) */}
+      <Breadcrumbs
+        trail={[
+          { label: "Apps", href: null },
+          { label: "Forget Anything?", href: "/apps/forget-anything" },
+        ]}
+        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
+      />
       <PageFaq href="/apps/forget-anything" />
       <RelatedPages href="/apps/forget-anything" />
       <Contact variant="light" />

@@ -8,6 +8,7 @@ import Contact from "@/components/sections/Contact";
 import RelatedPages from "@/components/ui/RelatedPages";
 import { domains, competencies, experiences, type Experience } from "@/lib/learnings-data";
 import "./learnings.css";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 /* ─────────────────────────────────────────────────────────────── */
 /* PDF helpers — window.pdfjsLib resolved via a promise            */
@@ -787,6 +788,13 @@ export default function LearningsPage() {
       {/* Modal lives outside lp-root so it can cover the full viewport */}
       <ExperienceModal exp={modalExp} onClose={closeModal} />
 
+      <Breadcrumbs
+        trail={[
+          { label: "Learnings", href: "/learnings" },
+        ]}
+        variant="paper"
+        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
+      />
       <RelatedPages href="/learnings" variant="paper" />
       <Contact />
     </MotionProvider>

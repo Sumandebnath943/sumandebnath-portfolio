@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import RelatedPages from "@/components/ui/RelatedPages";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import ImprintDossier from "@/components/sections/ImprintDossier";
 import LegatusDossier from "@/components/sections/LegatusDossier";
 import CiteDossier from "@/components/sections/CiteDossier";
@@ -89,40 +90,19 @@ export default async function ProjectPage({ params }: Props) {
 
   const jsonLd = softwareApplicationJsonLd(project);
 
-  const breadcrumbsJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: SITE_URL,
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Projects",
-        item: `${SITE_URL}/#projects`,
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: project.name,
-        item: `${SITE_URL}/projects/${project.slug}`,
-      },
-    ],
-  };
+  /* BreadcrumbList JSON-LD is NOT declared here. <Breadcrumbs> emits it together
+     with the visible trail — see components/ui/Breadcrumbs.tsx.
+
+     The version this replaced also had the middle crumb pointing at
+     `${SITE_URL}/#projects`, a homepage anchor rather than the real archive at
+     /projects. A breadcrumb whose parent is a fragment tells a crawler this page
+     sits under the homepage, which is both wrong and a wasted link. */
 
   return (
     <MotionProvider>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }}
       />
 
       <Navigation />
@@ -158,6 +138,13 @@ export default async function ProjectPage({ params }: Props) {
         <div className="max-w-7xl mx-auto">{renderDossier(project.slug)}</div>
       </main>
 
+      <Breadcrumbs
+        trail={[
+          { label: "Projects", href: "/projects" },
+          { label: project.name, href: `/projects/${project.slug}` },
+        ]}
+        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
+      />
       <RelatedPages href="/projects" />
       <Contact />
     </MotionProvider>

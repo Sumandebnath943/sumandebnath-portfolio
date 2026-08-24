@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import RelatedPages from "@/components/ui/RelatedPages";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Contact from "@/components/sections/Contact";
 import PostBody from "@/components/notebook/PostBody";
 import { SITE_URL } from "@/lib/projects";
@@ -100,6 +101,7 @@ export default async function NotebookPostPage({
     datePublished: post.published,
     dateModified: postModified(post),
     inLanguage: "en-US",
+    articleSection: post.category,
     keywords: post.tags.join(", "),
     wordCount: post.blocks.reduce((n, b) => {
       if (b.kind === "p") return n + b.text.split(/\s+/).length;
@@ -139,15 +141,9 @@ export default async function NotebookPostPage({
       }
     : null;
 
-  const breadcrumbsJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "Notebook", item: `${SITE_URL}/notebook` },
-      { "@type": "ListItem", position: 3, name: post.title, item: url },
-    ],
-  };
+  // No BreadcrumbList here — <Breadcrumbs> emits it alongside the visible trail.
+  // Two BreadcrumbList nodes on one URL is a conflict, and the version that
+  // matches what the reader can see is the one that should win.
 
   const seeAlso = (post.seeAlso ?? [])
     .map(getPage)
@@ -155,7 +151,7 @@ export default async function NotebookPostPage({
 
   return (
     <MotionProvider>
-      {[articleJsonLd, faqJsonLd, breadcrumbsJsonLd]
+      {[articleJsonLd, faqJsonLd]
         .filter(Boolean)
         .map((schema, i) => (
           <script
@@ -171,19 +167,15 @@ export default async function NotebookPostPage({
         <article>
           <header className="nb-mast">
             <div className="nb-shell">
-              <nav aria-label="Breadcrumb">
-                <ol className="nb-crumbs">
-                  <li>
-                    <Link href="/">Home</Link>
-                  </li>
-                  <li aria-hidden="true">/</li>
-                  <li>
-                    <Link href="/notebook">Notebook</Link>
-                  </li>
-                  <li aria-hidden="true">/</li>
-                  <li aria-current="page">{post.tags[0]}</li>
-                </ol>
-              </nav>
+              <Breadcrumbs
+                trail={[
+                  { label: "Notebook", href: "/notebook" },
+                  { label: post.category, href: null },
+                  { label: post.title, href: postUrl(post.slug) },
+                ]}
+                variant="paper"
+                className="mb-6"
+              />
 
               <h1 className="nb-title">{post.title}</h1>
 
@@ -208,6 +200,8 @@ export default async function NotebookPostPage({
                     <span>Updated {formatPostDate(post.updated)}</span>
                   </>
                 ) : null}
+                <span className="sep">·</span>
+                <span>{post.category}</span>
                 <span className="sep">·</span>
                 <span>{post.readingMinutes} min read</span>
                 <span className="sep">·</span>

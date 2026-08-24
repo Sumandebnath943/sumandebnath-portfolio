@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Image from "next/image";
 import Link from "next/link";
 import MotionProvider from "@/components/providers/MotionProvider";
@@ -929,6 +930,13 @@ export default function MigiAppPage() {
         </section>
       </main>
 
+      <Breadcrumbs
+        trail={[
+          { label: "Apps", href: null },
+          { label: "MIGI Android App", href: "/apps/migi-app" },
+        ]}
+        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
+      />
       <PageFaq href="/apps/migi-app" />
       <RelatedPages href="/apps/migi-app" />
       <Contact variant="dark" />

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
@@ -749,6 +750,13 @@ export default function PactAgentPage() {
         </div>
       </main>
 
+      <Breadcrumbs
+        trail={[
+          { label: "Agents", href: null },
+          { label: "PACT Agent", href: "/agents/pact-agent" },
+        ]}
+        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
+      />
       <PageFaq href="/agents/pact-agent" />
       <RelatedPages href="/agents/pact-agent" />
       <Contact />

@@ -4,6 +4,7 @@ import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import RelatedPages from "@/components/ui/RelatedPages";
 import PageFaq from "@/components/ui/PageFaq";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Contact from "@/components/sections/Contact";
 import HeroLock from "@/components/ui/HeroLock";
 import { Reveal, StatCounter } from "@/components/penta/PentaWidgets";
@@ -137,15 +138,10 @@ const articleLd = {
    visible copy. It was structured data with no visible counterpart on the page,
    which Google's FAQPage guidelines do not permit. */
 
-const breadcrumbLd = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-    { "@type": "ListItem", position: 2, name: "Project Archive", item: `${SITE_URL}/projects` },
-    { "@type": "ListItem", position: 3, name: "Banking Co-pilot", item: URL },
-  ],
-};
+/* BreadcrumbList JSON-LD is NOT declared here either. <Breadcrumbs> emits it
+   together with the visible trail — see components/ui/Breadcrumbs.tsx. Two
+   BreadcrumbList nodes on one URL is a conflict, and the one matching what the
+   reader can actually see is the one that should win. */
 
 /* ── Building blocks ───────────────────────────────────────────────────── */
 function SectionLabel({ index, kicker }: { index: string; kicker: string }) {
@@ -184,7 +180,6 @@ export default function BankingCopilotPage() {
     <MotionProvider>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(appLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <Navigation />
 
       <main className="relative font-manrope" style={{ background: BANK.bg, color: BANK.text }}>
@@ -939,6 +934,13 @@ export default function BankingCopilotPage() {
         </section>
       </main>
 
+      <Breadcrumbs
+        trail={[
+          { label: "Banking", href: null },
+          { label: "Banking Co-pilot", href: "/banking/rm-copilot" },
+        ]}
+        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
+      />
       <PageFaq href="/banking/rm-copilot" />
       <RelatedPages href="/banking/rm-copilot" />
       <Contact />

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
@@ -729,6 +730,13 @@ export default function PixelVillePage() {
         </section>
       </main>
 
+      <Breadcrumbs
+        trail={[
+          { label: "Games", href: null },
+          { label: "PixelVille", href: "/games/pixelville" },
+        ]}
+        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
+      />
       <PageFaq href="/games/pixelville" />
       <RelatedPages href="/games/pixelville" />
       <Contact

@@ -8,6 +8,7 @@ const post: Post = {
   description:
     "A hard-won debugging note turned out to be half right and entirely too absolute — and a wrong note in a trusted document does more damage than no note at all. What measuring revealed, and how to write findings that fail safely.",
   published: "2026-08-24",
+  category: "Practice",
   tags: ["Debugging", "Documentation", "Engineering"],
   readingMinutes: 5,
   facts: [

@@ -17,22 +17,14 @@ export const metadata: Metadata = {
   },
 };
 
-const breadcrumbsJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-    { "@type": "ListItem", position: 2, name: "Learnings", item: `${SITE_URL}/learnings` },
-  ],
-};
+/* BreadcrumbList JSON-LD is NOT declared here. <Breadcrumbs> emits it together
+   with the visible trail — see components/ui/Breadcrumbs.tsx. Two BreadcrumbList
+   nodes on one URL is a conflict, and the one matching what the reader can see
+   is the one that should win. */
 
 export default function LearningsPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }}
-      />
       <LearningsClient />
     </>
   );

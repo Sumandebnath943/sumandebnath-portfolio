@@ -8,6 +8,7 @@ import { SITE_URL } from "@/lib/projects";
 import { identity, targetRoles } from "@/lib/resume";
 import "./contact.css";
 import RelatedPages from "@/components/ui/RelatedPages";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 export const metadata: Metadata = {
   title: { absolute: `Contact Suman Debnath — ${identity.headline}` },
@@ -57,14 +58,10 @@ const contactPointJsonLd = {
   ],
 };
 
-const breadcrumbsJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-    { "@type": "ListItem", position: 2, name: "Contact", item: `${SITE_URL}/contact` },
-  ],
-};
+/* BreadcrumbList JSON-LD is NOT declared here. <Breadcrumbs> emits it together
+   with the visible trail — see components/ui/Breadcrumbs.tsx. Two BreadcrumbList
+   nodes on one URL is a conflict, and the one matching what the reader can see
+   is the one that should win. */
 
 const SOCIALS = [
   { label: "LinkedIn", href: "https://linkedin.com/in/suman-debnath-a528653a1" },
@@ -76,7 +73,7 @@ const SOCIALS = [
 export default function ContactPageRoute() {
   return (
     <MotionProvider>
-      {[contactPageJsonLd, contactPointJsonLd, breadcrumbsJsonLd].map(
+      {[contactPageJsonLd, contactPointJsonLd].map(
         (schema, i) => (
           <script
             key={i}
@@ -264,6 +261,13 @@ export default function ContactPageRoute() {
 
       </main>
 
+      <Breadcrumbs
+        trail={[
+          { label: "Contact", href: "/contact" },
+        ]}
+        variant="paper"
+        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
+      />
       <RelatedPages href="/contact" variant="paper" />
       <Contact variant="light" />
     </MotionProvider>

@@ -4,6 +4,7 @@ import Navigation from "@/components/layout/Navigation";
 import Contact from "@/components/sections/Contact";
 import { SITE_URL } from "@/lib/projects";
 import RelatedPages from "@/components/ui/RelatedPages";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 export const metadata: Metadata = {
   title: { absolute: "Terms of use — Suman Debnath" },
@@ -19,14 +20,10 @@ export const metadata: Metadata = {
   },
 };
 
-const breadcrumbsJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-    { "@type": "ListItem", position: 2, name: "Terms of use", item: `${SITE_URL}/terms` },
-  ],
-};
+/* BreadcrumbList JSON-LD is NOT declared here. <Breadcrumbs> emits it together
+   with the visible trail — see components/ui/Breadcrumbs.tsx. Two BreadcrumbList
+   nodes on one URL is a conflict, and the one matching what the reader can see
+   is the one that should win. */
 
 const LAST_UPDATED = "23 August 2026";
 
@@ -50,10 +47,6 @@ function Bullet({ children }: { children: React.ReactNode }) {
 export default function TermsPage() {
   return (
     <MotionProvider>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }}
-      />
 
       <Navigation />
 
@@ -269,6 +262,12 @@ export default function TermsPage() {
         </section>
       </main>
 
+      <Breadcrumbs
+        trail={[
+          { label: "Terms", href: "/terms" },
+        ]}
+        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
+      />
       <RelatedPages href="/terms" />
       <Contact />
     </MotionProvider>

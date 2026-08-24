@@ -35,6 +35,37 @@ export interface PostFact {
   value: string;
 }
 
+/**
+ * The primary category. **One per post, from a closed list.**
+ *
+ * Categories and tags do different jobs and the difference matters here.
+ * A category is the *section of the blog* a post belongs to — closed, small,
+ * mutually exclusive, and the thing the filter bar is built from. Tags are open
+ * and plural, describing what the post touches. A blog that lets categories
+ * grow freely ends up with twenty of them, one post each, and a filter bar
+ * nobody uses.
+ *
+ * Adding a value here is a deliberate decision. Adding a tag is not.
+ */
+export const CATEGORIES = [
+  "CSS & Layout",
+  "React",
+  "Next.js",
+  "Graphics",
+  "Practice",
+] as const;
+
+export type Category = (typeof CATEGORIES)[number];
+
+/** Accent per category — drives the generated cover art and the filter chips. */
+export const CATEGORY_ACCENT: Record<Category, string> = {
+  "CSS & Layout": "#b4472a",
+  React: "#38408f",
+  "Next.js": "#45505e",
+  Graphics: "#7a3358",
+  Practice: "#2c6047",
+};
+
 export interface Post {
   slug: string;
 
@@ -65,10 +96,46 @@ export interface Post {
   /** ISO date. Set only on a substantive revision; it drives `dateModified`. */
   updated?: string;
 
+  /** The section this belongs to. Exactly one — see the note on CATEGORIES. */
+  category: Category;
+
+  /** Open and plural. What the post touches, for the tag filter. */
   tags: string[];
 
   /** Rough reading time in minutes, shown in the dateline. */
   readingMinutes: number;
+
+  /**
+   * Path under /public to a cover image, e.g. "/notebook/sticky.jpg".
+   *
+   * Optional, and posts without one are not second-class: `PostCover` draws
+   * deterministic art from the slug and the category accent instead. That is a
+   * real design, not a grey placeholder box — a blog whose covers are missing
+   * looks broken, whereas one with a consistent generated pattern looks
+   * deliberate. Drop a real image in and it takes over.
+   */
+  cover?: string;
+
+  /** Alt text. Required whenever `cover` is set. */
+  coverAlt?: string;
+
+  /**
+   * Promotes the post to the lead slot on the index. At most one should carry
+   * it; if several do, the newest wins.
+   */
+  featured?: boolean;
+
+  /**
+   * Hand-picked for the "Start here" rail.
+   *
+   * **Deliberately not called `popular`.** Nothing here measures readership, and
+   * labelling an editorial choice as popularity would be a straightforward lie
+   * to the reader. Real popularity is available in principle — this site already
+   * records page views to Neon for /desk-4f7a — but wiring that in would make
+   * the index dynamic, and it is worth doing only once there is enough traffic
+   * for the ranking to mean something.
+   */
+  pick?: boolean;
 
   /** The quotable specifics — versions, numbers, measurements. Rendered as a
    *  definition table, which is far easier to extract than the same facts

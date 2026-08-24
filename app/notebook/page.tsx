@@ -1,17 +1,28 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
+import Contact from "@/components/sections/Contact";
 import RelatedPages from "@/components/ui/RelatedPages";
 import PageFaq from "@/components/ui/PageFaq";
-import Contact from "@/components/sections/Contact";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import NotebookBrowser from "@/components/notebook/NotebookBrowser";
+import { toCardPost } from "@/lib/notebook/card";
 import { SITE_URL } from "@/lib/projects";
-import { allPosts, allTags, formatPostDate, notebookModified, postUrl } from "@/lib/notebook";
+import {
+  activeCategories,
+  allPosts,
+  allTags,
+  formatPostDate,
+  notebookModified,
+  pickedPosts,
+  postUrl,
+} from "@/lib/notebook";
 import "./notebook.css";
+import "./blog.css";
 
-const TITLE = "Notebook — engineering notes by Suman Debnath";
+const TITLE = "Notebook — engineering articles by Suman Debnath";
 const DESCRIPTION =
-  "First-hand engineering notes from building AI-native products: what broke, the actual fix, and what generalises. Next.js, React, three.js, CSS and debugging methodology.";
+  "Engineering write-ups from building AI-native products: what broke, the actual fix, and what generalises. Articles on Next.js, React, CSS, three.js and debugging practice.";
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -23,13 +34,13 @@ export const metadata: Metadata = {
     },
   },
   keywords: [
-    "engineering notebook",
-    "Next.js debugging",
-    "React StrictMode",
+    "engineering blog",
+    "Next.js articles",
+    "React debugging",
     "position sticky overflow hidden",
     "three.js colour management",
     "AI-native product engineering",
-    "Suman Debnath",
+    "Suman Debnath blog",
   ],
   openGraph: {
     type: "website",
@@ -47,13 +58,15 @@ export const metadata: Metadata = {
 
 export default function NotebookIndexPage() {
   const posts = allPosts();
+  const categories = activeCategories();
   const tags = allTags();
+  const picks = pickedPosts();
 
   // ── Structured data ───────────────────────────────────────────────────────
-  // Blog + an ItemList of the posts. The Blog node carries `dateModified` from
-  // the newest entry, which is the freshness signal the rest of the site cannot
-  // produce: every other page changes only when its product does, whereas this
-  // one moves whenever anything is written.
+  // Blog + the full post list. `dateModified` from the newest entry is the
+  // freshness signal the rest of the site cannot produce: every other page
+  // changes only when its product does, whereas this one moves whenever
+  // anything is written.
   const blogJsonLd = {
     "@context": "https://schema.org",
     "@type": "Blog",
@@ -66,6 +79,10 @@ export default function NotebookIndexPage() {
     isPartOf: { "@id": `${SITE_URL}/#website` },
     author: { "@id": `${SITE_URL}/#person` },
     publisher: { "@id": `${SITE_URL}/#person` },
+    // The categories, declared as the sections of the blog. This is what lets a
+    // consumer say "his Next.js writing" rather than treating every post as an
+    // unrelated page.
+    about: categories.map((c) => ({ "@type": "Thing", name: c.category })),
     blogPost: posts.map((p) => ({
       "@type": "TechArticle",
       "@id": `${SITE_URL}${postUrl(p.slug)}#article`,
@@ -74,57 +91,45 @@ export default function NotebookIndexPage() {
       url: `${SITE_URL}${postUrl(p.slug)}`,
       datePublished: p.published,
       dateModified: p.updated ?? p.published,
+      articleSection: p.category,
       keywords: p.tags.join(", "),
+      timeRequired: `PT${p.readingMinutes}M`,
       author: { "@id": `${SITE_URL}/#person` },
     })),
   };
 
-  const breadcrumbsJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "Notebook", item: `${SITE_URL}/notebook` },
-    ],
-  };
-
   return (
     <MotionProvider>
-      {[blogJsonLd, breadcrumbsJsonLd].map((schema, i) => (
-        <script
-          key={i}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-        />
-      ))}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogJsonLd) }}
+      />
 
       <Navigation />
 
       <main className="nb">
         <header className="nb-mast">
           <div className="nb-shell">
-            <nav aria-label="Breadcrumb">
-              <ol className="nb-crumbs">
-                <li>
-                  <Link href="/">Home</Link>
-                </li>
-                <li aria-hidden="true">/</li>
-                <li aria-current="page">Notebook</li>
-              </ol>
-            </nav>
+            <Breadcrumbs
+              trail={[{ label: "Notebook", href: "/notebook" }]}
+              variant="paper"
+              className="mb-6"
+            />
 
             <p className="nb-eyebrow">Engineering notebook</p>
             <h1 className="nb-title">What broke, the actual fix, and what generalises</h1>
             <p className="nb-standfirst">
-              Notes written while building AI-native products — mostly the bugs that produced no
+              Articles written while building AI-native products — mostly the bugs that produced no
               error message, which are the only ones worth writing down. Every entry is something
               that cost me real time in a real codebase.
             </p>
 
             <div className="nb-dateline">
               <span>
-                {posts.length} {posts.length === 1 ? "entry" : "entries"}
+                {posts.length} {posts.length === 1 ? "article" : "articles"}
               </span>
+              <span className="sep">·</span>
+              <span>{categories.length} categories</span>
               <span className="sep">·</span>
               <span>Updated {formatPostDate(notebookModified())}</span>
               <span className="sep">·</span>
@@ -132,43 +137,22 @@ export default function NotebookIndexPage() {
                 RSS
               </a>
             </div>
-
-            {tags.length > 0 ? (
-              <ul className="nb-tags" style={{ marginTop: "1.5rem" }}>
-                {tags.map((t) => (
-                  <li key={t.tag} className="nb-tag">
-                    {t.tag} · {t.count}
-                  </li>
-                ))}
-              </ul>
-            ) : null}
           </div>
         </header>
 
-        <div className="nb-shell" style={{ paddingBlock: "2rem 5rem" }}>
-          <ul className="nb-index-list">
-            {posts.map((post) => (
-              <li key={post.slug} className="nb-entry">
-                <Link href={postUrl(post.slug)}>
-                  <p className="nb-entry-meta">
-                    {formatPostDate(post.published)} · {post.readingMinutes} min ·{" "}
-                    {post.tags.join(" · ")}
-                  </p>
-                  <h2 className="nb-entry-title">{post.title}</h2>
-                  {/* The extractable answer doubles as the index summary. One
-                      canonical sentence-set per post, not a second version that
-                      can drift from the first. */}
-                  <p className="nb-entry-answer">{post.answer}</p>
-                  <span className="nb-entry-more">Read →</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+        <div className="nb-wide" style={{ paddingBlock: "3rem 5rem" }}>
+          {/* toCardPost, not the raw posts: passing whole Post objects across the
+              server/client boundary serialises every article in full into this
+              page. See the note on CardPost in NotebookBrowser.tsx. */}
+          <NotebookBrowser
+            posts={posts.map(toCardPost)}
+            categories={categories}
+            tags={tags}
+            picks={picks.map(toCardPost)}
+          />
         </div>
       </main>
 
-      {/* Paper throughout, then the footer in its light variant — the blog is
-          part of the paper family (/resume, /journey), not the dark site. */}
       <PageFaq href="/notebook" variant="paper" />
       <RelatedPages href="/notebook" variant="paper" />
       <Contact variant="light" />

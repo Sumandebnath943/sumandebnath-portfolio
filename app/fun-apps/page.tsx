@@ -6,6 +6,7 @@ import Contact from "@/components/sections/Contact";
 import Image from "next/image";
 import { FadeInUp, BentoGridContainer, BentoCard } from "@/components/ui/AnimatedBento";
 import { SITE_URL } from "@/lib/projects";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 export const metadata: Metadata = {
   title: "Fun Apps & Experiments",
@@ -395,6 +396,12 @@ export default function FunAppsPage() {
         </section>
       </main>
 
+      <Breadcrumbs
+        trail={[
+          { label: "Fun Apps", href: "/fun-apps" },
+        ]}
+        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
+      />
       <RelatedPages href="/fun-apps" />
       <Contact
         closingBg="linear-gradient(180deg, #241605 0%, #2A1806 12%, #170E04 55%, #050505 100%)"

@@ -126,6 +126,42 @@ export const aboutFaqs: Faq[] = [
     q: "What kind of collaborations is Suman open to?",
     a: "Suman is open to collaborations involving AI-native products, automation systems, SaaS ecosystems, intelligent workflows, branding systems, growth infrastructure, operational strategy, and future-focused AI-assisted execution environments.",
   },
+
+  // ── Added Aug 2026 ──────────────────────────────────────────────────────
+  // The set above was written before PentaCMD-47M, Qdex-1.5B, the MIGI fleet
+  // and the Banking Co-pilot existed, and it showed: the archive answered
+  // questions about IMPRINT and ROASmind and said nothing about the work that
+  // now most distinguishes him. It also had no answer at all to the two
+  // questions a recruiter actually opens an FAQ to ask — is he available, and
+  // can any of this be checked.
+  //
+  // These are person-level questions by design. Product-level questions live in
+  // lib/page-faqs.ts, on the product's own page. See the note at the bottom of
+  // that file for why the two sets must never overlap.
+  {
+    q: "Has Suman Debnath actually trained AI models, or only used them?",
+    a: "Both. PentaCMD-47M is a 47-million-parameter language model he trained from scratch, nanoGPT-style, on 299,000 instruction-to-command pairs, reaching roughly 87% exact-match accuracy. Qdex-1.5B is a QLoRA fine-tuning pipeline for Qwen2.5-Coder-1.5B, benchmarked with HumanEval. Both are published, and both are separate from the applied work of building products on top of hosted models.",
+  },
+  {
+    q: "Is Suman Debnath available for hire, and where is he based?",
+    a: "Yes. He is based between Pune, Maharashtra and Kolkata, West Bengal, India, is open to remote and relocation, and serves a 90-day notice period. He is pursuing Product Marketing Manager, Senior Brand Marketing Manager, AI Product Manager and AI Product Marketing Manager roles.",
+  },
+  {
+    q: "Can a marketer really build production software, or is this AI-assisted hobby work?",
+    a: "The output is testable rather than a matter of opinion. The Banking Co-pilot carries 38 automated security tests — 17 driving a live server — and was hardened across five phases against three independent audits. The MIGI fleet runs 46 agents behind more than 500 automated evaluation checks. A language model trained from scratch either hits its benchmark or does not; PentaCMD-47M reports ~87% exact-match.",
+  },
+  {
+    q: "How can someone verify the claims on this site?",
+    a: "Every number stated here is stated on a specific page, and the machine-readable summary at /llms.txt lists each claim beside the page that carries it. The models are published, the code for several tools is on GitHub, and the live products are linked from their own pages. The engineering write-ups at /notebook are first-hand accounts with reproducible steps.",
+  },
+  {
+    q: "Does Suman Debnath write about engineering?",
+    a: "Yes, at /notebook — first-hand articles about specific problems hit while building AI-native products, each with the symptom, the cause and the fix. The subjects are mostly failures that produce no error message: a CSS rule that silently disables another, a framework rename that leaves the old file compiling but never running, a development-mode behaviour that permanently disables a feature.",
+  },
+  {
+    q: "What does Suman Debnath's day-to-day work actually look like?",
+    a: "Designing and shipping whole systems alone: deciding what a product should be, architecting it, building it inside AI-native environments such as Claude Code, Cursor, Antigravity and Codex, deploying it, and then maintaining it. The marketing half has not been discarded — positioning, naming, growth systems and the writing are all part of the same job.",
+  },
 ];
 
 // ── Combined archive (used by /faq) ──────────────────────────────────────

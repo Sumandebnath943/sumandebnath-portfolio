@@ -8,6 +8,8 @@ const post: Post = {
   description:
     "Next.js 16 renamed middleware to proxy.ts and moved it to the Node runtime. What changes, what the statically-read matcher will not let you do, and the migration in practice.",
   published: "2026-08-24",
+  category: "Next.js",
+  pick: true,
   tags: ["Next.js", "Migration", "Routing"],
   readingMinutes: 5,
   facts: [

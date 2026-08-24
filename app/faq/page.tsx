@@ -6,6 +6,7 @@ import Contact from "@/components/sections/Contact";
 import { aboutFaqs, allFaqs, buildFaqPageJsonLd, faqs, type Faq } from "@/lib/faqs";
 import { SITE_URL } from "@/lib/projects";
 import "./faq.css";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 /**
  * lib/faqs.ts has always held these as two distinct sets. The page flattened
@@ -118,6 +119,12 @@ export default function FAQPage() {
         </section>
       </main>
 
+      <Breadcrumbs
+        trail={[
+          { label: "FAQ", href: "/faq" },
+        ]}
+        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
+      />
       <RelatedPages href="/faq" />
       <Contact />
     </MotionProvider>

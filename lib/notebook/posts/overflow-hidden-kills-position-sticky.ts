@@ -8,6 +8,9 @@ const post: Post = {
   description:
     "position: sticky fails without any error when an ancestor has overflow: hidden. Why that happens, how to find the ancestor responsible, and the wrapper pattern that fixes it without losing the clip.",
   published: "2026-08-24",
+  category: "CSS & Layout",
+  featured: true,
+  pick: true,
   tags: ["CSS", "Debugging", "Layout"],
   readingMinutes: 4,
   facts: [

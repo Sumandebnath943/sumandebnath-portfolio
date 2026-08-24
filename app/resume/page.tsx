@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Image from "next/image";
 import Link from "next/link";
 import MotionProvider from "@/components/providers/MotionProvider";
@@ -118,14 +119,10 @@ const creativeWorkJsonLd = {
   ),
 };
 
-const breadcrumbsJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-    { "@type": "ListItem", position: 2, name: "Résumé", item: `${SITE_URL}/resume` },
-  ],
-};
+/* BreadcrumbList JSON-LD is NOT declared here. <Breadcrumbs> emits it together
+   with the visible trail — see components/ui/Breadcrumbs.tsx. Two BreadcrumbList
+   nodes on one URL is a conflict, and the one matching what the reader can see
+   is the one that should win. */
 
 /* ── Masthead figures ─────────────────────────────────────────────────────
    Every one of these is stated in the résumé. They are set in the dark
@@ -178,7 +175,6 @@ export default function ResumePage() {
         profilePageJsonLd,
         personSupplementJsonLd,
         creativeWorkJsonLd,
-        breadcrumbsJsonLd,
       ].map((schema, i) => (
         <script
           key={i}
@@ -575,6 +571,12 @@ export default function ResumePage() {
           its second half — the "Read it, or talk to it" close is already on the
           void palette, so the paper variant would put a cream band between two
           dark sections. Match what precedes the block, not the page's opening. */}
+      <Breadcrumbs
+        trail={[
+          { label: "Résumé", href: "/resume" },
+        ]}
+        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
+      />
       <RelatedPages href="/resume" />
       <Contact />
     </MotionProvider>

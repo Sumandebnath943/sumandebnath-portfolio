@@ -111,6 +111,35 @@ notes" is not.
 > looking imported. Code blocks stay dark **inside** it, which is where the
 > contrast earns its keep.
 
+### 3.4 The blog index
+
+`/notebook` is a blog front page: a curated "Start here" rail, a category
+filter, a tag filter, sort, reset, a lead card and a grid — all in
+`components/notebook/NotebookBrowser.tsx`.
+
+**Filtering is client-side over a complete list, and that is an SEO decision.**
+Every post is passed in and rendered from one array, so the server HTML contains
+every card with its title, category, date and standfirst before any filter runs.
+Query-string routes (`?category=react`) would split the index's link equity
+across variants showing subsets of the same content. When the archive outgrows
+this, the answer is real `/notebook/category/<slug>` routes with their own
+metadata — not query strings.
+
+**Categories are a closed list; tags are open.** `CATEGORIES` in
+`lib/notebook/types.ts` is the filter bar. A blog that lets categories grow
+freely ends up with twenty of them, one post each.
+
+> **Nothing is labelled "popular".** The curated rail is `pick`, shown as "Start
+> here". Nothing on this site measures readership, and calling an editorial
+> choice popularity is a lie to the reader. Real popularity is available in
+> principle — page views already go to Neon for `/desk-4f7a` — but it would make
+> the index dynamic and is only worth it once the ranking would mean something.
+
+**Covers** are real images when a post sets `cover`, and deterministic generated
+SVG art otherwise (`components/notebook/PostCover.tsx`), tinted per category and
+seeded from the slug. Deterministic matters: a random pattern would change on
+every deploy and make a familiar card unfamiliar.
+
 ### 3.3 Facts as structure, not prose
 
 Numbers buried in a paragraph get skipped; the same numbers in a labelled row
@@ -203,6 +232,52 @@ paper and turns dark for its second half, so its Related block is `dark`.
 > **Cream-on-dark below ~0.5 alpha fails AA.** `resume.css` records this for its
 > own text and the footer sitemap headings hit it too. Do not go below `/55` for
 > small uppercase labels on the dark register.
+
+### 5.4 Breadcrumbs
+
+`components/ui/Breadcrumbs.tsx` emits the visible trail **and** the
+`BreadcrumbList` JSON-LD from one array. Mounted on every route except `/`,
+where a trail reading only "Home" would be noise.
+
+They are not a ranking factor in themselves. What they do is replace the URL in
+a Google result with a readable hierarchy, give every page a second
+differently-worded link to its parent, and tell an answer engine where a page
+sits in the site rather than treating every URL as free-floating.
+
+> **Both halves must come from the same component.** Before this, fourteen pages
+> had `BreadcrumbList` markup and exactly two had a visible trail. Google's
+> guidance requires the markup to describe a trail the reader can actually see;
+> the two drifting apart is precisely what happens when they are written in
+> different places.
+
+> **A crumb must never lead to a 404.** `/agents`, `/apps`, `/slms`, `/llms`,
+> `/games` and `/banking` are menu groupings with no route behind them. Pass
+> `href: null` for those — the component renders them as plain text and omits
+> `item` from the schema. One dossier crumb was also pointing at `/#projects`, a
+> homepage anchor, which told crawlers the page sat under the homepage.
+
+### 5.5 Measured balance
+
+Run the link audit before and after changing the `RELATED` graph. As of
+25 Aug 2026:
+
+| | Before | After |
+|---|---|---|
+| Max inbound to one page | 11 (`/projects`) | 5 |
+| Min inbound (content page) | 1 | 2 |
+| Gini coefficient | 0.350 | 0.184 |
+
+`/` shows 0 inbound in that graph and that is not a problem — every page links
+home through the logo and the footer. `/privacy` and `/terms` sit at 1 on
+purpose; pumping link equity into legal pages is wasted.
+
+> **The real remaining bias is not in this graph.** The twelve pages listed in
+> the footer sitemap receive an inbound link from all 26 routes. The eight
+> product pages *not* listed there — Pentashell, PACT Agent, Qdex-1.5B, AEGIS
+> VAULT, the MIGI Android app, Forget Anything?, PixelVille and Fun Apps — have
+> only the nav and their Related entries. That is a deliberate editorial choice
+> about what earns a permanent slot, not an oversight, but it is the thing to
+> revisit if one of those pages needs to rank.
 
 ---
 

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
@@ -582,6 +583,13 @@ export default function PentashellPage() {
         </div>
       </main>
 
+      <Breadcrumbs
+        trail={[
+          { label: "Agents", href: null },
+          { label: "Pentashell", href: "/agents/pentashell" },
+        ]}
+        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
+      />
       <PageFaq href="/agents/pentashell" />
       <RelatedPages href="/agents/pentashell" />
       <Contact

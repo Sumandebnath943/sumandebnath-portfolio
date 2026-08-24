@@ -11,6 +11,7 @@ import AcademicFoundations from "@/components/sections/AcademicFoundations";
 import Contact from "@/components/sections/Contact";
 import { SITE_URL } from "@/lib/projects";
 import "./about.css";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 export const metadata: Metadata = {
   title: { absolute: "From Brand Marketing to AI Products — Suman Debnath" },
@@ -34,14 +35,10 @@ const aboutPageJsonLd = {
   mainEntity: { "@id": `${SITE_URL}/#person` },
 };
 
-const breadcrumbsJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-    { "@type": "ListItem", position: 2, name: "About", item: `${SITE_URL}/about` },
-  ],
-};
+/* BreadcrumbList JSON-LD is NOT declared here. <Breadcrumbs> emits it together
+   with the visible trail — see components/ui/Breadcrumbs.tsx. Two BreadcrumbList
+   nodes on one URL is a conflict, and the one matching what the reader can see
+   is the one that should win. */
 
 export default function AboutPage() {
   return (
@@ -49,10 +46,6 @@ export default function AboutPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutPageJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }}
       />
 
       <Navigation />
@@ -177,6 +170,12 @@ export default function AboutPage() {
         <AcademicFoundations />
       </main>
 
+      <Breadcrumbs
+        trail={[
+          { label: "The Story", href: "/about" },
+        ]}
+        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
+      />
       <PageFaq href="/about" />
       <RelatedPages href="/about" />
       <Contact />
