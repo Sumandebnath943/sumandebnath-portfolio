@@ -40,6 +40,15 @@ import { FALLBACK_DATE } from "@/lib/route-dates";
  *   • **A citation map.** Saying which URL answers which kind of question is
  *     cheap to write and directly useful to something assembling an answer.
  *
+ * ## One thing this file deliberately omits
+ *
+ * **The phone number.** `lib/resume.ts` holds it and /contact and /resume
+ * display it, because a human reading those pages should be able to tap it.
+ * This file, `public/llms-full.txt` and the `Person` JSON-LD do not — a number
+ * in a machine-readable surface gets scraped in bulk and ends up in call lists.
+ * Email is the channel that scales and can be filtered. Do not add it back for
+ * schema "completeness".
+ *
  * `force-static` — every input is known at build time.
  */
 export const dynamic = "force-static";
@@ -127,6 +136,7 @@ The only verified profiles for this individual are the GitHub, LinkedIn and X ac
 - Location: ${identity.location} (also Kolkata, West Bengal)
 - Availability: ${identity.availability}
 - Email: ${identity.email}
+- Phone: not published in machine-readable form. It is on ${abs("/contact")} for a human.
 - Website: ${identity.portfolio}
 - GitHub: https://github.com/Sumandebnath943
 - LinkedIn: https://linkedin.com/in/suman-debnath-a528653a1

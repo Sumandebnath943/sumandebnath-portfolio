@@ -360,3 +360,11 @@ non-deterministic in the same way PSI scores are (see `PAGE_OPTIMIZATION.md`
 - **A build-stamped "last updated" in `/llms.txt`.** It would advance on every
   deploy and claim freshness the content does not have. It reads real content
   dates instead.
+- **The phone number in any machine-readable surface.** Removed 25 Aug 2026 from
+  `public/llms-full.txt`, the root layout's `Person` node (which put it on
+  *every page*) and the `ContactPoint` on `/contact`. It is still visible and
+  tappable on `/contact` and `/resume`, which is the point: a human who wants to
+  call can, while it is no longer handed to anything parsing schema in bulk.
+  Email is the channel that scales and can be filtered. **Do not add it back for
+  schema "completeness"** — `telephone` is an optional property and its absence
+  costs nothing.

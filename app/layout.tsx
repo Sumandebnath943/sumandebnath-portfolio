@@ -170,7 +170,11 @@ const personJsonLd = {
   url: SITE_URL,
   image: `${SITE_URL}/og-image.png`,
   email: "mailto:sumandebnath944@gmail.com",
-  telephone: "+91-7980296957",
+  // No `telephone` here either, and this was the worst of the three: the Person
+  // node is emitted by the root layout, so the number was in the structured data
+  // of **every page on the site** — not just the contact page. It is still
+  // visible and tappable on /contact and /resume for a human; it is simply no
+  // longer handed to anything parsing schema in bulk.
   jobTitle: "Senior Brand Marketing Manager & AI-Native Product Builder",
   gender: "Male",
   nationality: "Indian",

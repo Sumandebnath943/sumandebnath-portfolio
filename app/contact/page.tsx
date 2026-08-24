@@ -50,7 +50,11 @@ const contactPointJsonLd = {
       "@type": "ContactPoint",
       contactType: "Recruiting and professional enquiries",
       email: identity.email,
-      telephone: "+91-7980296957",
+      // No `telephone`. The number is still on the page for a human to read and
+      // tap — this only keeps it out of the machine-readable surface, where it
+      // is trivially scraped in bulk and ends up in call lists. Email is the
+      // channel that scales and can be filtered; a phone number is not.
+      // Deliberate: do not add it back for schema "completeness".
       areaServed: "IN",
       availableLanguage: ["English", "Hindi", "Bengali"],
       url: `${SITE_URL}/contact`,
