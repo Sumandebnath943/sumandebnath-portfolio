@@ -4,6 +4,7 @@ import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import RelatedPages from "@/components/ui/RelatedPages";
 import PageFaq from "@/components/ui/PageFaq";
+import Contact from "@/components/sections/Contact";
 import { SITE_URL } from "@/lib/projects";
 import { allPosts, allTags, formatPostDate, notebookModified, postUrl } from "@/lib/notebook";
 import "./notebook.css";
@@ -166,8 +167,11 @@ export default function NotebookIndexPage() {
         </div>
       </main>
 
-      <PageFaq href="/notebook" />
-      <RelatedPages href="/notebook" />
+      {/* Paper throughout, then the footer in its light variant — the blog is
+          part of the paper family (/resume, /journey), not the dark site. */}
+      <PageFaq href="/notebook" variant="paper" />
+      <RelatedPages href="/notebook" variant="paper" />
+      <Contact variant="light" />
     </MotionProvider>
   );
 }

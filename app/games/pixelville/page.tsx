@@ -3,6 +3,7 @@ import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import RelatedPages from "@/components/ui/RelatedPages";
+import Contact from "@/components/sections/Contact";
 import PageFaq from "@/components/ui/PageFaq";
 import HeroLock from "@/components/ui/HeroLock";
 import { Reveal, StatCounter } from "@/components/penta/PentaWidgets";
@@ -730,6 +731,11 @@ export default function PixelVillePage() {
 
       <PageFaq href="/games/pixelville" />
       <RelatedPages href="/games/pixelville" />
+      <Contact
+        closingBg="linear-gradient(180deg, #12203A 0%, #101C33 12%, #0A1120 55%, #050505 100%)"
+        glowColor="rgba(245,185,74,0.15)"
+        hazeColor="rgba(77,163,255,0.08)"
+      />
     </MotionProvider>
   );
 }

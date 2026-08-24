@@ -3,6 +3,7 @@ import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import RelatedPages from "@/components/ui/RelatedPages";
+import Contact from "@/components/sections/Contact";
 import PageFaq from "@/components/ui/PageFaq";
 import HeroLock from "@/components/ui/HeroLock";
 import { Reveal, StatCounter } from "@/components/penta/PentaWidgets";
@@ -1523,6 +1524,11 @@ export default function MigiPage() {
 
       <PageFaq href="/agents/migi" />
       <RelatedPages href="/agents/migi" />
+      <Contact
+        closingBg="linear-gradient(180deg, #16200C 0%, #1B2410 12%, #10160A 55%, #050505 100%)"
+        glowColor="rgba(198,242,78,0.14)"
+        hazeColor="rgba(245,191,79,0.09)"
+      />
     </MotionProvider>
   );
 }

@@ -571,6 +571,10 @@ export default function ResumePage() {
         </section>
       </main>
 
+      {/* Dark, not paper. /resume opens on paper and deliberately turns dark for
+          its second half — the "Read it, or talk to it" close is already on the
+          void palette, so the paper variant would put a cream band between two
+          dark sections. Match what precedes the block, not the page's opening. */}
       <RelatedPages href="/resume" />
       <Contact />
     </MotionProvider>

@@ -3,6 +3,7 @@ import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import RelatedPages from "@/components/ui/RelatedPages";
+import Contact from "@/components/sections/Contact";
 import PageFaq from "@/components/ui/PageFaq";
 import HeroLock from "@/components/ui/HeroLock";
 import {
@@ -953,6 +954,11 @@ style={{ width: `${(d.n / 299329) * 100}%`, background: FAMILIES[d.fam].color }}
 
       <PageFaq href="/slms/pentacmd" />
       <RelatedPages href="/slms/pentacmd" />
+      <Contact
+        closingBg="linear-gradient(180deg, #07231A 0%, #06251C 12%, #041610 55%, #050505 100%)"
+        glowColor="rgba(52,211,153,0.15)"
+        hazeColor="rgba(167,139,250,0.09)"
+      />
     </MotionProvider>
   );
 }

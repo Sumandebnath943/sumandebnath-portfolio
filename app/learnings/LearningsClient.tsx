@@ -787,7 +787,7 @@ export default function LearningsPage() {
       {/* Modal lives outside lp-root so it can cover the full viewport */}
       <ExperienceModal exp={modalExp} onClose={closeModal} />
 
-      <RelatedPages href="/learnings" />
+      <RelatedPages href="/learnings" variant="paper" />
       <Contact />
     </MotionProvider>
   );

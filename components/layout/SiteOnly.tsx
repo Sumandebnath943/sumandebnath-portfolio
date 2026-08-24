@@ -12,14 +12,16 @@ import { ADMIN_PATH } from "@/lib/admin-path";
  * the site stays statically prerendered. Reading the pathname on the server
  * would make every page dynamic to hide a robot on one of them.
  *
- * `hideOn` extends the same mechanism to chrome that is unwanted on a specific
- * route rather than on the whole dashboard. Its one caller is the footer, which
- * must not render on `/` — the homepage's Contact section is already a designed
- * closing strip carrying the copyright and the privacy disclosure, and a second
- * footer underneath it would repeat both.
+ * `hideOn` extends the same mechanism to chrome that is unwanted on one specific
+ * route rather than on the whole dashboard. **Nothing uses it at present.** It
+ * was added for a layout-level footer that turned out to be the wrong design —
+ * this site's footer is `components/sections/Contact.tsx`, mounted per page
+ * because it is themed per page (see the note in app/layout.tsx). The prop is
+ * kept because the next piece of root-mounted chrome needing a per-route
+ * exception will want it, and the subtlety below is easy to get wrong afresh.
  *
  * Note this is an exact-match list, not a prefix test: `/` is a prefix of every
- * route on the site, so `startsWith` here would hide the footer everywhere and
+ * route on the site, so `startsWith` here would hide the chrome everywhere and
  * do it quietly.
  */
 export default function SiteOnly({

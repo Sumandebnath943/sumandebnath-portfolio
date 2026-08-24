@@ -278,6 +278,14 @@ const RELATED: Record<string, string[]> = {
   "/learnings": ["/resume", "/notebook", "/projects"],
   "/faq": ["/about", "/resume", "/contact"],
 
+  // The legal pages get real destinations rather than each other. Without an
+  // entry here the fallback is same-group siblings, and the "legal" group is
+  // only these two — so /privacy would have offered exactly one card, pointing
+  // at /terms, which is the least useful link on the site for someone who has
+  // just finished reading a privacy policy.
+  "/privacy": ["/contact", "/about", "/terms"],
+  "/terms": ["/contact", "/projects", "/privacy"],
+
   "/profile": ["/resume", "/journey", "/learnings"],
   "/about": ["/journey", "/resume", "/philosophy"],
   "/journey": ["/about", "/profile", "/philosophy"],

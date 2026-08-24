@@ -35,16 +35,43 @@ import { routeDate } from "@/lib/route-dates";
  * Renders nothing when the route has no entry in lib/page-faqs, so mounting it
  * speculatively is harmless.
  */
+type Variant = "dark" | "paper";
+
+// Mirrors RelatedPages' palette exactly — the two stack directly on top of each
+// other above the footer, and a mismatch between them reads as a rendering bug
+// rather than as two sections.
+const THEME: Record<Variant, { section: string; kicker: string; rule: string; q: string; a: string }> = {
+  dark: {
+    section: "border-white/10 bg-[#050505]",
+    kicker: "text-white/40",
+    rule: "border-white/10",
+    q: "text-white",
+    a: "text-white/55",
+  },
+  paper: {
+    section: "border-[#191512]/10 bg-[#f2ece0]",
+    kicker: "text-[#191512]/45",
+    rule: "border-[#191512]/12",
+    q: "text-[#191512]",
+    a: "text-[#191512]/65",
+  },
+};
+
 export default function PageFaq({
   href,
   heading = "Questions this page answers",
+  variant = "dark",
 }: {
   /** The current page's path, exactly as keyed in lib/page-faqs.ts. */
   href: string;
   heading?: string;
+  /** Match the page this sits on, and match the RelatedPages below it. */
+  variant?: Variant;
 }) {
   const faqs = faqsForPage(href);
   if (faqs.length === 0) return null;
+
+  const t = THEME[variant];
 
   const url = href === "/" ? SITE_URL : `${SITE_URL}${href}`;
 
@@ -66,7 +93,7 @@ export default function PageFaq({
   return (
     <section
       aria-labelledby="page-faq-heading"
-      className="relative border-t border-white/10 bg-[#050505] px-6 py-16 sm:px-10 lg:px-16"
+      className={`relative border-t px-6 py-14 sm:px-10 lg:px-16 ${t.section}`}
     >
       <script
         type="application/ld+json"
@@ -76,16 +103,16 @@ export default function PageFaq({
       <div className="mx-auto max-w-3xl">
         <h2
           id="page-faq-heading"
-          className="mb-10 font-dmmono text-[11px] uppercase tracking-[0.22em] text-white/40"
+          className={`mb-9 font-dmmono text-[11px] uppercase tracking-[0.22em] ${t.kicker}`}
         >
           {heading}
         </h2>
 
         <dl>
           {faqs.map((f) => (
-            <div key={f.q} className="border-t border-white/10 py-7 first:border-t-0 first:pt-0">
-              <dt className="mb-3 text-lg font-medium leading-snug text-white">{f.q}</dt>
-              <dd className="text-[0.9375rem] leading-relaxed text-white/55">{f.a}</dd>
+            <div key={f.q} className={`border-t py-6 first:border-t-0 first:pt-0 ${t.rule}`}>
+              <dt className={`mb-2.5 text-[1.0625rem] font-medium leading-snug ${t.q}`}>{f.q}</dt>
+              <dd className={`text-[0.9375rem] leading-relaxed ${t.a}`}>{f.a}</dd>
             </div>
           ))}
         </dl>

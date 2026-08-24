@@ -87,6 +87,10 @@ check it.
 > best ignored, at worst read as cloaking. That content now lives in
 > `lib/page-faqs.ts` and renders. Do not reintroduce markup-only FAQs.
 
+Both `PageFaq` and `RelatedPages` take a `variant` — see §5.3. They stack
+directly on top of each other above the footer, so they must always be passed the
+same one.
+
 ### 3.2 The notebook's answer block
 
 Every post in `lib/notebook/posts/` carries an `answer` field of 40–60 words,
@@ -98,6 +102,14 @@ opens with narrative gives it nothing.
 Post titles are **question-shaped or claim-shaped, never noun phrases**. "Why
 does position: sticky silently stop working?" is matchable; "Sticky positioning
 notes" is not.
+
+> **`/notebook` is a paper page, and that is not negotiable.** The first version
+> was near-black, reasoned from "the posts are mostly code and code reads better
+> dark". That optimised for the wrong thing — this is the one page on the site
+> somebody sits and *reads* at length, and a long-form reading surface wants
+> paper. It shares `.rz`'s palette so the blog belongs to this site rather than
+> looking imported. Code blocks stay dark **inside** it, which is where the
+> contrast earns its keep.
 
 ### 3.3 Facts as structure, not prose
 
@@ -135,27 +147,62 @@ drift. Check it when the résumé or the product list changes.
 ## 5. Internal linking
 
 Before this work, **nine of eleven product pages had no in-content link to
-anywhere else on the site**, `components/layout/Footer.tsx` returned `null`, and
-`/journey` was in the sitemap and in no menu at all.
+anywhere else on the site**, and `/journey` was in the sitemap and in no menu at
+all.
 
-Three mechanisms now carry it:
+### 5.1 The footer is `components/sections/Contact.tsx`
 
-- **`components/layout/SiteFooter.tsx`** — the site-wide link map, mounted in
-  the root layout, hidden on `/` (the homepage Contact section is already a
-  designed closing strip carrying the copyright and privacy disclosure; a second
-  footer under it repeats both). Link map only — no copyright, no identity line,
-  no socials, for the same reason.
-- **`components/ui/RelatedPages.tsx` + the `RELATED` graph in `lib/pages.ts`** —
-  three curated links at the foot of each page. Curated, not computed: a rail
-  generated from tag overlap produces links that are technically adjacent and
-  editorially meaningless.
-- **In-prose links** via the `[label](href)` inline subset in notebook posts.
+**Read this before adding anything that closes a page.** The site's footer is
+the Contact section — the themed closing panel, the four-column sitemap, and the
+white strip carrying FAQ/Privacy/Terms, the copyright and the visit-data
+disclosure. All of it, one component.
 
-> **The rail is always dark.** It is a sibling of `<main>`, never a child, and it
-> is each page's `<main>` that paints the paper on `/resume`, `/profile`,
-> `/journey` and `/learnings`. The rail therefore always sits on `body`, which is
-> `#050505` everywhere. A `variant="light"` was written, shipped, and found to
-> render ink-dark text onto near-black. It was removed rather than fixed.
+> **A second footer was built and removed.** `components/layout/SiteFooter.tsx`
+> mounted a parallel link map from the root layout, which put a third block
+> underneath the real footer on every page, with duplicate links. The footer is a
+> **page-level** component precisely because it is themed per page
+> (`closingBg`, `glowColor`, `hazeColor`, `variant`) and a layout cannot know
+> which palette a route wants. Do not mount a footer from `app/layout.tsx`.
+
+The footer sitemap (`FOOTER_GROUPS` in that file) is **four columns of four,
+hand-picked** — not derived from `lib/pages.ts`. Deriving it produces a wall of
+every page on the site, which is what the first version was. A new product page
+does not automatically belong there; ask whether it earns a permanent slot on
+every page ahead of something already listed.
+
+> The utility row below it is **capped at three links** by a hard layout
+> constraint recorded in its own comment — a fourth reintroduces a wrap on
+> phones. New footer links go in the sitemap row, never that one.
+
+### 5.2 The Related block
+
+`components/ui/RelatedPages.tsx`, driven by the `RELATED` graph in
+`lib/pages.ts`: **three** curated links at the foot of every page, above the
+footer. Curated, not computed — a rail generated from tag overlap produces links
+that are technically adjacent and editorially meaningless.
+
+**Three, not sixteen.** This block answers "having read *this* page, what next".
+The site index is the footer sitemap's job. Resist growing it.
+
+Plus **in-prose links** via the `[label](href)` inline subset in notebook posts.
+
+### 5.3 Palette — nothing is uniformly dark
+
+`RelatedPages` and `PageFaq` both take `variant`: `dark` for the near-black
+pages, `paper` for the light family (`/notebook`, `/profile`, `/contact`,
+`/journey`, `/learnings`). `Contact` has its own `variant="light"`. **Match the
+block to what precedes it, not to the page's opening** — `/resume` starts on
+paper and turns dark for its second half, so its Related block is `dark`.
+
+> **A `paper` variant must paint its own background.** The first attempt made it
+> transparent on the theory that it would inherit the page's paper. It is a
+> sibling of `<main>`, and it is `<main>` that paints the paper — so it inherited
+> `body`, which is `#050505` on every page on this site, and rendered ink-dark
+> text onto near-black.
+
+> **Cream-on-dark below ~0.5 alpha fails AA.** `resume.css` records this for its
+> own text and the footer sitemap headings hit it too. Do not go below `/55` for
+> small uppercase labels on the dark register.
 
 ---
 

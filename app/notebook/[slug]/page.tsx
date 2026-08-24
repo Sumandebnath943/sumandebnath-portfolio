@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import RelatedPages from "@/components/ui/RelatedPages";
+import Contact from "@/components/sections/Contact";
 import PostBody from "@/components/notebook/PostBody";
 import { SITE_URL } from "@/lib/projects";
 import { getPage } from "@/lib/pages";
@@ -289,7 +290,8 @@ export default async function NotebookPostPage({
         </article>
       </main>
 
-      <RelatedPages href="/notebook" heading="Elsewhere on the site" />
+      <RelatedPages href="/notebook" heading="Elsewhere on the site" variant="paper" />
+      <Contact variant="light" />
     </MotionProvider>
   );
 }

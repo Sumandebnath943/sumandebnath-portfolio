@@ -15,6 +15,7 @@ import OperationalHistory from "@/components/sections/OperationalHistory";
 import AcademicFoundations from "@/components/sections/AcademicFoundations";
 import Contact from "@/components/sections/Contact";
 import { SITE_URL } from "@/lib/projects";
+import RelatedPages from "@/components/ui/RelatedPages";
 
 const profilePageJsonLd = {
   "@context": "https://schema.org",
@@ -56,6 +57,7 @@ export default function Home() {
         <PhilosophyFAQ />
         <OperationalHistory />
         <AcademicFoundations />
+        <RelatedPages href="/" />
         <Contact />
       </main>
 

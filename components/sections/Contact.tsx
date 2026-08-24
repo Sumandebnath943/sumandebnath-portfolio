@@ -24,6 +24,59 @@ function SocialIcon({ id }: { id: string }) {
   );
 }
 
+/* The footer sitemap — four columns of four, rendered above the white strip.
+ *
+ * Hand-written rather than derived from lib/pages.ts, and that is the point:
+ * lib/pages.ts holds every public page, and a footer listing every page is the
+ * wall of links this replaced. These sixteen are the ones worth a permanent
+ * slot on every page of the site. Everything else is one click away through the
+ * nav, the command palette, or a page's own Related block.
+ *
+ * If you add a product page, it does NOT automatically belong here. Ask whether
+ * it earns a permanent place ahead of something already listed. */
+const FOOTER_GROUPS: {
+  title: string;
+  links: { label: string; href: string; external?: boolean }[];
+}[] = [
+  {
+    title: "Work",
+    links: [
+      { label: "All Projects", href: "/projects" },
+      { label: "MIGI Agent Fleet", href: "/agents/migi" },
+      { label: "PentaCMD-47M", href: "/slms/pentacmd" },
+      { label: "Banking Co-pilot", href: "/banking/rm-copilot" },
+    ],
+  },
+  {
+    title: "Writing",
+    links: [
+      { label: "Notebook", href: "/notebook" },
+      { label: "Learnings", href: "/learnings" },
+      { label: "Philosophy", href: "/philosophy" },
+      { label: "FAQ", href: "/faq" },
+    ],
+  },
+  {
+    title: "About",
+    links: [
+      { label: "Profile", href: "/profile" },
+      { label: "The Story", href: "/about" },
+      { label: "The Journey", href: "/journey" },
+      { label: "Résumé", href: "/resume" },
+    ],
+  },
+  {
+    title: "Elsewhere",
+    links: [
+      { label: "GitHub", href: "https://github.com/Sumandebnath943", external: true },
+      { label: "LinkedIn", href: "https://linkedin.com/in/suman-debnath-a528653a1", external: true },
+      { label: "Hugging Face", href: "https://huggingface.co/SumanDebnath943", external: true },
+      // Not decoration: an anchor is how most crawlers find this file at all.
+      { label: "llms.txt", href: "/llms.txt" },
+    ],
+  },
+];
+
 const socials = [
   { id: "github", label: "GitHub", href: "https://github.com/Sumandebnath943" },
   { id: "huggingface", label: "Hugging Face", href: "https://huggingface.co/SumanDebnath943" },
@@ -233,6 +286,63 @@ export default function Contact({
           </p>
         </m.div>
       </div>
+
+      {/* ── FOOTER SITEMAP ──────────────────────────────────────────────────
+          Four short columns, sitting on the closing panel's own background so
+          they read as the last of the dark half rather than the first of the
+          white strip.
+
+          This is the site's only full link map, and it belongs here. The utility
+          row below is capped at three links by a hard layout constraint (see its
+          comment — a fourth reintroduces a wrap on phones), so the map cannot go
+          there; and a separate footer block below this section is worse still,
+          because this section *is* the footer.
+
+          Kept deliberately short — four columns of four. The point is a crawlable
+          path from any page to the main ones, not an index of the site. */}
+      <nav
+        aria-label="Footer sitemap"
+        className={`sd-mascot-clear relative z-10 max-w-5xl mx-auto px-6 pb-12 pt-2 ${
+          light ? "text-[#0B3B25]" : "text-[#F5F5F3]"
+        }`}
+      >
+        <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4">
+          {FOOTER_GROUPS.map((group) => (
+            <div key={group.title}>
+              {/* 0.55, not 0.4 — the same finding resume.css records for its
+                  cream-on-void text: below ~0.5 this palette drops under 4.5:1,
+                  and these are 10px uppercase labels, which is the worst case
+                  for it rather than an exception to it. */}
+              <h3
+                className={`mb-3 font-manrope text-[10px] font-semibold uppercase tracking-[0.18em] ${
+                  light ? "text-[#1f7a4d]/90" : "text-[#F5F5F3]/55"
+                }`}
+              >
+                {group.title}
+              </h3>
+              <ul className="space-y-2">
+                {group.links.map((l) => (
+                  <li key={l.href}>
+                    <a
+                      href={l.href}
+                      {...(l.external
+                        ? { target: "_blank", rel: "me noopener noreferrer" }
+                        : {})}
+                      className={`font-manrope text-[13px] transition-colors ${
+                        light
+                          ? "text-[#0B3B25]/75 hover:text-[#0B3B25]"
+                          : "text-[#F5F5F3]/55 hover:text-[#F5F5F3]"
+                      }`}
+                    >
+                      {l.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </nav>
 
       {/* ── FOOTER STRIP ── */}
       <div className={`relative z-10 border-t ${light ? "bg-white border-[#2E8B57]/[0.18]" : "bg-white border-[#E8E8E8]"}`}>

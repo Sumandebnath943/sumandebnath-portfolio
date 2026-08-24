@@ -7,6 +7,7 @@ import ContactForm from "@/components/sections/ContactForm";
 import { SITE_URL } from "@/lib/projects";
 import { identity, targetRoles } from "@/lib/resume";
 import "./contact.css";
+import RelatedPages from "@/components/ui/RelatedPages";
 
 export const metadata: Metadata = {
   title: { absolute: `Contact Suman Debnath — ${identity.headline}` },
@@ -263,6 +264,7 @@ export default function ContactPageRoute() {
 
       </main>
 
+      <RelatedPages href="/contact" variant="paper" />
       <Contact variant="light" />
     </MotionProvider>
   );

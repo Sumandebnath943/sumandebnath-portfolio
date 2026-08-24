@@ -6,6 +6,7 @@ import { SITE_URL } from "@/lib/projects";
 // Read from the same constants the purge job enforces, so the page cannot claim
 // a retention period the code does not actually apply.
 import { IP_RETENTION_DAYS, VISIT_RETENTION_DAYS } from "@/lib/db";
+import RelatedPages from "@/components/ui/RelatedPages";
 
 export const metadata: Metadata = {
   title: { absolute: "Privacy — Suman Debnath" },
@@ -349,6 +350,7 @@ export default function PrivacyPage() {
         </section>
       </main>
 
+      <RelatedPages href="/privacy" />
       <Contact />
     </MotionProvider>
   );

@@ -1,9 +1,15 @@
-/* /notebook — the engineering notebook.
+/* /notebook — the blog.
  *
- * Dark register, matching the main site rather than the paper pages
- * (/resume, /profile, /journey). Two reasons: these posts are mostly code, and
- * code reads better dark; and the closing RelatedPages rail is dark by default,
- * so the page terminates without a variant switch.
+ * **Paper register, not dark.** The first version of this page was near-black,
+ * on the reasoning that the posts are mostly code and code reads better dark.
+ * That optimised for the wrong thing: this is the one page on the site somebody
+ * actually sits and *reads*, at length, and a long-form reading surface wants
+ * paper. The code blocks stay dark inside it, which is where the contrast
+ * earns its keep.
+ *
+ * The palette is lifted from .rz (app/resume/resume.css) on purpose — same
+ * --paper, same --ink, same --clay. The blog should read as part of this site,
+ * alongside /resume and /journey, rather than as an imported publishing tool.
  *
  * Prose is class-based here rather than Tailwind utilities. This is the one
  * place in the repo where that is the right call — long-form typography means a
@@ -12,16 +18,22 @@
  */
 
 .nb {
-  --nb-ink: #ECECF1;
-  --nb-ink-soft: rgba(236, 236, 241, 0.72);
-  --nb-ink-mute: rgba(236, 236, 241, 0.48);
-  --nb-rule: rgba(255, 255, 255, 0.1);
-  --nb-rule-strong: rgba(255, 255, 255, 0.2);
-  --nb-surface: rgba(255, 255, 255, 0.03);
-  --nb-accent: #7b61ff;
-  --nb-accent-warm: #f5a524;
+  /* Same warm register as .rz — see the note above. */
+  --nb-paper: #f2ece0;
+  --nb-paper-deep: #e9e1d1;
+  --nb-ink: #191512;
+  --nb-ink-soft: #4a423a;
+  --nb-ink-mute: #6d6459;
+  --nb-clay: #b4472a;
+  --nb-rule: rgba(25, 21, 18, 0.14);
+  --nb-rule-strong: rgba(25, 21, 18, 0.28);
+  --nb-surface: rgba(25, 21, 18, 0.035);
 
-  background: #050505;
+  /* The dark register, used only inside code blocks. */
+  --nb-void: #14110d;
+  --nb-cream: #ede7da;
+
+  background: var(--nb-paper);
   color: var(--nb-ink);
 }
 
@@ -79,7 +91,7 @@
 .nb-answer {
   margin: 2.5rem 0 0;
   padding: 1.5rem 1.75rem;
-  border-left: 2px solid var(--nb-accent);
+  border-left: 2px solid var(--nb-clay);
   background: var(--nb-surface);
   border-radius: 0 0.75rem 0.75rem 0;
 }
@@ -96,7 +108,7 @@
   font-size: 0.625rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--nb-accent);
+  color: var(--nb-clay);
   margin: 0 0 0.75rem;
 }
 
@@ -314,7 +326,7 @@
 }
 
 .nb-ul li::marker {
-  color: var(--nb-accent);
+  color: var(--nb-clay);
 }
 
 .nb-ol li::marker {
@@ -332,13 +344,13 @@
 }
 
 .nb-link:hover {
-  text-decoration-color: var(--nb-accent);
+  text-decoration-color: var(--nb-clay);
 }
 
 .nb-inline-code {
   font-family: var(--font-dm-mono), ui-monospace, monospace;
   font-size: 0.875em;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--nb-paper-deep);
   border: 1px solid var(--nb-rule);
   border-radius: 0.3rem;
   padding: 0.1em 0.35em;
@@ -352,10 +364,15 @@
   margin: 2rem 0;
 }
 
+/* The one place the dark register survives on this page, and it earns it: a
+   snippet wants maximum contrast between syntax and background, and a dark
+   block on paper also does the job of visually separating code from prose
+   without needing a rule or extra margin. Same device /resume uses for its
+   second half. */
 .nb-pre {
   margin: 0;
   padding: 1.25rem 1.4rem;
-  background: #0b0b0f;
+  background: var(--nb-void);
   border: 1px solid var(--nb-rule);
   border-radius: 0.75rem;
   /* The block scrolls; the page must not. */
@@ -366,7 +383,7 @@
   font-family: var(--font-dm-mono), ui-monospace, monospace;
   font-size: 0.8125rem;
   line-height: 1.75;
-  color: #d6d6e0;
+  color: var(--nb-cream);
   white-space: pre;
 }
 
@@ -388,11 +405,11 @@
 }
 
 .nb-callout--warn {
-  border-left: 2px solid var(--nb-accent-warm);
+  border-left: 2px solid var(--nb-clay);
 }
 
 .nb-callout--note {
-  border-left: 2px solid var(--nb-accent);
+  border-left: 2px solid var(--nb-clay);
 }
 
 .nb-callout-title {
@@ -568,7 +585,7 @@
   font-family: var(--font-dm-mono), ui-monospace, monospace;
   font-size: 0.75rem;
   letter-spacing: 0.08em;
-  color: var(--nb-accent);
+  color: var(--nb-clay);
 }
 
 /* ── Post footer nav ────────────────────────────────────────────────────── */

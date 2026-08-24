@@ -3,6 +3,7 @@ import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import RelatedPages from "@/components/ui/RelatedPages";
+import Contact from "@/components/sections/Contact";
 import PageFaq from "@/components/ui/PageFaq";
 import HeroLock from "@/components/ui/HeroLock";
 import { Reveal, LiveToolbar, CopyCommand } from "@/components/pact/PactWidgets";
@@ -750,6 +751,7 @@ export default function PactAgentPage() {
 
       <PageFaq href="/agents/pact-agent" />
       <RelatedPages href="/agents/pact-agent" />
+      <Contact />
     </MotionProvider>
   );
 }

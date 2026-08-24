@@ -482,10 +482,15 @@ Every page wraps its own content:
 <MotionProvider>
   <Navigation />
   <main>…</main>
+  <PageFaq href="/your/path" />
+  <RelatedPages href="/your/path" />
   <Contact variant="dark" />
-  <Footer />
 </MotionProvider>
 ```
+
+`<Contact />` closes the page — it **is** the footer, sitemap and legal strip
+included. There is no separate `<Footer />`; the component that used to sit
+there returned `null` and has been deleted. See §8.
 
 ### Six motion traps that have already cost real debugging time
 
@@ -873,17 +878,30 @@ Missing one of these is the most common defect in this repo. A new page needs:
    of the hero `<section>`**. Without it the chat launcher and the mascot cover
    the hero's own CTAs on a phone. See PORTFOLIO_HANDOFF.md §4 for the measured
    overlap on every page.
-6. **`lib/pages.ts`** — add a `PageEntry` (href, label, one-line blurb, group,
-   accent) **and** an entry in the `RELATED` graph. This is what puts the page
-   in the site footer and gives it a related rail; a page missing from here is
-   link-orphaned no matter how good its content is. Then mount
-   `<RelatedPages href="/your/path" />` where the page closes — above
-   `<Contact />` if the page has one.
+6. **The closing sequence** — every page ends with the same three blocks, in
+   this order, and a page missing them is link-orphaned no matter how good its
+   content is:
+
+   ```tsx
+   <PageFaq href="/your/path" variant="dark" />        // or "paper"
+   <RelatedPages href="/your/path" variant="dark" />   // must match PageFaq
+   <Contact closingBg="…" glowColor="…" hazeColor="…" />
+   ```
+
+   `<Contact />` **is the footer** — the closing panel, the four-column sitemap
+   and the white legal strip. It is mounted per page, never from the layout,
+   because it is themed per page; pass a `closingBg` built from the page's own
+   accent, or `variant="light"` on the paper pages. Do not add a second footer
+   below it. See `AEO_PLAYBOOK.md` §5.1.
+
+   Add the page to **`lib/pages.ts`** (a `PageEntry` plus an entry in the
+   `RELATED` graph) so the Related block has something to show. Adding it to
+   `FOOTER_GROUPS` in `Contact.tsx` is a **separate, deliberate** decision —
+   that list is sixteen hand-picked links, not an index.
 7. **`lib/page-faqs.ts`** — two to four questions somebody would actually type,
-   with self-contained answers, then mount `<PageFaq href="/your/path" />`
-   directly above the related rail. Read the rules at the top of that file
-   first, and **do not duplicate a question that already exists in
-   `lib/faqs.ts`**. See `AEO_PLAYBOOK.md` §3.
+   with self-contained answers. Read the rules at the top of that file first, and
+   **do not duplicate a question that already exists in `lib/faqs.ts`**. See
+   `AEO_PLAYBOOK.md` §3.
 
 Also set page-level `metadata` with `alternates.canonical` and an `openGraph`
 image, and put screenshots under `public/<slug>/`.

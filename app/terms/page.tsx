@@ -3,6 +3,7 @@ import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import Contact from "@/components/sections/Contact";
 import { SITE_URL } from "@/lib/projects";
+import RelatedPages from "@/components/ui/RelatedPages";
 
 export const metadata: Metadata = {
   title: { absolute: "Terms of use — Suman Debnath" },
@@ -268,6 +269,7 @@ export default function TermsPage() {
         </section>
       </main>
 
+      <RelatedPages href="/terms" />
       <Contact />
     </MotionProvider>
   );

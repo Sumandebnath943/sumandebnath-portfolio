@@ -325,7 +325,6 @@ import EasterEggs from "@/components/ui/EasterEggs";
 import VisitorPing from "@/components/analytics/VisitorPing";
 import PrivacyNotice from "@/components/ui/PrivacyNotice";
 import SiteOnly from "@/components/layout/SiteOnly";
-import SiteFooter from "@/components/layout/SiteFooter";
 import SiteTour from "@/components/ui/SiteTour";
 import CommandPalette from "@/components/layout/CommandPalette";
 import MotionProvider from "@/components/providers/MotionProvider";
@@ -427,18 +426,20 @@ export default function RootLayout({
         <RobotChatProvider>
           {children}
           {/*
-            The footer sits here — after {children}, outside MotionProvider —
-            because it is the only piece of root-layout chrome that is *in flow*
-            rather than fixed-position, and it has to close the document.
+            NO FOOTER IS MOUNTED HERE, and that is deliberate.
 
-            It does not animate and it is a server component, so it needs no
-            motion features; wrapping it in MotionProvider would only pull a
-            client boundary around markup whose entire purpose is to be present
-            in the server-rendered HTML.
+            A layout-level `<SiteFooter />` briefly lived at this spot and was
+            wrong. This site's footer is `components/sections/Contact.tsx` — the
+            closing panel plus the white strip carrying FAQ/Privacy/Terms, the
+            copyright and the visit-data disclosure. Mounting a second footer
+            from the layout produced a third block underneath the real one on
+            every page, with a duplicate set of links.
+
+            The footer is a *page-level* component because it is themed per page
+            (`closingBg`, `glowColor`, `hazeColor`, `variant`), and a layout has
+            no way to know which palette a route wants. Every page mounts its
+            own `<Contact />`; see PROJECT_BIBLE §8.
           */}
-          <SiteOnly hideOn={["/"]}>
-            <SiteFooter />
-          </SiteOnly>
           {/* Portfolio furniture — deliberately absent from the dashboard, which
               is a working tool and not somewhere a mascot belongs. VisitorPing
               excludes itself separately, so that reading your own records never

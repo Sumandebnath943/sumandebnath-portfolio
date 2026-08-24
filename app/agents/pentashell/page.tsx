@@ -3,6 +3,7 @@ import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import RelatedPages from "@/components/ui/RelatedPages";
+import Contact from "@/components/sections/Contact";
 import PageFaq from "@/components/ui/PageFaq";
 import HeroLock from "@/components/ui/HeroLock";
 import {
@@ -583,6 +584,11 @@ export default function PentashellPage() {
 
       <PageFaq href="/agents/pentashell" />
       <RelatedPages href="/agents/pentashell" />
+      <Contact
+        closingBg="linear-gradient(180deg, #08202B 0%, #06202E 12%, #051620 55%, #050505 100%)"
+        glowColor="rgba(47,226,240,0.16)"
+        hazeColor="rgba(155,107,242,0.09)"
+      />
     </MotionProvider>
   );
 }

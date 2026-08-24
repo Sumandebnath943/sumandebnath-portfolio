@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import RelatedPages from "@/components/ui/RelatedPages";
+import Contact from "@/components/sections/Contact";
 import PageFaq from "@/components/ui/PageFaq";
 import HeroLock from "@/components/ui/HeroLock";
 import { Reveal, StatCounter, CopyCommand } from "@/components/penta/PentaWidgets";
@@ -693,6 +694,11 @@ export default function QdexPage() {
 
       <PageFaq href="/llms/qdex-1.5b" />
       <RelatedPages href="/llms/qdex-1.5b" />
+      <Contact
+        closingBg="linear-gradient(180deg, #06201F 0%, #052322 12%, #041515 55%, #050505 100%)"
+        glowColor="rgba(45,212,191,0.15)"
+        hazeColor="rgba(52,211,153,0.08)"
+      />
     </MotionProvider>
   );
 }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import RelatedPages from "@/components/ui/RelatedPages";
+import Contact from "@/components/sections/Contact";
 import Image from "next/image";
 import { FadeInUp, BentoGridContainer, BentoCard } from "@/components/ui/AnimatedBento";
 import { SITE_URL } from "@/lib/projects";
@@ -395,6 +396,11 @@ export default function FunAppsPage() {
       </main>
 
       <RelatedPages href="/fun-apps" />
+      <Contact
+        closingBg="linear-gradient(180deg, #241605 0%, #2A1806 12%, #170E04 55%, #050505 100%)"
+        glowColor="rgba(255,140,0,0.15)"
+        hazeColor="rgba(255,59,107,0.08)"
+      />
     </MotionProvider>
   );
 }

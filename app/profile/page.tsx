@@ -25,6 +25,7 @@ import {
 import { SITE_URL } from "@/lib/projects";
 import "./profile.css";
 import "./profile-sections.css";
+import RelatedPages from "@/components/ui/RelatedPages";
 
 /* ─────────────────────────────────────────────────────────────────────────
    /profile — the paper profile.
@@ -660,6 +661,7 @@ export default function ProfilePage() {
 
       {/* The site's own closing, in its light variant. A page this bright
           cannot end on the dark one without reading as a cut-off. */}
+      <RelatedPages href="/profile" variant="paper" />
       <Contact variant="light" />
     </MotionProvider>
   );

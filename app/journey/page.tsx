@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Navigation from "@/components/layout/Navigation";
+import Contact from "@/components/sections/Contact";
+import RelatedPages from "@/components/ui/RelatedPages";
 import JourneyStage from "@/components/journey/JourneyStage";
 import { SITE_URL } from "@/lib/projects";
 import { identity } from "@/lib/resume";
@@ -114,6 +116,11 @@ export default function JourneyPage() {
           </p>
         </details>
       </main>
+
+      {/* Both in the paper register — this page is cream and ink throughout, and
+          the dark closing would read as the page having been cut off. */}
+      <RelatedPages href="/journey" variant="paper" />
+      <Contact variant="light" />
     </>
   );
 }
