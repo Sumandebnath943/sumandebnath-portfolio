@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
+import RelatedPages from "@/components/ui/RelatedPages";
+import PageFaq from "@/components/ui/PageFaq";
 import HeroLock from "@/components/ui/HeroLock";
 import Contact from "@/components/sections/Contact";
 import { Reveal, GoldShimmerButton } from "@/components/forget-anything/ForgetAnythingVisuals";
@@ -569,8 +570,9 @@ export default function ForgetAnythingPage() {
       </main>
 
       {/* white footer with green fonts & accents (this page only) */}
+      <PageFaq href="/apps/forget-anything" />
+      <RelatedPages href="/apps/forget-anything" />
       <Contact variant="light" />
-      <Footer />
     </MotionProvider>
   );
 }

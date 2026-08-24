@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
+import RelatedPages from "@/components/ui/RelatedPages";
+import PageFaq from "@/components/ui/PageFaq";
 import Contact from "@/components/sections/Contact";
 import HeroLock from "@/components/ui/HeroLock";
 import { Reveal, StatCounter } from "@/components/penta/PentaWidgets";
@@ -131,38 +132,10 @@ const articleLd = {
   image: OG,
 };
 
-/* The three questions an answer engine is most likely to be asked about this
-   project, answered in the markup as well as in the prose. */
-const faqLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "Does Banking Co-pilot let a language model make credit decisions?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "No. Every score — financial health, risk probability, loan eligibility, lead quality and next best action — is computed by a deterministic engine with named, weighted factors. No language model touches any of them. LLMs are confined to conversation, synthesising a cited answer from retrieved bank policy, and reading a document image.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Why does the API return 404 instead of 403 for another Relationship Manager's customer?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Because 403 Forbidden confirms the record exists. An attacker probing sequential customer ids could map the bank's entire customer ID space from the difference between a 403 and a 404, without reading any record. Returning 404 for both 'does not exist' and 'not yours' makes the two cases indistinguishable and the enumeration worthless.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Is Banking Co-pilot built on real customer data?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "No. The dataset is entirely synthetic — 24 generated customers across 4 Relationship Managers, 8 policy documents and 8 government schemes. No real customer data is used anywhere. The security controls are built to production quality so the platform is ready for real, governed data.",
-      },
-    },
-  ],
-};
+/* The FAQ that used to be hand-rolled here now lives in lib/page-faqs.ts and
+   is rendered by <PageFaq />, which emits the FAQPage markup alongside the
+   visible copy. It was structured data with no visible counterpart on the page,
+   which Google's FAQPage guidelines do not permit. */
 
 const breadcrumbLd = {
   "@context": "https://schema.org",
@@ -211,7 +184,6 @@ export default function BankingCopilotPage() {
     <MotionProvider>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(appLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <Navigation />
 
@@ -967,8 +939,9 @@ export default function BankingCopilotPage() {
         </section>
       </main>
 
+      <PageFaq href="/banking/rm-copilot" />
+      <RelatedPages href="/banking/rm-copilot" />
       <Contact />
-      <Footer />
     </MotionProvider>
   );
 }

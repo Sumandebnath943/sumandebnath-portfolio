@@ -184,10 +184,30 @@ const commands: Command[] = [
     icon: "◈",
   },
   {
+    id: "notebook",
+    command: "/notebook",
+    label: "Notebook",
+    description: "Engineering notes — what broke, the actual fix, what generalised",
+    href: "/notebook",
+    icon: "✎",
+  },
+  {
+    id: "journey",
+    command: "/journey",
+    label: "The Journey",
+    description: "The interactive life story — the turns, the artifacts, the years",
+    href: "/journey",
+    icon: "❂",
+  },
+  {
+    // Was described as the "engineering notebook", which this page is not — it
+    // is the credentials and skill map ported from the learning portfolio. The
+    // notebook is /notebook. The same wrong description had also been copied
+    // into public/llms.txt.
     id: "learnings",
     command: "/learnings",
     label: "Learnings",
-    description: "Engineering notebook — what broke, the real fix, what generalised",
+    description: "The skill map — domains, competencies and credentials",
     href: "/learnings",
     icon: "✦",
   },

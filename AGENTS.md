@@ -23,6 +23,10 @@ Three documents carry the full context for this repo. They do not overlap.
   or proposing any performance work.** How to measure this site without fooling
   yourself, what has already been changed and measured, the standing rules, and
   the list of things that were considered and refused on purpose.
+- **`AEO_PLAYBOOK.md`** — **read this before proposing any SEO, AEO or "get
+  cited by AI" work.** What is already in place, the rules for writing
+  extractable answers, the one-question-per-URL constraint, the off-site track
+  that carries most of the remaining ceiling, and what was refused.
 
 `project_memory.md` and `analysis_results.md` are early-2026 snapshots, kept for
 history only. They are superseded by `PROJECT_BIBLE.md` and their file paths no

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
+import RelatedPages from "@/components/ui/RelatedPages";
 import Image from "next/image";
 import { FadeInUp, BentoGridContainer, BentoCard } from "@/components/ui/AnimatedBento";
 import { SITE_URL } from "@/lib/projects";
@@ -394,7 +394,7 @@ export default function FunAppsPage() {
         </section>
       </main>
 
-      <Footer />
+      <RelatedPages href="/fun-apps" />
     </MotionProvider>
   );
 }

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
+import RelatedPages from "@/components/ui/RelatedPages";
+import PageFaq from "@/components/ui/PageFaq";
 import HeroLock from "@/components/ui/HeroLock";
 import { Reveal, StatCounter, CopyCommand } from "@/components/penta/PentaWidgets";
 import { QDEX, SPECTRUM, HUMANEVAL } from "@/components/qdex/qdex-data";
@@ -690,7 +691,8 @@ export default function QdexPage() {
         </div>
       </main>
 
-      <Footer />
+      <PageFaq href="/llms/qdex-1.5b" />
+      <RelatedPages href="/llms/qdex-1.5b" />
     </MotionProvider>
   );
 }

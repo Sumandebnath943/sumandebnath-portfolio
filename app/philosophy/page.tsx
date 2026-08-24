@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
+import RelatedPages from "@/components/ui/RelatedPages";
+import PageFaq from "@/components/ui/PageFaq";
 import AIPhilosophy from "@/components/sections/AIPhilosophy";
 import PhilosophyFAQ from "@/components/sections/PhilosophyFAQ";
 import Contact from "@/components/sections/Contact";
@@ -104,8 +105,9 @@ export default function PhilosophyPage() {
           </div>
         </section>
       </main>
+      <PageFaq href="/philosophy" />
+      <RelatedPages href="/philosophy" />
       <Contact />
-      <Footer />
     </MotionProvider>
   );
 }

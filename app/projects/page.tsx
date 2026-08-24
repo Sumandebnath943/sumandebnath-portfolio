@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
+import RelatedPages from "@/components/ui/RelatedPages";
+import PageFaq from "@/components/ui/PageFaq";
 import Contact from "@/components/sections/Contact";
 import ArchiveCard from "@/components/sections/ArchiveCard";
 import { archiveProjects } from "@/lib/archive-projects";
@@ -182,8 +183,9 @@ export default function ProjectsArchivePage() {
         </section>
       </main>
 
+      <PageFaq href="/projects" />
+      <RelatedPages href="/projects" />
       <Contact />
-      <Footer />
     </MotionProvider>
   );
 }

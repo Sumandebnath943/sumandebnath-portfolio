@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
+import RelatedPages from "@/components/ui/RelatedPages";
+import PageFaq from "@/components/ui/PageFaq";
 import Experience from "@/components/sections/Experience";
 import SystemsStack from "@/components/sections/SystemsStack";
 import OperationalHistory from "@/components/sections/OperationalHistory";
@@ -176,8 +177,9 @@ export default function AboutPage() {
         <AcademicFoundations />
       </main>
 
+      <PageFaq href="/about" />
+      <RelatedPages href="/about" />
       <Contact />
-      <Footer />
     </MotionProvider>
   );
 }

@@ -1,6 +1,5 @@
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
 import LoaderGate from "@/components/layout/LoaderGate";
 import Hero from "@/components/sections/Hero";
 import Film from "@/components/sections/Film";
@@ -60,7 +59,6 @@ export default function Home() {
         <Contact />
       </main>
 
-      <Footer />
       {/* SiteTour used to be mounted here, which is precisely why the tour never
           left this page. It now lives in the root layout. */}
     </MotionProvider>

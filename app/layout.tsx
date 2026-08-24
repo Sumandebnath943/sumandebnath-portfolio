@@ -325,6 +325,7 @@ import EasterEggs from "@/components/ui/EasterEggs";
 import VisitorPing from "@/components/analytics/VisitorPing";
 import PrivacyNotice from "@/components/ui/PrivacyNotice";
 import SiteOnly from "@/components/layout/SiteOnly";
+import SiteFooter from "@/components/layout/SiteFooter";
 import SiteTour from "@/components/ui/SiteTour";
 import CommandPalette from "@/components/layout/CommandPalette";
 import MotionProvider from "@/components/providers/MotionProvider";
@@ -379,6 +380,38 @@ export default function RootLayout({
               'r.classList.remove("sd-intro","sd-intro-nav")},8000)}}catch(e){}',
           }}
         />
+        {/*
+          Discovery links. React 19 hoists bare <link> elements into <head>
+          from anywhere in the tree, which is why these can live here rather
+          than in the Metadata API.
+
+          They are NOT in `metadata.alternates` on purpose: almost every page
+          sets its own `alternates: { canonical: … }`, and Next replaces that
+          object wholesale rather than merging it — so anything declared there
+          in the root layout would silently vanish on 20-odd routes.
+
+          • llms.txt / llms-full.txt — nothing on the site pointed at either
+            file, so the only way an agent found them was guessing the
+            convention. An advertised file is one more of them will read.
+          • rel="me" — the identity half. Entity resolution across ChatGPT,
+            Perplexity and Google's knowledge graph works by corroboration, and
+            a reciprocal rel="me" is the machine-readable claim that these
+            profiles and this site are the same person. It backs up the
+            `sameAs` array in the Person JSON-LD below with an HTML-level
+            assertion, which matters because there is more than one Suman
+            Debnath and at least one of them is well-indexed.
+        */}
+        <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM context — summary" />
+        <link
+          rel="alternate"
+          type="text/plain"
+          href="/llms-full.txt"
+          title="LLM context — full text"
+        />
+        <link rel="me" href="https://github.com/Sumandebnath943" />
+        <link rel="me" href="https://linkedin.com/in/suman-debnath-a528653a1" />
+        <link rel="me" href="https://x.com/iamSdebnath" />
+
         <Script
           id="ld-person"
           type="application/ld+json"
@@ -393,6 +426,19 @@ export default function RootLayout({
         />
         <RobotChatProvider>
           {children}
+          {/*
+            The footer sits here — after {children}, outside MotionProvider —
+            because it is the only piece of root-layout chrome that is *in flow*
+            rather than fixed-position, and it has to close the document.
+
+            It does not animate and it is a server component, so it needs no
+            motion features; wrapping it in MotionProvider would only pull a
+            client boundary around markup whose entire purpose is to be present
+            in the server-rendered HTML.
+          */}
+          <SiteOnly hideOn={["/"]}>
+            <SiteFooter />
+          </SiteOnly>
           {/* Portfolio furniture — deliberately absent from the dashboard, which
               is a working tool and not somewhere a mascot belongs. VisitorPing
               excludes itself separately, so that reading your own records never

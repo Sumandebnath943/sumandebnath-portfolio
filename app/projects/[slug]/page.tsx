@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
+import RelatedPages from "@/components/ui/RelatedPages";
 import ImprintDossier from "@/components/sections/ImprintDossier";
 import LegatusDossier from "@/components/sections/LegatusDossier";
 import CiteDossier from "@/components/sections/CiteDossier";
@@ -158,8 +158,8 @@ export default async function ProjectPage({ params }: Props) {
         <div className="max-w-7xl mx-auto">{renderDossier(project.slug)}</div>
       </main>
 
+      <RelatedPages href="/projects" />
       <Contact />
-      <Footer />
     </MotionProvider>
   );
 }

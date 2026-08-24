@@ -3,7 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
+import RelatedPages from "@/components/ui/RelatedPages";
+import PageFaq from "@/components/ui/PageFaq";
 import HeroLock from "@/components/ui/HeroLock";
 import Contact from "@/components/sections/Contact";
 import {
@@ -928,8 +929,9 @@ export default function MigiAppPage() {
         </section>
       </main>
 
+      <PageFaq href="/apps/migi-app" />
+      <RelatedPages href="/apps/migi-app" />
       <Contact variant="dark" />
-      <Footer />
     </MotionProvider>
   );
 }

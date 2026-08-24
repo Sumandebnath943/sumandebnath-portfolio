@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
+import RelatedPages from "@/components/ui/RelatedPages";
 import Contact from "@/components/sections/Contact";
 import { aboutFaqs, allFaqs, buildFaqPageJsonLd, faqs, type Faq } from "@/lib/faqs";
 import { SITE_URL } from "@/lib/projects";
@@ -118,8 +118,8 @@ export default function FAQPage() {
         </section>
       </main>
 
+      <RelatedPages href="/faq" />
       <Contact />
-      <Footer />
     </MotionProvider>
   );
 }

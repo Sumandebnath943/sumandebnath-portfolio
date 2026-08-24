@@ -855,7 +855,7 @@ and one hard-coded ink fails contrast on at least one of them.
 
 ---
 
-## 8. Adding a product page — the five wire-in points
+## 8. Adding a product page — the seven wire-in points
 
 Missing one of these is the most common defect in this repo. A new page needs:
 
@@ -873,14 +873,28 @@ Missing one of these is the most common defect in this repo. A new page needs:
    of the hero `<section>`**. Without it the chat launcher and the mascot cover
    the hero's own CTAs on a phone. See PORTFOLIO_HANDOFF.md §4 for the measured
    overlap on every page.
+6. **`lib/pages.ts`** — add a `PageEntry` (href, label, one-line blurb, group,
+   accent) **and** an entry in the `RELATED` graph. This is what puts the page
+   in the site footer and gives it a related rail; a page missing from here is
+   link-orphaned no matter how good its content is. Then mount
+   `<RelatedPages href="/your/path" />` where the page closes — above
+   `<Contact />` if the page has one.
+7. **`lib/page-faqs.ts`** — two to four questions somebody would actually type,
+   with self-contained answers, then mount `<PageFaq href="/your/path" />`
+   directly above the related rail. Read the rules at the top of that file
+   first, and **do not duplicate a question that already exists in
+   `lib/faqs.ts`**. See `AEO_PLAYBOOK.md` §3.
 
 Also set page-level `metadata` with `alternates.canonical` and an `openGraph`
 image, and put screenshots under `public/<slug>/`.
 
-If the page should be findable by answer engines as well as Google, add it to
-**`public/llms.txt`** and **`public/llms-full.txt`** too — every other product
-already has an entry there, and a page missing from them is invisible to that
-route even when its JSON-LD is perfect.
+Then run **`node scripts/build-route-dates.mjs`** so the sitemap carries a real
+`lastModified` for the new route.
+
+`/llms.txt` needs no action — it is generated from `lib/pages`, `lib/projects`
+and the notebook registry by `app/llms.txt/route.ts`, so adding the page above
+adds it there too. **`public/llms-full.txt` is still hand-written** and does
+need an entry.
 
 ### Page skeleton conventions
 

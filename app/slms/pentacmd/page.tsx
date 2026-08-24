@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
+import RelatedPages from "@/components/ui/RelatedPages";
+import PageFaq from "@/components/ui/PageFaq";
 import HeroLock from "@/components/ui/HeroLock";
 import {
   Reveal,
@@ -950,7 +951,8 @@ style={{ width: `${(d.n / 299329) * 100}%`, background: FAMILIES[d.fam].color }}
         </div>
       </main>
 
-      <Footer />
+      <PageFaq href="/slms/pentacmd" />
+      <RelatedPages href="/slms/pentacmd" />
     </MotionProvider>
   );
 }

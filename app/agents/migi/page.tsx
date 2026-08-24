@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
+import RelatedPages from "@/components/ui/RelatedPages";
+import PageFaq from "@/components/ui/PageFaq";
 import HeroLock from "@/components/ui/HeroLock";
 import { Reveal, StatCounter } from "@/components/penta/PentaWidgets";
 import { DashboardShowcase, ArchitectureFlow } from "@/components/migi/MigiVisuals";
@@ -1520,7 +1521,8 @@ export default function MigiPage() {
         </section>
       </main>
 
-      <Footer />
+      <PageFaq href="/agents/migi" />
+      <RelatedPages href="/agents/migi" />
     </MotionProvider>
   );
 }

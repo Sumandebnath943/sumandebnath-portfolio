@@ -5,6 +5,7 @@ import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import Contact from "@/components/sections/Contact";
 import { SITE_URL } from "@/lib/projects";
+import RelatedPages from "@/components/ui/RelatedPages";
 import "./resume.css";
 import {
   additionalProjects,
@@ -570,6 +571,7 @@ export default function ResumePage() {
         </section>
       </main>
 
+      <RelatedPages href="/resume" />
       <Contact />
     </MotionProvider>
   );

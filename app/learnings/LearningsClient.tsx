@@ -5,7 +5,7 @@ import Script from "next/script";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import Contact from "@/components/sections/Contact";
-import Footer from "@/components/layout/Footer";
+import RelatedPages from "@/components/ui/RelatedPages";
 import { domains, competencies, experiences, type Experience } from "@/lib/learnings-data";
 import "./learnings.css";
 
@@ -787,8 +787,8 @@ export default function LearningsPage() {
       {/* Modal lives outside lp-root so it can cover the full viewport */}
       <ExperienceModal exp={modalExp} onClose={closeModal} />
 
+      <RelatedPages href="/learnings" />
       <Contact />
-      <Footer />
     </MotionProvider>
   );
 }

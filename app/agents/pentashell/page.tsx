@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
+import RelatedPages from "@/components/ui/RelatedPages";
+import PageFaq from "@/components/ui/PageFaq";
 import HeroLock from "@/components/ui/HeroLock";
 import {
   Reveal,
@@ -580,7 +581,8 @@ export default function PentashellPage() {
         </div>
       </main>
 
-      <Footer />
+      <PageFaq href="/agents/pentashell" />
+      <RelatedPages href="/agents/pentashell" />
     </MotionProvider>
   );
 }

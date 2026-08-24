@@ -1,0 +1,629 @@
+/* /notebook — the engineering notebook.
+ *
+ * Dark register, matching the main site rather than the paper pages
+ * (/resume, /profile, /journey). Two reasons: these posts are mostly code, and
+ * code reads better dark; and the closing RelatedPages rail is dark by default,
+ * so the page terminates without a variant switch.
+ *
+ * Prose is class-based here rather than Tailwind utilities. This is the one
+ * place in the repo where that is the right call — long-form typography means a
+ * dozen rules applied to a hundred elements, and utilities would put the
+ * measure, rhythm and hanging punctuation decisions on every individual node.
+ */
+
+.nb {
+  --nb-ink: #ECECF1;
+  --nb-ink-soft: rgba(236, 236, 241, 0.72);
+  --nb-ink-mute: rgba(236, 236, 241, 0.48);
+  --nb-rule: rgba(255, 255, 255, 0.1);
+  --nb-rule-strong: rgba(255, 255, 255, 0.2);
+  --nb-surface: rgba(255, 255, 255, 0.03);
+  --nb-accent: #7b61ff;
+  --nb-accent-warm: #f5a524;
+
+  background: #050505;
+  color: var(--nb-ink);
+}
+
+/* The measure. 68 characters is the long end of comfortable for body text, and
+   the code blocks below deliberately break out wider — a wrapped line in a
+   snippet costs more than a slightly wide column. */
+.nb-shell {
+  width: min(100% - 3rem, 44rem);
+  margin-inline: auto;
+}
+
+.nb-wide {
+  width: min(100% - 3rem, 72rem);
+  margin-inline: auto;
+}
+
+/* ── Masthead ───────────────────────────────────────────────────────────── */
+
+.nb-mast {
+  padding: 10rem 0 3rem;
+  border-bottom: 1px solid var(--nb-rule);
+}
+
+.nb-eyebrow {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--nb-ink-mute);
+  margin-bottom: 1.5rem;
+}
+
+.nb-title {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  font-weight: 600;
+  text-wrap: balance;
+  margin-bottom: 1.75rem;
+}
+
+.nb-standfirst {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--nb-ink-soft);
+  max-width: 38rem;
+}
+
+/* ── The extractable answer ─────────────────────────────────────────────────
+   Sits directly under the H1 and is the single most important block on the
+   page. It is what an answer engine lifts, so it is marked up as its own
+   element with its own `data-` hook rather than being an indistinguishable
+   first paragraph. Visually it is a pull-quote; structurally it is the summary
+   the whole post exists to support. */
+.nb-answer {
+  margin: 2.5rem 0 0;
+  padding: 1.5rem 1.75rem;
+  border-left: 2px solid var(--nb-accent);
+  background: var(--nb-surface);
+  border-radius: 0 0.75rem 0.75rem 0;
+}
+
+.nb-answer p {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--nb-ink);
+  margin: 0;
+}
+
+.nb-answer-label {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--nb-accent);
+  margin: 0 0 0.75rem;
+}
+
+/* ── Dateline ───────────────────────────────────────────────────────────── */
+
+.nb-dateline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: var(--nb-ink-mute);
+  margin-top: 2rem;
+}
+
+.nb-dateline .sep {
+  color: var(--nb-rule-strong);
+}
+
+.nb-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nb-tag {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  color: var(--nb-ink-soft);
+  border: 1px solid var(--nb-rule);
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+}
+
+/* ── Facts table ────────────────────────────────────────────────────────────
+   The quotable specifics — versions, measurements, exact symptoms — pulled out
+   of the prose into a structure. Numbers buried in a paragraph get skipped;
+   the same numbers in a labelled row get quoted. */
+.nb-facts {
+  margin: 3rem 0;
+  border: 1px solid var(--nb-rule);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.nb-facts dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(8rem, 14rem) 1fr;
+}
+
+.nb-facts dt,
+.nb-facts dd {
+  margin: 0;
+  padding: 0.85rem 1.25rem;
+  border-top: 1px solid var(--nb-rule);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.nb-facts dt:first-of-type,
+.nb-facts dt:first-of-type + dd {
+  border-top: 0;
+}
+
+.nb-facts dt {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--nb-ink-mute);
+  background: var(--nb-surface);
+}
+
+.nb-facts dd {
+  color: var(--nb-ink);
+}
+
+@media (max-width: 34rem) {
+  .nb-facts dl {
+    grid-template-columns: 1fr;
+  }
+  .nb-facts dt {
+    border-top: 1px solid var(--nb-rule);
+    padding-bottom: 0.25rem;
+  }
+  .nb-facts dd {
+    border-top: 0;
+    padding-top: 0.25rem;
+  }
+  .nb-facts dt:first-of-type + dd {
+    border-top: 0;
+  }
+}
+
+/* ── Table of contents ──────────────────────────────────────────────────── */
+
+.nb-toc {
+  margin: 3rem 0;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--nb-rule);
+  border-radius: 0.75rem;
+}
+
+.nb-toc-label {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--nb-ink-mute);
+  margin: 0 0 0.85rem;
+}
+
+.nb-toc ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: toc;
+}
+
+.nb-toc li {
+  counter-increment: toc;
+  margin: 0.4rem 0;
+}
+
+.nb-toc a {
+  color: var(--nb-ink-soft);
+  text-decoration: none;
+  font-size: 0.9375rem;
+  transition: color 0.2s;
+}
+
+.nb-toc a::before {
+  content: counter(toc, decimal-leading-zero) "  ";
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: var(--nb-ink-mute);
+}
+
+.nb-toc a:hover {
+  color: var(--nb-ink);
+}
+
+/* ── Prose ──────────────────────────────────────────────────────────────── */
+
+.nb-body {
+  padding: 1rem 0 4rem;
+}
+
+.nb-p {
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  color: var(--nb-ink-soft);
+  margin: 1.5rem 0;
+}
+
+.nb-h2 {
+  position: relative;
+  font-size: 1.5rem;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+  color: var(--nb-ink);
+  margin: 3.5rem 0 1.25rem;
+  scroll-margin-top: 6rem;
+}
+
+.nb-h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--nb-ink);
+  margin: 2.5rem 0 1rem;
+  scroll-margin-top: 6rem;
+}
+
+/* The heading anchor hangs in the left margin on wide screens and is simply
+   hidden where there is no margin to hang in — a "#" inline in the text is
+   worse than no affordance at all. */
+.nb-anchor {
+  position: absolute;
+  left: -1.5rem;
+  color: var(--nb-rule-strong);
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.nb-h2:hover .nb-anchor {
+  opacity: 1;
+}
+
+@media (max-width: 52rem) {
+  .nb-anchor {
+    display: none;
+  }
+}
+
+.nb-ul,
+.nb-ol {
+  margin: 1.5rem 0;
+  padding-left: 1.25rem;
+  color: var(--nb-ink-soft);
+  font-size: 1.0625rem;
+  line-height: 1.8;
+}
+
+.nb-ul li,
+.nb-ol li {
+  margin: 0.6rem 0;
+  padding-left: 0.35rem;
+}
+
+.nb-ul li::marker {
+  color: var(--nb-accent);
+}
+
+.nb-ol li::marker {
+  color: var(--nb-ink-mute);
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.875rem;
+}
+
+.nb-link {
+  color: var(--nb-ink);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  text-decoration-color: var(--nb-rule-strong);
+  transition: text-decoration-color 0.2s;
+}
+
+.nb-link:hover {
+  text-decoration-color: var(--nb-accent);
+}
+
+.nb-inline-code {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.875em;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--nb-rule);
+  border-radius: 0.3rem;
+  padding: 0.1em 0.35em;
+  color: var(--nb-ink);
+  overflow-wrap: anywhere;
+}
+
+/* ── Code blocks ────────────────────────────────────────────────────────── */
+
+.nb-code-fig {
+  margin: 2rem 0;
+}
+
+.nb-pre {
+  margin: 0;
+  padding: 1.25rem 1.4rem;
+  background: #0b0b0f;
+  border: 1px solid var(--nb-rule);
+  border-radius: 0.75rem;
+  /* The block scrolls; the page must not. */
+  overflow-x: auto;
+}
+
+.nb-pre code {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.8125rem;
+  line-height: 1.75;
+  color: #d6d6e0;
+  white-space: pre;
+}
+
+.nb-cap {
+  margin-top: 0.65rem;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--nb-ink-mute);
+}
+
+/* ── Callouts ───────────────────────────────────────────────────────────── */
+
+.nb-callout {
+  margin: 2rem 0;
+  padding: 1.25rem 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--nb-rule);
+  background: var(--nb-surface);
+}
+
+.nb-callout--warn {
+  border-left: 2px solid var(--nb-accent-warm);
+}
+
+.nb-callout--note {
+  border-left: 2px solid var(--nb-accent);
+}
+
+.nb-callout-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--nb-ink);
+}
+
+.nb-callout-text {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  color: var(--nb-ink-soft);
+}
+
+/* ── Quote ──────────────────────────────────────────────────────────────── */
+
+.nb-quote {
+  margin: 2rem 0;
+  padding-left: 1.25rem;
+  border-left: 2px solid var(--nb-rule-strong);
+  font-family: var(--font-instrument), serif;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: var(--nb-ink);
+}
+
+.nb-cite {
+  display: block;
+  margin-top: 0.65rem;
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-style: normal;
+  color: var(--nb-ink-mute);
+}
+
+/* ── Tables ─────────────────────────────────────────────────────────────── */
+
+.nb-table-fig {
+  margin: 2rem 0;
+}
+
+.nb-table-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--nb-rule);
+  border-radius: 0.75rem;
+}
+
+.nb-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.nb-table th,
+.nb-table td {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--nb-rule);
+  line-height: 1.6;
+}
+
+.nb-table thead th {
+  border-top: 0;
+  background: var(--nb-surface);
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--nb-ink-mute);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.nb-table td {
+  color: var(--nb-ink-soft);
+}
+
+/* ── Post FAQ ───────────────────────────────────────────────────────────── */
+
+.nb-faq {
+  margin: 4rem 0 0;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--nb-rule);
+}
+
+.nb-faq h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem;
+  color: var(--nb-ink);
+}
+
+.nb-faq-item {
+  border-top: 1px solid var(--nb-rule);
+  padding: 1.25rem 0;
+}
+
+.nb-faq-item:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.nb-faq-q {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--nb-ink);
+}
+
+.nb-faq-a {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  color: var(--nb-ink-soft);
+}
+
+/* ── Index page ─────────────────────────────────────────────────────────── */
+
+.nb-index-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nb-entry {
+  border-top: 1px solid var(--nb-rule);
+}
+
+.nb-entry a {
+  display: block;
+  padding: 2.25rem 0;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.25s;
+}
+
+.nb-entry a:hover {
+  opacity: 0.7;
+}
+
+.nb-entry-meta {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--nb-ink-mute);
+  margin: 0 0 0.85rem;
+}
+
+.nb-entry-title {
+  font-size: clamp(1.25rem, 2.6vw, 1.75rem);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+  color: var(--nb-ink);
+  margin: 0 0 0.75rem;
+  text-wrap: balance;
+}
+
+.nb-entry-answer {
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  color: var(--nb-ink-soft);
+  margin: 0;
+  max-width: 42rem;
+}
+
+.nb-entry-more {
+  display: inline-block;
+  margin-top: 1rem;
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--nb-accent);
+}
+
+/* ── Post footer nav ────────────────────────────────────────────────────── */
+
+.nb-postnav {
+  margin-top: 3.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--nb-rule);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  align-items: baseline;
+}
+
+.nb-postnav a {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.8125rem;
+  color: var(--nb-ink-soft);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nb-postnav a:hover {
+  color: var(--nb-ink);
+}
+
+/* ── Breadcrumbs ────────────────────────────────────────────────────────────
+   The BreadcrumbList JSON-LD existed on twelve pages with no visible trail
+   behind it. Structured data describing navigation the page does not actually
+   offer is a claim, not a feature. */
+.nb-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--nb-ink-mute);
+  margin-bottom: 1.5rem;
+  list-style: none;
+  padding: 0;
+}
+
+.nb-crumbs a {
+  color: var(--nb-ink-mute);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nb-crumbs a:hover {
+  color: var(--nb-ink);
+}
+
+.nb-crumbs li[aria-current="page"] {
+  color: var(--nb-ink-soft);
+}

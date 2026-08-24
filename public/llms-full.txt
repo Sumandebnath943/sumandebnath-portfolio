@@ -35,7 +35,7 @@ From 2016 to 2023, Suman worked across branding, digital marketing, campaign arc
 
 In 2023-2025, Suman transitioned decisively into AI-native product development. Rather than supplementing his marketing background with AI tools, he restructured his entire workflow around AI as foundational infrastructure — using Claude Code, Antigravity, Cursor, Codex, Lovable, and other AI-native engineering environments to architect and ship full-stack intelligent systems.
 
-By June 2026, Suman has shipped 7 flagship AI products under the House of Namus brand, with 5 of them live and publicly accessible. He maintains an extended project archive of 13+ systems, tools, and experiments spanning identity preservation, digital inheritance, career intelligence, burnout recovery, collector commerce, prompt engineering, SEO intelligence, content automation, and presentation auditing. One flagship system (ROASmind) has exceeded 200,000 lines of orchestrated AI-assisted architecture and remains in stealth.
+By August 2026, Suman has shipped 7 flagship AI products under the House of Namus brand, with 5 of them live and publicly accessible. He maintains an extended project archive of 13+ systems, tools, and experiments spanning identity preservation, digital inheritance, career intelligence, burnout recovery, collector commerce, prompt engineering, SEO intelligence, content automation, and presentation auditing. One flagship system (ROASmind) has exceeded 200,000 lines of orchestrated AI-assisted architecture and remains in stealth.
 
 House of Namus is the product brand and creative umbrella under which all of Suman's AI-native products are built and shipped. The personal portfolio at sumandebnath.houseofnamus.com documents the full arc — the professional history, the transition, the systems, and the operating philosophy.
 
@@ -383,7 +383,10 @@ Founder: Suman Debnath
 - Philosophy: https://sumandebnath.houseofnamus.com/philosophy
 - Project Archive: https://sumandebnath.houseofnamus.com/projects
 - FAQ: https://sumandebnath.houseofnamus.com/faq
+- Notebook (engineering write-ups): https://sumandebnath.houseofnamus.com/notebook
+- Notebook RSS feed: https://sumandebnath.houseofnamus.com/notebook/rss.xml
 - Learnings (AI Certifications): https://sumandebnath.houseofnamus.com/learnings
+- The Journey (interactive life story): https://sumandebnath.houseofnamus.com/journey
 - Fun Apps & Experiments: https://sumandebnath.houseofnamus.com/fun-apps
 - PACT Agent: https://sumandebnath.houseofnamus.com/agents/pact-agent
 - MIGI Agent Fleet: https://sumandebnath.houseofnamus.com/agents/migi

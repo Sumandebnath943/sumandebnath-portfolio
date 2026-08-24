@@ -117,9 +117,13 @@ const navLinks: NavLink[] = [
     submenus: [
       { label: "Profile", href: "/profile", color: "#F3B44A" },
       { label: "The Story", href: "/about", color: "#FB7185" },
+      // /journey was reachable only from /resume and /profile — it was in the
+      // sitemap and in no menu at all, which is how a page ends up orphaned.
+      { label: "The Journey", href: "/journey", color: "#8B5CF6" },
       { label: "Philosophy", href: "/philosophy", color: "#F472B6" },
     ],
   },
+  { label: "Notebook", href: "/notebook", color: "#7B61FF" },
   { label: "Learnings", href: "/learnings", color: "#22D3EE" },
   { label: "Résumé", href: "/resume", color: "#FBBF24" },
   { label: "FAQ", href: "/faq", color: "#94A3B8" },

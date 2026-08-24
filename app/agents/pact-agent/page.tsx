@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
+import RelatedPages from "@/components/ui/RelatedPages";
+import PageFaq from "@/components/ui/PageFaq";
 import HeroLock from "@/components/ui/HeroLock";
 import { Reveal, LiveToolbar, CopyCommand } from "@/components/pact/PactWidgets";
 import {
@@ -747,7 +748,8 @@ export default function PactAgentPage() {
         </div>
       </main>
 
-      <Footer />
+      <PageFaq href="/agents/pact-agent" />
+      <RelatedPages href="/agents/pact-agent" />
     </MotionProvider>
   );
 }

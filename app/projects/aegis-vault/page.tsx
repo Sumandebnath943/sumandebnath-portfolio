@@ -3,7 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
+import RelatedPages from "@/components/ui/RelatedPages";
+import PageFaq from "@/components/ui/PageFaq";
 import Contact from "@/components/sections/Contact";
 import HeroLock from "@/components/ui/HeroLock";
 import { Reveal, StatCounter } from "@/components/penta/PentaWidgets";
@@ -505,8 +506,9 @@ export default function AegisVaultPage() {
         </section>
       </main>
 
+      <PageFaq href="/projects/aegis-vault" />
+      <RelatedPages href="/projects/aegis-vault" />
       <Contact />
-      <Footer />
     </MotionProvider>
   );
 }
