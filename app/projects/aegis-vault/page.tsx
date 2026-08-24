@@ -156,6 +156,13 @@ export default function AegisVaultPage() {
               </Reveal>
 
               {/* Wordmark lockup — light-on-dark logo, shown directly. h1 kept for SEO. */}
+              <Breadcrumbs
+                trail={[
+                  { label: "Projects", href: "/projects" },
+                  { label: "AEGIS VAULT", href: "/projects/aegis-vault" },
+                ]}
+                className="mb-6"
+              />
               <h1 className="sr-only">AEGIS VAULT — zero-knowledge encrypted notepad</h1>
               <Reveal delay={0.12}>
                 <Image
@@ -501,13 +508,6 @@ export default function AegisVaultPage() {
         </section>
       </main>
 
-      <Breadcrumbs
-        trail={[
-          { label: "Projects", href: "/projects" },
-          { label: "AEGIS VAULT", href: "/projects/aegis-vault" },
-        ]}
-        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
-      />
       <PageFaq href="/projects/aegis-vault" />
       <RelatedPages href="/projects/aegis-vault" />
       <Contact />

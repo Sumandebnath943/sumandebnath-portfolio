@@ -52,6 +52,12 @@ export default function TermsPage() {
 
       <main className="bg-black">
         <header className="max-w-3xl mx-auto px-6 md:px-10 pt-40 pb-12 text-white">
+          <Breadcrumbs
+            trail={[
+              { label: "Terms", href: "/terms" },
+            ]}
+            className="mb-6"
+          />
           <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#86868B] mb-6">
             Terms of use
           </p>
@@ -262,12 +268,6 @@ export default function TermsPage() {
         </section>
       </main>
 
-      <Breadcrumbs
-        trail={[
-          { label: "Terms", href: "/terms" },
-        ]}
-        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
-      />
       <RelatedPages href="/terms" />
       <Contact />
     </MotionProvider>

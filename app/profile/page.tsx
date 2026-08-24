@@ -415,6 +415,11 @@ export default function ProfilePage() {
 
           {/* ── 2. Statement ──────────────────────────────────────────── */}
           <section className="pf-wrap pf-pad pf-statement">
+            <Breadcrumbs
+              trail={[{ label: "Profile", href: "/profile" }]}
+              variant="paper"
+              className="mb-6"
+            />
             <Kick>In short</Kick>
             <div className="pf-statement-grid">
               <h2>
@@ -654,13 +659,6 @@ export default function ProfilePage() {
 
       {/* The site's own closing, in its light variant. A page this bright
           cannot end on the dark one without reading as a cut-off. */}
-      <Breadcrumbs
-        trail={[
-          { label: "Profile", href: "/profile" },
-        ]}
-        variant="paper"
-        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
-      />
       <RelatedPages href="/profile" variant="paper" />
       <Contact variant="light" />
     </MotionProvider>

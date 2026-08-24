@@ -57,6 +57,12 @@ export default function PhilosophyPage() {
             page for the six principles expanded immediately below. */}
         <header className="ph-hero">
           <div className="ph-shell">
+            <Breadcrumbs
+              trail={[
+                { label: "Philosophy", href: "/philosophy" },
+              ]}
+              className="mb-6"
+            />
             <p className="ph-eyebrow">Operating philosophy</p>
             <h1 className="ph-title">
               Six things I believe about <em>building</em> with AI.
@@ -98,12 +104,6 @@ export default function PhilosophyPage() {
           </div>
         </section>
       </main>
-      <Breadcrumbs
-        trail={[
-          { label: "Philosophy", href: "/philosophy" },
-        ]}
-        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
-      />
       <PageFaq href="/philosophy" />
       <RelatedPages href="/philosophy" />
       <Contact />

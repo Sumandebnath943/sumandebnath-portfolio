@@ -161,6 +161,13 @@ export default function QdexPage() {
                 </Reveal>
 
                 <Reveal delay={0.05}>
+                  <Breadcrumbs
+                    trail={[
+                      { label: "LLMs", href: null },
+                      { label: "Qdex-1.5B", href: "/llms/qdex-1.5b" },
+                    ]}
+                    className="mb-6"
+                  />
                   <h1 className="mb-6">
                     <span className="block font-manrope font-semibold text-6xl sm:text-7xl md:text-[6.5rem] leading-none tracking-tight bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(100deg,#f3f4fb 10%,#34D399 55%,#38BDF8 95%)" }}>
                       Qdex-1.5B
@@ -693,13 +700,6 @@ export default function QdexPage() {
         </div>
       </main>
 
-      <Breadcrumbs
-        trail={[
-          { label: "LLMs", href: null },
-          { label: "Qdex-1.5B", href: "/llms/qdex-1.5b" },
-        ]}
-        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
-      />
       <PageFaq href="/llms/qdex-1.5b" />
       <RelatedPages href="/llms/qdex-1.5b" />
       <Contact

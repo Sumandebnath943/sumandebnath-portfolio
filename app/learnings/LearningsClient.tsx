@@ -468,7 +468,7 @@ function ExperienceModal({
 export default function LearningsPage() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [modalExp, setModalExp] = useState<Experience | null>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLElement>(null);
 
   // Scroll progress bar
   useEffect(() => {
@@ -545,7 +545,11 @@ export default function LearningsPage() {
       {/* Scroll progress */}
       <div id="lp-scroll-bar" className="lp-scroll-progress" />
 
-      <div className="lp-root" ref={scrollRef}>
+      {/* `main`, not `div`. This page had no main landmark at all — the only
+          page on the site without one — so assistive tech had no "skip to
+          content" target and the document outline started at a generic div. The
+          class and the ref are unchanged, so nothing about the layout moves. */}
+      <main className="lp-root" ref={scrollRef}>
 
         {/* ── HERO ── */}
         <section
@@ -582,6 +586,13 @@ export default function LearningsPage() {
                   <p className="lp-caption" style={{ color: "var(--lp-accent)", letterSpacing: "0.14em" }}>Learning Portfolio</p>
                 </div>
 
+                <Breadcrumbs
+                  trail={[
+                    { label: "Learnings", href: "/learnings" },
+                  ]}
+                  variant="paper"
+                  className="mb-6"
+                />
                 <h1
                   className="lp-animate-slide-up lp-delay-100"
                   style={{ marginBottom: "1.5rem", lineHeight: 1.05, fontWeight: 800, letterSpacing: "-0.046em", fontSize: "clamp(2.4rem, 5.5vw, 4.8rem)" }}
@@ -783,18 +794,11 @@ export default function LearningsPage() {
           </div>
         </section>
 
-      </div>{/* /lp-root */}
+      </main>{/* /lp-root */}
 
       {/* Modal lives outside lp-root so it can cover the full viewport */}
       <ExperienceModal exp={modalExp} onClose={closeModal} />
 
-      <Breadcrumbs
-        trail={[
-          { label: "Learnings", href: "/learnings" },
-        ]}
-        variant="paper"
-        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
-      />
       <RelatedPages href="/learnings" variant="paper" />
       <Contact />
     </MotionProvider>

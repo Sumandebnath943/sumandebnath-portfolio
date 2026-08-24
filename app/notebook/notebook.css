@@ -644,3 +644,17 @@
 .nb-crumbs li[aria-current="page"] {
   color: var(--nb-ink-soft);
 }
+
+/* The blog index's banner. Wider and shallower than an article masthead: the
+   featured article underneath is the page's real hero, so this only has to
+   establish what the section is and get out of the way. The tint separates it
+   from the cards below without needing a hard rule. */
+.nb-mast--blog {
+  padding: 9.5rem 0 3rem;
+  background: linear-gradient(180deg, var(--nb-paper-deep) 0%, var(--nb-paper) 100%);
+  border-bottom: 1px solid var(--nb-rule);
+}
+
+.nb-mast--blog .nb-title {
+  max-width: 22ch;
+}

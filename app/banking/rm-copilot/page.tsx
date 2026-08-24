@@ -224,6 +224,13 @@ export default function BankingCopilotPage() {
             </Reveal>
 
             <Reveal delay={0.12}>
+              <Breadcrumbs
+                trail={[
+                  { label: "Banking", href: null },
+                  { label: "Banking Co-pilot", href: "/banking/rm-copilot" },
+                ]}
+                className="mb-6"
+              />
               <h1 className="font-manrope font-extrabold tracking-tight text-[2.6rem] sm:text-6xl md:text-[4.2rem] leading-[1.02] mt-7">
                 Banking{" "}
                 <span
@@ -934,13 +941,6 @@ export default function BankingCopilotPage() {
         </section>
       </main>
 
-      <Breadcrumbs
-        trail={[
-          { label: "Banking", href: null },
-          { label: "Banking Co-pilot", href: "/banking/rm-copilot" },
-        ]}
-        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
-      />
       <PageFaq href="/banking/rm-copilot" />
       <RelatedPages href="/banking/rm-copilot" />
       <Contact />

@@ -108,20 +108,23 @@ export default function NotebookIndexPage() {
       <Navigation />
 
       <main className="nb">
-        <header className="nb-mast">
-          <div className="nb-shell">
+        {/* The page banner. Compact on purpose — the featured article below is
+            the real hero, and a tall masthead above it would push the cover
+            story off the first screen. */}
+        <header className="nb-mast nb-mast--blog">
+          <div className="nb-wide">
             <Breadcrumbs
               trail={[{ label: "Notebook", href: "/notebook" }]}
               variant="paper"
-              className="mb-6"
+              className="mb-7"
             />
 
             <p className="nb-eyebrow">Engineering notebook</p>
             <h1 className="nb-title">What broke, the actual fix, and what generalises</h1>
             <p className="nb-standfirst">
               Articles written while building AI-native products — mostly the bugs that produced no
-              error message, which are the only ones worth writing down. Every entry is something
-              that cost me real time in a real codebase.
+              error message, which are the only ones worth writing down. Every one cost me real time
+              in a real codebase.
             </p>
 
             <div className="nb-dateline">
@@ -140,7 +143,7 @@ export default function NotebookIndexPage() {
           </div>
         </header>
 
-        <div className="nb-wide" style={{ paddingBlock: "3rem 5rem" }}>
+        <div className="nb-wide" style={{ paddingBlock: "3.5rem 5rem" }}>
           {/* toCardPost, not the raw posts: passing whole Post objects across the
               server/client boundary serialises every article in full into this
               page. See the note on CardPost in NotebookBrowser.tsx. */}

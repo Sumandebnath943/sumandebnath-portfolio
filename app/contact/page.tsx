@@ -93,6 +93,13 @@ export default function ContactPageRoute() {
         {/* ── Masthead ──────────────────────────────────────────────────── */}
         <header className="cx-hero">
           <div className="cx-shell">
+             <Breadcrumbs
+              trail={[
+                { label: "Contact", href: "/contact" },
+              ]}
+              variant="paper"
+              className="mb-6"
+            />
             <p className="cx-signal">
               <span className="cx-dot" aria-hidden>
                 <span />
@@ -100,7 +107,6 @@ export default function ContactPageRoute() {
               </span>
               Open to senior roles
             </p>
-
             <h1 className="cx-title">
               Let&apos;s talk about <em>what comes next.</em>
             </h1>
@@ -265,13 +271,6 @@ export default function ContactPageRoute() {
 
       </main>
 
-      <Breadcrumbs
-        trail={[
-          { label: "Contact", href: "/contact" },
-        ]}
-        variant="paper"
-        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
-      />
       <RelatedPages href="/contact" variant="paper" />
       <Contact variant="light" />
     </MotionProvider>

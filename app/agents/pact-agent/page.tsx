@@ -120,6 +120,13 @@ export default function PactAgentPage() {
 
               {/* Transparent landscape logo */}
               <Reveal delay={0.05}>
+                <Breadcrumbs
+                  trail={[
+                    { label: "Agents", href: null },
+                    { label: "PACT Agent", href: "/agents/pact-agent" },
+                  ]}
+                  className="mb-6"
+                />
                 <h1 className="mb-7 w-full">
                   <span className="sr-only">PACT Agent — Permission, Action, Cost, Trust</span>
                   <Image
@@ -750,13 +757,6 @@ export default function PactAgentPage() {
         </div>
       </main>
 
-      <Breadcrumbs
-        trail={[
-          { label: "Agents", href: null },
-          { label: "PACT Agent", href: "/agents/pact-agent" },
-        ]}
-        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
-      />
       <PageFaq href="/agents/pact-agent" />
       <RelatedPages href="/agents/pact-agent" />
       <Contact />

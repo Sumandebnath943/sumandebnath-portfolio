@@ -1,173 +1,160 @@
 /* Blog index — the front page of /notebook.
  *
  * Separate from notebook.css, which styles the *reading* surface (prose, code,
- * callouts, tables). This file styles the *browsing* surface: the curated rail,
- * the filter bar, the lead card and the grid. They share the `.nb` token block
- * defined in notebook.css and are imported together by the index page.
+ * callouts, tables). This file styles the *browsing* surface: the featured hero,
+ * the article grid and the sidebar. They share the `.nb` token block defined in
+ * notebook.css and are imported together by the index page.
  *
- * All of it renders on paper, and all of it is present in the server HTML
- * before any filter runs — see the note at the top of NotebookBrowser.tsx.
+ * Layout is the conventional blog anatomy — cover story, then articles beside a
+ * sidebar. See the note at the top of NotebookBrowser.tsx for why the filters
+ * are in the sidebar and not in a chip bar above the grid.
  */
 
-.nb-section-label {
+/* Visually hidden, but read aloud. For labels whose control is obvious to a
+   sighted reader and nameless to a screen reader. */
+.nb-vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Featured hero ──────────────────────────────────────────────────────── */
+
+.nb-hero {
+  margin: 0 0 3.5rem;
+}
+
+.nb-hero-link {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  align-items: stretch;
+  border: 1px solid var(--nb-rule);
+  border-radius: 1.1rem;
+  overflow: hidden;
+  background: #faf7f1;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.3s, transform 0.3s;
+}
+
+.nb-hero-link:hover {
+  border-color: var(--nb-rule-strong);
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nb-hero-link:hover {
+    transform: none;
+  }
+}
+
+.nb-hero-cover {
+  min-height: 22rem;
+  height: 100%;
+}
+
+.nb-hero-body {
+  align-self: center;
+  padding: 2.5rem 2.75rem;
+}
+
+.nb-hero-badge {
+  display: inline-block;
   font-family: var(--font-dm-mono), ui-monospace, monospace;
   font-size: 0.625rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--nb-ink-mute);
-  margin: 0 0 0.85rem;
-  font-weight: 400;
+  color: var(--nb-paper);
+  background: var(--nb-ink);
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  margin: 0 0 1.1rem;
 }
 
-/* ── Start here ─────────────────────────────────────────────────────────── */
-
-.nb-picks {
-  margin: 0 0 3.5rem;
-  padding: 1.5rem 1.75rem;
-  border: 1px solid var(--nb-rule);
-  border-radius: 0.9rem;
-  background: rgba(25, 21, 18, 0.02);
-}
-
-.nb-picks-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.nb-picks-list li + li {
-  border-top: 1px solid var(--nb-rule);
-}
-
-.nb-picks-list a {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: baseline;
-  gap: 0.9rem;
-  padding: 0.7rem 0;
-  text-decoration: none;
-  color: inherit;
-  transition: opacity 0.2s;
-}
-
-.nb-picks-list a:hover {
-  opacity: 0.65;
-}
-
-.nb-picks-num {
-  font-family: var(--font-dm-mono), ui-monospace, monospace;
-  font-size: 0.7rem;
-  color: var(--nb-ink-mute);
-}
-
-.nb-picks-title {
-  font-size: 0.9375rem;
-  line-height: 1.4;
+.nb-hero-title {
+  font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  font-weight: 600;
   color: var(--nb-ink);
+  margin: 0 0 1rem;
+  text-wrap: balance;
 }
 
-.nb-picks-cat {
+.nb-hero-excerpt {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--nb-ink-soft);
+  margin: 0;
+}
+
+.nb-hero-cta {
+  display: inline-block;
+  margin-top: 1.5rem;
   font-family: var(--font-dm-mono), ui-monospace, monospace;
-  font-size: 0.625rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  white-space: nowrap;
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  color: var(--nb-clay);
 }
 
-@media (max-width: 34rem) {
-  .nb-picks-list a {
-    grid-template-columns: auto 1fr;
+@media (max-width: 56rem) {
+  .nb-hero-link {
+    grid-template-columns: 1fr;
   }
-  .nb-picks-cat {
-    grid-column: 2;
+  .nb-hero-cover {
+    min-height: 0;
+    aspect-ratio: 40 / 21;
+  }
+  .nb-hero-body {
+    padding: 1.75rem 1.5rem 2rem;
   }
 }
 
-/* ── Filter bar ─────────────────────────────────────────────────────────── */
+/* ── Two-column body ────────────────────────────────────────────────────── */
 
-.nb-filters {
-  margin: 0 0 2.5rem;
-  padding-bottom: 1.75rem;
+.nb-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 16.5rem;
+  gap: 3rem;
+  align-items: start;
+}
+
+@media (max-width: 60rem) {
+  .nb-layout {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+}
+
+/* ── Toolbar above the grid ─────────────────────────────────────────────── */
+
+.nb-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.1rem;
+  margin-bottom: 2rem;
   border-bottom: 1px solid var(--nb-rule);
 }
 
-.nb-filter-row + .nb-filter-row {
-  margin-top: 1.5rem;
-}
-
-.nb-filter-row--end {
+.nb-toolbar-controls {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.nb-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.nb-chip {
-  display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  font-family: var(--font-manrope), system-ui, sans-serif;
-  font-size: 0.8125rem;
-  line-height: 1;
-  /* 0.55rem vertical keeps the hit area near 34px. Chips are the one control on
-     this page a reader taps repeatedly, and text-height targets on a phone are
-     the fastest way to make a filter feel broken. */
-  padding: 0.55rem 0.8rem;
-  border: 1px solid var(--nb-rule);
-  border-radius: 999px;
-  background: transparent;
-  color: var(--nb-ink-soft);
-  cursor: pointer;
-  transition: border-color 0.2s, background 0.2s, color 0.2s;
+  gap: 0.6rem;
 }
 
-.nb-chip:hover {
-  border-color: var(--nb-rule-strong);
-  color: var(--nb-ink);
-}
-
-.nb-chip.is-on {
-  background: var(--nb-ink);
-  border-color: var(--nb-ink);
-  color: var(--nb-paper);
-}
-
-.nb-chip.is-on .nb-chip-n {
-  color: rgba(242, 236, 224, 0.6);
-}
-
-.nb-chip--tag {
+.nb-count {
   font-family: var(--font-dm-mono), ui-monospace, monospace;
   font-size: 0.75rem;
-}
-
-.nb-chip-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  flex: none;
-}
-
-.nb-chip-n {
-  font-family: var(--font-dm-mono), ui-monospace, monospace;
-  font-size: 0.6875rem;
   color: var(--nb-ink-mute);
-}
-
-.nb-sort {
-  display: flex;
-  align-items: baseline;
-  gap: 0.75rem;
-}
-
-.nb-sort .nb-section-label {
   margin: 0;
 }
 
@@ -210,15 +197,6 @@
   margin-top: 1rem;
 }
 
-/* ── Results ────────────────────────────────────────────────────────────── */
-
-.nb-count {
-  font-family: var(--font-dm-mono), ui-monospace, monospace;
-  font-size: 0.75rem;
-  color: var(--nb-ink-mute);
-  margin: 0 0 1.5rem;
-}
-
 .nb-empty {
   padding: 3rem 0 4rem;
   text-align: center;
@@ -230,13 +208,13 @@
   font-size: 1rem;
 }
 
+/* ── Article grid ───────────────────────────────────────────────────────── */
+
 .nb-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
   gap: 1.75rem;
 }
-
-/* ── Cards ──────────────────────────────────────────────────────────────── */
 
 .nb-card {
   border: 1px solid var(--nb-rule);
@@ -265,7 +243,7 @@
 }
 
 .nb-card-cover {
-  aspect-ratio: 40 / 26;
+  aspect-ratio: 40 / 24;
   width: 100%;
 }
 
@@ -310,8 +288,8 @@
   color: var(--nb-ink-soft);
   margin: 0;
   /* Three lines, then clip. The excerpt is the post's `answer` field, written to
-     stand alone at full length on the post itself — here it only has to earn the
-     click, and ragged card heights cost more than the lost words. */
+     stand alone at full length on the article itself — here it only has to earn
+     the click, and ragged card heights cost more than the lost words. */
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -337,47 +315,214 @@
   padding: 0.15rem 0.5rem;
 }
 
-/* ── The lead card ──────────────────────────────────────────────────────── */
+/* ── Sidebar ────────────────────────────────────────────────────────────── */
 
-.nb-card--lead {
-  margin-bottom: 1.75rem;
+.nb-side {
+  /* Sticks while the article column scrolls past. `top` clears the fixed nav.
+     NOTE: nothing between here and the scroll container may carry
+     `overflow: hidden` or this silently stops sticking and simply scrolls away
+     — see /notebook/overflow-hidden-kills-position-sticky. */
+  position: sticky;
+  top: 7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
 }
 
-.nb-card--lead .nb-card-link {
+@media (max-width: 60rem) {
+  .nb-side {
+    position: static;
+    /* Two columns on tablet so the sidebar does not become a long single file
+       between the grid and the footer. */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 2rem;
+  }
+}
+
+.nb-side-title {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--nb-ink-mute);
+  font-weight: 400;
+  margin: 0 0 0.9rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--nb-rule);
+}
+
+.nb-side-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nb-side-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  /* 0.5rem vertical puts the row near 36px. These are tapped repeatedly on a
+     phone and text-height targets are the fastest way to make a filter feel
+     broken. */
+  padding: 0.5rem 0.6rem;
+  margin-left: -0.6rem;
+  border: 0;
+  border-radius: 0.45rem;
+  background: transparent;
+  font-family: var(--font-manrope), system-ui, sans-serif;
+  font-size: 0.875rem;
+  text-align: left;
+  color: var(--nb-ink-soft);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.nb-side-item:hover {
+  background: rgba(25, 21, 18, 0.05);
+  color: var(--nb-ink);
+}
+
+.nb-side-item.is-on {
+  background: var(--nb-ink);
+  color: var(--nb-paper);
+}
+
+.nb-side-item.is-on .nb-side-n {
+  color: rgba(242, 236, 224, 0.65);
+}
+
+.nb-side-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.nb-side-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  flex: none;
+}
+
+.nb-side-n {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  color: var(--nb-ink-mute);
+}
+
+/* ── Tag cloud ──────────────────────────────────────────────────────────── */
+
+.nb-tagcloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.nb-tagchip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  padding: 0.42rem 0.6rem;
+  border: 1px solid var(--nb-rule);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--nb-ink-soft);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+
+.nb-tagchip:hover {
+  border-color: var(--nb-rule-strong);
+  color: var(--nb-ink);
+}
+
+.nb-tagchip.is-on {
+  background: var(--nb-clay);
+  border-color: var(--nb-clay);
+  color: #fff;
+}
+
+.nb-tagchip.is-on .nb-side-n {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* ── Start here ─────────────────────────────────────────────────────────── */
+
+.nb-picks-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: pick;
+}
+
+.nb-picks-list li + li {
+  border-top: 1px solid var(--nb-rule);
+}
+
+.nb-picks-list a {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  align-items: stretch;
+  grid-template-columns: auto 1fr;
+  gap: 0.7rem;
+  padding: 0.65rem 0;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.2s;
 }
 
-.nb-card-cover--lead {
-  aspect-ratio: auto;
-  min-height: 100%;
+.nb-picks-list a:hover {
+  opacity: 0.65;
 }
 
-.nb-card--lead .nb-card-body {
-  padding: 2rem 2.25rem;
-  align-self: center;
+.nb-picks-num {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  color: var(--nb-ink-mute);
+  padding-top: 0.15rem;
 }
 
-.nb-card--lead .nb-card-title {
-  font-size: clamp(1.25rem, 2.4vw, 1.75rem);
-  line-height: 1.2;
+.nb-picks-title {
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--nb-ink);
 }
 
-.nb-card--lead .nb-card-excerpt {
-  font-size: 0.9375rem;
-  -webkit-line-clamp: 4;
+/* ── Feed block ─────────────────────────────────────────────────────────── */
+
+.nb-side-block--feed {
+  padding: 1.25rem;
+  border: 1px solid var(--nb-rule);
+  border-radius: 0.75rem;
+  background: rgba(25, 21, 18, 0.02);
 }
 
-@media (max-width: 46rem) {
-  .nb-card--lead .nb-card-link {
-    grid-template-columns: 1fr;
-  }
-  .nb-card-cover--lead {
-    aspect-ratio: 40 / 26;
-    min-height: 0;
-  }
-  .nb-card--lead .nb-card-body {
-    padding: 1.25rem 1.35rem 1.5rem;
-  }
+.nb-side-block--feed .nb-side-title {
+  border-bottom: 0;
+  padding-bottom: 0;
+  margin-bottom: 0.5rem;
+}
+
+.nb-side-note {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--nb-ink-soft);
+  margin: 0 0 0.9rem;
+}
+
+.nb-side-feed {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--nb-clay);
+  text-decoration: none;
+}
+
+.nb-side-feed:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
 }

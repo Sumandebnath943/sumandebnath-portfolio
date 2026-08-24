@@ -95,6 +95,12 @@ export default function ProjectsArchivePage() {
           </div>
 
           <div className="relative max-w-6xl mx-auto">
+            <Breadcrumbs
+              trail={[
+                { label: "Projects", href: "/projects" },
+              ]}
+              className="mb-6"
+            />
             <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-white/55 mb-6">
               Archive
             </p>
@@ -166,12 +172,6 @@ export default function ProjectsArchivePage() {
         </section>
       </main>
 
-      <Breadcrumbs
-        trail={[
-          { label: "Projects", href: "/projects" },
-        ]}
-        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
-      />
       <PageFaq href="/projects" />
       <RelatedPages href="/projects" />
       <Contact />

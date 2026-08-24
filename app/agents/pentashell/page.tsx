@@ -147,6 +147,13 @@ export default function PentashellPage() {
               </Reveal>
 
               <Reveal delay={0.12}>
+                <Breadcrumbs
+                  trail={[
+                    { label: "Agents", href: null },
+                    { label: "Pentashell", href: "/agents/pentashell" },
+                  ]}
+                  className="mb-6"
+                />
                 <h1 className="font-manrope font-extrabold text-[2rem] sm:text-[2.7rem] md:text-[3.4rem] leading-[1.08] tracking-[-0.04em] mt-5 mb-5">
                   <span style={gWhite}>One instruction. One command.</span>
                   <br />
@@ -583,13 +590,6 @@ export default function PentashellPage() {
         </div>
       </main>
 
-      <Breadcrumbs
-        trail={[
-          { label: "Agents", href: null },
-          { label: "Pentashell", href: "/agents/pentashell" },
-        ]}
-        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
-      />
       <PageFaq href="/agents/pentashell" />
       <RelatedPages href="/agents/pentashell" />
       <Contact

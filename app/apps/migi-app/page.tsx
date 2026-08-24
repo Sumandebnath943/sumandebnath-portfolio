@@ -282,6 +282,13 @@ export default function MigiAppPage() {
             </Reveal>
 
             <Reveal delay={0.06}>
+              <Breadcrumbs
+                trail={[
+                  { label: "Apps", href: null },
+                  { label: "MIGI Android App", href: "/apps/migi-app" },
+                ]}
+                className="mb-6"
+              />
               <h1 className="font-manrope mb-6 mt-6 text-[2.8rem] font-extrabold leading-[0.98] tracking-[-0.05em] sm:text-[3.9rem] md:text-[5rem]">
                 <span style={gWhite}>Not a wrapper.</span>
                 <br />
@@ -930,13 +937,6 @@ export default function MigiAppPage() {
         </section>
       </main>
 
-      <Breadcrumbs
-        trail={[
-          { label: "Apps", href: null },
-          { label: "MIGI Android App", href: "/apps/migi-app" },
-        ]}
-        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
-      />
       <PageFaq href="/apps/migi-app" />
       <RelatedPages href="/apps/migi-app" />
       <Contact variant="dark" />

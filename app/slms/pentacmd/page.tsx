@@ -196,6 +196,13 @@ export default function PentaCmdPage() {
 
               {/* Transparent landscape logo (tightly trimmed) */}
               <Reveal delay={0.05}>
+                <Breadcrumbs
+                  trail={[
+                    { label: "SLMs", href: null },
+                    { label: "PentaCMD-47M", href: "/slms/pentacmd" },
+                  ]}
+                  className="mb-6"
+                />
                 <h1 className="mb-7 w-full">
                   <span className="sr-only">PentaCMD-47M — English in, commands out</span>
                   <Image
@@ -953,13 +960,6 @@ style={{ width: `${(d.n / 299329) * 100}%`, background: FAMILIES[d.fam].color }}
         </div>
       </main>
 
-      <Breadcrumbs
-        trail={[
-          { label: "SLMs", href: null },
-          { label: "PentaCMD-47M", href: "/slms/pentacmd" },
-        ]}
-        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
-      />
       <PageFaq href="/slms/pentacmd" />
       <RelatedPages href="/slms/pentacmd" />
       <Contact

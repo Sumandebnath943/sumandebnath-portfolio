@@ -114,6 +114,13 @@ export default function ForgetAnythingPage() {
             <Reveal><Kicker>Privacy-first Android app · by Suman Debnath</Kicker></Reveal>
 
             <Reveal delay={0.06}>
+              <Breadcrumbs
+                trail={[
+                  { label: "Apps", href: null },
+                  { label: "Forget Anything?", href: "/apps/forget-anything" },
+                ]}
+                className="mb-6"
+              />
               <h1 className="font-manrope font-extrabold text-[2.7rem] sm:text-[3.7rem] md:text-[4.7rem] leading-[1.0] tracking-[-0.045em] mt-6 mb-6">
                 <span style={gWhite}>Walk out</span>{" "}
                 <span className="font-serif italic font-normal" style={gGold}>worry-free.</span>
@@ -571,13 +578,6 @@ export default function ForgetAnythingPage() {
       </main>
 
       {/* white footer with green fonts & accents (this page only) */}
-      <Breadcrumbs
-        trail={[
-          { label: "Apps", href: null },
-          { label: "Forget Anything?", href: "/apps/forget-anything" },
-        ]}
-        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
-      />
       <PageFaq href="/apps/forget-anything" />
       <RelatedPages href="/apps/forget-anything" />
       <Contact variant="light" />

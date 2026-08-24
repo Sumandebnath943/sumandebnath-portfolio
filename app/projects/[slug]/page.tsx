@@ -109,6 +109,13 @@ export default async function ProjectPage({ params }: Props) {
 
       <main className="bg-black pt-32 pb-12 px-4 md:px-8">
         <header className="max-w-5xl mx-auto mb-10 text-white">
+          <Breadcrumbs
+            trail={[
+              { label: "Projects", href: "/projects" },
+              { label: project.name, href: `/projects/${project.slug}` },
+            ]}
+            className="mb-6"
+          />
           <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#86868B] mb-4">
             {project.number} / Selected System
           </p>
@@ -138,13 +145,6 @@ export default async function ProjectPage({ params }: Props) {
         <div className="max-w-7xl mx-auto">{renderDossier(project.slug)}</div>
       </main>
 
-      <Breadcrumbs
-        trail={[
-          { label: "Projects", href: "/projects" },
-          { label: project.name, href: `/projects/${project.slug}` },
-        ]}
-        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
-      />
       <RelatedPages href="/projects" />
       <Contact />
     </MotionProvider>

@@ -88,6 +88,11 @@ export default function JourneyPage() {
       <Navigation />
       <main className="jr">
         <header className="jr-mast">
+          <Breadcrumbs
+            trail={[{ label: "The Journey", href: "/journey" }]}
+            variant="paper"
+            className="mb-6"
+          />
           <p className="jr-eyebrow">Suman Debnath · the long version</p>
           <h1>{JOURNEY_TITLE}</h1>
           <p className="jr-deck">{JOURNEY_DECK}</p>
@@ -137,13 +142,6 @@ export default function JourneyPage() {
 
       {/* Both in the paper register — this page is cream and ink throughout, and
           the dark closing would read as the page having been cut off. */}
-      <Breadcrumbs
-        trail={[
-          { label: "The Journey", href: "/journey" },
-        ]}
-        variant="paper"
-        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
-      />
       <RelatedPages href="/journey" variant="paper" />
       <Contact variant="light" />
     </MotionProvider>

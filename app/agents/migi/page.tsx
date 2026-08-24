@@ -280,6 +280,13 @@ export default function MigiPage() {
             </Reveal>
 
             <Reveal delay={0.12}>
+              <Breadcrumbs
+                trail={[
+                  { label: "Agents", href: null },
+                  { label: "MIGI", href: "/agents/migi" },
+                ]}
+                className="mb-6"
+              />
               <h1 className="font-manrope font-extrabold text-[2.1rem] sm:text-[2.9rem] md:text-[3.3rem] leading-[1.08] tracking-[-0.04em] mt-7 mb-5" style={{ color: MIGI.ink }}>
                 It started as{" "}
                 <span className="inline-block rounded-xl px-3 py-0.5 leading-[1.12] align-baseline" style={{ background: MIGI.ink, color: MIGI.lime }}>46 AI agents</span>.
@@ -1523,13 +1530,6 @@ export default function MigiPage() {
         </section>
       </main>
 
-      <Breadcrumbs
-        trail={[
-          { label: "Agents", href: null },
-          { label: "MIGI", href: "/agents/migi" },
-        ]}
-        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
-      />
       <PageFaq href="/agents/migi" />
       <RelatedPages href="/agents/migi" />
       <Contact

@@ -53,6 +53,12 @@ export default function AboutPage() {
       <main className="ab">
         <header className="ab-hero">
           <div className="ab-shell">
+            <Breadcrumbs
+              trail={[
+                { label: "The Story", href: "/about" },
+              ]}
+              className="mb-6"
+            />
             <p className="ab-eyebrow">About</p>
             <h1 className="ab-title">
               From branding to <em>AI-native</em> systems.
@@ -170,12 +176,6 @@ export default function AboutPage() {
         <AcademicFoundations />
       </main>
 
-      <Breadcrumbs
-        trail={[
-          { label: "The Story", href: "/about" },
-        ]}
-        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
-      />
       <PageFaq href="/about" />
       <RelatedPages href="/about" />
       <Contact />

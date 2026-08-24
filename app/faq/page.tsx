@@ -58,6 +58,10 @@ export default function FAQPage() {
       <main className="fq">
         <header className="fq-hero">
           <div className="fq-shell">
+            <Breadcrumbs
+              trail={[{ label: "FAQ", href: "/faq" }]}
+              className="mb-7"
+            />
             <p className="fq-eyebrow">Reference · {allFaqs.length} answers</p>
             <h1 className="fq-title">
               Everything people <em>actually</em> ask.
@@ -119,12 +123,6 @@ export default function FAQPage() {
         </section>
       </main>
 
-      <Breadcrumbs
-        trail={[
-          { label: "FAQ", href: "/faq" },
-        ]}
-        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
-      />
       <RelatedPages href="/faq" />
       <Contact />
     </MotionProvider>

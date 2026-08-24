@@ -78,7 +78,14 @@
 .jr-mast {
   max-width: var(--shell);
   margin: 0 auto;
-  padding: clamp(1.5rem, 3.5vh, 2.5rem) 1.5rem clamp(1rem, 2vh, 1.5rem);
+  /* The top value clears the fixed nav and is NOT free to shrink.
+     It was `clamp(1.5rem, 3.5vh, 2.5rem)` — at most 40px — while the nav pill is
+     around 100px tall including its offset, so the H1 rendered underneath it.
+     Every other page on the site reserves 10rem (`pt-40`); this one had been
+     written as a viewport-relative clamp and never checked against the nav.
+     Keep the 9rem floor: below it the eyebrow starts disappearing behind the
+     pill again on short viewports. */
+  padding: clamp(9rem, 3.5vh + 8rem, 11rem) 1.5rem clamp(1rem, 2vh, 1.5rem);
 }
 .jr-eyebrow {
   display: flex;

@@ -38,6 +38,13 @@ export default function FunAppsPage() {
               </p>
             </FadeInUp>
             <FadeInUp delay={0.1}>
+              <Breadcrumbs
+                trail={[
+                  { label: "Fun Apps", href: "/fun-apps" },
+                ]}
+                variant="paper"
+                className="mb-6"
+              />
               <h1 className="font-manrope font-semibold text-4xl md:text-6xl lg:text-7xl tracking-tight mb-6 text-[#1a1a1a]">
                 Fun{" "}
                 <span className="font-serif italic font-normal text-[#1a1a1a]/65">
@@ -396,12 +403,6 @@ export default function FunAppsPage() {
         </section>
       </main>
 
-      <Breadcrumbs
-        trail={[
-          { label: "Fun Apps", href: "/fun-apps" },
-        ]}
-        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
-      />
       <RelatedPages href="/fun-apps" />
       <Contact
         closingBg="linear-gradient(180deg, #241605 0%, #2A1806 12%, #170E04 55%, #050505 100%)"

@@ -54,6 +54,12 @@ export default function PrivacyPage() {
 
       <main className="bg-black">
         <header className="max-w-3xl mx-auto px-6 md:px-10 pt-40 pb-12 text-white">
+          <Breadcrumbs
+            trail={[
+              { label: "Privacy", href: "/privacy" },
+            ]}
+            className="mb-6"
+          />
           <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#86868B] mb-6">
             Privacy
           </p>
@@ -343,12 +349,6 @@ export default function PrivacyPage() {
         </section>
       </main>
 
-      <Breadcrumbs
-        trail={[
-          { label: "Privacy", href: "/privacy" },
-        ]}
-        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
-      />
       <RelatedPages href="/privacy" />
       <Contact />
     </MotionProvider>

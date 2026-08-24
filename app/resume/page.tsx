@@ -189,6 +189,16 @@ export default function ResumePage() {
         {/* ── Masthead ──────────────────────────────────────────────────── */}
         <header id="tour-resume-top" className="rz-mast">
           <div className="rz-shell">
+            {/* Above the eyebrow, not between it and the name. A breadcrumb is
+                the first thing in a document — dropping it after the kicker put
+                it in the middle of the masthead, reading as a stray line rather
+                than as navigation. */}
+            <Breadcrumbs
+              trail={[{ label: "Résumé", href: "/resume" }]}
+              variant="paper"
+              className="mb-7"
+            />
+
             <p className="rz-eyebrow" style={{ color: "var(--clay)" }}>
               Résumé — {identity.targeting}
             </p>
@@ -571,12 +581,6 @@ export default function ResumePage() {
           its second half — the "Read it, or talk to it" close is already on the
           void palette, so the paper variant would put a cream band between two
           dark sections. Match what precedes the block, not the page's opening. */}
-      <Breadcrumbs
-        trail={[
-          { label: "Résumé", href: "/resume" },
-        ]}
-        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
-      />
       <RelatedPages href="/resume" />
       <Contact />
     </MotionProvider>

@@ -210,6 +210,13 @@ export default function PixelVillePage() {
             </Reveal>
 
             <Reveal delay={0.06}>
+              <Breadcrumbs
+                trail={[
+                  { label: "Games", href: null },
+                  { label: "PixelVille", href: "/games/pixelville" },
+                ]}
+                className="mb-6"
+              />
               <h1 className="font-anton uppercase text-[3rem] sm:text-[4.5rem] md:text-[6rem] leading-[0.94] tracking-[0.01em] mt-7 mb-6" style={{ color: PV.snow, textShadow: "0 4px 30px rgba(0,0,0,0.5)" }}>
                 A village
                 <br />
@@ -730,13 +737,6 @@ export default function PixelVillePage() {
         </section>
       </main>
 
-      <Breadcrumbs
-        trail={[
-          { label: "Games", href: null },
-          { label: "PixelVille", href: "/games/pixelville" },
-        ]}
-        className="mx-auto max-w-5xl px-6 pt-12 sm:px-10 lg:px-16"
-      />
       <PageFaq href="/games/pixelville" />
       <RelatedPages href="/games/pixelville" />
       <Contact
