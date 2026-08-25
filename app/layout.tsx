@@ -144,6 +144,34 @@ export const metadata: Metadata = {
     },
   },
   category: "technology",
+
+  /*
+    Search-engine ownership verification.
+
+    Env-driven and absent until set — Next omits the tag entirely when the value
+    is undefined, so an unset variable costs nothing and there is no placeholder
+    to forget about.
+
+    This is the gate in front of the two things that matter most for being
+    findable by Gemini and Copilot: neither assistant has its own web index.
+    Gemini grounds on Google's, Copilot on Bing's. Verifying the property is
+    what lets you submit the sitemap and then *see* whether the pages are
+    actually indexed — which is a different question from whether they can be
+    crawled, and the one that has been unanswered so far.
+
+      NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION  Search Console → HTML tag method
+      NEXT_PUBLIC_BING_SITE_VERIFICATION    Bing Webmaster Tools → meta tag
+      NEXT_PUBLIC_YANDEX_SITE_VERIFICATION  Yandex Webmaster (optional)
+
+    Set them in Vercel → Settings → Environment Variables, redeploy, then verify.
+  */
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    yandex: process.env.NEXT_PUBLIC_YANDEX_SITE_VERIFICATION,
+    other: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
+      ? { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION }
+      : undefined,
+  },
 };
 
 export const viewport: Viewport = {

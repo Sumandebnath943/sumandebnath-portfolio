@@ -24,7 +24,21 @@ export default function robots(): MetadataRoute.Robots {
       { userAgent: "ChatGPT-User", allow: "/" },
 
       // ── Anthropic / Claude ──────────────────────────────────────────────
+      //
+      // Four agents, and the two that matter most were missing. `ClaudeBot` is
+      // the training crawl and says nothing about whether Claude can find you;
+      // `Claude-SearchBot` is what builds the index Claude searches, and
+      // `Claude-User` is the fetch that happens when somebody asks Claude about
+      // a page. `Claude-Web` and `anthropic-ai` are legacy and kept for older
+      // infrastructure that may still send them.
+      //
+      // Adding these does not *unblock* anything — the `*` group already allows
+      // everything, and robots.txt permits by default. What it does is state the
+      // permission explicitly for the two agents whose absence from a file this
+      // detailed could read as an oversight.
       { userAgent: "ClaudeBot", allow: "/" },
+      { userAgent: "Claude-SearchBot", allow: "/" },
+      { userAgent: "Claude-User", allow: "/" },
       { userAgent: "Claude-Web", allow: "/" },
       { userAgent: "anthropic-ai", allow: "/" },
 

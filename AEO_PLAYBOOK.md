@@ -281,6 +281,59 @@ purpose; pumping link equity into legal pages is wasted.
 
 ---
 
+## 5.6 Which index each assistant actually queries
+
+**Measured 25 Aug 2026.** ChatGPT names Suman prominently for "who is Suman
+Debnath", from multiple devices in temporary-chat mode, and the beacon confirms
+OpenAI agent arrivals. Claude, Gemini and Grok do not.
+
+That gap is not a crawlability problem — nothing on this site blocks any of
+them, and `proxy.ts` only logs crawlers, it never gates them. It is a question
+of **whose index each assistant answers from**:
+
+| Assistant | Answers from | What it needs |
+|---|---|---|
+| **ChatGPT** | OpenAI's own crawler + own index | Nothing — this loop is closed and working |
+| **Claude** | Brave's index | Presence in Brave: inbound links and time |
+| **Gemini** | Google's index | Search Console verification + indexing |
+| **Copilot** | Bing's index | Bing Webmaster + IndexNow |
+| **Grok** | X, plus a web index | Posts on X linking the site |
+
+OpenAI is the only one of the five that both crawls and indexes in-house, which
+is exactly why on-site work paid off there first and fastest. For the others the
+site can be perfect and still be uncitable, because the assistant never sees it.
+
+> **Being crawled is not being indexed.** The beacon proves a bot fetched a
+> page. It says nothing about whether that page entered any index. Those are
+> different questions and only the second one decides whether an assistant can
+> cite you.
+
+### What was wrong on this side
+
+`Claude-User` — the agent that fetches when somebody asks Claude about a page —
+matched **nothing** in `lib/crawler.ts`: not the Anthropic pattern, and not the
+generic one either, since the string contains no "bot", "crawler" or "fetcher".
+It returned `null`, so no row and no alert. Every Claude-User visit this site
+ever had was silently discarded, which is why there was no evidence either way.
+
+Detection is now per-agent rather than per-company, because
+`ClaudeBot` (training), `Claude-SearchBot` (indexing) and `Claude-User` (live
+fetch) mean three completely different things and collapsing them to "Anthropic"
+throws away the only information the alert carries.
+
+### The push channel
+
+`scripts/indexnow.mjs` submits every sitemap URL to IndexNow, which Bing,
+Yandex, Seznam and Naver share. Bing is the one that feeds Copilot and
+DuckDuckGo. **Google, Brave and xAI do not participate** — Google deprecated its
+equivalent for everything but job postings and livestreams.
+
+Run it after a deploy that adds or changes pages, never on a schedule:
+resubmitting unchanged URLs is discouraged by the protocol and can get the key
+rate-limited.
+
+---
+
 ## 6. Off-site — the part that is not code
 
 **This is where the remaining ceiling is.** Entity resolution across independent
