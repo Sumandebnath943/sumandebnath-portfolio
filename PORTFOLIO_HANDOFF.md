@@ -48,6 +48,15 @@ in JSX also trip `react/no-unescaped-entities`.
 
 **Second person is rare.** The site describes systems, not the reader.
 
+> **`/notebook` is the one exception, and it has its own rules.** The articles
+> are first-person and frequently address the reader directly, because they are
+> written to be read rather than to describe a product. Everything above still
+> holds — concrete over adjectival, honest postscripts, the typography — but the
+> register is different and `BLOG_GUIDELINES.md` §6 is the reference for it,
+> including the specific constructions that read as machine-written and are
+> banned. Since 26 Aug 2026 the notebook also carries career and marketing
+> writing, not only engineering.
+
 ### Headline construction
 
 The signature move is two registers in one headline — a bold sans clause and a
@@ -304,14 +313,23 @@ thing once, clearly, then respect the answer.
 
 ## 8. SEO / AEO
 
-There is a body of research in `SEO AEO Research Reports/` — a master plan, an
-execution split, and audits from four different models. Read `MASTER-PLAN.md`
-before making structural SEO changes.
+**`AEO_PLAYBOOK.md` is the standing reference — read it before any SEO or AEO
+work.** The June research reports are superseded and their folder is now named to
+say so; do not follow them. `TARGET_QUERIES.md` holds the prompts this site is
+trying to be the answer to.
 
 Per-page requirements: `metadata` with title, description, keywords,
 `alternates.canonical`, and an `openGraph` block with a real image. Add the route
-to `app/sitemap.ts`. `/faq` carries FAQ schema; `layout.tsx` carries the
-person/organization structured data.
+to `app/sitemap.ts`. `/faq` carries FAQ schema; `layout.tsx` carries the `Person`,
+`WebSite` and `Organization` nodes.
+
+Two rules from the playbook that bite hardest when writing a page:
+
+- **No two pages may answer the same question** (§3.1b). Grep `lib/faqs.ts` and
+  `lib/page-faqs.ts` before writing a heading or an FAQ entry.
+- **Structured data must be a plain `<script type="application/ld+json">`**, never
+  `next/script` (§3.5). `beforeInteractive` emits no element and the data exists
+  only after hydration.
 
 ---
 

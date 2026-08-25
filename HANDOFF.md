@@ -6,7 +6,7 @@ writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
 **Last updated:** 25 August 2026
 **Branch:** `main`.
-**Last session:** agentic readiness, against an external audit — the site's identity JSON-LD turned out to be invisible without JavaScript; plus a when-to-use block in `/llms.txt`, a recovery line on the 404, and House of Namus as a real `Organization` — §1.8.
+**Last session:** three pieces of work, all 25–26 Aug. Agentic readiness against an external audit, which found the identity JSON-LD was invisible without JavaScript — §1.8. Then **twenty-one notebook articles** in six batches, three new categories and a writing guide — §1.9. Then the target query set, the entity rework, and a measurement that reordered the priorities — §1.10.
 **Session before:** banner spacing across the whole site — one over-broad CSS rule was rewriting every masthead; plus a two-column `/philosophy` hero and two shell-width tokens — §1.7.
 
 > Run `git log --oneline -15` before trusting this section — it is a snapshot,
@@ -24,6 +24,7 @@ Recent history, newest first, gives an accurate picture of the trajectory:
 
 | Area | State |
 |---|---|
+| **Notebook** (`/notebook`) | **5 posts → 26**, 26 Aug (§1.9). Three new categories — Career, Marketing & AI, Method — so it is no longer a purely engineering notebook. `BLOG_GUIDELINES.md` is the standing reference for writing one; read it before touching a post. |
 | **Machine-readable identity** | Audited 25 Aug against Vercel's Is Agentic, **79 → 83** (§1.8). The `Person` and `WebSite` JSON-LD were emitted through `next/script` and existed only once JavaScript had run — now literal tags on all 26 routes. House of Namus added as a real `Organization`. Markdown content negotiation was **refused on purpose**; the reasoning and the one condition for revisiting it are in `AEO_PLAYBOOK.md` §8. |
 | **Profile** (`/profile`) | Built 23 Aug over two passes, extended 24 Aug with four more sections (§1.6). The only light page on the site — ruled cream paper, a 280vh pinned hero that zooms into a drawn monitor, a word reveal, and a conveyor street with a walking robot. Modelled on a reference the user supplied, then pulled back towards the site's own type, pills, accents and closing. **The figure and the dog still need redrawing** — §1.5. |
 | **Banking Co-pilot** (`/banking/rm-copilot`) | Built 22 Aug. New **Banking** group under Portfolio. Fully prerendered; 382 KB of WebP, one eager image. Done. |
@@ -670,6 +671,165 @@ line existed. 22 public routes 200. Lint produces nothing for any edited file.
 Two of the three remaining audit items are things this repo had already
 concluded: brand discoverability is `AEO_PLAYBOOK.md` §6 restated, and markdown
 is §8. **Treat the score as a proxy, not a goal.**
+
+---
+
+### 1.9 Twenty-one notebook articles (26 Aug 2026)
+
+**What was asked for.** A list of thirteen article titles, plus a request to find
+what was missing. The finished programme is **twenty-one**, written in six
+batches. The extra eight were proposed and accepted: four covering AEO and
+agentic readiness — the highest buyer-intent subjects and the only ones a
+prospective client searches for — three on the security argument, and one
+technical piece on the JSON-LD defect found the day before.
+
+**The standing reference is `BLOG_GUIDELINES.md`**, written in the same session
+and pointed at from `AGENTS.md`. Format, title and answer-block rules, category
+and tag discipline, the no-duplicate-question constraint, the voice rules and the
+never-publish list. Read that before writing a post; this section is the story.
+
+#### Structural decisions, all taken by Suman
+
+| Decision | Choice |
+|---|---|
+| Where career and marketing pieces live | **Broaden `/notebook`**, rather than build a second section |
+| How many new categories | **Three** — Career, Marketing & AI, Method. "Opinion" was proposed and rejected as a bucket that would hold one post |
+| Sequencing | **Batches of three, his input first.** Five rounds became six |
+| Length | **6–12 minutes, matched to the topic**, rather than a house figure |
+
+The notebook was five engineering categories and nothing else, so every career or
+marketing piece would otherwise have landed in "Practice" — one bucket holding
+two unrelated kinds of writing. It now runs eight categories: Career 5,
+Marketing & AI 7, Method 6, Practice 3, Next.js 2, and one each for CSS & Layout,
+React and Graphics.
+
+`llms.txt` and `lib/pages.ts` both described `/notebook` as an engineering
+notebook and were rewritten, because it is not one any more.
+
+#### The process that made these worth publishing
+
+Every batch began with questions and waited for answers. That was not politeness
+— **the material is the entire defence against the writing reading as
+generated.** Specificity comes from incidents, dates and numbers that only he
+has, and a post written without them is the vague filler that gets dismissed.
+
+**Nine claims were corrected against evidence rather than transcribed.** The
+pattern is worth keeping, because in every case the corrected version is stronger:
+
+- **LEGATUS "multiple security audits"** → written as his own review rounds. The
+  three *independent* audits belong to the banking work and nothing documented any
+  for LEGATUS. A sceptic checks that first.
+- **The `remembermenot` repository** was described as the fossil of the first
+  attempt; it is dated January 2026, a year after that attempt. The post says
+  exactly that instead.
+- **"Late 2024" versus a GitHub history starting December 2025.** Raised as a
+  credibility risk, since the audience for these posts checks. He confirmed the
+  earlier date and that the work was on platforms that never touched GitHub, so
+  the post states the gap and explains it.
+- **"GitHub secret scanning would stop the push"** → push protection matches known
+  provider formats only. The post says what it will not catch.
+- **"Every assistant knows never to hardcode a key now"** → too strong; they still
+  emit inline placeholders and, more to the point, read secrets from files.
+- **Supabase and Upstash** were named as the services whose keys he rotated. The
+  post says "a set of database and cache keys" — same credibility, no map of which
+  providers hold this site's credentials.
+- **The ChatGPT citation** arrived two days after a week of AEO work. Published as
+  a sequence with a callout stating what cannot be concluded, because asserting
+  cause from a two-day window contradicts `AEO_PLAYBOOK` §7 in front of exactly
+  the readers who would notice.
+- **"What I look for when hiring"** → he is not a hiring manager. Reframed as what
+  the term should mean and how anyone would check it.
+- **"Getting an AI product role"** → he has not got one. Written as the argument he
+  is currently making, stated as untested in the opening paragraph.
+
+**One post was deferred and later rescued by evidence.** "What I got wrong in my
+first six months" was dropped from a batch because the supplied material was a
+general principle rather than incidents. The commit history supplied the
+incidents: eight repositories created between 21 June and 1 July 2026, six of
+which received their last push within three days, and two which did not and
+became the agent fleet. Publishing the dates is what makes it land.
+
+#### A code change the programme forced
+
+`app/notebook/[slug]/page.tsx` hardcoded `TechArticle` for every post. That is
+specifically technical how-to writing and is the wrong claim over a personal
+career essay — a false statement in machine-readable data, on the site that had
+just spent a day fixing exactly that class of problem. The type now follows the
+category: technical categories keep `TechArticle`, everything else is
+`BlogPosting`.
+
+#### The repository boundary
+
+Suman granted read access to 27 repositories including private ones. The agreed
+limit was **commit messages and READMEs only, never diffs** — diffs are where
+accidentally-committed secrets live, so not reading them is the actual protection
+rather than a formality. That boundary held for the whole programme.
+
+#### Verified
+
+Production build each batch. Twenty-six posts on the index, every new URL 200,
+all eight category archives populated, sitemap, RSS and `/llms.txt` carrying all
+of them (they derive from the registry, so a missing one means the registry step
+was skipped), correct article type per category, and **147 questions across
+`lib/faqs.ts`, `lib/page-faqs.ts` and every post with zero exact and zero near
+duplicates** — checked with a script rather than by eye.
+
+> **The build ran out of memory twice, on type-checking, and it is not the code.**
+> `npx tsc --noEmit` passes alone. It is heap pressure from concurrent dev servers
+> on a machine already noted as short of disk (§3 item 0c).
+> `NODE_OPTIONS=--max-old-space-size=8192` clears it.
+
+---
+
+### 1.10 The query set, the entity rework, and one measurement (26 Aug 2026)
+
+**`TARGET_QUERIES.md` exists**, which `AEO_PLAYBOOK` §7 had been asking for since
+it was written. Sixty-one prompts across seven buckets, each with the page that
+owns it, a five-grade scale, a run protocol and an empty results log.
+
+Two things about it that were mistakes worth recording:
+
+- **The first draft was written without asking him anything.** He had said "help
+  me with this"; twenty-nine queries were produced by reading the codebase, which
+  made them circular — they could only test what the site already said, never
+  surface a gap. §7 was the one section in the whole playbook that could not be
+  derived from the repo, which is precisely why it had stayed unwritten. It was
+  rebuilt from his input.
+- **`§2` now says who runs it**, because he had to ask. A person runs it by hand,
+  logged out, three runs per query, taking the modal answer. **An agent cannot** —
+  web search queries an index, which is a different instrument from asking an
+  assistant and reading its answer.
+
+**The entity rework.** The disambiguation named the AWS advocate and the ORNL
+power-systems researcher. A search for "Suman Debnath portfolio" returned nine
+results with this domain absent and surfaced **at least four** well-indexed people
+of the name — the two that were named are the easy cases, and the two that were
+missing (another India-based software engineer, an AI/ML lead at a compute
+company) sit far closer to this profile. Enumerating all four was asked for and
+rejected; `AEO_PLAYBOOK` §6 carries the reasoning and the surface-by-surface
+split.
+
+#### The measurement that reorders everything below it
+
+`PentaCMD 47M parameter model terminal commands` returns **nothing**. That page
+has been live roughly two months and describes an artefact with a name almost
+nobody else uses.
+
+> **The technical bucket is not losing on quality. It is not indexed.** This is
+> §5.6's "being crawled is not being indexed", measured. No amount of further
+> writing moves a query whose page is in no index — so submission, verification
+> and inbound links come before more content, and before the off-site work in
+> item 0d.
+
+Google Search Console verification **is already live** — the meta tag is on the
+deployed site. Bing is not: there is no `msvalidate.01`. Bing Webmaster Tools can
+import the property from Search Console rather than verifying again, and Bing is
+what feeds Copilot and what `scripts/indexnow.mjs` submits into.
+
+**Still outstanding, and only Suman can do it: run the baseline.** Eighteen
+starred queries, one engine, three runs each, about an hour. Today is the clean
+moment — twenty-one articles are live and nothing has indexed them yet, so
+anything that moves over the next two months is attributable.
 
 ---
 

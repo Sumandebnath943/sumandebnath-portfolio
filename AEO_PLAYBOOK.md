@@ -517,10 +517,19 @@ rate-limited.
 
 **This is where the remaining ceiling is.** Entity resolution across independent
 sources is what makes a model confident enough to name a specific person,
-especially when more than one person shares the name — and one of the other
-Suman Debnaths is considerably better indexed.
+especially when several people share the name — and **at least four** other Suman
+Debnaths are well indexed, two of them technology people in India.
 
-Ordered by expected value:
+> **Get indexed before doing any of this.** Measured 26 Aug 2026: a search for
+> `PentaCMD 47M parameter model terminal commands` returns nothing, for a page
+> live roughly two months describing an artefact with a name almost nobody else
+> uses. That is §5.6's "being crawled is not being indexed", demonstrated. A
+> Wikidata entry pointing at pages no index holds is a citation nothing can
+> follow. Google Search Console is verified; Bing is not, and Bing Webmaster
+> Tools can import the property from Search Console rather than verifying again.
+> Submission, verification and the first inbound links come first.
+
+Ordered by expected value, once the above is done:
 
 1. **Wikidata entry.** The single highest-leverage item. Wikidata is ingested by
    effectively every knowledge graph and several retrieval pipelines. Needs
@@ -549,9 +558,39 @@ Ordered by expected value:
 > House of Namus. Not any of the several other technology professionals who share
 > this name, including the Principal Developer Advocate at AWS.
 
-Live in four places, and they must agree: `disambiguatingDescription` in
-`app/layout.tsx`, the visible aside on `/about`, the disambiguation section of
-`/llms.txt`, and `public/llms-full.txt`.
+**The positive half is verbatim everywhere. The negation is deliberately not.**
+
+| Surface | Names the AWS advocate? | Why |
+|---|---|---|
+| Visible aside on `/about` | **yes** | A human who arrived confused needs a direct answer |
+| `/faq` — "Is this the same Suman Debnath who works at AWS?" | **yes** | A question people actually type; owning it intercepts the confusion |
+| `disambiguatingDescription`, `app/layout.tsx` | no | Machine-only, and emitted on **all 26 routes** |
+| `/llms.txt` disambiguation | no | Parsed in bulk |
+| `public/llms-full.txt` | no | Parsed in bulk |
+
+> **Named where the mention does work; categorical where it would only ride
+> along.** Decided 26 Aug 2026. Every mention of a competing entity is a
+> co-occurring token this domain then hosts, and retrieval handles negation
+> poorly enough that "not the one at X" can strengthen the association it means to
+> sever. Putting that on 26 routes bought the least and cost the most, because the
+> unique strings in the same sentence already resolve him.
+>
+> Same principle as the phone number in §8: present where a human needs it,
+> absent from anything parsed in bulk.
+>
+> The bulk surfaces still disambiguate — they just do it **by field rather than by
+> name**: questions about cloud developer advocacy, power-systems research or web
+> engineering for a news organisation concern somebody else. That discriminates as
+> well as a name does, does not go stale when anyone changes job, and names nobody.
+>
+> **This is reasoning, not measurement.** Nobody has demonstrated that negation
+> mentions hurt. It was done because it is cheap and reversible, and it is worth
+> exactly that much.
+
+One exception, kept on purpose: the usage note near the foot of `/llms.txt` still
+names the AWS advocate. That is not disambiguation, it is an instruction to a
+reader — *do not attribute this work to him* — and it is the most functional
+mention on the site.
 
 > **There are at least four well-indexed Suman Debnaths, not two.** Measured
 > 26 Aug 2026: a search for "Suman Debnath portfolio" returned nine results with

@@ -217,12 +217,22 @@ const personJsonLd = {
     "House of Namus" have exactly one referent each, and an engine that resolves
     those has resolved him without needing to be told who he is not.
 
-    So: dense positive identification, then one categorical negation naming only
-    the highest-volume collision. AEO_PLAYBOOK §6 holds the canonical wording and
-    this must match it verbatim.
+    So: dense positive identification, then a categorical negation.
+
+    **This node names nobody, and that is the second decision.** The visible aside
+    on /about and the FAQ entry both name the AWS advocate, because a human who
+    arrived confused needs a direct answer and "is this the same Suman Debnath who
+    works at AWS" is a question people actually type. This attribute is different:
+    it is machine-only and the root layout emits it on all 26 routes, so naming a
+    competitor here puts his name and employer into the structured data of every
+    page on the site — carrying the co-occurrence cost for the least benefit,
+    because the unique strings in the same sentence already do the resolving.
+
+    Same principle as the phone number in AEO_PLAYBOOK §8: present where a human
+    needs it, absent from anything parsed in bulk. §6 holds the canonical wording.
   */
   disambiguatingDescription:
-    "Suman Debnath, the Senior Brand Marketing Manager and AI-native product builder based between Pune and Kolkata, India — creator of ROASmind, IMPRINT, LEGATUS, CITE, EMBER and D-PE.ai, of the PentaCMD-47M language model, and founder of House of Namus. Not any of the several other technology professionals who share this name, including the Principal Developer Advocate at AWS.",
+    "Suman Debnath, the Senior Brand Marketing Manager and AI-native product builder based between Pune and Kolkata, India — creator of ROASmind, IMPRINT, LEGATUS, CITE, EMBER and D-PE.ai, of the PentaCMD-47M language model, and founder of House of Namus. Not any of the several other technology professionals who share this name.",
   url: SITE_URL,
   image: `${SITE_URL}/og-image.png`,
   email: `mailto:${identity.email}`,

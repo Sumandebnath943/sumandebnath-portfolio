@@ -920,6 +920,14 @@ and the notebook registry by `app/llms.txt/route.ts`, so adding the page above
 adds it there too. **`public/llms-full.txt` is still hand-written** and does
 need an entry.
 
+> **Adding a notebook article is a completely different workflow** and none of
+> the seven points above apply to it. Posts are typed data in
+> `lib/notebook/posts/`, registered in `lib/notebook/index.ts`, and every surface
+> derives from that registry. **`BLOG_GUIDELINES.md` is the reference** — the
+> block format, the title and answer-block rules, the closed category list, the
+> capped tag vocabulary, the no-duplicate-question constraint, the voice rules,
+> and what may never be published. Read it before touching a post.
+
 ### Page skeleton conventions
 
 - `page.tsx` is a **server component** holding metadata, content arrays and layout.

@@ -27,6 +27,9 @@ Three documents carry the full context for this repo. They do not overlap.
   `/notebook`.** The typed-block format, the title and answer-block rules, the
   closed category list, the capped tag vocabulary, the no-duplicate-question
   constraint, the voice rules, and what may never be published.
+- **`TARGET_QUERIES.md`** — the prompts this site is trying to be the answer to,
+  the grading scale, and the results log. **A person runs it by hand; an agent
+  cannot.** Read `§2` before offering to "run the queries".
 - **`AEO_PLAYBOOK.md`** — **read this before proposing any SEO, AEO or "get
   cited by AI" work.** What is already in place, the rules for writing
   extractable answers, the one-question-per-URL constraint, the off-site track
