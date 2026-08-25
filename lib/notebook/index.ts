@@ -33,6 +33,9 @@ import finishingIsNotBuilding from "./posts/finishing-is-not-building";
 import whatAMarketerHasToLearn from "./posts/what-a-marketer-has-to-learn";
 import whatAiReplacesInMarketing from "./posts/what-ai-replaces-in-marketing";
 import whatMarketingTeamsShouldAutomateFirst from "./posts/what-marketing-teams-should-automate-first";
+import aeoVsSeoWhatChanges from "./posts/aeo-vs-seo-what-changes";
+import whatAgenticReadyActuallyMeans from "./posts/what-agentic-ready-actually-means";
+import doYouNeedAnLlmsTxt from "./posts/do-you-need-an-llms-txt";
 
 export type { Post, Block, PostFact, Category } from "./types";
 export { CATEGORIES, CATEGORY_ACCENT, categorySlug, categoryFromSlug } from "./types";
@@ -57,6 +60,9 @@ const POSTS: Post[] = [
   whatAMarketerHasToLearn,
   whatAiReplacesInMarketing,
   whatMarketingTeamsShouldAutomateFirst,
+  aeoVsSeoWhatChanges,
+  whatAgenticReadyActuallyMeans,
+  doYouNeedAnLlmsTxt,
 ];
 
 export const NOTEBOOK_PATH = "/notebook";
