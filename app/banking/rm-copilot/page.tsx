@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BannerArt from "@/components/ui/BannerArt";
 import Link from "next/link";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
@@ -184,7 +185,8 @@ export default function BankingCopilotPage() {
 
       <main className="relative font-manrope" style={{ background: BANK.bg, color: BANK.text }}>
         {/* ════════════════════════════ HERO ════════════════════════════ */}
-        <section className="relative px-6 pt-28 pb-16 md:pb-24 overflow-hidden">
+        <section className="relative px-6 pt-28 pb-16 md:pb-24 overflow-hidden sd-banner-host">
+          <BannerArt seed="/banking/rm-copilot" accent="#D9A961" />
           <HeroLock />
           <div className="pointer-events-none absolute inset-0">
             <div

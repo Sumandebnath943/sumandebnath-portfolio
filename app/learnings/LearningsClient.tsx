@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import Script from "next/script";
+import BannerArt from "@/components/ui/BannerArt";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import Contact from "@/components/sections/Contact";
@@ -552,7 +553,7 @@ export default function LearningsPage() {
       <main className="lp-root" ref={scrollRef}>
 
         {/* ── HERO ── */}
-        <section
+        <section className="sd-banner-host"
           id="tour-learnings"
           style={{
             minHeight: "92vh",
@@ -571,6 +572,7 @@ export default function LearningsPage() {
             overflow: "hidden",
           }}
         >
+          <BannerArt seed="/learnings" accent="#22D3EE" variant="paper" />
           {/* Decorative lines */}
           <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden", opacity: 0.04 }}>
             <div style={{ position: "absolute", top: 0, left: "50%", width: 1, height: "100%", background: "var(--lp-text-primary)" }} />

@@ -10,6 +10,15 @@ const post: Post = {
   published: "2026-08-24",
   category: "Next.js",
   pick: true,
+  // High demand during the migration window and very little written about it yet — but it decays as Next 16 stops being new, which is what caps it.
+  popularity: {
+    searchDemand: 17,
+    evergreen: 9,
+    painIntensity: 14,
+    gapInCoverage: 17,
+    shareability: 14,
+  },
+  popularityScore: 71,
   tags: ["Next.js", "Migration", "Routing"],
   readingMinutes: 5,
   facts: [

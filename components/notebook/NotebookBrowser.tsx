@@ -76,7 +76,7 @@ function Meta({ post }: { post: CardPost }) {
 }
 
 /** The cover story. One article at magazine scale, above everything else. */
-function FeaturedHero({ post }: { post: CardPost }) {
+function FeaturedHero({ post, popular = false }: { post: CardPost; popular?: boolean }) {
   return (
     <section className="nb-hero" aria-labelledby="nb-hero-title">
       <Link href={`/notebook/${post.slug}`} className="nb-hero-link">
@@ -89,7 +89,7 @@ function FeaturedHero({ post }: { post: CardPost }) {
           className="nb-hero-cover"
         />
         <div className="nb-hero-body">
-          <p className="nb-hero-badge">Featured</p>
+          <p className="nb-hero-badge">{popular ? "★ Most popular" : "Featured"}</p>
           <Meta post={post} />
           <h2 id="nb-hero-title" className="nb-hero-title">
             {post.title}
@@ -104,7 +104,7 @@ function FeaturedHero({ post }: { post: CardPost }) {
   );
 }
 
-function PostCard({ post }: { post: CardPost }) {
+function PostCard({ post, popular = false }: { post: CardPost; popular?: boolean }) {
   return (
     <article className="nb-card">
       <Link href={`/notebook/${post.slug}`} className="nb-card-link">
@@ -116,6 +116,10 @@ function PostCard({ post }: { post: CardPost }) {
           className="nb-card-cover"
         />
         <div className="nb-card-body">
+          {/* "Editor pick", not "Most read". The ranking is an editorial
+              forecast scored in lib/notebook/types.ts, and nothing on this site
+              counts readers yet — see the note on `popularityScore`. */}
+          {popular && <p className="nb-badge nb-badge--popular">★ Editor pick · most popular</p>}
           <Meta post={post} />
           <h3 className="nb-card-title">{post.title}</h3>
           <p className="nb-card-excerpt">{post.answer}</p>
@@ -135,11 +139,14 @@ export default function NotebookBrowser({
   categories,
   tags,
   picks,
+  popularSlug,
 }: {
   posts: CardPost[];
   categories: { category: Category; count: number }[];
   tags: { tag: string; count: number }[];
   picks: CardPost[];
+  /** Slug of the highest-scoring article. See mostPopularPost(). */
+  popularSlug?: string;
 }) {
   const [category, setCategory] = useState<Category | null>(null);
   const [activeTags, setActiveTags] = useState<string[]>([]);
@@ -176,7 +183,7 @@ export default function NotebookBrowser({
 
   return (
     <>
-      {hero && <FeaturedHero post={hero} />}
+      {hero && <FeaturedHero post={hero} popular={hero.slug === popularSlug} />}
 
       <div className="nb-layout">
         {/* ── Articles ─────────────────────────────────────────────────── */}
@@ -224,7 +231,7 @@ export default function NotebookBrowser({
           ) : (
             <div className="nb-grid">
               {grid.map((p) => (
-                <PostCard key={p.slug} post={p} />
+                <PostCard key={p.slug} post={p} popular={p.slug === popularSlug} />
               ))}
             </div>
           )}

@@ -11,6 +11,17 @@ const post: Post = {
   category: "CSS & Layout",
   featured: true,
   pick: true,
+  // "position sticky not working" is among the most-searched CSS questions there
+  // is, the behaviour is specified and will not change, and the failure is
+  // completely silent — the three things that make an article travel.
+  popularity: {
+    searchDemand: 19,
+    evergreen: 18,
+    painIntensity: 19,
+    gapInCoverage: 14,
+    shareability: 16,
+  },
+  popularityScore: 86,
   tags: ["CSS", "Debugging", "Layout"],
   readingMinutes: 4,
   facts: [

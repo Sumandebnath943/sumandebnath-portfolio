@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BannerArt from "@/components/ui/BannerArt";
 import Image from "next/image";
 import Link from "next/link";
 import MotionProvider from "@/components/providers/MotionProvider";
@@ -127,7 +128,8 @@ export default function AegisVaultPage() {
         style={{ background: AEGIS.bg, color: AEGIS.text }}
       >
         {/* ════════════════════════════ HERO ════════════════════════════ */}
-        <section className="relative px-6 pt-28 pb-16 md:pt-28 md:pb-24 overflow-hidden">
+        <section className="relative px-6 pt-28 pb-16 md:pt-28 md:pb-24 overflow-hidden sd-banner-host">
+          <BannerArt seed="/projects/aegis-vault" accent="#7DD3FC" />
           <HeroLock />
           {/* atmospheric emerald glow */}
           <div className="pointer-events-none absolute inset-0">

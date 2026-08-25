@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BannerArt from "@/components/ui/BannerArt";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Image from "next/image";
 import Link from "next/link";
@@ -269,9 +270,10 @@ export default function MigiAppPage() {
       <main className="relative" style={{ background: GRAPHITE }}>
         {/* ══════════════════════ HERO ══════════════════════ */}
         <section
-          className="mg-grain relative overflow-hidden"
+          className="mg-grain relative overflow-hidden sd-banner-host"
           style={{ background: "radial-gradient(130% 80% at 50% -10%, #16210E 0%, #0D140C 38%, #090D0B 72%, #0A0E0C 100%)" }}
         >
+          <BannerArt seed="/apps/migi-app" accent="#C6F24E" />
           <HeroLock />
           <Aurora />
           <GridField tone="dark" />

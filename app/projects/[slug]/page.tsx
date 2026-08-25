@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BannerArt from "@/components/ui/BannerArt";
 import { notFound } from "next/navigation";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
@@ -108,7 +109,8 @@ export default async function ProjectPage({ params }: Props) {
       <Navigation />
 
       <main className="bg-black pt-32 pb-12 px-4 md:px-8">
-        <header className="max-w-5xl mx-auto mb-10 text-white">
+        <header className="max-w-5xl mx-auto mb-10 text-white sd-banner-host">
+          <BannerArt seed="/projects/dossier" accent="#FF3B6B" />
           <Breadcrumbs
             trail={[
               { label: "Projects", href: "/projects" },

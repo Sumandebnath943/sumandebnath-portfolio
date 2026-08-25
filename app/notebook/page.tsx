@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BannerArt from "@/components/ui/BannerArt";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import Contact from "@/components/sections/Contact";
@@ -14,6 +15,7 @@ import {
   allTags,
   formatPostDate,
   notebookModified,
+  mostPopularPost,
   pickedPosts,
   postUrl,
 } from "@/lib/notebook";
@@ -61,6 +63,7 @@ export default function NotebookIndexPage() {
   const categories = activeCategories();
   const tags = allTags();
   const picks = pickedPosts();
+  const popular = mostPopularPost();
 
   // ── Structured data ───────────────────────────────────────────────────────
   // Blog + the full post list. `dateModified` from the newest entry is the
@@ -111,7 +114,8 @@ export default function NotebookIndexPage() {
         {/* The page banner. Compact on purpose — the featured article below is
             the real hero, and a tall masthead above it would push the cover
             story off the first screen. */}
-        <header className="nb-mast nb-mast--blog">
+        <header className="nb-mast nb-mast--blog sd-banner-host">
+          <BannerArt seed="/notebook" accent="#7B61FF" variant="paper" />
           <div className="nb-wide">
             <Breadcrumbs
               trail={[{ label: "Notebook", href: "/notebook" }]}
@@ -152,6 +156,7 @@ export default function NotebookIndexPage() {
             categories={categories}
             tags={tags}
             picks={picks.map(toCardPost)}
+            popularSlug={popular?.slug}
           />
         </div>
       </main>

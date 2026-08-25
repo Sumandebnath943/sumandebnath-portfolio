@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BannerArt from "@/components/ui/BannerArt";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import RelatedPages from "@/components/ui/RelatedPages";
@@ -148,7 +149,8 @@ export default function QdexPage() {
 
         <div className="relative z-10">
           {/* ════════════════════ HERO ════════════════════ */}
-          <section className="relative min-h-[100svh] flex flex-col pt-28 pb-8 px-6 md:px-14 overflow-hidden">
+          <section className="relative min-h-[100svh] flex flex-col pt-28 pb-8 px-6 md:px-14 overflow-hidden sd-banner-host">
+            <BannerArt seed="/llms/qdex-1.5b" accent="#2DD4BF" />
             <HeroLock />
             <div className="flex-1 flex items-center justify-center w-full">
               <div className="max-w-4xl mx-auto flex flex-col items-center text-center w-full">

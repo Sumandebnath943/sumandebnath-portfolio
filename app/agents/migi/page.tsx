@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BannerArt from "@/components/ui/BannerArt";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
@@ -245,7 +246,8 @@ export default function MigiPage() {
         style={{ background: MIGI.cream, color: MIGI.text, ["--sel" as string]: MIGI.lime }}
       >
         {/* ════════════════════════════ HERO · lime canvas ════════════════════════════ */}
-        <section className="relative px-6 pt-24 pb-20 md:pb-28 overflow-hidden" style={{ background: MIGI.lime }}>
+        <section className="relative px-6 pt-24 pb-20 md:pb-28 overflow-hidden sd-banner-host" style={{ background: MIGI.lime }}>
+          <BannerArt seed="/agents/migi" accent="#C6F24E" />
           <HeroLock />
           {/* faint ink texture rings */}
           <span aria-hidden className="absolute -top-24 -left-24 w-80 h-80 rounded-full" style={{ border: "1.5px solid rgba(22,23,28,0.07)" }} />

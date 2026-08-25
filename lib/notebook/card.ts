@@ -34,6 +34,7 @@ export type CardPost = Pick<
   | "cover"
   | "coverAlt"
   | "featured"
+  | "popularityScore"
 >;
 
 export function toCardPost(p: Post): CardPost {
@@ -48,5 +49,6 @@ export function toCardPost(p: Post): CardPost {
     cover: p.cover,
     coverAlt: p.coverAlt,
     featured: p.featured,
+    popularityScore: p.popularityScore,
   };
 }

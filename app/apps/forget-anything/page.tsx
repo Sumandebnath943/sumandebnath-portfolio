@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BannerArt from "@/components/ui/BannerArt";
 import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
@@ -107,7 +108,8 @@ export default function ForgetAnythingPage() {
       <main className="relative fa-grain" style={{ background: "#040a07" }}>
 
         {/* ════════════════════════════ HERO ════════════════════════════ */}
-        <section className="relative overflow-hidden" style={{ background: "radial-gradient(125% 75% at 50% -5%, #103a28 0%, #0a2418 35%, #061009 70%, #040a07 100%)" }}>
+        <section className="relative overflow-hidden sd-banner-host" style={{ background: "radial-gradient(125% 75% at 50% -5%, #103a28 0%, #0a2418 35%, #061009 70%, #040a07 100%)" }}>
+          <BannerArt seed="/apps/forget-anything" accent="#DAA520" />
           <HeroLock />
           <FlowField tone="hero" pattern="grid" particles />
           <div className="relative z-10 max-w-5xl mx-auto px-6 pt-28 md:pt-32 text-center">

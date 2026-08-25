@@ -10,6 +10,15 @@ const post: Post = {
   published: "2026-08-24",
   category: "React",
   pick: true,
+  // Every React codebase with a module-level guard meets this eventually, and the dev-only asymmetry makes it maddening. Less searched than the CSS one only because people misattribute it.
+  popularity: {
+    searchDemand: 15,
+    evergreen: 14,
+    painIntensity: 18,
+    gapInCoverage: 16,
+    shareability: 15,
+  },
+  popularityScore: 78,
   tags: ["React", "Debugging", "StrictMode"],
   readingMinutes: 5,
   facts: [

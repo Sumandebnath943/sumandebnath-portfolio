@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BannerArt from "@/components/ui/BannerArt";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import RelatedPages from "@/components/ui/RelatedPages";
@@ -85,8 +86,9 @@ export default function ProjectsArchivePage() {
         {/* ── HERO ── */}
         <section
           aria-labelledby="archive-heading"
-          className="relative pt-40 pb-20 md:pt-48 md:pb-28 px-6 md:px-10 overflow-hidden"
+          className="relative pt-40 pb-20 md:pt-48 md:pb-28 px-6 md:px-10 overflow-hidden sd-banner-host"
         >
+          <BannerArt seed="/projects" accent="#FF3B6B" />
           {/* Restrained atmospheric gradient */}
           <div className="pointer-events-none absolute inset-0 opacity-60">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.05)_0%,transparent_70%)] blur-2xl" />

@@ -9,6 +9,15 @@ const post: Post = {
     "three.js r152 turned colour management on by default, silently shifting any hex value chosen against an earlier release. Why warm whites turn violet, and how to compensate when you cannot disable the flag.",
   published: "2026-08-24",
   category: "Graphics",
+  // A real and under-documented trap, but the audience is anyone doing WebGL colour work, which is a much smaller room.
+  popularity: {
+    searchDemand: 9,
+    evergreen: 15,
+    painIntensity: 13,
+    gapInCoverage: 15,
+    shareability: 11,
+  },
+  popularityScore: 63,
   tags: ["three.js", "WebGL", "Colour"],
   readingMinutes: 6,
   facts: [

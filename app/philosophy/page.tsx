@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BannerArt from "@/components/ui/BannerArt";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import RelatedPages from "@/components/ui/RelatedPages";
@@ -55,7 +56,8 @@ export default function PhilosophyPage() {
         {/* ── The manifesto opening ───────────────────────────────────────
             Replaces a bare pt-32 spacer. The ledger doubles as a contents
             page for the six principles expanded immediately below. */}
-        <header className="ph-hero">
+        <header className="ph-hero sd-banner-host">
+          <BannerArt seed="/philosophy" accent="#F472B6" />
           <div className="ph-shell">
             <Breadcrumbs
               trail={[

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BannerArt from "@/components/ui/BannerArt";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import Contact from "@/components/sections/Contact";
@@ -51,7 +52,8 @@ export default function TermsPage() {
       <Navigation />
 
       <main className="bg-black">
-        <header className="max-w-3xl mx-auto px-6 md:px-10 pt-40 pb-12 text-white">
+        <header className="max-w-3xl mx-auto px-6 md:px-10 pt-40 pb-12 text-white sd-banner-host">
+          <BannerArt seed="/terms" accent="#64748B" />
           <Breadcrumbs
             trail={[
               { label: "Terms", href: "/terms" },

@@ -526,3 +526,25 @@
   text-decoration: underline;
   text-underline-offset: 0.25em;
 }
+
+/* ── Popularity badge ───────────────────────────────────────────────────────
+   Wording matters here. The ranking is an editorial forecast scored against
+   five factors in lib/notebook/types.ts, not measured traffic — nothing on this
+   site counts readers yet. "Editor pick · most popular" is true; "Most read"
+   would not be, and a reader who discovers the numbers are decorative stops
+   trusting everything else on the page. */
+.nb-badge {
+  display: inline-block;
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.5625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  padding: 0.25rem 0.6rem;
+  margin: 0 0 0.65rem;
+}
+
+.nb-badge--popular {
+  color: #fff;
+  background: var(--nb-clay);
+}

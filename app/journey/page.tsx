@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BannerArt from "@/components/ui/BannerArt";
 import Link from "next/link";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
@@ -87,7 +88,8 @@ export default function JourneyPage() {
       />
       <Navigation />
       <main className="jr">
-        <header className="jr-mast">
+        <header className="jr-mast sd-banner-host">
+          <BannerArt seed="/journey" accent="#b4472a" variant="paper" />
           <Breadcrumbs
             trail={[{ label: "The Journey", href: "/journey" }]}
             variant="paper"

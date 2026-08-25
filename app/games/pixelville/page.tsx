@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BannerArt from "@/components/ui/BannerArt";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
@@ -169,7 +170,8 @@ export default function PixelVillePage() {
             A clean, readable night-sky hero (solid gradient + subtle pixel
             decor) with the screenshot presented as a framed product shot
             below the copy — no text over a busy image. */}
-        <section className="relative" style={{ background: `radial-gradient(120% 80% at 50% 0%, #12203a 0%, ${PV.night} 45%, ${PV.nightDeep} 100%)` }}>
+        <section className="relative sd-banner-host" style={{ background: `radial-gradient(120% 80% at 50% 0%, #12203a 0%, ${PV.night} 45%, ${PV.nightDeep} 100%)` }}>
+          <BannerArt seed="/games/pixelville" accent="#F5B94A" />
           <HeroLock />
           {/* pixel-sky decor */}
           <div aria-hidden className="absolute inset-0 overflow-hidden pointer-events-none">

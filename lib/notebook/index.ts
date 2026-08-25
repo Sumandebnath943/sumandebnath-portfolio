@@ -87,6 +87,21 @@ export function pickedPosts(): Post[] {
   return allPosts().filter((p) => p.pick);
 }
 
+/**
+ * The highest-scoring article by `popularityScore`.
+ *
+ * A forecast, not a measurement — see the note on `popularityScore` in
+ * types.ts. Callers must label it honestly; the badge reads "Editor pick"
+ * rather than "Most read" for that reason.
+ */
+export function mostPopularPost(): Post | undefined {
+  const scored = POSTS.filter((p) => typeof p.popularityScore === "number");
+  if (!scored.length) return undefined;
+  return scored.reduce((best, p) =>
+    (p.popularityScore ?? 0) > (best.popularityScore ?? 0) ? p : best,
+  );
+}
+
 /** Every distinct tag, ordered by how many posts carry it. */
 export function allTags(): { tag: string; count: number }[] {
   const counts = new Map<string, number>();

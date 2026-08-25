@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BannerArt from "@/components/ui/BannerArt";
 import Link from "next/link";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
@@ -51,7 +52,8 @@ export default function AboutPage() {
       <Navigation />
 
       <main className="ab">
-        <header className="ab-hero">
+        <header className="ab-hero sd-banner-host">
+          <BannerArt seed="/about" accent="#FB7185" />
           <div className="ab-shell">
             <Breadcrumbs
               trail={[

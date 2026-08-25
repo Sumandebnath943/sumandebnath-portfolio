@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BannerArt from "@/components/ui/BannerArt";
 import Link from "next/link";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
@@ -91,7 +92,8 @@ export default function ContactPageRoute() {
 
       <main className="cx">
         {/* ── Masthead ──────────────────────────────────────────────────── */}
-        <header className="cx-hero">
+        <header className="cx-hero sd-banner-host">
+          <BannerArt seed="/contact" accent="#2E8B57" variant="paper" />
           <div className="cx-shell">
              <Breadcrumbs
               trail={[

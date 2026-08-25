@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BannerArt from "@/components/ui/BannerArt";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import RelatedPages from "@/components/ui/RelatedPages";
@@ -30,7 +31,8 @@ export default function FunAppsPage() {
 
       <main className="bg-[#f4f4f0] text-[#1a1a1a] min-h-screen selection:bg-[#1a1a1a] selection:text-white pb-32 overflow-hidden">
         {/* ── HERO ── */}
-        <section className="pt-40 pb-16 md:pt-48 md:pb-24 px-6 md:px-10">
+        <section className="pt-40 pb-16 md:pt-48 md:pb-24 px-6 md:px-10 sd-banner-host">
+          <BannerArt seed="/fun-apps" accent="#FF8C00" variant="paper" />
           <div className="max-w-6xl mx-auto flex flex-col items-center text-center">
             <FadeInUp delay={0}>
               <p className="font-mono text-[11px] uppercase tracking-[0.4em] text-[#1a1a1a]/65 mb-6 font-semibold">

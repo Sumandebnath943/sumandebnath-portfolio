@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BannerArt from "@/components/ui/BannerArt";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
@@ -107,7 +108,8 @@ export default function PactAgentPage() {
 
         <div className="relative z-10">
           {/* ════════════════════ HERO ════════════════════ */}
-          <section className="pt-36 md:pt-44 pb-12 px-6 md:px-14">
+          <section className="pt-36 md:pt-44 pb-12 px-6 md:px-14 sd-banner-host">
+            <BannerArt seed="/agents/pact-agent" accent="#FF5500" />
             <HeroLock />
             <div className="max-w-5xl mx-auto flex flex-col items-center text-center">
               <Reveal>

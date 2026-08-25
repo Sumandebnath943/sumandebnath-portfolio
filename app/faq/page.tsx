@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BannerArt from "@/components/ui/BannerArt";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import RelatedPages from "@/components/ui/RelatedPages";
@@ -56,7 +57,8 @@ export default function FAQPage() {
       <Navigation />
 
       <main className="fq">
-        <header className="fq-hero">
+        <header className="fq-hero sd-banner-host">
+          <BannerArt seed="/faq" accent="#94A3B8" />
           <div className="fq-shell">
             <Breadcrumbs
               trail={[{ label: "FAQ", href: "/faq" }]}

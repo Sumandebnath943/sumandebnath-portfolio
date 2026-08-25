@@ -754,3 +754,44 @@ html {
 @media (prefers-reduced-motion: reduce) {
   [class*="pv-"] { animation: none !important; }
 }
+
+/* ─── Banner art ─────────────────────────────────────────────────────────
+   Host + layer for components/ui/BannerArt.tsx.
+
+   `isolation: isolate` is the load-bearing bit. It gives the header its own
+   stacking context, so the art's `z-index: -1` lands *above the header's own
+   background* and *below its content* — without any of that content needing to
+   be positioned or given a z-index of its own. Without the isolation the -1
+   would escape to the page's root stacking context and disappear behind the
+   page background entirely.
+
+   `overflow: hidden` clips the figure to the banner. Safe here because a
+   header has no sticky descendants; do NOT copy this class onto a container
+   that does — see /notebook/overflow-hidden-kills-position-sticky. */
+.sd-banner-host {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.sd-banner-art {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  contain: paint;
+
+  /* Fades the figure out towards the left, where the headline sits.
+     A mask rather than a gradient rect painted inside the SVG: a rect has to be
+     filled with the page background to blend, and the paper pages do not share
+     one (#f2ece0, #f4efe6, #f4f4f0). Masking fades to transparency and does not
+     need to know what is behind it. */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.45) 42%, #000 100%);
+  mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.45) 42%, #000 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sd-banner-art {
+    opacity: 0.6;
+  }
+}

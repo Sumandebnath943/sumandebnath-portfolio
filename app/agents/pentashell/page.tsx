@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BannerArt from "@/components/ui/BannerArt";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
@@ -126,7 +127,8 @@ export default function PentashellPage() {
         <div className="relative z-10">
 
           {/* ════════════════════════════ HERO ════════════════════════════ */}
-          <section className="px-6 pt-24 md:pt-28 pb-10">
+          <section className="px-6 pt-24 md:pt-28 pb-10 sd-banner-host">
+            <BannerArt seed="/agents/pentashell" accent="#2FE2F0" />
             <HeroLock />
             <div className="max-w-5xl mx-auto flex flex-col items-center text-center">
               <Reveal><Kicker>The default CLI for PentaCMD-47M</Kicker></Reveal>

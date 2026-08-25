@@ -36,6 +36,40 @@ export interface PostFact {
 }
 
 /**
+ * The five things that decide whether a technical article travels, each scored
+ * 0–20. Written down rather than kept in the author's head so the ranking can be
+ * argued with — a single opaque "popularity: 8" invites nothing but agreement.
+ */
+export interface PopularityFactors {
+  /** How many people hit this problem. A CSS rule everyone meets beats a
+   *  library quirk a hundred people meet. */
+  searchDemand: number;
+  /** Whether it stays true. A framework migration decays as the version ages;
+   *  a CSS specification behaviour does not. */
+  evergreen: number;
+  /** How badly it hurts when you hit it. Silent failures score highest — they
+   *  are the ones people search for at 1am having tried everything. */
+  painIntensity: number;
+  /** How well the answer is already covered elsewhere. Low competition scores
+   *  high; a topic with fifty good StackOverflow answers scores low. */
+  gapInCoverage: number;
+  /** Whether someone would send it to a colleague. */
+  shareability: number;
+}
+
+export const POPULARITY_FACTORS: (keyof PopularityFactors)[] = [
+  "searchDemand",
+  "evergreen",
+  "painIntensity",
+  "gapInCoverage",
+  "shareability",
+];
+
+export function scorePopularity(f: PopularityFactors): number {
+  return POPULARITY_FACTORS.reduce((n, k) => n + f[k], 0);
+}
+
+/**
  * The primary category. **One per post, from a closed list.**
  *
  * Categories and tags do different jobs and the difference matters here.
@@ -125,17 +159,31 @@ export interface Post {
    */
   featured?: boolean;
 
-  /**
-   * Hand-picked for the "Start here" rail.
-   *
-   * **Deliberately not called `popular`.** Nothing here measures readership, and
-   * labelling an editorial choice as popularity would be a straightforward lie
-   * to the reader. Real popularity is available in principle — this site already
-   * records page views to Neon for /desk-4f7a — but wiring that in would make
-   * the index dynamic, and it is worth doing only once there is enough traffic
-   * for the ranking to mean something.
-   */
+  /** Hand-picked for the "Start here" rail. */
   pick?: boolean;
+
+  /**
+   * Editorial estimate of how well this article should travel, 0–100.
+   *
+   * `popularityScore` is the sum of the five factors in `POPULARITY_FACTORS`
+   * below. The highest scorer is surfaced as the blog's "Most popular"; see
+   * `mostPopularPost()` in lib/notebook/index.ts.
+   *
+   * **This is a forecast, not a measurement — and the UI says so.** Nothing on
+   * this site counts readers yet, so the badge reads "Editor's pick · most
+   * popular" rather than "Most read". Labelling an estimate as observed traffic
+   * would be a claim about the world that happens to be false, and the one
+   * thing a blog cannot afford is a reader discovering its numbers are decorative.
+   *
+   * Page views already go to Neon for /desk-4f7a, so a real ranking is a
+   * reporting query away whenever the traffic is worth ranking. At that point
+   * this field becomes the fallback for articles too new to have data.
+   */
+  popularityScore?: number;
+
+  /** The per-factor breakdown behind `popularityScore`, kept so the number is
+   *  auditable rather than asserted. Each is 0–20. */
+  popularity?: PopularityFactors;
 
   /** The quotable specifics — versions, numbers, measurements. Rendered as a
    *  definition table, which is far easier to extract than the same facts

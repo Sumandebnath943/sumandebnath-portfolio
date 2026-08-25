@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BannerArt from "@/components/ui/BannerArt";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Image from "next/image";
 import Link from "next/link";
@@ -187,7 +188,8 @@ export default function ResumePage() {
 
       <main className="rz">
         {/* ── Masthead ──────────────────────────────────────────────────── */}
-        <header id="tour-resume-top" className="rz-mast">
+        <header id="tour-resume-top" className="rz-mast sd-banner-host">
+          <BannerArt seed="/resume" accent="#b4472a" variant="paper" />
           <div className="rz-shell">
             {/* Above the eyebrow, not between it and the name. A breadcrumb is
                 the first thing in a document — dropping it after the kicker put

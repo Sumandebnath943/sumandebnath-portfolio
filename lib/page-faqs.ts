@@ -145,6 +145,14 @@ export const PAGE_FAQS: Record<string, PageFaq[]> = {
       q: "What is the MIGI Android app?",
       a: "The MIGI Android app is a native client for the MIGI agent fleet — the 46 autonomous agents that handle personal brand work, job applications, expense tracking and monitoring. It puts fleet control and approvals on a phone rather than requiring the desktop dashboard.",
     },
+    {
+      q: "Why does an agent fleet need a phone app at all?",
+      a: "Because the agents run continuously and the human approvals they wait on do not. A fleet that can only be approved from a desktop stalls every time its operator is away from one, so the queue backs up and the automation stops paying for itself. Putting the approval gate on a phone is what keeps the loop moving.",
+    },
+    {
+      q: "Is the MIGI Android app built natively or with a cross-platform framework?",
+      a: "Natively for Android. The V2 client is the current build; V1 is archived. Native was the right call for a control surface that needs background notifications and fast cold starts — an approval that arrives late is an approval that has already cost the fleet an hour.",
+    },
   ],
 
   "/apps/forget-anything": [
@@ -152,12 +160,28 @@ export const PAGE_FAQS: Record<string, PageFaq[]> = {
       q: "What does the Forget Anything? app do?",
       a: "Forget Anything? is an Android app that reminds you of the things you need before you leave home, triggered by geofencing and by your phone departing the home WiFi network. The trigger is leaving a place rather than a clock time, which is what makes the reminder arrive while it is still useful.",
     },
+    {
+      q: "Why use WiFi departure as well as geofencing for reminders?",
+      a: "Because each one fails where the other works. A GPS geofence is slow to trigger indoors and drains battery at a tight radius; WiFi disconnection fires the moment you step out of range but only works if the network was joined. Using both means the reminder lands whichever way you leave, and the earlier of the two wins.",
+    },
+    {
+      q: "How is a location reminder different from a normal to-do reminder?",
+      a: "A timed reminder fires when the clock says so, which is almost never the moment you can act on it — being told at 9am to take your gym bag is useless if you leave at 7:40. A location reminder fires at the point of departure, which is the last moment the information can still change what you do.",
+    },
   ],
 
   "/games/pixelville": [
     {
       q: "What is PixelVille?",
       a: "PixelVille is a procedurally generated city-builder with a working economy, seasons, weather, crime, democracy and disasters. Each city is generated rather than authored, and the simulated systems interact — so an economic downturn shows up in the crime rate and eventually at the ballot box.",
+    },
+    {
+      q: "What does it mean that PixelVille is procedurally generated?",
+      a: "The map, the terrain and the starting conditions are produced by algorithm from a seed rather than drawn by hand, so no two cities begin the same way. The systems on top of it — economy, weather, crime, elections — are simulated rather than scripted, which means outcomes emerge from how they interact instead of following a designed storyline.",
+    },
+    {
+      q: "Can you play PixelVille in a browser?",
+      a: "Yes. It runs in the browser with nothing to install, which is deliberate — a simulation game that needs a download loses most of the people who were curious enough to click. The live build is linked from the top of this page.",
     },
   ],
 

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BannerArt from "@/components/ui/BannerArt";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
@@ -170,7 +171,8 @@ export default function PentaCmdPage() {
 
         <div className="relative z-10">
           {/* ════════════════════ HERO ════════════════════ */}
-          <section className="relative min-h-[100svh] flex flex-col pt-28 pb-8 px-6 md:px-14 overflow-hidden">
+          <section className="relative min-h-[100svh] flex flex-col pt-28 pb-8 px-6 md:px-14 overflow-hidden sd-banner-host">
+            <BannerArt seed="/slms/pentacmd" accent="#38BDF8" />
             <HeroLock />
             {/* premium signal field — confined to the hero, fades out at the bottom */}
             <div
