@@ -126,10 +126,14 @@ slug does not collide with an existing one.
 
 **Tags are open but disciplined.** Reuse before inventing. The vocabulary in use:
 
-`AEO` · `AI-Native` · `Career` · `Colour` · `CSS` · `Debugging` · `Documentation`
-· `Engineering` · `Layout` · `Marketing` · `Migration` · `Next.js` · `Process` ·
-`Prompting` · `React` · `Routing` · `StrictMode` · `Structured Data` ·
-`three.js` · `WebGL`
+`AEO` · `AI-Native` · `Career` · `Colour` · `CSS` · `Debugging` · `Design` ·
+`Documentation` · `Engineering` · `Layout` · `Marketing` · `Migration` ·
+`Next.js` · `Process` · `Prompting` · `React` · `Routing` · `Security` · `SEO` ·
+`StrictMode` · `Structured Data` · `three.js` · `WebGL`
+
+> Keep this list current. A tag added to a post and not added here is how the
+> vocabulary quietly doubles — the next writer greps the posts, sees a near-miss
+> synonym, and invents a second one for the same idea.
 
 Two to four per post. A tag used once is not a tag, it is a note.
 

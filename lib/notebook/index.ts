@@ -26,6 +26,9 @@ import researchBeforeWritingAPrompt from "./posts/research-before-writing-a-prom
 import citedByChatgptWhatIChanged from "./posts/cited-by-chatgpt-what-i-changed";
 import realAiToolOrWrapper from "./posts/real-ai-tool-or-wrapper";
 import keepingSecretsOutOfAiBuiltApps from "./posts/keeping-secrets-out-of-ai-built-apps";
+import theCostOfBuildingAlone from "./posts/the-cost-of-building-alone";
+import neverRunACodingAgentOnAutopilot from "./posts/never-run-a-coding-agent-on-autopilot";
+import tasteIsTheLastThingToBeAutomated from "./posts/taste-is-the-last-thing-to-be-automated";
 
 export type { Post, Block, PostFact, Category } from "./types";
 export { CATEGORIES, CATEGORY_ACCENT, categorySlug, categoryFromSlug } from "./types";
@@ -43,6 +46,9 @@ const POSTS: Post[] = [
   citedByChatgptWhatIChanged,
   realAiToolOrWrapper,
   keepingSecretsOutOfAiBuiltApps,
+  theCostOfBuildingAlone,
+  neverRunACodingAgentOnAutopilot,
+  tasteIsTheLastThingToBeAutomated,
 ];
 
 export const NOTEBOOK_PATH = "/notebook";
