@@ -84,6 +84,9 @@ function Kicker({ children }: { children: React.ReactNode }) {
     <span className="inline-flex items-center gap-2 font-dmmono text-[10px] md:text-[11px] uppercase tracking-[0.32em] text-[#D4AF37]/70">
       <span className="h-px w-6 bg-gradient-to-r from-[#D4AF37]/70 to-transparent" />
       {children}
+      {/* Mirrored, so the kicker is a rule on both sides rather than one
+          stray dash on the left. Both fade away from the text. */}
+      <span className="h-px w-6 bg-gradient-to-r from-transparent to-[#D4AF37]/70" />
     </span>
   );
 }
@@ -123,7 +126,7 @@ export default function ForgetAnythingPage() {
                   { label: "Forget Anything?", href: "/apps/forget-anything" },
                 ]}
                 align="center"
-                className="mb-6"
+                className="mt-5 mb-6"
               />
               <h1 className="font-manrope font-extrabold text-[2.7rem] sm:text-[3.7rem] md:text-[4.7rem] leading-[1.0] tracking-[-0.045em] mt-6 mb-6">
                 <span style={gWhite}>Walk out</span>{" "}

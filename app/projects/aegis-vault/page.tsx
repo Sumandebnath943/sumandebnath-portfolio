@@ -129,7 +129,7 @@ export default function AegisVaultPage() {
         style={{ background: AEGIS.bg, color: AEGIS.text }}
       >
         {/* ════════════════════════════ HERO ════════════════════════════ */}
-        <section className="relative px-6 pt-28 pb-16 md:pt-28 md:pb-24 overflow-hidden sd-banner-host">
+        <section className="relative px-6 pt-32 pb-16 md:pt-32 md:pb-24 overflow-hidden sd-banner-host">
           <BannerArt seed="/projects/aegis-vault" accent="#7DD3FC" />
           <HeroLock />
           {/* atmospheric emerald glow */}
@@ -165,7 +165,10 @@ export default function AegisVaultPage() {
                   { label: "AEGIS VAULT", href: "/projects/aegis-vault" },
                 ]}
                 align="center"
-                className="mb-6"
+                /* The nav pill, the encrypted badge and this trail were three
+                   lines stacked with no air between them. Even rhythm here and
+                   on the logo below, rather than one clump under the nav. */
+                className="mt-5 mb-6"
               />
               <h1 className="sr-only">AEGIS VAULT — zero-knowledge encrypted notepad</h1>
               <Reveal delay={0.12}>
@@ -175,7 +178,7 @@ export default function AegisVaultPage() {
                   width={1361}
                   height={390}
                   priority
-                  className="mt-6 md:mt-7 w-[min(760px,90vw)] h-auto drop-shadow-[0_18px_50px_rgba(34,197,94,0.22)]"
+                  className="w-[min(760px,90vw)] h-auto drop-shadow-[0_18px_50px_rgba(34,197,94,0.22)]"
                 />
               </Reveal>
 
@@ -248,6 +251,7 @@ export default function AegisVaultPage() {
                     w={1365}
                     h={767}
                     priority
+                    sizes="(min-width: 1216px) 1152px, 100vw"
                   />
                 </div>
               </Reveal>

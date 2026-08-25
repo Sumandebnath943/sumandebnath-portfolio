@@ -41,7 +41,7 @@
   /* Converged register — foundations, where both halves already met */
   --soil: #14110d;
 
-  --shell: 68rem;
+  --shell: var(--sd-shell-read);
   background: var(--paper);
   color: var(--ink);
 }

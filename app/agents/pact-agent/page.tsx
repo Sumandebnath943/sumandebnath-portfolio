@@ -19,7 +19,6 @@ import {
   VerdictCycle,
   ActionConsole,
   LoopTerminal,
-  InlineCopy,
 } from "@/components/pact/PactVisuals";
 
 const GITHUB = "https://github.com/Sumandebnath943/pact-agent";
@@ -109,7 +108,7 @@ export default function PactAgentPage() {
 
         <div className="relative z-10">
           {/* ════════════════════ HERO ════════════════════ */}
-          <section className="pt-36 md:pt-44 pb-12 px-6 md:px-14 sd-banner-host">
+          <section className="pt-36 md:pt-44 pb-12 px-6 md:px-14 sd-banner-host sd-banner-tall">
             <BannerArt seed="/agents/pact-agent" accent="#FF5500" />
             <HeroLock />
             <div className="max-w-5xl mx-auto flex flex-col items-center text-center">

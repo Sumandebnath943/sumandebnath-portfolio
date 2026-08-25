@@ -22,7 +22,7 @@
   /* 0.48 clears AA on --pitch; 0.34 left the date labels at 2.76:1. */
   --bone-mute: rgba(244, 241, 234, 0.48);
   --rule: rgba(244, 241, 234, 0.1);
-  --shell: 64rem;
+  --shell: var(--sd-shell-read);
 }
 
 .ab-shell {
@@ -71,9 +71,18 @@
   line-height: 1;
   letter-spacing: -0.025em;
   margin-top: 1.6rem;
-  max-width: 16ch;
+  /* 16ch here broke the H1 as "Who is Suman / Debnath?" — the measure was set
+     for a generic title and this one is a name. Wide enough for the whole
+     question on one line on a laptop; the `nowrap` below is what actually
+     guarantees the name never splits again when it does wrap on a phone. */
+  max-width: 24ch;
 }
-.ab-title em { font-style: italic; color: var(--gold-warm); padding-right: 0.08em; }
+.ab-title em {
+  font-style: italic;
+  color: var(--gold-warm);
+  padding-right: 0.08em;
+  white-space: nowrap;
+}
 
 .ab-standfirst {
   font-family: var(--font-manrope), sans-serif;

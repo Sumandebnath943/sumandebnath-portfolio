@@ -134,7 +134,7 @@ export default function ProjectsArchivePage() {
         {/* ── HERO ── */}
         <section
           aria-labelledby="archive-heading"
-          className="relative pt-40 pb-20 md:pt-48 md:pb-28 px-6 md:px-10 overflow-hidden sd-banner-host"
+          className="relative pt-40 pb-20 md:pt-48 md:pb-28 px-6 md:px-10 overflow-hidden sd-banner-host sd-banner-tall"
         >
           <BannerArt seed="/projects" accent="#FF3B6B" />
           {/* Restrained atmospheric gradient */}

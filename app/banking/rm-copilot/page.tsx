@@ -186,7 +186,7 @@ export default function BankingCopilotPage() {
 
       <main className="relative font-manrope" style={{ background: BANK.bg, color: BANK.text }}>
         {/* ════════════════════════════ HERO ════════════════════════════ */}
-        <section className="relative px-6 pt-28 pb-16 md:pb-24 overflow-hidden sd-banner-host">
+        <section className="relative px-6 pt-32 pb-16 md:pb-24 overflow-hidden sd-banner-host">
           <BannerArt seed="/banking/rm-copilot" accent="#D9A961" />
           <HeroLock />
           <div className="pointer-events-none absolute inset-0">
@@ -233,7 +233,7 @@ export default function BankingCopilotPage() {
                   { label: "Banking Co-pilot", href: "/banking/rm-copilot" },
                 ]}
                 align="center"
-                className="mb-6"
+                className="mt-5 mb-6"
               />
               <h1 className="font-manrope font-extrabold tracking-tight text-[2.6rem] sm:text-6xl md:text-[4.2rem] leading-[1.02] mt-7">
                 Banking{" "}

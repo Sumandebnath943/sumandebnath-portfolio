@@ -4,6 +4,25 @@
 
 /* ─── Design Tokens ─────────────────────────────────────────────────── */
 :root {
+  /* ── Page shells ──────────────────────────────────────────────────────
+     Two widths, not five. Pages used to declare their own `--shell` and had
+     drifted to 62/64/68/72/74/75rem, so `/resume` sat 32px further in than
+     `/about` and `/faq` 16px further in again, for no reason a reader could
+     see.
+
+     `--sd-shell-read` is for prose: a line measure that stays comfortable.
+     `--sd-shell-wide` is for card grids and the journey timeline.
+
+     ⚠ These are max-widths, not gutters, and pages differ in whether their
+     padding sits inside or outside the max-width — so matching the token does
+     NOT by itself match the gutter. `.nb-wide` (72rem, padding outside) and
+     `.lp-container` (75rem, 24px inside) both land on a 102px gutter at
+     1366px and are deliberately left as they are. Before changing a shell,
+     measure the rendered gutter; do not assume the number here is what the
+     reader sees. */
+  --sd-shell-read: 64rem;
+  --sd-shell-wide: 75rem;
+
   --bg-deep: #F5F5F7;
   --bg-mid: #E8E8ED;
   --bg-surface: #FFFFFF;
@@ -824,33 +843,43 @@ html {
   }
 }
 
-/* ─── Short-viewport banner easing ───────────────────────────────────────
-   Product banners are designed to show through to their CTA on landing. On a
-   short viewport they no longer do, because a breadcrumb and an answer block
-   were added above the fold.
+/* ─── Short-viewport masthead cap ────────────────────────────────────────
+   The tall mastheads reserve 152–208px above the breadcrumb at desktop height.
+   On a laptop screen that is a third of the viewport spent on nothing, so this
+   caps them at 9rem. Below 760px tall only.
 
-   A previous version of this rule chased that target hard — compressing every
-   mb-6/7/8 and mt-6/7/8 token inside the banner, at three breakpoints. It won
-   the fold back and made the banners look cramped, which is a worse outcome:
-   the CTA being 40px low costs a scroll, and a cramped hero costs the
-   impression the hero exists to make.
+   ⚠ THIS IS A CAP, NOT A SETTING — the selector list is the whole mechanism.
+   Two earlier versions of this rule were written as `main .sd-banner-host
+   { padding-top: … }`, which reads as "ease the banners" and behaves as
+   "flatten every banner on the site to one number". `main .sd-banner-host`
+   (0,1,1) out-specifies every page's own hero class, so all twenty-one banner
+   routes collapsed to the same value: `/philosophy` lost 112px, `/about` 104px,
+   `/faq` and `/fun-apps` 96px each. Worse, `/apps/forget-anything`,
+   `/apps/migi-app`, `/games/pixelville` and `/projects/[slug]` carry their top
+   padding on an inner wrapper, so the rule *added* 96px to banners that had
+   none and pushed their CTAs further down — the exact opposite of easing. Every
+   one of those was a reported visual bug.
 
-   So this now does one thing only, and gently: it reclaims a little of the top
-   padding on short viewports. Nothing else is touched, and above 760px tall
-   nothing here applies at all.
+   So: name the banners that are genuinely too tall, and leave every other
+   banner alone. A page whose top padding is already at or under 9rem is not on
+   this list and must not be added to it — the rule can only ever take space
+   away, never give it. `9rem` is not arbitrary either; it is the floor
+   `journey.css` already documents, below which the eyebrow slides under the
+   nav pill.
 
-   Before tightening this again, read the note in HANDOFF.md — the fold target
-   and whether three specific banners may be restyled are open questions, and
-   MIGI, AEGIS VAULT and PixelVille never met the rule at 600px even before any
-   of this was added. */
+   `.sd-banner-tall` is the opt-in for banners that hold their padding in
+   Tailwind utilities rather than a named class. */
 @media (max-height: 760px) {
-  main .sd-banner-host {
-    padding-top: 6rem;
-  }
-}
-
-@media (max-height: 640px) {
-  main .sd-banner-host {
-    padding-top: 5.25rem;
+  .sd-banner-host:is(
+    .ab-hero,
+    .ph-hero,
+    .fq-hero,
+    .cx-hero,
+    .nb-mast,
+    .rz-mast,
+    .jr-mast,
+    .sd-banner-tall
+  ) {
+    padding-top: 9rem;
   }
 }

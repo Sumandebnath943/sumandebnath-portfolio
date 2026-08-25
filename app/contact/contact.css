@@ -33,7 +33,7 @@
   --ink: #10201a;
   --ink-soft: #45564f;
   --rule-light: rgba(16, 32, 26, 0.12);
-  --shell: 64rem;
+  --shell: var(--sd-shell-read);
 }
 
 .cx-shell {

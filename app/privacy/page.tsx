@@ -54,7 +54,7 @@ export default function PrivacyPage() {
       <Navigation />
 
       <main className="bg-black">
-        <header className="max-w-3xl mx-auto px-6 md:px-10 pt-40 pb-12 text-white sd-banner-host">
+        <header className="max-w-3xl mx-auto px-6 md:px-10 pt-40 pb-12 text-white sd-banner-host sd-banner-tall">
           <BannerArt seed="/privacy" accent="#64748B" />
           <Breadcrumbs
             trail={[

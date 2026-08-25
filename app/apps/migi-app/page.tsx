@@ -70,16 +70,22 @@ const gLime = {
   WebkitTextFillColor: "transparent" as const,
 };
 
-function Kicker({ children, tone = "dark" }: { children: React.ReactNode; tone?: "dark" | "light" | "ink" }) {
+/* `mirror` is the hero's alone. The nine section kickers below it are meant to
+   read as a single rule leading into the label; only the hero eyebrow, which is
+   centred, needs a rule on both sides to look deliberate. */
+function Kicker({ children, tone = "dark", mirror = false }: { children: React.ReactNode; tone?: "dark" | "light" | "ink"; mirror?: boolean }) {
   // Alphas set to clear WCAG AA at 10–11px on each tone's ground; the previous
   // 0.55 / 0.45 left these eyebrows at 3.91:1 and 2.9:1.
   const color = tone === "dark" ? "rgba(198,242,78,0.6)" : tone === "ink" ? "rgba(18,22,26,0.65)" : "rgba(18,22,26,0.6)";
   const rule =
     tone === "dark" ? "linear-gradient(90deg,rgba(198,242,78,0.7),transparent)" : "linear-gradient(90deg,rgba(18,22,26,0.35),transparent)";
+  const ruleMirrored =
+    tone === "dark" ? "linear-gradient(90deg,transparent,rgba(198,242,78,0.7))" : "linear-gradient(90deg,transparent,rgba(18,22,26,0.35))";
   return (
     <span className="font-dmmono inline-flex items-center gap-2.5 text-[10px] uppercase tracking-[0.32em] md:text-[11px]" style={{ color }}>
       <span className="h-px w-7" style={{ background: rule }} />
       {children}
+      {mirror && <span className="h-px w-7" style={{ background: ruleMirrored }} />}
     </span>
   );
 }
@@ -281,7 +287,7 @@ export default function MigiAppPage() {
 
           <div className="relative z-10 mx-auto max-w-5xl px-6 pt-28 text-center md:pt-36">
             <Reveal>
-              <Kicker>Version 2 · Standalone Native Android</Kicker>
+              <Kicker mirror>Version 2 · Standalone Native Android</Kicker>
             </Reveal>
 
             <Reveal delay={0.06}>
@@ -291,7 +297,7 @@ export default function MigiAppPage() {
                   { label: "MIGI Android App", href: "/apps/migi-app" },
                 ]}
                 align="center"
-                className="mb-6"
+                className="mt-5 mb-6"
               />
               <h1 className="font-manrope mb-6 mt-6 text-[2.8rem] font-extrabold leading-[0.98] tracking-[-0.05em] sm:text-[3.9rem] md:text-[5rem]">
                 <span style={gWhite}>Not a wrapper.</span>
@@ -353,7 +359,13 @@ export default function MigiAppPage() {
             </Reveal>
           </div>
 
-          <div className="relative z-10 mt-16 w-full overflow-hidden px-6 pb-24 md:mt-24">
+          {/* `pt-4` is headroom for the bob, not spacing: this box is
+              `overflow-hidden` (it crops the rotated side phones on purpose),
+              and `mg-bob` lifts the centre phone translateY(-14px), which took
+              its top edge past the crop. The margin is reduced by exactly the
+              padding added — 12+4 = the old 16, 20+4 = the old 24 — so the
+              stack does not move. */}
+          <div className="relative z-10 mt-12 w-full overflow-hidden px-6 pt-4 pb-24 md:mt-20">
             <HeroStack
               left={{ src: "/migi-app/v2/agents.jpg", alt: "MIGI agents screen" }}
               center={{ src: "/migi-app/v2/overview.jpg", alt: "MIGI overview screen" }}

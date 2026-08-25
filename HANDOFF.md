@@ -4,10 +4,10 @@ Where the project stands, what changed most recently, and what is worth doing
 next. For how the system is built read **PROJECT_BIBLE.md**; for how the site
 writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
-**Last updated:** 24 August 2026
+**Last updated:** 25 August 2026
 **Branch:** `main`.
-**Last session:** four more sections on `/profile` — tracks, a counted bar chart, a brand-mark wall and a zoom-out mosaic — §1.6.
-**Session before:** `/profile` itself, a new light paper-stock page built to match a supplied reference — §1.5.
+**Last session:** banner spacing across the whole site — one over-broad CSS rule was rewriting every masthead; plus a two-column `/philosophy` hero and two shell-width tokens — §1.7.
+**Session before:** four more sections on `/profile` — tracks, a counted bar chart, a brand-mark wall and a zoom-out mosaic — §1.6.
 
 > Run `git log --oneline -15` before trusting this section — it is a snapshot,
 > and the commit log is the authority on what has happened since.
@@ -446,6 +446,134 @@ all nine rows sit on one screen.
 
 **Still undone:** the seated figure and the dog in the hero drawing, unchanged
 from §1.5. That remains the next job on this route.
+
+---
+
+### 1.7 Banner spacing, everywhere (25 Aug 2026)
+
+Eleven separate visual complaints — "massive gap" on four product pages,
+"cramped" on three, "breadcrumbs too close to the nav" on four more — turned out
+to be **one CSS rule**.
+
+#### The rule, and why it read as fine
+
+`app/globals.css` carried a "short-viewport banner easing" block that *set*
+`padding-top` rather than trimming it:
+
+```css
+@media (max-height: 760px) { main .sd-banner-host { padding-top: 6rem } }
+@media (max-height: 640px) { main .sd-banner-host { padding-top: 5.25rem } }
+```
+
+`main .sd-banner-host` is (0,1,1) and out-specifies every page's own hero class,
+so below 760px tall it flattened **all twenty-one banner routes** to one number.
+Measured at 800px vs 700px:
+
+| route | designed | flattened to | Δ |
+|---|---|---|---|
+| `/philosophy` | 208 | 96 | −112 |
+| `/about` | 200 | 96 | −104 |
+| `/contact`, `/faq`, `/fun-apps`, `/projects` | 192 | 96 | −96 |
+| `/agents/pact-agent`, `/resume` | 176 | 96 | −80 |
+| `/terms`, `/privacy` | 160 | 96 | −64 |
+| `/notebook` | 152 | 96 | −56 |
+| pentacmd, qdex, pentashell, rm-copilot, aegis-vault | 112 | 96 | −16 ← the only intended case |
+| `/agents/migi` | 96 | 96 | 0 |
+| `/apps/forget-anything`, `/apps/migi-app`, `/games/pixelville`, `/projects/[slug]` | **0** | **96** | **+96** |
+
+Those last four hold their top padding on an **inner wrapper**, so the rule
+*added* 96px to banners that had none and pushed their CTAs further down — the
+exact opposite of easing, and the "massive gap" that got reported. The rule was
+gentle on five of twenty-one pages and wrong on the rest.
+
+> **The lesson generalises past this rule.** A selector broad enough to say
+> "the banners" will also hit the banners you were not thinking about, and a
+> declaration that *sets* a value cannot know what it is overriding. If the
+> intent is "take some off", the rule has to name what it is taking it from.
+
+It is now a cap with an explicit selector list — `.ab-hero, .ph-hero, .fq-hero,
+.cx-hero, .nb-mast, .rz-mast, .jr-mast, .sd-banner-tall` — at `9rem`, which is
+the floor `journey.css` already documents (below it the eyebrow slides under the
+nav pill). `.sd-banner-tall` is the opt-in for banners that hold their padding
+in Tailwind utilities. **A page already at or under 9rem is not on the list and
+must not be added** — the rule can only take away.
+
+#### Decisions he took explicitly
+
+- **The fold is calibrated for 768px**, and scrolling below that is accepted.
+  At 768 none of the `max-height` queries apply, so that column is the untouched
+  design baseline.
+- **MIGI, AEGIS VAULT and PixelVille keep their length.** They never met the
+  fold at 600px even before breadcrumbs and answer blocks were added. Nothing
+  was compressed to chase it. *"Prefer a banner that breathes over one that
+  meets the fold"* — that trade was already made once in the wrong direction.
+- **Masthead top space is 144px** on short viewports, ~78px clear of the nav.
+- **Two shell widths, not five.**
+
+#### Shell widths
+
+`--sd-shell-read: 64rem` and `--sd-shell-wide: 75rem` now live in
+`globals.css:6`, and all six per-page `--shell` declarations point at them.
+Gutters at 1366px:
+
+| | before | now |
+|---|---|---|
+| notebook, learnings, projects | 102 | 102 |
+| journey | 110 | **102** |
+| resume | 174 | **206** |
+| about, philosophy, contact | 206 | 206 |
+| faq | 222 | **206** |
+
+> **These tokens are max-widths, not gutters.** Pages differ in whether padding
+> sits inside or outside the max-width, so matching the token does *not* by
+> itself match the gutter — `.nb-wide` (72rem, padding outside) and
+> `.lp-container` (75rem, 24px inside) both land on 102px and are deliberately
+> left alone. Measure the rendered gutter before changing a shell.
+
+#### `/philosophy` — the hero was rebuilt
+
+Stacked, it was **1296px tall**: a title capped at 15ch inside a 64rem shell, so
+the right half was empty, and the six-principle ledger — the substance of the
+page — sat below the standfirst where nobody saw it. It is now two columns from
+1024px up, copy left and ledger right, so the height is whichever column is
+taller instead of both added together: **763px**. Type steps down inside the
+grid because the columns are ~430px, not ~1000px. Below 1024px the original
+stacked layout is unchanged. The H1 also carried an orphan — "AI." alone on a
+third line — fixed with a non-breaking space plus `text-wrap: balance`.
+
+#### Everything else in the pass
+
+- **`/about` H1** — `max-width: 16ch` was breaking it as "Who is Suman /
+  Debnath?". Now 24ch, with `white-space: nowrap` on the `em` so the name can
+  never split again when it does wrap on a phone.
+- **AEGIS VAULT and Banking Co-pilot** — `pt-28` → `pt-32`, and `mt-5` on the
+  breadcrumb so the nav pill, the status badge and the trail are not three lines
+  clumped together. AEGIS's logo lost its extra `mt-6 md:mt-7`, which shortened
+  the banner while the top gained air.
+- **`ScreenshotFrame` `sizes` is now a prop.** It was hardcoded to
+  `(min-width: 768px) 640px, 100vw`, correct for the two-up grid it was written
+  for and wrong for the AEGIS hero, where the same frame renders ~1150px wide —
+  so next/image served the 640px variant and the browser upscaled it 1.8×. That
+  was the "pixelated" screenshot; `cover.png` is 1365×767 and was never the
+  problem. **At 1× it is now exact (upscale 1.00); 1365px is the ceiling on a
+  2× display** and only a wider re-capture improves it.
+- **Kicker rules mirrored** on `/apps/forget-anything` and the `/apps/migi-app`
+  hero. The migi-app `Kicker` takes a `mirror` prop precisely because that page
+  has ten of them and only the centred hero eyebrow wants a rule on both sides.
+- **The migi-app hero phone stack was clipping.** Its container is
+  `overflow-hidden` (it crops the rotated side phones on purpose) and `mg-bob`
+  lifts the centre phone `translateY(-14px)`, past the crop. Fixed with `pt-4`
+  of headroom and the margin reduced by exactly the padding added, so the stack
+  does not move.
+
+#### Verified
+
+Production build, 1366×630, measured rather than eyeballed — **the Browser pane
+stopped compositing partway through and screenshots time out when it does**
+(§2b's lesson, still true). Gutters land on 102/206 with no page in between;
+`scrollWidth === clientWidth` on resume, faq and journey, so nothing overflows;
+the AEGIS hero image reports upscale factor 1.00; both kicker rules measure 24px
+with zero padding at either end. Lint and build clean.
 
 ---
 

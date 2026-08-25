@@ -201,7 +201,7 @@ export default function PixelVillePage() {
             </span>
           </div>
 
-          <div className="relative max-w-5xl mx-auto px-6 pt-36 pb-10 md:pt-44 md:pb-14 text-center">
+          <div className="relative max-w-5xl mx-auto px-6 pt-36 pb-10 md:pt-40 md:pb-14 text-center">
             <Reveal>
               <span
                 className="inline-flex items-center gap-2 font-dmmono text-[10px] md:text-[11px] uppercase tracking-[0.24em] rounded-full px-3.5 py-1.5"
@@ -219,7 +219,7 @@ export default function PixelVillePage() {
                   { label: "PixelVille", href: "/games/pixelville" },
                 ]}
                 align="center"
-                className="mb-6"
+                className="mt-5 mb-6"
               />
               <h1 className="font-anton uppercase text-[3rem] sm:text-[4.5rem] md:text-[6rem] leading-[0.94] tracking-[0.01em] mt-7 mb-6" style={{ color: PV.snow, textShadow: "0 4px 30px rgba(0,0,0,0.5)" }}>
                 A village

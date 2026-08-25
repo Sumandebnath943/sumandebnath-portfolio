@@ -43,7 +43,7 @@
   --slate: #45505e;
 
   --accent: var(--clay);
-  --shell: 74rem;
+  --shell: var(--sd-shell-wide);
 
   background: var(--paper);
   color: var(--ink);

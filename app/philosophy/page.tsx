@@ -65,29 +65,40 @@ export default function PhilosophyPage() {
               ]}
               className="mb-6"
             />
-            <p className="ph-eyebrow">Operating philosophy</p>
-            <h1 className="ph-title">
-              Six things I believe about <em>building</em> with AI.
-            </h1>
-            <p className="ph-standfirst">
-              Not predictions, and not opinions about which model is winning this
-              month. These are the working rules underneath every system on this
-              site — the reasons things are built the way they are built.
-            </p>
+            {/* Copy left, ledger right. The ledger used to sit under the
+                standfirst, which left the right half of the hero empty and put
+                the six principles — the substance of the page — below the fold
+                on a header 1296px tall. See .ph-hero-grid in philosophy.css. */}
+            <div className="ph-hero-grid">
+              <div>
+                <p className="ph-eyebrow">Operating philosophy</p>
+                <h1 className="ph-title">
+                  {/* Non-breaking: "AI." alone on a third line is the orphan
+                      that made this heading look broken. */}
+                  Six things I believe about <em>building</em> with&nbsp;AI.
+                </h1>
+                <p className="ph-standfirst">
+                  Not predictions, and not opinions about which model is winning
+                  this month. These are the working rules underneath every system
+                  on this site — the reasons things are built the way they are
+                  built.
+                </p>
+              </div>
 
-            <div className="ph-ledger">
-              {PRINCIPLES.map((p) => (
-                <a
-                  key={p.n}
-                  href="#philosophy"
-                  className="ph-row"
-                  style={{ ["--accent" as string]: p.accent }}
-                >
-                  <span className="ph-n">{p.n}</span>
-                  <span className="ph-name">{p.name}</span>
-                  <span className="ph-claim">{p.claim}</span>
-                </a>
-              ))}
+              <div className="ph-ledger">
+                {PRINCIPLES.map((p) => (
+                  <a
+                    key={p.n}
+                    href="#philosophy"
+                    className="ph-row"
+                    style={{ ["--accent" as string]: p.accent }}
+                  >
+                    <span className="ph-n">{p.n}</span>
+                    <span className="ph-name">{p.name}</span>
+                    <span className="ph-claim">{p.claim}</span>
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
         </header>

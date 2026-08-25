@@ -12,6 +12,12 @@ export function ScreenshotFrame({
   w,
   h,
   priority = false,
+  /* The default is the two-up grid this frame was written for. The hero uses
+     the same component at ~1112px wide, and with the 640px default next/image
+     served a 640px file for it and let the browser upscale — which is what
+     "compressed and pixelated" was. The source PNG is 1365×767 and was never
+     the problem. Pass a real `sizes` at any call site that is not the grid. */
+  sizes = "(min-width: 768px) 640px, 100vw",
 }: {
   src: string;
   label: string;
@@ -19,6 +25,7 @@ export function ScreenshotFrame({
   w: number;
   h: number;
   priority?: boolean;
+  sizes?: string;
 }) {
   return (
     <figure
@@ -48,7 +55,7 @@ export function ScreenshotFrame({
         priority={priority}
         loading={priority ? undefined : "lazy"}
         className="w-full h-auto block"
-        sizes="(min-width: 768px) 640px, 100vw"
+        sizes={sizes}
       />
     </figure>
   );
