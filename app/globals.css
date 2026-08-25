@@ -824,91 +824,33 @@ html {
   }
 }
 
-/* ─── Short-viewport banner compaction ────────────────────────────────────
-   Every product banner on this site is designed so that a visitor landing on it
-   sees everything down to the call-to-action without scrolling. Measured on
-   /slms/pentacmd at 1365x600, that design had 37px of headroom — it was
-   calibrated tightly. Adding a breadcrumb (40px with its margin) and an answer
-   block (117px with its margins) put the CTA 120px past the fold.
+/* ─── Short-viewport banner easing ───────────────────────────────────────
+   Product banners are designed to show through to their CTA on landing. On a
+   short viewport they no longer do, because a breadcrumb and an answer block
+   were added above the fold.
 
-   Rather than shrink the design for everyone, this compresses the *spacing*
-   only where the viewport cannot fit it. Above 780px tall nothing here applies
-   and the banners are exactly as designed. Below it, the whitespace tightens and
-   the type does not — no element is removed, resized or reordered.
+   A previous version of this rule chased that target hard — compressing every
+   mb-6/7/8 and mt-6/7/8 token inside the banner, at three breakpoints. It won
+   the fold back and made the banners look cramped, which is a worse outcome:
+   the CTA being 40px low costs a scroll, and a cramped hero costs the
+   impression the hero exists to make.
 
-   Selectors are two-class or element-qualified so they beat the Tailwind
-   utilities (`pt-28`, `mb-7`) they override, which are single-class.
+   So this now does one thing only, and gently: it reclaims a little of the top
+   padding on short viewports. Nothing else is touched, and above 760px tall
+   nothing here applies at all.
 
-   If you add anything else to a product banner, re-measure the CTA position at
-   1365x600 before shipping it. */
-@media (max-height: 780px) {
+   Before tightening this again, read the note in HANDOFF.md — the fold target
+   and whether three specific banners may be restyled are open questions, and
+   MIGI, AEGIS VAULT and PixelVille never met the rule at 600px even before any
+   of this was added. */
+@media (max-height: 760px) {
   main .sd-banner-host {
-    padding-top: 5.5rem;
-  }
-
-  .sd-banner-host nav[aria-label="Breadcrumb"] {
-    margin-bottom: 0.7rem;
-  }
-
-  .sd-banner-host h1 {
-    margin-bottom: 1.15rem;
-  }
-
-  /* The answer block: tighter margins, and a wider measure so 45 words fall on
-     two lines instead of three. The measure only widens where vertical space is
-     the binding constraint. */
-  .sd-banner-host .sd-answer {
-    margin-block: 0.7rem;
-    max-width: 62rem;
-    font-size: 15px;
-    line-height: 1.55;
+    padding-top: 6rem;
   }
 }
 
-/* Very short viewports — a laptop with several toolbars open. One more step of
-   the same compaction, still touching nothing but space. */
-@media (max-height: 660px) {
+@media (max-height: 640px) {
   main .sd-banner-host {
-    padding-top: 4.75rem;
-  }
-
-  .sd-banner-host h1 {
-    margin-bottom: 0.85rem;
-  }
-
-  .sd-banner-host .sd-answer {
-    margin-block: 0.55rem;
-  }
-}
-
-/* The last of the compaction, and the bluntest — so it is scoped hardest.
-   Only inside a banner, only under 700px of viewport height, and only against
-   the three exact spacing tokens these heroes actually use for their largest
-   gaps: the kicker pill, the line under the headline, and the deck.
-
-   `[class~="mb-7"]` matches the whitespace-separated token exactly, so it cannot
-   also catch `mb-72`. `[class*=…]` would, which is why it is not used here. */
-@media (max-height: 700px) {
-  .sd-banner-host [class~="mb-6"] {
-    margin-bottom: 0.9rem;
-  }
-  .sd-banner-host [class~="mb-7"] {
-    margin-bottom: 1rem;
-  }
-  .sd-banner-host [class~="mb-8"] {
-    margin-bottom: 1.1rem;
-  }
-
-  /* Top margins matter as much on the taller banners — /agents/migi stacks a
-     logo card, a two-line headline and a four-line deck, and carries its
-     spacing on mt- rather than mb-. */
-  .sd-banner-host [class~="mt-6"] {
-    margin-top: 0.8rem;
-  }
-  .sd-banner-host [class~="mt-7"] {
-    margin-top: 0.85rem;
-  }
-  .sd-banner-host [class~="mt-8"] {
-    margin-top: 0.95rem;
+    padding-top: 5.25rem;
   }
 }
