@@ -1147,6 +1147,33 @@ opportunities, roughly in value order.
    Bible §6.1). Nobody can test the notifier locally without a production build.
    Small fix, and it is why several bugs reached production unseen.
 
+3b. **The crawler beacon cannot see a single machine-readable file, and the
+   absence reads as zero.** Found 26 Aug 2026 while fact-checking a notebook
+   post. `proxy.ts`'s matcher excludes any path ending in a file extension —
+   `.*\.[a-zA-Z0-9]{2,5}$` — which is correct for fonts, images and scripts and
+   catches these four as collateral:
+
+   ```
+   proxy SKIPS  /llms.txt
+   proxy SKIPS  /llms-full.txt
+   proxy SKIPS  /sitemap.xml
+   proxy SKIPS  /robots.txt
+   ```
+
+   Those are precisely the files an agent fetches, so the beacon systematically
+   under-reports agent activity and there is **no data** for them rather than
+   *zero visits* — which is the distinction `AGENTS.md` §7 exists to warn about,
+   and it has almost certainly been read the wrong way at least once already.
+   It also means `AEO_PLAYBOOK` §5.6's conclusions about which agents arrive are
+   drawn from page requests only.
+
+   The fix is a narrow allowance in the matcher for those four paths rather than
+   relaxing the extension rule, which would put the beacon back in front of every
+   font and script on every page load. **`proxy.ts` is the hot path and its
+   tracking cannot be tested under `next dev`** (see item 3 and `AGENTS.md` §6),
+   so this needs a production build to verify. Not urgent; it costs measurement,
+   not correctness.
+
 4. **The visitor table has no pagination** — capped at 200 rows. Fine now, will
    matter within months.
 

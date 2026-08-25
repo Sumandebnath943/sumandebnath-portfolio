@@ -36,6 +36,11 @@ import whatMarketingTeamsShouldAutomateFirst from "./posts/what-marketing-teams-
 import aeoVsSeoWhatChanges from "./posts/aeo-vs-seo-what-changes";
 import whatAgenticReadyActuallyMeans from "./posts/what-agentic-ready-actually-means";
 import doYouNeedAnLlmsTxt from "./posts/do-you-need-an-llms-txt";
+import aiProductRoleWithoutCsDegree from "./posts/ai-product-role-without-cs-degree";
+import aiSkillsForAMarketingCv from "./posts/ai-skills-for-a-marketing-cv";
+import whatAiNativeActuallyMeans from "./posts/what-ai-native-actually-means";
+import shippingAProductInAWeekend from "./posts/shipping-a-product-in-a-weekend";
+import isAiGeneratedCodeSafeForProduction from "./posts/is-ai-generated-code-safe-for-production";
 
 export type { Post, Block, PostFact, Category } from "./types";
 export { CATEGORIES, CATEGORY_ACCENT, categorySlug, categoryFromSlug } from "./types";
@@ -63,6 +68,11 @@ const POSTS: Post[] = [
   aeoVsSeoWhatChanges,
   whatAgenticReadyActuallyMeans,
   doYouNeedAnLlmsTxt,
+  aiProductRoleWithoutCsDegree,
+  aiSkillsForAMarketingCv,
+  whatAiNativeActuallyMeans,
+  shippingAProductInAWeekend,
+  isAiGeneratedCodeSafeForProduction,
 ];
 
 export const NOTEBOOK_PATH = "/notebook";
