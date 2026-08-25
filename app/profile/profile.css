@@ -1704,3 +1704,27 @@
     opacity: 1;
   }
 }
+
+/* The extractable answer to "what is Suman Debnath known for?" — the question
+   this page's title, h1 and QAPage node all target. First self-contained block
+   after the kicker, which is the one an answer engine lifts.
+
+   Styled as the page's own summary rather than as a callout: on cream, a boxed
+   panel would read as an advertisement dropped into an otherwise quiet document.
+   A rule and a slightly larger measure is enough to mark it as the summary. */
+.pf-answer {
+  max-width: 46rem;
+  margin: 0 0 2.25rem;
+  padding-left: 1.15rem;
+  border-left: 2px solid var(--pf-accent, #b4472a);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--pf-ink-soft, #4a423a);
+}
+
+@media (max-width: 40rem) {
+  .pf-answer {
+    font-size: 1rem;
+    padding-left: 0.9rem;
+  }
+}

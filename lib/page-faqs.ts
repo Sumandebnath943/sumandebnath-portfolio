@@ -222,6 +222,20 @@ export const PAGE_FAQS: Record<string, PageFaq[]> = {
     },
   ],
 
+  // /profile owns "what is he known for" — the title, the h1 and the answer
+  // block on that page all target it. These two are the questions a reader who
+  // arrives on that query asks next, and neither is claimed anywhere else.
+  "/profile": [
+    {
+      q: "Is Suman Debnath a marketer or an engineer?",
+      a: "Both, and the combination is the point. Suman Debnath spent nine years in brand and performance marketing and now builds AI-native software end to end — architecting, shipping and maintaining it alone. He does not write code in the traditional sense; he works through AI-native engineering environments, and the output is judged the same way any software is, by whether it runs and holds up.",
+    },
+    {
+      q: "How many products has Suman Debnath shipped on his own?",
+      a: "More than twenty, built and shipped solo. They include a 46-agent autonomous fleet guarded by 500+ automated evaluation checks, PentaCMD-47M — a language model trained from scratch on 299,000 instruction-to-command pairs — and a retail-banking AI copilot hardened across five security phases against three independent audits.",
+    },
+  ],
+
   "/philosophy": [
     {
       q: "What are Suman Debnath's operating principles?",

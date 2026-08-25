@@ -675,9 +675,15 @@ export function ProfileHero({
         design, and the lead itself is far too long to promote to an h1. A
         visually-hidden h1 fixes the outline without touching the composition.
       */}
+      {/* Carries the question this page is titled for. It stays `sr-only`
+          because the hero is deliberately a lead paragraph over the desk scene
+          with no headline — that is the design, and the lead is far too long to
+          promote to an h1. The title tag does the heavy lifting for the query;
+          this makes the document outline agree with it instead of contradicting
+          it. */}
       <h1 className="sr-only">
-        Suman Debnath — Profile: Senior Brand Marketing Manager and AI-native
-        product builder
+        What is Suman Debnath known for? Nine years of brand marketing, and
+        AI-native products built alone.
       </h1>
       <div className="pf-hero-pin">
         <div className="pf-hero-inner" ref={innerRef}>

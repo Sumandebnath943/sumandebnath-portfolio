@@ -27,6 +27,7 @@ import "./profile.css";
 import "./profile-sections.css";
 import RelatedPages from "@/components/ui/RelatedPages";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import PageFaq from "@/components/ui/PageFaq";
 
 /* ─────────────────────────────────────────────────────────────────────────
    /profile — the paper profile.
@@ -51,27 +52,82 @@ import Breadcrumbs from "@/components/ui/Breadcrumbs";
    components/profile/ProfileVisuals.tsx.
    ───────────────────────────────────────────────────────────────────────── */
 
+/* ── The question this page owns ──────────────────────────────────────────────
+   /about answers "who is Suman Debnath?". This page must not also answer it —
+   two URLs competing for identical words is the collision that costs both of
+   them, and /faq already gave the question up for exactly that reason.
+
+   So this page takes the adjacent entity query nobody else on the site claims:
+   **what is he known for.** It is a natural thing to ask about a person, it is
+   distinct from "who is", and this page genuinely answers it better than any
+   other — four tracks, a decade added up, and what the work actually was.
+
+   Before changing the title here, check the question against lib/faqs.ts and
+   lib/page-faqs.ts. The rule is one question, one URL.                       */
+
+const TITLE = "What is Suman Debnath known for? — Brand marketing, and AI products built alone";
+
+const ANSWER =
+  "Suman Debnath is known for an unusual combination: nine years running brand and performance marketing, and two years building AI-native products entirely on his own. He has shipped more than twenty systems solo, including a 46-agent autonomous fleet, a 47-million-parameter language model trained from scratch, and an audited AI copilot for retail banking.";
+
 export const metadata: Metadata = {
-  title: { absolute: "Profile — Suman Debnath" },
+  title: { absolute: TITLE },
   description:
-    "Nine years of brand and performance marketing, two years building AI-native products alone. The profile: what the decade adds up to, where the work has been, and what I use every day.",
+    "Suman Debnath is known for combining nine years of brand and performance marketing with two years of building AI-native products alone — 20+ systems shipped solo, a 46-agent fleet and a language model trained from scratch.",
   alternates: { canonical: "/profile" },
+  keywords: [
+    "what is Suman Debnath known for",
+    "Suman Debnath profile",
+    "Suman Debnath marketer or engineer",
+    "Suman Debnath background",
+    "marketer who builds AI products",
+  ],
   openGraph: {
     type: "profile",
     url: `${SITE_URL}/profile`,
-    title: "Profile — Suman Debnath",
-    description:
-      "A decade of brand and performance marketing, then two years of shipping AI products solo. The full profile.",
+    title: TITLE,
+    description: ANSWER,
     images: ["/og-image.png"],
   },
+  twitter: { card: "summary_large_image", title: TITLE, description: ANSWER },
 };
 
 const profilePageJsonLd = {
   "@context": "https://schema.org",
   "@type": "ProfilePage",
+  "@id": `${SITE_URL}/profile#profilepage`,
   url: `${SITE_URL}/profile`,
-  name: "Profile — Suman Debnath",
+  name: TITLE,
+  description: ANSWER,
+  inLanguage: "en-US",
+  isPartOf: { "@id": `${SITE_URL}/#website` },
+  // Same @id as everywhere else, so this merges into the one entity rather than
+  // describing a second person. `mainEntityOfPage` on the Person points at
+  // /about, which stays the canonical description — this page is a facet of it.
   mainEntity: { "@id": `${SITE_URL}/#person` },
+  about: { "@id": `${SITE_URL}/#person` },
+  significantLink: [`${SITE_URL}/resume`, `${SITE_URL}/about`, `${SITE_URL}/projects`],
+};
+
+/* The literal query, marked up as a question with an answer — the same device
+   /about uses for "who is Suman Debnath?", pointed at a different question so
+   the two never compete. */
+const knownForJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "QAPage",
+  "@id": `${SITE_URL}/profile#knownfor`,
+  isPartOf: { "@id": `${SITE_URL}/#website` },
+  mainEntity: {
+    "@type": "Question",
+    name: "What is Suman Debnath known for?",
+    text: "What is Suman Debnath known for?",
+    answerCount: 1,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: ANSWER,
+      url: `${SITE_URL}/profile`,
+    },
+  },
 };
 
 /* BreadcrumbList JSON-LD is NOT declared here. <Breadcrumbs> emits it together
@@ -383,10 +439,13 @@ export default function ProfilePage() {
        opacity 0. Without MotionProvider's LazyMotion above it there is no
        animation to run and the bar simply stays invisible — no error, no nav. */
     <MotionProvider>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(profilePageJsonLd) }}
-      />
+      {[profilePageJsonLd, knownForJsonLd].map((schema, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
 
       <Navigation />
 
@@ -421,6 +480,16 @@ export default function ProfilePage() {
               className="mb-6"
             />
             <Kick>In short</Kick>
+
+            {/* The extractable answer to "what is Suman Debnath known for?" —
+                the first self-contained block after the kicker, which is what an
+                answer engine lifts. It reads as the page's own summary rather
+                than as bolted-on SEO copy, which is the only version worth
+                having: the h2 underneath it is a good line but it is written as
+                a story opening, not as something that survives being quoted on
+                its own. */}
+            <p className="pf-answer">{ANSWER}</p>
+
             <div className="pf-statement-grid">
               <h2>
                 Started in 2016 as a marketer, taught myself to build somewhere
@@ -659,6 +728,7 @@ export default function ProfilePage() {
 
       {/* The site's own closing, in its light variant. A page this bright
           cannot end on the dark one without reading as a cut-off. */}
+      <PageFaq href="/profile" variant="paper" surface="#ece5d8" />
       <RelatedPages href="/profile" variant="paper" surface="#ece5d8" />
       <Contact variant="light" />
     </MotionProvider>

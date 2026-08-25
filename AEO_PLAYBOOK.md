@@ -91,6 +91,42 @@ Both `PageFaq` and `RelatedPages` take a `variant` — see §5.3. They stack
 directly on top of each other above the footer, so they must always be passed the
 same one.
 
+### 3.1b Entity queries — one question, one URL
+
+There are several Suman Debnaths and one of them, a Principal Developer Advocate
+at AWS, is far better indexed. An engine answering a "who is / what is he known
+for" question picks the entity it can resolve most confidently, so the site has
+to give it something that lexically matches the query. Until 25 Aug 2026 no page
+was titled or headed for any of these, which is why ChatGPT — crawling and
+indexing this domain in-house — resolved him and the assistants working from
+third-party indexes did not.
+
+Each entity query is now owned by exactly one page, which carries it in the
+title, in an `h1`, in a 40–60 word answer as the first block after the heading,
+and in a `QAPage` node:
+
+| Query | Page |
+|---|---|
+| Who is Suman Debnath? | `/about` |
+| What is Suman Debnath known for? | `/profile` |
+| What does Suman Debnath do? | `/faq` |
+
+> **Never let two pages claim one question.** `/faq` used to answer "Who is
+> Suman Debnath?" and gave it up when `/about` took the title — two URLs
+> answering identical words is the collision documented at the bottom of
+> `lib/faqs.ts`, and Google resolves it by discounting one of them. Before
+> retitling any page for a query, grep both FAQ files and the `QAPage` nodes.
+
+> **The answer block is not the same as the standfirst.** A standfirst is
+> written to open a page; an answer is written to survive being quoted with no
+> page around it. `/profile` keeps both, deliberately — the h2 underneath is a
+> good line that would read as nonsense on its own.
+
+Disambiguation is **visible prose on `/about`**, not only the
+`disambiguatingDescription` attribute. An engine choosing between two people
+with one name has to read the distinction somewhere a human could read it too,
+and the attribute alone has never been enough against a better-indexed namesake.
+
 ### 3.2 The notebook's answer block
 
 Every post in `lib/notebook/posts/` carries an `answer` field of 40–60 words,
