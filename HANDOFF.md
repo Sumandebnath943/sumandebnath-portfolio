@@ -6,8 +6,8 @@ writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
 **Last updated:** 25 August 2026
 **Branch:** `main`.
-**Last session:** banner spacing across the whole site — one over-broad CSS rule was rewriting every masthead; plus a two-column `/philosophy` hero and two shell-width tokens — §1.7.
-**Session before:** four more sections on `/profile` — tracks, a counted bar chart, a brand-mark wall and a zoom-out mosaic — §1.6.
+**Last session:** agentic readiness, against an external audit — the site's identity JSON-LD turned out to be invisible without JavaScript; plus a when-to-use block in `/llms.txt`, a recovery line on the 404, and House of Namus as a real `Organization` — §1.8.
+**Session before:** banner spacing across the whole site — one over-broad CSS rule was rewriting every masthead; plus a two-column `/philosophy` hero and two shell-width tokens — §1.7.
 
 > Run `git log --oneline -15` before trusting this section — it is a snapshot,
 > and the commit log is the authority on what has happened since.
@@ -24,6 +24,7 @@ Recent history, newest first, gives an accurate picture of the trajectory:
 
 | Area | State |
 |---|---|
+| **Machine-readable identity** | Audited 25 Aug against Vercel's Is Agentic, **79 → 83** (§1.8). The `Person` and `WebSite` JSON-LD were emitted through `next/script` and existed only once JavaScript had run — now literal tags on all 26 routes. House of Namus added as a real `Organization`. Markdown content negotiation was **refused on purpose**; the reasoning and the one condition for revisiting it are in `AEO_PLAYBOOK.md` §8. |
 | **Profile** (`/profile`) | Built 23 Aug over two passes, extended 24 Aug with four more sections (§1.6). The only light page on the site — ruled cream paper, a 280vh pinned hero that zooms into a drawn monitor, a word reveal, and a conveyor street with a walking robot. Modelled on a reference the user supplied, then pulled back towards the site's own type, pills, accents and closing. **The figure and the dog still need redrawing** — §1.5. |
 | **Banking Co-pilot** (`/banking/rm-copilot`) | Built 22 Aug. New **Banking** group under Portfolio. Fully prerendered; 382 KB of WebP, one eager image. Done. |
 | **Hero lock** | Extended 22 Aug from the homepage to all ten product pages — `components/ui/HeroLock.tsx`. Done. |
@@ -577,6 +578,101 @@ with zero padding at either end. Lint and build clean.
 
 ---
 
+### 1.8 Agentic readiness — an external audit, and the thing it caught (25 Aug 2026)
+
+Vercel's **Is Agentic** scores a site on how well an agent can read it. Suman ran
+it four times across the session and pasted each report in: **79 → 82 → 82 → 83**.
+
+**The durable record is `AEO_PLAYBOOK.md` §9**, together with §3.5–§3.7 and the
+new entries in §8. This is the session narrative; that is the reference.
+
+**A rollback point was taken before anything was touched** — `git tag
+pre-agentic-fixes` at `c99934e`. It is **local only**; it was never pushed.
+
+#### The one finding that justified the whole exercise
+
+The audit's first report said the homepage's `ProfilePage` node had no `name` and
+no `description`. It did lack those, and they were added. But the reason it was
+being read as the *identity* block at all was the real bug: `app/layout.tsx`
+emitted the `Person` and `WebSite` nodes through
+`<Script strategy="beforeInteractive">`, **which does not emit a script
+element** — it serialises the payload into a `self.__next_s` push and lets the
+client bundle build the tag.
+
+So the site's entire identity — `jobTitle`, `sameAs`, the disambiguation, every
+credential, on every one of 26 routes — existed only for a reader that executes
+JavaScript. The static HTML of `/` carried exactly one literal block, whose
+`mainEntity` pointed at a `#person` that was not in the document. Every other
+JSON-LD on the site was already a plain tag; the root layout was the one
+exception and it was the one that mattered.
+
+That is **not** a scorecard problem. Any crawler that does not run JS — which is
+most of them, most of the time — was reading this site without its identity.
+
+#### The three commits
+
+| Commit | What |
+|---|---|
+| `427f6e7` | `name` + `description` on the homepage `ProfilePage`; a **when-to-use** block in `/llms.txt` (best fit / poor fit / how to read it); the 404's recovery line |
+| `a6afb57` | `Person` and `WebSite` made literal tags. **The one that mattered** |
+| `d5b6eac` | House of Namus as an `Organization` — `contactPoint`, `address`, `founder` → `#person` |
+
+`SITE_NAME` and `SITE_DESCRIPTION` moved from private consts in `layout.tsx` to
+`lib/projects.ts` beside `SITE_URL`, and the contact email now comes from
+`lib/resume.ts` in both nodes. Neither was tidying: the alternative was a second
+copy of each string in a second file.
+
+#### A measurement that changed the design
+
+The 404 needed links out to `/sitemap.xml` and `/llms.txt`. Measured first, and
+just as well — **at 375×667 that page had about 2px of slack**: the postscript's
+bottom sat at 641.13px inside a 667px viewport whose container carries 24px of
+bottom padding. `h-[100svh]` + `overflow-hidden` means anything past that is
+clipped rather than scrolled to, which is the bug the 40svh → 36svh change had
+already been made to fix.
+
+So the line is gated on `min-height: 760px` rather than shaved out of measured
+constants. It paints on every current phone and stands down on a 667-tall SE and
+the 1280×600 desktop case. **The gate governs what is painted, not what is
+served** — the markup is in the response at every size, which is what a fetcher
+reads. Full reasoning in `AEO_PLAYBOOK.md` §3.7.
+
+#### Two things were refused, and both are on the record
+
+- **Markdown content negotiation** (`acceptmarkdown.com`) — the only remaining
+  change that would move the number, declined with the score on the table. Five
+  reasons in `AEO_PLAYBOOK.md` §8; the short one is that no major AI crawler is
+  documented as negotiating for markdown today, and the cost is a `Vary: Accept`
+  cache split, an edit to `proxy.ts`, and a markdown twin thinner than the HTML
+  it would replace.
+- **Contact details on the universities.** The audit asked for `contactPoint` and
+  `address` on an `Organization` — and the Organizations it had found were West
+  Bengal State University, PIBM and Great Lakes in `hasCredential[].recognizedBy`.
+  Adding contact details there would be fabricated data about third parties under
+  this domain's name. The honest answer was a real Organization, and it cleared
+  the check on its own.
+
+Suman confirmed he founded House of Namus and is authorised to publish its
+contact details. Three judgment calls inside that node are flagged in
+`AEO_PLAYBOOK.md` §3.6 — chiefly that `Person.worksFor` still says PIBM, because
+that is his employer, and that `address` mirrors the Person's two locality-level
+entries rather than inventing a registered office he has never claimed.
+
+#### Verified
+
+Every change against a production build, never `next dev`. Four JSON-LD blocks on
+`/`, all parsing; `telephone` in no machine-readable surface; the serialised
+`Person` node **byte-identical to production** after the email refactor, which is
+what proved that refactor changed nothing. The 404 returns a real 404 with both
+links in the body, and measures 641.13px at 375×667 — unchanged from before the
+line existed. 22 public routes 200. Lint produces nothing for any edited file.
+
+Two of the three remaining audit items are things this repo had already
+concluded: brand discoverability is `AEO_PLAYBOOK.md` §6 restated, and markdown
+is §8. **Treat the score as a proxy, not a goal.**
+
+---
+
 ## 2. What changed in the session before (19 Aug 2026)
 
 **One brief, eleven numbered complaints**, all against the homepage: sections
@@ -1020,6 +1116,17 @@ opportunities, roughly in value order.
    it caused a real failure: a render died with a native crash that reported exit
    code 0, and the actual cause was `ENOSPC` during the bundle copy. `~2.3 GB`
    free is not enough for another film render.
+
+0d. **Off-site corroboration — the highest-value work left on being found, and
+   none of it is code.** `AEO_PLAYBOOK.md` §6 has it in expected-value order:
+   a **Wikidata entry** first, then **HuggingFace model cards** for PentaCMD-47M
+   and Qdex-1.5B linking back here, then a **GitHub profile README matching the
+   site bio verbatim** — paraphrase weakens it, because consistency across
+   independent sources *is* the signal. §5.6 is why it matters: Claude answers
+   from Brave's index and Gemini from Google's, and this domain is in neither.
+   The audit in §1.8 said the same thing in its own words and could not fix it
+   either. **This is Suman's to do, not a coding task**, and it outranks
+   everything below.
 
 1. **Watch a week of real traffic before building more on the dashboard.** It
    has never been used against real data. Pagination and CSV export are the
