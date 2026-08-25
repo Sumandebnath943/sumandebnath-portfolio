@@ -253,20 +253,19 @@
   margin: 0 0 0.8rem;
 }
 
-.ab-disambig ul {
+/* The lead paragraph — the positive identification, which now comes first.
+   It replaced a bulleted list of other people; see the comment on
+   `disambiguatingDescription` in app/layout.tsx for why the enumeration went.
+   No top rule here: the rule belongs to `-n` below, which is what separates the
+   identification from the negation. */
+.ab-disambig-p {
   margin: 0;
-  padding-left: 1.1rem;
-  list-style: disc;
-}
-
-.ab-disambig li {
   font-size: 0.9375rem;
   line-height: 1.7;
   color: rgba(244, 241, 234, 0.72);
-  margin: 0.35rem 0;
 }
 
-.ab-disambig li strong {
+.ab-disambig strong {
   color: var(--bone);
   font-weight: 600;
 }

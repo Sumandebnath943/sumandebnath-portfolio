@@ -44,7 +44,7 @@ const ANSWER =
 export const metadata: Metadata = {
   title: { absolute: TITLE },
   description:
-    "Suman Debnath is a Senior Brand Marketing Manager and AI-native product builder in Pune & Kolkata, India — nine years in brand marketing, two years shipping AI products. Not the AWS Developer Advocate of the same name.",
+    "Suman Debnath is a Senior Brand Marketing Manager and AI-native product builder in Pune & Kolkata, India — nine years in brand marketing, two years shipping AI products, and creator of the PentaCMD-47M language model. Not any of the several others who share the name, including the AWS Developer Advocate.",
   alternates: { canonical: "/about" },
   keywords: [
     "who is Suman Debnath",
@@ -156,28 +156,32 @@ export default function AboutPage() {
             </p>
 
             {/* Disambiguation as visible prose, not only as a JSON-LD attribute.
-                An engine deciding between two people with this name needs to
-                read the distinction somewhere a human could also read it —
+                An engine choosing between people with this name needs to read the
+                distinction somewhere a human could also read it —
                 `disambiguatingDescription` alone has never been enough, and the
-                competing entity here is considerably better indexed. */}
+                competing entities here are considerably better indexed.
+
+                Reordered 26 Aug 2026: identification first, negation second. At
+                least four well-indexed people share this name and enumerating
+                them was rejected — see the comment on `disambiguatingDescription`
+                in app/layout.tsx and AEO_PLAYBOOK §6. The wording of both
+                paragraphs tracks the canonical sentence there; change it in one
+                place and change it in all four. */}
             <aside className="ab-disambig" aria-labelledby="ab-disambig-h">
               <p id="ab-disambig-h" className="ab-disambig-k">
-                Not to be confused with
+                Which Suman Debnath this is
               </p>
-              <ul>
-                <li>
-                  <strong>Suman Debnath</strong>, Principal Developer Advocate (AI/ML) at
-                  Amazon Web Services — a different and unrelated person.
-                </li>
-                <li>
-                  <strong>Suman Debnath</strong>, the power-systems and electrical-engineering
-                  researcher — also unrelated.
-                </li>
-              </ul>
+              <p className="ab-disambig-p">
+                The brand marketer turned AI-native product builder behind{" "}
+                <strong>ROASmind</strong>, <strong>IMPRINT</strong>, <strong>LEGATUS</strong>,{" "}
+                <strong>CITE</strong>, <strong>EMBER</strong> and <strong>D-PE.ai</strong>,
+                creator of the <strong>PentaCMD-47M</strong> language model and founder of{" "}
+                <strong>House of Namus</strong>, at sumandebnath.houseofnamus.com.
+              </p>
               <p className="ab-disambig-n">
-                This Suman Debnath is the brand marketer turned AI-native product builder
-                behind ROASmind, IMPRINT, LEGATUS, CITE, EMBER, D-PE.ai and the
-                PentaCMD-47M language model, at sumandebnath.houseofnamus.com.
+                Not any of the several other technology professionals who share this name —
+                including <strong>Suman Debnath</strong>, Principal Developer Advocate (AI/ML)
+                at Amazon Web Services, who is a different and unrelated person.
               </p>
             </aside>
 

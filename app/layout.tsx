@@ -197,8 +197,32 @@ const personJsonLd = {
     "AI-Native Software Developer",
   ],
   description: SITE_DESCRIPTION,
+  /*
+    Positive first, negation second and categorical. Reworked 26 Aug 2026 after
+    a search for "Suman Debnath portfolio" returned nine results, none of them
+    this domain, and surfaced **at least four** well-indexed people of this name
+    rather than the two previously listed here.
+
+    The two that had been named — the AWS advocate and the power-systems
+    researcher — are the easy cases; nobody confuses a brand marketer with an
+    electromagnetic-transient researcher. The two that were missing are the
+    dangerous ones: another India-based software engineer and an AI/ML lead at a
+    compute company, both of whom sit much closer to this profile.
+
+    Enumerating all four was considered and rejected. A list pinned to four
+    employers is stale the moment somebody changes job, it puts each competing
+    name on this page as a co-occurring token, and it grows every time another
+    namesake gets indexed. The leverage is not in the negations — it is in the
+    unique strings. "Suman Debnath" is contested; "PentaCMD-47M", "ROASmind" and
+    "House of Namus" have exactly one referent each, and an engine that resolves
+    those has resolved him without needing to be told who he is not.
+
+    So: dense positive identification, then one categorical negation naming only
+    the highest-volume collision. AEO_PLAYBOOK §6 holds the canonical wording and
+    this must match it verbatim.
+  */
   disambiguatingDescription:
-    "Suman Debnath, the Senior Brand Marketing Manager and AI-native product builder based in Pune & Kolkata, India — creator of ROASmind, IMPRINT, LEGATUS, CITE, EMBER and D-PE.ai. Not to be confused with other people of the same name, including the AWS Principal Developer Advocate (AI/ML), or the power-systems researcher.",
+    "Suman Debnath, the Senior Brand Marketing Manager and AI-native product builder based between Pune and Kolkata, India — creator of ROASmind, IMPRINT, LEGATUS, CITE, EMBER and D-PE.ai, of the PentaCMD-47M language model, and founder of House of Namus. Not any of the several other technology professionals who share this name, including the Principal Developer Advocate at AWS.",
   url: SITE_URL,
   image: `${SITE_URL}/og-image.png`,
   email: `mailto:${identity.email}`,

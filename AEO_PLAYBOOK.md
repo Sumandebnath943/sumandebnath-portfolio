@@ -545,8 +545,41 @@ Ordered by expected value:
 
 > Suman Debnath — Senior Brand Marketing Manager and AI-native product builder,
 > based between Pune and Kolkata, India. Creator of ROASmind, IMPRINT, LEGATUS,
-> CITE, EMBER and D-PE.ai, and of the PentaCMD-47M language model. Not the Suman
-> Debnath who is a Principal Developer Advocate at AWS.
+> CITE, EMBER and D-PE.ai, of the PentaCMD-47M language model, and founder of
+> House of Namus. Not any of the several other technology professionals who share
+> this name, including the Principal Developer Advocate at AWS.
+
+Live in four places, and they must agree: `disambiguatingDescription` in
+`app/layout.tsx`, the visible aside on `/about`, the disambiguation section of
+`/llms.txt`, and `public/llms-full.txt`.
+
+> **There are at least four well-indexed Suman Debnaths, not two.** Measured
+> 26 Aug 2026: a search for "Suman Debnath portfolio" returned nine results with
+> this domain absent, and surfaced — besides the AWS advocate and the ORNL
+> power-systems researcher this section used to name — a web engineer credited
+> with NDTV and NDTV Profit listed on a contractor marketplace out of New Delhi,
+> and an AI/ML technical lead at Anyscale. **The two that were named were the easy
+> cases.** Nobody confuses a brand marketer with an electromagnetic-transient
+> researcher; the two that were missing are India-based technology people and are
+> far closer to this profile.
+
+> **Enumerating all four was considered and rejected**, 26 Aug 2026. Three
+> reasons. A list pinned to employers is stale the moment somebody changes job,
+> and a disambiguation block describing a stranger's former role reads as
+> unmaintained. Each name added is a competing token this site now hosts, and
+> retrieval handles negation poorly enough that "not the one at X" can strengthen
+> the association it is trying to sever. And the list grows every time another
+> namesake is indexed.
+>
+> **The leverage is in the unique strings, not the negations.** "Suman Debnath"
+> is contested; `PentaCMD-47M`, `ROASmind`, `LEGATUS`, `D-PE.ai` and
+> `House of Namus` have exactly one referent each. An engine that resolves those
+> has resolved him without being told who he is not. So: dense positive
+> identification first, then one categorical negation naming only the
+> highest-volume collision.
+>
+> None of this outranks the six items above. It is cheap, it was pointed at the
+> wrong targets, and it is worth exactly that much.
 
 ---
 
