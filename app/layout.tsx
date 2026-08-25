@@ -462,16 +462,46 @@ export default function RootLayout({
         <link rel="me" href="https://linkedin.com/in/suman-debnath-a528653a1" />
         <link rel="me" href="https://x.com/iamSdebnath" />
 
-        <Script
-          id="ld-person"
+        {/*
+          Plain <script>, NOT next/script — and the difference is the whole
+          point of these two nodes existing.
+
+          `<Script strategy="beforeInteractive">` does not emit a script
+          element. It serialises the payload into a `self.__next_s` push, and
+          the browser builds the real tag once the bundle runs. So the identity
+          of this site — jobTitle, sameAs, the disambiguation, every credential
+          — existed only for a reader that executes JavaScript. In the static
+          HTML there was one literal ld+json block on the homepage, the
+          `ProfilePage` node in app/page.tsx, and nothing an extractor could
+          resolve `mainEntity` against.
+
+          That is not a theory. Vercel's Is Agentic audit read `/` on 25 Aug
+          2026 and reported the ProfilePage as the site's identity block with no
+          name and no description; supplying those took it to 75% and it then
+          asked for `sameAs` and `jobTitle`, both of which were sitting in this
+          Person node, invisible. Every other JSON-LD on this site — /about,
+          /profile, /resume, Breadcrumbs, PageFaq — is already a plain tag. This
+          was the one exception and it was the one that mattered most.
+
+          `beforeInteractive` bought nothing here either: JSON-LD is inert data.
+          Nothing reads it at runtime, so there was never a reason for it to
+          race the bundle. It stays in the body deliberately — React 19 hoists
+          bare <link> elements, not inline scripts, and a JSON-LD block is valid
+          anywhere in the document.
+
+          The `@id` references are what keep this DRY: `#person` is defined once
+          here, and the homepage's ProfilePage, the WebSite node and every
+          per-page node point at it rather than restating it. If an extractor
+          ever proves unable to follow an `@id` across blocks, the fallback is
+          to inline this object as ProfilePage.mainEntity on the homepage —
+          valid schema, at the cost of shipping the Person twice.
+        */}
+        <script
           type="application/ld+json"
-          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
-        <Script
-          id="ld-website"
+        <script
           type="application/ld+json"
-          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
         <RobotChatProvider>
