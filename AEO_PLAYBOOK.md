@@ -8,6 +8,10 @@ what was deliberately **not** done.
 Read **§1 before proposing any "SEO work".** The single most common way to waste
 effort here is to optimise the wrong half of the problem.
 
+**Arrived with an audit report in hand? Read §9 first.** One has already been run
+against this site, most of its findings are already answered here, and the two it
+left open were left open on purpose.
+
 Companion documents: `PROJECT_BIBLE.md` (how the system is built),
 `PAGE_OPTIMIZATION.md` (performance, measured), `PORTFOLIO_HANDOFF.md` (voice).
 
@@ -197,6 +201,114 @@ get quoted. Notebook posts use the `facts` field; product pages should keep
 their specifics — 47M parameters, 299K pairs, ~87% exact-match, 46 agents, 38
 security tests — in tables and definition lists rather than sentences.
 
+### 3.5 Structured data — and the trap that made most of it invisible
+
+> **Every JSON-LD block on this site must be a plain
+> `<script type="application/ld+json">`. Never `next/script`.**
+
+`<Script strategy="beforeInteractive">` **does not emit a script element.** It
+serialises the payload into a `self.__next_s` push and lets the client bundle
+build the real tag once React runs. The `Person` and `WebSite` nodes in
+`app/layout.tsx` were written that way, so the site's entire identity —
+`jobTitle`, `sameAs`, the disambiguation, every credential, on all 26 routes —
+existed only for a reader that executes JavaScript. The static HTML of `/`
+carried exactly one literal block: the `ProfilePage` node in `app/page.tsx`,
+whose `mainEntity` pointed at a `#person` that was not in the document.
+
+This was not theoretical. Vercel's Is Agentic audit (§9) read `/` and reported
+the ProfilePage as the site's identity block with no name and no description,
+because it was the only one it could see. Fixed in `a6afb57`.
+
+> **JSON-LD is inert data.** Nothing reads it at runtime, so it never needed to
+> race the bundle. `beforeInteractive` bought nothing and cost everything. Every
+> other node on the site — `/about`, `/profile`, `/resume`, `Breadcrumbs`,
+> `PageFaq` — was already a plain tag. The root layout was the one exception and
+> it was the one that mattered most.
+
+**The graph, and how it joins.** Three nodes come from the root layout and are
+therefore on every route; the rest are per-page.
+
+| Node | `@id` | Emitted by |
+|---|---|---|
+| `Person` | `<site>/#person` | `app/layout.tsx` |
+| `WebSite` | `<site>/#website` | `app/layout.tsx` |
+| `Organization` | `houseofnamus.com/#organization` | `app/layout.tsx` |
+| `ProfilePage` | `<url>#profilepage` | the page |
+| `QAPage`, `FAQPage`, `BreadcrumbList` | `<url>#…` | the page / component |
+
+> **Two nodes sharing one `@id` merge — that is the point, not a duplicate.**
+> `/contact` emits a second `Person` carrying only `contactPoint`, which joins
+> the layout's node by `@id`. Do not "fix" it into one object; the page owns the
+> contact channel and the layout owns the identity.
+
+**`ProfilePage` repeats `name` and `description` rather than inheriting them
+through `mainEntity`.** A parser that resolves `@id` references gets the Person
+either way; one that reads a single node and stops — which is what most identity
+extractors do — got nothing. Two properties is a cheap price for not depending on
+the reader dereferencing anything. Both strings come from `lib/projects.ts`, so
+the node and the page's own `<title>` cannot disagree.
+
+### 3.6 The Organization node, and the three universities
+
+`House of Namus` is a real company on its own live domain, founded by Suman
+(confirmed by him, 25 Aug 2026) and already credited in visible copy on
+`/agents/pact-agent`. Its node carries `name`, `url`, `description`,
+`contactPoint`, `address` and `founder` → `#person`.
+
+It earns its place under §3.1b rather than merely satisfying an audit: entity
+resolution against a better-indexed namesake is won by corroboration, and a
+second entity that independently names him is worth more than another adjective
+on the Person node.
+
+Three things about it are deliberate:
+
+- **The `@id` is anchored at `houseofnamus.com`, not this subdomain.** The
+  company's identity belongs to the company's own domain; this portfolio
+  describes it, it does not host it.
+- **`founder` is the only relationship asserted.** `Person.worksFor` still says
+  Pune Institute of Business Management, because that is his employer. Founding
+  one company and being employed at another are not in conflict and nothing
+  should imply they are.
+- **No `telephone`, and no street address.** The first is §8. The second because
+  the site has never claimed a registered office and this node does not invent
+  one — `address` mirrors the two locality-level `PostalAddress` objects the
+  Person already carries. A real registered address is a fact only Suman can
+  supply.
+
+> **Never add `contactPoint` or `address` to the universities.** The audit
+> reported "Organization schema found but missing: contactPoint, address", and
+> the Organizations it had found were West Bengal State University, PIBM and
+> Great Lakes in `hasCredential[].recognizedBy`, plus PIBM again in `worksFor` —
+> every one a third party. This site does not speak for any of them, and
+> publishing a machine-readable address for an institution on its behalf is
+> fabricated data with this domain's name on it. Stripping the nodes to dodge
+> the check is equally wrong: they are legitimate credential data. The honest
+> answer was to add a real Organization, and it cleared the check on its own.
+
+### 3.7 The 404's recovery line — do not ungate it
+
+`app/not-found.tsx` carries one line below the postscript pointing at
+`/sitemap.xml` and `/llms.txt`, so a reader that is not a person has a route back.
+Two things about it must survive contact with a future edit:
+
+- **Plain `<a>`, not `<Link>`.** Both targets are route handlers, not pages;
+  `next/link` would try to client-navigate to them and fail. Everything else on
+  that page uses `Link`, so this exception looks exactly like something to tidy.
+- **It is gated on `min-height: 760px` and that gate is load-bearing.** Measured
+  25 Aug 2026: at 375×667 the postscript's bottom sits at **641.13px** inside a
+  667px viewport whose container has 24px of bottom padding — about **2px of
+  slack**. The page is `h-[100svh]` + `overflow-hidden`, so anything past that is
+  clipped rather than scrolled to, which is the same bug the 40svh → 36svh change
+  was made to fix. Content height is roughly `423 + 0.36h`, so the line only has
+  room once `h ≳ 716`; 760 leaves a margin rather than a rounding error. It
+  paints on every current phone (390×844, 412×915) and stands down on a 667-tall
+  SE and the 1280×600 desktop case.
+
+> The gate governs what is **painted**, not what is **served**. The markup is in
+> the response at every viewport size, which is what a fetcher reads. Removing
+> the gate to "show it everywhere" reintroduces clipping on the smallest phones
+> and gains nothing for any agent.
+
 ---
 
 ## 4. Generated, not hand-maintained
@@ -220,6 +332,23 @@ bump.
 **`public/llms-full.txt` is still hand-written**, deliberately — it is long-form
 biography that generation would flatten. It is the one file here that can still
 drift. Check it when the résumé or the product list changes.
+
+### 4.1 "When to use this site" — and the half that makes it credible
+
+The file opens with disambiguation, then answers a question an agent asks before
+any of the others: *should I be reading this at all?* Three blocks — **best fit**,
+**poor fit**, **how to read it** (the fetch surfaces, and that nothing is gated or
+rate-limited).
+
+> **"Poor fit" is the load-bearing half.** A source that never says what it is
+> wrong for reads as marketing, and this one declines three things explicitly:
+> any other Suman Debnath, general tutorials or reference documentation, and
+> anything the site does not state. The last of those repeats the constraint at
+> the foot of the file, because it is the one most worth repeating.
+
+It points at "Expertise" and "Citation map" instead of restating them. Those
+sections already own the topic list and the URL map; a fourth copy of either is a
+fourth thing to keep in sync. Same rule as everything else in §4.
 
 ---
 
@@ -471,3 +600,90 @@ non-deterministic in the same way PSI scores are (see `PAGE_OPTIMIZATION.md`
   Email is the channel that scales and can be filtered. **Do not add it back for
   schema "completeness"** — `telephone` is an optional property and its absence
   costs nothing.
+- **Contact details on any third-party `Organization`.** See §3.6. An audit
+  asking for `contactPoint` and `address` is not a licence to invent them for
+  somebody else's institution.
+- **Markdown content negotiation (`acceptmarkdown.com`).** Serving `text/markdown`
+  from every page URL under `Accept` negotiation, refused 25 Aug 2026 with the
+  score on the table. It is the only remaining change that would move the Is
+  Agentic number (§9) and it was still the wrong trade. Five reasons, in order:
+  1. **No evidence any major AI crawler negotiates for markdown today.** It is a
+     proposed convention. The engines that matter read server-rendered HTML, and
+     this site already hands them `/llms.txt` and `/llms-full.txt` — the same
+     content in a form they demonstrably do use.
+  2. **`Vary: Accept` fragments the CDN cache.** Chrome, Firefox and Safari each
+     send a different `Accept` string, so one cached page becomes several and the
+     edge hit rate falls. That is a real cost to real visitors, paid against
+     `PAGE_OPTIMIZATION.md`, in exchange for a rubric score.
+  3. **Next already sets its own `Vary`** — `rsc, next-router-state-tree,
+     next-router-prefetch, next-router-segment-prefetch`. Any implementation must
+     *append* to it. Overwriting it breaks client-side navigation caching for
+     every human on the site, which makes this the one failure mode here that
+     hurts people rather than agents.
+  4. **`proxy.ts` is the hot path.** It runs on every request, gates the
+     dashboard and logs crawlers, and its visitor tracking cannot be tested under
+     `next dev` (`AGENTS.md` §6). Every change there costs a production build to
+     verify.
+  5. **The twin would be thinner than the page.** Generated markdown for a
+     product page is the title, the answer block, the FAQs and the facts — honest,
+     and *less* than the HTML contains. If agents came to prefer it they would
+     extract less, not more. Passing the audit and being better for agents are
+     not the same thing here, and this is where they diverge.
+
+  **Revisit if, and only if,** one of the engines in §5.6 is documented as
+  negotiating for markdown. Then the calculus changes and points 2–4 become costs
+  worth paying. Until then, `/llms.txt` is the markdown-shaped surface this site
+  offers and it is enough.
+- **`Vary: Accept` on its own.** Suggested by the audit as though it were the
+  whole fix. Adding it without actually serving a markdown variant advertises a
+  representation that does not exist — the content-type evidence fails either
+  way, and the header becomes a lie.
+- **A markdown body on the 404.** Same mechanism, same refusal. `not-found.tsx`
+  renders a React page and **cannot set a Content-Type**, so any markdown 404 has
+  to route through `proxy.ts` and therefore needs its own list of which paths are
+  real. That list drifting would 404 live pages *for markdown requests only* —
+  invisible in every browser, which is precisely the silent partial failure
+  `AGENTS.md` §7 warns about. The recovery links added to the visible page
+  (§3.7) are what this site does instead.
+
+---
+
+## 9. The Is Agentic audit (Vercel), 25 Aug 2026
+
+An external scorecard for "agentic readiness", run against the live site. Four
+runs in one session, `79 → 83`.
+
+| Item | Weight | Start | End |
+|---|---|---|---|
+| JSON-LD structured data | Recommended | Partial 50% | **Cleared** |
+| Organization schema completeness | Recommended | Partial 50% | **Cleared** |
+| Agent-friendly 404s | Essential | Partial 50% | Partial 50% |
+| Markdown content negotiation | Essential | Failed | Failed |
+| Brand name discoverability | Recommended | Failed | Failed |
+
+What moved, and the commits:
+
+- `427f6e7` — `name` and `description` on the homepage `ProfilePage` (§3.5), the
+  when-to-use block in `/llms.txt` (§4.1), the 404's recovery line (§3.7).
+- `a6afb57` — the `Person` and `WebSite` nodes made literal (§3.5). **The single
+  largest real improvement of the four runs**, because it exposed the identity
+  graph to every non-JS reader, not merely to this audit.
+- `d5b6eac` — the House of Namus `Organization` (§3.6).
+
+What did not move, and why:
+
+- **404s and markdown negotiation are one item.** Both need the machinery refused
+  in §8. The 404 evidence string was byte-identical across all four runs — it did
+  not respond to the visible recovery links, which is the evidence that it wants a
+  `text/markdown` response and not a helpful HTML page.
+- **Brand discoverability is §6 restated.** "Suman Debnath" returning nine
+  results without this domain is the same finding as §5.6: Claude answers from
+  Brave's index, Gemini from Google's, and this site is in neither. No code
+  changes this.
+
+> **Treat the number as a proxy, not a goal.** It is one vendor's rubric, and two
+> of the three remaining items are things this playbook had already concluded were
+> either off-site work (§6) or not worth the cost (§8). The audit was useful for
+> exactly one thing the site did not already know — that half the structured data
+> was invisible without JavaScript — and that was worth the whole exercise. Do not
+> spend engineering risk chasing the remaining points.
