@@ -58,6 +58,10 @@ const dmMono = DM_Mono({
 // node needs the same name and description this file gives the metadata, and a
 // second copy of either string is a copy that drifts.
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "@/lib/projects";
+// The contact email, from the one file that owns it. It was a literal here and
+// a literal again in the Organization node below before this — lib/resume.ts is
+// the source of truth for anything on a business card.
+import { identity } from "@/lib/resume";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -197,7 +201,7 @@ const personJsonLd = {
     "Suman Debnath, the Senior Brand Marketing Manager and AI-native product builder based in Pune & Kolkata, India — creator of ROASmind, IMPRINT, LEGATUS, CITE, EMBER and D-PE.ai. Not to be confused with other people of the same name, including the AWS Principal Developer Advocate (AI/ML), or the power-systems researcher.",
   url: SITE_URL,
   image: `${SITE_URL}/og-image.png`,
-  email: "mailto:sumandebnath944@gmail.com",
+  email: `mailto:${identity.email}`,
   // No `telephone` here either, and this was the worst of the three: the Person
   // node is emitted by the root layout, so the number was in the structured data
   // of **every page on the site** — not just the contact page. It is still
@@ -372,6 +376,88 @@ const websiteJsonLd = {
   about: { "@id": `${SITE_URL}/#person` },
 };
 
+/*
+  House of Namus — the brand this portfolio is a subdomain of.
+
+  ## Why there is an Organization node at all
+
+  This site's identity model is `Person`, deliberately: §3.1b of AEO_PLAYBOOK
+  exists because more than one Suman Debnath is indexed and the better-known one
+  is at AWS. Nothing here should dilute that. This node earns its place anyway,
+  because House of Namus is a real company with its own live domain, Suman
+  founded it, and PACT Agent is already credited to it in visible copy on
+  /agents/pact-agent. An engine resolving "who is this" benefits from a second,
+  independent entity that names him — corroboration is the whole game.
+
+  `founder` points at `#person`. That is the only relationship asserted, and it
+  is the true one: `Person.worksFor` still says Pune Institute of Business
+  Management, because that is his employer. Founding a company and being
+  employed elsewhere are not in conflict, and nothing here should imply they are.
+
+  The `@id` is anchored at houseofnamus.com, not at this subdomain. The company's
+  identity belongs to the company's own domain; this portfolio is describing it,
+  not hosting it.
+
+  ## Two deliberate omissions
+
+  **No `telephone`.** Same standing rule as the Person node and /contact —
+  AEO_PLAYBOOK §8. A number in a machine-readable surface is scraped in bulk.
+  Email is the channel that scales and can be filtered. Do not add it back for
+  schema "completeness"; `telephone` is optional and its absence costs nothing.
+
+  **No street address.** `address` mirrors exactly what this site already
+  publishes about where its founder works — Pune and Kolkata, at locality level,
+  the same two PostalAddress objects the Person node carries. The site has never
+  claimed a registered office and this node does not invent one. If House of
+  Namus has a single registered address that should appear instead, it is a fact
+  only Suman can supply; until then, matching the Person is the honest option
+  and consistency across surfaces is itself the signal.
+
+  ## What this node is NOT for
+
+  Vercel's Is Agentic audit reported "Organization schema found but missing:
+  contactPoint, address" on 25 Aug 2026. The Organizations it found were the
+  three universities in `hasCredential[].recognizedBy` and the employer in
+  `worksFor`. **Never satisfy that check by adding contact details to those.**
+  This site does not speak for West Bengal State University, PIBM or Great
+  Lakes, and publishing a machine-readable address for an institution on their
+  behalf is fabricated data with our domain's name on it.
+*/
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://houseofnamus.com/#organization",
+  name: "House of Namus",
+  url: "https://houseofnamus.com",
+  description:
+    "AI-first creative and digital house in India — branding, design, web and digital marketing for future-ready brands.",
+  founder: { "@id": `${SITE_URL}/#person` },
+  contactPoint: [
+    {
+      "@type": "ContactPoint",
+      contactType: "Business and project enquiries",
+      email: identity.email,
+      areaServed: "IN",
+      availableLanguage: ["English", "Hindi", "Bengali"],
+      url: `${SITE_URL}/contact`,
+    },
+  ],
+  address: [
+    {
+      "@type": "PostalAddress",
+      addressLocality: "Pune",
+      addressRegion: "Maharashtra",
+      addressCountry: "IN",
+    },
+    {
+      "@type": "PostalAddress",
+      addressLocality: "Kolkata",
+      addressRegion: "West Bengal",
+      addressCountry: "IN",
+    },
+  ],
+};
+
 import EasterEggs from "@/components/ui/EasterEggs";
 import VisitorPing from "@/components/analytics/VisitorPing";
 import PrivacyNotice from "@/components/ui/PrivacyNotice";
@@ -503,6 +589,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
         <RobotChatProvider>
           {children}
