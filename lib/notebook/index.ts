@@ -29,6 +29,10 @@ import keepingSecretsOutOfAiBuiltApps from "./posts/keeping-secrets-out-of-ai-bu
 import theCostOfBuildingAlone from "./posts/the-cost-of-building-alone";
 import neverRunACodingAgentOnAutopilot from "./posts/never-run-a-coding-agent-on-autopilot";
 import tasteIsTheLastThingToBeAutomated from "./posts/taste-is-the-last-thing-to-be-automated";
+import finishingIsNotBuilding from "./posts/finishing-is-not-building";
+import whatAMarketerHasToLearn from "./posts/what-a-marketer-has-to-learn";
+import whatAiReplacesInMarketing from "./posts/what-ai-replaces-in-marketing";
+import whatMarketingTeamsShouldAutomateFirst from "./posts/what-marketing-teams-should-automate-first";
 
 export type { Post, Block, PostFact, Category } from "./types";
 export { CATEGORIES, CATEGORY_ACCENT, categorySlug, categoryFromSlug } from "./types";
@@ -49,6 +53,10 @@ const POSTS: Post[] = [
   theCostOfBuildingAlone,
   neverRunACodingAgentOnAutopilot,
   tasteIsTheLastThingToBeAutomated,
+  finishingIsNotBuilding,
+  whatAMarketerHasToLearn,
+  whatAiReplacesInMarketing,
+  whatMarketingTeamsShouldAutomateFirst,
 ];
 
 export const NOTEBOOK_PATH = "/notebook";
