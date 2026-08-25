@@ -405,7 +405,7 @@ export default function FunAppsPage() {
         </section>
       </main>
 
-      <RelatedPages href="/fun-apps" />
+      <RelatedPages href="/fun-apps" variant="paper" surface="#ebebe4" />
       <Contact
         closingBg="linear-gradient(180deg, #241605 0%, #2A1806 12%, #170E04 55%, #050505 100%)"
         glowColor="rgba(255,140,0,0.15)"

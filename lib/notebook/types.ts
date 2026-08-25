@@ -65,6 +65,27 @@ export const POPULARITY_FACTORS: (keyof PopularityFactors)[] = [
   "shareability",
 ];
 
+/**
+ * URL slug for a category — "CSS & Layout" becomes "css-layout".
+ *
+ * Hand-rolled rather than a generic slugify: the category list is closed and
+ * five items long, so a dependency would be doing nothing a regex cannot, and
+ * this way the mapping is visible in one place. If a new category ever slugs to
+ * the same string as an existing one, `categoryFromSlug` returns the first
+ * match and the second becomes unreachable — check before adding.
+ */
+export function categorySlug(c: Category): string {
+  return c
+    .toLowerCase()
+    .replace(/&/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+export function categoryFromSlug(slug: string): Category | undefined {
+  return CATEGORIES.find((c) => categorySlug(c) === slug);
+}
+
 export function scorePopularity(f: PopularityFactors): number {
   return POPULARITY_FACTORS.reduce((n, k) => n + f[k], 0);
 }

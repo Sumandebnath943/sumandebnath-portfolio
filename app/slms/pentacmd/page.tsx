@@ -962,8 +962,8 @@ style={{ width: `${(d.n / 299329) * 100}%`, background: FAMILIES[d.fam].color }}
         </div>
       </main>
 
-      <PageFaq href="/slms/pentacmd" />
-      <RelatedPages href="/slms/pentacmd" />
+      <PageFaq href="/slms/pentacmd" surface="#080a14" />
+      <RelatedPages href="/slms/pentacmd" surface="#080a14" />
       <Contact
         closingBg="linear-gradient(180deg, #07231A 0%, #06251C 12%, #041610 55%, #050505 100%)"
         glowColor="rgba(52,211,153,0.15)"

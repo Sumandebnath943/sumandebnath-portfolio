@@ -351,7 +351,7 @@ export default function PrivacyPage() {
         </section>
       </main>
 
-      <RelatedPages href="/privacy" />
+      <RelatedPages href="/privacy" surface="#000000" />
       <Contact />
     </MotionProvider>
   );

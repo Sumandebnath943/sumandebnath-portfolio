@@ -270,7 +270,7 @@ export default function TermsPage() {
         </section>
       </main>
 
-      <RelatedPages href="/terms" />
+      <RelatedPages href="/terms" surface="#000000" />
       <Contact />
     </MotionProvider>
   );

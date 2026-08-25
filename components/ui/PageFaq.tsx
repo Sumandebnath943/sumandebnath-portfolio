@@ -40,20 +40,30 @@ type Variant = "dark" | "paper";
 // Mirrors RelatedPages' palette exactly — the two stack directly on top of each
 // other above the footer, and a mismatch between them reads as a rendering bug
 // rather than as two sections.
-const THEME: Record<Variant, { section: string; kicker: string; rule: string; q: string; a: string }> = {
+// Mirrors RelatedPages exactly — including its `surface` prop and its contrast
+// floor. Read the notes at the top of that file; every reason there applies
+// here, and the two must never drift, because they stack directly on top of
+// each other and any difference reads as a rendering fault.
+const THEME: Record<
+  Variant,
+  { border: string; kicker: string; rule: string; q: string; a: string; fallback: string }
+> = {
   dark: {
-    section: "border-white/10 bg-[#050505]",
-    kicker: "text-white/40",
-    rule: "border-white/10",
+    border: "border-white/[0.12]",
+    // 0.62. At 0.40 this measured 3.71:1 and failed WCAG AA. Do not lower it.
+    kicker: "text-white/[0.62]",
+    rule: "border-white/[0.12]",
     q: "text-white",
-    a: "text-white/55",
+    a: "text-white/[0.68]",
+    fallback: "#050505",
   },
   paper: {
-    section: "border-[#191512]/10 bg-[#f2ece0]",
-    kicker: "text-[#191512]/45",
-    rule: "border-[#191512]/12",
+    border: "border-[#191512]/[0.12]",
+    kicker: "text-[#191512]/[0.62]",
+    rule: "border-[#191512]/[0.14]",
     q: "text-[#191512]",
-    a: "text-[#191512]/65",
+    a: "text-[#191512]/[0.72]",
+    fallback: "#ece5d8",
   },
 };
 
@@ -61,12 +71,15 @@ export default function PageFaq({
   href,
   heading = "Questions this page answers",
   variant = "dark",
+  surface,
 }: {
   /** The current page's path, exactly as keyed in lib/page-faqs.ts. */
   href: string;
   heading?: string;
   /** Match the page this sits on, and match the RelatedPages below it. */
   variant?: Variant;
+  /** The page's own base colour. See the note in RelatedPages.tsx. */
+  surface?: string;
 }) {
   const faqs = faqsForPage(href);
   if (faqs.length === 0) return null;
@@ -93,7 +106,8 @@ export default function PageFaq({
   return (
     <section
       aria-labelledby="page-faq-heading"
-      className={`relative border-t px-6 py-14 sm:px-10 lg:px-16 ${t.section}`}
+      style={{ backgroundColor: surface ?? t.fallback }}
+      className={`relative border-t px-6 py-14 sm:px-10 lg:px-16 ${t.border}`}
     >
       <script
         type="application/ld+json"

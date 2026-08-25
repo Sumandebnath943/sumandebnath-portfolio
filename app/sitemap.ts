@@ -1,7 +1,14 @@
 import type { MetadataRoute } from "next";
 import { projects, SITE_URL } from "@/lib/projects";
 import { PROJECT_DOSSIER_DATE, routeDate } from "@/lib/route-dates";
-import { allPosts, postModified, postUrl } from "@/lib/notebook";
+import {
+  activeCategories,
+  allPosts,
+  categorySlug,
+  notebookModified,
+  postModified,
+  postUrl,
+} from "@/lib/notebook";
 
 const SITE = SITE_URL;
 
@@ -80,5 +87,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...corePages, ...projectPages, ...notebookPages];
+  // ── Category archives — derived from the categories that have posts ──────
+  const categoryPages: MetadataRoute.Sitemap = activeCategories().map(({ category }) => ({
+    url: `${SITE}/notebook/category/${categorySlug(category)}`,
+    lastModified: new Date(notebookModified()),
+    changeFrequency: "weekly" as const,
+    priority: 0.6,
+  }));
+
+  return [...corePages, ...projectPages, ...notebookPages, ...categoryPages];
 }

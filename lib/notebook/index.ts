@@ -13,7 +13,7 @@
 //
 // Nothing else. The index page, the sitemap, the feed and llms.txt all derive.
 
-import { CATEGORIES, type Category, type Post } from "./types";
+import { CATEGORIES, categorySlug, type Category, type Post } from "./types";
 
 import overflowHiddenKillsPositionSticky from "./posts/overflow-hidden-kills-position-sticky";
 import nextjs16MiddlewareIsNowProxy from "./posts/nextjs-16-middleware-is-now-proxy";
@@ -22,7 +22,7 @@ import threeJsR152ColourManagement from "./posts/three-js-r152-colour-management
 import theTrapIWroteDownWasWrong from "./posts/the-trap-i-wrote-down-was-wrong";
 
 export type { Post, Block, PostFact, Category } from "./types";
-export { CATEGORIES, CATEGORY_ACCENT } from "./types";
+export { CATEGORIES, CATEGORY_ACCENT, categorySlug, categoryFromSlug } from "./types";
 
 /** Newest first. `allPosts()` sorts by date, so ordering here is not load-bearing. */
 const POSTS: Post[] = [
@@ -100,6 +100,11 @@ export function mostPopularPost(): Post | undefined {
   return scored.reduce((best, p) =>
     (p.popularityScore ?? 0) > (best.popularityScore ?? 0) ? p : best,
   );
+}
+
+/** Every article in one category, newest first. */
+export function postsInCategory(c: Category): Post[] {
+  return allPosts().filter((p) => p.category === c);
 }
 
 /** Every distinct tag, ordered by how many posts carry it. */

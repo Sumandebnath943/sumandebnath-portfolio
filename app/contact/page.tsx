@@ -273,7 +273,7 @@ export default function ContactPageRoute() {
 
       </main>
 
-      <RelatedPages href="/contact" variant="paper" />
+      <RelatedPages href="/contact" variant="paper" surface="#ece5d8" />
       <Contact variant="light" />
     </MotionProvider>
   );

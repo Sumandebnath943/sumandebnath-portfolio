@@ -939,8 +939,8 @@ export default function MigiAppPage() {
         </section>
       </main>
 
-      <PageFaq href="/apps/migi-app" />
-      <RelatedPages href="/apps/migi-app" />
+      <PageFaq href="/apps/migi-app" surface="#0a0d12" />
+      <RelatedPages href="/apps/migi-app" surface="#0a0d12" />
       <Contact variant="dark" />
     </MotionProvider>
   );

@@ -592,8 +592,8 @@ export default function PentashellPage() {
         </div>
       </main>
 
-      <PageFaq href="/agents/pentashell" />
-      <RelatedPages href="/agents/pentashell" />
+      <PageFaq href="/agents/pentashell" surface="#05060e" />
+      <RelatedPages href="/agents/pentashell" surface="#05060e" />
       <Contact
         closingBg="linear-gradient(180deg, #08202B 0%, #06202E 12%, #051620 55%, #050505 100%)"
         glowColor="rgba(47,226,240,0.16)"

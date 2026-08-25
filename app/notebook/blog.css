@@ -548,3 +548,88 @@
   color: #fff;
   background: var(--nb-clay);
 }
+
+/* ── Category cross-nav ─────────────────────────────────────────────────────
+   Sits at the foot of each archive. Five categories is small enough to link
+   every one from every other, so no archive is ever a dead end. */
+.nb-catnav {
+  margin-top: 3.5rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--nb-rule);
+}
+
+.nb-catnav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nb-catnav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-manrope), system-ui, sans-serif;
+  font-size: 0.8125rem;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--nb-rule);
+  border-radius: 999px;
+  color: var(--nb-ink-soft);
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.nb-catnav a:hover {
+  border-color: var(--nb-rule-strong);
+  background: rgba(25, 21, 18, 0.04);
+  color: var(--nb-ink);
+}
+
+/* Category row: the in-place filter button, plus a real link to the indexable
+   archive. The button is the fast path for someone browsing; the arrow is what
+   a crawler follows and what a reader copies to share a category. */
+.nb-side-row {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.nb-side-row .nb-side-item {
+  flex: 1;
+  min-width: 0;
+}
+
+.nb-side-go {
+  flex: none;
+  /* 32px square — the arrow is small but the target must not be. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.45rem;
+  font-size: 0.75rem;
+  color: var(--nb-ink-mute);
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 0.2s, background 0.2s, color 0.2s;
+}
+
+.nb-side-row:hover .nb-side-go,
+.nb-side-go:focus-visible {
+  opacity: 1;
+}
+
+.nb-side-go:hover {
+  background: rgba(25, 21, 18, 0.06);
+  color: var(--nb-ink);
+}
+
+/* Touch devices get no hover, so the affordance has to be permanent there. */
+@media (hover: none) {
+  .nb-side-go {
+    opacity: 1;
+  }
+}

@@ -771,14 +771,33 @@ html {
 .sd-banner-host {
   position: relative;
   isolation: isolate;
-  overflow: hidden;
+  /* NO `overflow: hidden` here. Several hosts are width-constrained —
+     `max-w-3xl mx-auto` on /privacy and /terms, `max-w-5xl` on the dossiers,
+     `.jr-mast` at 74rem — and clipping to the host meant the art stopped at the
+     text column on those pages while running edge to edge on the full-width
+     ones. The art clips itself instead (see below), which lets it span the
+     viewport from inside a narrow container. */
 }
 
 .sd-banner-art {
   position: absolute;
-  inset: 0;
   z-index: -1;
   pointer-events: none;
+
+  /* Edge to edge on every page, including inside a centred, width-limited
+     host. The classic break-out: pin to the host vertically, then centre a
+     viewport-wide box on the host horizontally.
+
+     100vw includes the scrollbar on desktop, so this is a few pixels wider
+     than the visible page — harmless, because `body` already carries
+     `overflow-x: hidden` (see the body rule above). Without that it would add
+     a horizontal scrollbar to every page. */
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  overflow: hidden;
   contain: paint;
 
   /* Fades the figure out towards the left, where the headline sits.

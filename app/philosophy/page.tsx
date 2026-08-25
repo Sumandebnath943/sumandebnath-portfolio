@@ -106,8 +106,8 @@ export default function PhilosophyPage() {
           </div>
         </section>
       </main>
-      <PageFaq href="/philosophy" />
-      <RelatedPages href="/philosophy" />
+      <PageFaq href="/philosophy" surface="#08070b" />
+      <RelatedPages href="/philosophy" surface="#08070b" />
       <Contact />
     </MotionProvider>
   );

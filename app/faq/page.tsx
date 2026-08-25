@@ -125,7 +125,7 @@ export default function FAQPage() {
         </section>
       </main>
 
-      <RelatedPages href="/faq" />
+      <RelatedPages href="/faq" surface="#0b1016" />
       <Contact />
     </MotionProvider>
   );

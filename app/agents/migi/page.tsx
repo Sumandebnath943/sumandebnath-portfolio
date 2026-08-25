@@ -1532,8 +1532,8 @@ export default function MigiPage() {
         </section>
       </main>
 
-      <PageFaq href="/agents/migi" />
-      <RelatedPages href="/agents/migi" />
+      <PageFaq href="/agents/migi" surface="#0a0d12" />
+      <RelatedPages href="/agents/migi" surface="#0a0d12" />
       <Contact
         closingBg="linear-gradient(180deg, #16200C 0%, #1B2410 12%, #10160A 55%, #050505 100%)"
         glowColor="rgba(198,242,78,0.14)"

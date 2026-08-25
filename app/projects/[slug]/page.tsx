@@ -147,7 +147,7 @@ export default async function ProjectPage({ params }: Props) {
         <div className="max-w-7xl mx-auto">{renderDossier(project.slug)}</div>
       </main>
 
-      <RelatedPages href="/projects" />
+      <RelatedPages href="/projects" surface="#000000" />
       <Contact />
     </MotionProvider>
   );

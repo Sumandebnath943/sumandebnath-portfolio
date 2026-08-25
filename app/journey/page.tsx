@@ -144,7 +144,7 @@ export default function JourneyPage() {
 
       {/* Both in the paper register — this page is cream and ink throughout, and
           the dark closing would read as the page having been cut off. */}
-      <RelatedPages href="/journey" variant="paper" />
+      <RelatedPages href="/journey" variant="paper" surface="#ece4d6" />
       <Contact variant="light" />
     </MotionProvider>
   );

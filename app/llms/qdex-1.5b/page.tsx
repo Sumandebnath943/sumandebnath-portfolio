@@ -702,8 +702,8 @@ export default function QdexPage() {
         </div>
       </main>
 
-      <PageFaq href="/llms/qdex-1.5b" />
-      <RelatedPages href="/llms/qdex-1.5b" />
+      <PageFaq href="/llms/qdex-1.5b" surface="#080a14" />
+      <RelatedPages href="/llms/qdex-1.5b" surface="#080a14" />
       <Contact
         closingBg="linear-gradient(180deg, #06201F 0%, #052322 12%, #041515 55%, #050505 100%)"
         glowColor="rgba(45,212,191,0.15)"

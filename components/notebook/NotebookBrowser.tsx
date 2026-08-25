@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import PostCover from "./PostCover";
-import { CATEGORY_ACCENT, type Category } from "@/lib/notebook/types";
+import { categorySlug, CATEGORY_ACCENT, type Category } from "@/lib/notebook/types";
 import type { CardPost } from "@/lib/notebook/card";
 
 /**
@@ -257,18 +257,31 @@ export default function NotebookBrowser({
               </li>
               {categories.map(({ category: c, count }) => (
                 <li key={c}>
-                  <button
-                    type="button"
-                    onClick={() => setCategory(category === c ? null : c)}
-                    aria-pressed={category === c}
-                    className={`nb-side-item ${category === c ? "is-on" : ""}`}
-                  >
-                    <span className="nb-side-label">
-                      <span className="nb-side-dot" style={{ background: CATEGORY_ACCENT[c] }} />
-                      {c}
-                    </span>
-                    <span className="nb-side-n">{count}</span>
-                  </button>
+                  <span className="nb-side-row">
+                    <button
+                      type="button"
+                      onClick={() => setCategory(category === c ? null : c)}
+                      aria-pressed={category === c}
+                      className={`nb-side-item ${category === c ? "is-on" : ""}`}
+                    >
+                      <span className="nb-side-label">
+                        <span className="nb-side-dot" style={{ background: CATEGORY_ACCENT[c] }} />
+                        {c}
+                      </span>
+                      <span className="nb-side-n">{count}</span>
+                    </button>
+                    {/* A real `<a>` to the indexable archive, beside the
+                        in-place filter. The button is the fast path for someone
+                        browsing; the link is what a crawler follows and what a
+                        reader copies to share a category. */}
+                    <Link
+                      href={`/notebook/category/${categorySlug(c)}`}
+                      className="nb-side-go"
+                      aria-label={`Open the ${c} archive`}
+                    >
+                      <span aria-hidden="true">→</span>
+                    </Link>
+                  </span>
                 </li>
               ))}
             </ul>

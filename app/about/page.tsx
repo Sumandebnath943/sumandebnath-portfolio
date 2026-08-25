@@ -178,8 +178,8 @@ export default function AboutPage() {
         <AcademicFoundations />
       </main>
 
-      <PageFaq href="/about" />
-      <RelatedPages href="/about" />
+      <PageFaq href="/about" surface="#070604" />
+      <RelatedPages href="/about" surface="#070604" />
       <Contact />
     </MotionProvider>
   );

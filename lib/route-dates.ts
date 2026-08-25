@@ -9,37 +9,37 @@
 
 export const ROUTE_DATES: Record<string, string> = {
   "/": "2026-08-24",
-  "/resume": "2026-08-24",
-  "/journey": "2026-08-24",
-  "/about": "2026-08-24",
+  "/resume": "2026-08-25",
+  "/journey": "2026-08-25",
+  "/about": "2026-08-25",
   "/profile": "2026-08-24",
-  "/contact": "2026-08-24",
-  "/projects": "2026-08-24",
-  "/learnings": "2026-08-24",
-  "/philosophy": "2026-08-24",
-  "/faq": "2026-08-24",
-  "/fun-apps": "2026-08-24",
-  "/privacy": "2026-08-24",
-  "/terms": "2026-08-24",
-  "/projects/aegis-vault": "2026-08-24",
-  "/agents/pact-agent": "2026-08-24",
-  "/agents/pentashell": "2026-08-24",
-  "/agents/migi": "2026-08-24",
-  "/slms/pentacmd": "2026-08-24",
-  "/llms/qdex-1.5b": "2026-08-24",
-  "/apps/forget-anything": "2026-08-24",
-  "/apps/migi-app": "2026-08-24",
-  "/games/pixelville": "2026-08-24",
-  "/banking/rm-copilot": "2026-08-24",
-  "/notebook": "2026-08-24",
+  "/contact": "2026-08-25",
+  "/projects": "2026-08-25",
+  "/learnings": "2026-08-25",
+  "/philosophy": "2026-08-25",
+  "/faq": "2026-08-25",
+  "/fun-apps": "2026-08-25",
+  "/privacy": "2026-08-25",
+  "/terms": "2026-08-25",
+  "/projects/aegis-vault": "2026-08-25",
+  "/agents/pact-agent": "2026-08-25",
+  "/agents/pentashell": "2026-08-25",
+  "/agents/migi": "2026-08-25",
+  "/slms/pentacmd": "2026-08-25",
+  "/llms/qdex-1.5b": "2026-08-25",
+  "/apps/forget-anything": "2026-08-25",
+  "/apps/migi-app": "2026-08-25",
+  "/games/pixelville": "2026-08-25",
+  "/banking/rm-copilot": "2026-08-25",
+  "/notebook": "2026-08-25",
 };
 
 /** Shared date for the /projects/[slug] dossiers — they all render from the
  *  same source files, so an individual date per slug would be fiction. */
-export const PROJECT_DOSSIER_DATE = "2026-08-24";
+export const PROJECT_DOSSIER_DATE = "2026-08-25";
 
 /** Used when a route has no entry above — a page added without regenerating. */
-export const FALLBACK_DATE = "2026-08-24";
+export const FALLBACK_DATE = "2026-08-25";
 
 export function routeDate(route: string): Date {
   return new Date(ROUTE_DATES[route] ?? FALLBACK_DATE);

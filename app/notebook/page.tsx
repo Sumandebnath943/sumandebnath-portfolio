@@ -161,8 +161,8 @@ export default function NotebookIndexPage() {
         </div>
       </main>
 
-      <PageFaq href="/notebook" variant="paper" />
-      <RelatedPages href="/notebook" variant="paper" />
+      <PageFaq href="/notebook" variant="paper" surface="#ece5d8" />
+      <RelatedPages href="/notebook" variant="paper" surface="#ece5d8" />
       <Contact variant="light" />
     </MotionProvider>
   );

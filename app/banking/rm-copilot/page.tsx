@@ -943,8 +943,8 @@ export default function BankingCopilotPage() {
         </section>
       </main>
 
-      <PageFaq href="/banking/rm-copilot" />
-      <RelatedPages href="/banking/rm-copilot" />
+      <PageFaq href="/banking/rm-copilot" surface="#06131c" />
+      <RelatedPages href="/banking/rm-copilot" surface="#06131c" />
       <Contact />
     </MotionProvider>
   );

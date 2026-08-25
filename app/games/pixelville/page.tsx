@@ -739,8 +739,8 @@ export default function PixelVillePage() {
         </section>
       </main>
 
-      <PageFaq href="/games/pixelville" />
-      <RelatedPages href="/games/pixelville" />
+      <PageFaq href="/games/pixelville" surface="#12203a" />
+      <RelatedPages href="/games/pixelville" surface="#12203a" />
       <Contact
         closingBg="linear-gradient(180deg, #12203A 0%, #101C33 12%, #0A1120 55%, #050505 100%)"
         glowColor="rgba(245,185,74,0.15)"

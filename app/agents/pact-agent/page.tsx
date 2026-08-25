@@ -759,8 +759,8 @@ export default function PactAgentPage() {
         </div>
       </main>
 
-      <PageFaq href="/agents/pact-agent" />
-      <RelatedPages href="/agents/pact-agent" />
+      <PageFaq href="/agents/pact-agent" surface="#0d0a08" />
+      <RelatedPages href="/agents/pact-agent" surface="#0d0a08" />
       <Contact />
     </MotionProvider>
   );
