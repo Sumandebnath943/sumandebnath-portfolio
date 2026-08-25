@@ -779,7 +779,16 @@ html {
      viewport from inside a narrow container. */
 }
 
-.sd-banner-art {
+/* Note the double-class selector. Four page stylesheets carry a
+   `.xx-hero > * { position: relative; z-index: 1; }` rule to lift their own
+   content above a decorative backdrop, and `.fq-hero > *` (0,1,0 plus the
+   universal) outspecifies a bare `.sd-banner-art` (0,1,0) by source order.
+   That flipped the art to `position: relative`, dropped it into the flow, and
+   pushed 376px of empty space above the headline on /faq, /about, /philosophy
+   and /contact — which read as an enormous gap under the nav rather than as a
+   positioning bug. `.sd-banner-host > .sd-banner-art` is (0,2,0) and wins
+   everywhere. Do not simplify it back to one class. */
+.sd-banner-host > .sd-banner-art {
   position: absolute;
   z-index: -1;
   pointer-events: none;

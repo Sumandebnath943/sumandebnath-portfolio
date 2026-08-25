@@ -34,19 +34,25 @@ export default function FunAppsPage() {
         <section className="pt-40 pb-16 md:pt-48 md:pb-24 px-6 md:px-10 sd-banner-host">
           <BannerArt seed="/fun-apps" accent="#FF8C00" variant="paper" />
           <div className="max-w-6xl mx-auto flex flex-col items-center text-center">
+            {/* Breadcrumb first, then the kicker, then the headline — the same
+                order as every other page. It had been sharing a FadeInUp with
+                the h1, which put it *below* "Creative Sandbox" and left it
+                reading as a stray line in the middle of a centred masthead.
+                Its own FadeInUp so it leads the entrance rather than arriving
+                with the headline. */}
             <FadeInUp delay={0}>
+              <Breadcrumbs
+                trail={[{ label: "Fun Apps", href: "/fun-apps" }]}
+                variant="paper"
+                className="mb-5 justify-center [&>ol]:justify-center"
+              />
+            </FadeInUp>
+            <FadeInUp delay={0.05}>
               <p className="font-mono text-[11px] uppercase tracking-[0.4em] text-[#1a1a1a]/65 mb-6 font-semibold">
                 Creative Sandbox
               </p>
             </FadeInUp>
             <FadeInUp delay={0.1}>
-              <Breadcrumbs
-                trail={[
-                  { label: "Fun Apps", href: "/fun-apps" },
-                ]}
-                variant="paper"
-                className="mb-6"
-              />
               <h1 className="font-manrope font-semibold text-4xl md:text-6xl lg:text-7xl tracking-tight mb-6 text-[#1a1a1a]">
                 Fun{" "}
                 <span className="font-serif italic font-normal text-[#1a1a1a]/65">
