@@ -16,6 +16,7 @@ and its own argument.
 | **[HANDOFF.md](HANDOFF.md)** | Current state, the last session's changes, next steps |
 | **[PORTFOLIO_HANDOFF.md](PORTFOLIO_HANDOFF.md)** | Voice, what each page argues, the pattern for a new product page |
 | **[BLOG_GUIDELINES.md](BLOG_GUIDELINES.md)** | Writing for `/notebook` — format, titles, categories, the no-duplicate-question rule, what may never be published |
+| **[NOTEBOOK_COVERS.md](NOTEBOOK_COVERS.md)** | Cover art — the one house style, an image prompt per article, and how to wire one in |
 | **[AEO_PLAYBOOK.md](AEO_PLAYBOOK.md)** | Being found and cited: what is in place, the standing rules, and what was refused |
 | **[TARGET_QUERIES.md](TARGET_QUERIES.md)** | The prompts this site is trying to be the answer to, and the log of what the engines said |
 | **[PAGE_OPTIMIZATION.md](PAGE_OPTIMIZATION.md)** | Performance — how to measure this site without fooling yourself |

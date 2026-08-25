@@ -37,6 +37,7 @@ tiny subset: `[label](href)`, `` `code` `` and `**bold**`.
 | `faqs` | `FAQPage` structured data | Two to four. **Must not duplicate any existing question — see §4** |
 | `category` | Filter bar and archive route | Exactly one, from the closed list |
 | `tags` | Tag filter | Reuse the existing vocabulary; see §5 |
+| `cover` / `coverAlt` | The card image | Optional — see `NOTEBOOK_COVERS.md` for the house style and a prompt per post. Unset is fine; generated art takes over |
 
 ### Titles
 
