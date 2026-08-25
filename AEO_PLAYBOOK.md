@@ -552,27 +552,46 @@ Ordered by expected value:
 
 ## 7. The target query set
 
-**This is the missing artefact and it should be written before any further AEO
-work.** Without it, "more robust" has no test and no stopping condition.
+**Written 26 Aug 2026, and it lives in `TARGET_QUERIES.md`.** Twenty-nine
+prompts, the page that owns each one, what a good answer contains, the grading
+scale and the results log. This section is the reasoning; that file is the thing
+you run.
 
-Twenty to thirty prompts that Suman wants to be the answer to, split three ways:
+It was the missing artefact for a long time, and the reason it mattered is worth
+keeping: without it, "more robust" has no test and no stopping condition, and the
+off-site work in §6 has no feedback loop at all. **It is a measurement
+instrument, not a wish list.**
 
-- **Identity** — "who is Suman Debnath the AI product builder", "brand marketer
-  who became an AI engineer"
-- **Capability** — "marketer who can build AI products", "AI generalist India",
-  "AI product manager without a CS degree"
-- **Technical** — "small language model for terminal commands", "train a 47M
-  parameter model from scratch", "position sticky not working overflow hidden",
-  "Next.js 16 middleware replacement"
+The set splits three ways, and the thirds behave completely differently:
 
-The technical set is the winnable one: it is specific, low-competition, and
-already backed by real published artefacts. The identity set is the one that
-matters commercially and depends almost entirely on §6.
+- **Identity** (7) — who he is. Owned by the §3.1b pages, so a bad grade here is
+  never a missing page; it is indexing or corroboration.
+- **Capability** (10) — what he can do, for the two audiences he chose: the seven
+  roles in `lib/resume.ts`, and clients looking to have something built. **This
+  is the commercially important third and the one most exposed to §6** — the
+  answers are already written and well-formed; what is missing is any independent
+  source that agrees.
+- **Technical** (12) — the winnable third. Specific, low-competition, and each
+  backed by a published artefact rather than an opinion. These are the only
+  queries here that can be won on the strength of the writing alone, which is
+  also why they are the likeliest to earn the citation that eventually moves the
+  other two.
 
-Re-run the set quarterly across ChatGPT, Perplexity and Gemini, and record the
-answers verbatim. **Do not trust a single run** — answer engines are
-non-deterministic in the same way PSI scores are (see `PAGE_OPTIMIZATION.md`
-§1.1), and one favourable response is not evidence of anything.
+Two rules from that file are worth repeating here because they are the ones most
+likely to be skipped:
+
+> **Grade "wrong person" separately from "absent".** Being confused with the AWS
+> Developer Advocate and being missing look identical in a score and need
+> opposite work. The first is §3.1b and §6; the second is indexing.
+
+> **Do not trust a single run.** Three runs per query per engine, take the modal
+> answer, record it verbatim. Answer engines are non-deterministic in the same
+> way PSI scores are (`PAGE_OPTIMIZATION.md` §1.1), and one favourable response
+> quoted back to yourself is the whole trap.
+
+**Run the baseline before starting any §6 work.** There is nothing to compare a
+Wikidata entry against otherwise, and that comparison is the entire reason the
+set exists.
 
 ---
 

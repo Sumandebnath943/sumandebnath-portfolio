@@ -1128,6 +1128,12 @@ opportunities, roughly in value order.
    either. **This is Suman's to do, not a coding task**, and it outranks
    everything below.
 
+   > **Run the `TARGET_QUERIES.md` baseline before any of it.** Twenty-nine
+   > prompts with the page that owns each and a grading scale, written 26 Aug and
+   > **not yet run**. Wikidata takes months to show up in an index; without a
+   > before, there is no way to tell whether it worked, and the whole point of
+   > §6 is that it is the only lever left.
+
 1. **Watch a week of real traffic before building more on the dashboard.** It
    has never been used against real data. Pagination and CSV export are the
    obvious next features, but which one matters will be obvious after a week and
