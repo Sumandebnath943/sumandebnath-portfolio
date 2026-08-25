@@ -14,13 +14,30 @@ import PhilosophyFAQ from "@/components/sections/PhilosophyFAQ";
 import OperationalHistory from "@/components/sections/OperationalHistory";
 import AcademicFoundations from "@/components/sections/AcademicFoundations";
 import Contact from "@/components/sections/Contact";
-import { SITE_URL } from "@/lib/projects";
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "@/lib/projects";
 import RelatedPages from "@/components/ui/RelatedPages";
 
+/*
+  The homepage node.
+
+  `name` and `description` are repeated here rather than left to be inherited
+  through `mainEntity` → `#person`. A parser that resolves the `@id` reference
+  gets the whole Person either way; one that reads a single node and stops —
+  which is what most identity extractors do, and what Vercel's Is Agentic audit
+  found on 25 Aug 2026 — got a `ProfilePage` with no name and no description at
+  all. Two properties is a cheap price for not depending on the reader
+  dereferencing anything.
+
+  Both strings come from lib/projects.ts, which is also where the root layout
+  reads them, so this node and the page's own <title>/meta description cannot
+  disagree.
+*/
 const profilePageJsonLd = {
   "@context": "https://schema.org",
   "@type": "ProfilePage",
   "@id": `${SITE_URL}/#profilepage`,
+  name: SITE_NAME,
+  description: SITE_DESCRIPTION,
   url: SITE_URL,
   isPartOf: { "@id": `${SITE_URL}/#website` },
   mainEntity: { "@id": `${SITE_URL}/#person` },

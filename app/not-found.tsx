@@ -128,6 +128,52 @@ export default function NotFound() {
                 That one’s mine to fix.
               </Link>
             </p>
+
+            {/*
+              Recovery for a reader that is not a person. Last, because the
+              human copy above it is the page — this is the footnote.
+
+              A 404 that only apologises is a dead end for an agent: it holds a
+              URL that does not exist and no route to the ones that do. Both
+              files here are the real index — the sitemap for every URL, llms.txt
+              for the whole site written to be read by a model.
+
+              **Plain <a>, not <Link>.** Both are route handlers, not pages;
+              next/link would try to client-navigate to them and fail. Everything
+              else on this page routes through Link, so this exception is exactly
+              the kind of thing that gets "tidied" later — it must not be.
+
+              **It is height-gated, and that is the whole reason it fits.** At
+              375×667 this page has ~2px of slack: pt-20 + a 36svh robot + gap +
+              this column already lands within a couple of pixels of the padding
+              edge, and `overflow-hidden` means anything past that is clipped
+              rather than scrolled to — the exact bug the 40svh → 36svh change
+              was made to fix. Content height here is roughly 423 + 0.36h, so
+              the line only has room once h ≳ 716; 760 leaves a real margin
+              rather than a rounding error. Every current phone (390×844,
+              412×915) shows it; a 667-tall SE and the 1280×600 desktop case do
+              not, and both keep the layout they were measured into. The markup
+              is in the response at every size regardless, which is what a
+              fetcher reads — this gate is about what is *painted*, not about
+              what is served.
+            */}
+            <p className="mx-auto mt-3 hidden max-w-[30rem] font-manrope text-[12px] leading-relaxed text-[#4A5157] lg:mx-0 [@media(min-height:760px)]:block">
+              Reading this as a machine?{" "}
+              <a
+                href="/sitemap.xml"
+                className="font-medium text-[#12161A] underline decoration-[#12161A]/30 underline-offset-4 transition-colors hover:decoration-[#12161A]"
+              >
+                sitemap.xml
+              </a>{" "}
+              lists every real URL, and{" "}
+              <a
+                href="/llms.txt"
+                className="font-medium text-[#12161A] underline decoration-[#12161A]/30 underline-offset-4 transition-colors hover:decoration-[#12161A]"
+              >
+                llms.txt
+              </a>{" "}
+              is the whole site, written for you.
+            </p>
           </div>
 
           {/* ── The robot ────────────────────────────────────────────────────

@@ -54,10 +54,10 @@ const dmMono = DM_Mono({
   display: "swap",
 });
 
-const SITE_URL = "https://sumandebnath.houseofnamus.com";
-const SITE_NAME = "Suman Debnath — Brand Marketing Leader & AI Product Builder";
-const SITE_DESCRIPTION =
-  "Senior Brand Marketing Manager (9+ yrs) who builds AI-native products. A rare cross-domain profile — brand strategy plus hands-on AI product engineering.";
+// One home for all three, in lib/projects.ts — the homepage's `ProfilePage`
+// node needs the same name and description this file gives the metadata, and a
+// second copy of either string is a copy that drifts.
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "@/lib/projects";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

@@ -1,5 +1,17 @@
 export const SITE_URL = "https://sumandebnath.houseofnamus.com";
 
+// The site's own name and one-line description, beside the URL because they are
+// the same kind of fact and are needed in the same places.
+//
+// They were private consts in app/layout.tsx, which was fine while the root
+// layout was the only thing that used them. It is not: the homepage's
+// `ProfilePage` node needs the identical pair, and the alternative to this
+// export was a second copy of both strings in app/page.tsx — two homes for one
+// sentence, drifting the first time either is edited. AEO_PLAYBOOK.md §4.
+export const SITE_NAME = "Suman Debnath — Brand Marketing Leader & AI Product Builder";
+export const SITE_DESCRIPTION =
+  "Senior Brand Marketing Manager (9+ yrs) who builds AI-native products. A rare cross-domain profile — brand strategy plus hands-on AI product engineering.";
+
 export type ProjectStatus = "Live" | "Coming Soon" | "Stealth";
 
 export interface ProjectMeta {
