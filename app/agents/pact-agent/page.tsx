@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import PageAnswer from "@/components/ui/PageAnswer";
 import BannerArt from "@/components/ui/BannerArt";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Image from "next/image";
@@ -140,6 +141,8 @@ export default function PactAgentPage() {
                     className="w-full max-w-[780px] h-auto mx-auto drop-shadow-[0_0_50px_rgba(255,85,0,0.28)]"
                   />
                 </h1>
+
+                <PageAnswer href="/agents/pact-agent" />
               </Reveal>
 
               <Reveal delay={0.12}>

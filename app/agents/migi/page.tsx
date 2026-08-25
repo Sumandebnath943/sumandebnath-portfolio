@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import PageAnswer from "@/components/ui/PageAnswer";
 import BannerArt from "@/components/ui/BannerArt";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Image from "next/image";
@@ -295,6 +296,8 @@ export default function MigiPage() {
                 <br />
                 Now it&rsquo;s an operator OS.
               </h1>
+
+              <PageAnswer href="/agents/migi" />
             </Reveal>
 
             <Reveal delay={0.18}>

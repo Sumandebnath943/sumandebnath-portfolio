@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import PageAnswer from "@/components/ui/PageAnswer";
 import BannerArt from "@/components/ui/BannerArt";
 import Link from "next/link";
 import MotionProvider from "@/components/providers/MotionProvider";
@@ -246,6 +247,8 @@ export default function BankingCopilotPage() {
                   Co-pilot
                 </span>
               </h1>
+
+              <PageAnswer href="/banking/rm-copilot" />
             </Reveal>
 
             <Reveal delay={0.18}>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import PageAnswer from "@/components/ui/PageAnswer";
 import BannerArt from "@/components/ui/BannerArt";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Image from "next/image";
@@ -161,6 +162,8 @@ export default function PentashellPage() {
                   <br />
                   <span className="font-serif italic font-normal inline-block px-[0.12em]" style={gBrand}>Your approval.</span>
                 </h1>
+
+                <PageAnswer href="/agents/pentashell" />
               </Reveal>
 
               <Reveal delay={0.18}>

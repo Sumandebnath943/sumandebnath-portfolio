@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import PageAnswer from "@/components/ui/PageAnswer";
 import BannerArt from "@/components/ui/BannerArt";
 import Image from "next/image";
 import MotionProvider from "@/components/providers/MotionProvider";
@@ -130,6 +131,8 @@ export default function ForgetAnythingPage() {
                 <span style={gWhite}>Your essentials</span>{" "}
                 <span className="font-serif italic font-normal" style={gEmerald}>walk with you.</span>
               </h1>
+
+              <PageAnswer href="/apps/forget-anything" />
             </Reveal>
 
             <Reveal delay={0.12}>

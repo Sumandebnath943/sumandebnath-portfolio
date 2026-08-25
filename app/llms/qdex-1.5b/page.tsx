@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import PageAnswer from "@/components/ui/PageAnswer";
 import BannerArt from "@/components/ui/BannerArt";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
@@ -175,6 +176,8 @@ export default function QdexPage() {
                       Qdex-1.5B
                     </span>
                   </h1>
+
+                  <PageAnswer href="/llms/qdex-1.5b" />
                 </Reveal>
 
                 <Reveal delay={0.12}>

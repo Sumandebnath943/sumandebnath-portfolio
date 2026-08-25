@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import PageAnswer from "@/components/ui/PageAnswer";
 import BannerArt from "@/components/ui/BannerArt";
 import Image from "next/image";
 import Link from "next/link";
@@ -182,6 +183,16 @@ export default function AegisVaultPage() {
                   A zero-knowledge encrypted notepad — every note is encrypted in
                   your browser before it ever leaves your device.
                 </p>
+              </Reveal>
+
+              {/* Below the deck rather than immediately after the h1, which is
+                  the placement used on every other product page. This page's h1
+                  is `sr-only` — the visible headline is the wordmark image — so
+                  "straight after the heading" would put a paragraph above the
+                  logo. The deck is the first thing a reader actually reads, and
+                  this follows it. */}
+              <Reveal delay={0.22}>
+                <PageAnswer href="/projects/aegis-vault" />
               </Reveal>
 
               <Reveal delay={0.24}>

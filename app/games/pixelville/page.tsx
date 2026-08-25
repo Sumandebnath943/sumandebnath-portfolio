@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import PageAnswer from "@/components/ui/PageAnswer";
 import BannerArt from "@/components/ui/BannerArt";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Image from "next/image";
@@ -224,6 +225,8 @@ export default function PixelVillePage() {
                 <br />
                 that <span style={{ color: PV.gold }}>remembers.</span>
               </h1>
+
+              <PageAnswer href="/games/pixelville" />
             </Reveal>
 
             <Reveal delay={0.12}>

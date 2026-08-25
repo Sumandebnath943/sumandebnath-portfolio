@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import PageAnswer from "@/components/ui/PageAnswer";
 import BannerArt from "@/components/ui/BannerArt";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Image from "next/image";
@@ -216,6 +217,8 @@ export default function PentaCmdPage() {
                     className="w-full max-w-[560px] md:max-w-[680px] h-auto mx-auto drop-shadow-[0_0_70px_rgba(167,139,250,0.22)]"
                   />
                 </h1>
+
+                <PageAnswer href="/slms/pentacmd" />
               </Reveal>
 
               <Reveal delay={0.12}>
