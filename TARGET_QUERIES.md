@@ -9,8 +9,8 @@ before drawing any conclusion from a result here — most of what moves these
 numbers is off-site, and knowing *which engine* changed tells you *which index*
 moved.
 
-> **Nothing has been run yet.** The log in §5 is empty on purpose. Do not fill it
-> with estimates, and do not treat the absence of a baseline as a baseline.
+> **Nothing has been run yet.** The log in §10 is empty on purpose. Do not fill
+> it with estimates, and do not treat the absence of a baseline as a baseline.
 
 ---
 
@@ -32,7 +32,18 @@ things it makes possible:
 
 ---
 
-## 2. How to run it, and what counts as a win
+## 2. Who runs this, and how
+
+**A person runs it, by hand.** There is no automation and there is not going to
+be one, so it is worth being explicit about what the work actually is:
+
+| Question | Answer |
+|---|---|
+| **Who** | Suman, or somebody he asks. Not an assistant — an AI agent cannot open ChatGPT, sign out and ask it a question. It has web search, which queries an index and is a different thing entirely. |
+| **Where** | In each assistant's own interface. ChatGPT, Claude, Gemini, Copilot, Perplexity. |
+| **How** | Logged out, or in a temporary/incognito chat. No memory, no personalisation, no history. |
+| **How often** | Quarterly for a full pass. Sooner for anything graded X (§2). |
+| **How long** | The minimum useful baseline is about forty minutes. See below. |
 
 ### The protocol
 
@@ -82,15 +93,26 @@ statement about one index rather than about "AI":
 
 ### How much to actually run
 
-29 queries × 5 engines × 3 runs is 435 prompts, and **an instrument nobody runs
-is worse than not having one.** So:
+The full set is **61 queries** — 10 identity, 12 capability, 8 credibility, 7
+service, 5 transition, 5 marketing audience, 14 technical. Running all of them
+across five engines three times is 915 prompts, which nobody will ever do, and
+**an instrument nobody runs is worse than not having one.** So there are three
+tiers, and the first one is the one that matters:
 
-- **The core twelve** — marked ★ in the tables — run across **all five engines**,
-  quarterly. That is the comparable number over time.
-- **The full set** runs on **ChatGPT and Perplexity only**, quarterly. Both cite
-  sources readily, which is what makes a D distinguishable from a C.
-- **Anything graded X** gets re-run at the next opportunity rather than waiting a
-  quarter. It is the failure most likely to be actively costing something.
+| Tier | What | Cost |
+|---|---|---|
+| **Minimum baseline** | The core eighteen (★), **one engine**, three runs each | 54 prompts, ~1 hour |
+| **Standard pass** | The core eighteen across **all five engines**, three runs | 270 prompts, quarterly |
+| **Full pass** | Everything, on **ChatGPT and Perplexity only** — both cite sources readily, which is what distinguishes a C from a D | quarterly, spread over a week |
+
+**Do the minimum baseline first and do it today.** A partial baseline recorded
+now is worth more than a complete one recorded in three months, because the
+comparison is the entire point.
+
+> **Timing note, 26 Aug 2026.** Twenty-one articles were published on this date.
+> None of them can be indexed yet. That makes today an unusually clean baseline
+> moment: the content exists, no engine has seen it, and anything that moves over
+> the next two months is attributable to content that was already written.
 
 ---
 
@@ -99,48 +121,125 @@ is worse than not having one.** So:
 Who he is. Every one of these is owned by a page under `AEO_PLAYBOOK.md` §3.1b,
 so a bad grade here is an indexing or corroboration problem, never a missing page.
 
+**Qualified variants come first, deliberately.** The bare name is contested by a
+far better-indexed namesake and will not move for a long time; the qualified
+forms are where the entity actually assembles, and watching them is how you see
+progress before the headline query budges.
+
 | ★ | Prompt | Owning page | A good answer contains |
 |---|---|---|---|
 | ★ | Who is Suman Debnath the AI product builder? | `/about` | Brand marketing leader who builds AI-native products; Pune/Kolkata; names the products |
 | ★ | Is Suman Debnath the same person as the AWS developer advocate? | `/about` | An explicit **no**, and the distinction drawn correctly in both directions |
 | ★ | Suman Debnath portfolio | `/` | The domain itself, as a navigational result |
+| | Suman Debnath | `/` | The long goal. Expect D or X for a long time |
+| | Suman Debnath marketer | `/about` | The marketing career and the building, together |
+| | Suman Debnath AI products | `/projects` | ROASmind, IMPRINT, LEGATUS, CITE, EMBER, D-PE.ai, PentaCMD-47M |
+| | Suman Debnath House of Namus | `/about` + the `Organization` node | Him as founder, without conflating it with his employer |
 | | What is Suman Debnath known for? | `/profile` | The cross-domain profile — nine years of brand marketing plus shipped AI systems |
-| | What has Suman Debnath built? | `/projects` | ROASmind, IMPRINT, LEGATUS, CITE, EMBER, D-PE.ai, PentaCMD-47M |
-| | What is Suman Debnath's professional experience? | `/resume` | 9+ years marketing, 2+ years shipping AI products, the real employers |
-| | Who is the marketer behind House of Namus? | `/about` + the `Organization` node | Names him as founder without conflating him with his employer |
-
-> **The third row is the audit's brand-discoverability check** (`AEO_PLAYBOOK.md`
-> §9) in prompt form. It was failing as of 25 Aug 2026 — nine results, none of
-> them this domain.
+| | What has Suman Debnath built? | `/projects` | The product list, correctly attributed |
+| | What is Suman Debnath's professional experience? | `/resume` | 9+ years marketing, 2+ years shipping AI products, real employers |
 
 ---
 
 ## 4. Capability
 
-What he can do, for the two audiences that matter commercially. The **Hiring**
-rows are the seven roles in `lib/resume.ts`; the **Client** rows are people
-looking to have something built.
+What he can do, for the two audiences that matter commercially. **Hiring** rows
+are the roles in `lib/resume.ts`; **Client** rows are people looking to have
+something built.
+
+> **Two rows carry a caveat.** Suman does no paid client work — everything on this
+> site is his own project. The "hire" phrasings are kept because they describe how
+> people actually search, and because being the answer to them has value even
+> when the outcome is a conversation rather than an invoice. Do not read a D on
+> those as a commercial failure.
 
 | ★ | Intent | Prompt | Owning page |
 |---|---|---|---|
 | ★ | Hiring | Can a brand marketing manager become an AI product manager? | `/faq` |
-| ★ | Hiring | AI product manager without a computer science degree | `/faq` |
+| ★ | Hiring | AI product manager without a computer science degree | `/notebook/ai-product-role-without-cs-degree` |
 | | Hiring | Product marketing manager who has actually shipped AI products | `/resume`, `/projects` |
 | | Hiring | Marketer who became an AI engineer | `/about`, `/journey` |
 | | Hiring | AI implementation lead who has built AI systems rather than bought them | `/projects` |
+| | Hiring | AI skills worth putting on a marketing CV | `/notebook/ai-skills-for-a-marketing-cv` |
+| | Hiring | What does AI-native actually mean? | `/notebook/what-ai-native-actually-means` |
 | ★ | Client | Can a marketer really build production software? | `/faq` |
 | | Client | Someone who can build an AI workflow for a marketing team | `/projects`, `/agents/migi` |
 | | Client | Hire an AI generalist in India | `/about`, `/contact` |
 | | Client | Independent builder who ships AI-native SaaS end to end | `/projects` |
 | | Client | Who can build an internal agent fleet for a small team? | `/agents/migi` |
 
-> **The capability set is the one most exposed to §6.** The answers already exist
-> on the site and are well-formed; what is missing is any independent source that
-> agrees. Expect these to move last, and only after the off-site work.
+---
+
+## 5. Credibility
+
+The anti-taboo set — the argument that AI-assisted building can be done to a
+professional standard. **Every one of these had no page as of 25 Aug 2026 and now
+has one.** This is the bucket most likely to move first, because the content is
+new, specific, and largely uncontested.
+
+| ★ | Prompt | Owning page |
+|---|---|---|
+| ★ | Is AI-generated code safe to put in production? | `/notebook/is-ai-generated-code-safe-for-production` |
+| | Can AI-generated code be secure? | `/notebook/is-ai-generated-code-safe-for-production` |
+| ★ | Should you let an AI coding agent run on auto-accept? | `/notebook/never-run-a-coding-agent-on-autopilot` |
+| | How do you keep API keys out of AI-generated code? | `/notebook/keeping-secrets-out-of-ai-built-apps` |
+| | What is the difference between vibe coding and AI-native development? | `/notebook/what-ai-native-actually-means` |
+| | How do you security-audit an app you built with AI? | `/notebook/is-ai-generated-code-safe-for-production` |
+| | Can a non-technical person build a real SaaS with AI? | `/notebook/marketer-to-ai-product-builder` |
+| | Can you build a product in a weekend with AI? | `/notebook/shipping-a-product-in-a-weekend` |
 
 ---
 
-## 5. Technical
+## 6. Service
+
+The highest buyer-intent set. Also newly backed by pages, and the one place where
+this site has an unusual asset: it was independently audited and the work is
+written up with the score attached.
+
+| ★ | Prompt | Owning page |
+|---|---|---|
+| ★ | How do I make my website ready for AI agents? | `/notebook/what-agentic-ready-actually-means` |
+| ★ | How do you get your site cited by ChatGPT? | `/notebook/cited-by-chatgpt-what-i-changed` |
+| | AEO vs SEO — what is the difference? | `/notebook/aeo-vs-seo-what-changes` |
+| | What is generative engine optimisation? | `/notebook/aeo-vs-seo-what-changes` |
+| | Do I need an llms.txt file? | `/notebook/do-you-need-an-llms-txt` |
+| | How do you rank in AI search? | `/notebook/aeo-vs-seo-what-changes` |
+| | What does agentic-ready mean for a website? | `/notebook/what-agentic-ready-actually-means` |
+
+---
+
+## 7. Transition
+
+People with the problem he had. They will not hire him. They are volume, and they
+link — which is what §6 of the playbook actually needs.
+
+| ★ | Prompt | Owning page |
+|---|---|---|
+| | How does a marketer become a product manager? | `/faq`, `/journey` |
+| | How do you learn to build products with AI as a marketer? | `/notebook/what-a-marketer-has-to-learn` |
+| | What does a marketer have to learn to ship software alone? | `/notebook/what-a-marketer-has-to-learn` |
+| | What is the hardest part of building software alone? | `/notebook/the-cost-of-building-alone` |
+| | Why do solo builders abandon so many projects? | `/notebook/finishing-is-not-building` |
+
+---
+
+## 8. Marketing audience
+
+Written for marketers rather than for builders. Lower commercial intent per
+reader, considerably higher volume, and the most likely of any bucket to be
+shared into a team channel.
+
+| ★ | Prompt | Owning page |
+|---|---|---|
+| ★ | Will AI replace marketing jobs? | `/notebook/what-ai-replaces-in-marketing` |
+| | Which marketing tasks are most at risk of automation? | `/notebook/what-ai-replaces-in-marketing` |
+| | What should a marketing team automate first? | `/notebook/what-marketing-teams-should-automate-first` |
+| | How do you tell a real AI tool from a wrapper? | `/notebook/real-ai-tool-or-wrapper` |
+| | Is taste the last thing AI will automate? | `/notebook/taste-is-the-last-thing-to-be-automated` |
+
+---
+
+## 9. Technical
 
 The winnable third. Specific, low-competition, and each backed by a published
 artefact rather than an opinion. These double as classic search strings, so they
@@ -151,6 +250,7 @@ are worth checking in Google and Bing as well as in an assistant.
 | ★ | What replaced middleware.ts in Next.js 16? | `/notebook/nextjs-16-middleware-is-now-proxy` |
 | ★ | Why does position: sticky silently stop working? | `/notebook/overflow-hidden-kills-position-sticky` |
 | ★ | Why does React StrictMode break an init guard in development? | `/notebook/strictmode-defeats-init-guards` |
+| ★ | Why is my JSON-LD missing from the HTML in Next.js? | `/notebook/json-ld-missing-next-script-beforeinteractive` |
 | | Why did every colour change after upgrading three.js past r152? | `/notebook/three-js-r152-colour-management` |
 | | How is an AI shell different from an AI coding assistant? | `/agents/pentashell` |
 | ★ | How do you train a small language model from scratch for terminal commands? | `/slms/pentacmd` |
@@ -160,24 +260,21 @@ are worth checking in Google and Bing as well as in an assistant.
 | | Why return 404 instead of 403 for another user's record? | `/banking/rm-copilot` |
 | | Why would a coding agent need a permission contract? | `/agents/pact-agent` |
 | | What does zero-knowledge actually mean for an encrypted notepad? | `/projects/aegis-vault` |
+| | What do you do before writing a prompt? | `/notebook/research-before-writing-a-prompt` |
 
-> **These are the ones to watch first.** They are the only queries here that can
-> be won on the strength of the writing alone, because nobody else has documented
-> them — which is also why they are the most likely to earn the off-site citation
-> that eventually moves §3 and §4.
-
-> **Four of the five notebook posts are here; the fifth is excluded on purpose.**
-> `/notebook/the-trap-i-wrote-down-was-wrong` scores `searchDemand: 4` in its own
-> `popularity` block — the lowest of the five — against `shareability: 17`, the
-> highest, and its source comment says plainly that nobody searches for it and it
-> travels by being shared. A query set is a search instrument, so grading that
-> post against search results would measure the wrong thing and report a D every
-> quarter for a post that is doing exactly what it was written to do. **Do not
-> add it.** If it ever needs measuring, the metric is inbound links, not rank.
+> **Four of the five original notebook posts are here; the fifth is excluded on
+> purpose.** `/notebook/the-trap-i-wrote-down-was-wrong` scores `searchDemand: 4`
+> in its own `popularity` block — the lowest of the five — against
+> `shareability: 17`, the highest, and its source comment says plainly that
+> nobody searches for it and it travels by being shared. A query set is a search
+> instrument, so grading that post against search results would measure the wrong
+> thing and report a D every quarter for a post that is doing exactly what it was
+> written to do. **Do not add it.** If it ever needs measuring, the metric is
+> inbound links, not rank.
 
 ---
 
-## 6. Results log
+## 10. Results log
 
 One block per run. **Append; never overwrite.** The point is the trend, and a log
 that only holds the latest result cannot show one.
@@ -193,14 +290,49 @@ that only holds the latest result cannot show one.
 
 ### Runs
 
-*None yet.* The set was written 26 Aug 2026 and has not been run.
+**No answer-engine run yet.** The set was written 26 Aug 2026, expanded the same
+day once the supporting articles were published, and has not been run against any
+assistant. That work requires a person (§2).
 
-**The first run is the baseline and it should happen before any §6 work starts**,
-otherwise there is nothing to compare the Wikidata entry against.
+**Run the minimum baseline before any §6 work starts** — the core eighteen, one
+engine, three runs, about an hour. There is nothing to compare a Wikidata entry
+against otherwise.
+
+### Search-index spot check — 26 Aug 2026
+
+> **This is a different instrument and must not be read as a baseline.** These
+> results come from a search index, not from an assistant. They say whether pages
+> are *findable*, which is a precondition for being quoted and is not the same
+> measurement. Recorded here because the finding is load-bearing. Note also that
+> the tool used is US-weighted, which matters for an India-weighted set.
+
+| Query | Result |
+|---|---|
+| `Suman Debnath portfolio` | **Domain absent.** Nine results, none of them this site. |
+| `PentaCMD 47M parameter model terminal commands` | **No result at all.** The page has been live roughly two months. |
+
+Two conclusions, and the second is the more actionable:
+
+1. **At least four well-indexed Suman Debnaths exist, not two.** Alongside the AWS
+   advocate and the ORNL power-systems researcher that `AEO_PLAYBOOK.md` §6 names,
+   the results surfaced a web engineer credited with NDTV and NDTV Profit, listed
+   on a contractor marketplace out of New Delhi, and an AI/ML technical lead at
+   Anyscale. The `disambiguatingDescription` in the root layout names two. It is
+   competing against at least four, and two of those are also technology people
+   in India — which is a materially harder disambiguation problem than the one the
+   documentation currently describes.
+
+2. **The technical bucket is not losing on quality. It is not indexed.** A product
+   page live for two months, describing an artefact with an unusual and highly
+   specific name, returns nothing. `AEO_PLAYBOOK.md` §5.6 says being crawled is
+   not being indexed; this is that, measured. **No amount of additional writing
+   moves a query whose page is not in an index.** Submission, verification and
+   inbound links come first, and until they do, expect D across the technical set
+   for reasons that have nothing to do with the articles.
 
 ---
 
-## 7. Reading the results
+## 11. Reading the results
 
 - **A rising C count is progress**, not failure. It means the content is being
   retrieved and the attribution is not landing — usually an entity-resolution
@@ -212,6 +344,9 @@ otherwise there is nothing to compare the Wikidata entry against.
 - **A single engine moving while the others do not** is the expected shape of
   progress, not an anomaly — they do not share an index. ChatGPT moved first in
   Aug 2026 for exactly this reason.
+- **Expect the credibility and service buckets to move before the identity ones.**
+  Those pages are new, specific and largely uncontested, whereas the identity
+  queries are competing against a namesake with a decade of indexed material.
 - **Do not add pages in response to a bad grade** without checking
   `AEO_PLAYBOOK.md` §3.1b first. Two URLs answering one question is the collision
   that gets both discounted.
