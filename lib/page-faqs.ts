@@ -199,8 +199,12 @@ export const PAGE_FAQS: Record<string, PageFaq[]> = {
 
   "/projects": [
     {
-      q: "What has Suman Debnath built?",
-      a: "Suman Debnath has independently built and shipped more than twenty AI-native systems, including ROASmind (a marketing operating system), IMPRINT (identity preservation), LEGATUS (digital inheritance), CITE (career intelligence), EMBER (burnout recovery), a 46-agent autonomous fleet, a 47M-parameter language model trained from scratch, and a retail-banking AI copilot.",
+      // NOT "What has Suman Debnath built?" any more — this page now carries
+      // that question in its title, h1 and a QAPage node. An FAQ at the foot
+      // answering the question the page exists to answer competes with the page
+      // itself for it. This asks what a reader wants to know next instead.
+      q: "Which of Suman Debnath's products are live and publicly usable?",
+      a: "Eleven of the systems in the archive are live and publicly reachable, including IMPRINT, LEGATUS, CITE, EMBER, D-PE.ai, Brief Killer, Repurpose AI, Slide Doctor, Crawl Daddy and the Banking Co-pilot. ROASmind is in testing and Geek Collectibles is in build. Each card in the archive states its own status.",
     },
     {
       q: "Did Suman Debnath build these alone?",

@@ -28,14 +28,39 @@ import {
   type ResumeProject,
 } from "@/lib/resume";
 
+/* ── The question this page owns ──────────────────────────────────────────────
+   "What is Suman Debnath's experience?" — see AEO_PLAYBOOK §3.1b for the map of
+   which page owns which entity query, and the rule that no two may share one.
+
+   **The word "Résumé" stays in the title.** This page was already the strongest
+   match on the site for "Suman Debnath resume", which is a real query with real
+   intent, and trading a working keyword for a new one would be a straight
+   downgrade. The question is front-loaded because Google truncates around sixty
+   characters and an answer engine matches on the words it can see; the résumé
+   keyword follows it rather than replacing it.
+
+   **The h1 is NOT changed to the question.** It is the person's name, which is
+   the correct heading for a résumé document and already a strong entity signal.
+   /about and /profile carry their questions in the h1 because those pages have
+   no such convention to respect. Consistency of *system* matters here; identical
+   treatment does not.                                                        */
+
+const TITLE = "What is Suman Debnath's experience? — Résumé & career history";
+
+const ANSWER =
+  "Suman Debnath has nine years of experience in brand and digital marketing — institutional brand strategy, paid acquisition, SEO and campaign systems, leading a 21-person team — followed by two years building AI-native products alone. He is currently Senior Brand Marketing Manager at Pune Institute of Business Management.";
+
 export const metadata: Metadata = {
-  title: { absolute: `${identity.name} — Résumé | ${identity.headline}` },
+  title: { absolute: TITLE },
   description:
-    "The full résumé of Suman Debnath: 9+ years in brand and product marketing, 2+ years shipping AI-native products — a 46-agent autonomous fleet, a 47M-parameter language model trained from scratch, and 21 live systems.",
+    "Suman Debnath's experience: 9+ years in brand and product marketing, 2+ years shipping AI-native products — a 46-agent autonomous fleet, a 47M-parameter language model trained from scratch, and 21 live systems.",
   alternates: { canonical: "/resume" },
   keywords: [
+    "what is Suman Debnath's experience",
+    "Suman Debnath experience",
     "Suman Debnath resume",
     "Suman Debnath CV",
+    "Suman Debnath career history",
     "Senior Brand Marketing Manager resume",
     "AI Product Manager resume",
     "AI Product Marketing Manager",
@@ -45,16 +70,30 @@ export const metadata: Metadata = {
   openGraph: {
     type: "profile",
     url: `${SITE_URL}/resume`,
-    title: `${identity.name} — Résumé`,
-    description:
-      "9+ years scaling brands, 2+ years shipping AI-native products. The full record, on one page.",
+    title: TITLE,
+    description: ANSWER,
     images: ["/og-image.png"],
   },
-  twitter: {
-    card: "summary_large_image",
-    title: `${identity.name} — Résumé`,
-    description:
-      "9+ years scaling brands, 2+ years shipping AI-native products. The full record, on one page.",
+  twitter: { card: "summary_large_image", title: TITLE, description: ANSWER },
+};
+
+/* The literal query, marked up as a question with an answer. Distinct from the
+   ones on /about ("who is") and /profile ("known for") — one question, one URL. */
+const experienceJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "QAPage",
+  "@id": `${SITE_URL}/resume#experience`,
+  isPartOf: { "@id": `${SITE_URL}/#website` },
+  mainEntity: {
+    "@type": "Question",
+    name: "What is Suman Debnath's experience?",
+    text: "What is Suman Debnath's experience?",
+    answerCount: 1,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: ANSWER,
+      url: `${SITE_URL}/resume`,
+    },
   },
 };
 
@@ -176,6 +215,7 @@ export default function ResumePage() {
         profilePageJsonLd,
         personSupplementJsonLd,
         creativeWorkJsonLd,
+        experienceJsonLd,
       ].map((schema, i) => (
         <script
           key={i}
@@ -214,6 +254,14 @@ export default function ResumePage() {
             <p className="rz-role">
               Senior Brand Marketing <em>&</em> AI Product Marketing Leader
             </p>
+
+            {/* The extractable answer to "what is Suman Debnath's experience?".
+                A résumé is a document a machine finds hard to summarise — dates,
+                bullets and org names with no sentence tying them together — so
+                this states the shape of it once, in prose, before the record
+                itself begins. It is the same 40–60 word device as /about and
+                /profile; see AEO_PLAYBOOK §3.1b. */}
+            <p className="rz-answer">{ANSWER}</p>
 
             <div className="rz-contact">
               <a href={identity.phoneHref}>{identity.phone}</a>

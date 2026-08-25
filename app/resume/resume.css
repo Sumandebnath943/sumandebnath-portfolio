@@ -876,3 +876,24 @@
 @media (prefers-reduced-motion: reduce) {
   .rz * { transition: none !important; }
 }
+
+/* The extractable answer to "what is Suman Debnath's experience?".
+   A résumé is a document a machine finds hard to summarise — dates, bullets and
+   org names with nothing tying them together in a sentence — so this states the
+   shape of the record once, in prose, before the record itself starts. */
+.rz-answer {
+  max-width: 44rem;
+  margin: 1.5rem 0 0;
+  padding-left: 1.15rem;
+  border-left: 2px solid var(--clay);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 40rem) {
+  .rz-answer {
+    font-size: 1rem;
+    padding-left: 0.9rem;
+  }
+}

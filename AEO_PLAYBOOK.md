@@ -105,11 +105,25 @@ Each entity query is now owned by exactly one page, which carries it in the
 title, in an `h1`, in a 40–60 word answer as the first block after the heading,
 and in a `QAPage` node:
 
-| Query | Page |
-|---|---|
-| Who is Suman Debnath? | `/about` |
-| What is Suman Debnath known for? | `/profile` |
-| What does Suman Debnath do? | `/faq` |
+| Query | Page | h1 carries it |
+|---|---|---|
+| Who is Suman Debnath? | `/about` | yes |
+| What is Suman Debnath known for? | `/profile` | yes, `sr-only` |
+| What is Suman Debnath's experience? | `/resume` | **no — see below** |
+| What has Suman Debnath built? | `/projects` | yes |
+| What does Suman Debnath do? | `/faq` | no |
+
+> **`/resume` keeps its name as the h1 on purpose.** "Suman Debnath" is the
+> correct heading for a résumé document and already a strong entity signal;
+> replacing it with a question to match the other pages would be consistency for
+> its own sake. The title carries the query, the answer block carries the
+> quotable summary, and the `QAPage` node carries the markup. Consistency of
+> *system* is the goal — identical treatment is not.
+
+> **`/resume` also keeps the word "Résumé" in its title.** That page was already
+> the site's strongest match for "Suman Debnath resume", a real query with real
+> intent. The question is front-loaded because Google truncates near sixty
+> characters; the résumé keyword follows rather than being traded away.
 
 > **Never let two pages claim one question.** `/faq` used to answer "Who is
 > Suman Debnath?" and gave it up when `/about` took the title — two URLs

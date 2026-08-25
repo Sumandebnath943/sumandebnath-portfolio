@@ -10,18 +10,63 @@ import { archiveProjects } from "@/lib/archive-projects";
 import { SITE_URL } from "@/lib/projects";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
+/* ── The question this page owns ──────────────────────────────────────────────
+   "What has Suman Debnath built?" — see AEO_PLAYBOOK §3.1b for the map of which
+   page owns which entity query.
+
+   This question was previously a page-FAQ *on this same page*, which is the one
+   place it could not usefully sit: an FAQ entry at the foot answering the
+   question the page exists to answer, while the page itself was titled "AI
+   Products & Tools". The title now carries it and the FAQ has been swapped for
+   an adjacent question, because two blocks on one URL competing for the same
+   words is the same collision as two URLs.                                   */
+
+const TITLE = "What has Suman Debnath built? — 20+ AI products and systems";
+
+const ANSWER =
+  "Suman Debnath has independently built and shipped more than twenty AI-native systems. They include ROASmind, a marketing operating system; IMPRINT, LEGATUS and CITE; a 46-agent autonomous fleet; PentaCMD-47M, a language model trained from scratch; and an audited AI copilot for retail banking. All were designed, built and shipped solo.";
+
 export const metadata: Metadata = {
-  title: { absolute: "AI Products & Tools by Suman Debnath" },
+  title: { absolute: TITLE },
   description:
-    "AI-native tools and systems built by a brand marketer turned AI product builder — identity, inheritance, career intelligence, burnout recovery, and more.",
+    "Suman Debnath has built 20+ AI-native systems alone — ROASmind, IMPRINT, LEGATUS, CITE, a 46-agent autonomous fleet, a language model trained from scratch, and a retail-banking AI copilot.",
   alternates: { canonical: "/projects" },
+  keywords: [
+    "what has Suman Debnath built",
+    "Suman Debnath projects",
+    "Suman Debnath AI products",
+    "Suman Debnath portfolio",
+    "AI products built solo",
+    "ROASmind IMPRINT LEGATUS CITE",
+  ],
   openGraph: {
     type: "website",
     url: `${SITE_URL}/projects`,
-    title: "AI Products & Tools by Suman Debnath",
-    description:
-      "AI-native tools, systems, and operational products built by a brand marketer turned AI product builder.",
+    title: TITLE,
+    description: ANSWER,
     images: ["/og-image.png"],
+  },
+  twitter: { card: "summary_large_image", title: TITLE, description: ANSWER },
+};
+
+/* The literal query, marked up as a question with an answer. The CollectionPage
+   below lists the items; this states the summary a machine can quote without
+   having to read and condense twenty cards itself. */
+const builtJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "QAPage",
+  "@id": `${SITE_URL}/projects#built`,
+  isPartOf: { "@id": `${SITE_URL}/#website` },
+  mainEntity: {
+    "@type": "Question",
+    name: "What has Suman Debnath built?",
+    text: "What has Suman Debnath built?",
+    answerCount: 1,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: ANSWER,
+      url: `${SITE_URL}/projects`,
+    },
   },
 };
 
@@ -75,10 +120,13 @@ const collectionJsonLd = {
 export default function ProjectsArchivePage() {
   return (
     <MotionProvider>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
-      />
+      {[collectionJsonLd, builtJsonLd].map((schema, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
 
       <Navigation />
 
@@ -110,13 +158,22 @@ export default function ProjectsArchivePage() {
               id="archive-heading"
               className="font-manrope font-semibold text-4xl md:text-6xl lg:text-7xl leading-[1.05] tracking-tight mb-8 max-w-4xl"
             >
-              Project{" "}
+              What has Suman Debnath{" "}
               <span className="font-serif italic font-normal text-white/70">
-                archive
+                built
               </span>
-              .
+              ?
             </h1>
-            <p className="font-manrope text-base md:text-lg text-white/55 leading-relaxed max-w-2xl">
+
+            {/* The extractable answer. A card grid is close to unsummarisable
+                for a machine — twenty names and statuses with no sentence tying
+                them together — so this states the shape once, in prose, before
+                the grid begins. */}
+            <p className="font-manrope text-[17px] md:text-lg text-white/75 leading-[1.75] max-w-3xl border-l-2 border-[#FF3B6B] pl-5">
+              {ANSWER}
+            </p>
+
+            <p className="font-manrope mt-6 text-base md:text-lg text-white/60 leading-relaxed max-w-2xl">
               A growing ecosystem of AI-native tools, systems, experiments, and
               operational products built through AI-assisted execution.
             </p>
