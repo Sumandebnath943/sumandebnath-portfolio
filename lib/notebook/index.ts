@@ -23,6 +23,9 @@ import theTrapIWroteDownWasWrong from "./posts/the-trap-i-wrote-down-was-wrong";
 import marketerToAiProductBuilder from "./posts/marketer-to-ai-product-builder";
 import jsonLdMissingNextScriptBeforeinteractive from "./posts/json-ld-missing-next-script-beforeinteractive";
 import researchBeforeWritingAPrompt from "./posts/research-before-writing-a-prompt";
+import citedByChatgptWhatIChanged from "./posts/cited-by-chatgpt-what-i-changed";
+import realAiToolOrWrapper from "./posts/real-ai-tool-or-wrapper";
+import keepingSecretsOutOfAiBuiltApps from "./posts/keeping-secrets-out-of-ai-built-apps";
 
 export type { Post, Block, PostFact, Category } from "./types";
 export { CATEGORIES, CATEGORY_ACCENT, categorySlug, categoryFromSlug } from "./types";
@@ -37,6 +40,9 @@ const POSTS: Post[] = [
   marketerToAiProductBuilder,
   jsonLdMissingNextScriptBeforeinteractive,
   researchBeforeWritingAPrompt,
+  citedByChatgptWhatIChanged,
+  realAiToolOrWrapper,
+  keepingSecretsOutOfAiBuiltApps,
 ];
 
 export const NOTEBOOK_PATH = "/notebook";
