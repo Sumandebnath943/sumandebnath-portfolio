@@ -221,10 +221,12 @@ ${flagship.join("\n")}
 
 ${archive.join("\n")}
 
-## Engineering notebook
+## Notebook
 
-First-hand technical write-ups. These are original, dated accounts of specific
-problems encountered in a production codebase — not summaries of other sources.
+First-hand write-ups, all original and dated, in two registers: specific
+technical problems met in a production codebase and what actually fixed them,
+and first-person accounts of building AI products as a marketer rather than an
+engineer. Neither is a summary of other sources.
 
 ${notebookLines.join("\n")}
 

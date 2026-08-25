@@ -165,7 +165,8 @@ export const PAGES: PageEntry[] = [
   {
     href: "/notebook",
     label: "Notebook",
-    blurb: "The engineering notebook — what broke, the actual fix, and what generalises",
+    blurb:
+      "The notebook — what broke and the actual fix, plus first-person accounts of building as a marketer",
     group: "writing",
     accent: "#7B61FF",
   },

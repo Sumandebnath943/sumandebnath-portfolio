@@ -20,6 +20,9 @@ import nextjs16MiddlewareIsNowProxy from "./posts/nextjs-16-middleware-is-now-pr
 import strictmodeDefeatsInitGuards from "./posts/strictmode-defeats-init-guards";
 import threeJsR152ColourManagement from "./posts/three-js-r152-colour-management";
 import theTrapIWroteDownWasWrong from "./posts/the-trap-i-wrote-down-was-wrong";
+import marketerToAiProductBuilder from "./posts/marketer-to-ai-product-builder";
+import jsonLdMissingNextScriptBeforeinteractive from "./posts/json-ld-missing-next-script-beforeinteractive";
+import researchBeforeWritingAPrompt from "./posts/research-before-writing-a-prompt";
 
 export type { Post, Block, PostFact, Category } from "./types";
 export { CATEGORIES, CATEGORY_ACCENT, categorySlug, categoryFromSlug } from "./types";
@@ -31,6 +34,9 @@ const POSTS: Post[] = [
   strictmodeDefeatsInitGuards,
   threeJsR152ColourManagement,
   theTrapIWroteDownWasWrong,
+  marketerToAiProductBuilder,
+  jsonLdMissingNextScriptBeforeinteractive,
+  researchBeforeWritingAPrompt,
 ];
 
 export const NOTEBOOK_PATH = "/notebook";

@@ -16,6 +16,7 @@ import {
   headingsOf,
   postModified,
   postUrl,
+  type Category,
 } from "@/lib/notebook";
 import "../notebook.css";
 
@@ -82,15 +83,24 @@ export default async function NotebookPostPage({
 
   // ── Structured data ───────────────────────────────────────────────────────
   //
-  // TechArticle rather than Article: these are technical how-to and diagnostic
-  // pieces, and the more specific type is the more useful claim.
+  // The type follows the category, and it stopped being a constant on 26 Aug
+  // 2026 when the notebook gained Career, Marketing & AI and Method.
+  //
+  // `TechArticle` is specifically technical how-to and diagnostic writing —
+  // the right and more useful claim for "Why does position: sticky stop
+  // working?". It is the wrong claim for a first-person career account, which
+  // is a `BlogPosting`. Asserting TechArticle over an essay is not a small
+  // inaccuracy: the type is what tells a consumer how to treat the content.
   //
   // `about` and `author` both point at the site-wide Person @id rather than
   // restating it, so a consumer merges these into the one entity instead of
   // creating a second, thinner Suman Debnath.
+  const TECHNICAL: Category[] = ["CSS & Layout", "React", "Next.js", "Graphics"];
+  const articleType = TECHNICAL.includes(post.category) ? "TechArticle" : "BlogPosting";
+
   const articleJsonLd = {
     "@context": "https://schema.org",
-    "@type": "TechArticle",
+    "@type": articleType,
     "@id": `${url}#article`,
     headline: post.title,
     name: post.title,

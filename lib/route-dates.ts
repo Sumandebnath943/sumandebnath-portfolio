@@ -8,7 +8,7 @@
 // nothing, and a hand-maintained constant is one nobody remembers to bump.
 
 export const ROUTE_DATES: Record<string, string> = {
-  "/": "2026-08-24",
+  "/": "2026-08-25",
   "/resume": "2026-08-25",
   "/journey": "2026-08-25",
   "/about": "2026-08-25",

@@ -108,6 +108,18 @@ export const CATEGORIES = [
   "Next.js",
   "Graphics",
   "Practice",
+  // Added 26 Aug 2026. The notebook was five engineering categories and nothing
+  // else, so every career, marketing or working-method piece would have landed
+  // in "Practice" — one bucket holding two unrelated kinds of writing, which is
+  // the filter-bar failure this list exists to prevent.
+  //
+  // Three, not five: "Career" carries the transition and hiring pieces,
+  // "Marketing & AI" is written for marketers and covers AEO/GEO as the
+  // marketing discipline it actually is, and "Method" is how the work gets done.
+  // Opinion was considered and rejected — it would have held one post.
+  "Career",
+  "Marketing & AI",
+  "Method",
 ] as const;
 
 export type Category = (typeof CATEGORIES)[number];
@@ -119,6 +131,11 @@ export const CATEGORY_ACCENT: Record<Category, string> = {
   "Next.js": "#45505e",
   Graphics: "#7a3358",
   Practice: "#2c6047",
+  // Same register as the five above — desaturated, dark enough to carry cream
+  // text, and distinct from each other at the small size the filter chips use.
+  Career: "#8a5a1f",
+  "Marketing & AI": "#1f5f6b",
+  Method: "#5a3a7a",
 };
 
 export interface Post {
