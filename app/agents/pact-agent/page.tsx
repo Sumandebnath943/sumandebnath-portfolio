@@ -128,6 +128,7 @@ export default function PactAgentPage() {
                     { label: "Agents", href: null },
                     { label: "PACT Agent", href: "/agents/pact-agent" },
                   ]}
+                  align="center"
                   className="mb-6"
                 />
                 <h1 className="mb-7 w-full">

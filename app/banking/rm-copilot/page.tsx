@@ -232,6 +232,7 @@ export default function BankingCopilotPage() {
                   { label: "Banking", href: null },
                   { label: "Banking Co-pilot", href: "/banking/rm-copilot" },
                 ]}
+                align="center"
                 className="mb-6"
               />
               <h1 className="font-manrope font-extrabold tracking-tight text-[2.6rem] sm:text-6xl md:text-[4.2rem] leading-[1.02] mt-7">

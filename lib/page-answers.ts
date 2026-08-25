@@ -29,6 +29,15 @@ export interface PageAnswer {
   accent: string;
   /** Match the page's register so the text is readable on it. */
   variant: "dark" | "paper";
+  /**
+   * Match the hero this sits in.
+   *
+   * Every product hero on this site is `text-center`, so all of these are
+   * "center". A left rule beside centred text reads as a mistake, so the centred
+   * layout drops the rule and takes its emphasis from weight instead — see
+   * components/ui/PageAnswer.tsx.
+   */
+  align: "left" | "center";
 }
 
 export const PAGE_ANSWERS: Record<string, PageAnswer> = {
@@ -37,11 +46,13 @@ export const PAGE_ANSWERS: Record<string, PageAnswer> = {
     text: "PentaCMD-47M is a 47-million-parameter language model that turns plain English into terminal commands. Suman Debnath trained it from scratch, nanoGPT-style, on 299,000 instruction-to-command pairs across five terminal families, reaching roughly 87% exact-match accuracy. It runs locally, with no API key and no network call.",
     accent: "#38BDF8",
     variant: "dark",
+    align: "center",
   },
   "/llms/qdex-1.5b": {
     text: "Qdex-1.5B is a QLoRA fine-tuning pipeline for Qwen2.5-Coder-1.5B, built by Suman Debnath and benchmarked with HumanEval. It adapts an open-weight code model on a single consumer GPU by training low-rank adapters against a quantised base, rather than retraining the model itself.",
     accent: "#2DD4BF",
     variant: "dark",
+    align: "center",
   },
 
   // ── Agents ───────────────────────────────────────────────────────────────
@@ -49,16 +60,21 @@ export const PAGE_ANSWERS: Record<string, PageAnswer> = {
     text: "Pentashell is a command-line tool that converts plain English into terminal commands. It runs on PentaCMD-47M, a 47-million-parameter model Suman Debnath trained from scratch for this one task, so it needs no API key, no account and no network connection — the model sits on your machine.",
     accent: "#2FE2F0",
     variant: "dark",
+    align: "center",
   },
   "/agents/pact-agent": {
     text: "PACT Agent is a local command-line coding agent built around trust rather than autonomy. Before taking any action it states a permission contract, executes inside a sandbox, writes every effect to a journal, and runs an independent verifier that can refuse the result. Built by Suman Debnath.",
     accent: "#FF5500",
     variant: "dark",
+    align: "center",
   },
   "/agents/migi": {
     text: "MIGI is a fleet of 46 autonomous AI agents that run Suman Debnath's personal brand work, job applications, expense tracking, journaling and uptime monitoring. It is operated from a two-factor dashboard and a Telegram bot, and guarded by more than 500 automated evaluation checks rather than by supervision.",
     accent: "#C6F24E",
-    variant: "dark",
+    // The MIGI hero is a lime canvas (#C6F24E), not a dark one — this is the
+    // only product page in the set that needs ink rather than cream.
+    variant: "paper",
+    align: "center",
   },
 
   // ── Applied systems ──────────────────────────────────────────────────────
@@ -66,11 +82,13 @@ export const PAGE_ANSWERS: Record<string, PageAnswer> = {
     text: "Banking Co-pilot is an AI assistant for retail-banking relationship managers, spanning 12 modules across customer analytics, decisioning, grounded policy answers and document verification. Every score is deterministic and explainable — no language model takes a credit decision. It carries 38 automated security tests and runs entirely on synthetic data.",
     accent: "#D9A961",
     variant: "dark",
+    align: "center",
   },
   "/projects/aegis-vault": {
     text: "AEGIS VAULT is a zero-knowledge encrypted notepad. Notes are encrypted with AES-256-GCM under an Argon2id envelope, with the key derived from the user's passphrase on their own device — so the server only ever holds ciphertext it cannot read, and a forgotten passphrase is genuinely unrecoverable.",
     accent: "#7DD3FC",
     variant: "dark",
+    align: "center",
   },
 
   // ── Apps and games ───────────────────────────────────────────────────────
@@ -78,16 +96,19 @@ export const PAGE_ANSWERS: Record<string, PageAnswer> = {
     text: "The MIGI Android app is a native client for the MIGI agent fleet — the 46 autonomous agents that handle Suman Debnath's brand work, applications and monitoring. It puts the fleet's approval queue on a phone, so the agents are not stalled waiting for someone to reach a desktop.",
     accent: "#C6F24E",
     variant: "dark",
+    align: "center",
   },
   "/apps/forget-anything": {
     text: "Forget Anything? is an Android app that reminds you of what you need before you leave home, triggered by geofencing and by your phone dropping off the home WiFi. The trigger is departure rather than a clock time, which is what makes the reminder arrive while you can still act on it.",
     accent: "#DAA520",
     variant: "dark",
+    align: "center",
   },
   "/games/pixelville": {
     text: "PixelVille is a procedurally generated city-builder with a working economy, seasons, weather, crime, democracy and disasters. Every city is generated from a seed rather than authored, and the systems interact — an economic downturn shows up in the crime rate and eventually at the ballot box. It runs in the browser.",
     accent: "#F5B94A",
     variant: "dark",
+    align: "center",
   },
 };
 

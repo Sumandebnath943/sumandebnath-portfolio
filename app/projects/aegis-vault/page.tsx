@@ -164,6 +164,7 @@ export default function AegisVaultPage() {
                   { label: "Projects", href: "/projects" },
                   { label: "AEGIS VAULT", href: "/projects/aegis-vault" },
                 ]}
+                align="center"
                 className="mb-6"
               />
               <h1 className="sr-only">AEGIS VAULT — zero-knowledge encrypted notepad</h1>

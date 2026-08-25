@@ -44,12 +44,22 @@ export interface Crumb {
 export default function Breadcrumbs({
   trail,
   variant = "dark",
+  align = "start",
   className = "",
 }: {
   /** Without Home and without the current page — both are added here. */
   trail: Crumb[];
   variant?: "dark" | "paper";
-  /** The current page: its own label and path. */
+  /**
+   * Where the crumbs sit inside their container.
+   *
+   * Every product hero on this site is `text-center`, and the `<ol>` is a flex
+   * container — so `text-center` on an ancestor does nothing to it. The box was
+   * centring correctly while the items inside it stayed hard left, which read as
+   * a stray line to the left of an otherwise centred masthead. Pass "center" on
+   * those pages.
+   */
+  align?: "start" | "center";
   className?: string;
 }) {
   const paper = variant === "paper";
@@ -81,7 +91,9 @@ export default function Breadcrumbs({
       />
       <nav aria-label="Breadcrumb" className={className}>
         <ol
-          className={`flex flex-wrap items-center gap-x-2 gap-y-1 font-dmmono text-[10px] uppercase tracking-[0.16em] ${text}`}
+          className={`flex flex-wrap items-center gap-x-2 gap-y-1 font-dmmono text-[10px] uppercase tracking-[0.16em] ${
+            align === "center" ? "justify-center" : ""
+          } ${text}`}
         >
           {items.map((c, i) => {
             const last = i === items.length - 1;

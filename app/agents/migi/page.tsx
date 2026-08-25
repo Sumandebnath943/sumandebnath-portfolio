@@ -288,6 +288,7 @@ export default function MigiPage() {
                   { label: "Agents", href: null },
                   { label: "MIGI", href: "/agents/migi" },
                 ]}
+                align="center"
                 className="mb-6"
               />
               <h1 className="font-manrope font-extrabold text-[2.1rem] sm:text-[2.9rem] md:text-[3.3rem] leading-[1.08] tracking-[-0.04em] mt-7 mb-5" style={{ color: MIGI.ink }}>

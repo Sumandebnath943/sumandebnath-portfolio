@@ -44,23 +44,34 @@ export default function PageAnswer({
   if (!answer) return null;
 
   const paper = answer.variant === "paper";
+  const centred = answer.align === "center";
+
+  /*
+    Two layouts, and the centred one is not a variation on the left one.
+
+    A left rule beside centred text reads as a mistake — the rule implies an
+    edge the text does not have. So the centred version drops the rule entirely
+    and takes its emphasis from being brighter and slightly larger than the deck
+    beneath it, which is how every other centred hero on this site distinguishes
+    its lines.
+
+    The centred version is also **deliberately tighter**: a wider measure, a
+    smaller step and shorter margins. That is not taste, it is arithmetic. Every
+    product banner is designed to show through to its CTA without scrolling, and
+    adding a breadcrumb and this block pushed the CTA 141px below the fold at
+    1365×600. A wider measure costs fewer lines, so the block gives most of that
+    back. Do not loosen these values without re-measuring the CTA position.
+  */
+  const layout = centred
+    ? "mx-auto my-5 max-w-4xl text-center text-[14.5px] leading-[1.6] sm:text-[16px]"
+    : "mx-auto my-7 max-w-3xl border-l-2 pl-5 text-left text-[15px] leading-[1.75] sm:text-[17px]";
 
   return (
     <p
-      // Three deliberate bits of layout:
-      //
-      // `max-w-3xl` — an answer is read as prose, and a 60-word paragraph set to
-      //   a display headline's measure is hard work.
-      // `mx-auto`   — every product hero on this site is `text-center`, so the
-      //   block centres itself within them and is unaffected in a left-aligned
-      //   one.
-      // `text-left` — but the *text* never centres. A left rule beside centred
-      //   text reads as a mistake, and centred prose at this length is harder to
-      //   read than the visual symmetry is worth.
-      className={`relative mx-auto my-7 max-w-3xl border-l-2 pl-5 text-left text-[15px] leading-[1.75] sm:text-[17px] ${
-        paper ? "text-[#191512]/[0.78]" : "text-white/[0.78]"
+      className={`sd-answer relative ${layout} ${
+        paper ? "text-[#191512]/[0.82]" : "text-white/[0.82]"
       } ${className}`}
-      style={{ borderColor: answer.accent }}
+      style={centred ? undefined : { borderColor: answer.accent }}
     >
       {answer.text}
     </p>

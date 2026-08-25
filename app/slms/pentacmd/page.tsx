@@ -204,6 +204,7 @@ export default function PentaCmdPage() {
                     { label: "SLMs", href: null },
                     { label: "PentaCMD-47M", href: "/slms/pentacmd" },
                   ]}
+                  align="center"
                   className="mb-6"
                 />
                 <h1 className="mb-7 w-full">

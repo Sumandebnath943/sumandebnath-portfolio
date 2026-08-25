@@ -169,6 +169,7 @@ export default function QdexPage() {
                       { label: "LLMs", href: null },
                       { label: "Qdex-1.5B", href: "/llms/qdex-1.5b" },
                     ]}
+                    align="center"
                     className="mb-6"
                   />
                   <h1 className="mb-6">

@@ -155,6 +155,7 @@ export default function PentashellPage() {
                     { label: "Agents", href: null },
                     { label: "Pentashell", href: "/agents/pentashell" },
                   ]}
+                  align="center"
                   className="mb-6"
                 />
                 <h1 className="font-manrope font-extrabold text-[2rem] sm:text-[2.7rem] md:text-[3.4rem] leading-[1.08] tracking-[-0.04em] mt-5 mb-5">

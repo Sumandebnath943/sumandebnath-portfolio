@@ -44,7 +44,8 @@ export default function FunAppsPage() {
               <Breadcrumbs
                 trail={[{ label: "Fun Apps", href: "/fun-apps" }]}
                 variant="paper"
-                className="mb-5 justify-center [&>ol]:justify-center"
+                align="center"
+                className="mb-5"
               />
             </FadeInUp>
             <FadeInUp delay={0.05}>

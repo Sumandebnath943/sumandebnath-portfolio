@@ -122,6 +122,7 @@ export default function ForgetAnythingPage() {
                   { label: "Apps", href: null },
                   { label: "Forget Anything?", href: "/apps/forget-anything" },
                 ]}
+                align="center"
                 className="mb-6"
               />
               <h1 className="font-manrope font-extrabold text-[2.7rem] sm:text-[3.7rem] md:text-[4.7rem] leading-[1.0] tracking-[-0.045em] mt-6 mb-6">

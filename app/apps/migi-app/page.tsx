@@ -290,6 +290,7 @@ export default function MigiAppPage() {
                   { label: "Apps", href: null },
                   { label: "MIGI Android App", href: "/apps/migi-app" },
                 ]}
+                align="center"
                 className="mb-6"
               />
               <h1 className="font-manrope mb-6 mt-6 text-[2.8rem] font-extrabold leading-[0.98] tracking-[-0.05em] sm:text-[3.9rem] md:text-[5rem]">
