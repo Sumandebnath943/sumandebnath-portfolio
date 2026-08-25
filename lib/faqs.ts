@@ -55,8 +55,18 @@ export const faqs: Faq[] = [
 // Appended below the philosophy set on the FAQ archive page.
 export const aboutFaqs: Faq[] = [
   {
-    q: "Who is Suman Debnath?",
-    a: "Suman Debnath is a Senior Brand Marketing Manager who builds AI-native products — a rare cross-domain profile combining nearly a decade in brand strategy, digital marketing, growth systems, and creative direction with hands-on AI product engineering. Over the last two years he has independently designed and shipped AI-native systems including IMPRINT, LEGATUS, CITE, EMBER, ROASmind, and D-PE.ai. (Note: this is not the Suman Debnath who is a Principal Developer Advocate at AWS — that is a different person.)",
+    // Deliberately NOT the bare "Who is Suman Debnath?" any more.
+    //
+    // /about is now titled and headed for exactly those four words and carries a
+    // QAPage node answering them. Two URLs answering the identical question is
+    // the collision this file warns about at the bottom — Google picks one and
+    // discounts the other, and the one that should win is the page named for it.
+    //
+    // This asks the adjacent question instead: same subject, different words, no
+    // competition. It still carries the disambiguation, because a reader who
+    // lands here rather than on /about needs it just as much.
+    q: "What does Suman Debnath do?",
+    a: "Suman Debnath designs and ships AI-native products end to end — deciding what a product should be, architecting it, building it and maintaining it, alone. He combines nearly a decade in brand strategy, digital marketing and growth systems with hands-on AI product engineering, and has independently shipped IMPRINT, LEGATUS, CITE, EMBER, ROASmind and D-PE.ai. (This is not the Suman Debnath who is a Principal Developer Advocate at AWS — a different person.)",
   },
   {
     q: "Is this the same Suman Debnath who works at AWS?",

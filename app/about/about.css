@@ -206,3 +206,67 @@
 @media (prefers-reduced-motion: reduce) {
   .ab * { transition: none !important; }
 }
+
+/* ── The answer, and the disambiguation ─────────────────────────────────────
+   Both exist for the same reason: this page has to win the query "who is Suman
+   Debnath?" against a better-indexed person of the same name. The answer is the
+   first self-contained block after the H1 — what an answer engine lifts — and
+   the disambiguation is the distinction stated where a human can read it, not
+   only inside a JSON-LD attribute. */
+
+.ab-answer {
+  max-width: 46rem;
+  margin: 0 0 1.75rem;
+  padding: 1.25rem 1.5rem;
+  border-left: 2px solid var(--gold);
+  background: rgba(197, 160, 89, 0.06);
+  border-radius: 0 0.6rem 0.6rem 0;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--bone);
+}
+
+.ab-disambig {
+  max-width: 46rem;
+  margin: 2.25rem 0 0;
+  padding: 1.15rem 1.4rem;
+  border: 1px solid var(--rule);
+  border-radius: 0.7rem;
+}
+
+.ab-disambig-k {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  /* 0.62 — the same AA floor the rest of this palette uses. */
+  color: rgba(244, 241, 234, 0.62);
+  margin: 0 0 0.8rem;
+}
+
+.ab-disambig ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  list-style: disc;
+}
+
+.ab-disambig li {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: rgba(244, 241, 234, 0.72);
+  margin: 0.35rem 0;
+}
+
+.ab-disambig li strong {
+  color: var(--bone);
+  font-weight: 600;
+}
+
+.ab-disambig-n {
+  margin: 0.9rem 0 0;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: rgba(244, 241, 234, 0.72);
+}

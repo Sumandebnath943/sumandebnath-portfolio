@@ -224,8 +224,27 @@ const personJsonLd = {
     { "@type": "Place", name: "Pune, Maharashtra, India" },
     { "@type": "Place", name: "Kolkata, West Bengal, India" },
   ],
+  /*
+    The page that describes this person. Without it an engine has to infer which
+    of twenty-odd URLs is the canonical description, and when two people share a
+    name that inference is exactly what goes wrong. /about is now titled and
+    headed "Who is Suman Debnath?" and carries the answer as its first block.
+  */
+  mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}/about#profilepage` },
+
+  /*
+    Corroborating profiles. This is the single most load-bearing property for
+    telling two people with one name apart: an engine resolves an entity by
+    finding the same identity asserted across independent sources, and every
+    profile listed here is one more source that agrees.
+
+    Hugging Face was missing and matters more than its position suggests — a
+    published model account is the kind of artefact the *other* Suman Debnath
+    does not have, so it separates the two rather than merely adding volume.
+  */
   sameAs: [
     "https://github.com/Sumandebnath943",
+    "https://huggingface.co/SumanDebnath943",
     "https://linkedin.com/in/suman-debnath-a528653a1",
     "https://x.com/iamSdebnath",
   ],

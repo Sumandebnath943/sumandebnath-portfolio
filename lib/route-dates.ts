@@ -12,7 +12,7 @@ export const ROUTE_DATES: Record<string, string> = {
   "/resume": "2026-08-25",
   "/journey": "2026-08-25",
   "/about": "2026-08-25",
-  "/profile": "2026-08-24",
+  "/profile": "2026-08-25",
   "/contact": "2026-08-25",
   "/projects": "2026-08-25",
   "/learnings": "2026-08-25",
