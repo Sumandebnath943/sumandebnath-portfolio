@@ -184,6 +184,26 @@ regardless, so none of them are needed for first paint.
 `Instrument_Serif` now has `preload: false`. It is used 106 times as
 `font-serif` but never in the first screenful.
 
+> **Amended 27 Aug 2026 — the second sentence is no longer true.** The notebook
+> serif pass put `Instrument Serif` on `.nb-title`, so it is now in the first
+> screenful of every article and of `/notebook`.
+>
+> **`preload: false` stays anyway**, and deliberately. Re-enabling it would add
+> a fifth high-priority preload to *every* route on the site to serve two, which
+> is the exact regression `1f7ee61` fixed. What the notebook gets instead:
+>
+> - The headline paints immediately in the Georgia fallback and swaps —
+>   `display: "swap"`, which is what it is for.
+> - `next/font` generates a metrics-matched fallback automatically, so the swap
+>   costs little or no layout shift.
+> - **LCP is unaffected.** On an article the largest element in the viewport is
+>   the lede image at 936×527 — roughly 493,000px² against the H1's 68,000 — so
+>   the image is the LCP candidate and no font is on that path. Same on
+>   `/notebook`, where the lead cover is 499×333.
+>
+> If the lede image is ever removed from articles, re-check this: the H1 would
+> become the LCP element and the trade changes.
+
 **Anton and DM Mono keep their preloads deliberately** — both are on screen
 within the first second (hero headline, loader counter and boot log), and a swap
 there lands in the one moment the brand is doing the talking.
@@ -579,8 +599,14 @@ Expected shape: `1 mesh, 2 primitives, 27,038 vertices, 1 skin, 65 joints,
 ### 6.4 Font preloads
 
 ```bash
-curl -sS http://localhost:3200/ | grep -c 'as="font"'    # expect 4
+curl -sS http://localhost:3200/ | grep -o 'as="font"' | wc -l   # expect 4
 ```
+
+> **Corrected 27 Aug 2026.** This read `grep -c` and always returned **1**.
+> `grep -c` counts matching *lines*, and the served HTML is minified onto one —
+> so the check passed at four preloads and would have passed just as quietly at
+> forty. `grep -o | wc -l` counts occurrences. Verified at 4 on `/`, `/notebook`
+> and an article.
 
 ### 6.5 Paint timings
 

@@ -894,11 +894,14 @@
   border-radius: 0.9rem;
 }
 
+/* Serif, at 400 — the face has no bold. See the long note on `.nb-title` in
+   notebook.css for why the size goes up and the tracking comes off. */
 .nb-lead-title {
-  font-size: clamp(1.6rem, 3.2vw, 2.35rem);
-  line-height: 1.12;
-  letter-spacing: -0.02em;
-  font-weight: 600;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(1.8rem, 3.6vw, 2.7rem);
+  line-height: 1.1;
+  letter-spacing: 0;
+  font-weight: 400;
   color: var(--nb-ink);
   margin: 0.5rem 0 0.75rem;
   text-wrap: balance;
@@ -1143,10 +1146,11 @@
 }
 
 .nb-tile-title {
-  font-size: 1.3rem;
-  line-height: 1.22;
-  letter-spacing: -0.015em;
-  font-weight: 600;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  letter-spacing: 0;
+  font-weight: 400;
   color: var(--nb-ink);
   margin: 0 0 0.7rem;
   text-wrap: balance;

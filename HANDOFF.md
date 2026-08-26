@@ -4,10 +4,10 @@ Where the project stands, what changed most recently, and what is worth doing
 next. For how the system is built read **PROJECT_BIBLE.md**; for how the site
 writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
-**Last updated:** 26 August 2026
-**Branch:** `main`, pushed — `43308b4..9eed856`, six commits, 39 files.
-**Last session:** **the notebook redesign §1.11 asked for, carried out** — the reading page rebuilt in three steps and the front page rebuilt on HBR's zone rhythm, plus three fixes Suman raised on seeing it and two overflow bugs found while verifying — §1.12.
-**Next up:** **the serif.** §1.11 named it the highest-value change available and it costs nothing to load; §1.12 did not do it. `Instrument Serif` is already in `tailwind.config.ts` and the notebook still references it twice. See the end of §1.12.
+**Last updated:** 27 August 2026
+**Branch:** `main`, pushed through `178f972`.
+**Last session:** the notebook redesign §1.11 asked for, carried out — the reading page and front page rebuilt (§1.12), then **the serif pass** that closes the last of the three findings (§1.13). Plus the homepage AEO/GEO/agentic-readiness panel and those skills declared across all five surfaces that claim them.
+**Next up:** nothing outstanding on the notebook — all three §1.11 findings are closed (§1.13). The homepage structure weakness in §3 is the oldest open item.
 **Session before:** four pieces of work, 25–26 Aug. Agentic readiness against an external audit, which found the identity JSON-LD was invisible without JavaScript — §1.8. Then **twenty-one notebook articles** in six batches, three new categories and a writing guide — §1.9. Then the target query set, the entity rework, and a measurement that reordered the priorities — §1.10. Then the notebook rebuilt as a publication — §1.11.
 
 > Run `git log --oneline -15` before trusting this section — it is a snapshot,
@@ -1054,14 +1054,7 @@ Quotes and targets were chosen by hand; only the insertion point was computed.
 |---|---|
 | Grid variety | **Done.** 3 · 4 · 3 · 4 · 2, no two adjacent zones alike |
 | Density | **Done.** Nine articles before a scroll, all 26 linked from the front page, seven text-only headline lists |
-| **The serif** | **Not done.** Still the highest-value change available, still costs nothing to load |
-
-> **The serif is the outstanding item and it is deliberate that it is called out
-> twice.** `Instrument Serif` is loaded, is `font-serif` in `tailwind.config.ts`,
-> and is used on `/about`, PACT, Pentashell, Forget Anything, the MIGI app and
-> the banking page. The notebook references it twice — `.nb-quote` and
-> `.nb-pullquote`. Headlines, the lead story and the tile titles are all still
-> sans. Start there.
+| **The serif** | **Done 27 Aug** — see §1.13 |
 
 Two smaller things left open on purpose: `CompactCard` holds a **third local
 copy** of a six-line `formatDate` (matching `ArticleCard` and `magazine.tsx`
@@ -1069,6 +1062,52 @@ rather than inventing a fourth convention — fold all three into `card.ts` when
 something next touches them), and the share module carries **no X or LinkedIn
 intents**, because two more outbound endpoints would have to be matched on
 `/privacy`.
+
+---
+
+### 1.13 The serif (27 Aug 2026)
+
+The last of the three §1.11 findings, and the one two sessions had walked past.
+
+**One constraint shaped all of it: `Instrument Serif` is loaded at weight 400
+and there is no bold.** Every headline that takes the serif therefore drops from
+600 to 400 — leave it at 600 and the browser synthesises a fake bold, which
+smears the stems of a high-contrast face. Sizes go up to buy back the presence
+that losing 200 weight units costs, and the negative tracking comes off: it
+suits a geometric sans and closes up a serif.
+
+Seven classes, measured in the browser at 56.4 / 27.2 / 20.8px for H1/H2/H3:
+
+| Class | Was | Now |
+|---|---|---|
+| `.nb-title` | 600, clamp 2–3.25rem, −0.025em | serif 400, clamp 2.15–3.6rem, −0.005em |
+| `.nb-h2` | 600, 1.5rem | serif 400, 1.7rem |
+| `.nb-h3` | 600, 1.125rem | serif 400, 1.3rem |
+| `.nb-faq h2` | 600, 1.25rem | serif 400, 1.45rem |
+| `.nb-end-name` | 600, 1.125rem | serif 400, 1.4rem |
+| `.nb-lead-title` | 600, clamp 1.6–2.35rem | serif 400, clamp 1.8–2.7rem |
+| `.nb-tile-title` | 600, 1.3rem | serif 400, 1.5rem |
+
+**Everything at or below 17px stays Manrope 600** — card, row, compact and
+headline-list titles, plus all furniture. At 400 this face gets thin on cream
+below about 18px. Display serif, text sans: the split is the system, not an
+omission, and it is forced by the single weight rather than chosen.
+
+> **If you want the small card headlines in serif too, that needs a different
+> face.** Instrument Serif has no weight to give them. It would mean loading a
+> text serif with a bold — a real decision about page weight, not a CSS tweak.
+
+Two notes in `PAGE_OPTIMIZATION.md` were wrong and are corrected:
+
+- **§3.4** justified `preload: false` on the grounds that the serif is "never in
+  the first screenful". It now is, on every article. The preload stays off
+  anyway — re-enabling it puts a fifth high-priority preload on *every* route to
+  serve two — and **LCP is unaffected**, because the lede image at 936×527
+  (~493,000px²) beats the H1 (~68,000px²) as the LCP candidate. Re-check that if
+  the lede image ever goes.
+- **§6.4's snippet was broken.** `grep -c 'as="font"'` counts matching *lines*
+  and the served HTML is minified onto one, so it always returned 1 — it would
+  have passed just as quietly at forty preloads. Now `grep -o | wc -l`.
 
 ---
 
