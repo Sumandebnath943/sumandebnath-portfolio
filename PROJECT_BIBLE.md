@@ -905,6 +905,40 @@ body text.**
 The prose stays on paper. Colour is for the boxes around the reading, never the
 reading.
 
+**Two blocks do not follow the category: the answer block and the contents
+card.** Both carry the fixed **ember ramp** — `--nb-ember-1/2/3`, muted red into
+burnt orange — because the block a reader meets first should not change
+temperature by section. The answer block took the accent briefly and put a solid
+teal panel at the top of every Marketing & AI post, which was right in principle
+and wrong on the page. Every ember stop clears AA for the cream it carries
+(7.53, 6.31, 4.88); the obvious brighter orange scores 3.16, which is why the
+ramp stays in the dark half.
+
+#### Type — display serif, text sans
+
+`Instrument Serif` for editorial headlines, `Manrope` for everything that is
+furniture. Applied 27 Aug 2026; the notebook was the last part of the site
+without it.
+
+> **The face is loaded at weight 400 and has no bold.** Anything that takes the
+> serif must also be `font-weight: 400` — at 600 the browser synthesises a fake
+> bold that smears the stems. Sizes go up to compensate and the negative
+> tracking comes off; it suits a geometric sans and closes up a serif.
+
+Serif: `.nb-title`, `.nb-h2`, `.nb-h3`, `.nb-faq h2`, `.nb-end-name`,
+`.nb-lead-title`, `.nb-tile-title`, plus the two pull-quote classes that always
+had it. Rendered scale is 56.4 / 27.2 / 20.8px for H1/H2/H3.
+
+**Everything at or below 17px stays Manrope 600** — card, row, compact and
+headline-list titles, and all furniture. At 400 this face gets thin on cream
+below about 18px. The split is forced by the single weight, not chosen: putting
+small card headlines in serif means loading a different face with a real bold,
+which is a page-weight decision rather than a CSS one.
+
+`Instrument Serif` keeps `preload: false` even though it is now in the first
+screenful — see `PAGE_OPTIMIZATION.md` §3.4 for why, and for the LCP arithmetic
+that makes it safe.
+
 #### Components — `components/notebook/`
 
 `magazine.tsx` exports the front-page furniture (`LeadStory`, `HeadlineList`,

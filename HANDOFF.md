@@ -5,8 +5,8 @@ next. For how the system is built read **PROJECT_BIBLE.md**; for how the site
 writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
 **Last updated:** 27 August 2026
-**Branch:** `main`, pushed through `178f972`.
-**Last session:** the notebook redesign §1.11 asked for, carried out — the reading page and front page rebuilt (§1.12), then **the serif pass** that closes the last of the three findings (§1.13). Plus the homepage AEO/GEO/agentic-readiness panel and those skills declared across all five surfaces that claim them.
+**Branch:** `main`, pushed through `67ba999`. Working tree clean.
+**Last session:** the notebook redesign §1.11 asked for, carried out — the reading page and front page rebuilt (§1.12), then **the serif pass** closing the last of the three findings (§1.13). Then the homepage readiness panel, which took three passes and forced the same claim into the five places the site declares skills (§1.14).
 **Next up:** nothing outstanding on the notebook — all three §1.11 findings are closed (§1.13). The homepage structure weakness in §3 is the oldest open item.
 **Session before:** four pieces of work, 25–26 Aug. Agentic readiness against an external audit, which found the identity JSON-LD was invisible without JavaScript — §1.8. Then **twenty-one notebook articles** in six batches, three new categories and a writing guide — §1.9. Then the target query set, the entity rework, and a measurement that reordered the priorities — §1.10. Then the notebook rebuilt as a publication — §1.11.
 
@@ -43,6 +43,7 @@ Recent history, newest first, gives an accurate picture of the trajectory:
 | **Navigation + ⌘K** | Restructured around Home / Portfolio / About Me, mounted site-wide. |
 | **Site tour** | Crosses routes and survives navigation, `8adf5ee`. |
 | **The film** (`Who am I?`) | Made 17–18 Aug. 5:57, on YouTube as `4AP2eui9720`, embedded on the homepage. Retitled 19 Aug. Done. |
+| **Skills declaration** | AEO, GEO, SEO and agentic readiness now land in all five surfaces that declare expertise — `knowsAbout` in the Person JSON-LD, `coreSkills` (which feeds /resume *and* the AI assistant), the capabilities FAQ, the homepage stack and `llms-full.txt`. **`AEO_PLAYBOOK.md` §3.6b is the list; read it before adding a skill anywhere.** — §1.14 |
 | **Homepage density** | Reworked 19 Aug. Three sections roughly halved in height, two closers restyled, three copy blocks refreshed — §2. |
 | **Homepage structure** | **Still weak.** Thirteen sections, no spine. The 19 Aug pass fixed density and copy, not order — §3. |
 | **Performance** | **Done — see `PAGE_OPTIMIZATION.md`**, which is now the standing reference and should be read before any further perf work or any test run. PSI **94 mobile / 88 desktop**, other four categories 100. TBT 18,775 → 83 ms, weight 3,791 → 861 KiB. Tier C and the GA work were **declined on purpose**; do not re-propose them. |
@@ -935,7 +936,11 @@ a rename, and the reason twenty-five slugs stayed.
 > twenty-six articles in one sitting they produced a blog that read like an FAQ.
 > §2 of the guidelines now carries the correction.
 
-#### Where the design work stopped — read this before continuing
+#### Where the design work stopped
+
+> **All three findings below were carried out on 26–27 Aug — §1.12 and §1.13.**
+> This block is kept as the record of what was measured and why, not as work
+> outstanding. The measurements are still the reference; the to-do is closed.
 
 Suman asked for `/notebook` to feel like **hbr.org**. That site was examined
 directly and measured rather than recalled. Three findings:
@@ -1108,6 +1113,69 @@ Two notes in `PAGE_OPTIMIZATION.md` were wrong and are corrected:
 - **§6.4's snippet was broken.** `grep -c 'as="font"'` counts matching *lines*
   and the served HTML is minified onto one, so it always returned 1 — it would
   have passed just as quietly at forty preloads. Now `grep -o | wc -l`.
+
+---
+
+### 1.14 The readiness panel, and what it forced everywhere else (27 Aug 2026)
+
+Suman asked for AEO, GEO, SEO and agentic readiness to appear in his skills on
+the homepage, first position on the Chapter 01 "Marketer" card, standing out.
+It took three passes because the first two were wrong in instructive ways.
+
+**Pass one was misdated and over-specific.** It went in as a panel rather than a
+sixth bullet — that part was right, because the card is dated 2016—2023 and this
+work is 2026 — but the copy led with "a generated `llms.txt`" and "scored
+79 → 83". Both were cut. 79 was never a baseline: it was already the product of
+a long stretch of work, and 75 before that, so quoting the delta credited four
+points for a job mostly done by the time it was measured. And `llms.txt` is one
+artefact of a much larger practice; leading with it made the discipline sound
+like publishing a text file.
+
+**Pass two fixed a factual error in the title.** It read "Answer-engine
+optimisation, end to end", which puts GEO underneath AEO. Checked against
+current sources rather than assumed:
+
+- **SEO** wins the ranking and the click.
+- **AEO** makes the answer extractable — AI Overviews, snippets.
+- **GEO** earns the citation when a generative engine writes the answer.
+- **Agentic readiness** is the broadest: whether an agent can crawl, understand,
+  cite *and act on* the site at all.
+
+AEO and GEO are siblings, not parent and child. There is no academic consensus
+separating them and some practitioners treat them as one thing, but the majority
+position is that they are distinct jobs. Title became "**Agentic Readiness**
+Strategy" — the broadest of the four.
+
+**Pass three was colour and a layout bug.** The panel is
+`#DE2A22 → #A81818`, not the `#FF2C2C` asked for: white on `#FF2C2C` measures
+**3.72:1** and the panel carries about forty-five words of body copy. `#DE2A22`
+is the warmest red in that family clearing AA. `#FF2C2C` still runs the top rule
+and the corner glow, where nothing is read on top of it.
+
+> **The card-height bug is the one worth remembering.** The two cards are grid
+> items and stretch to match, so whichever holds less content gets dead space.
+> Adding the panel moved 168px of it from the Marketer card to the AI Builder.
+> The first fix used `mt-auto` on the closing quote — which *relocated* the hole
+> from the bottom of the card to its middle rather than removing it. The real
+> fix is to stop pooling it: both lists are `flex-1` with `justify-between` and
+> a `gap-6` floor, so the surplus distributes across the gaps between items.
+> Measured 24px throughout on the Marketer card and an even 60px on the Builder,
+> both cards 1259px with 1px trailing slack. `space-y-*` cannot do this — it
+> sets margins, which add on top of distributed free space instead of absorbing
+> it.
+
+Then the claim had to become true everywhere else. `AEO_PLAYBOOK.md` §3.6b now
+lists the five surfaces that declare skills and the two rules for adding to
+them — the short version being that `knowsAbout` in the `Person` JSON-LD is the
+one that matters most, and that `/about` and the `/resume` summary were left
+alone on purpose because backdating a 2026 discipline into a 2016—2023 role is
+the same mistake as making this a sixth bullet.
+
+Also noted while linting the whole tree for the first time: **12 pre-existing
+eslint errors** in files this session never touched — the robot components,
+`VisitorPing`, `LearningsClient`, `PactVisuals`. The build does not run eslint,
+so nothing is blocked. `VisitorPing` is the one to look at first, given §6–7 of
+`AGENTS.md` already flags that file as silent-failure territory.
 
 ---
 
@@ -1522,22 +1590,11 @@ top of this file, plus:
 **The one genuinely unfinished thing is at the top.** The rest are
 opportunities, roughly in value order.
 
-00. **The notebook redesign, picked up in a fresh session.** Two passes, and the
-   analysis is already done at the end of §1.11 — read that first rather than
-   re-deriving it.
-
-   1. **Typography.** Put the notebook's headlines in `font-serif`. The face is
-      already loaded, already configured, and already used on six other pages;
-      the notebook is the only part of the site that dropped it, which is why it
-      reads flatter than the rest of the work. Highest value, lowest cost, and it
-      is the one to do first because it changes what the layout should be.
-   2. **Per-section grids.** Every rail currently uses the same
-      `minmax(16rem, 1fr)`. Give the featured rail a lead-plus-two, the picks a
-      compact four-up, the categories a three-up, and one section an asymmetric
-      label-rail layout — the pattern measured on hbr.org.
-
-   **Do not clone HBR.** §1.11 says why, and the short version is that their
-   density is a consequence of publishing dozens of articles a week.
+~~00. The notebook redesign.~~ **Done, 26–27 Aug — §1.12 and §1.13.** All three
+   findings from the end of §1.11 are closed: per-section grids (the front page
+   now runs 3 · 4 · 3 · 4 · 2, no two adjacent zones alike), density (nine
+   articles before a scroll, all 26 linked from the front page), and the serif.
+   Kept here only so the item is visibly closed rather than silently dropped.
 
 0. **Finish the homepage restructure — the original request is only half done.**
    The 17–18 Aug session opened with "the entire website is really ambiguous…

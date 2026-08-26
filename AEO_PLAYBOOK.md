@@ -343,6 +343,36 @@ Three things about it are deliberate:
 > the check is equally wrong: they are legitimate credential data. The honest
 > answer was to add a real Organization, and it cleared the check on its own.
 
+### 3.6b Skills live in five places, and they must agree
+
+Added 27 Aug 2026, when the homepage began claiming AEO, GEO and agentic
+readiness and nothing else on the site had heard of them.
+
+A claim of expertise on one page is a claim an assistant cannot verify. These
+five are where the site *declares* what Suman knows, and a new discipline has to
+land in all of them or the answer depends on which surface got read:
+
+| Surface | Why it counts |
+|---|---|
+| `app/layout.tsx` → `knowsAbout` | The `Person` JSON-LD, on **every route**. The machine-readable one, and the highest-value of the five |
+| `lib/resume.ts` → `coreSkills` | Feeds `/resume` **and** the skills block in `lib/systemPrompt.ts`, so it decides what the site's own assistant can say |
+| `lib/faqs.ts` → core capabilities | Ships as `FAQPage` structured data |
+| `components/sections/SystemsStack.tsx` | The homepage capability stack |
+| `public/llms-full.txt` | Hand-maintained — no generator, so it needs editing directly |
+
+Two rules learned doing it:
+
+1. **Acronym and expansion in one entry, not one entry each.** Write
+   `"AEO (answer engine optimisation)"`. Both forms are worth carrying — people
+   type the acronym, models match the phrase — but a separate row per spelling
+   is the keyword stuffing that `/notebook/cited-by-chatgpt-what-i-changed`
+   records as having produced nothing.
+2. **Do not backdate a discipline into a historical role.** `/about`'s career
+   paragraphs, the `/resume` summary sentence and `OperationalHistory`'s tags
+   are all attached to the 2016–2023 position and were deliberately left alone.
+   Adding a 2026 discipline to them would be a false claim about *when*, which
+   is exactly the sort of thing an assistant will repeat back with a date on it.
+
 ### 3.7 The 404's recovery line — do not ungate it
 
 `app/not-found.tsx` carries one line below the postscript pointing at
