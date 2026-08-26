@@ -23,6 +23,9 @@ const post: Post = {
   popularityScore: 74,
   tags: ["Prompting", "Process", "AI-Native"],
   readingMinutes: 7,
+  cover: "/notebook/research-before-writing-a-prompt.webp",
+  coverAlt:
+    "An hourglass whose upper chamber is packed with books and documents and whose lower chamber holds one short typed line.",
   facts: [
     { label: "Research share of a project", value: "Roughly 10–20% of total duration" },
     { label: "Shortest phase", value: "Generating the first working version" },

@@ -21,6 +21,9 @@ const post: Post = {
   popularityScore: 74,
   tags: ["Process", "AI-Native", "Prompting"],
   readingMinutes: 7,
+  cover: "/notebook/shipping-a-product-in-a-weekend.webp",
+  coverAlt:
+    "A wall calendar with two adjacent days circled and a faint dotted line continuing far past the page edge.",
   facts: [
     { label: "What a weekend produces", value: "A working version" },
     { label: "What it does not produce", value: "A finished product" },

@@ -22,6 +22,9 @@ const post: Post = {
   popularityScore: 72,
   tags: ["AEO", "SEO", "Marketing"],
   readingMinutes: 6,
+  cover: "/notebook/do-you-need-an-llms-txt.webp",
+  coverAlt:
+    "A sheet pinned to a public noticeboard that a crowd walks past, with one small robot stopped to read it.",
   facts: [
     { label: "Google's position", value: "Publicly stated it does not support llms.txt and is not planning to" },
     { label: "Major providers committing to read it", value: "None publicly, as of August 2026" },

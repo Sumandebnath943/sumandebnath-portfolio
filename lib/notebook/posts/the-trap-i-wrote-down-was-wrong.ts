@@ -20,6 +20,9 @@ const post: Post = {
   popularityScore: 56,
   tags: ["Debugging", "Documentation", "Engineering"],
   readingMinutes: 5,
+  cover: "/notebook/the-trap-i-wrote-down-was-wrong.webp",
+  coverAlt:
+    "An open notebook page with a confidently written note struck through, a measuring instrument lying across it.",
   facts: [
     { label: "The claim", value: "\"window scroll listeners never fire — use IntersectionObserver\"" },
     { label: "True part", value: "document.body.scrollTop reads 0 and setting it does nothing" },

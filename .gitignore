@@ -44,6 +44,16 @@ yarn-error.log*
 next-env.d.ts
 
 # 3D robot source assets (converted to public/robot.glb via scripts/build-robot-glb.mjs)
+# Notebook cover masters — the full-size PNGs straight out of the generator,
+# ~2.9 MB each. `scripts/build-notebook-covers.mjs` turns them into the WebP in
+# public/notebook/, and that output IS committed. These are not: 26 of them is
+# 74 MB, and every regenerated image would be a new blob in history for ever.
+#
+# ⚠ Git-ignored means unbacked. Same standing risk as _source-film (HANDOFF §3
+# item 0b) — if this folder is lost, the covers cannot be reproduced exactly,
+# because a generator will not return the same image twice from the same prompt.
+/_masters/notebook-covers/
+
 /_source-fbx/
 /tmp_glb/
 

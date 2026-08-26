@@ -31,12 +31,23 @@ function hash(s: string): number {
   return h >>> 0;
 }
 
+/** The three-up grid: full width on a phone, half on a tablet, a third above. */
+export const GRID_SIZES = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw";
+
+/**
+ * The featured hero. Wider than a grid card at every breakpoint above a phone,
+ * so it needs its own hint — `50vw` above 1024 rather than `33vw`, which is what
+ * it actually occupies beside the body copy.
+ */
+export const HERO_SIZES = "(max-width: 640px) 100vw, (max-width: 1024px) 60vw, 50vw";
+
 export default function PostCover({
   slug,
   category,
   cover,
   coverAlt,
   priority = false,
+  sizes = GRID_SIZES,
   className = "",
 }: {
   slug: string;
@@ -45,6 +56,21 @@ export default function PostCover({
   coverAlt?: string;
   /** Set on the featured card only — it is the one above the fold. */
   priority?: boolean;
+  /**
+   * The `sizes` hint, and it **must** describe the slot this instance renders
+   * into. Default is the grid; the featured hero is roughly half again as wide
+   * and has to pass `HERO_SIZES` or next/image serves it a variant chosen for a
+   * card and the browser upscales it.
+   *
+   * This was a real defect, found 26 Aug 2026 the moment real cover images
+   * replaced the generated art: at a 1025px viewport the hero rendered 516px
+   * wide and was handed 338px — a 1.53× upscale — while the grid cards were
+   * correctly served. Vector art had hidden it completely, because SVG does not
+   * pixelate. It is the same failure `ScreenshotFrame` had (HANDOFF §1.7), which
+   * is twice now: **a shared image component with one hardcoded `sizes` is a
+   * bug waiting for a second call site.**
+   */
+  sizes?: string;
   className?: string;
 }) {
   if (cover) {
@@ -54,7 +80,7 @@ export default function PostCover({
           src={cover}
           alt={coverAlt ?? ""}
           fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          sizes={sizes}
           className="object-cover"
           quality={75}
           priority={priority}

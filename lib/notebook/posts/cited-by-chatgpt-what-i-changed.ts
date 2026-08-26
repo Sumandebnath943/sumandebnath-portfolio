@@ -26,6 +26,9 @@ const post: Post = {
   popularityScore: 77,
   tags: ["AEO", "SEO", "Marketing", "Structured Data"],
   readingMinutes: 8,
+  cover: "/notebook/cited-by-chatgpt-what-i-changed.webp",
+  coverAlt:
+    "A single paragraph being lifted out of a printed page between two quotation marks, leaving a clean rectangular gap.",
   facts: [
     { label: "First observed", value: "24 August 2026" },
     { label: "Queries", value: "\"who is suman debnath\", \"suman debnath portfolio\"" },

@@ -20,7 +20,7 @@ way to end up with twenty-six unrelated pictures.
 | Safe area | Keep all text and the main object **inside the middle 80%** — a sliver crops top and bottom |
 | Text length | **Four words maximum.** Image models still fumble long strings; short lines survive |
 | Retries | Expect two or three attempts per image, almost always for the text |
-| File | `public/notebook/<slug>.jpg`, then set `cover` and `coverAlt` on the post |
+| File | Save as `_masters/notebook-covers/<slug>.png`, then run the converter — **never commit the PNG**, see §5 |
 
 > **If the text renders wrong twice, generate it clean and add the words
 > yourself.** A cover with mangled lettering is worse than a cover with none, and
@@ -239,10 +239,82 @@ Each line is a follow-up message. Format: **subject — accent — on-screen tex
 
 ---
 
-## 5. Wiring a cover in
+## 5. The pipeline — masters in, WebP out
+
+> **Never commit a generated PNG.** They arrive at ~2.9 MB each; twenty-six of
+> them is 74 MB, and git keeps every version of every blob for ever. One careless
+> commit of a set this size is permanent.
+
+Three steps:
+
+1. Drop the full-size PNGs into **`_masters/notebook-covers/`**, named
+   `<slug>.png`. That folder is git-ignored.
+2. Run the converter. It resizes to 1280 wide and encodes WebP at quality 80.
+   ```bash
+   node scripts/build-notebook-covers.mjs
+   ```
+3. Commit what it wrote to `public/notebook/`. That output *is* tracked — it is
+   what the site serves.
+
+**Measured on the first twenty-six: 74.4 MB → 4.9 MB, a 93% reduction,
+averaging 189 KB a cover.** The script's header records the size-versus-quality
+table it was chosen from, so the numbers can be argued with rather than trusted.
+
+> **1280 wide is not a round number, it is the answer.** The largest a cover is
+> ever rendered is `100vw` on a phone, so a 430px viewport at 3× device pixel
+> ratio wants about 1290px. Anything above that is bytes nobody downloads.
+
+> **The visitor does not download 189 KB.** `next/image` re-encodes to AVIF or
+> WebP at the rendered size, so a grid card fetches far less. The 189 KB is
+> repository and deployment weight only.
+
+> **`_masters/notebook-covers/` is git-ignored, which means unbacked.** Same
+> standing risk as `_source-film` (HANDOFF §3 item 0b): a generator will not
+> return the same image twice from the same prompt, so losing that folder means
+> the covers cannot be reproduced exactly. Back it up off this disk.
+
+### Where this lives, and for how long
+
+Committed to the repository and served from `/public` by Vercel. No external
+service, no second place to look, and a cover is versioned with the post it
+belongs to.
+
+At 189 KB a cover, that scales further than this blog ever will:
+
+| Posts | Covers on disk |
+|---|---|
+| 26 (today) | 4.9 MB |
+| 100 | ~19 MB |
+| 500 | ~95 MB |
+| 1,000 | ~189 MB |
+
+GitHub recommends keeping a repository under a gigabyte. Covers alone would not
+reach that until roughly **4,500 posts**, so this is not a decision that needs
+revisiting at any realistic volume.
+
+**The real constraint is history, not total size.** Every regenerated cover
+committed is a new blob kept for ever, so ten attempts at one image cost ten
+times one image permanently. Convert and commit the *final* file only; iterate in
+`_masters/`, which is ignored.
+
+Three alternatives were considered and are not needed yet:
+
+- **Vercel Blob** — moves images off the repository, at the cost of
+  `remotePatterns` configuration, a second place to look, and covers no longer
+  versioned alongside their post. Worth it if this ever holds video or thousands
+  of images.
+- **Cloudinary or imgix** — a transformation CDN, which duplicates what
+  `next/image` already does here. It would add a dependency to solve a solved
+  problem.
+- **Git LFS** — keeps clones small, but GitHub's free LFS bandwidth is modest and
+  every Vercel build would spend it pulling objects. Poor fit for files this size.
+
+---
+
+## 6. Wiring a cover in
 
 ```ts
-cover: "/notebook/<slug>.jpg",
+cover: "/notebook/<slug>.webp",
 coverAlt: "…",
 ```
 
@@ -257,7 +329,7 @@ generate all twenty-six before shipping any.
 
 ---
 
-## 6. Adding a cover for a new post
+## 7. Adding a cover for a new post
 
 Paste `§2`, take the accent for the post's category from `§3`, and write one line
 in the shape of `§4`: **a single concrete object or scene that carries the

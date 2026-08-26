@@ -22,6 +22,9 @@ const post: Post = {
   popularityScore: 81,
   tags: ["AI-Native", "Process", "Prompting"],
   readingMinutes: 7,
+  cover: "/notebook/never-run-a-coding-agent-on-autopilot.webp",
+  coverAlt:
+    "A mechanical arm reaching for a tick-marked stamp, held back at the wrist by a human hand.",
   facts: [
     { label: "Auto-accept", value: "Never enabled" },
     { label: "Reviewed before landing", value: "Every diff, summary and commit message" },

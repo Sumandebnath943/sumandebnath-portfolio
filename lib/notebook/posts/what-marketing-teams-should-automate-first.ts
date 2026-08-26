@@ -22,6 +22,9 @@ const post: Post = {
   popularityScore: 74,
   tags: ["Marketing", "Process", "AI-Native"],
   readingMinutes: 7,
+  cover: "/notebook/what-marketing-teams-should-automate-first.webp",
+  coverAlt:
+    "A queue of identical documents feeding into a machine, with one marked document pulled out and set aside.",
   facts: [
     { label: "Sort by", value: "Frequency × judgement required" },
     { label: "First candidates", value: "Reporting, data gathering, asset variants, routine checks" },

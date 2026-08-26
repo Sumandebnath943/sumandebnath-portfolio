@@ -22,6 +22,9 @@ const post: Post = {
   popularityScore: 81,
   tags: ["Security", "AI-Native", "Process"],
   readingMinutes: 7,
+  cover: "/notebook/keeping-secrets-out-of-ai-built-apps.webp",
+  coverAlt:
+    "A key being lowered into a small heavy vault, with the same key drawn on a page of code and struck out.",
   facts: [
     { label: "Secrets committed to date", value: "One, early on" },
     { label: "Where production values live", value: "The host's environment settings, never the repository" },

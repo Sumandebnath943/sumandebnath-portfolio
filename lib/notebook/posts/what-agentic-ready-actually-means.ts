@@ -21,6 +21,9 @@ const post: Post = {
   popularityScore: 76,
   tags: ["AEO", "Structured Data", "Marketing"],
   readingMinutes: 8,
+  cover: "/notebook/what-agentic-ready-actually-means.webp",
+  coverAlt:
+    "A tall door with four bolts, three drawn open and one still shut, with a small robot waiting in front of it.",
   facts: [
     { label: "The four questions", value: "Can it be found, fetched, read, and recovered from" },
     { label: "Most common failure", value: "Content or schema that exists only after JavaScript runs" },

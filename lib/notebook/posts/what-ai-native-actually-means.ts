@@ -21,6 +21,9 @@ const post: Post = {
   popularityScore: 75,
   tags: ["Career", "AI-Native", "Process"],
   readingMinutes: 7,
+  cover: "/notebook/what-ai-native-actually-means.webp",
+  coverAlt:
+    "An enamel lapel badge held under a magnifying glass, revealing that its back is open and hollow.",
   facts: [
     { label: "What it should mean", value: "Building with these systems is the default method, not an addition" },
     { label: "What it is often used to mean", value: "Familiarity with several tools" },

@@ -21,6 +21,9 @@ const post: Post = {
   popularityScore: 71,
   tags: ["Next.js", "Migration", "Routing"],
   readingMinutes: 5,
+  cover: "/notebook/nextjs-16-middleware-is-now-proxy.webp",
+  coverAlt:
+    "A signpost with the old nameplate unscrewed and leaning against the post as a new one is fixed on.",
   facts: [
     { label: "Old", value: "middleware.ts, export default middleware(), Edge runtime" },
     { label: "New", value: "proxy.ts, export function proxy(request), Node runtime" },

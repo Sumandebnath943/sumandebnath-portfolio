@@ -22,6 +22,9 @@ const post: Post = {
   popularityScore: 80,
   tags: ["Marketing", "AI-Native", "Career"],
   readingMinutes: 8,
+  cover: "/notebook/what-ai-replaces-in-marketing.webp",
+  coverAlt:
+    "A column of paper trays: mechanical arms lift the top three away while a heavy weight holds the bottom two down.",
   facts: [
     { label: "Author's background", value: "Nine years in brand and performance marketing" },
     { label: "Position", value: "Has spent two years building systems that automate parts of that work" },

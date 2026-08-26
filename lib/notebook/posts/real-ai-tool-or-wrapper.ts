@@ -22,6 +22,9 @@ const post: Post = {
   popularityScore: 78,
   tags: ["Marketing", "AI-Native", "Process"],
   readingMinutes: 7,
+  cover: "/notebook/real-ai-tool-or-wrapper.webp",
+  coverAlt:
+    "A large ribboned gift box opened to reveal a much smaller plain box amid a great deal of empty packing.",
   facts: [
     { label: "Models trained from scratch", value: "PentaCMD-47M — 47M parameters, 299,000 training pairs" },
     { label: "Measured accuracy", value: "~87% exact match on its narrow task" },

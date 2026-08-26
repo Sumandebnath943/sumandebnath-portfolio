@@ -22,6 +22,9 @@ const post: Post = {
   popularityScore: 76,
   tags: ["Career", "Process", "AI-Native"],
   readingMinutes: 8,
+  cover: "/notebook/what-a-marketer-has-to-learn.webp",
+  coverAlt:
+    "A toolbox with its ornamental top tray tipped out, revealing a deeper tray of plain, worn tools beneath.",
   facts: [
     { label: "Formal coding education", value: "None" },
     { label: "How it was learned", value: "By shipping, then by reading every change before accepting it" },

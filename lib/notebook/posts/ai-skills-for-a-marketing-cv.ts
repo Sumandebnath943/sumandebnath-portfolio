@@ -21,6 +21,9 @@ const post: Post = {
   popularityScore: 72,
   tags: ["Career", "Marketing", "AI-Native"],
   readingMinutes: 7,
+  cover: "/notebook/ai-skills-for-a-marketing-cv.webp",
+  coverAlt:
+    "A CV page with a column of small identical tool icons struck through, and one line near the bottom circled.",
   facts: [
     { label: "Value of naming a tool", value: "Near zero — the reader has the same access" },
     { label: "What survives a reference check", value: "Artefacts and measured outcomes" },

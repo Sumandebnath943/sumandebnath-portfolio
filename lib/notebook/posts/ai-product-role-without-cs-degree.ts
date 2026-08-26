@@ -22,6 +22,9 @@ const post: Post = {
   popularityScore: 81,
   tags: ["Career", "AI-Native", "Marketing"],
   readingMinutes: 8,
+  cover: "/notebook/ai-product-role-without-cs-degree.webp",
+  coverAlt:
+    "A closed door with a rolled certificate lying on the floor before it, beside an open window with tools on the sill.",
   facts: [
     { label: "Formal engineering qualification", value: "None" },
     { label: "Education", value: "BA English, MBA Marketing, postgraduate digital marketing" },

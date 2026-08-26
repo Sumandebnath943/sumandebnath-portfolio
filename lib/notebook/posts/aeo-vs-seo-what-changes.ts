@@ -22,6 +22,9 @@ const post: Post = {
   popularityScore: 74,
   tags: ["AEO", "SEO", "Marketing"],
   readingMinutes: 8,
+  cover: "/notebook/aeo-vs-seo-what-changes.webp",
+  coverAlt:
+    "Ten stacked bars on the left narrowing through an arrow into a single speech bubble on the right.",
   facts: [
     { label: "SEO competes for", value: "A position among several results" },
     { label: "AEO competes for", value: "Being the passage quoted in one answer" },

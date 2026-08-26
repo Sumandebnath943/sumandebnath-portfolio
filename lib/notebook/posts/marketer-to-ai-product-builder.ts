@@ -36,6 +36,9 @@ const post: Post = {
   popularityScore: 81,
   tags: ["Career", "AI-Native", "Marketing"],
   readingMinutes: 9,
+  cover: "/notebook/marketer-to-ai-product-builder.webp",
+  coverAlt:
+    "An empty open filing box whose long shadow resolves into a dense row of sealed, stacked boxes.",
   facts: [
     { label: "Background", value: "9 years brand and performance marketing, no engineering role" },
     { label: "Started", value: "Late 2024, on a no-code AI builder's free tier" },

@@ -20,6 +20,9 @@ const post: Post = {
   popularityScore: 63,
   tags: ["three.js", "WebGL", "Colour"],
   readingMinutes: 6,
+  cover: "/notebook/three-js-r152-colour-management.webp",
+  coverAlt:
+    "A colour swatch card entering a glass lens and emerging visibly shifted and darkened on the other side.",
   facts: [
     { label: "Changed in", value: "three.js r152 — ColorManagement.enabled defaults to true" },
     { label: "Example input", value: "0xADC1DE → sRGB (0.678, 0.757, 0.871)" },

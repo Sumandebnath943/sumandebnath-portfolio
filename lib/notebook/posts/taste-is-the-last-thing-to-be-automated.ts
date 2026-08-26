@@ -22,6 +22,9 @@ const post: Post = {
   popularityScore: 72,
   tags: ["AI-Native", "Process", "Design"],
   readingMinutes: 6,
+  cover: "/notebook/taste-is-the-last-thing-to-be-automated.webp",
+  coverAlt:
+    "Four near-identical objects on plinths, a machine producing more behind them, and a hand pointing at one.",
   facts: [
     { label: "Cost of producing an option", value: "Near zero, and falling" },
     { label: "Cost of choosing correctly", value: "Unchanged" },

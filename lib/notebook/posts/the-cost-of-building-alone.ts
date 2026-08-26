@@ -23,6 +23,9 @@ const post: Post = {
   popularityScore: 80,
   tags: ["Process", "Career", "AI-Native"],
   readingMinutes: 7,
+  cover: "/notebook/the-cost-of-building-alone.webp",
+  coverAlt:
+    "A long meeting table of empty chairs receding into darkness, with one near chair lit by a single desk lamp.",
   facts: [
     { label: "Team size", value: "One" },
     { label: "Intended finish time", value: "1am" },

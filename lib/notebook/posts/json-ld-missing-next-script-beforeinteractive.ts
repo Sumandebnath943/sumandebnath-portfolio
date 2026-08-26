@@ -24,6 +24,9 @@ const post: Post = {
   popularityScore: 79,
   tags: ["Next.js", "Structured Data", "AEO", "Debugging"],
   readingMinutes: 6,
+  cover: "/notebook/json-ld-missing-next-script-beforeinteractive.webp",
+  coverAlt:
+    "A printed page held up to the light, with one central block entirely blank where content should be.",
   facts: [
     { label: "Symptom", value: "JSON-LD present in DevTools, absent from view-source and curl" },
     { label: "Console output", value: "None — nothing errors" },

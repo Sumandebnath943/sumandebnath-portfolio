@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import PostCover from "./PostCover";
+import PostCover, { HERO_SIZES } from "./PostCover";
 import { categorySlug, CATEGORY_ACCENT, type Category } from "@/lib/notebook/types";
 import type { CardPost } from "@/lib/notebook/card";
 
@@ -86,6 +86,7 @@ function FeaturedHero({ post, popular = false }: { post: CardPost; popular?: boo
           cover={post.cover}
           coverAlt={post.coverAlt}
           priority
+          sizes={HERO_SIZES}
           className="nb-hero-cover"
         />
         <div className="nb-hero-body">

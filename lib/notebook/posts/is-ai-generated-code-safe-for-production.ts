@@ -22,6 +22,9 @@ const post: Post = {
   popularityScore: 82,
   tags: ["Security", "AI-Native", "Process"],
   readingMinutes: 8,
+  cover: "/notebook/is-ai-generated-code-safe-for-production.webp",
+  coverAlt:
+    "Two identical sealed envelopes; one stays sealed while the other is opened and read under a magnifying glass.",
   facts: [
     { label: "The wrong question", value: "Who wrote it" },
     { label: "The right question", value: "Who read it, and what was run against it" },

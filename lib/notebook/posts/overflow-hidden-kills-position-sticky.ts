@@ -24,6 +24,9 @@ const post: Post = {
   popularityScore: 86,
   tags: ["CSS", "Debugging", "Layout"],
   readingMinutes: 4,
+  cover: "/notebook/overflow-hidden-kills-position-sticky.webp",
+  coverAlt:
+    "A sticky note sliding down the smooth inner wall of a sealed box, with a faint motion trail above it.",
   facts: [
     { label: "Symptom", value: "Sticky element scrolls away as if position: static" },
     { label: "Console output", value: "None — no error, no warning" },

@@ -21,6 +21,9 @@ const post: Post = {
   popularityScore: 78,
   tags: ["React", "Debugging", "StrictMode"],
   readingMinutes: 5,
+  cover: "/notebook/strictmode-defeats-init-guards.webp",
+  coverAlt:
+    "A turnstile locked after a single rotation, with a figure stuck behind it and a used ticket on the floor.",
   facts: [
     { label: "Affects", value: "Development only — StrictMode double-mount is not in production" },
     { label: "Trigger", value: "Init state stored outside the component (module scope, or a ref never reset)" },

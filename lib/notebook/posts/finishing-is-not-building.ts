@@ -22,6 +22,9 @@ const post: Post = {
   popularityScore: 78,
   tags: ["Career", "Process", "AI-Native"],
   readingMinutes: 6,
+  cover: "/notebook/finishing-is-not-building.webp",
+  coverAlt:
+    "Eight flags planted in a line: six collapsed and faded, the last two upright and grown into built structures.",
   facts: [
     { label: "Repositories created", value: "Eight, between 21 June and 1 July 2026" },
     { label: "Abandoned within three days", value: "Six" },
