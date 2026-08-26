@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { ArticleRow } from "./magazine";
 import { CATEGORY_ACCENT, categorySlug, type Category } from "@/lib/notebook/types";
@@ -34,6 +34,14 @@ import type { CardPost } from "@/lib/notebook/card";
 
 type Sort = "newest" | "oldest" | "ranked";
 
+// The query string is read once and never changes under this component — the
+// filter chips do not rewrite the URL — so the store never notifies. Defined at
+// module scope because `useSyncExternalStore` re-subscribes whenever the
+// subscribe function's identity changes.
+const subscribeNever = () => () => {};
+const readUrlTag = () => new URLSearchParams(window.location.search).get("tag");
+const serverTag = () => null;
+
 const SORTS: { value: Sort; label: string }[] = [
   { value: "newest", label: "Newest first" },
   { value: "oldest", label: "Oldest first" },
@@ -53,8 +61,37 @@ export default function BrowseAll({
   tags: { tag: string; count: number }[];
 }) {
   const [category, setCategory] = useState<Category | null>(null);
-  const [tag, setTag] = useState<string | null>(null);
   const [sort, setSort] = useState<Sort>("newest");
+
+  // `?tag=` seeds the filter, so an article's "filed under" row can link here.
+  //
+  // **Not** `useSearchParams`. In a statically rendered route that hook forces
+  // its Suspense subtree to client-render, which would take every article out
+  // of the prerendered HTML — and the whole argument for this page, three
+  // paragraphs up, is that a crawler with no JavaScript sees all of them.
+  //
+  // **Not an effect either.** Setting state during mount is a cascading render
+  // and `react-hooks/set-state-in-effect` rejects it. `useSyncExternalStore` is
+  // the sanctioned way to read a browser-only value: the server snapshot is
+  // null, the client snapshot is the real one, and React reconciles the two
+  // itself without a hydration mismatch.
+  const urlTag = useSyncExternalStore(subscribeNever, readUrlTag, serverTag);
+
+  // `undefined` means the reader has not touched the control yet, which is what
+  // lets the URL seed the filter while still allowing it to be cleared to
+  // `null` afterwards. A plain `null` initial state could not tell the two
+  // apart, and clearing the filter would immediately re-apply the URL's tag.
+  const [chosenTag, setTag] = useState<string | null | undefined>(undefined);
+
+  // Checked against the real vocabulary. An unknown tag would otherwise filter
+  // to nothing and print itself back in the results line, which is a stranger's
+  // text rendered on the page for no reason.
+  const tag =
+    chosenTag !== undefined
+      ? chosenTag
+      : urlTag && tags.some((t) => t.tag === urlTag)
+        ? urlTag
+        : null;
 
   const dirty = category !== null || tag !== null || sort !== "newest";
 

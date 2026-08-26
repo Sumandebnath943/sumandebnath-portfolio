@@ -68,6 +68,8 @@ const post: Post = {
       text: "So the case has to be made against that question, not against the degree.",
     },
 
+    { kind: "pullquote", text: "That is what a hiring manager is actually worried about, and \"I am passionate about AI\" does not touch it." },
+
     { kind: "h2", id: "the-evidence", text: "What I would put in front of it" },
     {
       kind: "p",
@@ -138,6 +140,11 @@ const post: Post = {
       text: "I would rather be assessed on those five than on a credential, and if I fail them then the objection was right in my case and the hiring decision is correct.",
     },
 
+    {
+      kind: "promote",
+      href: "/projects",
+      note: "The answer to the question this article says hiring managers are actually asking — every system here is one I built and can be opened.",
+    },
     { kind: "h2", id: "honest-close", text: "Where this actually stands" },
     {
       kind: "p",

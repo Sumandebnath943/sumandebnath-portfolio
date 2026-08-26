@@ -50,6 +50,8 @@ const post: Post = {
       text: "At the time this felt like the most productive stretch I had ever had. Every few days something worked that had not worked before. That is a genuinely intoxicating feeling and it is why the habit is difficult to see from the inside.",
     },
 
+    { kind: "pullquote", text: "Six of those eight received their last commit within three days of being created." },
+
     { kind: "h2", id: "the-mistake", text: "The mistake was not speed" },
     {
       kind: "p",
@@ -94,6 +96,11 @@ const post: Post = {
       text: "Everything that makes those two projects worth anything today happened after the point where the earlier six had stopped. The evaluation harness, the interface someone else can operate, the failure handling, the part where it keeps running when I am not watching it. All of that is week three, week five, week nine work. None of it is exciting and all of it is what separates a thing that exists from a thing that is used.",
     },
 
+    {
+      kind: "promote",
+      href: "/projects",
+      note: "The two that survived, and everything built since. Finished work only — the abandoned eight are not here.",
+    },
     { kind: "h2", id: "what-i-do-now", text: "What I do differently" },
     {
       kind: "ol",

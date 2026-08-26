@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import MotionProvider from "@/components/providers/MotionProvider";
@@ -7,15 +8,18 @@ import RelatedPages from "@/components/ui/RelatedPages";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import PostCover from "@/components/notebook/PostCover";
 import ArticleRail from "@/components/notebook/ArticleRail";
+import CompactCard from "@/components/notebook/CompactCard";
 import ReadingProgress from "@/components/notebook/ReadingProgress";
 import Contact from "@/components/sections/Contact";
 import PostBody from "@/components/notebook/PostBody";
 import { SITE_URL } from "@/lib/projects";
 import { getPage } from "@/lib/pages";
 import { CATEGORY_ACCENT } from "@/lib/notebook/types";
+import { toCardPost } from "@/lib/notebook/card";
 import {
   allPosts,
   formatPostDate,
+  furtherReading,
   getPost,
   headingsOf,
   postModified,
@@ -82,10 +86,13 @@ export default async function NotebookPostPage({
 
   const url = `${SITE_URL}${postUrl(post.slug)}`;
   const headings = headingsOf(post);
-  const posts = allPosts();
-  const index = posts.findIndex((p) => p.slug === post.slug);
-  const newer = index > 0 ? posts[index - 1] : undefined;
-  const older = index < posts.length - 1 ? posts[index + 1] : undefined;
+
+  // The rail and the grid at the foot are chosen together so neither repeats
+  // the other — see `furtherReading()`. The Newer/Older pair that used to sit
+  // at the end is gone with it: chronological neighbours are an accident of
+  // publication order, and "the post I happened to write before this one" is
+  // rarely the post somebody finishing this one wants next.
+  const { related, picks, more } = furtherReading(post);
 
   // ── Structured data ───────────────────────────────────────────────────────
   //
@@ -243,14 +250,6 @@ export default async function NotebookPostPage({
                 <span className="sep">·</span>
                 <span>Suman Debnath</span>
               </div>
-
-              <ul className="nb-tags" style={{ marginTop: "1.25rem" }}>
-                {post.tags.map((tag) => (
-                  <li key={tag} className="nb-tag">
-                    {tag}
-                  </li>
-                ))}
-              </ul>
               </div>
             </div>
           </header>
@@ -329,58 +328,112 @@ export default async function NotebookPostPage({
               </section>
             ) : null}
 
-            {/* The end of the article, which used to be three bare links.
-                Who wrote it, where to go next as real cards, and the feed. */}
-            <footer className="nb-end">
-              <div className="nb-end-author">
-                <p className="nb-end-kicker">Written by</p>
-                <p className="nb-end-name">Suman Debnath</p>
-                <p className="nb-end-bio">
-                  Senior brand marketing manager who builds AI-native products. Everything here is
-                  first-hand — written while building, not researched afterwards.
-                </p>
-                <p className="nb-end-links">
-                  <Link href="/about" className="nb-link">
-                    About
-                  </Link>
-                  <span className="sep">·</span>
-                  <Link href="/projects" className="nb-link">
-                    What I have built
-                  </Link>
-                  <span className="sep">·</span>
-                  <a href="/notebook/rss.xml" className="nb-link">
-                    RSS
-                  </a>
-                </p>
-              </div>
-
-              <nav className="nb-end-nav" aria-label="More articles">
-                {newer ? (
-                  <Link href={postUrl(newer.slug)} className="nb-end-card">
-                    <span className="nb-end-dir">← Newer</span>
-                    <span className="nb-end-title">{newer.title}</span>
-                  </Link>
-                ) : null}
-                {older ? (
-                  <Link href={postUrl(older.slug)} className="nb-end-card">
-                    <span className="nb-end-dir">Older →</span>
-                    <span className="nb-end-title">{older.title}</span>
-                  </Link>
-                ) : null}
-              </nav>
-
-              <p className="nb-end-all">
-                <Link href="/notebook/all" className="nb-link">
-                  Browse all articles
-                </Link>
-              </p>
-            </footer>
             </div>
 
             {/* Five modules now, not one, so the rail is no longer conditional
                 on the article having headings — `ArticleRail` decides which of
                 its own sections have anything to show. */}
-            <ArticleRail post={post} headings={headings} url={url} />
+            <ArticleRail
+              post={post}
+              headings={headings}
+              url={url}
+              related={related}
+              picks={picks}
+            />
+          </div>
+
+          {/* The foot of the article, outside `.nb-read` and across the whole
+              band rather than inside the prose column.
+
+              That is what makes a three-up grid possible: at the 38rem measure
+              three cards are 190px each and unreadable, at the 58.5rem band
+              they are close to 290px. It is also simply where this belongs —
+              "keep reading" is not part of the argument the column is making,
+              and every publication puts it under both columns rather than at
+              the bottom of one. */}
+          <div className="nb-shell">
+            <footer className="nb-end">
+              {more.length > 0 ? (
+                <section aria-labelledby="nb-more-label">
+                  <h2 id="nb-more-label" className="nb-end-h">
+                    Keep reading
+                  </h2>
+                  <ul className="nb-end-grid">
+                    {more.map((p) => (
+                      <li key={p.slug}>
+                        {/* Three across the band, so roughly 290px each below
+                            1024 and a single column under 34rem. */}
+                        <CompactCard
+                          post={toCardPost(p)}
+                          sizes="(max-width: 34rem) 88px, 96px"
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ) : null}
+
+              {/* The tags moved here from the masthead and became links.
+                  The Conversation ends on a tag grid and it is the right place
+                  for them: at the top they were five words a reader had no use
+                  for yet, and they were not clickable, which made them look
+                  like navigation that had broken. */}
+              <section className="nb-end-filed" aria-labelledby="nb-filed-label">
+                <h2 id="nb-filed-label" className="nb-end-h">
+                  Filed under
+                </h2>
+                <ul className="nb-tags">
+                  {post.tags.map((tag) => (
+                    <li key={tag}>
+                      <Link
+                        href={`/notebook/all?tag=${encodeURIComponent(tag)}`}
+                        className="nb-tag nb-tag--link"
+                      >
+                        {tag}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+
+              <section className="nb-end-author" aria-labelledby="nb-endauthor-label">
+                <Image
+                  src="/profile/portrait.webp"
+                  alt=""
+                  width={88}
+                  height={88}
+                  quality={75}
+                  className="nb-end-photo"
+                />
+                <div>
+                  <p id="nb-endauthor-label" className="nb-end-kicker">
+                    Written by
+                  </p>
+                  <p className="nb-end-name">Suman Debnath</p>
+                  <p className="nb-end-bio">
+                    Senior brand marketing manager who builds AI-native products. Everything here is
+                    first-hand — written while building, not researched afterwards.
+                  </p>
+                  <p className="nb-end-links">
+                    <Link href="/about" className="nb-link">
+                      About
+                    </Link>
+                    <span className="sep">·</span>
+                    <Link href="/projects" className="nb-link">
+                      What I have built
+                    </Link>
+                    <span className="sep">·</span>
+                    <Link href="/notebook/all" className="nb-link">
+                      All articles
+                    </Link>
+                    <span className="sep">·</span>
+                    <a href="/notebook/rss.xml" className="nb-link">
+                      RSS
+                    </a>
+                  </p>
+                </div>
+              </section>
+            </footer>
           </div>
         </article>
       </main>

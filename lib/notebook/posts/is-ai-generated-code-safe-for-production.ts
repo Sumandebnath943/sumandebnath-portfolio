@@ -59,6 +59,8 @@ const post: Post = {
       kind: "p",
       text: "When you write something by hand you retain a map of it — roughly where things are, what depends on what, which parts you were unsure about. Accepting generated code gives you a much weaker map unless you deliberately build one by reading. Six months later that difference decides whether you can reason about your own system.",
     },
+
+    { kind: "pullquote", text: "Accepting generated code gives you a much weaker map unless you deliberately build one by reading." },
     {
       kind: "h3", id: "plausibility", text: "It is plausible, which defeats skimming" },
     {

@@ -90,6 +90,8 @@ setTimeout(() => {
       text: "The damage here was not a bug. It was a set of designs never attempted. A scroll-driven timeline got ruled out on the strength of one sentence. It works, incidentally — it is on the site now, and it depends on precisely the `window` scroll behaviour the note said did not exist.",
     },
 
+    { kind: "pullquote", text: "A scroll-driven timeline got ruled out on the strength of one sentence." },
+
     { kind: "h2", id: "writing-better", text: "Writing findings that fail safely" },
     {
       kind: "p",
@@ -114,6 +116,11 @@ setTimeout(() => {
       text: "Same finding. Same practical advice for the common case. One sentence at the end that gives the next person permission to check — which is the only part that would have made a difference.",
     },
 
+    {
+      kind: "promote",
+      href: "/journey",
+      note: "The timeline that note ruled out. It exists, and it depends on precisely the scroll behaviour the note said was unavailable.",
+    },
     { kind: "h2", id: "the-general-point", text: "The general point" },
     {
       kind: "p",

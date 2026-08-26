@@ -46,6 +46,8 @@ const post: Post = {
       text: "I went and found out what the thing actually required. That took a couple of days. The prompt that started the build took about twenty minutes to write and the first working version arrived shortly after. Those proportions are not an accident and they are not unusual for me — they are the method.",
     },
 
+    { kind: "pullquote", text: "Those proportions are not an accident and they are not unusual for me — they are the method." },
+
     { kind: "h2", id: "the-proportions", text: "Generating is the cheapest phase" },
     {
       kind: "p",

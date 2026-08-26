@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 
 /**
  * Copy the link, hand it to the OS share sheet, or take the feed.
@@ -17,17 +17,23 @@ import { useEffect, useState } from "react";
 
 type State = "idle" | "copied" | "failed";
 
+// Whether the OS share sheet exists. It does on a phone and usually does not on
+// a desktop browser, and it never changes while the page is open, so the store
+// never notifies. At module scope because `useSyncExternalStore` re-subscribes
+// whenever the subscribe function's identity changes.
+const subscribeNever = () => () => {};
+const hasShare = () => typeof navigator !== "undefined" && typeof navigator.share === "function";
+const noShareOnServer = () => false;
+
 export default function ShareRow({ url, title }: { url: string; title: string }) {
   const [state, setState] = useState<State>("idle");
-  // `navigator.share` exists on a phone and usually not on a desktop browser.
-  // Reading it during render would produce different markup on the server and
-  // the client, so the button is mounted in an effect and the first paint
-  // matches what was prerendered.
-  const [canShare, setCanShare] = useState(false);
 
-  useEffect(() => {
-    setCanShare(typeof navigator !== "undefined" && typeof navigator.share === "function");
-  }, []);
+  // Read through `useSyncExternalStore` rather than set in an effect. Reading
+  // `navigator` during render would give the server and the client different
+  // markup; setting it in an effect is a cascading render that
+  // `react-hooks/set-state-in-effect` rejects. This gives false on the server,
+  // the real value on the client, and lets React reconcile the two.
+  const canShare = useSyncExternalStore(subscribeNever, hasShare, noShareOnServer);
 
   useEffect(() => {
     if (state === "idle") return;

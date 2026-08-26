@@ -55,6 +55,8 @@ const post: Post = {
       text: "But something subtler is also true. You cannot review what you cannot read, and reviewing is the entire job. So you do end up learning to read code — fluently, in several languages — without ever sitting down to learn a language. It arrives sideways, from reading thousands of changes and deciding whether each one is right. That is a real education and it is not the one anybody advertises.",
     },
 
+    { kind: "pullquote", text: "You cannot review what you cannot read, and reviewing is the entire job." },
+
     { kind: "h2", id: "the-real-list", text: "What you actually have to understand" },
     {
       kind: "p",

@@ -30,7 +30,35 @@ export type Block =
   /** A boxed aside. `warn` is the "this will bite you" tone; `note` is neutral. */
   | { kind: "callout"; tone: "warn" | "note"; title?: string; text: string }
   | { kind: "quote"; text: string; cite?: string }
-  | { kind: "table"; head: string[]; rows: string[][]; caption?: string };
+  | { kind: "table"; head: string[]; rows: string[][]; caption?: string }
+  /**
+   * A sentence from this article, set large, breaking the grey of the column.
+   *
+   * **Selected, never written.** Lift a real sentence out of a nearby
+   * paragraph. A pull-quote saying something the article does not is a caption
+   * pretending to be a quote, and inventing them is among the most recognisable
+   * machine-writing tells there is — see BLOG_GUIDELINES §6, which bans the
+   * same move for originating mistakes.
+   *
+   * Rendered as an `<aside>`, and `wordCount` in the article's structured data
+   * ignores it, so repeating a sentence does not inflate the length the page
+   * claims.
+   */
+  | { kind: "pullquote"; text: string }
+  /**
+   * A card pointing at another page on this site, placed mid-article.
+   *
+   * `href` is a path exactly as it appears in `lib/pages.ts`; the label and the
+   * blurb are read from that registry rather than retyped, so a renamed page
+   * cannot leave a stale card behind. `note` overrides the blurb where this
+   * article wants to say something more specific about why it is pointing
+   * there.
+   *
+   * **Only where it is genuinely relevant.** Twenty of the twenty-six posts
+   * list `/projects` in `seeAlso`; dropping that card into all of them would
+   * reproduce exactly the interchangeable ad slot this is modelled on.
+   */
+  | { kind: "promote"; href: string; note?: string };
 
 export interface PostFact {
   label: string;

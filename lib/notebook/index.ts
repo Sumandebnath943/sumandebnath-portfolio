@@ -211,6 +211,48 @@ export function popularPosts(limit = 2, exclude: ReadonlySet<string> = new Set()
     .slice(0, limit);
 }
 
+/** Everything an article page offers a reader once they finish. */
+export interface FurtherReading {
+  /** Rail: the rest of this post's category. */
+  related: Post[];
+  /** Rail: the editor's pick. */
+  picks: Post[];
+  /** The foot of the article: three more. */
+  more: Post[];
+}
+
+/**
+ * The three "read next" slots on an article, chosen together.
+ *
+ * Composed in one place for the same reason `magazine()` composes the index:
+ * every slot draws from one pool and marks what it took, so no article appears
+ * twice on the page. Chosen separately, the rail's "more in this category" and
+ * the grid at the foot would print an identical three cards on every post that
+ * has three — which is most of them.
+ *
+ * `more` prefers the rest of the category and falls back to the newest across
+ * the notebook. That fallback is what keeps the grid full for React, Graphics
+ * and CSS & Layout, which hold a single article each and would otherwise end on
+ * nothing.
+ */
+export function furtherReading(post: Post): FurtherReading {
+  const related = relatedInCategory(post, 3);
+
+  const taken = new Set<string>([post.slug, ...related.map((p) => p.slug)]);
+  const picks = popularPosts(2, taken);
+  for (const p of picks) taken.add(p.slug);
+
+  const more: Post[] = [];
+  for (const p of [...postsInCategory(post.category), ...allPosts()]) {
+    if (more.length === 3) break;
+    if (taken.has(p.slug)) continue;
+    taken.add(p.slug);
+    more.push(p);
+  }
+
+  return { related, picks, more };
+}
+
 /** Every distinct tag, ordered by how many posts carry it. */
 export function allTags(): { tag: string; count: number }[] {
   const counts = new Map<string, number>();

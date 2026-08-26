@@ -62,6 +62,8 @@ const post: Post = {
       text: "Then write the second list, which matters more: everything it will not do. Explicitly, in writing, so that at eleven o'clock on Saturday night when a feature seems obviously necessary, you have a note from a calmer person telling you it is not.",
     },
 
+    { kind: "pullquote", text: "If the sentence contains \"and\", you have two weekends of work and will finish neither." },
+
     { kind: "h2", id: "the-research", text: "Then research, even now" },
     {
       kind: "p",

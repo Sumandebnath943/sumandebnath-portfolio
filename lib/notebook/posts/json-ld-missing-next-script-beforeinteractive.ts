@@ -71,6 +71,8 @@ const post: Post = {
       text: "The reasoning behind `beforeInteractive` seems sound when you write it: this is metadata, crawlers should see it as early as possible, so load it as early as the framework allows. Every part of that sentence is wrong, but not obviously.",
     },
 
+    { kind: "pullquote", text: "Every part of that sentence is wrong, but not obviously." },
+
     { kind: "h2", id: "what-it-does", text: "What beforeInteractive actually does" },
     {
       kind: "p",

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getPage } from "@/lib/pages";
 import type { Block } from "@/lib/notebook";
 
 /**
@@ -151,6 +152,47 @@ function renderBlock(block: Block, i: number): React.ReactNode {
           {block.cite ? <cite className="nb-cite">{block.cite}</cite> : null}
         </blockquote>
       );
+
+    case "pullquote":
+      // `<aside>`, not `<blockquote>`. The words are already in the article a
+      // paragraph away; this is a second presentation of them, not a citation
+      // of somebody else. Marking it as an aside is also what keeps a consumer
+      // reading the page for prose from counting the sentence twice.
+      return (
+        <aside key={key} className="nb-pullquote">
+          <p>{inline(block.text, key)}</p>
+        </aside>
+      );
+
+    case "promote": {
+      const page = getPage(block.href);
+      // Loud, not silent. Every article is generated at build time, so a bad
+      // href fails `npm run build` with the path in the message rather than
+      // rendering an article with a hole where a card should be. `seeAlso`
+      // filters unknown pages away quietly and that has always been a worse
+      // trade — AGENTS.md §7 is about exactly this class of thing.
+      if (!page) {
+        throw new Error(
+          `notebook: a "promote" block points at "${block.href}", which is not in lib/pages.ts`,
+        );
+      }
+      return (
+        <aside
+          key={key}
+          className="nb-promote"
+          style={{ ["--promo" as string]: page.accent }}
+        >
+          <p className="nb-promote-kicker">Elsewhere on this site</p>
+          <Link href={page.href} className="nb-promote-link">
+            <span className="nb-promote-title">{page.label}</span>
+            <span className="nb-promote-blurb">{block.note ?? page.blurb}</span>
+            <span className="nb-promote-cta">
+              Have a look <span aria-hidden="true">→</span>
+            </span>
+          </Link>
+        </aside>
+      );
+    }
 
     case "table":
       return (

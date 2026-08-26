@@ -83,6 +83,8 @@ const post: Post = {
       text: "That flag is global, and it is global across every consumer of the same `three` instance. In my case a GLTF model is mounted in the root layout and renders on every page from that same instance. Disabling colour management site-wide to correct one background would have changed how the model renders everywhere else. Fixing a background by re-tinting the mascot is not a fix.",
     },
 
+    { kind: "pullquote", text: "That flag is global, and it is global across every consumer of the same `three` instance." },
+
     { kind: "h2", id: "compensating", text: "Compensating locally instead" },
     {
       kind: "p",

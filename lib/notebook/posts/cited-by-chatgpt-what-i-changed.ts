@@ -76,6 +76,8 @@ const post: Post = {
       kind: "p",
       text: "It did nothing. Not a small effect I failed to measure — nothing at all. The site was already saying my name plenty of times; repetition was never the missing input.",
     },
+
+    { kind: "pullquote", text: "This is the reflex from a decade of search engine optimisation and it is a reflex worth unlearning." },
     {
       kind: "p",
       text: "What an answer engine is doing is **entity resolution**: deciding which real-world person a name refers to, then deciding whether it knows enough about that person to say anything. Repetition does not help with either. Corroboration does, and structure does.",

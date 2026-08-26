@@ -59,6 +59,8 @@ const post: Post = {
       text: "Most of the value in serious AI products is not in the model at all. It is in the boring surrounding work: getting your data in, deciding who is allowed to see what, handling the cases where the answer is wrong, keeping a record of what was done, and fitting into the way your organisation actually operates.",
     },
 
+    { kind: "pullquote", text: "If the answer is a body of work that would still be valuable with a different model plugged into it, that is a product." },
+
     { kind: "h2", id: "the-tells", text: "Five tells you can check without being technical" },
     {
       kind: "h3", id: "tell-1", text: "1. Ask what happens when it is wrong" },
@@ -125,6 +127,11 @@ const post: Post = {
       text: "It is also expensive in effort, which is why almost nobody does it and why claiming it is a strong signal when true. If a vendor says they trained their own model, ask what on, how big, and how they measured it. The answers arrive quickly from anyone who did, and vaguely from anyone who did not.",
     },
 
+    {
+      kind: "promote",
+      href: "/slms/pentacmd",
+      note: "A model I trained rather than called — the other side of the line this article is drawing.",
+    },
     { kind: "h2", id: "the-script", text: "Four questions to take into the meeting" },
     {
       kind: "ol",

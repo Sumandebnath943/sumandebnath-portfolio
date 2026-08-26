@@ -74,6 +74,8 @@ const post: Post = {
       kind: "p",
       text: "The distinction that matters is between a **crawler** and a **fetcher**. A crawler gathers pages at scale for an index or a training set, and largely ignores llms.txt. A fetcher retrieves a specific URL right now because a user just referred to it — you paste a domain into a coding assistant, or ask a desktop agent about a product, and something goes and looks.",
     },
+
+    { kind: "pullquote", text: "There is a real use case and it is more interesting than the one being sold." },
     {
       kind: "p",
       text: "Those on-demand agents do read it. Coding assistants and agent frameworks will pick it up when a user names a domain, which makes llms.txt an **agent-to-agent convenience file** rather than a search asset. If somebody points an assistant at your site and asks what you do, a good llms.txt is the difference between a confident answer and a guess assembled from your navigation.",

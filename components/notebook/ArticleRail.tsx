@@ -4,7 +4,7 @@ import CompactCard from "./CompactCard";
 import ShareRow from "./ShareRow";
 import { toCardPost } from "@/lib/notebook/card";
 import { categorySlug } from "@/lib/notebook/types";
-import { popularPosts, relatedInCategory, type Post } from "@/lib/notebook";
+import type { Post } from "@/lib/notebook";
 
 /**
  * The article rail: contents, author, related reading, editor's pick, share.
@@ -32,20 +32,23 @@ export default function ArticleRail({
   post,
   headings,
   url,
+  related,
+  picks,
 }: {
   post: Post;
   headings: { id: string; text: string }[];
   /** Absolute URL of the article, for the clipboard and the share sheet. */
   url: string;
+  /**
+   * Both lists are chosen by `furtherReading()` and passed in rather than
+   * looked up here. The rail is not the only thing on the page offering a
+   * reader somewhere to go next — the grid at the foot does too — and the two
+   * have to agree about what each has already used or they print the same
+   * three cards twice.
+   */
+  related: Post[];
+  picks: Post[];
 }) {
-  const related = relatedInCategory(post, 3);
-
-  // Excluded from the pick so the rail cannot print the same article twice:
-  // the highest-scoring post in a small category is very often also one of its
-  // three most recent.
-  const seen = new Set([post.slug, ...related.map((p) => p.slug)]);
-  const picks = popularPosts(2, seen);
-
   return (
     <div className="nb-read-rail">
       {/* Unchanged threshold: two headings is a list of two links, which is

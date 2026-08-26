@@ -51,6 +51,8 @@ const post: Post = {
       kind: "p",
       text: "So an ancestor with `overflow: hidden` becomes the container the sticky element sticks inside. That container does not scroll; it clips. The sticky child therefore has no scroll to respond to, and travels with the page like a static element.",
     },
+
+    { kind: "pullquote", text: "The sticky child therefore has no scroll to respond to, and travels with the page like a static element." },
     {
       kind: "callout",
       tone: "warn",

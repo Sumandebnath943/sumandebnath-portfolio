@@ -61,6 +61,8 @@ const post: Post = {
       text: "I want to be careful not to romanticise this. The hours are a cost and they are self-inflicted, and I would not hold them up as evidence of anything except that I have not solved my own scheduling. The sleep is the part of this I would change.",
     },
 
+    { kind: "pullquote", text: "This is true whether the work is going well or badly, which means the work going badly produces no external signal at all." },
+
     { kind: "h2", id: "what-is-missing", text: "What is actually missing is disagreement" },
     {
       kind: "p",

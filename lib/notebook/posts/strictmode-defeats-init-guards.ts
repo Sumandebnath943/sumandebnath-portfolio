@@ -90,6 +90,8 @@ export default function VisitorPing() {
       text: "This compounds with any subsystem that already fails quietly. In my case the write path returns `false` on failure rather than throwing, so a partial failure and a success are indistinguishable from the calling side. Two silent layers stacked on top of each other take a long time to see through.",
     },
 
+    { kind: "pullquote", text: "Two silent layers stacked on top of each other take a long time to see through." },
+
     { kind: "h2", id: "diagnosing", text: "Telling it apart from a real bug" },
     {
       kind: "p",

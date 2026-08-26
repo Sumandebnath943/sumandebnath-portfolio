@@ -60,6 +60,8 @@ const post: Post = {
       text: "I have shipped twenty-one products since. This is the part of that story people do not usually get told, because most accounts of building with AI are written by engineers who added a new tool to an existing skill. I did not have the existing skill. I was a brand marketer who had never written a line of production code in his life.",
     },
 
+    { kind: "pullquote", text: "It is completely empty — not a single commit, not one file, not even a README." },
+
     { kind: "h2", id: "the-conversation", text: "It started as a conversation about money" },
     {
       kind: "p",
@@ -188,6 +190,11 @@ const post: Post = {
       text: "Everything the critics describe — secrets committed to public repositories, tables left open, an application nobody read before shipping — genuinely happens, and it happens because the generating is easy and the reviewing is boring. The answer is not to argue that the risk is imaginary. It is to do the boring part and be able to show that you did.",
     },
 
+    {
+      kind: "promote",
+      href: "/journey",
+      note: "The same account with the artefacts attached — the dates, the repositories, and what was actually happening at each turn.",
+    },
     { kind: "h2", id: "the-empty-repo", text: "Back to the empty repository" },
     {
       kind: "p",

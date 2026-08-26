@@ -81,6 +81,8 @@ const post: Post = {
       kind: "p",
       text: "Many agents do not execute JavaScript. They request the URL, take the HTML, and work with what came back. If your content is assembled client-side, they receive an empty shell. The check takes one command and it is the highest-value thing in this article:",
     },
+
+    { kind: "pullquote", text: "This is where most sites fail, and where I failed, on the site you are reading." },
     {
       kind: "code",
       lang: "bash",

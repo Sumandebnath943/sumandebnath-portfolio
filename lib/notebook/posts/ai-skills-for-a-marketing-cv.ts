@@ -44,6 +44,8 @@ const post: Post = {
       text: "The problem is not that using these tools is unimpressive. It is that the claim is uncheckable and universal, which are the two properties that make any CV line worthless.",
     },
 
+    { kind: "pullquote", text: "It is that the claim is uncheckable and universal, which are the two properties that make any CV line worthless." },
+
     { kind: "h2", id: "what-is-screened", text: "What is actually being screened for" },
     {
       kind: "p",
@@ -129,6 +131,11 @@ const post: Post = {
       text: "This is also a defensive position. As claiming AI competence becomes universal, the value moves entirely to the people who can demonstrate it, and the gap between a candidate who lists tools and one who can show a working thing widens every quarter.",
     },
 
+    {
+      kind: "promote",
+      href: "/resume",
+      note: "My own CV, written against the rule in this article: every AI line on it names a thing that exists and can be checked.",
+    },
     { kind: "h2", id: "the-test", text: "The test to run on your own CV" },
     {
       kind: "p",

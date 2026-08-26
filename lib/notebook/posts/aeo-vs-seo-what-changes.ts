@@ -51,6 +51,8 @@ const post: Post = {
       kind: "p",
       text: "An answer engine produces **one answer**. It may cite two or three sources underneath, but there is no fourth position and no consolation share. You are either in the answer or you are not, and the distribution of outcomes is far more brutal than a ranked list.",
     },
+
+    { kind: "pullquote", text: "You are either in the answer or you are not, and the distribution of outcomes is far more brutal than a ranked list." },
     {
       kind: "quote",
       text: "Search optimisation is competing for a position. Answer optimisation is competing to be the sentence that gets used.",

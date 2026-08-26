@@ -512,6 +512,93 @@
   color: var(--nb-ink-soft);
 }
 
+/* ── Pull-quote ─────────────────────────────────────────────────────────────
+   A sentence already in the article, set large to break the column.
+
+   Deliberately not a box. Every other interruption on this page — callout,
+   facts, promo, answer — has a border and a fill, and a fifth boxed thing would
+   read as more furniture. This is just type, hanging slightly into the left
+   margin with a rule above and below, which is what a magazine does. */
+.nb-pullquote {
+  margin: 2.75rem 0;
+  padding: 1.5rem 0;
+  border-top: 2px solid var(--nb-accent, var(--nb-rule-strong));
+  border-bottom: 1px solid var(--nb-rule);
+}
+
+.nb-pullquote p {
+  margin: 0;
+  font-family: var(--font-instrument), serif;
+  font-size: 1.5rem;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: var(--nb-ink);
+  text-wrap: balance;
+}
+
+@media (max-width: 34rem) {
+  .nb-pullquote p {
+    font-size: 1.25rem;
+  }
+}
+
+/* ── The in-article promo ───────────────────────────────────────────────────
+   The one card allowed to interrupt the prose. It takes the target page's own
+   accent from lib/pages.ts rather than the article's, because it belongs to
+   where it points, not to where it sits. */
+.nb-promote {
+  margin: 2.75rem 0;
+  border: 1px solid var(--nb-rule);
+  border-left: 3px solid var(--promo, var(--nb-clay));
+  border-radius: 0.75rem;
+  background: var(--nb-surface);
+  padding: 1.25rem 1.5rem;
+}
+
+.nb-promote-kicker {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.5625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--promo, var(--nb-ink-mute));
+  margin: 0 0 0.6rem;
+}
+
+.nb-promote-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.nb-promote-title {
+  display: block;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--nb-ink);
+  margin-bottom: 0.35rem;
+}
+
+.nb-promote-link:hover .nb-promote-title {
+  color: var(--promo, var(--nb-clay));
+}
+
+.nb-promote-blurb {
+  display: block;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--nb-ink-soft);
+}
+
+.nb-promote-cta {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--promo, var(--nb-clay));
+}
+
 /* ── Quote ──────────────────────────────────────────────────────────────── */
 
 .nb-quote {
@@ -893,6 +980,13 @@
   .nb-read-rail > section:first-of-type {
     margin-top: 2.5rem;
   }
+  /* The rail's author card is a sidebar convenience. In one column it would sit
+     a few hundred pixels above the far larger author block that closes the
+     article, saying the same thing twice. The foot keeps it; the rail drops it.
+     Nothing is lost, because the two carry identical information. */
+  .nb-railauthor {
+    display: none;
+  }
 }
 
 /* ── Rail modules ───────────────────────────────────────────────────────────
@@ -1159,19 +1253,81 @@
   color: var(--nb-clay);
 }
 
-/* ── End of article ─────────────────────────────────────────────────────── */
+/* ── The foot of the article ────────────────────────────────────────────────
+   Rebuilt in step 3. It was an author box, two chronological Newer/Older cards
+   and a bare link, all inside the prose column. It is now three sections across
+   the whole band: what to read next, what this is filed under, and who wrote
+   it.
+
+   Newer/Older is gone. Publication order is an accident, and the post written
+   immediately before this one is rarely the post somebody finishing it wants —
+   `furtherReading()` picks on category and score instead. */
 
 .nb-end {
-  margin: 4rem 0 0;
+  margin: 4.5rem 0 0;
   padding-top: 2.5rem;
   border-top: 1px solid var(--nb-rule);
 }
 
+.nb-end-h {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--nb-accent, var(--nb-ink-mute));
+  margin: 0 0 1.25rem;
+}
+
+/* Three across the band. `auto-fit` with a 15rem floor drops it to two and
+   then one on the way down, so it never produces a 190px card. */
+.nb-end-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1.5rem 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nb-end-filed {
+  margin-top: 3rem;
+}
+
+/* The tags are links now, so they need a hover state and a pointer. As inert
+   `<li>`s they looked like navigation that had stopped working. */
+.nb-tag--link {
+  display: inline-block;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.nb-tag--link:hover {
+  background: var(--nb-accent, var(--nb-clay));
+  background: var(--nb-accent-deep, var(--nb-clay));
+  border-color: var(--nb-accent-deep, var(--nb-clay));
+  color: var(--nb-cream);
+}
+
+/* Ink, and the last thing on the page before the site furniture. A dark band
+   closes the article — the alternative was a fourth pale box in a column that
+   already had several, which is the complaint this whole pass answers. */
 .nb-end-author {
-  padding: 1.5rem 1.75rem;
-  border: 1px solid var(--nb-rule);
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  margin-top: 3rem;
+  padding: 1.75rem 2rem;
   border-radius: 0.9rem;
-  background: var(--nb-surface);
+  background: var(--nb-void);
+}
+
+.nb-end-photo {
+  width: 5.5rem;
+  height: 5.5rem;
+  flex: none;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(237, 231, 218, 0.22);
 }
 
 .nb-end-kicker {
@@ -1179,83 +1335,54 @@
   font-size: 0.625rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--nb-ink-mute);
+  color: var(--nb-cream);
+  opacity: 0.6;
   margin: 0 0 0.5rem;
 }
 
 .nb-end-name {
-  font-size: 1.0625rem;
+  font-size: 1.125rem;
   font-weight: 600;
-  color: var(--nb-ink);
+  color: var(--nb-cream);
   margin: 0 0 0.5rem;
 }
 
 .nb-end-bio {
   font-size: 0.9375rem;
   line-height: 1.7;
-  color: var(--nb-ink-soft);
-  margin: 0 0 0.85rem;
+  color: rgba(237, 231, 218, 0.72);
+  margin: 0 0 1rem;
+  max-width: 34rem;
 }
 
 .nb-end-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
   margin: 0;
   font-size: 0.875rem;
-  color: var(--nb-ink-mute);
 }
 
 .nb-end-links .sep {
-  margin: 0 0.5rem;
-  opacity: 0.5;
+  color: rgba(237, 231, 218, 0.3);
 }
 
-.nb-end-nav {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  gap: 1rem;
-  margin: 1.5rem 0 0;
+/* `.nb-link` is written for paper and is unreadable on the ink block. */
+.nb-end-links .nb-link {
+  color: var(--nb-cream);
+  text-decoration-color: rgba(237, 231, 218, 0.4);
 }
 
-.nb-end-card {
-  display: block;
-  padding: 1.1rem 1.25rem;
-  border: 1px solid var(--nb-rule);
-  border-radius: 0.75rem;
-  text-decoration: none;
-  color: inherit;
-  transition: border-color 0.2s, transform 0.2s;
+.nb-end-links .nb-link:hover {
+  color: #fff;
+  text-decoration-color: #fff;
 }
 
-.nb-end-card:hover {
-  border-color: var(--nb-rule-strong);
-  transform: translateY(-2px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .nb-end-card:hover {
-    transform: none;
+@media (max-width: 40rem) {
+  .nb-end-author {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
   }
-}
-
-.nb-end-dir {
-  display: block;
-  font-family: var(--font-dm-mono), ui-monospace, monospace;
-  font-size: 0.625rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--nb-clay);
-  margin-bottom: 0.5rem;
-}
-
-.nb-end-title {
-  display: block;
-  font-size: 0.9375rem;
-  line-height: 1.45;
-  font-weight: 600;
-  color: var(--nb-ink);
-}
-
-.nb-end-all {
-  margin: 1.5rem 0 0;
-  text-align: center;
-  font-size: 0.875rem;
 }

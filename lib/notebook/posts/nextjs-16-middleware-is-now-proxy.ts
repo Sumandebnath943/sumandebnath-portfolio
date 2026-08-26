@@ -101,6 +101,8 @@ export const config = { matcher: ["/desk-4f7a/:path*"] };`,
       text: "If you keep a path constant in a shared module — which you should, if several files need it — the matcher becomes a deliberate duplication of that value. Comment it as such at both ends, because it looks exactly like the kind of duplication a future reader will helpfully refactor away.",
     },
 
+    { kind: "pullquote", text: "Comment it as such at both ends, because it looks exactly like the kind of duplication a future reader will helpfully refactor away." },
+
     { kind: "h2", id: "migrating", text: "Migrating in practice" },
     {
       kind: "ol",

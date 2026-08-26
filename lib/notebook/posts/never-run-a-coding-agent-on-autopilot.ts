@@ -46,6 +46,8 @@ const post: Post = {
       text: "This is usually taken as caution, or as not trusting the tools. It is neither. It is that I have watched several people build on autopilot and I have not yet seen one of those projects arrive anywhere.",
     },
 
+    { kind: "pullquote", text: "It is that I have watched several people build on autopilot and I have not yet seen one of those projects arrive anywhere." },
+
     { kind: "h2", id: "the-failures", text: "The three ways it goes wrong" },
     {
       kind: "p",
@@ -131,6 +133,11 @@ const post: Post = {
       text: "Autopilot removes exactly that. Two years of accepted diffs you never read leaves you with a large application and no more understanding than you started with, and the first serious problem is unrecoverable because you have no map.",
     },
 
+    {
+      kind: "promote",
+      href: "/agents/migi",
+      note: "The agent fleet I run under exactly the rule described here: every change is read before it lands.",
+    },
     { kind: "h2", id: "when-autopilot-is-fine", text: "When I would not bother" },
     {
       kind: "p",

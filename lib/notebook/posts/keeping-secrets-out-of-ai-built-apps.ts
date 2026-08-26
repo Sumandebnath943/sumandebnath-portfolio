@@ -74,6 +74,8 @@ const post: Post = {
       text: "It also has a second benefit that only shows up when you need it: an application whose keys have been rotated before is an application you know how to rotate keys on. Discovering the procedure for the first time during an actual exposure is a bad evening.",
     },
 
+    { kind: "pullquote", text: "A key that has never been rotated is a key you are trusting to have never leaked, and you have no way of knowing that." },
+
     { kind: "h2", id: "push-protection", text: "Push protection is a net, not a guarantee" },
     {
       kind: "p",
@@ -156,6 +158,11 @@ const post: Post = {
       ],
     },
 
+    {
+      kind: "promote",
+      href: "/projects/aegis-vault",
+      note: "What I built after thinking about this for long enough — notes encrypted in the browser, where the server never sees the key.",
+    },
     { kind: "h2", id: "the-point", text: "The reason this is worth writing down" },
     {
       kind: "p",

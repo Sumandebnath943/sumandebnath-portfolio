@@ -49,6 +49,8 @@ const post: Post = {
       kind: "p",
       text: "A designer who has always designed and now generates first drafts faster is using AI. Excellent, sensible, and not what the word describes. Someone AI-native has a working method that does not make sense without these systems — the way work is scoped, the order things happen in, what gets prototyped versus discussed, what is worth attempting at all.",
     },
+
+    { kind: "pullquote", text: "The useful line is between **adding** these systems to an existing method and **starting** from them." },
     {
       kind: "p",
       text: "For me it means that a question I would previously have researched for a week and then written a document about, I now build a working version of in an evening and look at. That is not the same job done faster. It is a different sequence, and it produces different decisions.",

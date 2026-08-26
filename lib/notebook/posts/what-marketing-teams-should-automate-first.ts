@@ -44,6 +44,8 @@ const post: Post = {
       text: "Sort your work by two numbers — how often it happens, and how much judgement it requires — and start where frequency is high and judgement is low. Everything else in this article is detail on that one instruction.",
     },
 
+    { kind: "pullquote", text: "The frequent thing is dull, invisible, and eats a day a week." },
+
     { kind: "h2", id: "the-order", text: "The order I would actually follow" },
     {
       kind: "h3", id: "reporting", text: "1. Reporting" },

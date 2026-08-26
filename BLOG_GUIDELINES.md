@@ -118,6 +118,56 @@ page around it: no "as described above", no pronouns pointing back at the title.
 
 ---
 
+## 2b. The two in-article blocks
+
+Added with the reading-page rebuild. Both render as `<aside>` and both are
+skipped by the `wordCount` in the article's structured data, so neither inflates
+the length the page claims.
+
+### `pullquote`
+
+```ts
+{ kind: "pullquote", text: "A scroll-driven timeline got ruled out on the strength of one sentence." },
+```
+
+**Lift a real sentence out of the article. Never write a new one.** A pull-quote
+saying something the piece does not say is a caption pretending to be a quote,
+and inventing them is the same move §6 bans for originating mistakes. One per
+post is plenty.
+
+Two placement rules, both learned by getting them wrong:
+
+1. **Never let it be the last block.** Ending an essay on a line it has just
+   said is the opposite of "end on the last real thing".
+2. **Leave a paragraph between the quote and the paragraph it came from**, so
+   the reader is not looking at the same sentence twice in succession.
+
+### `promote`
+
+```ts
+{
+  kind: "promote",
+  href: "/projects/aegis-vault",
+  note: "What I built after thinking about this for long enough — notes encrypted in the browser.",
+},
+```
+
+`href` is a path exactly as it appears in `lib/pages.ts`; the label and blurb are
+read from that registry, so a renamed page cannot strand a stale card. `note`
+overrides the blurb where the article wants to say something more specific.
+An href that is not in the registry **fails the build** rather than rendering a
+hole.
+
+> **Only where the article is genuinely about that page.** Twenty of the
+> twenty-six posts list `/projects` in `seeAlso`; dropping that card into all
+> twenty would reproduce exactly the interchangeable ad slot this is modelled
+> on. Nine of the twenty-six carry one. Most posts should carry none.
+
+Placement is the closing third — before the final `h2` — not after the last
+line, which is where an advertisement goes.
+
+---
+
 ## 3. Length, and what it should be governed by
 
 **Match the topic, not a house rule.** Reading time reflects reality:

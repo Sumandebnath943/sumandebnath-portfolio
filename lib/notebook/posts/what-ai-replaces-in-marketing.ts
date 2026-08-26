@@ -45,6 +45,8 @@ const post: Post = {
       text: "So I will try to be more useful than reassuring. The honest answer is not \"AI will not take your job\" and it is not \"everything is about to be automated\". It is more specific and more uncomfortable than either.",
     },
 
+    { kind: "pullquote", text: "Whatever I say here, I have already voted with my time." },
+
     { kind: "h2", id: "tasks-not-jobs", text: "AI replaces tasks. Jobs are bundles of tasks." },
     {
       kind: "p",

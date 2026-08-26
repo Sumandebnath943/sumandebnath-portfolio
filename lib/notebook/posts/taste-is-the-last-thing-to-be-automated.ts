@@ -58,6 +58,8 @@ const post: Post = {
       text: "I can give four from this site, all of them decisions where the number said one thing and I did the other.",
     },
 
+    { kind: "pullquote", text: "Taste is knowing which of several correct answers is the right one **here**." },
+
     { kind: "h2", id: "examples", text: "Four times the metric was wrong" },
     {
       kind: "h3", id: "mascot", text: "The animated mascot that costs performance and stays" },
@@ -112,6 +114,11 @@ const post: Post = {
       text: "A model optimises the objective you give it, and it is extremely good at that. What it cannot do is tell you that the objective is wrong. Ask it to improve a performance score and it will improve the performance score, including by removing the thing that makes the site worth visiting. The judgement is not in the optimisation. It is in choosing what to optimise, and knowing when to stop.",
     },
 
+    {
+      kind: "promote",
+      href: "/philosophy",
+      note: "The judgements this article calls taste, written down as the rules I actually build to.",
+    },
     { kind: "h2", id: "who-has-it", text: "Where this skill comes from" },
     {
       kind: "p",
