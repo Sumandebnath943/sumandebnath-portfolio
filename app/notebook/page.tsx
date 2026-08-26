@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import BannerArt from "@/components/ui/BannerArt";
 import MotionProvider from "@/components/providers/MotionProvider";
@@ -205,6 +206,13 @@ export default function NotebookIndexPage() {
                     The rest of the notebook, newest first.
                   </p>
                 </div>
+                {/* The interactive surface. This section only holds what the
+                    rails did not use, so a filter here would search a fraction
+                    of the archive — /notebook/all is where the pool is
+                    genuinely everything. */}
+                <Link href="/notebook/all" className="nb-rail-more">
+                  Browse all {posts.length} <span aria-hidden="true">→</span>
+                </Link>
               </div>
               {/* Rows, not cards — a sixth grid of three reads as more of the
                   same, and rows are far more compact on a page this long. */}

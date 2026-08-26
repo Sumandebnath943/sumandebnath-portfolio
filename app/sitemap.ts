@@ -43,6 +43,11 @@ const ROUTES: Entry[] = [
   // Weekly, and second only to the homepage among the non-résumé pages: this
   // is the one route whose content genuinely changes on its own schedule.
   { path: "/notebook", changeFrequency: "weekly", priority: 0.9 },
+  // The full archive. Lower priority than /notebook on purpose — it lists the
+  // same articles, and the front page is the one that should rank for the
+  // notebook itself. It is here rather than omitted because it is the only page
+  // that links every article at once, which is useful crawl depth.
+  { path: "/notebook/all", changeFrequency: "weekly", priority: 0.6 },
   { path: "/learnings", changeFrequency: "monthly", priority: 0.9 },
   { path: "/philosophy", changeFrequency: "monthly", priority: 0.8 },
   { path: "/faq", changeFrequency: "monthly", priority: 0.8 },
