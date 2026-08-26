@@ -6,8 +6,14 @@ import Contact from "@/components/sections/Contact";
 import RelatedPages from "@/components/ui/RelatedPages";
 import PageFaq from "@/components/ui/PageFaq";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
-import ArticleCard from "@/components/notebook/ArticleCard";
-import { FeaturedHero, Rail, BrowseChips, Pagination } from "@/components/notebook/magazine";
+import {
+  FeaturedHero,
+  Rail,
+  BrowseChips,
+  CategoryStrip,
+  ArticleRow,
+  Pagination,
+} from "@/components/notebook/magazine";
 import { toCardPost } from "@/lib/notebook/card";
 import { SITE_URL } from "@/lib/projects";
 import {
@@ -160,18 +166,28 @@ export default function NotebookIndexPage() {
         <div className="nb-wide" style={{ paddingBlock: "3.5rem 5rem" }}>
           <FeaturedHero post={toCardPost(hero)} />
 
+          {/* All eight categories, before any scrolling. The rails below show
+              only the four largest; without this a reader at the top cannot see
+              how much else is here. */}
+          <CategoryStrip categories={categories} />
+
           <Rail
             title="Start here"
             standfirst="If you read three, read these."
+            tone="ink"
             posts={picks.map(toCardPost)}
           />
 
-          {rails.map(({ category, posts: railPosts }) => (
+          {/* Alternating tinted and plain. Five identical cream sections in a
+              row is the "one large canvas" problem; the tint is the category's
+              own accent, so the colour is information rather than decoration. */}
+          {rails.map(({ category, posts: railPosts }, i) => (
             <Rail
               key={category}
               title={category}
               href={`/notebook/category/${categorySlug(category)}`}
               accent={CATEGORY_ACCENT[category]}
+              tone={i % 2 === 0 ? "tinted" : "plain"}
               posts={railPosts.map(toCardPost)}
             />
           ))}
@@ -190,11 +206,13 @@ export default function NotebookIndexPage() {
                   </p>
                 </div>
               </div>
-              <div className="nb-grid">
+              {/* Rows, not cards — a sixth grid of three reads as more of the
+                  same, and rows are far more compact on a page this long. */}
+              <ul className="nb-rows">
                 {latest.map((p) => (
-                  <ArticleCard key={p.slug} post={toCardPost(p)} />
+                  <ArticleRow key={p.slug} post={toCardPost(p)} />
                 ))}
-              </div>
+              </ul>
               <Pagination page={1} totalPages={totalPages} />
             </section>
           )}

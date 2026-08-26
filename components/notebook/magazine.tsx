@@ -76,37 +76,123 @@ export function Rail({
   href,
   accent,
   posts,
+  tone = "plain",
 }: {
   title: string;
   standfirst?: string;
   href?: string;
   accent?: string;
   posts: CardPost[];
+  /**
+   * `tinted` paints the section in a wash of its own accent and gives it a
+   * coloured rule; `ink` is the dark editorial block. Alternating these down the
+   * page is what stops twenty-six cards on cream reading as one canvas — see the
+   * note at the top of the front-page section in blog.css.
+   */
+  tone?: "plain" | "tinted" | "ink";
 }) {
   if (posts.length === 0) return null;
   const id = `rail-${title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
 
   return (
-    <section className="nb-rail" aria-labelledby={id}>
-      <div className="nb-rail-head">
-        <div>
-          <h2 id={id} className="nb-rail-title" style={accent ? { color: accent } : undefined}>
-            {title}
-          </h2>
-          {standfirst && <p className="nb-rail-standfirst">{standfirst}</p>}
+    <section
+      className={`nb-rail nb-rail--${tone}`}
+      aria-labelledby={id}
+      style={accent ? ({ ["--tint" as string]: accent }) : undefined}
+    >
+      <div className="nb-rail-inner">
+        <div className="nb-rail-head">
+          <div>
+            <h2 id={id} className="nb-rail-title" style={accent ? { color: accent } : undefined}>
+              {title}
+            </h2>
+            {standfirst && <p className="nb-rail-standfirst">{standfirst}</p>}
+          </div>
+          {href && (
+            <Link href={href} className="nb-rail-more">
+              All articles <span aria-hidden="true">→</span>
+            </Link>
+          )}
         </div>
-        {href && (
-          <Link href={href} className="nb-rail-more">
-            All {posts.length === 1 ? "articles" : "articles"} <span aria-hidden="true">→</span>
-          </Link>
-        )}
-      </div>
-      <div className="nb-grid">
-        {posts.map((p) => (
-          <ArticleCard key={p.slug} post={p} />
-        ))}
+        <div className="nb-grid">
+          {posts.map((p) => (
+            <ArticleCard key={p.slug} post={p} />
+          ))}
+        </div>
       </div>
     </section>
+  );
+}
+
+/**
+ * Every category, at a glance, colour-coded.
+ *
+ * The front page shows a rail for the four largest categories and chips for the
+ * rest, which is right for the reading order and wrong as navigation — a reader
+ * arriving at the top could not tell how much else was here. This strip sits
+ * directly under the lead story and names all eight with their counts, so the
+ * shape of the notebook is visible before any scrolling.
+ */
+export function CategoryStrip({
+  categories,
+}: {
+  categories: { category: Category; count: number }[];
+}) {
+  return (
+    <nav className="nb-strip" aria-label="Article categories">
+      <ul className="nb-strip-list">
+        {categories.map(({ category, count }) => (
+          <li key={category}>
+            <Link
+              href={`/notebook/category/${categorySlug(category)}`}
+              className="nb-strip-item"
+              style={{ ["--tint" as string]: CATEGORY_ACCENT[category] }}
+            >
+              <span className="nb-strip-name">{category}</span>
+              <span className="nb-strip-count">{count}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
+
+/**
+ * The archive, as rows rather than cards.
+ *
+ * A different shape from everything above it on purpose: by the time a reader
+ * reaches the bottom of the front page they have seen five grids of three, and a
+ * sixth reads as more of the same. Rows are also considerably more compact,
+ * which matters on a page this long.
+ */
+export function ArticleRow({ post }: { post: CardPost }) {
+  return (
+    <li className="nb-row">
+      <Link href={`/notebook/${post.slug}`} className="nb-row-link">
+        <PostCover
+          slug={post.slug}
+          category={post.category}
+          cover={post.cover}
+          coverAlt={post.coverAlt}
+          sizes="(max-width: 40rem) 30vw, 12rem"
+          className="nb-row-cover"
+        />
+        <div className="nb-row-body">
+          <p className="nb-card-meta">
+            <span className="nb-card-cat" style={{ color: CATEGORY_ACCENT[post.category] }}>
+              {post.category}
+            </span>
+            <span className="nb-card-sep">·</span>
+            <span>{formatDate(post.published)}</span>
+            <span className="nb-card-sep">·</span>
+            <span>{post.readingMinutes} min</span>
+          </p>
+          <h3 className="nb-row-title">{post.title}</h3>
+          <p className="nb-row-excerpt">{post.answer}</p>
+        </div>
+      </Link>
+    </li>
   );
 }
 

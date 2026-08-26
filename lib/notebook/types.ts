@@ -1,3 +1,5 @@
+import type { BannerForm } from "@/components/ui/BannerArt";
+
 // The content model for /notebook.
 //
 // Typed blocks rather than MDX, deliberately. Three reasons:
@@ -136,6 +138,38 @@ export const CATEGORY_ACCENT: Record<Category, string> = {
   Career: "#8a5a1f",
   "Marketing & AI": "#1f5f6b",
   Method: "#5a3a7a",
+};
+
+/**
+ * The banner figure each category's archive page draws.
+ *
+ * `BannerArt` normally picks one of its eight forms by hashing the route, which
+ * is right for twenty-odd unrelated pages and wrong here: it handed the
+ * marketing archive an arbitrary shape, and a category page should look like
+ * what it is about. Eight categories and eight forms happen to map cleanly, so
+ * each one is chosen rather than drawn:
+ *
+ *   CSS & Layout    lattice        a grid, which is the subject
+ *   React           constellation  a component tree
+ *   Next.js         arcs           routes, request paths
+ *   Graphics        moire          an actual rendering artefact
+ *   Practice        orbits         cycles, returning to the same problem
+ *   Career          contours       terrain crossed over time
+ *   Marketing & AI  waveform       signal and reach
+ *   Method          halftone       a field built from small repeated marks
+ *
+ * Typed as the union `BannerArt` exports, so a renamed form fails the build here
+ * rather than silently falling back to the hash.
+ */
+export const CATEGORY_BANNER: Record<Category, BannerForm> = {
+  "CSS & Layout": "lattice",
+  React: "constellation",
+  "Next.js": "arcs",
+  Graphics: "moire",
+  Practice: "orbits",
+  Career: "contours",
+  "Marketing & AI": "waveform",
+  Method: "halftone",
 };
 
 export interface Post {

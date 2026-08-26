@@ -14,6 +14,7 @@ import {
   categoryFromSlug,
   categorySlug,
   CATEGORY_ACCENT,
+  CATEGORY_BANNER,
   formatPostDate,
   postModified,
   postsInCategory,
@@ -133,7 +134,15 @@ export default async function CategoryArchivePage({
 
       <main className="nb">
         <header className="nb-mast nb-mast--blog sd-banner-host">
-          <BannerArt seed={`/notebook/category/${slug}`} accent={accent} variant="paper" />
+          {/* The form is chosen, not hashed — see CATEGORY_BANNER in
+              lib/notebook/types.ts. A category archive should look like what it
+              is about; Marketing & AI was drawing whatever the route hashed to. */}
+          <BannerArt
+            seed={`/notebook/category/${slug}`}
+            accent={accent}
+            form={CATEGORY_BANNER[category]}
+            variant="paper"
+          />
           <div className="nb-wide">
             <Breadcrumbs
               trail={[

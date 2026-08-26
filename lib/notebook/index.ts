@@ -43,7 +43,13 @@ import shippingAProductInAWeekend from "./posts/shipping-a-product-in-a-weekend"
 import isAiGeneratedCodeSafeForProduction from "./posts/is-ai-generated-code-safe-for-production";
 
 export type { Post, Block, PostFact, Category } from "./types";
-export { CATEGORIES, CATEGORY_ACCENT, categorySlug, categoryFromSlug } from "./types";
+export {
+  CATEGORIES,
+  CATEGORY_ACCENT,
+  CATEGORY_BANNER,
+  categorySlug,
+  categoryFromSlug,
+} from "./types";
 
 /** Newest first. `allPosts()` sorts by date, so ordering here is not load-bearing. */
 const POSTS: Post[] = [

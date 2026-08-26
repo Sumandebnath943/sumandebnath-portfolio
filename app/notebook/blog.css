@@ -870,3 +870,184 @@
     row-gap: 1rem;
   }
 }
+
+/* ── Section tone ───────────────────────────────────────────────────────────
+   Added 26 Aug 2026. The front page was eight sections on one cream, which read
+   as a single canvas of repeating cards however well composed it was. Three
+   tones alternate down the page:
+
+     plain   — the paper, unchanged
+     tinted  — a wash of the section's OWN accent, so the colour is information
+               rather than decoration: the teal block is the marketing block
+     ink     — one dark editorial slab, used once, for "Start here"
+
+   `--tint` is set inline from CATEGORY_ACCENT. `color-mix` keeps the wash tied
+   to that one value rather than requiring a second hand-picked colour per
+   category, which would drift the moment an accent changed. */
+
+.nb-rail--plain {
+  padding: 0;
+}
+
+.nb-rail--tinted,
+.nb-rail--ink {
+  border-radius: 1.1rem;
+  padding: 2rem 1.75rem 2.25rem;
+  margin-bottom: 3.25rem;
+}
+
+.nb-rail--tinted {
+  background: color-mix(in srgb, var(--tint) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--tint) 22%, transparent);
+}
+
+.nb-rail--tinted .nb-rail-head {
+  border-bottom-color: color-mix(in srgb, var(--tint) 30%, transparent);
+}
+
+/* The one dark block on the page. Cards keep their own cream, which is the
+   point — light cards on ink is the strongest contrast available here and it
+   marks the editorial selection as different in kind from a category. */
+.nb-rail--ink {
+  background: var(--nb-void, #14110d);
+  border: 1px solid rgba(237, 231, 218, 0.14);
+}
+
+.nb-rail--ink .nb-rail-title {
+  color: var(--nb-cream, #ede7da);
+}
+
+.nb-rail--ink .nb-rail-standfirst {
+  color: rgba(237, 231, 218, 0.66);
+}
+
+.nb-rail--ink .nb-rail-head {
+  border-bottom-color: rgba(237, 231, 218, 0.18);
+}
+
+/* ── Category strip ─────────────────────────────────────────────────────── */
+
+.nb-strip {
+  margin: 0 0 3rem;
+}
+
+.nb-strip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nb-strip-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  padding: 0.5rem 0.9rem 0.5rem 0.75rem;
+  border: 1px solid var(--nb-rule);
+  /* The accent as a left edge rather than a fill: eight filled pills in a row
+     is a paint chart, eight edges is a legend. */
+  border-left: 3px solid var(--tint);
+  border-radius: 0.55rem;
+  background: #faf7f1;
+  font-size: 0.875rem;
+  color: var(--nb-ink);
+  text-decoration: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.nb-strip-item:hover {
+  background: color-mix(in srgb, var(--tint) 9%, #faf7f1);
+  border-color: color-mix(in srgb, var(--tint) 40%, transparent);
+  border-left-color: var(--tint);
+}
+
+.nb-strip-count {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  color: var(--nb-ink-mute);
+}
+
+/* ── The archive, as rows ───────────────────────────────────────────────── */
+
+/* Two up, not one. A single column of rows was measured taller than the grid of
+   cards it replaced — 1,889px against 1,761px for the same ten articles —
+   because one row per line wastes the whole right half of a wide page. Paired,
+   the same rows come in around half that. Below 64rem it collapses to one
+   column, where a single row per line is the only thing that fits. */
+.nb-rows {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nb-row-link {
+  display: grid;
+  grid-template-columns: 12rem minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid var(--nb-rule);
+  border-radius: 0.9rem;
+  background: #faf7f1;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.25s, transform 0.25s;
+}
+
+.nb-row-link:hover {
+  border-color: var(--nb-rule-strong);
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nb-row-link:hover {
+    transform: none;
+  }
+}
+
+.nb-row-cover {
+  aspect-ratio: 3 / 2;
+  width: 100%;
+  border-radius: 0.6rem;
+  overflow: hidden;
+}
+
+.nb-row-title {
+  font-size: 1.0625rem;
+  line-height: 1.35;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--nb-ink);
+  margin: 0.4rem 0 0.4rem;
+}
+
+.nb-row-excerpt {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--nb-ink-soft);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (max-width: 40rem) {
+  .nb-row-link {
+    grid-template-columns: 7rem minmax(0, 1fr);
+    gap: 1rem;
+  }
+  .nb-row-excerpt {
+    display: none;
+  }
+  .nb-rail--tinted,
+  .nb-rail--ink {
+    padding: 1.5rem 1.15rem 1.75rem;
+  }
+}
