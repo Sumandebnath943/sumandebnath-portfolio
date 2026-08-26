@@ -383,6 +383,35 @@ a third of the height the box implied. No arrangement of the boxes could have
 fixed it. `logo_v2_wordmark.png` is the cropped derivative. (`PROJECT_BIBLE.md`
 §9.1 carries the general rule.)
 
+### 4.2b A shared image component needs `sizes` as a prop, not a constant
+
+**This has now happened twice**, which is what makes it a rule rather than an
+anecdote.
+
+`next/image` picks which variant to serve from the `sizes` hint. Hardcode one
+string inside a reusable component and it is correct for the call site it was
+written for and wrong for every other — the browser then upscales, and the result
+is a soft image with no error anywhere.
+
+- **`ScreenshotFrame`** carried `(min-width: 768px) 640px, 100vw`, correct for a
+  two-up grid and wrong for the AEGIS hero at ~1150px. It served the 640px
+  variant and upscaled it 1.8×. That was the "pixelated screenshot" —
+  `cover.png` was 1365×767 and had never been the problem (HANDOFF §1.7).
+- **`PostCover`** carried `…33vw`, correct for the notebook grid and wrong for
+  the featured hero. At a 1025px viewport the hero rendered 516px and was handed
+  338px — a **1.53× upscale**. It is now a prop with `GRID_SIZES` and
+  `HERO_SIZES` exported beside it, and the worst upscale on that page measures
+  1.01.
+
+> **Vector art hides this completely.** The notebook covers were generated SVG
+> until real images landed, and SVG does not pixelate — the defect had been there
+> the whole time and was invisible. Adding a real image to a component that has
+> only ever drawn vectors is the moment to check its `sizes`.
+
+The check, at any viewport:
+`renderedWidth × devicePixelRatio ÷ naturalWidth`. Above ~1.1 the browser is
+upscaling.
+
 ### 4.3 Tailwind's opacity modifier only takes multiples of five
 
 `bg-white/12` **compiles to nothing** — the loader's progress track was

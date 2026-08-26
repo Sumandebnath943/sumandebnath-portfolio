@@ -19,6 +19,7 @@ and its own argument.
 | **[NOTEBOOK_COVERS.md](NOTEBOOK_COVERS.md)** | Cover art — the one house style, an image prompt per article, and how to wire one in |
 | **[AEO_PLAYBOOK.md](AEO_PLAYBOOK.md)** | Being found and cited: what is in place, the standing rules, and what was refused |
 | **[TARGET_QUERIES.md](TARGET_QUERIES.md)** | The prompts this site is trying to be the answer to, and the log of what the engines said |
+| **[SEO_AUDIT.md](SEO_AUDIT.md)** | Every article's title, meta title, description and target keywords — applied, with the reasoning |
 | **[PAGE_OPTIMIZATION.md](PAGE_OPTIMIZATION.md)** | Performance — how to measure this site without fooling yourself |
 | **[ROBOT_ROLLBACK.md](ROBOT_ROLLBACK.md)** | The 3D mascot, indexed by symptom, with a per-item undo |
 

@@ -6,7 +6,8 @@ writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
 **Last updated:** 25 August 2026
 **Branch:** `main`.
-**Last session:** three pieces of work, all 25–26 Aug. Agentic readiness against an external audit, which found the identity JSON-LD was invisible without JavaScript — §1.8. Then **twenty-one notebook articles** in six batches, three new categories and a writing guide — §1.9. Then the target query set, the entity rework, and a measurement that reordered the priorities — §1.10.
+**Last session:** four pieces of work, all 25–26 Aug. Agentic readiness against an external audit, which found the identity JSON-LD was invisible without JavaScript — §1.8. Then **twenty-one notebook articles** in six batches, three new categories and a writing guide — §1.9. Then the target query set, the entity rework, and a measurement that reordered the priorities — §1.10. Then **the notebook rebuilt as a publication** — covers, a magazine front page, a filterable archive, a new reading surface and an applied SEO audit — §1.11.
+**Next up:** the blog redesign continues — a typography pass (the notebook is the one part of the site that dropped the serif) and per-section grids. §1.11 ends with the analysis.
 **Session before:** banner spacing across the whole site — one over-broad CSS rule was rewriting every masthead; plus a two-column `/philosophy` hero and two shell-width tokens — §1.7.
 
 > Run `git log --oneline -15` before trusting this section — it is a snapshot,
@@ -24,7 +25,7 @@ Recent history, newest first, gives an accurate picture of the trajectory:
 
 | Area | State |
 |---|---|
-| **Notebook** (`/notebook`) | **5 posts → 26**, 26 Aug (§1.9). Three new categories — Career, Marketing & AI, Method — so it is no longer a purely engineering notebook. `BLOG_GUIDELINES.md` is the standing reference for writing one; read it before touching a post. |
+| **Notebook** (`/notebook`) | **5 posts → 26**, 26 Aug (§1.9), then rebuilt as a publication (§1.11): four routes, a composed front page, real cover art on all 26, a new reading surface, and every title and meta rewritten against `SEO_AUDIT.md`. Three new categories — Career, Marketing & AI, Method — so it is no longer a purely engineering notebook. **Read `BLOG_GUIDELINES.md` before touching a post and `NOTEBOOK_COVERS.md` before making an image.** Design work is unfinished — see the end of §1.11. |
 | **Machine-readable identity** | Audited 25 Aug against Vercel's Is Agentic, **79 → 83** (§1.8). The `Person` and `WebSite` JSON-LD were emitted through `next/script` and existed only once JavaScript had run — now literal tags on all 26 routes. House of Namus added as a real `Organization`. Markdown content negotiation was **refused on purpose**; the reasoning and the one condition for revisiting it are in `AEO_PLAYBOOK.md` §8. |
 | **Profile** (`/profile`) | Built 23 Aug over two passes, extended 24 Aug with four more sections (§1.6). The only light page on the site — ruled cream paper, a 280vh pinned hero that zooms into a drawn monitor, a word reveal, and a conveyor street with a walking robot. Modelled on a reference the user supplied, then pulled back towards the site's own type, pills, accents and closing. **The figure and the dog still need redrawing** — §1.5. |
 | **Banking Co-pilot** (`/banking/rm-copilot`) | Built 22 Aug. New **Banking** group under Portfolio. Fully prerendered; 382 KB of WebP, one eager image. Done. |
@@ -833,6 +834,136 @@ anything that moves over the next two months is attributable.
 
 ---
 
+### 1.11 The notebook rebuilt as a publication (26 Aug 2026)
+
+Five separate briefs, in the order they were given. `BLOG_GUIDELINES.md`,
+`NOTEBOOK_COVERS.md` and `SEO_AUDIT.md` are the standing references; this is the
+narrative and the decisions.
+
+#### Cover art on all twenty-six
+
+Suman generated the images from the prompts in `NOTEBOOK_COVERS.md`; the pipeline
+is `scripts/build-notebook-covers.mjs`. **74.4 MB of PNG became 4.9 MB of WebP —
+93% smaller, averaging 189 KB.** Masters live in the git-ignored
+`_masters/notebook-covers/`; the WebP output is committed because it is what the
+site serves.
+
+1280 wide is not a round number: the largest a cover renders is `100vw` on a
+phone, so 430px at 3× wants about 1290px. Quality 80 is where the paper grain
+starts to band. The grain is also why these cost 189 KB rather than the 40 KB
+flat art usually costs — noise is what every codec is worst at, and it stays
+because it is most of what stops the set looking like clip art.
+
+> **Never commit a generated PNG.** Twenty-six of them is 74 MB and git keeps
+> every version of every blob for ever. The real constraint is history, not total
+> size — ten attempts at one image cost ten times one image permanently.
+
+> **`_masters/notebook-covers/` is git-ignored, therefore unbacked.** A generator
+> will not return the same image twice from the same prompt. Same standing risk
+> as `_source-film` (§3 item 0b). **Back it up off this disk.**
+
+#### The front page, and three routes behind it
+
+`/notebook` is composed by `magazine()` in `lib/notebook/index.ts` rather than in
+the template — hero, "Start here", a rail per category with three or more
+articles, chips for the rest, then the archive. Every section draws from one pool
+and marks what it took, so **no article appears twice**: verified at 26 unique
+links, zero duplicate card titles.
+
+`AEO_PLAYBOOK.md` §3.4 carries the four-route architecture and why the filter is
+not on the front page. Two things worth repeating here:
+
+- **Sorting had to be fixed first.** Twenty-four of twenty-six articles share a
+  publication date, so "newest first" was falling through to the order `POSTS`
+  was typed in. `popularityScore` breaks the tie.
+- **There is no page two yet and that is correct.** Curation consumes 16, the
+  archive is the remaining 10, and `/notebook/page/2` 404s until the notebook
+  reaches 29. The lever is `POSTS_PER_PAGE`.
+
+**`NotebookBrowser` was deleted** — the client component holding every card so it
+could filter them. Its replacement is `/notebook/all`, where the pool is
+genuinely everything and all 26 articles are server-rendered before any filtering
+runs.
+
+#### Colour and rhythm
+
+Reported as "one large canvas of repeating things". Three section tones now
+alternate — plain paper, a wash of the section's **own** accent via `color-mix`,
+and one dark ink slab for "Start here" — taking the page from one background
+colour to five. A category strip under the lead names all eight with counts,
+because the rails only show four.
+
+Category archives now draw a **chosen** banner figure rather than a hashed one:
+`CATEGORY_BANNER` maps Marketing & AI to a waveform, React to a constellation,
+CSS & Layout to a lattice, Graphics to moiré. Typed against the union `BannerArt`
+exports, so a renamed form fails the build.
+
+#### The reading surface
+
+The article page had no image, no sense of position, a contents list that
+scrolled away, and three bare links at the end. It now carries the cover, a
+progress bar measuring the `<article>` rather than the document, a contents rail
+that sticks above 76rem while the prose keeps its 44rem measure, and a real end
+block.
+
+> **Two things are built and unverified.** Sticky engagement and the progress
+> fill both need scrolling, and **the page will not scroll in a non-compositing
+> preview pane** — `scrollHeight` 9741 against `innerHeight` 900 with `scrollY`
+> stuck at 0 after both `window.scrollTo` and `documentElement.scrollTop`. Layout
+> is measured and correct; the behaviour wants a look in a real browser.
+
+#### The SEO audit, applied
+
+`SEO_AUDIT.md` is the record. Counted before and after: **"actually" in 8 titles
+→ 0**, question-shaped 13 → 7, no meta title over 60 characters, no description
+over 160, no duplicates.
+
+Two fields were added to `Post` to make it possible — `metaTitle`, because the H1
+and the search result want different words, and `keywords`, because a tag is
+taxonomy and a keyword is a target phrase. Both optional, both falling back to
+what came before.
+
+**One slug of twenty-six renamed**, with the full chain in one commit: a 308
+redirect, the cover renamed in two places, the `NOTEBOOK_COVERS` heading keyed by
+slug, and the `TARGET_QUERIES` row. The redirect carries a warning that it is
+permanent and must not be tidied away — carrying it for ever is the real cost of
+a rename, and the reason twenty-five slugs stayed.
+
+> **The cause of the title problem was documented and it was ours.**
+> `BLOG_GUIDELINES` §2 required question or claim shapes and `AEO_PLAYBOOK` §3.1b
+> wanted the title to carry the query. Both are right for a machine. Applied to
+> twenty-six articles in one sitting they produced a blog that read like an FAQ.
+> §2 of the guidelines now carries the correction.
+
+#### Where the design work stopped — read this before continuing
+
+Suman asked for `/notebook` to feel like **hbr.org**. That site was examined
+directly and measured rather than recalled. Three findings:
+
+1. **Two typefaces with separate jobs** — Tiempos serif for editorial headlines,
+   GT America sans for furniture. **The notebook is the one part of this site
+   that dropped the serif.** `Instrument Serif` is already loaded, already in
+   `tailwind.config.ts` as `font-serif`, and already used on `/about`, PACT,
+   Pentashell, Forget Anything, the MIGI app and the banking page — the notebook
+   references it exactly once. This is the highest-value change available and it
+   costs nothing to load.
+2. **Every section uses a different grid.** Measured on their front page:
+   `605/302/302`, then `262×4`, then `350×3`, then `124/745/261`. They never
+   repeat one twice in a row. Ours uses the same `minmax(16rem, 1fr)` for every
+   rail, which is the real reason it reads as repetitive.
+3. **Density.** An HBR four-up row is 182px tall. Our cards are ~440px.
+
+> **Do not clone HBR, and not mainly for legal reasons.** Their front page is
+> dense because they publish dozens of articles a week with an editorial staff.
+> Twenty-six articles in that layout would look like an empty magazine — their
+> density is a consequence of their volume. Their cool grey and teal is also
+> wrong against this site's warm cream, which is deliberate and documented.
+>
+> **Take the serif, the grid variety and the density. Keep the palette and the
+> voice.**
+
+---
+
 ## 2. What changed in the session before (19 Aug 2026)
 
 **One brief, eleven numbered complaints**, all against the homepage: sections
@@ -1243,6 +1374,23 @@ top of this file, plus:
 
 **The one genuinely unfinished thing is at the top.** The rest are
 opportunities, roughly in value order.
+
+00. **The notebook redesign, picked up in a fresh session.** Two passes, and the
+   analysis is already done at the end of §1.11 — read that first rather than
+   re-deriving it.
+
+   1. **Typography.** Put the notebook's headlines in `font-serif`. The face is
+      already loaded, already configured, and already used on six other pages;
+      the notebook is the only part of the site that dropped it, which is why it
+      reads flatter than the rest of the work. Highest value, lowest cost, and it
+      is the one to do first because it changes what the layout should be.
+   2. **Per-section grids.** Every rail currently uses the same
+      `minmax(16rem, 1fr)`. Give the featured rail a lead-plus-two, the picks a
+      compact four-up, the categories a three-up, and one section an asymmetric
+      label-rail layout — the pattern measured on hbr.org.
+
+   **Do not clone HBR.** §1.11 says why, and the short version is that their
+   density is a consequence of publishing dozens of articles a week.
 
 0. **Finish the homepage restructure — the original request is only half done.**
    The 17–18 Aug session opened with "the entire website is really ambiguous…

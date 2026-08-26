@@ -167,17 +167,48 @@ notes" is not.
 
 ### 3.4 The blog index
 
-`/notebook` is a blog front page: a curated "Start here" rail, a category
-filter, a tag filter, sort, reset, a lead card and a grid — all in
-`components/notebook/NotebookBrowser.tsx`.
+**Rewritten 26 Aug 2026.** The index was one client component holding every card
+so it could filter them. At twenty-six articles that stopped being the right
+shape, and the paragraph this replaces predicted exactly how it would be fixed:
+real routes, never query strings. It was.
 
-**Filtering is client-side over a complete list, and that is an SEO decision.**
-Every post is passed in and rendered from one array, so the server HTML contains
-every card with its title, category, date and standfirst before any filter runs.
-Query-string routes (`?category=react`) would split the index's link equity
-across variants showing subsets of the same content. When the archive outgrows
-this, the answer is real `/notebook/category/<slug>` routes with their own
-metadata — not query strings.
+**Four surfaces, each with one job.** The overlap between them is deliberate and
+is recorded at the top of `app/notebook/all/page.tsx` so it does not later read
+as accidental duplication:
+
+| Route | Job |
+|---|---|
+| `/notebook` | The front page. Editorial, curated, **no controls** |
+| `/notebook/all` | Everything, filterable by category and tag, sortable |
+| `/notebook/category/<slug>` | One category — the canonical, linkable address for a subset |
+| `/notebook/page/<n>` | The paginated archive, from page two. Crawl depth |
+
+The front page is composed by `magazine()` in `lib/notebook/index.ts` rather than
+in the template, so the arithmetic is inspectable: a hero, three "Start here"
+picks, a rail of three for each category holding three or more articles, chips
+for the categories below that line, then the archive. **Every section draws from
+one pool and marks what it took, so no article appears twice.**
+
+> **Why the filter is not on the front page.** That page's archive section holds
+> only what the rails did not use — ten articles of twenty-six. A filter there
+> would search a tenth of the notebook and report "no results" for a category
+> with seven, which is worse than no filter. `/notebook/all` is where the pool is
+> genuinely everything, and every article is server-rendered into it before any
+> filtering runs — so a crawler with no JavaScript still sees the complete
+> archive rather than an empty shell with controls.
+
+> **Page one is `/notebook`, and there is deliberately no `/notebook/page/1`.**
+> Two addresses for one page is the duplicate the whole scheme exists to avoid.
+> Pagination activates on its own once the archive exceeds `POSTS_PER_PAGE`; at
+> twenty-six articles it has not, and `/notebook/page/2` returns 404 rather than
+> rendering an empty grid.
+
+**Sorting needed fixing before any of it worked.** Twenty-four of the twenty-six
+articles share a publication date, so sorting by date alone left almost the whole
+archive falling through to the order `POSTS` happened to be typed in — an
+arbitrary sequence presented to the reader as "newest first". `popularityScore`
+now breaks the tie: already the site's editorial ranking, already labelled a
+forecast rather than traffic, and stable across builds.
 
 **Categories are a closed list; tags are open.** `CATEGORIES` in
 `lib/notebook/types.ts` is the filter bar. A blog that lets categories grow

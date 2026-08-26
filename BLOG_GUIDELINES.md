@@ -55,6 +55,55 @@ for. Prefer the claim form when the post's value is the argument rather than the
 lookup. Put the searchable keyword in the **slug** either way, so the title is
 free to be a hook.
 
+> **⚠ This rule, applied to a whole archive at once, produced a blog that read
+> like an FAQ — and that is not hypothetical.** Counted across the first
+> twenty-six articles before `SEO_AUDIT.md` corrected them: **eight titles
+> contained the word "actually"**, thirteen of twenty-six were question-shaped,
+> and eleven ran past sixty characters. Nobody uses one hedge word in a third of
+> their headlines. It is the clearest possible tell that they were written in one
+> sitting to one instruction.
+>
+> Three additions, all learned the expensive way:
+>
+> 1. **Vary the register deliberately.** If the last two articles opened with a
+>    question, the next one does not. Judge it against the index, not the post.
+> 2. **"Actually" is banned from titles.** It hedges and adds nothing. The audit
+>    removed all eight.
+> 3. **A number beats an adjective.** "Eight repositories in eleven days. Six
+>    died within three." outperforms every other phrasing of that lesson, and it
+>    is checkable.
+>
+> Question-shaped remains correct for the technical articles, where people type
+> the question almost verbatim. It is wrong as a default for everything else.
+
+### `metaTitle` — when the headline and the search result want different words
+
+Added 26 Aug 2026 with the audit. The H1 can be a hook of any length; the thing
+that appears in a search result has roughly sixty characters before Google cuts
+it.
+
+```ts
+title: "Eight repositories in eleven days. Six died within three.",
+metaTitle: "Why solo builders abandon projects: 8 repos, 11 days",
+```
+
+Set it **only** when the two genuinely differ. Where the title is already short
+and searchable, leave it unset and the title is used. **Under 60 characters** is
+the one hard rule on this field.
+
+Nine of the twenty-six titles still run past sixty characters and that is fine —
+the meta title is what truncates, and none of those do.
+
+### `keywords` — target phrases, not taxonomy
+
+Also new, and distinct from `tags`, which are the blog's own taxonomy and drive
+the filter UI. A tag is `Security`; a keyword is `API keys AI generated code`.
+Falls back to `tags` when unset.
+
+**One primary phrase per article.** The one-question-per-URL constraint in §4
+applies to keywords too — two articles targeting one phrase compete with each
+other rather than with anybody else.
+
 ### The answer block
 
 This is the block a model lifts and quotes. It has to survive being read with no
