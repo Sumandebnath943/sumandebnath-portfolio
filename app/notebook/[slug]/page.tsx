@@ -6,6 +6,7 @@ import Navigation from "@/components/layout/Navigation";
 import RelatedPages from "@/components/ui/RelatedPages";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import PostCover from "@/components/notebook/PostCover";
+import ArticleRail from "@/components/notebook/ArticleRail";
 import ReadingProgress from "@/components/notebook/ReadingProgress";
 import Contact from "@/components/sections/Contact";
 import PostBody from "@/components/notebook/PostBody";
@@ -362,20 +363,10 @@ export default async function NotebookPostPage({
             </footer>
             </div>
 
-            {headings.length > 2 ? (
-              <aside className="nb-read-rail" aria-label="On this page">
-                <nav className="nb-toc">
-                  <p className="nb-toc-label">On this page</p>
-                  <ol>
-                    {headings.map((h) => (
-                      <li key={h.id}>
-                        <a href={`#${h.id}`}>{h.text}</a>
-                      </li>
-                    ))}
-                  </ol>
-                </nav>
-              </aside>
-            ) : null}
+            {/* Five modules now, not one, so the rail is no longer conditional
+                on the article having headings — `ArticleRail` decides which of
+                its own sections have anything to show. */}
+            <ArticleRail post={post} headings={headings} url={url} />
           </div>
         </article>
       </main>

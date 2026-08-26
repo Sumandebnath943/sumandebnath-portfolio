@@ -173,6 +173,44 @@ export function postsInCategory(c: Category): Post[] {
   return allPosts().filter((p) => p.category === c);
 }
 
+/**
+ * The rest of a post's category, newest first, with the post itself removed.
+ *
+ * Feeds the article rail and, later, the end-of-article grid. It is allowed to
+ * come back empty and callers must render nothing when it does: four of the
+ * eight categories hold fewer than three posts, which is the same reason the
+ * index gives them chips instead of rails.
+ */
+export function relatedInCategory(post: Post, limit = 3): Post[] {
+  return postsInCategory(post.category)
+    .filter((p) => p.slug !== post.slug)
+    .slice(0, limit);
+}
+
+/**
+ * The highest-scoring articles by `popularityScore`, strongest first.
+ *
+ * The plural of `mostPopularPost`, and it inherits the same obligation: this is
+ * an editorial forecast, not measured traffic (see the note on the field in
+ * types.ts). **Anything rendering it must say "Editor's pick", never "Most
+ * read".** Nothing on this site counts readers yet.
+ *
+ * Unscored posts are excluded rather than counted as zero, so an article
+ * published without a popularity block never displaces one that has been
+ * assessed.
+ *
+ * `exclude` takes a set rather than a slug because the one caller needs to
+ * suppress several at once: in a small category the highest-scoring post is
+ * very often also one of the three most recent, and the rail would otherwise
+ * print it twice.
+ */
+export function popularPosts(limit = 2, exclude: ReadonlySet<string> = new Set()): Post[] {
+  return allPosts()
+    .filter((p) => typeof p.popularityScore === "number" && !exclude.has(p.slug))
+    .sort((a, b) => (b.popularityScore ?? 0) - (a.popularityScore ?? 0))
+    .slice(0, limit);
+}
+
 /** Every distinct tag, ordered by how many posts carry it. */
 export function allTags(): { tag: string; count: number }[] {
   const counts = new Map<string, number>();
