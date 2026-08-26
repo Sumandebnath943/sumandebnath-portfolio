@@ -129,6 +129,7 @@ Technical Stack:
 Brand & Marketing:
 - Brand strategy, brand management, brand identity systems
 - Digital marketing, SEO/SEM, paid acquisition (Google Ads, Meta Ads)
+- AEO (answer engine optimisation), GEO (generative engine optimisation), agentic readiness
 - Campaign architecture, content systems, creative direction
 - Growth systems, performance analytics, conversion optimization
 - Design systems and AI-assisted creative production

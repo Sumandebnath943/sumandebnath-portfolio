@@ -102,9 +102,11 @@ const ecosystems = [
     index: "06",
     name: "Growth Infrastructure",
     description:
-      "Search, analytics, paid acquisition, visibility systems, and performance-driven growth operations.",
+      "Search, answer engines, analytics, paid acquisition, visibility systems, and performance-driven growth operations.",
     primary: ["Google Ads", "Meta Ads", "LinkedIn Ads"],
-    secondary: ["Analytics", "SEO", "SEM"],
+    // "visibility systems" in the description was already pointing at this and
+    // the chips had not caught up — SEO and SEM only.
+    secondary: ["Analytics", "SEO", "SEM", "AEO", "GEO"],
     overflow: true,
     accent: "rgba(220,100,60,0.1)",
     borderAccent: "rgba(220,100,60,0.18)",

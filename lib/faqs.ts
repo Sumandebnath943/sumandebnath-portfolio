@@ -110,7 +110,7 @@ export const aboutFaqs: Faq[] = [
   },
   {
     q: "What are Suman’s core professional capabilities?",
-    a: "Suman’s core expertise spans branding, brand management, digital marketing, growth systems, SEO, paid advertising, creative direction, design systems, campaign architecture, automation workflows, AI-native execution systems, operational strategy, and AI-assisted product development.",
+    a: "Suman’s core expertise spans branding, brand management, digital marketing, growth systems, SEO, answer engine optimisation (AEO), generative engine optimisation (GEO), agentic readiness, paid advertising, creative direction, design systems, campaign architecture, automation workflows, AI-native execution systems, operational strategy, and AI-assisted product development.",
   },
   {
     q: "What AI systems and tools does Suman work with?",

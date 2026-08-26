@@ -320,6 +320,19 @@ const personJsonLd = {
     "Digital marketing",
     "SEO",
     "SEM",
+    // Added 27 Aug 2026. This is the machine-readable skills declaration and it
+    // is on every route, so it is the highest-value place these four can sit —
+    // it had SEO and SEM and nothing newer.
+    //
+    // Acronym and expansion in one entry each, rather than a separate row per
+    // spelling. Both forms are worth carrying because people type the acronym
+    // and models match the phrase, but listing them twice is the keyword
+    // stuffing that /notebook/cited-by-chatgpt-what-i-changed records as having
+    // done nothing.
+    "AEO (answer engine optimisation)",
+    "GEO (generative engine optimisation)",
+    "Agentic readiness",
+    "AI search visibility",
     "Paid acquisition",
     "Growth systems",
     "Design systems",

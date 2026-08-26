@@ -78,6 +78,11 @@ export const coreSkills: SkillGroup[] = [
       "Campaign Architecture",
       "Performance Marketing",
       "SEO / SEM / Content Strategy",
+      // Added 27 Aug 2026. This array is the source of truth for /resume and
+      // for the skills block in lib/systemPrompt.ts, so without it the site's
+      // own assistant could not say Suman does this work.
+      "AEO / GEO / Answer-Engine Optimisation",
+      "Agentic Readiness",
       "Google Ads & Meta Ads",
       "Social Media",
       "Marketing Automation",
