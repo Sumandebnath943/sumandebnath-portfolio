@@ -159,6 +159,12 @@
    data layer, which is the wrong place for one. The fallback declarations below
    each use are what a browser without `color-mix` gets. */
 .nb-art {
+  /* The article's own closing space, as padding rather than a margin on the
+     last block. `main.nb` paints the paper and `body` behind it is `#050505`,
+     so anything that escapes `main` at the bottom edge opens as a black band
+     rather than as whitespace. Padding cannot collapse; a margin can and did. */
+  padding-bottom: 5.5rem;
+
   --nb-accent-wash: color-mix(in srgb, var(--nb-accent, var(--nb-clay)) 9%, transparent);
   --nb-accent-line: color-mix(in srgb, var(--nb-accent, var(--nb-clay)) 32%, transparent);
 
@@ -1406,12 +1412,18 @@
    immediately before this one is rarely the post somebody finishing it wants —
    `furtherReading()` picks on category and score instead. */
 
-/* The bottom margin is load-bearing. `RelatedPages` renders its own cream band
-   immediately after `</main>`, so with no space here the ink author block ran
-   straight into the top edge of "Elsewhere on the site" and the two read as one
-   mis-drawn element. */
+/* No bottom margin here — the space belongs to `.nb-art` as padding.
+
+   It was a `margin-bottom: 5.5rem` and that was wrong in a way measuring the
+   gap could not show. Nothing between `.nb-end` and `<main>` carries padding,
+   a border or `overflow`, so the margin collapsed all the way out: `main`
+   ended at the author card, and because `main.nb` paints the paper while
+   `body` is `#050505`, the 5.5rem opened as a **black band** across the page
+   between the article and "Elsewhere on the site".
+
+   Padding on an ancestor cannot collapse, so the gap stays inside the paper. */
 .nb-end {
-  margin: 4.5rem 0 5.5rem;
+  margin: 4.5rem 0 0;
   padding-top: 2.5rem;
   border-top: 1px solid var(--nb-rule);
 }
