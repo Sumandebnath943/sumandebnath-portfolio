@@ -42,7 +42,7 @@ export default function CompactCard({
    * lesson PAGE_OPTIMIZATION §4.2b records twice is that a shared image
    * component with a hardcoded hint is correct at the call site it was written
    * for and silently wrong at the next one. A card this small has a lot of room
-   * to be wrong in: the thumbnail is 4.5rem in the rail and will be wider on
+   * to be wrong in: the thumbnail is 5.5rem in the rail and will be wider on
    * the front page. Making the prop required means a new call site cannot
    * forget it.
    */

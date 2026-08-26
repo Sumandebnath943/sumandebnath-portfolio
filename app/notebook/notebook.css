@@ -114,24 +114,55 @@
   max-width: 38rem;
 }
 
+/* ── Accent, and what is derived from it ────────────────────────────────────
+   `--nb-accent` is set on this element from the post's category
+   (CATEGORY_ACCENT). The two washes are derived once, here, so every tinted
+   surface on the page agrees about strength — eight categories times a dozen
+   surfaces is far too many places to be hand-mixing opacities.
+
+   `color-mix` rather than pre-computed rgba: the accent arrives as a hex string
+   from TypeScript and converting it there would mean a colour helper in the
+   data layer, which is the wrong place for one. The fallback declarations below
+   each use are what a browser without `color-mix` gets. */
+.nb-art {
+  --nb-accent-wash: color-mix(in srgb, var(--nb-accent, var(--nb-clay)) 9%, transparent);
+  --nb-accent-line: color-mix(in srgb, var(--nb-accent, var(--nb-clay)) 32%, transparent);
+
+  /* Ten per cent black, for accents used as a background under cream body text.
+     Measured, not eyeballed: cream on the eight raw accents scores 4.40 to 7.42
+     against WCAG, and CSS & Layout's clay is the one that misses AA for body
+     text. Darkening every accent by the same amount lifts the worst case to
+     5.15:1 and needs no per-category exception. The shift is invisible at 90%;
+     the failure it prevents was not. */
+  --nb-accent-deep: color-mix(in srgb, var(--nb-accent, var(--nb-clay)) 90%, #000);
+}
+
 /* ── The extractable answer ─────────────────────────────────────────────────
    Sits directly under the H1 and is the single most important block on the
    page. It is what an answer engine lifts, so it is marked up as its own
    element with its own `data-` hook rather than being an indistinguishable
    first paragraph. Visually it is a pull-quote; structurally it is the summary
-   the whole post exists to support. */
+   the whole post exists to support.
+
+   **Solid in the category's accent, carrying cream.** It was a 3.5%-black wash
+   with a hairline, which made the most important block on the page also the
+   faintest thing on it — indistinguishable at a glance from the facts table,
+   the callouts and the contents list, all of which were the same near-white
+   box. The accents are specified as dark enough to carry cream text
+   (lib/notebook/types.ts), so this needs no per-category exception. */
 .nb-answer {
   margin: 2.5rem 0 0;
   padding: 1.5rem 1.75rem;
-  border-left: 2px solid var(--nb-clay);
-  background: var(--nb-surface);
-  border-radius: 0 0.75rem 0.75rem 0;
+  /* Plain accent first, for anything without `color-mix`. */
+  background: var(--nb-accent, var(--nb-clay));
+  background: var(--nb-accent-deep, var(--nb-clay));
+  border-radius: 0.9rem;
 }
 
 .nb-answer p {
   font-size: 1.0625rem;
   line-height: 1.75;
-  color: var(--nb-ink);
+  color: var(--nb-cream);
   margin: 0;
 }
 
@@ -140,7 +171,8 @@
   font-size: 0.625rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--nb-clay);
+  color: var(--nb-cream);
+  opacity: 0.72;
   margin: 0 0 0.75rem;
 }
 
@@ -174,8 +206,10 @@
   font-family: var(--font-dm-mono), ui-monospace, monospace;
   font-size: 0.6875rem;
   letter-spacing: 0.08em;
-  color: var(--nb-ink-soft);
+  color: var(--nb-accent, var(--nb-ink-soft));
   border: 1px solid var(--nb-rule);
+  border-color: var(--nb-accent-line, var(--nb-rule));
+  background: var(--nb-accent-wash, transparent);
   border-radius: 999px;
   padding: 0.2rem 0.6rem;
 }
@@ -215,8 +249,9 @@
   font-family: var(--font-dm-mono), ui-monospace, monospace;
   font-size: 0.75rem;
   letter-spacing: 0.04em;
-  color: var(--nb-ink-mute);
+  color: var(--nb-accent, var(--nb-ink-mute));
   background: var(--nb-surface);
+  background: var(--nb-accent-wash, var(--nb-surface));
 }
 
 .nb-facts dd {
@@ -428,6 +463,13 @@
 
 /* ── Callouts ───────────────────────────────────────────────────────────── */
 
+/* The two tones were indistinguishable: both carried
+   `border-left: 2px solid var(--nb-clay)` over the same near-white wash, so a
+   "this will bite you" box and a neutral aside rendered identically. The type
+   in lib/notebook/types.ts distinguishes them; the stylesheet did not.
+
+   Warn is clay in every article — an alarm that changes colour by section is
+   not an alarm. Note takes the category accent, because it is furniture. */
 .nb-callout {
   margin: 2rem 0;
   padding: 1.25rem 1.5rem;
@@ -437,11 +479,15 @@
 }
 
 .nb-callout--warn {
-  border-left: 2px solid var(--nb-clay);
+  border-color: rgba(180, 71, 42, 0.32);
+  background: rgba(180, 71, 42, 0.08);
+  border-left: 3px solid var(--nb-clay);
 }
 
 .nb-callout--note {
-  border-left: 2px solid var(--nb-clay);
+  border-color: var(--nb-accent-line, var(--nb-rule));
+  background: var(--nb-accent-wash, var(--nb-surface));
+  border-left: 3px solid var(--nb-accent, var(--nb-clay));
 }
 
 .nb-callout-title {
@@ -449,6 +495,14 @@
   font-size: 0.9375rem;
   font-weight: 600;
   color: var(--nb-ink);
+}
+
+.nb-callout--warn .nb-callout-title {
+  color: var(--nb-clay);
+}
+
+.nb-callout--note .nb-callout-title {
+  color: var(--nb-accent, var(--nb-ink));
 }
 
 .nb-callout-text {
@@ -463,7 +517,7 @@
 .nb-quote {
   margin: 2rem 0;
   padding-left: 1.25rem;
-  border-left: 2px solid var(--nb-rule-strong);
+  border-left: 3px solid var(--nb-accent, var(--nb-rule-strong));
   font-family: var(--font-instrument), serif;
   font-size: 1.25rem;
   line-height: 1.6;
@@ -752,17 +806,13 @@
 
 /* ── Two-column reading layout ──────────────────────────────────────────────
    The prose column is the measure and nothing here widens it. The rail beside
-   it takes the contents list today and three more modules after step 2.
+   it carries five modules.
 
-   `align-items: start` is required: a stretched grid item is full-height, and a
-   full-height item has nothing left to stick within. This is the same class of
-   mistake as the hero cover ignoring its aspect-ratio under `stretch`.
+   `align-items: start` keeps the rail the height of its content rather than the
+   height of the article. Without it the rail stretches to 4,000-odd pixels and
+   its last module is stranded at the bottom of the page.
 
-   No ancestor of a sticky element may carry `overflow` other than `visible` or
-   the sticky silently stops working and nothing errors — see
-   /notebook/overflow-hidden-kills-position-sticky, which was written about this
-   exact failure on this site. `.nb-facts` does clip, but it is a descendant of
-   the main column, not an ancestor of the rail. */
+   Nothing here pins any more — see the note on `.nb-read-rail .nb-toc`. */
 .nb-read {
   width: min(100% - 3rem, var(--nb-band));
   margin-inline: auto;
@@ -778,37 +828,24 @@
   min-width: 0;
 }
 
-/* The rail scrolls away with the page; only the contents list pins.
-
-   It used to be the other way round, which worked while the rail held one
-   short list. It stops working at four modules: a stack that tall pinned inside
-   `calc(100vh - 8rem)` grows its own scrollbar on any laptop screen, and an
-   inner scrollbar beside prose is worse than losing the rail on scroll.
-
-   No `overflow` here. This element is now the *ancestor* of the sticky one
-   rather than the sticky one itself, which flips it from harmless to the exact
-   failure the comment above describes. */
+/* The rail travels with the prose. Measured at 1,413px on a Marketing & AI
+   article, which is why no version of pinning it was ever going to work. */
 .nb-read-rail {
   min-width: 0;
 }
 
+/* The contents list scrolls away with everything else.
+
+   It was sticky, and that was wrong. Pinning it meant the four modules below
+   kept moving while it held still, so they slid underneath it — the panel stays
+   put and the rest of the rail disappears behind it one card at a time. Opaque
+   backgrounds made the overlap legible rather than making it right.
+
+   Nothing on this page pins now. The rail is a column of five things that
+   travel with the prose, which is what The Conversation does and what the
+   reading-progress bar at the top of the viewport already covers. */
 .nb-read-rail .nb-toc {
-  position: sticky;
-  /* Clear of the floating nav pill, plus the progress bar. */
-  top: 6.5rem;
   margin: 0 0 2rem;
-  max-height: calc(100vh - 9rem);
-  overflow-y: auto;
-
-  /* Opaque, and above its siblings.
-
-     A sticky element does not leave the flow, so the four modules below it keep
-     scrolling once it pins — and being later in paint order they would draw
-     straight over it. Giving the list the paper colour and a stacking order
-     sends them behind it instead, which reads as a panel holding still while
-     the page moves. Leaving it transparent is the version that looks broken. */
-  background: var(--nb-paper);
-  z-index: 1;
 }
 
 /* Below this the rail cannot earn its width; the list returns to the flow above
@@ -845,11 +882,6 @@
   }
   .nb-read-rail .nb-toc {
     order: -1;
-    position: static;
-    max-height: none;
-    overflow-y: visible;
-    background: none;
-    z-index: auto;
   }
   .nb-rail-mod {
     order: 1;
@@ -878,10 +910,62 @@
   font-size: 0.625rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--nb-ink-mute);
+  color: var(--nb-accent, var(--nb-ink-mute));
   margin: 0 0 0.9rem;
   padding-bottom: 0.6rem;
   border-bottom: 1px solid var(--nb-rule);
+  border-bottom-color: var(--nb-accent-line, var(--nb-rule));
+}
+
+/* ── Tinted and ink modules ─────────────────────────────────────────────────
+   Five stacked boxes in the same near-white is the "one canvas" problem the
+   index solved months ago by alternating `tone="tinted"` and `tone="ink"` down
+   the page (components/notebook/magazine.tsx). The rail had never been given
+   the same treatment, so it read as one undifferentiated column.
+
+   Tinted for the author card, ink for the pick. Two of five, not five of five:
+   the point is contrast between the modules, and a rail where every block
+   shouts is the same failure in a louder register. */
+.nb-rail-mod--tint {
+  padding: 1.1rem 1.25rem;
+  border: 1px solid var(--nb-rule);
+  border-color: var(--nb-accent-line, var(--nb-rule));
+  background: var(--nb-accent-wash, var(--nb-surface));
+  border-radius: 0.75rem;
+}
+
+.nb-rail-mod--ink {
+  padding: 1.1rem 1.25rem;
+  background: var(--nb-void);
+  border-radius: 0.75rem;
+}
+
+.nb-rail-mod--ink .nb-rail-label {
+  color: var(--nb-cream);
+  opacity: 0.66;
+  border-bottom-color: rgba(237, 231, 218, 0.18);
+}
+
+.nb-rail-mod--ink .nb-compact-title {
+  color: var(--nb-cream);
+}
+
+.nb-rail-mod--ink .nb-compact-link:hover .nb-compact-title {
+  color: #fff;
+}
+
+.nb-rail-mod--ink .nb-compact-meta {
+  color: rgba(237, 231, 218, 0.55);
+}
+
+.nb-rail-mod--ink .nb-rail-list > li + li {
+  border-top-color: rgba(237, 231, 218, 0.16);
+}
+
+/* The category name is drawn in its own accent, which is a dark colour chosen
+   to sit on paper. On the ink block it disappears. */
+.nb-rail-mod--ink .nb-compact-cat {
+  color: rgba(237, 231, 218, 0.72) !important;
 }
 
 .nb-rail-list {
@@ -961,7 +1045,7 @@
 
 .nb-compact-link {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 4.5rem;
+  grid-template-columns: minmax(0, 1fr) 5.5rem;
   gap: 0.75rem;
   align-items: start;
   text-decoration: none;
@@ -1009,11 +1093,15 @@
   color: var(--nb-ink-mute);
 }
 
-/* Square, not the cover's 16:9. A thumbnail this small is read as a mark
-   rather than a picture, and a 72x40 strip reads as neither. */
+/* 3:2 — the ratio the artwork is actually drawn at, so nothing is cropped.
+
+   This was square, and square was wrong. `object-fit: cover` fitting 3:2 into
+   1:1 throws away a third of the image's width, and unlike the lede's 16:9
+   there is no safe area protecting it: NOTEBOOK_COVERS.md §1 reserves a sliver
+   top and bottom, not a third off each side. Covers came back visibly cut. */
 .nb-compact-cover {
-  width: 4.5rem;
-  aspect-ratio: 1 / 1;
+  width: 5.5rem;
+  aspect-ratio: 3 / 2;
   border: 1px solid var(--nb-rule);
   border-radius: 0.4rem;
 }
@@ -1033,17 +1121,33 @@
   text-transform: uppercase;
   padding: 0.5rem 0.8rem;
   border: 1px solid var(--nb-rule);
+  border-color: var(--nb-accent-line, var(--nb-rule));
   border-radius: 0.5rem;
   background: transparent;
-  color: var(--nb-ink-soft);
+  color: var(--nb-accent, var(--nb-ink-soft));
   text-decoration: none;
   cursor: pointer;
-  transition: border-color 0.2s, color 0.2s;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
 }
 
 .nb-share-btn:hover {
-  border-color: var(--nb-rule-strong);
-  color: var(--nb-ink);
+  background: var(--nb-accent-wash, transparent);
+  border-color: var(--nb-accent, var(--nb-rule-strong));
+}
+
+/* One filled button, not three outlines. Copying the link is the action this
+   module exists for; the feed and the OS share sheet are alternatives to it. */
+.nb-share-btn--primary {
+  background: var(--nb-accent, var(--nb-clay));
+  background: var(--nb-accent-deep, var(--nb-clay));
+  border-color: var(--nb-accent-deep, var(--nb-clay));
+  color: var(--nb-cream);
+}
+
+.nb-share-btn--primary:hover {
+  background: var(--nb-ink);
+  border-color: var(--nb-ink);
+  color: var(--nb-cream);
 }
 
 /* Height is reserved whether or not there is a message, so the failure state

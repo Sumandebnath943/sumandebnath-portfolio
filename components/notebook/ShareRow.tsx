@@ -64,7 +64,7 @@ export default function ShareRow({ url, title }: { url: string; title: string })
       </h2>
 
       <div className="nb-share-row">
-        <button type="button" onClick={copy} className="nb-share-btn">
+        <button type="button" onClick={copy} className="nb-share-btn nb-share-btn--primary">
           {state === "copied" ? "Link copied" : state === "failed" ? "Copy failed" : "Copy link"}
         </button>
 

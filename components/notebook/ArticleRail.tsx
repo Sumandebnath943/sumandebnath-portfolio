@@ -24,7 +24,7 @@ import { popularPosts, relatedInCategory, type Post } from "@/lib/notebook";
  *
  * ## The thumbnails
  *
- * `sizes="72px"` describes the 4.5rem thumbnail `.nb-compact-cover` renders,
+ * `sizes="88px"` describes the 5.5rem thumbnail `.nb-compact-cover` renders,
  * not the rail. `CompactCard` makes the prop required precisely so this is a
  * decision rather than an inherited default.
  */
@@ -65,7 +65,10 @@ export default function ArticleRail({
         </nav>
       ) : null}
 
-      <section className="nb-rail-mod nb-railauthor" aria-labelledby="nb-author-label">
+      <section
+        className="nb-rail-mod nb-rail-mod--tint nb-railauthor"
+        aria-labelledby="nb-author-label"
+      >
         <h2 id="nb-author-label" className="nb-rail-label">
           Written by
         </h2>
@@ -104,7 +107,7 @@ export default function ArticleRail({
           <ul className="nb-rail-list">
             {related.map((p) => (
               <li key={p.slug}>
-                <CompactCard post={toCardPost(p)} sizes="72px" />
+                <CompactCard post={toCardPost(p)} sizes="88px" />
               </li>
             ))}
           </ul>
@@ -118,7 +121,7 @@ export default function ArticleRail({
       ) : null}
 
       {picks.length > 0 ? (
-        <section className="nb-rail-mod" aria-labelledby="nb-pick-label">
+        <section className="nb-rail-mod nb-rail-mod--ink" aria-labelledby="nb-pick-label">
           {/* "Editor's pick", never "Most read". `popularityScore` is an
               editorial forecast and nothing on this site counts readers yet —
               see the note on the field in lib/notebook/types.ts. */}
@@ -128,7 +131,7 @@ export default function ArticleRail({
           <ul className="nb-rail-list">
             {picks.map((p) => (
               <li key={p.slug}>
-                <CompactCard post={toCardPost(p)} sizes="72px" />
+                <CompactCard post={toCardPost(p)} sizes="88px" />
               </li>
             ))}
           </ul>

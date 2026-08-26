@@ -12,6 +12,7 @@ import Contact from "@/components/sections/Contact";
 import PostBody from "@/components/notebook/PostBody";
 import { SITE_URL } from "@/lib/projects";
 import { getPage } from "@/lib/pages";
+import { CATEGORY_ACCENT } from "@/lib/notebook/types";
 import {
   allPosts,
   formatPostDate,
@@ -180,7 +181,20 @@ export default async function NotebookPostPage({
 
       <main className="nb">
         <ReadingProgress targetId="nb-article" />
-        <article id="nb-article">
+        {/* The category's accent, handed to the stylesheet as a variable so the
+            furniture on this page can be coloured by section rather than being
+            eight shades of paper. A Marketing & AI article reads teal, a Career
+            one amber — the same device the index already uses for its tinted
+            rails, applied to the page a reader actually sits in front of.
+
+            The prose itself stays on paper. Colour is for the boxes around the
+            reading, never the reading: the note at the top of this stylesheet
+            argues that at length and it is still right. */}
+        <article
+          id="nb-article"
+          className="nb-art"
+          style={{ ["--nb-accent" as string]: CATEGORY_ACCENT[post.category] }}
+        >
           <header className="nb-mast nb-mast--post">
             {/* `.nb-shell` is the article band; `.nb-post-head` holds the copy
                 to the reading measure inside it. Two elements rather than one
