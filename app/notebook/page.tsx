@@ -8,8 +8,11 @@ import RelatedPages from "@/components/ui/RelatedPages";
 import PageFaq from "@/components/ui/PageFaq";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import {
-  FeaturedHero,
-  Rail,
+  LeadStory,
+  HeadlineList,
+  CardRow,
+  FeatureTile,
+  SectionsZone,
   BrowseChips,
   CategoryStrip,
   ArticleRow,
@@ -25,7 +28,7 @@ import {
   notebookModified,
   postUrl,
 } from "@/lib/notebook";
-import { CATEGORY_ACCENT, categorySlug, type Category } from "@/lib/notebook/types";
+import { type Category } from "@/lib/notebook/types";
 import "./notebook.css";
 import "./blog.css";
 
@@ -71,7 +74,8 @@ const TECHNICAL_CATEGORIES: Category[] = ["CSS & Layout", "React", "Next.js", "G
 export default function NotebookIndexPage() {
   const posts = allPosts();
   const categories = activeCategories();
-  const { hero, picks, rails, chips, latest, totalPages } = magazine();
+  const { hero, picks, brief, row, features, ranked, sections, chips, latest, totalPages } =
+    magazine();
 
   // ── Structured data ───────────────────────────────────────────────────────
   // Blog + the full post list. `dateModified` from the newest entry is the
@@ -161,61 +165,119 @@ export default function NotebookIndexPage() {
         </header>
 
         {/* The front page is composed by `magazine()` in lib/notebook, not here.
-            Every section draws from one pool and marks what it took, so no
-            article appears twice — the hero is not repeated in a rail, and a
-            rail's articles are not repeated in the archive below. */}
-        <div className="nb-wide" style={{ paddingBlock: "3.5rem 5rem" }}>
-          <FeaturedHero post={toCardPost(hero)} />
+            Every zone draws from one pool and marks what it took, so no article
+            appears twice — the lead story is not repeated four rows down, and a
+            curated article is not repeated in the archive at the foot.
 
-          {/* All eight categories, before any scrolling. The rails below show
-              only the four largest; without this a reader at the top cannot see
-              how much else is here. */}
+            Zone D is the one exception, and deliberately so: the sections
+            directory lists each category's newest straight from the category,
+            because an index that hides a category's newest article because a
+            zone above already showed it is wrong about what is in that
+            category. See the note on `sections` in lib/notebook/index.ts. */}
+        <div className="nb-wide" style={{ paddingBlock: "3.5rem 5rem" }}>
+          {/* ── Zone A · the lead triptych ─────────────────────────────────
+              Widest column takes the lead story; beside it the hand-picked set
+              as compact cards, and the newest five as headlines with no images
+              at all. Nine articles before a reader scrolls, where the old hero
+              spent the whole first screen on one. */}
+          <section className="nb-leadzone" aria-labelledby="nb-lead-title">
+            <h2 id="nb-lead-title" className="nb-vh">
+              Latest from the notebook
+            </h2>
+            <LeadStory post={toCardPost(hero)} />
+            <div className="nb-leadzone-col">
+              <HeadlineList
+                label="Start here"
+                posts={picks.map(toCardPost)}
+                showCategory
+                numbered
+              />
+            </div>
+            <div className="nb-leadzone-col">
+              <HeadlineList
+                label="Latest"
+                href="/notebook/all"
+                posts={brief.map(toCardPost)}
+                showCategory
+              />
+            </div>
+          </section>
+
+          {/* All eight categories, before any scrolling. The sections zone
+              below shows only the four largest; without this a reader at the
+              top cannot see how much else is here. */}
           <CategoryStrip categories={categories} />
 
-          <Rail
-            title="Start here"
-            standfirst="If you read three, read these."
-            tone="ink"
-            posts={picks.map(toCardPost)}
+          {/* ── Zone B · four across ───────────────────────────────────────
+              A different rhythm from the zone above it, which is the whole
+              mechanism. Compact cards, so four fit where three used to. */}
+          <CardRow
+            label="More recent"
+            standfirst="Working notes, newest first."
+            href="/notebook/all"
+            posts={row.map(toCardPost)}
           />
 
-          {/* Alternating tinted and plain. Five identical cream sections in a
-              row is the "one large canvas" problem; the tint is the category's
-              own accent, so the colour is information rather than decoration. */}
-          {rails.map(({ category, posts: railPosts }, i) => (
-            <Rail
-              key={category}
-              title={category}
-              href={`/notebook/category/${categorySlug(category)}`}
-              accent={CATEGORY_ACCENT[category]}
-              tone={i % 2 === 0 ? "tinted" : "plain"}
-              posts={railPosts.map(toCardPost)}
-            />
-          ))}
+          {/* ── Zone C · two tiles and a ranked list ───────────────────────
+              Tint, plain, ink across one row. The middle column is text only,
+              so the eye gets a rest between two filled blocks. */}
+          {features.length === 2 && (
+            <section className="nb-tilezone" aria-labelledby="nb-tiles-title">
+              <h2 id="nb-tiles-title" className="nb-vh">
+                Editor&rsquo;s selection
+              </h2>
+              <FeatureTile post={toCardPost(features[0])} kicker="Worth your time" tone="tint" />
+              {/* "Editor's ranking", never "Most read". `popularityScore` is a
+                  forecast and nothing here counts readers — types.ts. */}
+              <HeadlineList
+                label="Editor's ranking"
+                href="/notebook/all"
+                posts={ranked.map(toCardPost)}
+                showCategory
+                numbered
+              />
+              <FeatureTile post={toCardPost(features[1])} kicker="Also worth it" tone="ink" />
+            </section>
+          )}
+
+          {/* ── Zone D · the sections directory ────────────────────────────
+              Four columns of three headlines. The densest thing on the page and
+              the only zone allowed to repeat what the zones above used — it is
+              an index of sections, not a feed. */}
+          <SectionsZone
+            sections={sections.map((s) => ({
+              category: s.category,
+              posts: s.posts.map(toCardPost),
+            }))}
+          />
 
           <BrowseChips chips={chips} />
 
+          {/* ── Zone E · the remainder ─────────────────────────────────────
+              Rows rather than a fourth grid of cards — by this point the page
+              has already shown tiles, cards and headline lists, and another
+              grid would read as more of the same. `.nb-rows` fills to two
+              columns at this width, which keeps the rhythm changing one last
+              time: 3 · 4 · 3 · 4 · 2. */}
           {latest.length > 0 && (
-            <section className="nb-rail" aria-labelledby="nb-latest-title">
-              <div className="nb-rail-head">
+            <section className="nb-zone" aria-labelledby="nb-latest-title">
+              <div className="nb-zone-head">
                 <div>
-                  <h2 id="nb-latest-title" className="nb-rail-title">
+                  <h2 id="nb-latest-title" className="nb-zone-title">
                     Everything else
                   </h2>
-                  <p className="nb-rail-standfirst">
+                  <p className="nb-zone-standfirst">
                     The rest of the notebook, newest first.
                   </p>
                 </div>
                 {/* The interactive surface. This section only holds what the
-                    rails did not use, so a filter here would search a fraction
-                    of the archive — /notebook/all is where the pool is
+                    zones above did not use, so a filter here would search a
+                    fraction of the archive — /notebook/all is where the pool is
                     genuinely everything. */}
-                <Link href="/notebook/all" className="nb-rail-more">
+                <Link href="/notebook/all" className="nb-zone-more">
                   Browse all {posts.length} <span aria-hidden="true">→</span>
                 </Link>
               </div>
-              {/* Rows, not cards — a sixth grid of three reads as more of the
-                  same, and rows are far more compact on a page this long. */}
               <ul className="nb-rows">
                 {latest.map((p) => (
                   <ArticleRow key={p.slug} post={toCardPost(p)} />

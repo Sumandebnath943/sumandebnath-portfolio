@@ -24,139 +24,6 @@
   border: 0;
 }
 
-/* ── Featured hero ──────────────────────────────────────────────────────── */
-
-.nb-hero {
-  margin: 0 0 3.5rem;
-}
-
-/* 1.4fr, and `center` rather than `stretch`, and both are load-bearing.
-   See the note on .nb-hero-cover below — the previous pair produced a portrait
-   box for landscape artwork. */
-.nb-hero-link {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  align-items: center;
-  border: 1px solid var(--nb-rule);
-  border-radius: 1.1rem;
-  overflow: hidden;
-  background: #faf7f1;
-  text-decoration: none;
-  color: inherit;
-  transition: border-color 0.3s, transform 0.3s;
-}
-
-.nb-hero-link:hover {
-  border-color: var(--nb-rule-strong);
-  transform: translateY(-2px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .nb-hero-link:hover {
-    transform: none;
-  }
-}
-
-/* The cover must keep the artwork's own ratio, and nothing else in this grid is
-   allowed to decide it.
-
-   It used to be `min-height: 22rem; height: 100%` with no ratio at all. As a
-   stretched grid item its height therefore came from the body copy beside it,
-   and measured on 26 Aug 2026 that produced a **530 × 584 box — ratio 0.91,
-   portrait** — for 3:2 landscape illustrations. `object-cover` then threw away
-   40% of every hero image. It read as "square-ish"; it was worse than that.
-
-   Three things hold the fix together and removing any one brings it back:
-     • `aspect-ratio: 3 / 2` matches the art (NOTEBOOK_COVERS.md §1).
-     • `align-items: center` on the parent, NOT `stretch` — a stretched item
-       ignores its aspect-ratio, which is exactly how this happened.
-     • the excerpt is clamped below, so the body cannot out-grow the image and
-       start driving the row height again. */
-.nb-hero-cover {
-  aspect-ratio: 3 / 2;
-  min-height: 0;
-  height: auto;
-}
-
-.nb-hero-body {
-  align-self: center;
-  padding: 2rem 2.5rem;
-}
-
-.nb-hero-badge {
-  display: inline-block;
-  font-family: var(--font-dm-mono), ui-monospace, monospace;
-  font-size: 0.625rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--nb-paper);
-  background: var(--nb-ink);
-  border-radius: 999px;
-  padding: 0.3rem 0.7rem;
-  margin: 0 0 1.1rem;
-}
-
-.nb-hero-title {
-  font-size: clamp(1.6rem, 3.2vw, 2.4rem);
-  line-height: 1.12;
-  letter-spacing: -0.02em;
-  font-weight: 600;
-  color: var(--nb-ink);
-  margin: 0 0 1rem;
-  text-wrap: balance;
-  /* Three lines. A long headline in this narrow column ran to five — 188px —
-     which made the body taller than the cover and put the row height back under
-     the body's control, which is the failure documented on .nb-hero-cover. */
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* Clamped to three lines, and this is what keeps the cover's ratio honest.
-   The excerpt is the post's `answer`, which is 40–60 words by design — six or
-   seven lines here. Unclamped it made the body column taller than the image,
-   the row took its height from the body, and the cover was stretched back into
-   a portrait crop. Three lines is also simply better as a hero standfirst; the
-   full answer is the first thing on the article itself. */
-.nb-hero-excerpt {
-  font-size: 1rem;
-  line-height: 1.7;
-  color: var(--nb-ink-soft);
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.nb-hero-cta {
-  display: inline-block;
-  margin-top: 1.5rem;
-  font-family: var(--font-dm-mono), ui-monospace, monospace;
-  font-size: 0.8125rem;
-  letter-spacing: 0.06em;
-  color: var(--nb-clay);
-}
-
-@media (max-width: 56rem) {
-  .nb-hero-link {
-    grid-template-columns: 1fr;
-  }
-  /* 3:2 here too. It was 40/21 — a cinematic crop, which is a defensible choice
-     for stock photography and the wrong one for illustrations drawn to 3:2 with
-     a defined safe area. It was throwing away about a fifth of each one. */
-  .nb-hero-cover {
-    min-height: 0;
-    aspect-ratio: 3 / 2;
-  }
-  .nb-hero-body {
-    padding: 1.75rem 1.5rem 2rem;
-  }
-}
-
 /* ── Two-column body ────────────────────────────────────────────────────── */
 
 .nb-layout {
@@ -679,59 +546,6 @@
   }
 }
 
-/* ── Front-page sections ────────────────────────────────────────────────────
-   Added 26 Aug 2026, when /notebook stopped being one filtered grid and became
-   a front page. A rail is a heading and a row of cards; four of them plus the
-   hero is what turns twenty-six articles from a column you scroll past into a
-   page you can navigate. Nothing here is interactive — see components/notebook/
-   magazine.tsx for why browsing moved to real routes. */
-
-.nb-rail {
-  margin: 0 0 3.25rem;
-}
-
-.nb-rail-head {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1.5rem;
-  margin: 0 0 1.4rem;
-  padding-bottom: 0.85rem;
-  border-bottom: 1px solid var(--nb-rule);
-}
-
-.nb-rail-title {
-  font-size: 1.15rem;
-  line-height: 1.2;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--nb-ink);
-  margin: 0;
-}
-
-.nb-rail-standfirst {
-  margin: 0.4rem 0 0;
-  font-size: 0.9375rem;
-  line-height: 1.6;
-  color: var(--nb-ink-mute);
-}
-
-.nb-rail-more {
-  flex: none;
-  font-family: var(--font-dm-mono), ui-monospace, monospace;
-  font-size: 0.6875rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--nb-ink-soft);
-  text-decoration: none;
-  white-space: nowrap;
-  transition: color 0.2s;
-}
-
-.nb-rail-more:hover {
-  color: var(--nb-ink);
-}
-
 /* ── The small-category chip row ─────────────────────────────────────────── */
 
 .nb-chips {
@@ -859,7 +673,7 @@
 }
 
 @media (max-width: 40rem) {
-  .nb-rail-head {
+  .nb-zone-head {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.75rem;
@@ -869,60 +683,6 @@
     justify-content: center;
     row-gap: 1rem;
   }
-}
-
-/* ── Section tone ───────────────────────────────────────────────────────────
-   Added 26 Aug 2026. The front page was eight sections on one cream, which read
-   as a single canvas of repeating cards however well composed it was. Three
-   tones alternate down the page:
-
-     plain   — the paper, unchanged
-     tinted  — a wash of the section's OWN accent, so the colour is information
-               rather than decoration: the teal block is the marketing block
-     ink     — one dark editorial slab, used once, for "Start here"
-
-   `--tint` is set inline from CATEGORY_ACCENT. `color-mix` keeps the wash tied
-   to that one value rather than requiring a second hand-picked colour per
-   category, which would drift the moment an accent changed. */
-
-.nb-rail--plain {
-  padding: 0;
-}
-
-.nb-rail--tinted,
-.nb-rail--ink {
-  border-radius: 1.1rem;
-  padding: 2rem 1.75rem 2.25rem;
-  margin-bottom: 3.25rem;
-}
-
-.nb-rail--tinted {
-  background: color-mix(in srgb, var(--tint) 8%, transparent);
-  border: 1px solid color-mix(in srgb, var(--tint) 22%, transparent);
-}
-
-.nb-rail--tinted .nb-rail-head {
-  border-bottom-color: color-mix(in srgb, var(--tint) 30%, transparent);
-}
-
-/* The one dark block on the page. Cards keep their own cream, which is the
-   point — light cards on ink is the strongest contrast available here and it
-   marks the editorial selection as different in kind from a category. */
-.nb-rail--ink {
-  background: var(--nb-void, #14110d);
-  border: 1px solid rgba(237, 231, 218, 0.14);
-}
-
-.nb-rail--ink .nb-rail-title {
-  color: var(--nb-cream, #ede7da);
-}
-
-.nb-rail--ink .nb-rail-standfirst {
-  color: rgba(237, 231, 218, 0.66);
-}
-
-.nb-rail--ink .nb-rail-head {
-  border-bottom-color: rgba(237, 231, 218, 0.18);
 }
 
 /* ── Category strip ─────────────────────────────────────────────────────── */
@@ -1046,8 +806,409 @@
   .nb-row-excerpt {
     display: none;
   }
-  .nb-rail--tinted,
-  .nb-rail--ink {
-    padding: 1.5rem 1.15rem 1.75rem;
+}
+
+/* ══ The front page, rebuilt ════════════════════════════════════════════════
+   This was a hero and five identical three-up grids, and it read as one long
+   canvas whatever was in it. Studying HBR's front page against it, the
+   difference turned out not to be the card design: it is that no two adjacent
+   zones share a column count, and that a lot of the page is text-only headline
+   lists rather than cards.
+
+   The rhythm here runs 3 (asymmetric) · 4 · 3 · 4 · 1. Nothing is repeated. */
+
+/* ── Zone A · the lead triptych ─────────────────────────────────────────────
+   HBR's opening zone is 605/302.5/302.5 in a 1210px container — the lead story
+   takes half, and two narrow columns beside it carry another eight articles.
+   Proportionally the same here inside 72rem. */
+
+.nb-leadzone {
+  display: grid;
+  grid-template-columns: 1.72fr 1fr 1fr;
+  gap: 2.25rem;
+  align-items: start;
+  margin: 0 0 3rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid var(--nb-rule);
+}
+
+/* The two narrow columns get a rule down their left edge, which is what stops
+   three columns of unequal content reading as three unrelated fragments. */
+.nb-leadzone-col {
+  padding-left: 2.25rem;
+  border-left: 1px solid var(--nb-rule);
+  margin-left: -2.25rem;
+}
+
+@media (max-width: 68rem) {
+  .nb-leadzone {
+    grid-template-columns: 1.4fr 1fr;
   }
+  .nb-leadzone-col:last-child {
+    grid-column: 1 / -1;
+    padding-left: 0;
+    margin-left: 0;
+    border-left: 0;
+    border-top: 1px solid var(--nb-rule);
+    padding-top: 1.75rem;
+  }
+}
+
+@media (max-width: 52rem) {
+  .nb-leadzone {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+  .nb-leadzone-col {
+    padding-left: 0;
+    margin-left: 0;
+    border-left: 0;
+    border-top: 1px solid var(--nb-rule);
+    padding-top: 1.75rem;
+  }
+}
+
+/* ── The lead story ─────────────────────────────────────────────────────── */
+
+.nb-lead-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* 3:2, the ratio the artwork is drawn at, so the lead crops nothing at all. */
+.nb-lead-cover {
+  aspect-ratio: 3 / 2;
+  width: 100%;
+  margin-bottom: 1.25rem;
+  border: 1px solid var(--nb-rule);
+  border-radius: 0.9rem;
+}
+
+.nb-lead-title {
+  font-size: clamp(1.6rem, 3.2vw, 2.35rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  color: var(--nb-ink);
+  margin: 0.5rem 0 0.75rem;
+  text-wrap: balance;
+}
+
+.nb-lead-link:hover .nb-lead-title {
+  color: var(--tint, var(--nb-clay));
+}
+
+.nb-lead-excerpt {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--nb-ink-soft);
+  margin: 0;
+  max-width: 34rem;
+}
+
+.nb-lead-cta {
+  display: inline-block;
+  margin-top: 1rem;
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tint, var(--nb-clay));
+}
+
+/* ── The headline list ──────────────────────────────────────────────────────
+   The densest unit on the page, and the one that was missing entirely. A
+   section name and three to five headlines, hairline-ruled, no images: twelve
+   links in the height a card row was spending on three. */
+
+.nb-hl-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 0 0.9rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 2px solid var(--tint, var(--nb-ink));
+}
+
+.nb-hl-label {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--tint, var(--nb-ink));
+  margin: 0;
+}
+
+.nb-hl-more {
+  flex: none;
+  color: var(--tint, var(--nb-ink-mute));
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.nb-hl-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: hl;
+}
+
+.nb-hl-list > li + li {
+  border-top: 1px solid var(--nb-rule);
+}
+
+.nb-hl-link {
+  display: block;
+  padding: 0.7rem 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+.nb-hl-cat {
+  display: block;
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.5625rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.nb-hl-title {
+  display: block;
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  font-weight: 600;
+  color: var(--nb-ink);
+}
+
+.nb-hl-link:hover .nb-hl-title {
+  color: var(--tint, var(--nb-clay));
+}
+
+.nb-hl-meta {
+  display: block;
+  margin-top: 0.3rem;
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.625rem;
+  color: var(--nb-ink-mute);
+}
+
+/* Numbered where the order is the point — "Start here" and the ranking — and
+   unnumbered where it is just recency. */
+.nb-hl-list--num .nb-hl-link {
+  display: grid;
+  grid-template-columns: 1.6rem minmax(0, 1fr);
+  column-gap: 0.5rem;
+}
+
+.nb-hl-list--num .nb-hl-link::before {
+  counter-increment: hl;
+  content: counter(hl, decimal-leading-zero);
+  grid-column: 1;
+  grid-row: 1 / span 3;
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: var(--tint, var(--nb-ink-mute));
+  opacity: 0.65;
+}
+
+.nb-hl-list--num .nb-hl-link > * {
+  grid-column: 2;
+}
+
+/* ── Zone B · four compact cards across ─────────────────────────────────── */
+
+.nb-cardrow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.5rem 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 68rem) {
+  .nb-cardrow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 40rem) {
+  .nb-cardrow {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
+  .nb-cardrow > li + li {
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--nb-rule);
+  }
+}
+
+/* ── Zone C · two tiles and a ranked list ───────────────────────────────────
+   Tint, plain, ink across one row. The middle column is text only, so the eye
+   gets a rest between two filled blocks rather than meeting three of them. */
+
+.nb-tilezone {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
+  align-items: start;
+  margin: 0 0 3.25rem;
+}
+
+@media (max-width: 68rem) {
+  .nb-tilezone {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+}
+
+.nb-tile {
+  border-radius: 1.1rem;
+  padding: 1.6rem 1.75rem 1.85rem;
+  height: 100%;
+}
+
+.nb-tile--tint {
+  background: color-mix(in srgb, var(--tint) 9%, transparent);
+  border: 1px solid color-mix(in srgb, var(--tint) 24%, transparent);
+}
+
+.nb-tile--ink {
+  background: var(--nb-void, #14110d);
+  border: 1px solid rgba(237, 231, 218, 0.14);
+}
+
+.nb-tile-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.nb-tile-kicker {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin: 0 0 0.85rem;
+  color: var(--tint, var(--nb-ink-mute));
+}
+
+.nb-tile--ink .nb-tile-kicker {
+  color: rgba(237, 231, 218, 0.66);
+}
+
+.nb-tile-title {
+  font-size: 1.3rem;
+  line-height: 1.22;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+  color: var(--nb-ink);
+  margin: 0 0 0.7rem;
+  text-wrap: balance;
+}
+
+.nb-tile--ink .nb-tile-title {
+  color: var(--nb-cream, #ede7da);
+}
+
+.nb-tile-excerpt {
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--nb-ink-soft);
+  margin: 0;
+}
+
+.nb-tile--ink .nb-tile-excerpt {
+  color: rgba(237, 231, 218, 0.72);
+}
+
+.nb-tile-meta {
+  display: block;
+  margin-top: 1rem;
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--nb-ink-mute);
+}
+
+.nb-tile--ink .nb-tile-meta {
+  color: rgba(237, 231, 218, 0.5);
+}
+
+.nb-tile-link:hover .nb-tile-title {
+  opacity: 0.78;
+}
+
+/* ── Zone D · the sections directory ────────────────────────────────────── */
+
+.nb-sections {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 68rem) {
+  .nb-sections {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.75rem 2rem;
+  }
+}
+
+@media (max-width: 40rem) {
+  .nb-sections {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Zone furniture, shared ─────────────────────────────────────────────── */
+
+.nb-zone {
+  margin: 0 0 3.25rem;
+}
+
+.nb-zone-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin: 0 0 1.4rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--nb-rule);
+}
+
+.nb-zone-title {
+  font-size: 1.15rem;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--nb-ink);
+  margin: 0;
+}
+
+.nb-zone-standfirst {
+  margin: 0.4rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--nb-ink-mute);
+}
+
+.nb-zone-more {
+  flex: none;
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--nb-ink-soft);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.nb-zone-more:hover {
+  color: var(--nb-ink);
 }

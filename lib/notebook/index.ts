@@ -272,27 +272,60 @@ export function allTags(): { tag: string; count: number }[] {
 
 /** Articles per page in the paginated archive. */
 export const POSTS_PER_PAGE = 12;
-/** How many of the "Start here" set appear on the front page. */
+
+/* The zone budget. Every number here is spent out of one pool of twenty-six, so
+   they are declared together and add up in public: 1 + 3 + 5 + 4 + 2 + 4 = 19
+   curated, leaving 7 for the archive at the foot. Raise one and something below
+   it gets thinner — there is no slack. */
+
+/** Zone A, column two — the hand-picked set. */
 const PICKS_ON_INDEX = 3;
-/** Cards in each category rail. */
-const RAIL_SIZE = 3;
+/** Zone A, column three — headlines only, no images. */
+const BRIEF_SIZE = 5;
+/** Zone B — four compact cards across. */
+const ROW_SIZE = 4;
+/** Zone C — the two tiles flanking the ranked list. */
+const FEATURE_COUNT = 2;
+/** Zone C, centre — the ranked headline list. */
+const RANKED_SIZE = 4;
+/** Zone D — headlines under each section name. */
+const SECTION_SIZE = 3;
 /**
- * A category needs this many articles to earn a rail of its own.
+ * A category needs this many articles to earn a column in the sections zone.
  *
  * Below it the category still exists, still has an archive route and still
- * appears as a chip — it simply does not get a horizontal rail, because a rail
- * holding one card looks like a rendering fault rather than a section. Four of
- * the eight categories are currently below the line.
+ * appears as a chip — it simply does not get a column, because a column holding
+ * one headline reads as a rendering fault rather than a section. Four of the
+ * eight categories are currently below the line.
  */
-const RAIL_MIN = 3;
+const SECTION_MIN = 3;
 
 export interface Magazine {
+  /** Zone A: the lead story. */
   hero: Post;
+  /** Zone A, column two. */
   picks: Post[];
-  rails: { category: Category; posts: Post[] }[];
-  /** Categories too small for a rail — rendered as links, not cards. */
+  /** Zone A, column three — rendered as headlines, not cards. */
+  brief: Post[];
+  /** Zone B: four compact cards. */
+  row: Post[];
+  /** Zone C: the two tiles. */
+  features: Post[];
+  /** Zone C: the ranked list between them. */
+  ranked: Post[];
+  /**
+   * Zone D: the sections directory.
+   *
+   * **The one zone that may repeat what the zones above used**, and the only
+   * exception to the rule below. It is not a feed — it is an index of the
+   * notebook's sections, and an index that hides a category's newest article
+   * because a zone further up already showed it is simply wrong about what is
+   * in that category. HBR's topic zone works the same way.
+   */
+  sections: { category: Category; posts: Post[] }[];
+  /** Categories too small for a column — rendered as links, not headlines. */
   chips: { category: Category; count: number }[];
-  /** The first page of the archive: everything the sections above did not use. */
+  /** The first page of the archive: everything the curated zones did not use. */
   latest: Post[];
   /** Total articles left after curation, across every archive page. */
   archiveCount: number;
@@ -302,13 +335,22 @@ export interface Magazine {
 /**
  * The front page's composition.
  *
- * **Nothing appears twice.** Each section takes from a shared pool and marks
- * what it took, so the hero is not repeated in a rail and a rail's articles are
- * not repeated in the archive below. The consequence is worth stating plainly:
- * curation consumes 1 + 3 + (3 x number of rails) articles, so the archive is
- * the remainder, and a second page exists only once that remainder passes
- * POSTS_PER_PAGE. At twenty-six articles it does not, and page two appears on
- * its own when the notebook reaches twenty-nine.
+ * **Nothing appears twice, except in the sections directory.** Each zone takes
+ * from a shared pool and marks what it took, so the lead story is not repeated
+ * four rows down and a curated article is not repeated in the archive at the
+ * foot.
+ *
+ * The consequence is worth stating plainly: curation consumes nineteen of the
+ * twenty-six, the archive is the remainder, and a second page exists only once
+ * that remainder passes POSTS_PER_PAGE. At twenty-six articles it does not, and
+ * page two appears on its own once the notebook reaches thirty-one.
+ *
+ * ## Why the zones are shaped differently from one another
+ *
+ * Five identical three-up grids stacked down a page read as one canvas no
+ * matter what is in them. The column counts here go 3 (asymmetric), 4, 3, 4, 1
+ * — no two adjacent zones share a rhythm, which is the actual mechanism behind
+ * a magazine front page rather than the card design.
  */
 export function magazine(): Magazine {
   const all = allPosts();
@@ -325,20 +367,31 @@ export function magazine(): Magazine {
     return out;
   };
 
+  /** Highest editorial score first — a forecast, not measured traffic. */
+  const byScore = [...all].sort((a, b) => (b.popularityScore ?? 0) - (a.popularityScore ?? 0));
+
   const hero = take([featuredPost(), ...all], 1)[0];
-  const picks = take(pickedPosts(), PICKS_ON_INDEX);
+  const picks = take([...pickedPosts(), ...all], PICKS_ON_INDEX);
+  const brief = take(all, BRIEF_SIZE);
+  const row = take(all, ROW_SIZE);
+  const features = take(byScore, FEATURE_COUNT);
+  const ranked = take(byScore, RANKED_SIZE);
 
   const active = activeCategories();
   // Biggest section first. `activeCategories()` returns declaration order, which
   // put the three-article category above the seven-article one — an order that
   // means nothing to a reader and changes whenever CATEGORIES is edited.
-  const rails = active
-    .filter((c) => c.count >= RAIL_MIN)
+  const sections = active
+    .filter((c) => c.count >= SECTION_MIN)
     .sort((a, b) => b.count - a.count || a.category.localeCompare(b.category))
-    .map(({ category }) => ({ category, posts: take(postsInCategory(category), RAIL_SIZE) }))
-    .filter((r) => r.posts.length > 0);
+    .map(({ category }) => ({
+      // Straight from the category, not from the pool — see the note on
+      // `sections` above.
+      category,
+      posts: postsInCategory(category).slice(0, SECTION_SIZE),
+    }));
   const chips = [...active]
-    .filter((c) => c.count < RAIL_MIN)
+    .filter((c) => c.count < SECTION_MIN)
     .sort((a, b) => b.count - a.count || a.category.localeCompare(b.category));
 
   const archive = all.filter((p) => !used.has(p.slug));
@@ -346,7 +399,11 @@ export function magazine(): Magazine {
   return {
     hero,
     picks,
-    rails,
+    brief,
+    row,
+    features,
+    ranked,
+    sections,
     chips,
     latest: archive.slice(0, POSTS_PER_PAGE),
     archiveCount: archive.length,
@@ -371,10 +428,23 @@ export function archivePage(page: number): { posts: Post[]; totalPages: number }
   return { posts: archive.slice(start, start + POSTS_PER_PAGE), totalPages };
 }
 
-/** Slugs the front page's curated sections consume. */
+/**
+ * Slugs the front page's curated zones consume.
+ *
+ * `sections` is deliberately absent: it re-lists articles other zones already
+ * used, so counting it here would empty the archive of things that are still
+ * only shown as a headline in a directory column.
+ */
 function magazineUsedSlugs(): string[] {
   const m = magazine();
-  return [m.hero.slug, ...m.picks.map((p) => p.slug), ...m.rails.flatMap((r) => r.posts.map((p) => p.slug))];
+  return [
+    m.hero.slug,
+    ...m.picks.map((p) => p.slug),
+    ...m.brief.map((p) => p.slug),
+    ...m.row.map((p) => p.slug),
+    ...m.features.map((p) => p.slug),
+    ...m.ranked.map((p) => p.slug),
+  ];
 }
 
 /** Headings a post exposes as anchors — the table of contents, and the fragment
