@@ -33,16 +33,48 @@
   --nb-void: #14110d;
   --nb-cream: #ede7da;
 
+  /* ── Article geometry ─────────────────────────────────────────────────────
+     One set of numbers for the whole reading page. The three tracks sum
+     exactly to the band — 38 + 3.5 + 17 = 58.5 — which is why `.nb-read`
+     needs no `justify-content`, and why the masthead, the lede image and the
+     first paragraph can all share a left edge.
+
+     They did not share one before. The masthead was a 44rem box centred on the
+     page while `.nb-read` centred a 62.5rem grid inside a 66rem box, so the H1
+     began roughly 9rem to the right of the paragraph beneath it. Nothing
+     pointed at it because both halves were individually centred and looked
+     deliberate.
+
+     Consumed only by reading-page classes. `notebook.css` is imported by five
+     routes, so anything defined here that the index or an archive also uses
+     must not move. */
+  --nb-measure: 38rem;
+  --nb-rail: 17rem;
+  --nb-gutter: 3.5rem;
+  --nb-band: 58.5rem;
+
   background: var(--nb-paper);
   color: var(--nb-ink);
 }
 
-/* The measure. 68 characters is the long end of comfortable for body text, and
-   the code blocks below deliberately break out wider — a wrapped line in a
-   snippet costs more than a slightly wide column. */
+/* The article band. Every full-width row of the reading page uses this, so the
+   masthead, the lede image and the prose grid are all the same box.
+
+   Reading-page only — `[slug]/page.tsx` is the sole consumer of `.nb-shell`,
+   which is what makes widening it from 44rem safe for the other four routes
+   that import this stylesheet. */
 .nb-shell {
-  width: min(100% - 3rem, 44rem);
+  width: min(100% - 3rem, var(--nb-band));
   margin-inline: auto;
+}
+
+/* Masthead copy, held to the measure and left-aligned inside the band. The
+   band is wider than the text on purpose: the lede image fills it, the words
+   do not. 68 characters is the long end of comfortable for body text, and the
+   code blocks further down deliberately break out wider — a wrapped line in a
+   snippet costs more than a slightly wide column. */
+.nb-post-head {
+  max-width: var(--nb-measure);
 }
 
 .nb-wide {
@@ -659,6 +691,16 @@
   max-width: 22ch;
 }
 
+/* The article masthead. A modifier rather than an edit to `.nb-mast`, which the
+   index and both archive routes also use.
+
+   The rule at the foot goes: the lede image immediately below it is a far
+   stronger divider than a hairline, and running both reads as indecision. */
+.nb-mast--post {
+  padding: 9.5rem 0 0;
+  border-bottom: 0;
+}
+
 /* ── Reading surface, rebuilt 26 Aug 2026 ───────────────────────────────────
    The article page was a single 44rem column: no cover, no sense of position,
    a contents list that scrolled away and never came back, and three bare links
@@ -685,39 +727,49 @@
   opacity: 0.85;
 }
 
-/* The cover. Sits between the masthead and the body at the reading measure —
-   3:2, matching how the artwork is drawn (NOTEBOOK_COVERS.md §1). */
+/* The lede. Sits between the masthead and the body, filling the whole article
+   band rather than the reading measure — so it starts on the prose's left edge
+   and runs out under the rail.
+
+   **16:9, not the artwork's native 3:2.** The covers are drawn with all
+   meaning inside the middle 80% of the frame, so that a sliver may crop top and
+   bottom (NOTEBOOK_COVERS.md §1). Cutting 16:9 out of 3:2 removes 7.8% from
+   each edge, which is inside that safe area. 2:1 would remove 12.5% and is not
+   — that is the reason this is not the wider, more cinematic ratio.
+
+   `PostCover` renders with `fill` + `object-cover`, so the crop is done by this
+   box. That is framing the covers were designed for, and is not the thing
+   PAGE_OPTIMIZATION §4.2 forbids: no derivative is being fixed up after the
+   fact, and no transparent padding is being hidden. */
 .nb-cover {
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 16 / 9;
   width: 100%;
-  margin: 2.25rem 0 0;
+  margin: 2.5rem 0 0;
   border: 1px solid var(--nb-rule);
   border-radius: 0.9rem;
   overflow: hidden;
 }
 
 /* ── Two-column reading layout ──────────────────────────────────────────────
-   The prose keeps its 44rem measure — that number is the whole reason the page
-   is readable and nothing here widens it. The contents list moves out of the
-   flow into a rail beside it.
+   The prose column is the measure and nothing here widens it. The rail beside
+   it takes the contents list today and three more modules after step 2.
 
    `align-items: start` is required: a stretched grid item is full-height, and a
    full-height item has nothing left to stick within. This is the same class of
    mistake as the hero cover ignoring its aspect-ratio under `stretch`.
 
-   No ancestor of the rail may carry `overflow` other than `visible` or the
-   sticky silently stops working and nothing errors — see
+   No ancestor of a sticky element may carry `overflow` other than `visible` or
+   the sticky silently stops working and nothing errors — see
    /notebook/overflow-hidden-kills-position-sticky, which was written about this
    exact failure on this site. `.nb-facts` does clip, but it is a descendant of
    the main column, not an ancestor of the rail. */
 .nb-read {
-  width: min(100% - 3rem, 66rem);
+  width: min(100% - 3rem, var(--nb-band));
   margin-inline: auto;
   display: grid;
-  grid-template-columns: minmax(0, 44rem) 15rem;
-  gap: 3.5rem;
+  grid-template-columns: minmax(0, var(--nb-measure)) var(--nb-rail);
+  gap: var(--nb-gutter);
   align-items: start;
-  justify-content: center;
 }
 
 /* The main column already has the measure, so it must not be re-shelled. */
@@ -726,31 +778,54 @@
   min-width: 0;
 }
 
+/* The rail scrolls away with the page; only the contents list pins.
+
+   It used to be the other way round, which worked while the rail held one
+   short list. It stops working at four modules: a stack that tall pinned inside
+   `calc(100vh - 8rem)` grows its own scrollbar on any laptop screen, and an
+   inner scrollbar beside prose is worse than losing the rail on scroll.
+
+   No `overflow` here. This element is now the *ancestor* of the sticky one
+   rather than the sticky one itself, which flips it from harmless to the exact
+   failure the comment above describes. */
 .nb-read-rail {
+  min-width: 0;
+}
+
+.nb-read-rail .nb-toc {
   position: sticky;
   /* Clear of the floating nav pill, plus the progress bar. */
   top: 6.5rem;
-  max-height: calc(100vh - 8rem);
+  margin: 0 0 2rem;
+  max-height: calc(100vh - 9rem);
   overflow-y: auto;
 }
 
 /* Below this the rail cannot earn its width; the list returns to the flow above
-   the prose, which is where it was before and is correct on a phone. */
-@media (max-width: 76rem) {
+   the prose, which is where it was before and is correct on a phone.
+
+   64rem, down from 76rem. The band is 58.5rem now rather than 66rem, so two
+   columns fit from about 61.5rem up — holding the old breakpoint would have
+   collapsed the layout on a 1200px window that had room for it. */
+@media (max-width: 64rem) {
+  /* The band collapses to the measure with it, so the masthead keeps its
+     alignment and the lede stops being a breakout. */
+  .nb-shell {
+    width: min(100% - 3rem, var(--nb-measure));
+  }
   .nb-read {
-    width: min(100% - 3rem, 44rem);
+    width: min(100% - 3rem, var(--nb-measure));
     grid-template-columns: 1fr;
     gap: 0;
   }
   .nb-read-rail {
-    position: static;
-    max-height: none;
     order: -1;
   }
-}
-
-.nb-read-rail .nb-toc {
-  margin: 0 0 2rem;
+  .nb-read-rail .nb-toc {
+    position: static;
+    max-height: none;
+    overflow-y: visible;
+  }
 }
 
 /* ── End of article ─────────────────────────────────────────────────────── */

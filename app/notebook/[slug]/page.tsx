@@ -180,8 +180,14 @@ export default async function NotebookPostPage({
       <main className="nb">
         <ReadingProgress targetId="nb-article" />
         <article id="nb-article">
-          <header className="nb-mast">
+          <header className="nb-mast nb-mast--post">
+            {/* `.nb-shell` is the article band; `.nb-post-head` holds the copy
+                to the reading measure inside it. Two elements rather than one
+                because the lede image below fills the band and the words must
+                not — and because both need to start on the same left edge,
+                which is what the old single centred box could not do. */}
             <div className="nb-shell">
+              <div className="nb-post-head">
               <Breadcrumbs
                 trail={[
                   { label: "Notebook", href: "/notebook" },
@@ -230,14 +236,22 @@ export default async function NotebookPostPage({
                   </li>
                 ))}
               </ul>
+              </div>
             </div>
           </header>
 
-          {/* The cover, between the masthead and the body.
-              It was missing entirely: a reader clicked a card carrying
-              artwork and arrived at a page with no image on it. Rendered at the
-              reading measure rather than full-bleed so it sits inside the
-              column the prose establishes. */}
+          {/* The lede, between the masthead and the body.
+
+              It now fills the article band instead of the reading measure, so
+              it shares the prose's left edge and runs out under the rail. See
+              `.nb-cover` for why the ratio is 16:9 and not something wider.
+
+              `sizes` describes the band, not the viewport: above 64rem the box
+              is always 936px, because the band caps at 58.5rem well before
+              `100vw - 3rem` does. Getting this wrong is the failure
+              PAGE_OPTIMIZATION §4.2b records twice — a hint written for one
+              slot, reused in a wider one, and next/image quietly serving a
+              variant the browser then upscales. */}
           {post.cover ? (
             <div className="nb-shell">
               <PostCover
@@ -246,7 +260,7 @@ export default async function NotebookPostPage({
                 cover={post.cover}
                 coverAlt={post.coverAlt}
                 priority
-                sizes="(max-width: 46rem) 100vw, 44rem"
+                sizes="(max-width: 64rem) calc(100vw - 3rem), 936px"
                 className="nb-cover"
               />
             </div>
