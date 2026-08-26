@@ -89,35 +89,46 @@ export default function ExperienceNarrative() {
                   Every claim here is checkable from this site: view source for
                   the structured data, /llms.txt for the generated file, and
                   AEO_PLAYBOOK §9 for the audit. */}
-              <li className="relative overflow-hidden rounded-2xl border border-[#C43F00]/20 bg-gradient-to-br from-[#F04E00]/[0.08] via-[#F04E00]/[0.03] to-transparent p-6">
+              <li className="relative overflow-hidden rounded-2xl border border-[#6D28D9]/25 bg-gradient-to-br from-[#7C3AED]/[0.10] via-[#4F46E5]/[0.05] to-[#06B6D4]/[0.07] p-6">
                 <span
                   aria-hidden
-                  className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-[#C43F00] via-[#F04E00] to-[#F0A100]"
+                  className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-[#7C3AED] via-[#4F46E5] to-[#06B6D4]"
                 />
-                <span className="font-mono text-[9px] uppercase tracking-[0.28em] text-[#C43F00] block mb-2.5">
+                {/* Violet into cyan, deliberately nothing like the card's own
+                    orange. This is the one block on the page that is not part
+                    of the 2016—2023 story and it should not look like it is. */}
+                <span className="font-mono text-[9px] uppercase tracking-[0.28em] text-[#6D28D9] block mb-2.5">
                   Current practice &middot; 2026
                 </span>
-                <p className="font-manrope font-semibold text-[#1A1917] text-base md:text-lg mb-1.5">
-                  Answer-engine optimisation, end to end
+                <p className="font-manrope font-semibold text-[#1A1917] text-lg md:text-xl mb-2 tracking-[-0.01em]">
+                  <span className="text-[#5B21B6]">Agentic Readiness</span> Strategy
                 </p>
                 <p className="font-manrope text-[15px] text-[#4A4743] leading-relaxed mb-4">
-                  Search is turning into answers, and this site is where I
-                  worked out the method — a generated{" "}
-                  <span className="font-mono text-[13px] text-[#1A1917]">llms.txt</span>,
-                  extractable answer blocks, entity disambiguation and
-                  structured data. Scored{" "}
-                  <span className="font-semibold text-[#1A1917]">79 &rarr; 83</span>{" "}
-                  on Vercel&apos;s Is Agentic audit in one session.
+                  Four distinct jobs, not one buzzword. SEO wins the ranking,
+                  AEO makes the answer extractable, GEO earns the citation — and
+                  agentic readiness decides whether a machine can read and act
+                  on the site at all. This one is where I work the whole span in
+                  public.
                 </p>
                 <ul className="flex flex-wrap gap-2">
-                  {["AEO", "GEO", "SEO", "Agentic readiness"].map((skill) => (
-                    <li
-                      key={skill}
-                      className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#C43F00] border border-[#C43F00]/30 bg-white/70 rounded-full px-3 py-1.5"
-                    >
-                      {skill}
-                    </li>
-                  ))}
+                  {["AEO", "GEO", "SEO", "Agentic readiness"].map((skill) => {
+                    // The fourth is the one the heading is about, so it is
+                    // filled rather than outlined — the others are the
+                    // disciplines it spans.
+                    const lead = skill === "Agentic readiness";
+                    return (
+                      <li
+                        key={skill}
+                        className={
+                          lead
+                            ? "font-mono text-[10px] uppercase tracking-[0.14em] text-white bg-[#5B21B6] border border-[#5B21B6] rounded-full px-3 py-1.5 shadow-[0_2px_10px_rgba(91,33,182,0.35)]"
+                            : "font-mono text-[10px] uppercase tracking-[0.14em] text-[#6D28D9] border border-[#6D28D9]/30 bg-white/70 rounded-full px-3 py-1.5"
+                        }
+                      >
+                        {skill}
+                      </li>
+                    );
+                  })}
                 </ul>
               </li>
 
@@ -159,7 +170,13 @@ export default function ExperienceNarrative() {
             initial={{ opacity: 0, y: 40 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="rounded-[2rem] bg-[#0E0D0C] border border-white/10 p-8 md:p-12 shadow-[0_20px_60px_rgba(14,13,12,0.3)] relative overflow-hidden"
+            /* `flex flex-col` so the closing quote can be pushed to the foot.
+               The two cards are grid items and stretch to match, so whichever
+               has less content gets trailing dead space — it used to be this
+               one's neighbour, and adding the readiness panel moved 168px of it
+               here instead. Distributing the slack above the quote rather than
+               below it means neither card ends on a hole. */
+            className="rounded-[2rem] bg-[#0E0D0C] border border-white/10 p-8 md:p-12 shadow-[0_20px_60px_rgba(14,13,12,0.3)] relative overflow-hidden flex flex-col"
           >
             {/* Subtle background glow */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-[#F04E00]/10 blur-[80px] rounded-full pointer-events-none" />
@@ -209,8 +226,14 @@ export default function ExperienceNarrative() {
               ))}
             </ul>
 
-            {/* Closing statement inside the dark card */}
-            <div className="relative z-10 mt-12 pt-8 border-t border-white/10">
+            {/* Closing statement inside the dark card.
+
+                `mt-auto` rather than `mt-12`: in a flex column it absorbs
+                whatever height the card was stretched to and holds the quote at
+                the foot, so the dead space lands above it instead of below.
+                `pt-8` and the rule keep it clear of the list even when the
+                margin collapses to nothing. */}
+            <div className="relative z-10 mt-auto pt-8 border-t border-white/10">
               <p className="font-serif italic text-xl md:text-2xl text-white leading-snug">
                 &quot;Most companies hiring for AI product roles get a builder who doesn&apos;t understand the business, or a marketer who doesn&apos;t know how to build. <span className="font-manrope font-semibold not-italic text-[#F04E00]">I bring both.</span>&quot;
               </p>
