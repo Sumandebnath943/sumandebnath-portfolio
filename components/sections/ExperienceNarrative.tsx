@@ -73,6 +73,54 @@ export default function ExperienceNarrative() {
             </div>
 
             <ul className="space-y-6">
+              {/* ── The current-practice panel ──
+                  First position, and deliberately *not* a sixth bullet. This
+                  card is dated 2016—2023 and answer-engine work is 2026, so a
+                  dot in this list would misdate it. Labelled as current and
+                  drawn as a panel instead, which is also what makes it read as
+                  the newest thing here rather than the oldest.
+
+                  It sits in the marketer card rather than the builder one on
+                  purpose: AEO and GEO are what search-and-content became, and
+                  AEO_PLAYBOOK.md calls them a marketing discipline in as many
+                  words. The "Dominated Search & Paid Media" bullet below is the
+                  2016—2023 half of the same thread.
+
+                  Every claim here is checkable from this site: view source for
+                  the structured data, /llms.txt for the generated file, and
+                  AEO_PLAYBOOK §9 for the audit. */}
+              <li className="relative overflow-hidden rounded-2xl border border-[#C43F00]/20 bg-gradient-to-br from-[#F04E00]/[0.08] via-[#F04E00]/[0.03] to-transparent p-6">
+                <span
+                  aria-hidden
+                  className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-[#C43F00] via-[#F04E00] to-[#F0A100]"
+                />
+                <span className="font-mono text-[9px] uppercase tracking-[0.28em] text-[#C43F00] block mb-2.5">
+                  Current practice &middot; 2026
+                </span>
+                <p className="font-manrope font-semibold text-[#1A1917] text-base md:text-lg mb-1.5">
+                  Answer-engine optimisation, end to end
+                </p>
+                <p className="font-manrope text-[15px] text-[#4A4743] leading-relaxed mb-4">
+                  Search is turning into answers, and this site is where I
+                  worked out the method — a generated{" "}
+                  <span className="font-mono text-[13px] text-[#1A1917]">llms.txt</span>,
+                  extractable answer blocks, entity disambiguation and
+                  structured data. Scored{" "}
+                  <span className="font-semibold text-[#1A1917]">79 &rarr; 83</span>{" "}
+                  on Vercel&apos;s Is Agentic audit in one session.
+                </p>
+                <ul className="flex flex-wrap gap-2">
+                  {["AEO", "GEO", "SEO", "Agentic readiness"].map((skill) => (
+                    <li
+                      key={skill}
+                      className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#C43F00] border border-[#C43F00]/30 bg-white/70 rounded-full px-3 py-1.5"
+                    >
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
+              </li>
+
               {[
                 {
                   bold: "Directed a 21-person cross-functional team",
