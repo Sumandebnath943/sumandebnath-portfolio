@@ -736,9 +736,18 @@
    because one row per line wastes the whole right half of a wide page. Paired,
    the same rows come in around half that. Below 64rem it collapses to one
    column, where a single row per line is the only thing that fits. */
+/* `min(24rem, 100%)`, not a bare `24rem`.
+
+   A bare minimum in `minmax()` is a hard floor: below a 24rem container the
+   track stays 384px and the grid runs off the side of the screen. At 375px with
+   the page's 1.5rem padding the rows measured 384px wide starting at x=24 —
+   33px past the viewport, on /notebook and /notebook/all but not on an article,
+   which is the one route that does not use them. Wrapping the floor in `min()`
+   lets the track collapse to the container on a phone and changes nothing
+   above 24rem. */
 .nb-rows {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(24rem, 100%), 1fr));
   gap: 1.25rem;
   margin: 0;
   padding: 0;
@@ -995,27 +1004,60 @@
   color: var(--nb-ink-mute);
 }
 
+.nb-hl-text {
+  display: block;
+  min-width: 0;
+}
+
 /* Numbered where the order is the point — "Start here" and the ranking — and
    unnumbered where it is just recency. */
 .nb-hl-list--num .nb-hl-link {
   display: grid;
   grid-template-columns: 1.6rem minmax(0, 1fr);
   column-gap: 0.5rem;
+  align-items: start;
 }
 
 .nb-hl-list--num .nb-hl-link::before {
   counter-increment: hl;
   content: counter(hl, decimal-leading-zero);
-  grid-column: 1;
-  grid-row: 1 / span 3;
   font-family: var(--font-dm-mono), ui-monospace, monospace;
   font-size: 0.75rem;
+  line-height: 1.45;
   color: var(--tint, var(--nb-ink-mute));
   opacity: 0.65;
 }
 
-.nb-hl-list--num .nb-hl-link > * {
-  grid-column: 2;
+/* ── Headlines with a thumbnail ─────────────────────────────────────────────
+   On "Latest" and on every column of the sections directory. 4rem at 3:2 —
+   the ratio the artwork is drawn at, so nothing is cropped — which leaves
+   about 188px of text in a 264px section column.
+
+   The two numbered lists deliberately stay text-only: the numerals are already
+   their visual device, and a page where every list carries pictures has nothing
+   left that is purely type. */
+.nb-hl-list--thumb .nb-hl-link {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 4rem;
+  column-gap: 0.75rem;
+  align-items: start;
+}
+
+.nb-hl-cover {
+  width: 4rem;
+  aspect-ratio: 3 / 2;
+  border: 1px solid var(--nb-rule);
+  border-radius: 0.35rem;
+  margin-top: 0.15rem;
+}
+
+/* Ragged row heights are what make a column of four look unfinished. */
+.nb-hl-list--thumb .nb-hl-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* ── Zone B · four compact cards across ─────────────────────────────────── */

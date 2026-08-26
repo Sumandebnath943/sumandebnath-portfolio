@@ -84,9 +84,29 @@
 
 /* ── Masthead ───────────────────────────────────────────────────────────── */
 
+/* `overflow: hidden` clips `BannerArt` to the masthead.
+
+   The art is `width: 100vw` centred on its host, and 100vw includes the
+   scrollbar — so on a page with a vertical scrollbar it is about 10px wider
+   than the visible area and hangs 5px off each edge. `body` carries
+   `overflow-x: hidden`, so this never produced a scrollbar, but it did leave
+   `documentElement.scrollWidth` 5px past `clientWidth` on every notebook route
+   while /about, /contact and /faq measured clean. Those hosts clip; these did
+   not.
+
+   Clipped here on `.nb-mast` rather than on `.sd-banner-host`, which
+   globals.css §sd-banner-host explicitly forbids: several hosts are
+   width-constrained (`max-w-3xl` on /privacy, `.jr-mast` at 74rem) and clipping
+   to the host would stop the art at the text column on those pages. `.nb-mast`
+   is full-bleed, so clipping to it costs nothing.
+
+   Safe because a masthead has no sticky descendants — the archive's sticky
+   sidebar is a sibling, not a child. See
+   /notebook/overflow-hidden-kills-position-sticky before copying this. */
 .nb-mast {
   padding: 10rem 0 3rem;
   border-bottom: 1px solid var(--nb-rule);
+  overflow: hidden;
 }
 
 .nb-eyebrow {

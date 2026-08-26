@@ -128,6 +128,7 @@ export function HeadlineList({
   accent,
   showCategory = false,
   numbered = false,
+  thumbs = false,
   tone = "plain",
 }: {
   label: string;
@@ -138,6 +139,15 @@ export function HeadlineList({
    *  where every entry would carry the same word. */
   showCategory?: boolean;
   numbered?: boolean;
+  /**
+   * A 4rem thumbnail to the right of each headline.
+   *
+   * Not on every list. The two numbered lists — "Start here" and the ranking —
+   * already carry a visual device in the numerals, and adding pictures to them
+   * would leave the page with nothing that is purely type. Recency and the
+   * sections directory take the thumbnails; the ranked lists stay text.
+   */
+  thumbs?: boolean;
   tone?: "plain" | "ink";
 }) {
   if (posts.length === 0) return null;
@@ -159,17 +169,36 @@ export function HeadlineList({
           </Link>
         )}
       </div>
-      <ol className={`nb-hl-list${numbered ? " nb-hl-list--num" : ""}`}>
+      <ol
+        className={`nb-hl-list${numbered ? " nb-hl-list--num" : ""}${
+          thumbs ? " nb-hl-list--thumb" : ""
+        }`}
+      >
         {posts.map((p) => (
           <li key={p.slug}>
             <Link href={`/notebook/${p.slug}`} className="nb-hl-link">
-              {showCategory && (
-                <span className="nb-hl-cat" style={{ color: CATEGORY_ACCENT[p.category] }}>
-                  {p.category}
-                </span>
+              {/* The text is wrapped whether or not there is a thumbnail, so
+                  the numeral and the picture each get one grid cell to sit
+                  beside rather than having to place three loose children. */}
+              <span className="nb-hl-text">
+                {showCategory && (
+                  <span className="nb-hl-cat" style={{ color: CATEGORY_ACCENT[p.category] }}>
+                    {p.category}
+                  </span>
+                )}
+                <span className="nb-hl-title">{p.title}</span>
+                <span className="nb-hl-meta">{p.readingMinutes} min</span>
+              </span>
+              {thumbs && (
+                <PostCover
+                  slug={p.slug}
+                  category={p.category}
+                  cover={p.cover}
+                  coverAlt={p.coverAlt}
+                  sizes="64px"
+                  className="nb-hl-cover"
+                />
               )}
-              <span className="nb-hl-title">{p.title}</span>
-              <span className="nb-hl-meta">{p.readingMinutes} min</span>
             </Link>
           </li>
         ))}
@@ -278,6 +307,7 @@ export function SectionsZone({
             href={`/notebook/category/${categorySlug(category)}`}
             accent={CATEGORY_ACCENT[category]}
             posts={posts}
+            thumbs
           />
         ))}
       </div>

@@ -199,6 +199,7 @@ export default function NotebookIndexPage() {
                 href="/notebook/all"
                 posts={brief.map(toCardPost)}
                 showCategory
+                thumbs
               />
             </div>
           </section>
