@@ -30,10 +30,13 @@
   margin: 0 0 3.5rem;
 }
 
+/* 1.4fr, and `center` rather than `stretch`, and both are load-bearing.
+   See the note on .nb-hero-cover below — the previous pair produced a portrait
+   box for landscape artwork. */
 .nb-hero-link {
   display: grid;
-  grid-template-columns: 1.15fr 1fr;
-  align-items: stretch;
+  grid-template-columns: 1.4fr 1fr;
+  align-items: center;
   border: 1px solid var(--nb-rule);
   border-radius: 1.1rem;
   overflow: hidden;
@@ -54,14 +57,30 @@
   }
 }
 
+/* The cover must keep the artwork's own ratio, and nothing else in this grid is
+   allowed to decide it.
+
+   It used to be `min-height: 22rem; height: 100%` with no ratio at all. As a
+   stretched grid item its height therefore came from the body copy beside it,
+   and measured on 26 Aug 2026 that produced a **530 × 584 box — ratio 0.91,
+   portrait** — for 3:2 landscape illustrations. `object-cover` then threw away
+   40% of every hero image. It read as "square-ish"; it was worse than that.
+
+   Three things hold the fix together and removing any one brings it back:
+     • `aspect-ratio: 3 / 2` matches the art (NOTEBOOK_COVERS.md §1).
+     • `align-items: center` on the parent, NOT `stretch` — a stretched item
+       ignores its aspect-ratio, which is exactly how this happened.
+     • the excerpt is clamped below, so the body cannot out-grow the image and
+       start driving the row height again. */
 .nb-hero-cover {
-  min-height: 22rem;
-  height: 100%;
+  aspect-ratio: 3 / 2;
+  min-height: 0;
+  height: auto;
 }
 
 .nb-hero-body {
   align-self: center;
-  padding: 2.5rem 2.75rem;
+  padding: 2rem 2.5rem;
 }
 
 .nb-hero-badge {
@@ -85,13 +104,32 @@
   color: var(--nb-ink);
   margin: 0 0 1rem;
   text-wrap: balance;
+  /* Three lines. A long headline in this narrow column ran to five — 188px —
+     which made the body taller than the cover and put the row height back under
+     the body's control, which is the failure documented on .nb-hero-cover. */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
+/* Clamped to three lines, and this is what keeps the cover's ratio honest.
+   The excerpt is the post's `answer`, which is 40–60 words by design — six or
+   seven lines here. Unclamped it made the body column taller than the image,
+   the row took its height from the body, and the cover was stretched back into
+   a portrait crop. Three lines is also simply better as a hero standfirst; the
+   full answer is the first thing on the article itself. */
 .nb-hero-excerpt {
   font-size: 1rem;
   line-height: 1.7;
   color: var(--nb-ink-soft);
   margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .nb-hero-cta {
@@ -107,9 +145,12 @@
   .nb-hero-link {
     grid-template-columns: 1fr;
   }
+  /* 3:2 here too. It was 40/21 — a cinematic crop, which is a defensible choice
+     for stock photography and the wrong one for illustrations drawn to 3:2 with
+     a defined safe area. It was throwing away about a fifth of each one. */
   .nb-hero-cover {
     min-height: 0;
-    aspect-ratio: 40 / 21;
+    aspect-ratio: 3 / 2;
   }
   .nb-hero-body {
     padding: 1.75rem 1.5rem 2rem;
@@ -242,6 +283,10 @@
   color: inherit;
 }
 
+/* 5:3 rather than the artwork's 3:2, and that is deliberate. It trims about a
+   tenth off the top and bottom, which the covers are drawn to survive —
+   NOTEBOOK_COVERS.md §1 keeps every subject inside the middle 80% — and it buys
+   a denser grid. The hero is a different case: it was cropping 40%, not 10%. */
 .nb-card-cover {
   aspect-ratio: 40 / 24;
   width: 100%;
