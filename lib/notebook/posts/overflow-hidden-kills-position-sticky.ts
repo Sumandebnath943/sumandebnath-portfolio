@@ -6,7 +6,9 @@ const post: Post = {
   answer:
     "An ancestor with overflow: hidden becomes the sticky element's scroll container. That container never scrolls, so the sticky child has nothing to stick to and scrolls away with the page instead. Nothing errors and no warning appears. Check every ancestor for overflow-hidden before touching the sticky element's own CSS.",
   description:
-    "position: sticky fails without any error when an ancestor has overflow: hidden. Why that happens, how to find the ancestor responsible, and the wrapper pattern that fixes it without losing the clip.",
+    "An ancestor with overflow: hidden becomes the scroll container, so the sticky child has nothing to stick to. No error appears. How to find it, and the fix.",
+  metaTitle: "Why position: sticky stops working (overflow)",
+  keywords: ["position sticky not working", "overflow hidden sticky", "sticky element not sticking", "CSS sticky debugging"],
   published: "2026-08-24",
   category: "CSS & Layout",
   featured: true,

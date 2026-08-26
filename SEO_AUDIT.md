@@ -3,8 +3,27 @@
 Proposed titles, meta titles, meta descriptions, target keywords and slug
 changes, with the reasoning and the cost of each.
 
-**Nothing here is applied.** This is for review. `AEO_PLAYBOOK.md` §3.1b and
-`BLOG_GUIDELINES.md` §2 are the standing rules the recommendations work inside.
+> **✅ Applied in full, 26 August 2026.** Every recommendation below is live.
+> This file is now the record of what was changed and why, not a proposal.
+>
+> Measured after: **"actually" gone from every title** (was 8 of 26),
+> question-shaped titles **13 → 7**, no meta title over 60 characters, no
+> description over 160, no duplicate titles or meta titles, all 26 articles
+> returning 200, and the one renamed slug 308-redirecting.
+
+`AEO_PLAYBOOK.md` §3.1b and `BLOG_GUIDELINES.md` §2 are the standing rules the
+recommendations work inside.
+
+### Two fields were added to make this possible
+
+`metaTitle` and `keywords` on the `Post` type, both optional and both falling
+back to what came before — `title` and `tags` respectively.
+
+`metaTitle` exists because the H1 and the search result genuinely want different
+words. "Eight repositories in eleven days. Six died within three." is a headline;
+"Why solo builders abandon projects: 8 repos, 11 days" is what belongs in a
+result under sixty characters. Nine titles are still over sixty and that is now
+fine — the meta title is what truncates, and none of those do.
 
 ---
 

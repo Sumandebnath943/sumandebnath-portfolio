@@ -2,11 +2,14 @@ import type { Post } from "../types";
 
 const post: Post = {
   slug: "what-a-marketer-has-to-learn",
-  title: "What does a marketer actually have to learn to ship software alone?",
+  title:
+    "What a marketer has to learn to ship software — and it is not syntax",
   answer:
     "Less syntax than expected and more operations than anyone warns you about. The gap is not writing code — an assistant does that — it is knowing where data lives, how deployment differs from a machine that works, what happens when something breaks in front of a user, and being able to read a change well enough to accept or reject it.",
   description:
-    "The skills gap between marketing and shipping software is not what it looks like from the outside. What actually has to be learned, what an AI assistant genuinely removes, and what no assistant will learn on your behalf.",
+    "Less syntax than expected and far more operations than anyone warns you about. The list that will hurt you if you skip it, and what a course is for.",
+  metaTitle: "What a marketer must learn to build software",
+  keywords: ["marketer learn to code", "non-technical build software", "what to learn to build with AI", "marketing to engineering skills"],
   published: "2026-08-26",
   category: "Method",
   // The practical companion to the transition story, and the question most

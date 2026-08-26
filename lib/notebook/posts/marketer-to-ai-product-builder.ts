@@ -18,7 +18,9 @@ const post: Post = {
   answer:
     "Suman Debnath spent nine years in brand and performance marketing before building any software. Starting in late 2024 with a reminder app abandoned on a free tier, he has since shipped twenty-one products, trained a language model from scratch and run a fleet of autonomous agents — with no computer science degree and no developer job.",
   description:
-    "A brand marketer's account of learning to build software with AI: the app abandoned when the free credits ran out, the project that proved it was possible, the one that nearly ended it, and why almost nobody knew.",
+    "A brand marketer's account of learning to build software with AI: the app abandoned when the credits ran out, the project that proved it worked, and who knew.",
+  metaTitle: "How a marketer shipped 21 products without coding",
+  keywords: ["marketer to AI product builder", "learn to build software with AI", "non-technical founder building apps", "career change marketing to tech"],
   published: "2026-08-26",
   category: "Career",
   featured: true,

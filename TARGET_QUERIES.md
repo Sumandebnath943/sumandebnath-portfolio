@@ -198,13 +198,13 @@ written up with the score attached.
 
 | ★ | Prompt | Owning page |
 |---|---|---|
-| ★ | How do I make my website ready for AI agents? | `/notebook/what-agentic-ready-actually-means` |
+| ★ | How do I make my website ready for AI agents? | `/notebook/agentic-ready-website` |
 | ★ | How do you get your site cited by ChatGPT? | `/notebook/cited-by-chatgpt-what-i-changed` |
 | | AEO vs SEO — what is the difference? | `/notebook/aeo-vs-seo-what-changes` |
 | | What is generative engine optimisation? | `/notebook/aeo-vs-seo-what-changes` |
 | | Do I need an llms.txt file? | `/notebook/do-you-need-an-llms-txt` |
 | | How do you rank in AI search? | `/notebook/aeo-vs-seo-what-changes` |
-| | What does agentic-ready mean for a website? | `/notebook/what-agentic-ready-actually-means` |
+| | What does agentic-ready mean for a website? | `/notebook/agentic-ready-website` |
 
 ---
 

@@ -2,11 +2,14 @@ import type { Post } from "../types";
 
 const post: Post = {
   slug: "aeo-vs-seo-what-changes",
-  title: "AEO vs SEO: what actually changes when the reader is a model?",
+  title:
+    "AEO vs SEO: what changes when the reader is a model",
   answer:
     "Search optimisation competes to be ranked among ten results; answer optimisation competes to be the one passage quoted. The unit shifts from the page to the self-contained block, the currency shifts from keywords to resolved entities, and the outcome becomes largely unmeasurable — there is no rank to track and the same question returns different answers on different runs.",
   description:
-    "The practical differences between optimising for search results and optimising to be quoted by an answer engine: what carries over, what stops working, and why the hardest part is that you cannot measure it.",
+    "Search competes for a position among ten results. An answer engine produces one. What carries over from SEO, what stops working, and why you cannot measure it.",
+  metaTitle: "AEO vs SEO: what changes when the reader is a model",
+  keywords: ["AEO vs SEO", "answer engine optimisation", "generative engine optimisation", "GEO vs SEO"],
   published: "2026-08-26",
   category: "Marketing & AI",
   // High demand, and most existing coverage is either rebranded SEO advice or

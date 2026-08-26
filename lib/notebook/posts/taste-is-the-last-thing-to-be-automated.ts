@@ -6,7 +6,9 @@ const post: Post = {
   answer:
     "Taste is the ability to choose between options that are all technically correct, and it becomes the scarce skill once generation is cheap. A model optimises whichever metric it is given. Deciding which metric is the right one — and recognising when a measurable win is the wrong trade — is the part that cannot be delegated.",
   description:
-    "When producing an option costs almost nothing, choosing between options becomes the work. Four decisions where the measurable answer and the right answer pointed in opposite directions, and what that says about which skills hold their value.",
+    "When producing an option costs nothing, choosing between them becomes the work. Four decisions where the measurable answer and the right one differed.",
+  metaTitle: "Taste is the last thing to be automated",
+  keywords: ["taste in product design", "AI and design judgement", "what AI cannot replace", "product judgement"],
   published: "2026-08-26",
   category: "Practice",
   // The most shareable thing in the batch and the least tied to any tool or

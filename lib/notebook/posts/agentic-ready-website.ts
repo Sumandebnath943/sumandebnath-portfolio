@@ -1,12 +1,15 @@
 import type { Post } from "../types";
 
 const post: Post = {
-  slug: "what-agentic-ready-actually-means",
-  title: "What does it actually mean for a website to be agentic-ready?",
+  slug: "agentic-ready-website",
+  title:
+    "Agentic-ready: the four things an agent has to be able to do",
   answer:
     "Four questions decide it: can an agent find the site, fetch it, read it without executing JavaScript, and recover when it hits a URL that does not exist. Most sites fail on the third for a dull reason — the content or the structured data only exists after the client bundle runs, and many fetchers never run it.",
   description:
-    "Agentic readiness is not a single property. The four things an agent has to be able to do with a site, the failure that catches most sites, and what an audit of a real site found.",
+    "Can an agent find you, fetch you, read you without JavaScript, and recover from a dead URL? Most sites fail the third, for a dull reason. Six commands to check.",
+  metaTitle: "What is an agentic-ready website? Four checks",
+  keywords: ["agentic ready website", "AI agent readiness", "make website AI readable", "agentic SEO"],
   published: "2026-08-26",
   category: "Marketing & AI",
   // Rising demand as the term enters marketing vocabulary, and almost nothing
@@ -21,7 +24,7 @@ const post: Post = {
   popularityScore: 76,
   tags: ["AEO", "Structured Data", "Marketing"],
   readingMinutes: 8,
-  cover: "/notebook/what-agentic-ready-actually-means.webp",
+  cover: "/notebook/agentic-ready-website.webp",
   coverAlt:
     "A tall door with four bolts, three drawn open and one still shut, with a small robot waiting in front of it.",
   facts: [

@@ -43,10 +43,12 @@ export async function generateMetadata({
   const url = `${SITE_URL}${postUrl(post.slug)}`;
 
   return {
-    title: { absolute: `${post.title} · Suman Debnath` },
+    // `metaTitle` where the headline and the search result want different words
+    // — see the note on it in lib/notebook/types.ts. Falls back to the H1.
+    title: { absolute: `${post.metaTitle ?? post.title} · Suman Debnath` },
     description: post.description,
     alternates: { canonical: postUrl(post.slug) },
-    keywords: post.tags,
+    keywords: post.keywords ?? post.tags,
     authors: [{ name: "Suman Debnath", url: SITE_URL }],
     openGraph: {
       type: "article",

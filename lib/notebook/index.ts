@@ -34,7 +34,7 @@ import whatAMarketerHasToLearn from "./posts/what-a-marketer-has-to-learn";
 import whatAiReplacesInMarketing from "./posts/what-ai-replaces-in-marketing";
 import whatMarketingTeamsShouldAutomateFirst from "./posts/what-marketing-teams-should-automate-first";
 import aeoVsSeoWhatChanges from "./posts/aeo-vs-seo-what-changes";
-import whatAgenticReadyActuallyMeans from "./posts/what-agentic-ready-actually-means";
+import agenticReadyWebsite from "./posts/agentic-ready-website";
 import doYouNeedAnLlmsTxt from "./posts/do-you-need-an-llms-txt";
 import aiProductRoleWithoutCsDegree from "./posts/ai-product-role-without-cs-degree";
 import aiSkillsForAMarketingCv from "./posts/ai-skills-for-a-marketing-cv";
@@ -72,7 +72,7 @@ const POSTS: Post[] = [
   whatAiReplacesInMarketing,
   whatMarketingTeamsShouldAutomateFirst,
   aeoVsSeoWhatChanges,
-  whatAgenticReadyActuallyMeans,
+  agenticReadyWebsite,
   doYouNeedAnLlmsTxt,
   aiProductRoleWithoutCsDegree,
   aiSkillsForAMarketingCv,

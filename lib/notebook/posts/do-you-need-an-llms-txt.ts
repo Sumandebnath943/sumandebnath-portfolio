@@ -2,11 +2,14 @@ import type { Post } from "../types";
 
 const post: Post = {
   slug: "do-you-need-an-llms-txt",
-  title: "Do you actually need an llms.txt file?",
+  title:
+    "Do you need an llms.txt file? Google says no.",
   answer:
     "Probably not for search visibility. Google has publicly declined to support llms.txt, and reported monitoring of AI crawler traffic through 2026 found direct fetches to be negligible. Where it does get read is agent-side — coding assistants and desktop agents retrieving a domain because a user named it. Worth having if it is generated, not worth maintaining by hand.",
   description:
-    "llms.txt is widely recommended and rarely fetched. What the evidence actually shows about who reads it, the one use case where it genuinely matters, and why a hand-written one is worse than none.",
+    "Google has publicly declined to support llms.txt and crawler fetches are negligible. Where it does get read, and why a hand-written one is worse than none.",
+  metaTitle: "Do you need an llms.txt file? Google says no.",
+  keywords: ["llms.txt", "do I need llms.txt", "llms.txt SEO", "llms.txt Google support"],
   published: "2026-08-26",
   category: "Marketing & AI",
   // Heavily searched, heavily oversold, and the honest answer is not the one

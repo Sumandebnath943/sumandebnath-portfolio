@@ -2,11 +2,14 @@ import type { Post } from "../types";
 
 const post: Post = {
   slug: "ai-product-role-without-cs-degree",
-  title: "I do not have a computer science degree. This is the case I make for an AI product role.",
+  title:
+    "No computer science degree. Here is the case I make for an AI product role.",
   answer:
     "The objection to hiring a product manager without an engineering qualification is rarely about the qualification. It is about whether they can tell when a system is wrong. That is answerable with evidence — shipped products, a measured model, a documented review practice — and it is answerable badly with a list of tools.",
   description:
-    "Written while still looking rather than after landing the job. What the real objection to a non-technical AI product hire is, what evidence answers it, what it cannot answer, and how to be tested.",
+    "The objection is not the degree — it is whether you can tell when the system is wrong. What evidence answers that, what it cannot answer, and how to be tested.",
+  metaTitle: "AI product manager without a CS degree: the case",
+  keywords: ["AI product manager without a computer science degree", "non-technical product manager", "AI product role hiring", "product manager no CS degree"],
   published: "2026-08-26",
   category: "Career",
   // High demand, and everything written about it is either encouragement with

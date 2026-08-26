@@ -2,11 +2,14 @@ import type { Post } from "../types";
 
 const post: Post = {
   slug: "ai-skills-for-a-marketing-cv",
-  title: "Which AI skills are actually worth putting on a marketing CV?",
+  title:
+    "The AI skills worth putting on a marketing CV — and the ones to delete",
   answer:
     "Named tools are not skills, because everyone has access to the same tools and the claim cannot be checked. What survives scrutiny is anything with an artefact or a measured outcome attached: a process automated with the time saved stated, a system built and linked, or a described method for judging whether an output is correct.",
   description:
-    "Listing AI tools on a CV signals nothing, because the reader has the same subscriptions. What a hiring manager is actually screening for, and the four categories of AI claim that survive being checked.",
+    "Naming tools signals nothing — the reader has the same subscriptions. The four claims that survive a follow-up question, and the five lines to take off.",
+  metaTitle: "AI skills for a marketing CV: what to list in 2026",
+  keywords: ["AI skills marketing CV", "AI skills for marketers", "marketing resume AI", "prompt engineering on a CV"],
   published: "2026-08-26",
   category: "Career",
   // Directly actionable, large audience, and currently answered almost entirely

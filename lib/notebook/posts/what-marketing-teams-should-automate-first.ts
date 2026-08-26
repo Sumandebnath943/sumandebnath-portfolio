@@ -6,7 +6,9 @@ const post: Post = {
   answer:
     "Start with the highest-frequency, lowest-judgement work — reporting, data gathering, asset variants and routine checks — because that is where hours accumulate without any decision being made. The selection rule that matters most is error visibility: automate where a mistake is obvious and cheap, and never where it would be silent and expensive.",
   description:
-    "A practical order for automating marketing work, the rule for deciding what qualifies, what to leave alone entirely, and the trap of automating a process that was already wrong.",
+    "Sort by frequency and judgement, not by what is impressive. The order to work in, the rule for hard cases, and the trap of automating a broken process.",
+  metaTitle: "What should a marketing team automate first?",
+  keywords: ["what to automate in marketing", "marketing automation priorities", "AI marketing workflow", "marketing tasks to automate"],
   published: "2026-08-26",
   category: "Marketing & AI",
   // Directly actionable for the audience, and the existing coverage is mostly

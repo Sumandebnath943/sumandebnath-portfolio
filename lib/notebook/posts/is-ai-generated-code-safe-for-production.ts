@@ -2,11 +2,14 @@ import type { Post } from "../types";
 
 const post: Post = {
   slug: "is-ai-generated-code-safe-for-production",
-  title: "Is AI-generated code safe to put in production?",
+  title:
+    "Is AI-generated code safe for production? Ask who read it",
   answer:
     "Safety is a property of review and testing rather than of authorship — nobody asks whether hand-written code is safe, they ask what was tested. What genuinely differs is volume, plausibility, and the author's weaker familiarity with code they did not type, which together make skimming ineffective. The answer is an audit trail, not an origin story.",
   description:
-    "The question is usually asked about origin, which is the wrong axis. What is actually different about AI-generated code, the specific risks worth checking for, and what evidence of safety looks like.",
+    "Safety is a property of review, not authorship. What genuinely differs, the six risks worth checking, and 38 security tests across three audit passes.",
+  metaTitle: "Is AI-generated code safe for production?",
+  keywords: ["is AI generated code safe", "AI code security risks", "vibe coding security", "AI generated code vulnerabilities"],
   published: "2026-08-26",
   category: "Practice",
   // The central objection to the whole practice. High pain, high demand, and

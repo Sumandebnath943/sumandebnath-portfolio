@@ -2,11 +2,14 @@ import type { Post } from "../types";
 
 const post: Post = {
   slug: "never-run-a-coding-agent-on-autopilot",
-  title: "I never let a coding agent run on autopilot, and I have watched what happens when people do",
+  title:
+    "I never let a coding agent run on autopilot",
   answer:
     "Running a coding agent with auto-accept enabled removes the only step that checks whether the work is the right work. The common failures are not broken code but overbuilding, quiet substitution of a different solution, and confidently finishing something nobody asked for. Keeping approval manual costs time and is what makes the output defensible.",
   description:
-    "Auto-accept removes the review step, and the failures that follow are not compile errors — they are overengineering, substitution and building the wrong thing well. What manual approval actually catches, and how to direct an agent instead.",
+    "Three failures follow, and none is broken code: overbuilding, quiet substitution, and finishing what nobody asked for. What manual approval catches.",
+  metaTitle: "Should you use auto-accept on an AI coding agent?",
+  keywords: ["AI coding agent auto-accept", "should you let AI write code unsupervised", "Claude Code review workflow", "AI agent autopilot risks"],
   published: "2026-08-26",
   category: "Method",
   // The central argument of the AI-assisted-development debate, and the side

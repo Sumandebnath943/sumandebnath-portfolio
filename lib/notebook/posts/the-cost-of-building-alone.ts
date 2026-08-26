@@ -2,11 +2,14 @@ import type { Post } from "../types";
 
 const post: Post = {
   slug: "the-cost-of-building-alone",
-  title: "Nobody warns you what building alone actually costs",
+  title:
+    "The expensive part of building alone is not the hours",
   answer:
     "The expensive part of building software alone is not the hours, it is the absence of correction. There is no colleague to say the approach is wrong, no review before a decision becomes permanent, and no one who knows the codebase well enough to disagree usefully. Tutorials, forums and AI assistants each replace part of that, and none of them replace disagreement.",
   description:
-    "Building software with no team means no review, no second opinion and no one who knows your codebase. What that actually costs, what the substitutes do and do not cover, and the part that is genuinely worth it.",
+    "With AI assistance labour stopped being the constraint. What is missing is somebody who will say the approach is wrong, and what no substitute replaces.",
+  metaTitle: "The real cost of building software alone",
+  keywords: ["building software alone", "solo developer challenges", "indie hacker isolation", "solo founder burnout"],
   published: "2026-08-26",
   category: "Method",
   // Large audience — solo builders and indie developers — and the existing

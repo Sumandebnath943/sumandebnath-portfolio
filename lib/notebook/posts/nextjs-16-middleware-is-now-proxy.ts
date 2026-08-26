@@ -6,7 +6,9 @@ const post: Post = {
   answer:
     "In Next.js 16, middleware.ts is gone. The replacement is proxy.ts at the project root, exporting a function named proxy(request) and a config.matcher, and it runs on the Node runtime rather than Edge. The matcher is read statically at build time, so it cannot reference an imported constant.",
   description:
-    "Next.js 16 renamed middleware to proxy.ts and moved it to the Node runtime. What changes, what the statically-read matcher will not let you do, and the migration in practice.",
+    "middleware.ts is gone in Next.js 16. What proxy.ts changes, why the matcher cannot reference an imported constant, and the migration in practice.",
+  metaTitle: "Next.js 16: middleware.ts is now proxy.ts",
+  keywords: ["Next.js 16 middleware", "proxy.ts Next.js", "middleware.ts removed", "Next.js 16 migration"],
   published: "2026-08-24",
   category: "Next.js",
   pick: true,

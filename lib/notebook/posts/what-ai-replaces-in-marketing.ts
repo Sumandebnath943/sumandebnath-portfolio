@@ -2,11 +2,14 @@ import type { Post } from "../types";
 
 const post: Post = {
   slug: "what-ai-replaces-in-marketing",
-  title: "Which parts of a marketing job does AI actually replace?",
+  title:
+    "AI replaces tasks, not jobs — unless your job is only tasks",
   answer:
     "AI replaces tasks rather than whole jobs, but a role made up entirely of replaceable tasks is effectively a replaced role. In marketing the exposed work is reporting, data gathering, first drafts, asset variants and rule-based campaign operations. What survives is deciding what is worth doing, judging whether it lands, being accountable, and governing the systems.",
   description:
-    "Written by a performance marketer who has spent two years automating parts of his own discipline. Which marketing tasks are genuinely exposed, which are not, why junior execution roles carry most of the risk, and what replaces them.",
+    "Written by a marketer automating his own discipline. The five kinds of marketing work genuinely at risk, what survives, and why junior roles carry most of it.",
+  metaTitle: "Will AI replace marketing jobs? What is exposed",
+  keywords: ["will AI replace marketing jobs", "marketing tasks AI can do", "AI impact on marketing careers", "is marketing a safe career"],
   published: "2026-08-26",
   category: "Marketing & AI",
   // Enormous demand and almost all of it answered either by vendors with

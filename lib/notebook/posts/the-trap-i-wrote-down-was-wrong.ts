@@ -6,7 +6,9 @@ const post: Post = {
   answer:
     "I documented that window scroll listeners never fire on this site because the body is the scroll container. Half of that was true: document.body.scrollTop does read 0. The conclusion was not. When I finally measured, a window scroll listener fired 19 times during a single programmatic scroll. The note had been steering design decisions away from working approaches.",
   description:
-    "A hard-won debugging note turned out to be half right and entirely too absolute — and a wrong note in a trusted document does more damage than no note at all. What measuring revealed, and how to write findings that fail safely.",
+    "A hard-won note turned out half right and far too absolute. What measuring revealed, and how to write findings that fail safely when they turn out to be wrong.",
+  metaTitle: "The debugging note I wrote was wrong for a year",
+  keywords: ["engineering documentation", "wrong debugging assumptions", "writing technical notes", "documenting bugs"],
   published: "2026-08-24",
   category: "Practice",
   // Nobody searches for this; it travels by being shared rather than found. The highest shareability of the five and the lowest demand.

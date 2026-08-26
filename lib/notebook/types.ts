@@ -194,8 +194,39 @@ export interface Post {
   answer: string;
 
   /** `<meta name="description">`. Distinct from `answer` — this one is written
-   *  for a search result, that one for a quote. */
+   *  for a search result, that one for a quote. Keep it 140–160 characters:
+   *  Google truncates around 160 and a description that ends mid-clause reads as
+   *  neglect. */
   description: string;
+
+  /**
+   * Overrides the H1 in the `<title>` tag. Optional.
+   *
+   * Added 26 Aug 2026 with the SEO audit, to resolve a real conflict between two
+   * readers. The H1 can be a hook — "Eight repositories in eleven days. Six died
+   * within three." — while the thing that appears in a search result carries the
+   * phrase somebody actually typed. Google truncates near sixty characters, and
+   * eleven of the twenty-six headlines were longer than that.
+   *
+   * Set it only when the two genuinely want to differ. Where the title is
+   * already short and searchable, leave this unset and the title is used.
+   *
+   * **Keep it under 60 characters.** SEO_AUDIT.md §3 rule 1.
+   */
+  metaTitle?: string;
+
+  /**
+   * Target search phrases, most important first.
+   *
+   * Distinct from `tags`, which are the blog's own taxonomy and drive the filter
+   * UI. A tag is "Security"; a keyword is "API keys AI generated code". Falls
+   * back to `tags` when unset, which is what every post did before the audit.
+   *
+   * One primary phrase per article — `AEO_PLAYBOOK.md` §3.1b's
+   * one-question-per-URL constraint applies to keywords too. Two articles
+   * targeting one phrase compete with each other.
+   */
+  keywords?: string[];
 
   /** ISO date, YYYY-MM-DD. */
   published: string;

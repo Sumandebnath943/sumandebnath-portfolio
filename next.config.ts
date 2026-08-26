@@ -31,6 +31,33 @@ const nextConfig: NextConfig = {
   // fine and is rejected by path-to-regexp at build time ("cannot repeat
   // without a prefix and suffix"). A rename means editing this line too, which
   // is already part of the rule.
+  /**
+   * Permanent redirects for renamed routes.
+   *
+   * A slug is a promise. Anything that has linked, bookmarked or indexed a URL
+   * keeps working, and a 308 passes the ranking signal along rather than
+   * stranding it — which is the entire reason a rename is affordable at all.
+   *
+   * ⚠ These are permanent in both senses: browsers and intermediaries cache a
+   * 308 aggressively, and the entry has to stay here indefinitely. Do not remove
+   * one to tidy the file; the cost of a rename is carrying its redirect for ever,
+   * and that cost is the reason SEO_AUDIT.md §5 renamed one slug out of
+   * twenty-six rather than "improving" all of them.
+   */
+  async redirects() {
+    return [
+      {
+        // Renamed 26 Aug 2026 with the SEO audit. The article's title moved from
+        // "What does it actually mean for a website to be agentic-ready?" to
+        // "Agentic-ready: the four things an agent has to be able to do", and the
+        // new slug is the phrase people search.
+        source: "/notebook/what-agentic-ready-actually-means",
+        destination: "/notebook/agentic-ready-website",
+        permanent: true,
+      },
+    ];
+  },
+
   async headers() {
     const immutable = [
       { key: "Cache-Control", value: "public, max-age=31536000, immutable" },

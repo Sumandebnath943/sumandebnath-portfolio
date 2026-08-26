@@ -6,7 +6,9 @@ const post: Post = {
   answer:
     "React StrictMode mounts every component, runs cleanup, then remounts. A module-level `if (initialised) return` guard is set on the first mount, survives the cleanup because it lives outside the component, and blocks the second mount from ever re-attaching its listeners. The feature is then dead for the whole dev session while production works fine.",
   description:
-    "Why a one-time initialisation guard plus React StrictMode leaves event listeners permanently detached in development, how to tell it apart from a real bug, and the two ways to fix it.",
+    "StrictMode's mount, cleanup and remount trips a ref-based guard, so listeners never reattach and the feature is silently dead in dev. Why, and the fix.",
+  metaTitle: "React StrictMode breaks init guards in dev",
+  keywords: ["React StrictMode double mount", "useEffect runs twice", "init guard StrictMode", "StrictMode breaks my code"],
   published: "2026-08-24",
   category: "React",
   pick: true,

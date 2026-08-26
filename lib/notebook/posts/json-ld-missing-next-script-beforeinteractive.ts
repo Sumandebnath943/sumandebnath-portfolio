@@ -6,7 +6,9 @@ const post: Post = {
   answer:
     "Next.js does not emit a script element for a component using next/script with strategy beforeInteractive. It serialises the payload into a self.__next_s array that the client bundle reads after hydration, so JSON-LD declared that way is absent from the served HTML and invisible to any crawler that does not execute JavaScript.",
   description:
-    "next/script with strategy=\"beforeInteractive\" emits no script tag into the served HTML. Why structured data declared that way is visible in DevTools but missing from the response, how to check, and the one-line fix.",
+    "next/script with beforeInteractive emits no script tag. Why your structured data shows in DevTools but not in the response, the one-line check, and the fix.",
+  metaTitle: "JSON-LD missing from HTML in Next.js? next/script",
+  keywords: ["JSON-LD not showing Next.js", "next/script beforeInteractive", "structured data not in HTML", "Next.js structured data missing"],
   published: "2026-08-26",
   category: "Next.js",
   pick: true,

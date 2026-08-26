@@ -2,11 +2,14 @@ import type { Post } from "../types";
 
 const post: Post = {
   slug: "what-ai-native-actually-means",
-  title: "What does \"AI-native\" actually mean, and how would you check?",
+  title:
+    "\"AI-native\" is being claimed faster than it is earned. Five questions that check it.",
   answer:
     "AI-native describes someone whose default working method is building with these systems, rather than someone who added them to an existing method. The claim is checkable: ask what they shipped, what they did when the model was wrong, what they refused to automate, and how they verify output. Tool familiarity answers none of those.",
   description:
-    "The term is being claimed faster than it is being earned. What it should mean, five questions that separate a real claim from a stated one, and the answers that indicate somebody has actually done it.",
+    "The term is entering job descriptions with no agreed meaning. What it should describe, and five questions that separate a real claim from a stated one.",
+  metaTitle: "What does AI-native actually mean? Five checks",
+  keywords: ["what does AI-native mean", "AI-native developer", "hiring AI-native", "AI-native definition"],
   published: "2026-08-26",
   category: "Career",
   // The term is entering job descriptions rapidly and nobody has defined it, so

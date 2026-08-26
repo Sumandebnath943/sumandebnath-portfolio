@@ -6,7 +6,9 @@ const post: Post = {
   answer:
     "Since three.js r152, ColorManagement.enabled defaults to true, so new THREE.Color(0xADC1DE) converts sRGB to linear before reaching the shader. Red loses proportionally more than blue, so colours picked against older releases drift violet. Nothing errors — the scene simply renders a different colour than the hex you wrote.",
   description:
-    "three.js r152 turned colour management on by default, silently shifting any hex value chosen against an earlier release. Why warm whites turn violet, and how to compensate when you cannot disable the flag.",
+    "ColorManagement.enabled defaults true since r152 and silently converts sRGB to linear. Nothing errors. Why your colours look wrong after upgrading, and the fix.",
+  metaTitle: "three.js r152 colour management changed everything",
+  keywords: ["three.js r152 colors", "ColorManagement.enabled", "three.js colours wrong after upgrade", "three.js color management"],
   published: "2026-08-24",
   category: "Graphics",
   // A real and under-documented trap, but the audience is anyone doing WebGL colour work, which is a much smaller room.

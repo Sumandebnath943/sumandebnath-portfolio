@@ -2,11 +2,14 @@ import type { Post } from "../types";
 
 const post: Post = {
   slug: "finishing-is-not-building",
-  title: "I mistook finishing things for building things",
+  title:
+    "Eight repositories in eleven days. Six died within three.",
   answer:
     "Between 21 June and 1 July 2026, Suman Debnath created eight repositories. Six of them stopped receiving commits within three days; the two that did not became an agent fleet still in active development two months later. The mistake was not speed — it was treating a working first version as a finished product.",
   description:
-    "Eight repositories in eleven days, six of them abandoned within three. What the commit history shows about building too fast, why a working version is not a finished one, and the test that separates them.",
+    "The commit history is not vague: eight repositories in eleven days, six abandoned within three, two that became something. What separated them was not the idea.",
+  metaTitle: "Why solo builders abandon projects: 8 repos, 11 days",
+  keywords: ["abandoned side projects", "why developers abandon projects", "shipping vs finishing", "solo builder mistakes"],
   published: "2026-08-26",
   category: "Career",
   // Very common failure among solo builders and newly enabled non-engineers,

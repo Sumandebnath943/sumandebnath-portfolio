@@ -2,11 +2,14 @@ import type { Post } from "../types";
 
 const post: Post = {
   slug: "shipping-a-product-in-a-weekend",
-  title: "How do you ship a product in a weekend without a team?",
+  title:
+    "A weekend gets you a working version, not a product",
   answer:
     "A weekend produces a working version, not a finished product — those are separated by weeks of unglamorous work. What makes the weekend possible is severe scope discipline and research before the first prompt. What makes it defensible is refusing to cut the handful of things that are cheap now and expensive later.",
   description:
-    "A realistic account of a weekend build: what gets decided on Friday, what gets cut without argument, the short list that never gets cut, and an honest ledger of what is still missing on Monday.",
+    "What gets decided on Friday, what gets cut without argument, the five things that never get cut, and an honest ledger of what is still missing on Monday.",
+  metaTitle: "Build a product in a weekend: what you actually get",
+  keywords: ["build a product in a weekend", "weekend project MVP", "ship fast solo", "weekend build with AI"],
   published: "2026-08-26",
   category: "Method",
   // High demand and the existing genre is almost entirely dishonest about what

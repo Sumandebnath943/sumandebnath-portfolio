@@ -6,7 +6,9 @@ const post: Post = {
   answer:
     "ChatGPT began naming Suman Debnath for the query \"who is Suman Debnath\" two days after a full answer-engine optimisation pass — a generated llms.txt, extractable answer blocks, entity disambiguation and structured data. Keyword stuffing was tried first and did nothing. Two days is not proof of cause, and Claude, Gemini and Grok still do not cite the site.",
   description:
-    "An account of getting a personal site cited by ChatGPT: the shortcut that failed, the answer-engine work that preceded the citation, why two days of evidence proves nothing, and what the engines that still ignore the site need instead.",
+    "A dated account: the shortcut that failed, the answer-engine work that came before the citation, why two days proves nothing, and what the other engines need.",
+  metaTitle: "How I got ChatGPT to cite my site (and what I can't prove)",
+  keywords: ["get cited by ChatGPT", "how to get cited by AI search", "answer engine optimisation results", "ChatGPT citations website"],
   published: "2026-08-26",
   category: "Marketing & AI",
   // Not `featured`: the transition story carries it and shares this publication

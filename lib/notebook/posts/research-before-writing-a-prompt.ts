@@ -6,7 +6,9 @@ const post: Post = {
   answer:
     "Research before prompting accounts for roughly ten to twenty percent of a project's duration, and generating the first working version takes less time than any other phase. The prompt is written last, after the reading, and carries context, goal and worked examples — which is what prevents confident but confused output.",
   description:
-    "Generating code is the fastest part of building with AI, which makes it the wrong place to spend attention. How research before the first prompt is structured, what the prompt then contains, and what goes wrong without it.",
+    "Generating the first working version is the cheapest phase, which makes it the wrong place to spend attention. What the research is, and what skipping it costs.",
+  metaTitle: "Research before prompting: a fifth of every project",
+  keywords: ["how to write better prompts", "context engineering", "prompt research process", "AI prompting workflow"],
   published: "2026-08-26",
   category: "Method",
   pick: true,

@@ -2,11 +2,14 @@ import type { Post } from "../types";
 
 const post: Post = {
   slug: "real-ai-tool-or-wrapper",
-  title: "How do you tell a real AI tool from a wrapper?",
+  title:
+    "Is it a real AI product or a wrapper? Ask what is left without the model.",
   answer:
     "The useful test is not whether a product calls somebody else's model, because most do, including good ones. It is what would remain if the model were removed. A product with its own evaluation, defined behaviour when the answer is wrong, real integration and data you can export is a product. One with none of those is an interface charging a markup on an API.",
   description:
-    "Most AI products are built on somebody else's model, and that is not the problem. A non-technical test for whether there is a product underneath, the questions to ask a vendor, and when a wrapper is genuinely the right thing to buy.",
+    "Most AI products call somebody else's model, including good ones. The test that separates them, four questions for a vendor, and when a wrapper is worth buying.",
+  metaTitle: "Real AI tool or wrapper? Five non-technical checks",
+  keywords: ["AI wrapper vs real product", "how to evaluate AI tools", "AI vendor questions", "is it just a GPT wrapper"],
   published: "2026-08-26",
   category: "Marketing & AI",
   // Very high demand from buyers who cannot evaluate the claim themselves, and

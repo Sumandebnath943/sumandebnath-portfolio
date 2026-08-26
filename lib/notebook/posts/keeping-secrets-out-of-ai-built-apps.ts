@@ -2,11 +2,14 @@ import type { Post } from "../types";
 
 const post: Post = {
   slug: "keeping-secrets-out-of-ai-built-apps",
-  title: "How do you keep secrets out of an app you built with AI?",
+  title:
+    "Keeping API keys out of an app you built with AI",
   answer:
     "Three rules do most of the work: never let a key appear in code, keep environment files out of version control, and hold production values in the host's environment settings. Rotation is the part most people skip. Push protection catches known key formats only, so it is a net rather than a guarantee.",
   description:
-    "Committed API keys are the standard criticism of AI-assisted development, and the criticism is earned by somebody. The routine that prevents it, what push protection does and does not cover, and why rotating beats deleting the commit.",
+    "Push protection catches known formats only. The three rules, why rotation is the step everybody skips, and what to do first if you have already committed a key.",
+  metaTitle: "Keeping API keys out of an app you built with AI",
+  keywords: ["API keys AI generated code", "secrets management vibe coding", "committed API key what to do", "AI coding secrets"],
   published: "2026-08-26",
   category: "Method",
   // Everybody building with AI has this exposure and most of the writing about

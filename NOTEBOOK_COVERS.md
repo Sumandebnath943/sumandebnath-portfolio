@@ -120,7 +120,7 @@ Each line is a follow-up message. Format: **subject — accent — on-screen tex
 > the ten into the one. Accent `#1f5f6b` on the speech bubble only.
 > On-screen text: **TEN RESULTS, ONE ANSWER**
 
-**`what-agentic-ready-actually-means`**
+**`agentic-ready-website`**
 > A tall door with four bolt locks running down it. Three are drawn open, the
 > fourth is still shut. A small simple robot stands patiently in front of it.
 > Accent `#1f5f6b` on the one closed lock.
