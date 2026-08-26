@@ -678,3 +678,195 @@
     opacity: 1;
   }
 }
+
+/* ── Front-page sections ────────────────────────────────────────────────────
+   Added 26 Aug 2026, when /notebook stopped being one filtered grid and became
+   a front page. A rail is a heading and a row of cards; four of them plus the
+   hero is what turns twenty-six articles from a column you scroll past into a
+   page you can navigate. Nothing here is interactive — see components/notebook/
+   magazine.tsx for why browsing moved to real routes. */
+
+.nb-rail {
+  margin: 0 0 3.25rem;
+}
+
+.nb-rail-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin: 0 0 1.4rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--nb-rule);
+}
+
+.nb-rail-title {
+  font-size: 1.15rem;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--nb-ink);
+  margin: 0;
+}
+
+.nb-rail-standfirst {
+  margin: 0.4rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--nb-ink-mute);
+}
+
+.nb-rail-more {
+  flex: none;
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--nb-ink-soft);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.nb-rail-more:hover {
+  color: var(--nb-ink);
+}
+
+/* ── The small-category chip row ─────────────────────────────────────────── */
+
+.nb-chips {
+  margin: 0 0 3.25rem;
+  padding: 1.5rem 1.75rem;
+  border: 1px solid var(--nb-rule);
+  border-radius: 1.1rem;
+  background: var(--nb-surface);
+}
+
+.nb-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* `--chip` is set inline per category from CATEGORY_ACCENT, so the chip carries
+   the same colour as that category's filter pill and generated cover art. */
+.nb-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid var(--nb-rule);
+  border-radius: 999px;
+  background: #faf7f1;
+  font-size: 0.875rem;
+  color: var(--nb-ink);
+  text-decoration: none;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.nb-chip:hover {
+  border-color: var(--chip, var(--nb-rule-strong));
+  transform: translateY(-1px);
+}
+
+.nb-chip-count {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  color: var(--chip, var(--nb-ink-mute));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nb-chip:hover {
+    transform: none;
+  }
+}
+
+/* ── Pager ──────────────────────────────────────────────────────────────── */
+
+.nb-pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 2.75rem 0 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--nb-rule);
+}
+
+.nb-pager-step {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--nb-ink-soft);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nb-pager-step:hover {
+  color: var(--nb-ink);
+}
+
+/* Disabled ends stay in the layout rather than disappearing, so the page
+   numbers do not shift position between the first page and the middle ones. */
+.nb-pager-step.is-off {
+  color: var(--nb-rule-strong);
+  pointer-events: none;
+}
+
+.nb-pager-list {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nb-pager-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--nb-ink-soft);
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.nb-pager-num:hover {
+  border-color: var(--nb-rule);
+  color: var(--nb-ink);
+}
+
+.nb-pager-num.is-current {
+  border-color: var(--nb-rule-strong);
+  color: var(--nb-ink);
+  font-weight: 600;
+}
+
+/* ── Archive masthead ───────────────────────────────────────────────────── */
+
+.nb-mast--archive {
+  padding-block: 3.5rem 0;
+}
+
+@media (max-width: 40rem) {
+  .nb-rail-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .nb-pager {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 1rem;
+  }
+}

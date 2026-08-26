@@ -1,26 +1,28 @@
 import type { Post } from "./types";
 
 /**
- * The subset of a post that the blog index actually renders.
+ * The subset of a post that a card actually renders.
  *
  * ## Why this exists
  *
- * `NotebookBrowser` is a client component, and everything passed to a client
- * component crosses the server/client boundary as serialised data. Passing whole
- * `Post` objects therefore embedded **every article in full** — blocks, code
- * samples, tables, FAQs — into the index page payload. It measured 160 KB for
- * five posts, to render a page that shows none of that text, and it grows
- * linearly with the archive.
+ * It began as a payload fix. The index used to be one client component
+ * (`NotebookBrowser`, removed 26 Aug 2026 when the front page became
+ * server-rendered sections), and everything passed to a client component crosses
+ * the boundary as serialised data — so passing whole `Post` objects embedded
+ * **every article in full**, blocks, code samples, tables and FAQs, into the
+ * index payload. It measured 160 KB for five posts, to render a page showing
+ * none of that text.
  *
- * Ten fields is what a card needs. Map through `toCardPost` before crossing.
+ * That boundary is gone and the type is kept anyway, for a plainer reason: a
+ * card needs eleven fields and should not be handed an object carrying an entire
+ * article. It documents what a card is allowed to depend on.
  *
- * ## Why it lives here and not in the client module
+ * ## Why it lives here rather than beside the component
  *
- * It was defined in `NotebookBrowser.tsx` first, and the build failed at
- * prerender. Anything exported from a `"use client"` module becomes a **client
- * reference** — a stub the bundler swaps in — so calling `toCardPost` from a
- * server component throws rather than running. Shared helpers used on both sides
- * of the boundary have to live in a module that declares neither.
+ * Anything exported from a `"use client"` module becomes a **client reference** —
+ * a stub the bundler swaps in — so calling `toCardPost` from a server component
+ * throws rather than running. That cost a build failure once. Helpers used on
+ * both sides belong in a module that declares neither, and this one still is.
  */
 export type CardPost = Pick<
   Post,

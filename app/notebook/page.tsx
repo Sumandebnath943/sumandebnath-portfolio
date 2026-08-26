@@ -6,25 +6,25 @@ import Contact from "@/components/sections/Contact";
 import RelatedPages from "@/components/ui/RelatedPages";
 import PageFaq from "@/components/ui/PageFaq";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
-import NotebookBrowser from "@/components/notebook/NotebookBrowser";
+import ArticleCard from "@/components/notebook/ArticleCard";
+import { FeaturedHero, Rail, BrowseChips, Pagination } from "@/components/notebook/magazine";
 import { toCardPost } from "@/lib/notebook/card";
 import { SITE_URL } from "@/lib/projects";
 import {
   activeCategories,
   allPosts,
-  allTags,
   formatPostDate,
+  magazine,
   notebookModified,
-  mostPopularPost,
-  pickedPosts,
   postUrl,
 } from "@/lib/notebook";
+import { CATEGORY_ACCENT, categorySlug, type Category } from "@/lib/notebook/types";
 import "./notebook.css";
 import "./blog.css";
 
-const TITLE = "Notebook — engineering articles by Suman Debnath";
+const TITLE = "Notebook — articles by Suman Debnath";
 const DESCRIPTION =
-  "Engineering write-ups from building AI-native products: what broke, the actual fix, and what generalises. Articles on Next.js, React, CSS, three.js and debugging practice.";
+  "First-hand writing from building AI-native products as a marketer: the bugs that produced no error message, what a non-developer has to learn to ship software, and how to be found by answer engines.";
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -58,12 +58,13 @@ export const metadata: Metadata = {
   },
 };
 
+/** Kept in step with the same list in app/notebook/[slug]/page.tsx. */
+const TECHNICAL_CATEGORIES: Category[] = ["CSS & Layout", "React", "Next.js", "Graphics"];
+
 export default function NotebookIndexPage() {
   const posts = allPosts();
   const categories = activeCategories();
-  const tags = allTags();
-  const picks = pickedPosts();
-  const popular = mostPopularPost();
+  const { hero, picks, rails, chips, latest, totalPages } = magazine();
 
   // ── Structured data ───────────────────────────────────────────────────────
   // Blog + the full post list. `dateModified` from the newest entry is the
@@ -86,8 +87,13 @@ export default function NotebookIndexPage() {
     // consumer say "his Next.js writing" rather than treating every post as an
     // unrelated page.
     about: categories.map((c) => ({ "@type": "Thing", name: c.category })),
+    // The type follows the category, exactly as the article pages do. A
+    // first-person career essay is a BlogPosting; TechArticle is specifically
+    // technical how-to and diagnostic writing. Asserting one for the other in
+    // the blog's own listing would contradict what each article says about
+    // itself.
     blogPost: posts.map((p) => ({
-      "@type": "TechArticle",
+      "@type": TECHNICAL_CATEGORIES.includes(p.category) ? "TechArticle" : "BlogPosting",
       "@id": `${SITE_URL}${postUrl(p.slug)}#article`,
       headline: p.title,
       description: p.answer,
@@ -123,12 +129,12 @@ export default function NotebookIndexPage() {
               className="mb-7"
             />
 
-            <p className="nb-eyebrow">Engineering notebook</p>
-            <h1 className="nb-title">What broke, the actual fix, and what generalises</h1>
+            <p className="nb-eyebrow">The notebook</p>
+            <h1 className="nb-title">Building AI products as a marketer, written down</h1>
             <p className="nb-standfirst">
-              Articles written while building AI-native products — mostly the bugs that produced no
-              error message, which are the only ones worth writing down. Every one cost me real time
-              in a real codebase.
+              Two kinds of writing. Bugs that produced no error message and cost me real time in a
+              real codebase — and first-person accounts of learning to ship software without ever
+              having been a developer. All of it first-hand.
             </p>
 
             <div className="nb-dateline">
@@ -147,17 +153,51 @@ export default function NotebookIndexPage() {
           </div>
         </header>
 
+        {/* The front page is composed by `magazine()` in lib/notebook, not here.
+            Every section draws from one pool and marks what it took, so no
+            article appears twice — the hero is not repeated in a rail, and a
+            rail's articles are not repeated in the archive below. */}
         <div className="nb-wide" style={{ paddingBlock: "3.5rem 5rem" }}>
-          {/* toCardPost, not the raw posts: passing whole Post objects across the
-              server/client boundary serialises every article in full into this
-              page. See the note on CardPost in NotebookBrowser.tsx. */}
-          <NotebookBrowser
-            posts={posts.map(toCardPost)}
-            categories={categories}
-            tags={tags}
-            picks={picks.map(toCardPost)}
-            popularSlug={popular?.slug}
+          <FeaturedHero post={toCardPost(hero)} />
+
+          <Rail
+            title="Start here"
+            standfirst="If you read three, read these."
+            posts={picks.map(toCardPost)}
           />
+
+          {rails.map(({ category, posts: railPosts }) => (
+            <Rail
+              key={category}
+              title={category}
+              href={`/notebook/category/${categorySlug(category)}`}
+              accent={CATEGORY_ACCENT[category]}
+              posts={railPosts.map(toCardPost)}
+            />
+          ))}
+
+          <BrowseChips chips={chips} />
+
+          {latest.length > 0 && (
+            <section className="nb-rail" aria-labelledby="nb-latest-title">
+              <div className="nb-rail-head">
+                <div>
+                  <h2 id="nb-latest-title" className="nb-rail-title">
+                    Everything else
+                  </h2>
+                  <p className="nb-rail-standfirst">
+                    The rest of the notebook, newest first.
+                  </p>
+                </div>
+              </div>
+              <div className="nb-grid">
+                {latest.map((p) => (
+                  <ArticleCard key={p.slug} post={toCardPost(p)} />
+                ))}
+              </div>
+              <Pagination page={1} totalPages={totalPages} />
+            </section>
+          )}
         </div>
       </main>
 

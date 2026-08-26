@@ -77,9 +77,27 @@ const POSTS: Post[] = [
 
 export const NOTEBOOK_PATH = "/notebook";
 
-/** All posts, newest first. */
+/**
+ * All posts, newest first, with `popularityScore` breaking ties.
+ *
+ * The tiebreak is not decoration. Twenty-four of the twenty-six articles share a
+ * publication date, because they were written in one programme — so sorting by
+ * date alone left the order of almost the whole archive falling through to
+ * whatever sequence `POSTS` happened to be typed in. That is an arbitrary order
+ * presented to the reader as "newest first", and it made paginating the archive
+ * meaningless.
+ *
+ * `popularityScore` is the honest thing to break the tie with: it is already the
+ * site's own editorial ranking, it is already labelled as a forecast rather than
+ * measured traffic (see types.ts), and it is stable across builds. Posts sharing
+ * a date therefore appear strongest first, which is what a reader would want
+ * anyway.
+ */
 export function allPosts(): Post[] {
-  return [...POSTS].sort((a, b) => (a.published < b.published ? 1 : -1));
+  return [...POSTS].sort((a, b) => {
+    if (a.published !== b.published) return a.published < b.published ? 1 : -1;
+    return (b.popularityScore ?? 0) - (a.popularityScore ?? 0);
+  });
 }
 
 export function getPost(slug: string): Post | undefined {
@@ -158,6 +176,119 @@ export function allTags(): { tag: string; count: number }[] {
   return [...counts.entries()]
     .map(([tag, count]) => ({ tag, count }))
     .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
+}
+
+/* ── The index, composed ──────────────────────────────────────────────────
+ *
+ * `/notebook` is a front page, not a list. Four constants decide its shape and
+ * they are here rather than in the template so the arithmetic is inspectable.
+ */
+
+/** Articles per page in the paginated archive. */
+export const POSTS_PER_PAGE = 12;
+/** How many of the "Start here" set appear on the front page. */
+const PICKS_ON_INDEX = 3;
+/** Cards in each category rail. */
+const RAIL_SIZE = 3;
+/**
+ * A category needs this many articles to earn a rail of its own.
+ *
+ * Below it the category still exists, still has an archive route and still
+ * appears as a chip — it simply does not get a horizontal rail, because a rail
+ * holding one card looks like a rendering fault rather than a section. Four of
+ * the eight categories are currently below the line.
+ */
+const RAIL_MIN = 3;
+
+export interface Magazine {
+  hero: Post;
+  picks: Post[];
+  rails: { category: Category; posts: Post[] }[];
+  /** Categories too small for a rail — rendered as links, not cards. */
+  chips: { category: Category; count: number }[];
+  /** The first page of the archive: everything the sections above did not use. */
+  latest: Post[];
+  /** Total articles left after curation, across every archive page. */
+  archiveCount: number;
+  totalPages: number;
+}
+
+/**
+ * The front page's composition.
+ *
+ * **Nothing appears twice.** Each section takes from a shared pool and marks
+ * what it took, so the hero is not repeated in a rail and a rail's articles are
+ * not repeated in the archive below. The consequence is worth stating plainly:
+ * curation consumes 1 + 3 + (3 x number of rails) articles, so the archive is
+ * the remainder, and a second page exists only once that remainder passes
+ * POSTS_PER_PAGE. At twenty-six articles it does not, and page two appears on
+ * its own when the notebook reaches twenty-nine.
+ */
+export function magazine(): Magazine {
+  const all = allPosts();
+  const used = new Set<string>();
+
+  const take = (from: Post[], n: number): Post[] => {
+    const out: Post[] = [];
+    for (const p of from) {
+      if (out.length >= n) break;
+      if (used.has(p.slug)) continue;
+      used.add(p.slug);
+      out.push(p);
+    }
+    return out;
+  };
+
+  const hero = take([featuredPost(), ...all], 1)[0];
+  const picks = take(pickedPosts(), PICKS_ON_INDEX);
+
+  const active = activeCategories();
+  // Biggest section first. `activeCategories()` returns declaration order, which
+  // put the three-article category above the seven-article one — an order that
+  // means nothing to a reader and changes whenever CATEGORIES is edited.
+  const rails = active
+    .filter((c) => c.count >= RAIL_MIN)
+    .sort((a, b) => b.count - a.count || a.category.localeCompare(b.category))
+    .map(({ category }) => ({ category, posts: take(postsInCategory(category), RAIL_SIZE) }))
+    .filter((r) => r.posts.length > 0);
+  const chips = [...active]
+    .filter((c) => c.count < RAIL_MIN)
+    .sort((a, b) => b.count - a.count || a.category.localeCompare(b.category));
+
+  const archive = all.filter((p) => !used.has(p.slug));
+
+  return {
+    hero,
+    picks,
+    rails,
+    chips,
+    latest: archive.slice(0, POSTS_PER_PAGE),
+    archiveCount: archive.length,
+    totalPages: Math.max(1, Math.ceil(archive.length / POSTS_PER_PAGE)),
+  };
+}
+
+/**
+ * One page of the archive. Page 1 lives at `/notebook`; 2 and above at
+ * `/notebook/page/<n>`.
+ *
+ * Real routes rather than query strings, which is what `AEO_PLAYBOOK.md` §3.4
+ * prescribes for exactly this moment — `?page=2` splits the index's link equity
+ * across variants of the same content.
+ */
+export function archivePage(page: number): { posts: Post[]; totalPages: number } {
+  const { totalPages } = magazine();
+  const all = allPosts();
+  const used = new Set(magazineUsedSlugs());
+  const archive = all.filter((p) => !used.has(p.slug));
+  const start = (page - 1) * POSTS_PER_PAGE;
+  return { posts: archive.slice(start, start + POSTS_PER_PAGE), totalPages };
+}
+
+/** Slugs the front page's curated sections consume. */
+function magazineUsedSlugs(): string[] {
+  const m = magazine();
+  return [m.hero.slug, ...m.picks.map((p) => p.slug), ...m.rails.flatMap((r) => r.posts.map((p) => p.slug))];
 }
 
 /** Headings a post exposes as anchors — the table of contents, and the fragment
