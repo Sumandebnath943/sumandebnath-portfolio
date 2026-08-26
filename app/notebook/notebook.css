@@ -658,3 +658,198 @@
 .nb-mast--blog .nb-title {
   max-width: 22ch;
 }
+
+/* ── Reading surface, rebuilt 26 Aug 2026 ───────────────────────────────────
+   The article page was a single 44rem column: no cover, no sense of position,
+   a contents list that scrolled away and never came back, and three bare links
+   at the end. Everything below addresses one of those. */
+
+/* Progress. Fixed to the top of the viewport, under the nav. `scaleX` on a
+   pre-sized bar rather than animating `width`, so it never triggers layout. */
+.nb-progress {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  height: 3px;
+  z-index: 60;
+  background: transparent;
+  pointer-events: none;
+}
+
+.nb-progress-fill {
+  height: 100%;
+  width: 100%;
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  background: var(--nb-clay);
+  opacity: 0.85;
+}
+
+/* The cover. Sits between the masthead and the body at the reading measure —
+   3:2, matching how the artwork is drawn (NOTEBOOK_COVERS.md §1). */
+.nb-cover {
+  aspect-ratio: 3 / 2;
+  width: 100%;
+  margin: 2.25rem 0 0;
+  border: 1px solid var(--nb-rule);
+  border-radius: 0.9rem;
+  overflow: hidden;
+}
+
+/* ── Two-column reading layout ──────────────────────────────────────────────
+   The prose keeps its 44rem measure — that number is the whole reason the page
+   is readable and nothing here widens it. The contents list moves out of the
+   flow into a rail beside it.
+
+   `align-items: start` is required: a stretched grid item is full-height, and a
+   full-height item has nothing left to stick within. This is the same class of
+   mistake as the hero cover ignoring its aspect-ratio under `stretch`.
+
+   No ancestor of the rail may carry `overflow` other than `visible` or the
+   sticky silently stops working and nothing errors — see
+   /notebook/overflow-hidden-kills-position-sticky, which was written about this
+   exact failure on this site. `.nb-facts` does clip, but it is a descendant of
+   the main column, not an ancestor of the rail. */
+.nb-read {
+  width: min(100% - 3rem, 66rem);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 44rem) 15rem;
+  gap: 3.5rem;
+  align-items: start;
+  justify-content: center;
+}
+
+/* The main column already has the measure, so it must not be re-shelled. */
+.nb-read-main {
+  width: 100%;
+  min-width: 0;
+}
+
+.nb-read-rail {
+  position: sticky;
+  /* Clear of the floating nav pill, plus the progress bar. */
+  top: 6.5rem;
+  max-height: calc(100vh - 8rem);
+  overflow-y: auto;
+}
+
+/* Below this the rail cannot earn its width; the list returns to the flow above
+   the prose, which is where it was before and is correct on a phone. */
+@media (max-width: 76rem) {
+  .nb-read {
+    width: min(100% - 3rem, 44rem);
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .nb-read-rail {
+    position: static;
+    max-height: none;
+    order: -1;
+  }
+}
+
+.nb-read-rail .nb-toc {
+  margin: 0 0 2rem;
+}
+
+/* ── End of article ─────────────────────────────────────────────────────── */
+
+.nb-end {
+  margin: 4rem 0 0;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--nb-rule);
+}
+
+.nb-end-author {
+  padding: 1.5rem 1.75rem;
+  border: 1px solid var(--nb-rule);
+  border-radius: 0.9rem;
+  background: var(--nb-surface);
+}
+
+.nb-end-kicker {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--nb-ink-mute);
+  margin: 0 0 0.5rem;
+}
+
+.nb-end-name {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--nb-ink);
+  margin: 0 0 0.5rem;
+}
+
+.nb-end-bio {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--nb-ink-soft);
+  margin: 0 0 0.85rem;
+}
+
+.nb-end-links {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--nb-ink-mute);
+}
+
+.nb-end-links .sep {
+  margin: 0 0.5rem;
+  opacity: 0.5;
+}
+
+.nb-end-nav {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0 0;
+}
+
+.nb-end-card {
+  display: block;
+  padding: 1.1rem 1.25rem;
+  border: 1px solid var(--nb-rule);
+  border-radius: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.nb-end-card:hover {
+  border-color: var(--nb-rule-strong);
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nb-end-card:hover {
+    transform: none;
+  }
+}
+
+.nb-end-dir {
+  display: block;
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--nb-clay);
+  margin-bottom: 0.5rem;
+}
+
+.nb-end-title {
+  display: block;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  font-weight: 600;
+  color: var(--nb-ink);
+}
+
+.nb-end-all {
+  margin: 1.5rem 0 0;
+  text-align: center;
+  font-size: 0.875rem;
+}

@@ -5,6 +5,8 @@ import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import RelatedPages from "@/components/ui/RelatedPages";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import PostCover from "@/components/notebook/PostCover";
+import ReadingProgress from "@/components/notebook/ReadingProgress";
 import Contact from "@/components/sections/Contact";
 import PostBody from "@/components/notebook/PostBody";
 import { SITE_URL } from "@/lib/projects";
@@ -174,7 +176,8 @@ export default async function NotebookPostPage({
       <Navigation />
 
       <main className="nb">
-        <article>
+        <ReadingProgress targetId="nb-article" />
+        <article id="nb-article">
           <header className="nb-mast">
             <div className="nb-shell">
               <Breadcrumbs
@@ -228,7 +231,30 @@ export default async function NotebookPostPage({
             </div>
           </header>
 
-          <div className="nb-shell nb-body">
+          {/* The cover, between the masthead and the body.
+              It was missing entirely: a reader clicked a card carrying
+              artwork and arrived at a page with no image on it. Rendered at the
+              reading measure rather than full-bleed so it sits inside the
+              column the prose establishes. */}
+          {post.cover ? (
+            <div className="nb-shell">
+              <PostCover
+                slug={post.slug}
+                category={post.category}
+                cover={post.cover}
+                coverAlt={post.coverAlt}
+                priority
+                sizes="(max-width: 46rem) 100vw, 44rem"
+                className="nb-cover"
+              />
+            </div>
+          ) : null}
+
+          {/* Two columns above 76rem: the prose keeps its 44rem measure and the
+              contents list moves into a rail that sticks. Below that it
+              collapses to one column and the list returns to the flow. */}
+          <div className="nb-read">
+            <div className="nb-read-main nb-body">
             {post.facts?.length ? (
               <div className="nb-facts">
                 <dl>
@@ -240,19 +266,6 @@ export default async function NotebookPostPage({
                   ))}
                 </dl>
               </div>
-            ) : null}
-
-            {headings.length > 2 ? (
-              <nav className="nb-toc" aria-label="On this page">
-                <p className="nb-toc-label">On this page</p>
-                <ol>
-                  {headings.map((h) => (
-                    <li key={h.id}>
-                      <a href={`#${h.id}`}>{h.text}</a>
-                    </li>
-                  ))}
-                </ol>
-              </nav>
             ) : null}
 
             <PostBody blocks={post.blocks} />
@@ -285,11 +298,68 @@ export default async function NotebookPostPage({
               </section>
             ) : null}
 
-            <nav className="nb-postnav" aria-label="More entries">
-              <Link href="/notebook">← All entries</Link>
-              {newer ? <Link href={postUrl(newer.slug)}>Newer: {newer.title}</Link> : null}
-              {older ? <Link href={postUrl(older.slug)}>Older: {older.title}</Link> : null}
-            </nav>
+            {/* The end of the article, which used to be three bare links.
+                Who wrote it, where to go next as real cards, and the feed. */}
+            <footer className="nb-end">
+              <div className="nb-end-author">
+                <p className="nb-end-kicker">Written by</p>
+                <p className="nb-end-name">Suman Debnath</p>
+                <p className="nb-end-bio">
+                  Senior brand marketing manager who builds AI-native products. Everything here is
+                  first-hand — written while building, not researched afterwards.
+                </p>
+                <p className="nb-end-links">
+                  <Link href="/about" className="nb-link">
+                    About
+                  </Link>
+                  <span className="sep">·</span>
+                  <Link href="/projects" className="nb-link">
+                    What I have built
+                  </Link>
+                  <span className="sep">·</span>
+                  <a href="/notebook/rss.xml" className="nb-link">
+                    RSS
+                  </a>
+                </p>
+              </div>
+
+              <nav className="nb-end-nav" aria-label="More articles">
+                {newer ? (
+                  <Link href={postUrl(newer.slug)} className="nb-end-card">
+                    <span className="nb-end-dir">← Newer</span>
+                    <span className="nb-end-title">{newer.title}</span>
+                  </Link>
+                ) : null}
+                {older ? (
+                  <Link href={postUrl(older.slug)} className="nb-end-card">
+                    <span className="nb-end-dir">Older →</span>
+                    <span className="nb-end-title">{older.title}</span>
+                  </Link>
+                ) : null}
+              </nav>
+
+              <p className="nb-end-all">
+                <Link href="/notebook/all" className="nb-link">
+                  Browse all articles
+                </Link>
+              </p>
+            </footer>
+            </div>
+
+            {headings.length > 2 ? (
+              <aside className="nb-read-rail" aria-label="On this page">
+                <nav className="nb-toc">
+                  <p className="nb-toc-label">On this page</p>
+                  <ol>
+                    {headings.map((h) => (
+                      <li key={h.id}>
+                        <a href={`#${h.id}`}>{h.text}</a>
+                      </li>
+                    ))}
+                  </ol>
+                </nav>
+              </aside>
+            ) : null}
           </div>
         </article>
       </main>
