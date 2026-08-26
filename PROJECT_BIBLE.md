@@ -83,6 +83,18 @@ Every route is statically prerendered unless noted.
 - `/learnings` — certificates and coursework
 - `/projects`, `/projects/[slug]` (SSG), `/projects/aegis-vault`
 
+**The notebook** — six routes, and the largest subsystem on the site. Full
+architecture in §6.8; writing rules in `BLOG_GUIDELINES.md`.
+
+| Route | What it is |
+|---|---|
+| `/notebook` | The magazine front, composed by `magazine()` into five zones |
+| `/notebook/[slug]` | The reading page (SSG, `dynamicParams = false`) |
+| `/notebook/all` | The whole archive, filterable client-side; accepts `?tag=` |
+| `/notebook/category/[slug]` | One archive per category, eight of them |
+| `/notebook/page/[n]` | The paginated remainder — one page at 26 articles |
+| `/notebook/rss.xml` | The feed |
+
 **Products** — each is a full bespoke landing page with its own accent system
 
 | Route | Product | Dominant accents |
@@ -785,6 +797,146 @@ capturing those fights scrolling on touch.
 > cheap enough to justify at all.
 
 See §5 trap 3 for why the colours are pre-compensated.
+
+### 6.8 The notebook (`/notebook`)
+
+Added to this document 26 Aug 2026. It had grown into the largest subsystem on
+the site — six routes, four data modules, ten components and two stylesheets —
+while appearing here only as a passing mention in §8.
+
+**Read `BLOG_GUIDELINES.md` before writing a post and `NOTEBOOK_COVERS.md`
+before making an image.** This section is the architecture only.
+
+#### Routes
+
+| Route | Rendering | What it is |
+|---|---|---|
+| `/notebook` | static | The magazine front. Five zones — see below |
+| `/notebook/[slug]` | SSG, `dynamicParams = false` | The reading page |
+| `/notebook/all` | static | The whole archive, filterable client-side. Accepts `?tag=` |
+| `/notebook/category/[slug]` | SSG | One archive per category, eight of them |
+| `/notebook/page/[n]` | SSG | The paginated remainder. One page at 26 articles |
+| `/notebook/rss.xml` | route handler | The feed |
+
+#### Data — `lib/notebook/`
+
+| File | Role |
+|---|---|
+| `types.ts` | `Post`, the `Block` union, `CATEGORIES`, `CATEGORY_ACCENT`, `CATEGORY_BANNER` |
+| `index.ts` | The `POSTS` registry and every selector: `allPosts`, `magazine`, `furtherReading`, `archivePage`, `postsInCategory`, `popularPosts` |
+| `card.ts` | `CardPost` — the eleven fields a card may depend on — and `toCardPost` |
+| `posts/*.ts` | One typed module per article, 26 of them |
+
+**Content is typed TypeScript, not MDX.** A malformed post fails `tsc` rather
+than rendering wrong in production; `types.ts` argues it at length. There is no
+globbing — the explicit `POSTS` array is what keeps the index, the sitemap, RSS,
+`/llms.txt` and the category archives from disagreeing.
+
+#### Composition — two functions decide what appears where
+
+`magazine()` composes the front page and `furtherReading(post)` composes the
+three read-next slots on an article. **Both work the same way: every slot draws
+from one pool and marks what it took**, so nothing appears twice on a page.
+
+The front page budget is declared in one block of constants and adds up in
+public: `1 + 3 + 5 + 4 + 2 + 4 = 19` curated, leaving 7 for the archive at the
+foot. Raise one and something below it gets thinner; there is no slack.
+
+> **One deliberate exception.** The sections directory (zone D) lists each
+> category's newest straight from the category rather than from the consumed
+> pool, because an index that hides a category's newest article because a zone
+> above showed it is simply wrong about what is in that category.
+> `magazineUsedSlugs()` therefore excludes it, or the archive would be emptied
+> by a directory listing.
+
+#### The front page's five zones
+
+The rhythm is **3 (asymmetric) · 4 · 3 · 4 · 2** and that is the whole design.
+Measured at a 1152px content width:
+
+| Zone | Grid | Unit |
+|---|---|---|
+| A lead triptych | `499 / 290 / 290` | `LeadStory` + two `HeadlineList`s |
+| B more recent | `4 × 264` | `CompactCard` |
+| C selection | `3 × 362` | `FeatureTile` · `HeadlineList` · `FeatureTile` |
+| D by section | `4 × 264` | Four `HeadlineList`s |
+| E everything else | `2 × 566` | `ArticleRow` |
+
+> **No two adjacent zones may share a column count.** This is the mechanism, not
+> the card design. The page was five identical three-up grids before and read as
+> one canvas whatever was in it. If you add a zone, check what sits either side
+> of it.
+
+`HeadlineList` is the densest unit — a section name and three to five headlines,
+hairline-ruled — and carries most of the page's link count. `thumbs` adds a 4rem
+3:2 thumbnail; the two **numbered** lists stay text-only on purpose, because the
+numerals are already their visual device.
+
+#### The reading page
+
+Four numbers on `.nb` govern it and the tracks sum exactly to the band:
+
+```
+--nb-measure: 38rem   --nb-rail: 17rem   --nb-gutter: 3.5rem   --nb-band: 58.5rem
+```
+
+`38 + 3.5 + 17 = 58.5`, which is why `.nb-read` needs no `justify-content` and
+why the masthead, the lede image and the first paragraph share a left edge.
+`.nb-shell` is the band; `.nb-post-head` holds the copy to the measure inside it.
+
+**Nothing on this page is sticky.** The rail is five modules and roughly 1,400px
+tall; pinning any of it meant the rest slid underneath. Below 64rem the rail
+takes `display: contents` so its modules can be ordered individually around the
+prose — contents above, the rest below — which is why the wrapper is a bare
+`<div>` carrying no semantics.
+
+#### Colour — the accent system
+
+`--nb-accent` is set on `<article class="nb-art">` from the post's category, and
+three values derive from it once: `--nb-accent-wash` (9%), `--nb-accent-line`
+(32%) and `--nb-accent-deep` (90% accent, 10% black).
+
+`--nb-accent-deep` exists for a measured reason. Cream on the eight raw accents
+scores **4.40 to 7.42** against WCAG, and CSS & Layout's clay misses AA for body
+text. Darkening every accent by the same amount lifts the worst case to 5.17:1
+and needs no per-category exception. **Use it for any accent carrying cream
+body text.**
+
+The prose stays on paper. Colour is for the boxes around the reading, never the
+reading.
+
+#### Components — `components/notebook/`
+
+`magazine.tsx` exports the front-page furniture (`LeadStory`, `HeadlineList`,
+`CardRow`, `FeatureTile`, `SectionsZone`, `CategoryStrip`, `ArticleRow`,
+`BrowseChips`, `Pagination`). `ArticleCard` is the cover-above-title card used
+by the category and page archives; `CompactCard` is the thumbnail-right one used
+by the rail, the article foot and zone B. `PostBody` renders the typed blocks,
+`PostCover` draws a cover or deterministic art, `ArticleRail` is the five-module
+sidebar.
+
+Only three are client components: `BrowseAll`, `ReadingProgress` and `ShareRow`.
+Everything else is server-rendered, which is the point — a client-rendered
+article is exactly what a non-JavaScript crawler cannot read.
+
+#### Five traps that have already cost time here
+
+1. **`notebook.css` is imported by five routes.** Only classes `[slug]/page.tsx`
+   is the sole consumer of — `.nb-shell`, `.nb-cover`, `.nb-toc`, `.nb-answer`,
+   `.nb-read*` — may be changed freely. `.nb-mast`, `.nb-title`, `.nb-grid` and
+   `.nb-card*` are shared; use a modifier.
+2. **A bare minimum in `minmax()` is a hard floor.** `minmax(24rem, 1fr)` on
+   `.nb-rows` stayed 384px inside a 327px container and ran off the side of a
+   phone. Write `minmax(min(24rem, 100%), 1fr)`.
+3. **`sizes` must be a prop, never a constant.** `CompactCard` makes it
+   *required with no default* for this reason — see `PAGE_OPTIMIZATION.md` §4.2b,
+   which records the same failure twice.
+4. **`.nb-mast` carries `overflow: hidden`** to clip `BannerArt`, which is
+   `100vw` and therefore wider than the page whenever a scrollbar exists. Do not
+   move that clip onto `.sd-banner-host` — `globals.css` explains why.
+5. **A `promote` block with an href not in `lib/pages.ts` throws at build.**
+   Deliberately loud. `seeAlso` filters unknown pages away silently and that has
+   always been the worse trade.
 
 ---
 

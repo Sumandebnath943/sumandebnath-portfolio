@@ -442,6 +442,55 @@ A wrong environment map does not error — `<Environment>` sits behind
 `<Suspense fallback={null}>`, so a bad path fails **silently** and the robot just
 looks slightly flat. Reference values in §6.2.
 
+### 4.8 A bare minimum in `minmax()` is a hard floor
+
+Added 26 Aug 2026 after it ran a grid off the side of a phone.
+
+```css
+/* ✗ Below a 24rem container the track stays 384px and overflows. */
+grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
+
+/* ✓ Collapses to the container; identical above 24rem. */
+grid-template-columns: repeat(auto-fill, minmax(min(24rem, 100%), 1fr));
+```
+
+`auto-fill`/`auto-fit` decide *how many* tracks fit. They do not shrink a track
+below the minimum you gave them — that is what the minimum means. `.nb-rows`
+measured **384px wide inside a 327px container** at a 375px viewport, running
+33px past the edge on `/notebook` and `/notebook/all` and nowhere else, because
+article pages are the one route that does not use rows.
+
+Two things made it survive a long time:
+
+- **`body` carries `overflow-x: hidden`**, so it never produced a scrollbar. The
+  page was simply cut off at the right edge, which reads as a margin problem
+  rather than a layout bug.
+- `documentElement.scrollWidth > innerWidth` **does not catch it** under viewport
+  emulation, because `innerWidth` grows to the overflowing width. Compare against
+  **`clientWidth`**:
+
+```js
+// The check that finds it. `innerWidth` will lie to you.
+document.documentElement.scrollWidth > document.documentElement.clientWidth
+```
+
+Audit the others before assuming yours is fine: `.nb-grid` at 16rem, `.nb-side`
+and `.nb-end-grid` at 15rem and `.nb-facts` at 8rem all fit inside a 375px
+content box, which is why only one rule needed changing.
+
+### 4.9 `100vw` includes the scrollbar
+
+`BannerArt` is `width: 100vw` centred on its host, so on any page with a
+vertical scrollbar it is ~10px wider than the visible area and hangs 5px off
+each edge. That is by design and `globals.css` says so — **it must not be fixed
+by clipping `.sd-banner-host`**, because several hosts are width-constrained
+(`max-w-3xl` on /privacy, `.jr-mast` at 74rem) and clipping there stops the art
+at the text column.
+
+Clip the *page's own* full-bleed masthead instead, as `.ab-hero` does on /about
+and `.nb-mast` now does on the notebook. Check for sticky descendants first —
+§ the overflow/sticky rule in `AGENTS.md`.
+
 ---
 
 ## 5. Open, declined, and deliberately not done

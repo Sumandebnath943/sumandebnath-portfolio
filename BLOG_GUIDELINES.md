@@ -237,6 +237,18 @@ slug does not collide with an existing one.
 
 Two to four per post. A tag used once is not a tag, it is a note.
 
+**Tags are links now.** Since 26 Aug 2026 they render in a "Filed under" row at
+the *foot* of the article — not the masthead, where a reader has no use for them
+yet — and each one goes to `/notebook/all?tag=<tag>`, which seeds the archive's
+filter. Two consequences for an author:
+
+- **A tag that is not in the vocabulary above still renders, but its link does
+  nothing.** `BrowseAll` checks the parameter against the real tag list and
+  ignores anything it does not recognise, so a one-off tag produces a link to an
+  unfiltered archive. Reuse before inventing, as above.
+- `/notebook/all` self-canonicalises, so `?tag=` creates no duplicate indexable
+  URL — `AEO_PLAYBOOK` §3.4's rule against query-string views is not breached.
+
 ---
 
 ## 6. Voice — how not to read as machine-written

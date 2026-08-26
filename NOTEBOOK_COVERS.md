@@ -26,6 +26,33 @@ way to end up with twenty-six unrelated pictures.
 > yourself.** A cover with mangled lettering is worse than a cover with none, and
 > `PostCover` falls back to generated art if you leave `cover` unset.
 
+### 1.1 Where the safe area actually gets spent
+
+Added 26 Aug 2026, when the notebook redesign put the same 3:2 master into four
+differently-shaped boxes. `PostCover` renders `fill` + `object-cover`, so **the
+box does the cropping** and the middle-80% rule above is what makes that safe.
+The arithmetic, so nobody has to redo it:
+
+| Slot | Box | Cut from a 3:2 master | Verdict |
+|---|---|---|---|
+| Article lede — `.nb-cover` | **16:9** | 7.8% off each edge | Inside the safe area |
+| Front-page grid card — `.nb-card-cover` | **5:3** | ~5% off each edge | Comfortable |
+| Lead story, rail, headline and foot thumbnails | **3:2** | nothing | Native ratio, no crop |
+| *(rejected)* a wider cinematic lede | 2:1 | **12.5% off each edge** | **Outside it — do not** |
+
+> **Square is the one that broke it.** A 1:1 thumbnail cuts **a third off each
+> side**, not a sliver off the top — the safe area does not protect horizontal
+> cropping at all, because these are drawn to be trimmed vertically. The rail
+> thumbnails shipped square for one commit and visibly clipped the artwork; they
+> are 3:2 now. If a slot needs a square mark, it needs a different asset.
+
+**1280 wide is still the ceiling** (§5) and a full-bleed desktop lede would want
+about 2400. That is why the lede is *wide-contained* at 936px rather than edge
+to edge: at 936 the 1080 variant is served with no upscale on a 1× display.
+Going full-bleed means cutting new `<slug>-wide.webp` derivatives from the
+masters — a second derivative, not a regeneration, and §5's permanence warning
+applies.
+
 ---
 
 ## 2. The style block — paste this first

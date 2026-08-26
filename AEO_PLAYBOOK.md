@@ -184,10 +184,37 @@ as accidental duplication:
 | `/notebook/page/<n>` | The paginated archive, from page two. Crawl depth |
 
 The front page is composed by `magazine()` in `lib/notebook/index.ts` rather than
-in the template, so the arithmetic is inspectable: a hero, three "Start here"
-picks, a rail of three for each category holding three or more articles, chips
-for the categories below that line, then the archive. **Every section draws from
-one pool and marks what it took, so no article appears twice.**
+in the template, so the arithmetic is inspectable. **Recomposed 26 Aug 2026 into
+five zones** — architecture in `PROJECT_BIBLE.md` §6.8 — and the budget adds up
+in public: `1 + 3 + 5 + 4 + 2 + 4 = 19` curated, 7 left for the archive.
+**Every zone draws from one pool and marks what it took, so no article appears
+twice**, with one deliberate exception noted in §6.8.
+
+The AEO-relevant consequence: **all 26 articles are now linked from
+`/notebook`** — 38 links, of which 12 are the sections directory re-listing
+what other zones used. Before the rebuild the front page reached about sixteen.
+Crawl depth to any article from the site root is now two.
+
+#### 3.4a `?tag=` — the one query string, and why it is allowed
+
+Article tags moved to the foot of the reading page and became links to
+`/notebook/all?tag=<tag>`. That looks like it contradicts "real routes, never
+query strings" above, and it does not, for three reasons:
+
+1. **It is not a view anybody links to or indexes.** `/notebook/all` carries
+   `alternates.canonical: "/notebook/all"`, so every `?tag=` variant
+   self-canonicalises to one URL. No link equity splits.
+2. **The durable per-subset addresses still exist** —
+   `/notebook/category/<slug>` — and are what the front page and the rail link
+   to. The parameter only seeds an interactive control.
+3. **It costs nothing server-side.** The value is read from `window` through
+   `useSyncExternalStore`, **not** `useSearchParams` — that hook forces a
+   statically rendered route to client-render its Suspense subtree, which would
+   have pulled all twenty-six articles out of the prerendered HTML and broken
+   exactly the guarantee the box below makes.
+
+Unknown tags are checked against the real vocabulary and ignored, so
+`?tag=<anything>` cannot render a stranger's text onto the page.
 
 > **Why the filter is not on the front page.** That page's archive section holds
 > only what the rails did not use — ten articles of twenty-six. A filter there

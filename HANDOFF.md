@@ -4,11 +4,11 @@ Where the project stands, what changed most recently, and what is worth doing
 next. For how the system is built read **PROJECT_BIBLE.md**; for how the site
 writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
-**Last updated:** 25 August 2026
-**Branch:** `main`.
-**Last session:** four pieces of work, all 25–26 Aug. Agentic readiness against an external audit, which found the identity JSON-LD was invisible without JavaScript — §1.8. Then **twenty-one notebook articles** in six batches, three new categories and a writing guide — §1.9. Then the target query set, the entity rework, and a measurement that reordered the priorities — §1.10. Then **the notebook rebuilt as a publication** — covers, a magazine front page, a filterable archive, a new reading surface and an applied SEO audit — §1.11.
-**Next up:** the blog redesign continues — a typography pass (the notebook is the one part of the site that dropped the serif) and per-section grids. §1.11 ends with the analysis.
-**Session before:** banner spacing across the whole site — one over-broad CSS rule was rewriting every masthead; plus a two-column `/philosophy` hero and two shell-width tokens — §1.7.
+**Last updated:** 26 August 2026
+**Branch:** `main`, pushed — `43308b4..9eed856`, six commits, 39 files.
+**Last session:** **the notebook redesign §1.11 asked for, carried out** — the reading page rebuilt in three steps and the front page rebuilt on HBR's zone rhythm, plus three fixes Suman raised on seeing it and two overflow bugs found while verifying — §1.12.
+**Next up:** **the serif.** §1.11 named it the highest-value change available and it costs nothing to load; §1.12 did not do it. `Instrument Serif` is already in `tailwind.config.ts` and the notebook still references it twice. See the end of §1.12.
+**Session before:** four pieces of work, 25–26 Aug. Agentic readiness against an external audit, which found the identity JSON-LD was invisible without JavaScript — §1.8. Then **twenty-one notebook articles** in six batches, three new categories and a writing guide — §1.9. Then the target query set, the entity rework, and a measurement that reordered the priorities — §1.10. Then the notebook rebuilt as a publication — §1.11.
 
 > Run `git log --oneline -15` before trusting this section — it is a snapshot,
 > and the commit log is the authority on what has happened since.
@@ -25,7 +25,7 @@ Recent history, newest first, gives an accurate picture of the trajectory:
 
 | Area | State |
 |---|---|
-| **Notebook** (`/notebook`) | **5 posts → 26**, 26 Aug (§1.9), then rebuilt as a publication (§1.11): four routes, a composed front page, real cover art on all 26, a new reading surface, and every title and meta rewritten against `SEO_AUDIT.md`. Three new categories — Career, Marketing & AI, Method — so it is no longer a purely engineering notebook. **Read `BLOG_GUIDELINES.md` before touching a post and `NOTEBOOK_COVERS.md` before making an image.** Design work is unfinished — see the end of §1.11. |
+| **Notebook** (`/notebook`) | **5 posts → 26**, 26 Aug (§1.9), rebuilt as a publication (§1.11), then **redesigned end to end** (§1.12): the reading page on one band with a five-module rail, colour driven by category accent, pull-quotes in all 26 posts and in-article promo cards in nine; the front page recomposed into five zones on a 3·4·3·4·2 rhythm. Six routes — the architecture now lives in **`PROJECT_BIBLE.md` §6.8**, which it did not before. **Read `BLOG_GUIDELINES.md` before touching a post and `NOTEBOOK_COVERS.md` before making an image.** One thing outstanding: the serif — see the end of §1.12. |
 | **Machine-readable identity** | Audited 25 Aug against Vercel's Is Agentic, **79 → 83** (§1.8). The `Person` and `WebSite` JSON-LD were emitted through `next/script` and existed only once JavaScript had run — now literal tags on all 26 routes. House of Namus added as a real `Organization`. Markdown content negotiation was **refused on purpose**; the reasoning and the one condition for revisiting it are in `AEO_PLAYBOOK.md` §8. |
 | **Profile** (`/profile`) | Built 23 Aug over two passes, extended 24 Aug with four more sections (§1.6). The only light page on the site — ruled cream paper, a 280vh pinned hero that zooms into a drawn monitor, a word reveal, and a conveyor street with a walking robot. Modelled on a reference the user supplied, then pulled back towards the site's own type, pills, accents and closing. **The figure and the dog still need redrawing** — §1.5. |
 | **Banking Co-pilot** (`/banking/rm-copilot`) | Built 22 Aug. New **Banking** group under Portfolio. Fully prerendered; 382 KB of WebP, one eager image. Done. |
@@ -961,6 +961,114 @@ directly and measured rather than recalled. Three findings:
 >
 > **Take the serif, the grid variety and the density. Keep the palette and the
 > voice.**
+
+---
+
+### 1.12 The notebook redesign, carried out (26 Aug 2026)
+
+The work §1.11 stopped short of. Suman supplied two references — **hbr.org** for
+the magazine front and a **theconversation.com** article for the reading page —
+and asked what was possible before anything was built. Both were examined
+directly and measured through the DOM rather than recalled.
+
+Six commits, pushed as `43308b4..9eed856`.
+
+#### What the references actually turned out to be
+
+| | Measured |
+|---|---|
+| HBR front | 1210px container, 4-col base of 262.5px. Zones run `605/302.5/302.5`, `262.5×4`, `350×3`, `124/745/261`, `262.5×4`. Compact cards are `auto 106px` — **text left, thumbnail right** |
+| The Conversation article | 972px container → **724px main, 228px sidebar**, prose measure **600px**. Sidebar is **not sticky**: author, disclosure, partners, DOI, republish |
+
+> **Half of what looks like editorial density on The Conversation is
+> advertising.** Four of its five `div.slot` positions rendered at h=0–1 — they
+> are ad slots. The genuinely editorial sidebar is institutional furniture this
+> site has no equivalent of: no DOI, no partner university, no republishing
+> licence. Copying the *positions* was never the problem; the question was what
+> could honestly go in them.
+
+#### What was built, in four passes
+
+1. **Geometry** (`8086dfd`). Four numbers on `.nb` — measure 38rem, rail 17rem,
+   gutter 3.5rem, band 58.5rem — that sum exactly. This fixed an alignment fault
+   nobody had spotted: the masthead was a 44rem box centred on the page while
+   `.nb-read` centred a 62.5rem grid inside a 66rem box, so **the H1 started
+   roughly 9rem right of the first paragraph under it.** Both halves were
+   individually centred, which is why it read as deliberate.
+2. **The rail** (`cdf052e`). One module became five, and `CompactCard` was
+   written — text left, thumbnail right — because `ArticleCard` needs ~20rem and
+   renders a postage stamp in a 17rem rail.
+3. **Fixes and colour** (`1d5dbe5`). See below.
+4. **Blocks and the article foot** (`e6a133b`), then **the front page**
+   (`d048036`) and a final fix pass (`9eed856`).
+
+#### The three things Suman rejected on seeing it
+
+- **The sticky contents list.** Pinning it meant the four modules below kept
+  moving and slid underneath. The opaque background added in pass 2 made the
+  overlap *legible* rather than *right*. **Nothing on the reading page pins now**
+  — the rail is ~1,400px tall, so no version of pinning it was going to work.
+- **Square thumbnails cropped the art.** `object-fit: cover` fitting a 3:2 cover
+  into 1:1 discards a third of the width, and unlike the lede's 16:9 there is no
+  safe area protecting that — `NOTEBOOK_COVERS.md` reserves a sliver top and
+  bottom, not a third off each side.
+- **"Not every damn box needs to be in light color."** He was right. Every
+  interruption on the page — answer block, facts, callouts, contents, author,
+  buttons — was the same near-white wash, so the most important block on the page
+  was also the faintest thing on it. The accent system in Bible §6.8 is the
+  answer: colour driven by category, varied fill weights, and one ink block.
+
+> **Contrast was measured, not eyeballed.** Cream on the eight raw accents scores
+> 4.40–7.42; CSS & Layout's clay misses AA for body text at 4.40. Darkening every
+> accent 10% (`--nb-accent-deep`) lifts the worst case to 5.17:1 with no
+> per-category exception.
+
+#### Two overflow bugs, one of which mattered
+
+Both pre-existing, both found while verifying something else.
+
+- **`BannerArt` hung 5px off each edge** on every notebook route because it is
+  `100vw` and 100vw includes the scrollbar. **It never produced a visible
+  scrollbar** — `body` carries `overflow-x: hidden` — and saying otherwise was an
+  overstatement corrected in the commit. `/about` clips; the notebook mastheads
+  did not. Fixed on `.nb-mast`, not `.sd-banner-host`, which `globals.css`
+  forbids clipping.
+- **`.nb-rows` ran 33px off a phone.** `minmax(24rem, 1fr)` — a bare minimum is a
+  hard floor, so the track stayed 384px inside a 327px container. This one *was*
+  visible on a real device. It was briefly written off as an emulation artefact
+  and that was wrong: `innerWidth` reported 409 because the document genuinely
+  was that wide. Now `minmax(min(24rem, 100%), 1fr)`. Every other floor in both
+  notebook stylesheets was checked and fits.
+
+#### The editorial pass
+
+All 26 posts carry a **pull-quote lifted verbatim** — selected, never written.
+Nine carry a **promo card**; seventeen carry none, because twenty of the
+twenty-six list `/projects` in `seeAlso` and putting that card in all twenty
+would have reproduced exactly the interchangeable ad slot the design was copying.
+Quotes and targets were chosen by hand; only the insertion point was computed.
+
+#### Where this leaves the three §1.11 findings
+
+| §1.11 finding | State |
+|---|---|
+| Grid variety | **Done.** 3 · 4 · 3 · 4 · 2, no two adjacent zones alike |
+| Density | **Done.** Nine articles before a scroll, all 26 linked from the front page, seven text-only headline lists |
+| **The serif** | **Not done.** Still the highest-value change available, still costs nothing to load |
+
+> **The serif is the outstanding item and it is deliberate that it is called out
+> twice.** `Instrument Serif` is loaded, is `font-serif` in `tailwind.config.ts`,
+> and is used on `/about`, PACT, Pentashell, Forget Anything, the MIGI app and
+> the banking page. The notebook references it twice — `.nb-quote` and
+> `.nb-pullquote`. Headlines, the lead story and the tile titles are all still
+> sans. Start there.
+
+Two smaller things left open on purpose: `CompactCard` holds a **third local
+copy** of a six-line `formatDate` (matching `ArticleCard` and `magazine.tsx`
+rather than inventing a fourth convention — fold all three into `card.ts` when
+something next touches them), and the share module carries **no X or LinkedIn
+intents**, because two more outbound endpoints would have to be matched on
+`/privacy`.
 
 ---
 
