@@ -53,6 +53,20 @@
   --nb-gutter: 3.5rem;
   --nb-band: 58.5rem;
 
+  /* ── The ember ramp ───────────────────────────────────────────────────────
+     Muted red into burnt orange, and the one colour family on the reading page
+     that does *not* follow the article's category. The answer block and the
+     contents list carry it on every post, so those two read the same whatever
+     section you are in — which is the point of them.
+
+     Every stop clears WCAG AA for cream body text. Measured: 7.53, 6.31 and
+     4.88 to one. The obvious brighter orange does not — #c26a2e scores 3.16 —
+     which is why the ramp stays in the dark half and ends at a burnt tone
+     rather than a bright one. Do not lighten the end stop without re-measuring. */
+  --nb-ember-1: #7d2d1b;
+  --nb-ember-2: #93401e;
+  --nb-ember-3: #9c4d1a;
+
   background: var(--nb-paper);
   color: var(--nb-ink);
 }
@@ -164,19 +178,30 @@
    first paragraph. Visually it is a pull-quote; structurally it is the summary
    the whole post exists to support.
 
-   **Solid in the category's accent, carrying cream.** It was a 3.5%-black wash
-   with a hairline, which made the most important block on the page also the
-   faintest thing on it — indistinguishable at a glance from the facts table,
-   the callouts and the contents list, all of which were the same near-white
-   box. The accents are specified as dark enough to carry cream text
-   (lib/notebook/types.ts), so this needs no per-category exception. */
+   **The ember ramp, not the category accent.** It was a 3.5%-black wash with a
+   hairline, which made the most important block on the page also the faintest
+   thing on it. It then took the article's accent, which put a solid teal panel
+   at the top of every Marketing & AI post — the colour was right in principle
+   and wrong in practice, because the block a reader meets first should not
+   change temperature by section.
+
+   Warm, fixed, and the same on all twenty-six. Every stop of the ramp clears AA
+   for the cream it carries; see the note on the tokens. */
 .nb-answer {
   margin: 2.5rem 0 0;
   padding: 1.5rem 1.75rem;
-  /* Plain accent first, for anything without `color-mix`. */
-  background: var(--nb-accent, var(--nb-clay));
-  background: var(--nb-accent-deep, var(--nb-clay));
+  /* Flat first, for anything without gradient support in this position. */
+  background: var(--nb-ember-2);
+  background: linear-gradient(
+    135deg,
+    var(--nb-ember-1) 0%,
+    var(--nb-ember-2) 52%,
+    var(--nb-ember-3) 100%
+  );
   border-radius: 0.9rem;
+  /* A hairline of the light end, so the block has an edge against paper rather
+     than floating. */
+  box-shadow: inset 0 0 0 1px rgba(237, 231, 218, 0.14);
 }
 
 .nb-answer p {
@@ -345,8 +370,10 @@
 
 /* ── Prose ──────────────────────────────────────────────────────────────── */
 
+/* No top padding — `.nb-read` owns the gap under the lede now, so both columns
+   can start on the same line. */
 .nb-body {
-  padding: 1rem 0 4rem;
+  padding: 0 0 4rem;
 }
 
 .nb-p {
@@ -927,6 +954,21 @@
   grid-template-columns: minmax(0, var(--nb-measure)) var(--nb-rail);
   gap: var(--nb-gutter);
   align-items: start;
+
+  /* The gap under the lede belongs to the grid, not to whatever happens to be
+     the first block in either column. It used to belong to both, differently:
+     the prose column carried `.nb-body`'s 1rem plus the facts table's 3rem
+     while the rail carried nothing, so the contents card sat 4rem higher than
+     the panel beside it. */
+  padding-top: 3.25rem;
+}
+
+/* Whatever lands first in either column starts at the grid's top edge. Written
+   as a child rule rather than against `.nb-facts` and `.nb-toc` by name because
+   the first block is a facts table on some articles and a paragraph on others. */
+.nb-read-main > *:first-child,
+.nb-read-rail > *:first-child {
+  margin-top: 0;
 }
 
 /* The main column already has the measure, so it must not be re-shelled. */
@@ -951,8 +993,50 @@
    Nothing on this page pins now. The rail is a column of five things that
    travel with the prose, which is what The Conversation does and what the
    reading-progress bar at the top of the viewport already covers. */
+/* The contents card carries the ember ramp too, at a wash rather than at full
+   strength — it sits beside the prose the whole way down the article and a
+   second solid panel would compete with the answer block rather than rhyme
+   with it. The bar across the top is the only part at full saturation. */
 .nb-read-rail .nb-toc {
   margin: 0 0 2rem;
+  padding-top: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(125, 45, 27, 0.24);
+  background: linear-gradient(
+    168deg,
+    rgba(156, 77, 26, 0.13) 0%,
+    rgba(125, 45, 27, 0.07) 46%,
+    rgba(125, 45, 27, 0.02) 100%
+  );
+}
+
+.nb-read-rail .nb-toc::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--nb-ember-1) 0%,
+    var(--nb-ember-2) 50%,
+    var(--nb-ember-3) 100%
+  );
+}
+
+.nb-read-rail .nb-toc .nb-toc-label {
+  color: var(--nb-ember-1);
+}
+
+/* The numerals were the same mute grey as the text, which made the list read as
+   one block of type. In the ramp they become the thing the eye lands on. */
+.nb-read-rail .nb-toc a::before {
+  color: var(--nb-ember-3);
+  opacity: 0.9;
+}
+
+.nb-read-rail .nb-toc a:hover {
+  color: var(--nb-ember-1);
 }
 
 /* Below this the rail cannot earn its width; the list returns to the flow above
@@ -994,10 +1078,17 @@
     order: 1;
   }
   /* `.nb-read` runs at `gap: 0` in one column, so the first module would sit
-     flush against the foot of the article. `:first-of-type` still resolves
-     against the real DOM parent — `display: contents` removes the box, not the
-     element — and the contents list is a `<nav>`, so this is the author card. */
-  .nb-read-rail > section:first-of-type {
+     flush against the foot of the article.
+
+     Targeted through the author card rather than with `:first-of-type`, which
+     was the original rule and became wrong the moment the author card was
+     hidden here: `display: none` does not change what `:first-of-type` matches,
+     so the separation landed on an invisible element and the first *visible*
+     module butted straight against the last line of the article — measured at
+     0px. The sibling selector picks whichever module actually comes first,
+     which is the related list on most posts and the editor's pick on the three
+     that have no category siblings. */
+  .nb-read-rail > .nb-railauthor + section {
     margin-top: 2.5rem;
   }
   /* The rail's author card is a sidebar convenience. In one column it would sit
@@ -1113,21 +1204,50 @@
 
 /* ── The author card ─────────────────────────────────────────────────────── */
 
+/* ── The rail's author card ─────────────────────────────────────────────────
+   It was the plainest block in the rail: a 9% wash, a hairline and a 56px
+   portrait, sitting directly under a card with a coloured bar across it and
+   above a solid ink one. Given a centred portrait, the category accent as a
+   ring around it, and a wash that actually has a direction.
+
+   This one keeps the category accent rather than the ember ramp. The two fixed
+   ember blocks are the page's spine; everything between them still tells you
+   which section you are reading. */
+.nb-railauthor {
+  text-align: center;
+  padding-top: 1.4rem;
+  background: linear-gradient(
+    170deg,
+    var(--nb-accent-wash, var(--nb-surface)) 0%,
+    transparent 82%
+  );
+}
+
+.nb-railauthor .nb-rail-label {
+  border-bottom: 0;
+  padding-bottom: 0;
+  margin-bottom: 1rem;
+}
+
 .nb-railauthor-row {
   display: flex;
-  gap: 0.75rem;
+  flex-direction: column;
   align-items: center;
+  gap: 0.75rem;
 }
 
 /* The source is 576x720, so it needs cropping to a circle rather than
-   squashing into one. */
+   squashing into one. The ring is drawn with `box-shadow` rather than `border`
+   so it sits outside the image and does not eat into the crop. */
 .nb-railauthor-photo {
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 4.5rem;
+  height: 4.5rem;
   border-radius: 50%;
   object-fit: cover;
   flex: none;
-  border: 1px solid var(--nb-rule);
+  box-shadow:
+    0 0 0 2px var(--nb-paper),
+    0 0 0 4px var(--nb-accent-line, var(--nb-rule));
 }
 
 .nb-railauthor-name {
@@ -1148,7 +1268,10 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
-  margin: 0.85rem 0 0;
+  justify-content: center;
+  margin: 1rem 0 0;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--nb-accent-line, var(--nb-rule));
   font-size: 0.8125rem;
 }
 
@@ -1283,8 +1406,12 @@
    immediately before this one is rarely the post somebody finishing it wants —
    `furtherReading()` picks on category and score instead. */
 
+/* The bottom margin is load-bearing. `RelatedPages` renders its own cream band
+   immediately after `</main>`, so with no space here the ink author block ran
+   straight into the top edge of "Elsewhere on the site" and the two read as one
+   mis-drawn element. */
 .nb-end {
-  margin: 4.5rem 0 0;
+  margin: 4.5rem 0 5.5rem;
   padding-top: 2.5rem;
   border-top: 1px solid var(--nb-rule);
 }
