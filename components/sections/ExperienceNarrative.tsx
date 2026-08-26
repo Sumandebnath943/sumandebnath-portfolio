@@ -58,7 +58,7 @@ export default function ExperienceNarrative() {
             initial={{ opacity: 0, y: 40 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="rounded-[2rem] bg-white border border-[#1A1917]/10 p-8 md:p-12 shadow-[0_8px_30px_rgba(26,25,23,0.04)]"
+            className="rounded-[2rem] bg-white border border-[#1A1917]/10 p-8 md:p-12 shadow-[0_8px_30px_rgba(26,25,23,0.04)] flex flex-col"
           >
             <div className="mb-8">
               <span className="font-mono text-[10px] text-[#C43F00] uppercase tracking-[0.3em] mb-3 block">
@@ -72,7 +72,20 @@ export default function ExperienceNarrative() {
               </p>
             </div>
 
-            <ul className="space-y-6">
+            {/* `flex-1` + `justify-between`, not `space-y-6`.
+
+               The two cards are grid items and stretch to match, so one of them
+               always has more height than content. Parking that surplus in a
+               single place shows up as a hole — under the list when it went at
+               the end, and in the middle of the card when `mt-auto` moved it
+               above the closing quote. Distributing it across the gaps between
+               items instead means it never pools anywhere: the shorter card
+               simply breathes a little more.
+
+               `gap-6` is the floor, so a card with no surplus looks exactly as
+               it did. `space-y-*` cannot do this — it sets margins, which are
+               added on top of distributed free space rather than absorbing it. */}
+            <ul className="flex flex-col gap-6 flex-1 justify-between">
               {/* ── The current-practice panel ──
                   First position, and deliberately *not* a sixth bullet. This
                   card is dated 2016—2023 and answer-engine work is 2026, so a
@@ -89,40 +102,54 @@ export default function ExperienceNarrative() {
                   Every claim here is checkable from this site: view source for
                   the structured data, /llms.txt for the generated file, and
                   AEO_PLAYBOOK §9 for the audit. */}
-              <li className="relative overflow-hidden rounded-2xl border border-[#6D28D9]/25 bg-gradient-to-br from-[#7C3AED]/[0.10] via-[#4F46E5]/[0.05] to-[#06B6D4]/[0.07] p-6">
+              {/* ── Colour note ──
+                  The ground is `#DE2A22 → #A81818`, not the `#FF2C2C` that was
+                  asked for, and the reason is measured: white on `#FF2C2C` is
+                  **3.72:1**, which fails AA for body text, and this panel
+                  carries about forty-five words of it. `#DE2A22` is the warmest
+                  red in that family that clears the bar — 4.71:1, rising to
+                  7.48:1 at the dark end.
+
+                  `#FF2C2C` is not lost. It runs the full-width rule across the
+                  top and the corner glow, where nothing has to be read on top
+                  of it, so the panel still reads as that red. */}
+              <li className="relative overflow-hidden rounded-2xl p-6 bg-gradient-to-br from-[#DE2A22] via-[#C42020] to-[#A81818] shadow-[0_10px_30px_rgba(168,24,24,0.25)]">
                 <span
                   aria-hidden
-                  className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-[#7C3AED] via-[#4F46E5] to-[#06B6D4]"
+                  className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-[#FF2C2C] via-[#F0D98A] to-[#FF2C2C]"
                 />
-                {/* Violet into cyan, deliberately nothing like the card's own
-                    orange. This is the one block on the page that is not part
-                    of the 2016—2023 story and it should not look like it is. */}
-                <span className="font-mono text-[9px] uppercase tracking-[0.28em] text-[#6D28D9] block mb-2.5">
+                <span
+                  aria-hidden
+                  className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-[#FF2C2C] blur-[60px] opacity-70 pointer-events-none"
+                />
+
+                <span className="relative z-10 font-mono text-[9px] uppercase tracking-[0.28em] text-white block mb-2.5">
                   Current practice &middot; 2026
                 </span>
-                <p className="font-manrope font-semibold text-[#1A1917] text-lg md:text-xl mb-2 tracking-[-0.01em]">
-                  <span className="text-[#5B21B6]">Agentic Readiness</span> Strategy
+                <p className="relative z-10 font-manrope font-semibold text-lg md:text-xl mb-2 tracking-[-0.01em] text-white">
+                  <span className="text-[#F0D98A]">Agentic Readiness</span> Strategy
                 </p>
-                <p className="font-manrope text-[15px] text-[#4A4743] leading-relaxed mb-4">
+                <p className="relative z-10 font-manrope text-[15px] text-white leading-relaxed mb-4">
                   Four distinct jobs, not one buzzword. SEO wins the ranking,
                   AEO makes the answer extractable, GEO earns the citation — and
                   agentic readiness decides whether a machine can read and act
                   on the site at all. This one is where I work the whole span in
                   public.
                 </p>
-                <ul className="flex flex-wrap gap-2">
+                <ul className="relative z-10 flex flex-wrap gap-2">
                   {["AEO", "GEO", "SEO", "Agentic readiness"].map((skill) => {
-                    // The fourth is the one the heading is about, so it is
-                    // filled rather than outlined — the others are the
-                    // disciplines it spans.
+                    // The fourth is what the heading is about. On a red card
+                    // with three muted-yellow pills the strongest highlight
+                    // left is white — it is the only one of the four that is
+                    // not a warm tone, so it separates at a glance.
                     const lead = skill === "Agentic readiness";
                     return (
                       <li
                         key={skill}
                         className={
                           lead
-                            ? "font-mono text-[10px] uppercase tracking-[0.14em] text-white bg-[#5B21B6] border border-[#5B21B6] rounded-full px-3 py-1.5 shadow-[0_2px_10px_rgba(91,33,182,0.35)]"
-                            : "font-mono text-[10px] uppercase tracking-[0.14em] text-[#6D28D9] border border-[#6D28D9]/30 bg-white/70 rounded-full px-3 py-1.5"
+                            ? "font-mono text-[10px] uppercase tracking-[0.14em] rounded-full px-3 py-1.5 bg-white text-[#B3160F] font-semibold shadow-[0_2px_12px_rgba(0,0,0,0.22)]"
+                            : "font-mono text-[10px] uppercase tracking-[0.14em] rounded-full px-3 py-1.5 bg-[#F0D98A] text-[#7A1A12]"
                         }
                       >
                         {skill}
@@ -193,7 +220,8 @@ export default function ExperienceNarrative() {
               </p>
             </div>
 
-            <ul className="relative z-10 space-y-6">
+            {/* Same treatment as the Marketer card's list — see the note there. */}
+            <ul className="relative z-10 flex flex-col gap-6 flex-1 justify-between">
               {[
                 {
                   bold: "Shipped 21 AI products, solo",
@@ -226,14 +254,9 @@ export default function ExperienceNarrative() {
               ))}
             </ul>
 
-            {/* Closing statement inside the dark card.
-
-                `mt-auto` rather than `mt-12`: in a flex column it absorbs
-                whatever height the card was stretched to and holds the quote at
-                the foot, so the dead space lands above it instead of below.
-                `pt-8` and the rule keep it clear of the list even when the
-                margin collapses to nothing. */}
-            <div className="relative z-10 mt-auto pt-8 border-t border-white/10">
+            {/* Fixed margin again, not `mt-auto` — the list above absorbs the
+                surplus now, so this no longer has to be pushed anywhere. */}
+            <div className="relative z-10 mt-10 pt-8 border-t border-white/10">
               <p className="font-serif italic text-xl md:text-2xl text-white leading-snug">
                 &quot;Most companies hiring for AI product roles get a builder who doesn&apos;t understand the business, or a marketer who doesn&apos;t know how to build. <span className="font-manrope font-semibold not-italic text-[#F04E00]">I bring both.</span>&quot;
               </p>
