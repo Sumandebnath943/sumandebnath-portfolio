@@ -1340,12 +1340,18 @@ them** — the URL is the only contact route on a public social profile.
 > are a different surface**: a card linking its own code is conventional, those
 > links predate the instruction, and they remain.
 
-> **Two edits were proposed and refused this session, both correctly.** A
-> `rel="me"` line for HuggingFace in `app/layout.tsx` — the profile is in `sameAs`
-> but not in `rel="me"`, which is a real asymmetry and still unfixed — and it was
-> offered while he was asking for something else entirely. **He asked for bio text
-> and got a code edit.** The gap is genuine and worth doing; raise it as its own
-> question rather than folding it into an unrelated answer.
+> **One edit was proposed, refused, and then asked for — in that order, and the
+> order is the lesson.** HuggingFace sat in `sameAs` without a matching
+> `rel="me"`. Correct finding; wrong moment. **He had asked for social-profile bio
+> text and got an unrequested edit to `app/layout.tsx`**, so he stopped it. Raised
+> later as its own question, it took about four seconds to approve — `9232a32`.
+>
+> He then asked whether the finding was merely fallout from the bad edit. It was
+> not, but it was not independent either: **the same grep produced both**, and the
+> gap had been on screen earlier in the session, unnoticed. Worth saying plainly
+> rather than dressing up as prior discovery. **The mistake was acting unasked,
+> not noticing.** A real finding that arrives mid-answer to an unrelated question
+> is still a real finding — hold it, finish the actual question, then raise it.
 
 ---
 

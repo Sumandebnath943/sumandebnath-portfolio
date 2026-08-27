@@ -677,10 +677,15 @@ Ordered by expected value, once the above is done:
    > profile** — see the surface table below. The negation lives on `/about` and
    > `/faq` and nowhere else.
 
-   > **Mastodon's verified tick needs a `rel="me"` back.** `app/layout.tsx`
-   > declares GitHub, LinkedIn and X. A Mastodon profile link will sit unverified
-   > until a fourth is added — and **HuggingFace is already in `sameAs` without a
-   > matching `rel="me"`**, which is the same asymmetry, live today.
+   > **Mastodon's verified tick needs a `rel="me"` back.** `app/layout.tsx` now
+   > declares GitHub, LinkedIn, X and HuggingFace — the last added 27 Aug 2026 in
+   > `9232a32`, closing an asymmetry where the profile was claimed in `sameAs` and
+   > not at HTML level. **A Mastodon profile link will sit unverified until a
+   > fifth is added**, and only once that profile links back here.
+   >
+   > **Keep `sameAs` and the `rel="me"` list in step.** They are the same
+   > assertion in two languages; a profile in one but not the other is a claim
+   > half-made, and it went unnoticed for months.
 6. **Answer the same questions where they are asked** — Stack Overflow, Reddit,
    the Next.js discussions — linking back only where genuinely relevant.
 
