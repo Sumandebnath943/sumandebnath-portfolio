@@ -1264,8 +1264,10 @@ not find one. Two independent instruments, same reading. `AEO_PLAYBOOK` §6's
 
 #### The Brave problem, which reorders the fix
 
-`scripts/indexnow.mjs` was dry-run: 66 URLs resolve, key file reachable and
-matching, submission ready. **But it does nothing for the index that caused
+`scripts/indexnow.mjs` was dry-run and then **submitted — accepted (200)**, all 66
+URLs. The payload is four fields: host, key, keyLocation, urlList. No page
+content, no personal data, nothing about anyone else — it is a list of addresses
+already public in `sitemap.xml`. **But it does nothing for the index that caused
 this.** Claude searches **Brave**, and Brave participates in no push protocol and
 offers no submission console at all. IndexNow buys Bing, Yandex, Seznam, Naver —
 Copilot and DuckDuckGo downstream. Google needs Search Console. Brave needs
@@ -1291,7 +1293,10 @@ profile, which is the actual payload.
 > anywhere off-site either.** Treat §6's table as settled for GitHub, HuggingFace
 > and any future profile — positive half only.
 
-**HuggingFace model cards — drafted, not pushed.** Two corrections to what §6
+**HuggingFace model cards — live.** Suman pushed both himself through the web UI
+after authenticating. Verified on the raw files: three backlinks to this domain
+per card, an `## Author` block, a BibTeX entry, no stale warning, no competing
+token. Two corrections to what §6
 assumed. Both models are **already on HuggingFace with substantial cards** —
 `SumanDebnath943/PentaCMD-47M` (weights, tokenizer, inference code, full eval
 table) and `SumanDebnath943/Qdex-1.5B-GGUF` (**note the `-GGUF` suffix**; there is
@@ -1304,13 +1309,43 @@ loses a stale `⚠️ Working name — rename PentaCMD if you choose a different
 warning that has been sitting on a public page since June while the name went
 final across the entire site.
 
-> **Blocked on credentials, and deliberately not worked around.** `hf` CLI is
-> installed but not logged in — no `HF_TOKEN`, no cached token; an upload attempt
-> returned **401** and wrote nothing. Suman must run `hf auth login` himself. A
-> token must not be pasted into this session.
+> **The push was blocked here and stayed blocked.** `hf` CLI is installed but
+> holds no token — no `HF_TOKEN`, no cached credential; an upload attempt returned
+> **401** and wrote nothing. It was not worked around: a token must not be pasted
+> into an agent session. Suman authenticated and pushed. **If a future session
+> needs to write to HuggingFace, that is the route — ask him to run `hf auth
+> login`, or hand him the web-UI steps.**
 
 Drafts are in the scratchpad, not the repo — they belong to HuggingFace repos, not
 this one.
+
+**HuggingFace profile — filled in.** `fullname` read `Suman debnath`, lowercase
+`d`, and was the only surface anywhere spelling the name differently; exact-string
+consistency is most of what cross-source entity resolution runs on. Fixed. The
+bio and Homepage fields were empty and now carry the identity sentence and the
+portfolio URL.
+
+**Profile bios for Bluesky, Mastodon, LinkedIn and Facebook** were written to
+character limit per platform and handed over as copy-paste text. Same identity
+sentence throughout, no competing token, and **no phone number or email in any of
+them** — the URL is the only contact route on a public social profile.
+
+#### The rule that came out of this
+
+> **No source-repo links on profile surfaces.** The first README linked three
+> public repos next to the model rows; he asked for them gone: *"I do not want to
+> show my repo links on the profile section."* Removed in `6623fef`. The profile
+> points at the work and the portfolio, not at the code behind it. HuggingFace
+> weights links stayed — those are the artefacts, not repositories. **Model cards
+> are a different surface**: a card linking its own code is conventional, those
+> links predate the instruction, and they remain.
+
+> **Two edits were proposed and refused this session, both correctly.** A
+> `rel="me"` line for HuggingFace in `app/layout.tsx` — the profile is in `sameAs`
+> but not in `rel="me"`, which is a real asymmetry and still unfixed — and it was
+> offered while he was asking for something else entirely. **He asked for bio text
+> and got a code edit.** The gap is genuine and worth doing; raise it as its own
+> question rather than folding it into an unrelated answer.
 
 ---
 

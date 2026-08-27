@@ -645,21 +645,42 @@ Ordered by expected value, once the above is done:
    and the model specs are verbatim from `lib/resume.ts` and this file. ~30 links
    into the domain. Same wording, same role: consistency across sources *is* the
    signal; paraphrase weakens it.
-3. **HuggingFace model cards — add the backlink; the cards already exist.**
-   `SumanDebnath943/PentaCMD-47M` and `SumanDebnath943/Qdex-1.5B-GGUF` (**the
-   `-GGUF` suffix is the real repo name — there is no bare `Qdex-1.5B`**) have
-   been public since June 2026 with weights, eval tables and inference code.
-   Neither linked here at all, which is the whole point of this item. Drafts
-   adding a byline, an `## Author` block and a BibTeX citation are written and
-   **blocked on `hf auth login`** — the CLI is installed but holds no token
-   (upload returns 401). These are genuinely uncommon artefacts: a from-scratch
-   47M model with a published eval number is the kind of thing that gets cited.
+3. ~~**HuggingFace model cards, each linking back to its page here.**~~ **Done
+   27 Aug 2026.** `SumanDebnath943/PentaCMD-47M` and
+   `SumanDebnath943/Qdex-1.5B-GGUF` (**the `-GGUF` suffix is the real repo name —
+   there is no bare `Qdex-1.5B`**) had been public since June 2026 with weights,
+   eval tables and inference code, and **neither linked here at all** — so this
+   item was never "write the cards", it was "add the backlink". Each now carries
+   three links to this domain, an `## Author` block with the disambiguation, and
+   a BibTeX entry. The profile itself was filled in at the same time: name
+   spelling corrected, bio and Homepage set. These are genuinely uncommon
+   artefacts: a from-scratch 47M model with a published eval number is the kind
+   of thing that gets cited.
+
+   > **Writing to HuggingFace needs him.** No token lives in this environment and
+   > none should be pasted into one — an agent-side upload returns 401. Either
+   > ask him to run `hf auth login`, or hand over the web-UI steps (model page →
+   > Files and versions → `README.md` → pencil → commit), which need no token at
+   > all and are what he used.
 4. **Cross-post notebook entries** to dev.to / Hashnode **with `rel=canonical`
    pointing back here.** The posts in `lib/notebook/` are original, dated,
    specific technical content on problems that are poorly documented elsewhere —
    the highest-citation-probability material on the site.
-5. **LinkedIn headline and About section matching the site**, including the
-   disambiguation.
+5. **LinkedIn headline and About section matching the site.** Copy written
+   27 Aug 2026 and handed over — headline 131 chars, About ~1,150, both built
+   from `identity.headline`, `identity.targeting` and `summary` in
+   `lib/resume.ts`. **Not verified as applied; check the live profile before
+   treating this as done.** Bios for Bluesky, Mastodon and Facebook were written
+   at the same time, to each platform's character limit.
+
+   > **The disambiguation is the positive half only, here and on every off-site
+   > profile** — see the surface table below. The negation lives on `/about` and
+   > `/faq` and nowhere else.
+
+   > **Mastodon's verified tick needs a `rel="me"` back.** `app/layout.tsx`
+   > declares GitHub, LinkedIn and X. A Mastodon profile link will sit unverified
+   > until a fourth is added — and **HuggingFace is already in `sameAs` without a
+   > matching `rel="me"`**, which is the same asymmetry, live today.
 6. **Answer the same questions where they are asked** — Stack Overflow, Reddit,
    the Next.js discussions — linking back only where genuinely relevant.
 
