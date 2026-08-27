@@ -19,6 +19,23 @@ export interface ProjectMeta {
   number: string;
   name: string;
   positioning: string;
+  /**
+   * Overrides the `<title>` for this project's dossier page. Optional.
+   *
+   * The default is `${name} — ${positioning}`, and `positioning` is written to
+   * read as a line of visible copy — a full sentence, ending in a full stop.
+   * That is right on the page and too long in a search result once the root
+   * layout appends " · Suman Debnath" (16 chars), which is what put three
+   * dossiers over Bing's limit on 27 Aug 2026.
+   *
+   * Set this when the sentence overruns; leave it unset otherwise. Do NOT
+   * shorten `positioning` to fix a title — it is rendered on the page and in
+   * the projects index, and trimming it there to serve a meta tag damages the
+   * copy to fix the wrong thing. Same split as `metaTitle` on notebook posts.
+   *
+   * Budget: 44 characters keeps the finished title at 60.
+   */
+  metaTitle?: string;
   description: string;
   category: string;
   url: string | null;
@@ -119,6 +136,10 @@ export const projects: ProjectMeta[] = [
     number: "05",
     name: "Geek Collectibles",
     positioning: "High-ticket collector commerce infrastructure.",
+    // Default title was 82 chars. This lands at 63. "Japanese" comes straight
+    // from the description below and is a far better search term than
+    // "high-ticket", which nobody types.
+    metaTitle: "Geek Collectibles — Japanese Collector Commerce",
     description:
       "Geek Collectibles is a global collector ecosystem sourcing authentic hobby culture directly from Japan. A high-ticket commerce stack with ISO request systems, franchise worlds, grail tiers, condition grading, multi-currency support, and an admin infrastructure built for serious collectors.",
     category: "Collector Commerce Ecosystem",

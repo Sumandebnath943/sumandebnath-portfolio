@@ -78,7 +78,13 @@ export default function ArticleRail({
         <div className="nb-railauthor-row">
           <Image
             src="/profile/portrait.webp"
-            alt=""
+            // Not decorative, and it was `alt=""` until Bing's 27 Aug crawl
+            // caught it. This is the one image on the site that carries the
+            // entity — a captioned photograph of the person the whole domain is
+            // trying to make resolvable against four better-indexed namesakes
+            // (AEO_PLAYBOOK.md §6). It renders on all 26 notebook pages, so an
+            // empty alt threw the signal away 26 times.
+            alt="Suman Debnath"
             width={56}
             height={56}
             quality={75}

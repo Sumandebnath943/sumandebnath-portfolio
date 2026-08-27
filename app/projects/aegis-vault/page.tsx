@@ -29,7 +29,9 @@ import Breadcrumbs from "@/components/ui/Breadcrumbs";
 const URL = `${SITE_URL}/projects/aegis-vault`;
 
 export const metadata: Metadata = {
-  title: "AEGIS VAULT — Zero-Knowledge Encrypted Notes App (Next.js + Supabase)",
+  // 60 chars with the layout's " · Suman Debnath" suffix. Was 85 — the stack
+  // parenthetical was pure overrun and is already in the description.
+  title: "AEGIS VAULT — Zero-Knowledge Encrypted Notes",
   description:
     "A full-stack, end-to-end encrypted notepad. Notes are encrypted in the browser with Argon2id + AES-256-GCM; the server stores only ciphertext. Built with Next.js 16, Supabase, and Row-Level Security.",
   keywords: [

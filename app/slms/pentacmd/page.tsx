@@ -29,7 +29,10 @@ const GITHUB = "https://github.com/Sumandebnath943/pentacmd";
 const HF = "https://huggingface.co/SumanDebnath943/PentaCMD-47M";
 
 export const metadata: Metadata = {
-  title: "PentaCMD-47M — Small Language Model for Terminal Commands (bash · git · npm · python · PowerShell)",
+  // 64 chars with the layout's " · Suman Debnath" suffix. Was 114 — the shell
+  // list was the whole overrun and none of it survived truncation anyway.
+  // Those keywords still live in the description and the on-page copy.
+  title: "PentaCMD-47M — Small Language Model for Terminals",
   description:
     "PentaCMD-47M is a from-scratch 47-million-parameter small language model (SLM) that turns plain-English instructions into CLI terminal commands across bash, git, npm, python (pip/venv) and PowerShell — ~86.7% blended exact-match, 100% on git, trained in ~53 minutes on a single Kaggle T4. Open weights on Hugging Face, MIT code on GitHub.",
   keywords: [

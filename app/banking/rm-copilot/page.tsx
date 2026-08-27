@@ -38,8 +38,10 @@ import { SITE_URL } from "@/lib/projects";
 const URL = `${SITE_URL}/banking/rm-copilot`;
 const OG = `${SITE_URL}/banking-copilot/og.png`;
 
-const TITLE =
-  "Banking Co-pilot — AI Relationship Manager Copilot for Retail Banking";
+// 63 chars once the root layout appends " · Suman Debnath" (16). Was 85.
+// See AEO_PLAYBOOK.md §3.1c for the budget — the suffix is the thing everyone
+// forgets to count, and it is what pushed fifteen titles past Bing's limit.
+const TITLE = "Banking Co-pilot — AI for Relationship Managers";
 const DESC =
   "A production-grade AI copilot for bank Relationship Managers. Twelve modules across customer analytics, decisioning, grounded policy answers and document verification — behind authentication, per-RM data isolation, PII masking and 38 automated security tests.";
 

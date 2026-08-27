@@ -399,7 +399,9 @@ export default async function NotebookPostPage({
               <section className="nb-end-author" aria-labelledby="nb-endauthor-label">
                 <Image
                   src="/profile/portrait.webp"
-                  alt=""
+                  // See the matching note in components/notebook/ArticleRail.tsx.
+                  // The author photograph is an entity signal, not decoration.
+                  alt="Suman Debnath"
                   width={88}
                   height={88}
                   quality={75}

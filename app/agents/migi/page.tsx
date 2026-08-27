@@ -68,7 +68,10 @@ import {
 /* ── SEO ───────────────────────────────────────────────────────────────── */
 const SITE = "https://sumandebnath.houseofnamus.com";
 export const metadata: Metadata = {
-  title: "Migi · A Three-Pillar Operator OS — 46 AI Agents, a Multi-Agent System & a Knowledge Brain",
+  // 54 chars with the layout's " · Suman Debnath" suffix. Was 106.
+  // The three pillars are the page's own structure and are stated in the
+  // description; a title cannot carry an outline.
+  title: "Migi — 46 AI Agents in One Operator OS",
   description:
     "Migi grew from a fleet of 46 self-running AI agents into a three-pillar operator OS: MIGI (the fleet), MIGI MAS (a multi-agent system you hand a goal), and MIGI ECHO (a knowledge brain you talk to) — one secure control panel, three identities. Now with intelligent model routing (the right AI per job, a fallback for every agent), self-testing and self-healing, and independently security-audited + hardened. Built solo with Claude Code, on entirely free infrastructure.",
   keywords: [

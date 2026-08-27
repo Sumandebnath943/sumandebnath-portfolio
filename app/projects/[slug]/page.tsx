@@ -33,7 +33,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const project = getProject(slug);
   if (!project) return {};
 
-  const title = `${project.name} — ${project.positioning}`;
+  // `positioning` is visible copy — a full sentence with a full stop — so the
+  // default composition reads well on the page and overruns in a search result
+  // once the root layout appends " · Suman Debnath". `metaTitle` is the opt-out
+  // for the ones that overrun; see the field's note in lib/projects.ts.
+  const title = project.metaTitle ?? `${project.name} — ${project.positioning}`;
   const url = `${SITE_URL}/projects/${project.slug}`;
 
   // Per-project social image from /public/screenshots; ROASmind is in stealth

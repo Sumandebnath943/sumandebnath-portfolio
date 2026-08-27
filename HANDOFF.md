@@ -6,8 +6,8 @@ writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
 **Last updated:** 27 August 2026
 **Branch:** `main`, pushed through `67ba999`. Working tree clean.
-**Last session:** the notebook redesign §1.11 asked for, carried out — the reading page and front page rebuilt (§1.12), then **the serif pass** closing the last of the three findings (§1.13). Then the homepage readiness panel, which took three passes and forced the same claim into the five places the site declares skills (§1.14).
-**Next up:** nothing outstanding on the notebook — all three §1.11 findings are closed (§1.13). The homepage structure weakness in §3 is the oldest open item.
+**Last session:** three external scanners triaged — Bing Webmaster, isitagentready.com and geometrics.app. Three things built, four dismissed as false positives, **nine refused as descriptions of a public API this site does not have** (§1.16). The one real defect: the author portrait carried `alt=""` on all 26 notebook pages.
+**Next up:** **run `scripts/indexnow.mjs` once after the next deploy** — Bing Webmaster turns out to be verified (§1.16), which was the blocker recorded in §1.10. Indexing beats every remaining scorecard point. After that, the homepage structure weakness in §3 is the oldest open item.
 **Session before:** four pieces of work, 25–26 Aug. Agentic readiness against an external audit, which found the identity JSON-LD was invisible without JavaScript — §1.8. Then **twenty-one notebook articles** in six batches, three new categories and a writing guide — §1.9. Then the target query set, the entity rework, and a measurement that reordered the priorities — §1.10. Then the notebook rebuilt as a publication — §1.11.
 
 > Run `git log --oneline -15` before trusting this section — it is a snapshot,
@@ -1362,6 +1362,115 @@ not empty boxes.
 > rather than dressing up as prior discovery. **The mistake was acting unasked,
 > not noticing.** A real finding that arrives mid-answer to an unrelated question
 > is still a real finding — hold it, finish the actual question, then raise it.
+
+---
+
+### 1.16 Three scanners triaged, three things built (27 Aug 2026)
+
+Suman ran the site through **Bing Webmaster Tools** (91 pages, 0 errors, 49
+warnings), **isitagentready.com** (twelve fix prompts) and **geometrics.app**
+(49/100), and asked for a plain-language read on what was actually wrong.
+
+**The durable record is `AEO_PLAYBOOK.md` §10**, with §2.1 and §3.1c for the two
+decisions that needed their own sections. This is the narrative.
+
+#### The sort: 3 built, 4 false positives, 9 refused
+
+Nine of the twelve agentic prompts describe **a public API this site does not
+have** — an API catalog, OAuth discovery, protected-resource metadata,
+`auth.md`, an MCP server card, a skills index, plus DNS-AID and WebMCP. The four
+`/api` routes are the contact form, the visitor beacon, the crawler log and a
+cron hook. Publishing manifests for them would advertise internal endpoints and
+claim capabilities that do not exist, which is the same class of defect as the
+`TechArticle` type on career essays (§1.9).
+
+> **0/100 on "Protocol Discovery" is the correct score for a portfolio.** It is
+> a document, not a service. §10.1 has the three-scanner comparison; do not
+> spend engineering risk moving that number.
+
+#### The finding that justified the exercise
+
+`/profile/portrait.webp` shipped with `alt=""` in **both** notebook author
+blocks — `ArticleRail.tsx` and `app/notebook/[slug]/page.tsx` — so **52
+instances across 26 pages** said nothing. That is a captioned photograph of the
+person the entire domain is trying to make resolvable against four
+better-indexed namesakes, on more pages than any other image on the site.
+
+Bing's **other 32** "missing alt" pages are decorative images with deliberate
+`alt=""`, most also `aria-hidden`. That is the WCAG-correct treatment and it
+stays — Bing's checker cannot tell "empty" from "missing", so the warning count
+will never reach zero and should not.
+
+#### Titles: one line caused fifteen warnings
+
+`app/layout.tsx` appends `· Suman Debnath` — **16 characters** — to every title
+that does not use `title.absolute`. Nobody counted it. `SEO_AUDIT.md` §5 had
+trimmed twenty-six notebook titles to 60 by measuring the page's own string, so
+they shipped at 74. Six pages rewritten (114→65, 110→63, 106→54, and three in
+the eighties); `/about`, `/profile` and `/contact` deliberately untouched
+because their length *is* the entity query. **Budget: 44 characters of your
+own.** §3.1c.
+
+`ProjectMeta` gained an optional `metaTitle`, because `positioning` is visible
+copy and must never be shortened to fix a meta tag — same split as `metaTitle`
+on notebook posts.
+
+#### Two decisions Suman took explicitly
+
+- **`Content-Signal: ai-train=yes, search=yes, ai-input=yes`.** Every scanner
+  suggests `ai-train=no`. He asked what it would cost before choosing, and the
+  answer is §2.1: training is how a model names him *without* searching, the
+  content is an advertisement rather than a product, and GPTBot has been
+  crawling for months so declining now forfeits future models and recovers
+  nothing. He chose permissive.
+- **One honest manifest, not the full set.** `/.well-known/ai-catalog.json`
+  lists eight things that genuinely exist and return 200. Nothing invented.
+
+#### A trap avoided, and one that was walked into first
+
+> **`rel="author"` was already taken.** The root layout emits `<link
+> rel="author" href="{SITE_URL}">`. Adding `/about` and `/profile` as two more
+> author claims in the Link header would have made three assertions, two
+> disagreeing — the half-made claim §6 records for `sameAs`/`rel="me"`. The four
+> identity pages use `describedby`, which is registered and may repeat.
+
+> **The plan to rewrite `robots.ts` as a route handler was wrong, and
+> `AGENTS.md` line 1 says why.** `MetadataRoute.Robots` in *this* Next version
+> has an `other` field — "non-standard per-user-agent directives passed through
+> verbatim" — which is exactly the escape hatch needed. Training data said it
+> did not exist. Reading the type made item 1 a three-line change instead of a
+> rewrite of the file that governs ~30 crawlers.
+
+> **The first measurement of title lengths was wrong.** `${#t}` in bash counts
+> **bytes**, and an em dash is three of them — so every title containing `—` or
+> `·` read 3–8 characters longer than it was. Recounted properly in Node before
+> anything was rewritten. Worth remembering the next time a length is measured
+> on a string that is not ASCII.
+
+#### The most valuable thing, and it is on no list
+
+**Bing Webmaster Tools is verified.** §1.10 and `AEO_PLAYBOOK` §6 both recorded
+it as not verified and named it as what keeps this site out of Copilot and
+DuckDuckGo. Crawling 91 pages through it settles that, and unblocks
+`scripts/indexnow.mjs`. Against the §1.10 measurement — `PentaCMD 47M parameter
+model terminal commands` returns nothing — that is worth more than every
+scorecard point in §1.8 and §10 combined. **Run it once after the next deploy.**
+
+#### Verified
+
+Production build and `tsc --noEmit` clean; lint clean for every edited file
+(the 17 remaining repo-wide errors are pre-existing, in `scripts/`). A 33-check
+script against `next start`: Content-Signal emitted once inside the `*` group
+with all 35 agent groups intact; **52 labelled portraits across all 26
+articles**, none left empty; six titles at their target lengths and the three
+identity pages untouched; nine Link relations on documents and **none on
+`/_next` assets**; the catalog served as JSON, cross-origin, 8 entries, contact
+email matching `lib/resume.ts`, no phone number; and **every one of the nine
+advertised URLs returning 200**. `/desk-4f7a` still returns 307 with
+`X-Robots-Tag: noindex`.
+
+**Nothing was touched in `proxy.ts`, `app/api/track` or `VisitorPing`,** so the
+§6 verification constraint in `AGENTS.md` does not apply to this session.
 
 ---
 

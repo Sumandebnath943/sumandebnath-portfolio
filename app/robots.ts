@@ -13,6 +13,27 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
+        // ── Content Signals (contentsignals.org), 27 Aug 2026 ───────────────
+        //
+        // A declaration of preference, not an access control. `Allow: /` above
+        // is what actually grants access; this states the *intent* behind it in
+        // the vocabulary three agentic-readiness scanners now look for.
+        //
+        // ⚠ It says `ai-train=yes`, and that is deliberate. Every scanner
+        // suggests `ai-train=no` as the default and it is the wrong call for
+        // this site — see AEO_PLAYBOOK.md §2.1. The short version: training is
+        // how a model can name Suman *without* running a search, which is the
+        // durable half of the entity fight described in §6, and this site's
+        // content is an advertisement rather than a product with revenue to
+        // protect. Declining training would opt out of the one thing the whole
+        // playbook is built to win.
+        //
+        // The `other` field is this Next version's escape hatch for non-standard
+        // per-agent directives — passed through verbatim. It is emitted only in
+        // the `*` group, which is where the spec expects a site-wide default.
+        other: {
+          "Content-Signal": "ai-train=yes, search=yes, ai-input=yes",
+        },
       },
       // Explicitly allow Bingbot — feeds Microsoft Copilot, LinkedIn AI,
       // and DuckDuckGo. Critical for AI-assisted hiring manager discovery.

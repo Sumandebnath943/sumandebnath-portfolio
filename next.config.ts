@@ -62,9 +62,66 @@ const nextConfig: NextConfig = {
     const immutable = [
       { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
     ];
+
+    /**
+     * RFC 8288 Link header — machine discovery before a byte of HTML is parsed.
+     *
+     * Added 27 Aug 2026. Three agentic-readiness scanners flagged its absence,
+     * and all three suggested advertising an API catalog. **This site has no
+     * public API** — the four /api routes are the contact form, the visitor
+     * beacon and a cron hook, all private plumbing. So every relation below
+     * points at something that genuinely exists and is genuinely fetchable.
+     *
+     * ⚠ Do not add `rel="author"` here. The root layout already emits
+     * `<link rel="author" href="{SITE_URL}">`, and a second, differently-valued
+     * author claim in the headers is the same "claim half-made" failure
+     * AEO_PLAYBOOK.md §6 records for sameAs / rel=me drifting apart. The four
+     * identity pages use `describedby`, which is registered and may legitimately
+     * repeat.
+     *
+     * Relation types are IANA-registered with one deliberate exception:
+     * `sitemap` is a de-facto token rather than a registered one, kept because
+     * it is what consumers actually look for and robots.txt already declares
+     * the same URL.
+     */
+    const discovery = [
+      '</llms.txt>; rel="alternate"; type="text/plain"',
+      '</llms-full.txt>; rel="alternate"; type="text/plain"',
+      '</sitemap.xml>; rel="sitemap"; type="application/xml"',
+      '</notebook/rss.xml>; rel="alternate"; type="application/rss+xml"',
+      '</.well-known/ai-catalog.json>; rel="service-desc"; type="application/json"',
+      // The four pages that own an entity query — AEO_PLAYBOOK.md §3.1b.
+      '</about>; rel="describedby"; type="text/html"',
+      '</profile>; rel="describedby"; type="text/html"',
+      '</resume>; rel="describedby"; type="text/html"',
+      '</projects>; rel="describedby"; type="text/html"',
+    ].join(", ");
+
     return [
       { source: "/hdri/:file*", headers: immutable },
       { source: "/robot-v3.glb", headers: immutable },
+
+      // Documents only. The negative lookahead keeps ~600 bytes of Link header
+      // off every font, chunk and optimised image — /_next/static is the bulk
+      // of the requests on this site and none of it is a discovery surface.
+      // A malformed pattern here fails the build rather than degrading quietly
+      // (path-to-regexp throws), which is why this is safe to express as regex.
+      {
+        source: "/((?!_next/|api/).*)",
+        headers: [{ key: "Link", value: discovery }],
+      },
+
+      // ARD manifest: JSON, and readable cross-origin so a registry or an agent
+      // on another domain can actually fetch it. Short max-age because the
+      // entries track real routes and a stale catalog is a lying one.
+      {
+        source: "/.well-known/ai-catalog.json",
+        headers: [
+          { key: "Content-Type", value: "application/json; charset=utf-8" },
+          { key: "Access-Control-Allow-Origin", value: "*" },
+          { key: "Cache-Control", value: "public, max-age=3600" },
+        ],
+      },
     ];
   },
 };

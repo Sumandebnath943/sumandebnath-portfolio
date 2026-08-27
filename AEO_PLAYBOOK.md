@@ -8,9 +8,12 @@ what was deliberately **not** done.
 Read **§1 before proposing any "SEO work".** The single most common way to waste
 effort here is to optimise the wrong half of the problem.
 
-**Arrived with an audit report in hand? Read §9 first.** One has already been run
-against this site, most of its findings are already answered here, and the two it
-left open were left open on purpose.
+**Arrived with an audit report in hand? Read §9 and §10 first.** Four have
+already been run against this site — Vercel's Is Agentic (§9), then Bing
+Webmaster, isitagentready.com and geometrics.app (§10). Most of their findings
+are already answered here, and the ones left open were left open on purpose.
+**§10 in particular records nine "fixes" that were refused because they describe
+a public API this site does not have.**
 
 Companion documents: `PROJECT_BIBLE.md` (how the system is built),
 `PAGE_OPTIMIZATION.md` (performance, measured), `PORTFOLIO_HANDOFF.md` (voice).
@@ -60,6 +63,50 @@ hoists them into `<head>`. They are **not** in `metadata.alternates`, because
 almost every page sets its own `alternates.canonical` and Next replaces that
 object wholesale rather than merging, which would silently drop them on ~20
 routes.
+
+### 2.1 Content Signals — and why this site says `ai-train=yes`
+
+`robots.ts` emits `Content-Signal: ai-train=yes, search=yes, ai-input=yes` in
+the `*` group. Added 27 Aug 2026, decided by Suman with the argument below on
+the table.
+
+**Every scanner that asks for this directive suggests `ai-train=no` as the
+default.** That is the wrong call here, and the reasoning is worth keeping
+because the question will be asked again:
+
+- **Training is the durable half.** A model that has been trained on this site
+  can name Suman *without running a search*. Retrieval only fires when a
+  question happens to trigger one. §6 is a fight to be the Suman Debnath a model
+  produces from memory, against four better-indexed namesakes — and that is a
+  training outcome, not a retrieval one.
+- **The content is the advertisement, not the product.** `ai-train=no` protects
+  a publisher whose content *is* revenue. Nothing here is sold. Being absorbed
+  is the goal.
+- **It would not retract anything.** GPTBot has been crawling this domain for
+  months and ChatGPT is the one assistant that currently cites it (§5.6).
+  Declining training now forfeits future models and recovers nothing from
+  existing ones.
+- **The separation is not as clean as the directive implies.** Blocking
+  `Google-Extended` leaves Google Search and AI Overviews untouched but removes
+  the site from grounding in the Gemini app — one of the engines §5.6 records as
+  not citing him yet. That is a door being shut, not held open.
+
+> **This is a declaration, not an access control.** `Allow: /` is what grants
+> access; `Content-Signal` states the intent behind it. Unlike `Disallow:`,
+> which crawlers obey, this is a stated preference with no enforcement — anyone
+> ignoring robots.txt ignores this too. It costs one line and it is worth
+> exactly that much.
+
+**Revisit if, and only if, Suman starts selling content** — a paid course, a
+newsletter, licensed writing. Then the calculus inverts and the directive
+becomes worth its enforcement gap.
+
+The `other` field on a robots rule is this Next version's escape hatch for
+non-standard per-agent directives, passed through verbatim. It is **not** in
+most training data — the assumption that `MetadataRoute.Robots` could only
+express the standard fields is wrong here, and cost a wasted plan to rewrite
+`robots.ts` as a route handler before `AGENTS.md`'s opening instruction was
+followed and the type checked.
 
 ---
 
@@ -144,6 +191,51 @@ Disambiguation is **visible prose on `/about`**, not only the
 `disambiguatingDescription` attribute. An engine choosing between two people
 with one name has to read the distinction somewhere a human could read it too,
 and the attribute alone has never been enough against a better-indexed namesake.
+
+### 3.1c The title budget — count the suffix
+
+`app/layout.tsx` sets `title.template` to `"%s · Suman Debnath"`. **That appends
+sixteen characters to every page title that does not use `title.absolute`.**
+
+Nobody counted it. `SEO_AUDIT.md` §5 trimmed twenty-six notebook titles to "no
+meta title over 60 characters" and measured the *page's own* string, so the
+articles shipped at 74. Bing's crawl on 27 Aug 2026 flagged **fifteen URLs**,
+and the suffix was the entire cause on nine of them.
+
+> **The budget is 44 characters of your own text.** 44 + 16 = 60, which is
+> roughly where Google truncates. Bing warns past 65.
+
+Six pages were rewritten on 27 Aug — the three past 100 and the three in the
+eighties:
+
+| Page | Was | Now |
+|---|---|---|
+| `/slms/pentacmd` | 114 | 65 |
+| `/llms/qdex-1.5b` | 110 | 63 |
+| `/agents/migi` | 106 | 54 |
+| `/banking/rm-copilot` | 85 | 63 |
+| `/projects/aegis-vault` | 85 | 60 |
+| `/projects/geek-collectibles` | 82 | 63 |
+
+**What came out was always the parenthetical.** `(bash · git · npm · python ·
+PowerShell)`, `(GGUF · CPU)`, `(Next.js + Supabase)` — none of it survived
+truncation anyway, and every one of those keywords is still in the page's
+description and its visible copy. A title cannot carry a specification list.
+
+> **`/about`, `/profile` and `/contact` were left long on purpose.** They run
+> 76–82 and they use `title.absolute`, so the suffix is not on them — their
+> length is the entity query itself (§3.1b), which is the one thing worth
+> spending the characters on. Do not trim these to clear a warning.
+
+> **`/projects/cite` and `/projects/roasmind` were left at 75 and 71.** They are
+> outside the agreed scope, not overlooked. Both are fixed the same way if they
+> ever matter: set `metaTitle` in `lib/projects.ts`.
+
+For dossier pages the title is `${name} — ${positioning}`, and **`positioning`
+is visible copy** — a full sentence with a full stop, rendered on the page and
+in the projects index. Never shorten it to fix a title; set the optional
+`metaTitle` beside it instead. Same split as `metaTitle` on notebook posts, and
+for the same reason: the H1 and the search result want different words.
 
 ### 3.2 The notebook's answer block
 
@@ -931,3 +1023,123 @@ What did not move, and why:
 > exactly one thing the site did not already know — that half the structured data
 > was invisible without JavaScript — and that was worth the whole exercise. Do not
 > spend engineering risk chasing the remaining points.
+
+---
+
+## 10. Three more scanners, 27 Aug 2026
+
+Bing Webmaster Tools (91 pages, 0 errors, 49 warnings), isitagentready.com
+(twelve fix prompts) and geometrics.app (**49/100**) were run against the live
+site on the same day. Three things were built, four were dismissed as false
+positives, and **nine were refused**.
+
+### 10.1 The scanners are not measuring the same thing
+
+| Scanner | Grades | Fair test? |
+|---|---|---|
+| Bing Webmaster | Whether a search crawler can read the pages | Yes |
+| Vercel Is Agentic (§9) | Whether an agent can extract meaning — **83** | Mostly |
+| geometrics.app | Whether the site exposes an API for robots to call — **49** | **No** |
+
+The 49 decomposes as **100/100 on GEO and citation signals**, 72 on
+discoverability, 66 on bot access, and **0/100 on "Protocol Discovery"** — six
+checks asking whether agents can authenticate against your API and call your
+tools.
+
+> **Zero is the correct score for a portfolio.** This site is a document, not a
+> service. Scoring nothing on protocol discovery accurately describes a site
+> with no protocols to discover. It is not a defect and it is not a backlog.
+
+### 10.2 What was built
+
+- **`Content-Signal` in robots.txt** — §2.1. Declared permissive, against every
+  scanner's suggested default.
+- **The author portrait's `alt`** — §10.3 below. The one genuine defect any of
+  the three found.
+- **Six titles rewritten** — §3.1c.
+- **An RFC 8288 `Link` header and one ARD manifest** — §10.4.
+
+### 10.3 The portrait — the finding that justified the exercise
+
+`/profile/portrait.webp` shipped with `alt=""` in **both** author blocks on the
+notebook reading page — `components/notebook/ArticleRail.tsx` and
+`app/notebook/[slug]/page.tsx` — so **52 instances across 26 pages** said
+nothing.
+
+That is not an ordinary alt-text warning. It is a captioned photograph of the
+person this entire domain is trying to make resolvable against four
+better-indexed namesakes (§6), repeated on more pages than any other image on
+the site, and it was invisible to every image index and entity extractor.
+
+**Bing's other 32 "missing alt" pages are false positives and must stay that
+way.** Every one is a decorative image given `alt=""` deliberately, most also
+`aria-hidden` — the WCAG-correct treatment. Two examples: `/resume`'s prologue
+drawing sits inside an `aria-hidden` wrapper, and the homepage film poster is
+inside a button already labelled *"Play the film — 5 minutes 57 seconds"*.
+Filling those in makes a screen reader announce the same thing twice.
+
+> **Bing's checker cannot distinguish "empty" from "missing".** The warning
+> count will never reach zero and should not. Two full WCAG AA passes have
+> already ruled on these images.
+
+### 10.4 Link header and the ARD manifest
+
+`next.config.ts` sets an RFC 8288 `Link` header on documents only — the source
+pattern `/((?!_next/|api/).*)` keeps ~600 bytes off every font, chunk and
+optimised image. Nine relations, each pointing at something that genuinely
+exists and returns 200: `llms.txt`, `llms-full.txt`, the sitemap, the notebook
+RSS feed, the ARD manifest, and the four pages that own an entity query (§3.1b)
+as `describedby`.
+
+`public/.well-known/ai-catalog.json` is the ARD manifest — eight entries, real
+media types, 2–4 `representativeQueries` each, served `application/json` with
+`Access-Control-Allow-Origin: *`.
+
+> **Do not add `rel="author"` to the Link header.** The root layout already
+> emits `<link rel="author" href="{SITE_URL}">`. A second author claim with a
+> different value is the same half-made assertion §6 records for `sameAs` and
+> `rel="me"` drifting apart. `describedby` is registered and may legitimately
+> repeat; `author` should not.
+
+> **One unregistered token, on purpose.** `rel="sitemap"` is de-facto rather
+> than IANA-registered. Kept because it is what consumers look for and
+> robots.txt already declares the same URL.
+
+### 10.5 Refused — nine items describing a website this is not
+
+Six of the twelve isitagentready prompts ask one question in six formats:
+**where is your API, and how does a robot log into it.** An API catalog
+(RFC 9727), OpenID/OAuth discovery, OAuth protected-resource metadata,
+`auth.md`, an MCP server card (SEP-1649) and an agent-skills index.
+
+**There is no public API.** The four `/api` routes are the contact form, the
+visitor beacon, the crawler log and a cron hook — private plumbing. Publishing
+manifests for them would advertise internal endpoints and describe capabilities
+that do not exist.
+
+| Refused | Why |
+|---|---|
+| API catalog, OAuth/OIDC discovery, OAuth protected resource, `auth.md`, MCP server card, agent-skills index | All six describe a public API. There isn't one. |
+| **DNS-AID** | SVCB/HTTPS records plus DNSSEC on the apex domain, for a draft with near-zero adoption. Real risk to live mail and hosting; no upside. |
+| **WebMCP** | A Chrome origin trial. Adds JavaScript to a site whose performance was won by removing it (`PAGE_OPTIMIZATION.md`), to expose actions that do not exist. |
+| **Markdown negotiation** | Already refused 25 Aug with five reasons — §8. Two of the three scanners flag it; neither is new evidence. |
+
+> **A manifest describing machinery you do not have is worse than a zero.** It
+> is the site telling a machine something untrue — the same class of defect as
+> the `TechArticle` type on career essays (§1.9 of the handoff) and the
+> markup-only FAQ on `/banking/rm-copilot` (§3.1). Scanners cannot tell the
+> difference between a site that has an API and a site that claims one. Readers
+> eventually can.
+
+### 10.6 The most valuable thing the scan proved, and it is on no list
+
+**Bing Webmaster Tools is verified.** §6 and `HANDOFF.md` both recorded it as
+not verified and named it as what keeps this site out of Copilot and
+DuckDuckGo. Crawling 91 pages through it settles that.
+
+That unblocks `scripts/indexnow.mjs`, which pushes every sitemap URL into Bing,
+Yandex, Seznam and Naver. Set against the measurement in §6 — that
+`PentaCMD 47M parameter model terminal commands` returns nothing at all — being
+indexed is worth more than every scorecard point in §9 and §10 combined.
+
+**Run it after the next deploy, once.** Not on a schedule (§5.6).

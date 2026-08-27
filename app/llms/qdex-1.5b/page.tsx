@@ -17,7 +17,9 @@ const HF = "https://huggingface.co/SumanDebnath943/Qdex-1.5B-GGUF";
 const SITE_URL = "https://sumandebnath.houseofnamus.com";
 
 export const metadata: Metadata = {
-  title: "Qdex-1.5B — a 1.5B coding LLM, QLoRA-tuned to follow instructions and run locally (GGUF · CPU)",
+  // 63 chars with the layout's " · Suman Debnath" suffix. Was 110.
+  // QLoRA, GGUF and CPU stay in the description and the page body.
+  title: "Qdex-1.5B — a 1.5B coding LLM that runs locally",
   description:
     "Qdex-1.5B is an instruction-tuned coding model built on Qwen2.5-Coder-1.5B with QLoRA. Fine-tuning lifted instruction-mode HumanEval pass@1 from 1.2% to 42.1% (~35×), matching and slightly edging the base model's raw coding ability (42.1% vs 40.2%) — and it runs locally on a 16GB no-GPU laptop via Ollama / llama.cpp (GGUF). Open weights on Hugging Face, code on GitHub.",
   keywords: [
