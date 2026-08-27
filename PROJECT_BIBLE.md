@@ -654,6 +654,19 @@ That one decides whether a *beacon* deserves a visitor alert; this decides
 whether a *page request* deserves a crawler alert. Changing one must not
 quietly alter the other.
 
+**A second bot carries the human signal** — visit reports, hot actions and
+contact messages only, in its own chat, via `TELEGRAM_HUMAN_BOT_TOKEN` /
+`TELEGRAM_HUMAN_CHAT_ID`. Unset means no mirror. It is a *mirror, not a second
+opinion*: it never decides anything the main bot did not already decide.
+`HANDOFF.md` §1.17 has the design, the refusals, and why bot-to-bot forwarding
+is impossible on Telegram.
+
+> **If the volume complaint ever returns, the lever is `/api/crawl`, not the
+> notifier.** One message per crawler per page across ~60 recognised agents is
+> the bulk of the main chat. `HANDOFF.md` §3 item 9 has the change and its
+> trade-offs. **Suman knows and has parked it — produce it when he describes
+> the symptom, never unprompted.**
+
 > **Tracking is inert under `next dev`.** StrictMode mounts → cleans up →
 > remounts; the cleanup removes the listeners and the `initedRef` guard stops
 > them re-attaching. No clicks, scrolls or leave events are recorded locally.

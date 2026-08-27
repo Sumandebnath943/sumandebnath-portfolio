@@ -1515,6 +1515,97 @@ advertised URLs returning 200**. `/desk-4f7a` still returns 307 with
 
 ---
 
+### 1.17 A second Telegram bot, carrying only the human signal (27 Aug 2026)
+
+The complaint was volume: bots, crawlers and auditors had buried the alerts
+worth reading. He asked for a second bot receiving **only genuine human
+visits**, and was explicit that nothing already working could be put at risk —
+he would accept an addition, never a rewrite.
+
+**Where the noise actually came from.** Four things write into the one chat:
+`/api/crawl` (one message per crawler per page), `/api/track` arrivals labelled
+`🖥️ Automated scan`, ordinary visits (four messages each), and `/api/contact`.
+The firehose is the first of those, not the notifier — which is why the parked
+option in §3 item 9 exists and why it is the cheaper lever if volume ever
+returns as a complaint.
+
+**The constraint that shaped the design: a visitor cannot be known to be human
+on arrival.** The decisive signal is `interacted`, and the arrival payload does
+not carry it — at t=0 nobody has done anything. It first reaches the server on
+the +3s card refresh, and reliably only at the summary. So a fast human alert
+is a guess and a certain one is late. Bot 1 already covers fast-and-uncertain;
+bot 2 was built as the late-and-certain one.
+
+**What was built.** An optional mirror: **visit reports, hot actions, contact
+messages**, and nothing else. No arrivals, no journey cards, no mute
+confirmations, no crawler alerts. Env: `TELEGRAM_HUMAN_BOT_TOKEN` /
+`TELEGRAM_HUMAN_CHAT_ID`; unset means no mirror, and deleting either is a
+complete off switch with **no deploy**.
+
+#### Decisions he took explicitly
+
+| Question | His call |
+|---|---|
+| Remove human alerts from bot 1? | **No.** Bot 1 untouched, both feeds run |
+| Mirror `❓ unclear`? | **Yes** — it is mostly borderline humans |
+| Mirror `💨 quick bounce`? | **Yes**, all three engagement levels |
+| Mirror hot actions? | **Yes**, live, not only inside the report |
+| Contact form messages? | **Yes**, every one |
+
+> **`❓ unclear` is not a robot bucket.** Score 1–2 means a real browser with a
+> real screen and real cores that either did not scroll or arrived from a
+> hosting network. Headless UA and webdriver score 3 on their own and land in
+> `🤖 automated`, which never reaches the report path at all. Including unclear
+> is what keeps the recruiter behind a corporate Azure proxy.
+
+> **Telegram forbids bot-to-bot.** He asked whether bot 1 could simply forward
+> to bot 2 — a good instinct, since it would keep new code out of the sensitive
+> contact path. It is impossible: a bot never receives updates originating from
+> another bot, and can only forward from a chat it belongs to. **Only bot 2's
+> own token can put anything in bot 2's chat.** Do not re-propose it.
+
+#### What was deliberately refused
+
+**Threading and a journey card in bot 2.** Message ids are per-chat, so bot 1's
+`mid`/`smid` mean nothing there. Mirroring the thread would need a second pair
+round-tripping through the browser — changing the `/api/track` response shape,
+the `Session` type and `summaryPayload`, which is the most fragile code in the
+repo. Not worth it for a nice-to-have. Bot 2's messages are standalone.
+
+**A card id stored in Postgres instead.** It would need new columns, and
+deploying code ahead of its migration silently drops every write (§2b). The
+`reportMsg` map gained an optional `hmid` instead — per-instance and
+best-effort, exactly like the `mid` beside it, and enough to stop a reload
+posting a second report in bot 2 while bot 1 correctly edits its first.
+
+#### Why bot 1 is genuinely untouched
+
+Three existing lines changed in `app/api/track/route.ts`, and all three are the
+`reportMsg` map gaining `hmid`. No message text, timing, threading, card logic
+or gating condition was altered — `git show 39711de -- app/api/track/route.ts |
+grep "^-"` is the check. In `app/api/contact/route.ts` the message template was
+extracted into `contactMessage()` so both bots send one string rather than two
+drifting copies.
+
+> **The mirror has no vote in the contact route.** It rides as a third
+> `Promise.all` entry whose result is **not destructured**, so it costs no extra
+> wall-clock time and `notified` still decides alone whether the sender is told
+> delivery failed. A second chat being unreachable must never make a delivered
+> message look undelivered. It also carries a 5s timeout the main send does not
+> need, because the main send is the thing being waited for.
+
+#### Verified
+
+`tsc --noEmit` and the production build clean; lint clean for both edited files
+(the 27 repo-wide problems are pre-existing, in `ignorelearningportfolio/` and
+`scripts/`). **Confirmed live by Suman after setting the env vars and
+redeploying:** one visit, `lunar-marten-62`, produced a hot action and a visit
+report in both chats at the same minute — **four unread in bot 1, one in bot
+2**, which is the whole point of the change visible in a notification list.
+Rollback point `rollback/pre-bot2-mirror` is pushed.
+
+---
+
 ## 2. What changed in the session before (19 Aug 2026)
 
 **One brief, eleven numbered complaints**, all against the homepage: sections
@@ -2045,6 +2136,41 @@ opportunities, roughly in value order.
    lightboxes render sharper.
 8. **Weight of `public/migi-app/v2/`** — 24 screenshots at ~12 MB total. Fine
    today; worth watching as more product pages ship.
+
+9. **Give the crawler alerts their own chat — parked on request, offer it only
+   when asked.** Suman knows about this one and chose to leave it. **Do not
+   raise it unprompted.** It is written down so it can be produced on demand,
+   not pushed.
+
+   **Surface it when he describes the symptom**, in any of these shapes: the
+   main visitor bot is too noisy / buried / a firehose; he is being "bombarded"
+   by bots, crawlers, scanners or auditors; he wants the main chat to be only
+   real people; he asks what else can be done about notification volume. Those
+   are the cues. A question about the notifier that is *not* about volume is not
+   one.
+
+   **The idea.** `app/api/crawl/route.ts` — called from `proxy.ts` — sends one
+   Telegram message per crawler, per page, per 10-minute window, and
+   `lib/crawler.ts` recognises roughly sixty agents. That is the overwhelming
+   majority of traffic in the main chat; the visitor notifier itself is a small
+   fraction of it. Pointing that route at a **third** bot or chat would leave
+   the main bot as a clean human-visit log, without touching the notifier at
+   all.
+
+   **Why it is cheap and safe.** That route shares nothing with `/api/track`:
+   no threading, no journey card, no message-id round-trip through the browser,
+   no `reportMsg` map. It reads `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID` at
+   `route.ts:69–70` and sends one self-contained message. Swapping those for a
+   third pair of env vars is a two-line change with no blast radius into the
+   notifier, and — following the pattern already set by the human bot in §1.17
+   — unset vars should mean the alerts simply stop rather than fall back, or
+   fall back to the main chat, whichever he prefers when he asks.
+
+   **What he would lose.** Crawler sightings stop appearing beside visits in
+   the main chat, so the "a résumé link was just shared, here is LinkedIn
+   fetching it" sequence would span two chats. The dashboard is unaffected —
+   crawler rows still land in Postgres with `botVerdict = "crawler"`, so
+   `/desk-4f7a` remains the single joined-up view.
 
 ---
 
