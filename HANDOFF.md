@@ -1742,10 +1742,14 @@ opportunities, roughly in value order.
 4. **The visitor table has no pagination** — capped at 200 rows. Fine now, will
    matter within months.
 
-5. **Clear the pre-existing lint errors in `Navigation.tsx`** — an
-   `immutability` error on `window.location.href`, a raw `<a>` to `/` that
-   should be `<Link>`, and an `<img>` that should be `next/image`. They predate
-   recent work and fail `npm run lint` today.
+5. ~~Clear the pre-existing lint errors in `Navigation.tsx`.~~ **Gone —
+   `npx eslint components/layout/Navigation.tsx` is clean as of 27 Aug 2026.**
+   Fixed at some point without being recorded here; verified, not assumed.
+
+   What remains is **ten `react-hooks` errors**, nine of them in
+   `components/robot/` and one in `VisitorPing`. The full breakdown, and the
+   reason each one stays, is in §1.14 — read that before touching any of them.
+   The honest time to clear them is the session that turns React Compiler on.
 5. **Retire the two stale docs.** `project_memory.md` and `analysis_results.md`
    are early-2026 snapshots with file paths that no longer exist. They now carry
    a superseded banner; deleting them is the cleaner end state, but that is
@@ -1775,12 +1779,40 @@ Before calling any change done:
 npx next build
 ```
 
+> **`next build` does not run eslint.** Next 16 moved it out, so a build passing
+> says nothing about lint. This is how ten `react-hooks` errors sat in the tree
+> unnoticed — every build all session returned exit 0 with them present. Lint
+> the files you touched, explicitly:
+
 ```bash
-npx eslint app/apps/migi-app/page.tsx components/migi-app/MigiAppVisuals.tsx
+npx eslint <the files you changed>
 ```
 
-Ignore the known `Navigation.tsx` lint failures listed in §3 unless you are
-deliberately fixing them.
+Ten pre-existing `react-hooks` errors are expected — nine in
+`components/robot/`, one in `VisitorPing`. **§1.14 lists them and why each one
+stays.** Anything outside that set is yours.
+
+#### The browser pane
+
+`preview_start` with the `prod` config (port 3200) for anything that has to be
+*seen*. **Check it composites before trusting a visual verification.** Run this
+*in the pane* — it is a browser check, not a shell one:
+
+```js
+await new Promise(res => { let n = 0; const t0 = performance.now();
+  const step = () => { n++; performance.now() - t0 < 600 ? requestAnimationFrame(step) : res(n); };
+  requestAnimationFrame(step); });
+```
+
+If rAF is not ticking, the pane is painting but not animating, and every
+`requestAnimationFrame`, `IntersectionObserver` and scroll-driven behaviour will
+appear broken when it is fine. Measured healthy at **32 ticks / 600ms**.
+
+> This bit a whole session on 26–27 Aug: animation and scroll work could not be
+> verified, only geometry, and a robot change would have been unverifiable
+> entirely. It came back after a machine reboot. If the numbers look wrong,
+> suspect the pane before you rewrite the code — and never rewrite animation
+> logic to "fix" a pane that is not compositing.
 
 ---
 

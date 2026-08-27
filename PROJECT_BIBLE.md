@@ -1234,12 +1234,41 @@ Deploys follow `main` automatically. Commit subjects are lowercase
 `type(scope): sentence` and the body explains *why*, in prose.
 
 **Verification.** `npx next build` and `npx eslint <changed files>` before
-calling anything done. There are pre-existing lint errors in
-`components/layout/Navigation.tsx`, `components/robot/RobotMascot.tsx`,
-`components/robot/RobotModel.tsx` and `components/robot/ChatTakeover.tsx` —
-`react-hooks/set-state-in-effect`, `purity` and `immutability`. **They are not
-yours, do not "fix" them incidentally.** Count them before and after your change
-and confirm the number is unchanged; that is the check, not zero.
+calling anything done.
+
+> **`next build` does not run eslint.** Next 16 moved it out, so a green build
+> says nothing about lint and the two commands are not interchangeable. Ten
+> `react-hooks` errors sat in the tree unnoticed on exactly this — every build
+> returned exit 0 with them present.
+
+The **ten** pre-existing errors, as of 27 Aug 2026: nine across
+`components/robot/` — `ChatTakeover` ×3, `RobotMascot` ×3, `RobotModel` ×2,
+`useWebSpeech` ×1 — and one in `components/analytics/VisitorPing.tsx`. Rules are
+`react-hooks/set-state-in-effect`, `immutability` and `purity`, and they are
+errors only because `eslint-plugin-react-hooks` 7.1.1 ships the React Compiler
+rules at that severity. **React Compiler is not enabled**, so they optimise
+nothing and block nothing.
+
+**They are not yours; do not "fix" them incidentally.** Count them before and
+after your change and confirm the number is unchanged — that is the check, not
+zero. `HANDOFF.md` §1.14 has the per-error reasoning, including which are false
+positives in spirit (`RobotModel`'s two are mutations of three.js
+`AnimationAction` objects) and which are load-bearing (`VisitorPing`'s is the
+arrival-sent guard).
+
+`Navigation.tsx` used to be on that list and is clean now.
+
+**Resetting child state when a prop changes — use `key`, not an effect.** An
+effect that calls several `setState`s to put a component back to its initial
+values is the pattern `react-hooks/set-state-in-effect` exists to catch, and it
+costs an extra render every time. Give the child a `key` derived from the thing
+that changed and let React remount it; the state resets for free and the refs
+reset with it. `<ExperienceModal key={modalExp?.id}>` in
+`app/learnings/LearningsClient.tsx` is the worked example.
+
+> Only safe when nothing depends on the instance outliving the value — check for
+> an exit animation or an `AnimatePresence` first. It is safe there because the
+> modal returns `null` when closed.
 
 **Performance.** Before running any test or proposing any performance work, read
 **`PAGE_OPTIMIZATION.md`**. This page has properties that break the usual

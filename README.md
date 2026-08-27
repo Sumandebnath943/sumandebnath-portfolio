@@ -51,8 +51,15 @@ npm run build
 npm run lint
 ```
 
-There are pre-existing lint errors in `components/layout/Navigation.tsx` — see
-`HANDOFF.md` §3.
+Both, separately — **`npm run build` does not lint.** Next 16 moved eslint out
+of the build, so a green build says nothing about lint.
+
+Ten pre-existing `react-hooks` errors are expected: nine in `components/robot/`,
+one in `components/analytics/VisitorPing.tsx`. They are errors only because
+`eslint-plugin-react-hooks` 7.1.1 ships the React Compiler rules at that
+severity, and React Compiler is not enabled here — they block nothing. **Count
+them before and after your change rather than aiming for zero.**
+`HANDOFF.md` §1.14 explains each one.
 
 ## Environment
 
