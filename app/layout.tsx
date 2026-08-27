@@ -594,6 +594,15 @@ export default function RootLayout({
         <link rel="me" href="https://github.com/Sumandebnath943" />
         <link rel="me" href="https://linkedin.com/in/suman-debnath-a528653a1" />
         <link rel="me" href="https://x.com/iamSdebnath" />
+        {/* HuggingFace was in `sameAs` below and missing here — the site claimed
+            the profile in JSON-LD but not at HTML level. Added 27 Aug 2026, once
+            that profile's Homepage field pointed back here, which is what makes
+            the claim reciprocal rather than one-directional.
+
+            Keep this list and `sameAs` in step. They are two assertions of the
+            same thing in different languages, and a profile in one but not the
+            other is a claim half-made. */}
+        <link rel="me" href="https://huggingface.co/SumanDebnath943" />
 
         {/*
           Plain <script>, NOT next/script — and the difference is the whole
