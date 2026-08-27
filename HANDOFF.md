@@ -1171,11 +1171,64 @@ one that matters most, and that `/about` and the `/resume` summary were left
 alone on purpose because backdating a 2026 discipline into a 2016—2023 role is
 the same mistake as making this a sixth bullet.
 
-Also noted while linting the whole tree for the first time: **12 pre-existing
-eslint errors** in files this session never touched — the robot components,
-`VisitorPing`, `LearningsClient`, `PactVisuals`. The build does not run eslint,
-so nothing is blocked. `VisitorPing` is the one to look at first, given §6–7 of
-`AGENTS.md` already flags that file as silent-failure territory.
+#### The twelve eslint errors, and why ten of them stay
+
+Linting the whole tree for the first time surfaced **12 errors in files this
+session never touched**. They are not new bugs: `eslint-plugin-react-hooks` is
+at **7.1.1**, the version that ships the React Compiler rules as errors by
+default. The code got linted harder, it did not get worse.
+
+**They affect nothing today.** React Compiler is not enabled — there is no
+`reactCompiler` flag in `next.config.ts` — so the rules optimise nothing, and
+`next build` does not run eslint in Next 16, which is why every build this
+session passed at exit 0 with all twelve present.
+
+Distribution is the whole story: **9 of the 12 are in `components/robot/`**.
+
+| Rule | n | Where |
+|---|---|---|
+| `set-state-in-effect` | 7 | LearningsClient, ChatTakeover ×3, RobotMascot ×2, useWebSpeech |
+| `immutability` | 4 | VisitorPing, PactVisuals, RobotModel ×2 |
+| `purity` | 1 | RobotMascot — `useRef(Date.now())` |
+
+**Two were fixed, 27 Aug**, both verified in the browser:
+
+- `PactVisuals` — `let running = -1` reassigned inside a nested `.map()` during
+  render, purely to produce a flat index. Replaced with a module-scope
+  `FAM_START` of `[0, 4, 5]`. Verified the sweep still runs
+  `7 → 0 → 1 → 2 → 3 → 4 → 5`, one lit at a time, across both family boundaries.
+- `LearningsClient` — an effect hand-resetting five state values whenever `exp`
+  changed. Replaced with `key={modalExp?.id}` on `<ExperienceModal>`, which is
+  the fix React's own docs prescribe for this shape. Safe because the modal
+  returns `null` when closed and has no exit animation. Verified by dirtying it
+  — credential index 3, zoom viewer open at 1.5× — closing, and reopening both
+  a different experience *and the same one*: index 0, viewer closed, scale 1 in
+  both cases, with all five thumbnails and the main canvas re-rendering (876
+  ink px sampled, so a real PDF draw rather than a white fill).
+
+**The other ten stay, deliberately.**
+
+> **The robot's nine are not safely fixable without watching the robot.**
+> `ROBOT_ROLLBACK.md` exists because it fails in subtle, symptom-indexed ways,
+> and those effects are a deliberate imperative animation state machine. Note
+> that `RobotModel`'s two are mutations of **three.js `AnimationAction`
+> objects** — which is what effects are for; the rule cannot tell a three.js
+> object from React state, so it is a false positive in spirit.
+>
+> **`VisitorPing`'s one is the arrival-sent guard.** `AGENTS.md` §6–7 already
+> flags that file: tracking does nothing under `next dev`, and `saveVisit()`
+> returns `false` rather than throwing, so a break there either double-counts
+> every visit or sends none, silently. Do not touch it without a production
+> build and the Telegram output in front of you.
+>
+> **`useWebSpeech`'s one is probably load-bearing.** The obvious fix — lazy
+> `useState(() => detect())` — also runs during SSR and would make `supported`
+> differ between server and client. The effect is likely avoiding a hydration
+> mismatch on purpose.
+
+The honest time to clear the remaining ten is the session that decides to turn
+React Compiler **on**, because that is when they start paying for themselves —
+and it should be done with the robot visible on a real screen.
 
 ---
 

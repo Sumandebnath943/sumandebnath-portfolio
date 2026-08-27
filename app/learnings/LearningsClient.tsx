@@ -273,16 +273,19 @@ function ExperienceModal({
   const isDragging = useRef(false);
   const dragStart = useRef({ x: 0, y: 0 });
 
-  // Reset state whenever a new experience is opened
-  useEffect(() => {
-    if (!exp) return;
-    setActiveIdx(0);
-    setViewerOpen(false);
-    setScale(1);
-    setTx(0);
-    setTy(0);
-  }, [exp]);
+  /* There is no "reset on open" effect here any more.
 
+     It used to set activeIdx, viewerOpen, scale, tx and ty back to their
+     initial values whenever `exp` changed — five setStates in an effect body,
+     which forces a second render immediately after the first commits. The
+     modal is now given a `key` of the experience id at its call site, so React
+     remounts it per experience and every one of those values starts at its
+     initial value for free. The refs reset with it, which is the more correct
+     behaviour anyway: a canvas ref from the previously open experience has no
+     business surviving into the next one.
+
+     Safe here because the component returns null when `exp` is null and has no
+     exit animation — nothing depends on the instance outliving the value. */
   // Render active cert whenever experience or selected index changes
   useEffect(() => {
     if (!exp) return;
@@ -798,8 +801,16 @@ export default function LearningsPage() {
 
       </main>{/* /lp-root */}
 
-      {/* Modal lives outside lp-root so it can cover the full viewport */}
-      <ExperienceModal exp={modalExp} onClose={closeModal} />
+      {/* Modal lives outside lp-root so it can cover the full viewport.
+
+          `key` is load-bearing, not decoration: it remounts the modal per
+          experience, which is what resets its zoom, page index and viewer state
+          between openings. See the note where the old reset effect used to be. */}
+      <ExperienceModal
+        key={modalExp?.id ?? "none"}
+        exp={modalExp}
+        onClose={closeModal}
+      />
 
       <RelatedPages href="/learnings" variant="paper" surface="#e9e7df" />
       <Contact />

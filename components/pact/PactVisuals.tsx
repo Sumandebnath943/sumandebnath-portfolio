@@ -323,6 +323,20 @@ const ACTIONS = [
 ];
 const FLAT = ACTIONS.flatMap((f) => f.items.map((it) => ({ it, color: f.color })));
 
+/* Flat index of each family's first action: [0, 4, 5] for 4 file, 1 shell and
+   3 browser actions. The sweep runs over the flattened list, so each row needs
+   to know where it starts in that list to tell whether one of its own items is
+   the hot one.
+
+   This used to be a `let running = -1` incremented inside the nested map, which
+   is a mutable variable being reassigned during render — it worked, because the
+   maps run in order every time, but it made the render impure for no gain.
+   The offsets are constant, so they are computed once at module scope. */
+const FAM_START = ACTIONS.reduce<number[]>(
+  (acc, f, i) => [...acc, i === 0 ? 0 : acc[i - 1] + ACTIONS[i - 1].items.length],
+  [],
+);
+
 export function ActionConsole() {
   const [hot, setHot] = useState(0);
   useEffect(() => {
@@ -330,16 +344,14 @@ export function ActionConsole() {
     return () => clearInterval(id);
   }, []);
 
-  let running = -1;
   return (
     <div className="font-dmmono text-[13px] space-y-3">
-      {ACTIONS.map((f) => (
+      {ACTIONS.map((f, fi) => (
         <div key={f.fam} className="grid grid-cols-[80px_1fr] gap-x-3 items-start">
           <span className="text-right" style={{ color: f.color }}>{f.fam}:</span>
           <span className="flex flex-wrap gap-x-2 gap-y-1.5">
-            {f.items.map((it) => {
-              running += 1;
-              const on = running === hot;
+            {f.items.map((it, ii) => {
+              const on = FAM_START[fi] + ii === hot;
               return (
                 <span
                   key={it}
