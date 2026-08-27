@@ -813,6 +813,13 @@ split.
 
 #### The measurement that reorders everything below it
 
+> **⚠ OVERTAKEN 27 Aug 2026 — one day later, and it reversed for Google.**
+> `AEO_PLAYBOOK.md` §6.1 is the current picture and this paragraph is history.
+> Google now returns an AI Overview *and* an organic result for the query below.
+> The index behind Claude's search still returns nothing — not even the exact
+> domain string — so the finding did not evaporate, it **split**. Do not quote
+> the sentence below as the state of play.
+
 `PentaCMD 47M parameter model terminal commands` returns **nothing**. That page
 has been live roughly two months and describes an artefact with a name almost
 nobody else uses.
@@ -827,6 +834,10 @@ Google Search Console verification **is already live** — the meta tag is on th
 deployed site. Bing is not: there is no `msvalidate.01`. Bing Webmaster Tools can
 import the property from Search Console rather than verifying again, and Bing is
 what feeds Copilot and what `scripts/indexnow.mjs` submits into.
+
+> **Bing is verified as of 27 Aug** — §1.16. The `msvalidate.01` observation
+> above is stale too; the property was imported and 91 pages have been crawled
+> through it.
 
 **Still outstanding, and only Suman can do it: run the baseline.** Eighteen
 starred queries, one engine, three runs each, about an hour. Today is the clean
@@ -1452,9 +1463,39 @@ on notebook posts.
 **Bing Webmaster Tools is verified.** §1.10 and `AEO_PLAYBOOK` §6 both recorded
 it as not verified and named it as what keeps this site out of Copilot and
 DuckDuckGo. Crawling 91 pages through it settles that, and unblocks
-`scripts/indexnow.mjs`. Against the §1.10 measurement — `PentaCMD 47M parameter
-model terminal commands` returns nothing — that is worth more than every
-scorecard point in §1.8 and §10 combined. **Run it once after the next deploy.**
+`scripts/indexnow.mjs`.
+
+**Pushed and submitted the same day: 66 URLs, accepted (200).**
+
+#### And then the premise underneath it turned out to be stale
+
+This section first justified that with "§1.10's measurement — returns nothing".
+**Suman then produced screenshots of Google returning an AI Overview, an organic
+result and a sidebar card for that exact query**, from a signed-out incognito
+window. `AEO_PLAYBOOK.md` §6.1 is the corrected record; §1.10 and §10.6 now
+carry warnings pointing at it.
+
+The picture is **split**, not reversed:
+
+| Index | State, 27 Aug 2026 |
+|---|---|
+| **Google** | Holds the site and *synthesises* from it — the AI Overview quoted 47M params, 299K pairs, ~87% exact-match and Pentashell, all correct |
+| **The index behind an agent's web search** (US-only, not Google) | Nothing on four queries, **including the exact domain string** |
+
+> **The conclusion survived; the reasoning had to be rebuilt.** Indexing still
+> outranks scorecard points — because one major non-Google index holds nothing
+> from this domain, not because no index holds anything. §6's "get indexed
+> before doing off-site work" gate is now half-lifted, and for Brave it never
+> applied: Brave takes no submission and has one input, inbound links, which
+> *is* the off-site work.
+
+> **The process failure is worth more than the finding.** That 26 Aug number was
+> quoted as live fact three times on 27 Aug — in a report, a summary and a
+> commit — before anybody re-ran it. `AEO_PLAYBOOK` §7 says *do not trust a
+> single run*, and the rule was broken by an agent citing the same document that
+> states it. **Any indexing claim in these files now carries a date, because it
+> expires.** Re-measure before quoting; a scorecard is a snapshot and so is an
+> index.
 
 #### Verified
 

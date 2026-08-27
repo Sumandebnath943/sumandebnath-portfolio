@@ -700,14 +700,77 @@ sources is what makes a model confident enough to name a specific person,
 especially when several people share the name — and **at least four** other Suman
 Debnaths are well indexed, two of them technology people in India.
 
-> **Get indexed before doing any of this.** Measured 26 Aug 2026: a search for
-> `PentaCMD 47M parameter model terminal commands` returns nothing, for a page
-> live roughly two months describing an artefact with a name almost nobody else
-> uses. That is §5.6's "being crawled is not being indexed", demonstrated. A
-> Wikidata entry pointing at pages no index holds is a citation nothing can
+> **⚠ SUPERSEDED 27 Aug 2026 — the gate below is now half-lifted. Read §6.1
+> before acting on it.** The measurement it rests on ("returns nothing") was
+> true on 26 August and is false for Google as of 27 August. It remains true
+> for the index behind Claude's search. Kept because the *reasoning* still
+> governs the Brave half, and because the reversal is the point.
+>
+> ~~**Get indexed before doing any of this.**~~ Measured 26 Aug 2026: a search
+> for `PentaCMD 47M parameter model terminal commands` returns nothing, for a
+> page live roughly two months describing an artefact with a name almost nobody
+> else uses. That is §5.6's "being crawled is not being indexed", demonstrated.
+> A Wikidata entry pointing at pages no index holds is a citation nothing can
 > follow. Google Search Console is verified; Bing is not, and Bing Webmaster
 > Tools can import the property from Search Console rather than verifying again.
 > Submission, verification and the first inbound links come first.
+
+### 6.1 The indexing picture is split, not flat (27 Aug 2026)
+
+**Google has the site. The index behind Claude's search does not.** Both halves
+were measured on 27 Aug and they disagree completely, which is why the flat
+claim above had to go.
+
+**Google, measured from a signed-out incognito window in Maharashtra, India**,
+on `PentaCMD 47M parameter model terminal commands`:
+
+- An **AI Overview** stating 47 million parameters, 299,000 instruction-to-command
+  pairs, ~87% exact-match, and correctly naming Pentashell as the CLI. Every
+  figure matches the site. Google is not merely holding the page — it is
+  synthesising a correct answer from it and citing the domain.
+- An **organic result**, plus a sidebar card. Both point at `/`, dated 19 Aug.
+
+> **This is §3.3 paying off — "facts as structure, not prose".** The numbers
+> that came back are exactly the ones held in tables and definition lists rather
+> than sentences. Nothing else on the site was written to be lifted that cleanly.
+
+**The other index, measured the same day** by an agent's web search tool
+(US-only, not Google), four queries:
+
+| Query | Result |
+|---|---|
+| `PentaCMD 47M parameter model terminal commands` | nothing |
+| `LEGATUS immutable digital inheritance Suman Debnath` | nothing |
+| `AEGIS VAULT zero-knowledge encrypted notes Suman Debnath` | nothing |
+| `"sumandebnath.houseofnamus.com"` — the exact domain | **nothing** |
+
+An exact-string search for the domain itself returning nothing is decisive: this
+is absence from the index, not poor ranking within it.
+
+> **Do not overclaim which index that was.** The tool does not name its backend.
+> §5.6 records Claude as answering from Brave, so the result is *consistent with*
+> the Brave gap rather than proof of it. What it does establish beyond doubt is
+> that **at least one major non-Google index holds nothing from this domain at
+> all**, eight days after the notebook programme shipped.
+
+**What this changes, and what it does not:**
+
+- **Items 1–6 below are no longer gated on indexing.** For Google the gate is
+  cleared. For Brave it never applied — Brave takes no submission and has one
+  input, inbound links, which *is* the off-site work. Waiting was always the
+  failure mode; now it is also pointless.
+- **The 26 Aug reasoning was still correct when it was written.** A Wikidata
+  entry pointing at pages no index holds really is a citation nothing can
+  follow. It stopped being the binding constraint, it was never wrong.
+- **One incidental confirmation:** the LEGATUS query surfaced the AWS advocate,
+  the ORNL researcher, the Anyscale ML lead and the New Delhi web engineer — all
+  four namesakes named at the foot of this section, on one result page.
+
+> **Two measurements, eight days apart, in opposite directions. Re-measure
+> before citing either.** The 26 Aug figure was quoted as live fact three times
+> on 27 Aug before the screenshots arrived. §7's rule — *do not trust a single
+> run* — exists for exactly this, and it was broken by the same document that
+> states it. **Any indexing claim in this file carries a date because it expires.**
 
 > **Confirmed a second time, 27 Aug 2026, by a different instrument.** Claude was
 > asked about the site from a phone. It fetched the homepage (pasted by hand) and
@@ -1138,8 +1201,22 @@ not verified and named it as what keeps this site out of Copilot and
 DuckDuckGo. Crawling 91 pages through it settles that.
 
 That unblocks `scripts/indexnow.mjs`, which pushes every sitemap URL into Bing,
-Yandex, Seznam and Naver. Set against the measurement in §6 — that
-`PentaCMD 47M parameter model terminal commands` returns nothing at all — being
-indexed is worth more than every scorecard point in §9 and §10 combined.
+Yandex, Seznam and Naver. **Run once after a deploy**, never on a schedule
+(§5.6).
 
-**Run it after the next deploy, once.** Not on a schedule (§5.6).
+**Done 27 Aug 2026: 66 URLs submitted, accepted (200).** The script verifies the
+key file at `/<key>.txt` resolves and matches before posting — the check that
+catches the most common silent failure, where a submission is accepted and then
+ignored. Bing, Yandex, Seznam and Naver share the submission; Google, Brave and
+xAI do not participate.
+
+> **Accepted is not indexed.** It means Bing has the URLs queued. That is
+> §5.6's distinction again and only the second half decides whether Copilot can
+> cite anything.
+
+> **This section originally closed by citing §6's "returns nothing at all" as
+> the reason indexing outranked every scorecard point. That measurement was
+> already stale when it was written** — see §6.1, measured hours later the same
+> day. The conclusion survives the correction and the reasoning changes:
+> indexing still outranks scorecard points, but because **one major non-Google
+> index holds nothing from this domain**, not because no index holds anything.

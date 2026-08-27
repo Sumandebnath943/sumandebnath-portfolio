@@ -306,10 +306,10 @@ against otherwise.
 > measurement. Recorded here because the finding is load-bearing. Note also that
 > the tool used is US-weighted, which matters for an India-weighted set.
 
-| Query | Result |
-|---|---|
-| `Suman Debnath portfolio` | **Domain absent.** Nine results, none of them this site. |
-| `PentaCMD 47M parameter model terminal commands` | **No result at all.** The page has been live roughly two months. |
+| Query | Result | Re-run 27 Aug |
+|---|---|---|
+| `Suman Debnath portfolio` | **Domain absent.** Nine results, none of them this site. | not re-run |
+| `PentaCMD 47M parameter model terminal commands` | **No result at all.** The page has been live roughly two months. | **reversed on Google** — see the box below |
 
 Two conclusions, and the second is the more actionable:
 
@@ -329,6 +329,26 @@ Two conclusions, and the second is the more actionable:
    moves a query whose page is not in an index.** Submission, verification and
    inbound links come first, and until they do, expect D across the technical set
    for reasons that have nothing to do with the articles.
+
+> **⚠ Conclusion 2 was overtaken one day later, 27 Aug 2026. Do not grade
+> against it.** `AEO_PLAYBOOK.md` §6.1 is the current record.
+>
+> Google now returns an **AI Overview** for
+> `PentaCMD 47M parameter model terminal commands` — quoting 47M parameters,
+> 299K instruction-to-command pairs, ~87% exact-match and Pentashell, all
+> correct — plus an organic result and a sidebar card, from a signed-out
+> incognito window in India. Meanwhile a second index, queried the same day,
+> returned nothing for four queries **including the exact domain string**.
+>
+> **So "not indexed" is now wrong as a flat statement and right as a
+> per-engine one.** Expect the technical set to grade very differently on
+> Google than on anything answering from another index, and **record which
+> engine produced each grade** — §2 already asks for this and it now decides
+> whether a D means "absent" or "absent *here*".
+>
+> **Conclusion 1 stands and was re-confirmed** the same day: a single query
+> surfaced the AWS advocate, the ORNL researcher, the Anyscale ML lead and the
+> New Delhi web engineer together.
 
 ---
 
