@@ -677,15 +677,19 @@ Ordered by expected value, once the above is done:
    > profile** — see the surface table below. The negation lives on `/about` and
    > `/faq` and nowhere else.
 
-   > **Mastodon's verified tick needs a `rel="me"` back.** `app/layout.tsx` now
-   > declares GitHub, LinkedIn, X and HuggingFace — the last added 27 Aug 2026 in
-   > `9232a32`, closing an asymmetry where the profile was claimed in `sameAs` and
-   > not at HTML level. **A Mastodon profile link will sit unverified until a
-   > fifth is added**, and only once that profile links back here.
+   > **Six profiles, declared three times each.** `app/layout.tsx` carries GitHub,
+   > HuggingFace, LinkedIn, X, Bluesky and Mastodon in both `sameAs` and
+   > `rel="me"`; the footer pills in `components/sections/Contact.tsx` carry
+   > `rel="me"` as well, so the claim is made twice on every page of the site.
    >
-   > **Keep `sameAs` and the `rel="me"` list in step.** They are the same
-   > assertion in two languages; a profile in one but not the other is a claim
-   > half-made, and it went unnoticed for months.
+   > **Mastodon's verified tick is the one visible dividend.** Put
+   > `https://sumandebnath.houseofnamus.com` in a profile metadata field at
+   > mastodon.social and it renders green — Mastodon fetches the page and looks
+   > for a `rel="me"` pointing back, which is now there.
+   >
+   > **Keep `sameAs`, the `rel="me"` links and the footer pills in step.** They
+   > are the same assertion in three languages; a profile in one but not the
+   > others is a claim half-made, and HuggingFace sat that way for months.
 6. **Answer the same questions where they are asked** — Stack Overflow, Reddit,
    the Next.js discussions — linking back only where genuinely relevant.
 

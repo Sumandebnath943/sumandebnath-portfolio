@@ -285,6 +285,8 @@ const personJsonLd = {
     "https://huggingface.co/SumanDebnath943",
     "https://linkedin.com/in/suman-debnath-a528653a1",
     "https://x.com/iamSdebnath",
+    "https://bsky.app/profile/sumandebnath.bsky.social",
+    "https://mastodon.social/@sumandebnath",
   ],
   knowsAbout: [
     "AI-native product engineering",
@@ -603,6 +605,14 @@ export default function RootLayout({
             same thing in different languages, and a profile in one but not the
             other is a claim half-made. */}
         <link rel="me" href="https://huggingface.co/SumanDebnath943" />
+        {/* Bluesky and Mastodon, added 27 Aug 2026 alongside the footer pills.
+            Mastodon is the one that pays a visible dividend: put the site in a
+            profile metadata field there and it renders a verified tick, but only
+            because of this line — Mastodon fetches the page and looks for a
+            rel="me" pointing back. The footer pills carry rel="me" too, so the
+            claim is made twice on every page. */}
+        <link rel="me" href="https://bsky.app/profile/sumandebnath.bsky.social" />
+        <link rel="me" href="https://mastodon.social/@sumandebnath" />
 
         {/*
           Plain <script>, NOT next/script — and the difference is the whole

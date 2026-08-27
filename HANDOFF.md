@@ -1330,6 +1330,16 @@ character limit per platform and handed over as copy-paste text. Same identity
 sentence throughout, no competing token, and **no phone number or email in any of
 them** — the URL is the only contact route on a public social profile.
 
+**Bluesky and Mastodon added to the site.** Two new pills in the footer's social
+row with official simple-icons marks, plus both profiles in `sameAs` and
+`rel="me"`. Verified in a dev build rather than assumed: six `link[rel="me"]` in
+the head, six pills with the right labels and hrefs, icons rendering as marks and
+not empty boxes.
+
+> **Bing Webmaster was already done** — he had imported the property from Search
+> Console a day or two earlier. It sat on the "outstanding" list for a session
+> because nobody asked. **Ask before listing something as blocked on him.**
+
 #### The rule that came out of this
 
 > **No source-repo links on profile surfaces.** The first README linked three
