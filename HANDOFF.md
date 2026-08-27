@@ -6,9 +6,10 @@ writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
 **Last updated:** 27 August 2026
 **Branch:** `main`, pushed through `67ba999`. Working tree clean.
-**Last session:** three external scanners triaged — Bing Webmaster, isitagentready.com and geometrics.app. Three things built, four dismissed as false positives, **nine refused as descriptions of a public API this site does not have** (§1.16). The one real defect: the author portrait carried `alt=""` on all 26 notebook pages.
-**Next up:** **run `scripts/indexnow.mjs` once after the next deploy** — Bing Webmaster turns out to be verified (§1.16), which was the blocker recorded in §1.10. Indexing beats every remaining scorecard point. After that, the homepage structure weakness in §3 is the oldest open item.
-**Session before:** four pieces of work, 25–26 Aug. Agentic readiness against an external audit, which found the identity JSON-LD was invisible without JavaScript — §1.8. Then **twenty-one notebook articles** in six batches, three new categories and a writing guide — §1.9. Then the target query set, the entity rework, and a measurement that reordered the priorities — §1.10. Then the notebook rebuilt as a publication — §1.11.
+**Last session:** two Google Search Console structured-data reports cleared — a critical `ProfilePage.mainEntity` type error on `/about` and `/profile`, an invalid `dateModified` on `/resume`, and five recommended Q&A fields on all four `QAPage` URLs (§1.18). JSON-LD only; nothing visible changed. **Click "Validate fix" in both reports after the next deploy.**
+**Session before:** three external scanners triaged — Bing Webmaster, isitagentready.com and geometrics.app. Three things built, four dismissed as false positives, **nine refused as descriptions of a public API this site does not have** (§1.16). The one real defect: the author portrait carried `alt=""` on all 26 notebook pages.
+**Next up:** **run `scripts/indexnow.mjs` once after the next deploy** — Bing Webmaster turns out to be verified (§1.16), which was the blocker recorded in §1.10. Indexing beats every remaining scorecard point. Then **click "Validate fix" in both Search Console reports** (§1.18). After that, the homepage structure weakness in §3 is the oldest open item.
+**Session before that:** four pieces of work, 25–26 Aug. Agentic readiness against an external audit, which found the identity JSON-LD was invisible without JavaScript — §1.8. Then **twenty-one notebook articles** in six batches, three new categories and a writing guide — §1.9. Then the target query set, the entity rework, and a measurement that reordered the priorities — §1.10. Then the notebook rebuilt as a publication — §1.11.
 
 > Run `git log --oneline -15` before trusting this section — it is a snapshot,
 > and the commit log is the authority on what has happened since.
@@ -1603,6 +1604,74 @@ redeploying:** one visit, `lunar-marten-62`, produced a hot action and a visit
 report in both chats at the same minute — **four unread in bot 1, one in bot
 2**, which is the whole point of the change visible in a notification list.
 Rollback point `rollback/pre-bot2-mirror` is pushed.
+
+### 1.18 Two Search Console structured-data reports, cleared (27 Aug 2026)
+
+Google emailed two reports against the property. Both were real and both were in
+the code; neither was a scanner guessing.
+
+**The critical one: `Invalid object type for field "mainEntity"`**, on `/about`
+and `/profile`. Every `ProfilePage` on this site pointed at the person by
+reference alone — `mainEntity: { "@id": <site>/#person }` — which is valid
+schema.org and is how the graph has always stayed DRY. **Google does not
+dereference an `@id` across `<script>` blocks.** It saw an object with no
+`@type` and rejected it.
+
+> **This was predicted.** The comment above the JSON-LD blocks in
+> `app/layout.tsx` says that if an extractor ever proves unable to follow the
+> `@id`, the fallback is to inline the object. One has. The fallback is now the
+> code.
+
+The odd part, worth recording because it explains why only two URLs were named:
+`/` and `/resume` carry the identical pattern and were **not** flagged, and the
+`dateModified` report resolved `/resume`'s item name as "Suman Debnath". So
+Google sometimes follows the reference and sometimes does not — most likely
+because `/resume` emits its own `Person` node at that `@id`. Depending on it
+either way is the mistake. All four now use `personRef` from **`lib/schema.ts`**:
+the same `@id`, with `@type` and `name` inline, so a reader that resolves nothing
+still gets a named Person.
+
+**`Invalid datetime value for "dateModified"`**, on `/resume`. `RESUME_UPDATED`
+is `"2026-08-13"`; Google's profile-page spec wants a datetime. The constant
+stays a plain date — it also drives the visible footer label — and
+`schemaDateTime()` widens it to `2026-08-13T00:00:00+05:30` at the point of
+emission only.
+
+**Five non-critical Q&A issues**, one shape on all four `QAPage` URLs: `author`
+and `datePublished` absent on the Question, and those plus `upvoteCount` absent
+on the `acceptedAnswer`. Required fields were always present; these are Google's
+recommended set. Added as `qaAuthorship` / `qaAnswerAuthorship`.
+
+> **`upvoteCount` is 0 and stays 0.** These pages have no voting. The field was
+> asked for, a number was needed, and the honest number is zero.
+
+> **`datePublished` is a fixed constant, not `routeDate()`.** Route dates are
+> regenerated from git and move forward whenever a page is touched; a publication
+> date that advances is a false claim. All four nodes were committed 25 Aug, so
+> the constant is real.
+
+**Converting `QAPage` → `FAQPage` was considered and refused.** It is arguably
+the more correct type — Google reserves `QAPage` for pages where *users* submit
+answers — but `/about`, `/profile` and `/projects` already emit an `FAQPage` at
+`<url>#faq` through `<PageFaq>`, so converting would put two `FAQPage` nodes on
+each. Folding the owned question into `lib/page-faqs.ts` instead would change
+visible copy and collide with the one-question-one-URL rule. Filling the fields
+was the safe path; the type stays.
+
+**Expect no visible change in Google.** Q&A and FAQ rich results were restricted
+to forum- and institution-shaped sites in 2023 and this portfolio was never
+eligible. What this buys is authorship and freshness for the answer engines that
+read the markup, a critical issue cleared, and two quiet reports — so the next
+real defect is not buried under five known warnings.
+
+#### Verified
+
+`tsc --noEmit` clean; production build clean, all 26 routes still prerendered.
+The emitted JSON-LD was read back out of `.next/server/app/{index,about,profile,projects,resume}.html`
+— all eight nodes correct, every `@id` unchanged. **Nothing visible was touched:**
+the change is entirely inside `<script type="application/ld+json">`, which no
+runtime code reads. Search Console will stay red until Google recrawls; click
+**Validate fix** in both reports after the deploy.
 
 ---
 

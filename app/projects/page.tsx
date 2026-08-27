@@ -8,6 +8,7 @@ import Contact from "@/components/sections/Contact";
 import ArchiveCard from "@/components/sections/ArchiveCard";
 import { archiveProjects } from "@/lib/archive-projects";
 import { SITE_URL } from "@/lib/projects";
+import { qaAnswerAuthorship, qaAuthorship } from "@/lib/schema";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 /* ── The question this page owns ──────────────────────────────────────────────
@@ -62,10 +63,12 @@ const builtJsonLd = {
     name: "What has Suman Debnath built?",
     text: "What has Suman Debnath built?",
     answerCount: 1,
+    ...qaAuthorship,
     acceptedAnswer: {
       "@type": "Answer",
       text: ANSWER,
       url: `${SITE_URL}/projects`,
+      ...qaAnswerAuthorship,
     },
   },
 };

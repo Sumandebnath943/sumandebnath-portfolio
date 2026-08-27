@@ -7,6 +7,12 @@ import MotionProvider from "@/components/providers/MotionProvider";
 import Navigation from "@/components/layout/Navigation";
 import Contact from "@/components/sections/Contact";
 import { SITE_URL } from "@/lib/projects";
+import {
+  personRef,
+  qaAnswerAuthorship,
+  qaAuthorship,
+  schemaDateTime,
+} from "@/lib/schema";
 import RelatedPages from "@/components/ui/RelatedPages";
 import "./resume.css";
 import {
@@ -89,10 +95,12 @@ const experienceJsonLd = {
     name: "What is Suman Debnath's experience?",
     text: "What is Suman Debnath's experience?",
     answerCount: 1,
+    ...qaAuthorship,
     acceptedAnswer: {
       "@type": "Answer",
       text: ANSWER,
       url: `${SITE_URL}/resume`,
+      ...qaAnswerAuthorship,
     },
   },
 };
@@ -110,9 +118,18 @@ const profilePageJsonLd = {
   "@id": `${SITE_URL}/resume#profilepage`,
   url: `${SITE_URL}/resume`,
   name: `${identity.name} — Résumé`,
-  dateModified: RESUME_UPDATED,
+  /* A datetime, not a date. Search Console reported "2026-08-13" as an invalid
+     datetime value for this field on 27 Aug 2026. RESUME_UPDATED stays a plain
+     date — it also drives the visible footer label — and is widened here only
+     for the structured data. lib/schema.ts. */
+  dateModified: schemaDateTime(RESUME_UPDATED),
   isPartOf: { "@id": `${SITE_URL}/#website` },
-  mainEntity: { "@id": `${SITE_URL}/#person` },
+  /* Typed and named inline, carrying the same @id, so a reader that will not
+     follow the reference still gets a Person. This URL was not among the two
+     Google flagged — it resolved here, most likely because the page emits its
+     own Person node below — but the pattern was identical and depending on that
+     is what broke on /about and /profile. */
+  mainEntity: personRef,
   about: { "@id": `${SITE_URL}/#person` },
   significantLink: [`${SITE_URL}/projects`, `${SITE_URL}/contact`],
 };

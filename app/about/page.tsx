@@ -11,6 +11,7 @@ import OperationalHistory from "@/components/sections/OperationalHistory";
 import AcademicFoundations from "@/components/sections/AcademicFoundations";
 import Contact from "@/components/sections/Contact";
 import { SITE_URL } from "@/lib/projects";
+import { personRef, qaAnswerAuthorship, qaAuthorship } from "@/lib/schema";
 import "./about.css";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
@@ -71,7 +72,13 @@ export const metadata: Metadata = {
    describing a specific person, which is what this page now is. It reuses the
    root layout's Person @id so the two merge into one entity rather than
    creating a second, thinner Suman Debnath — the exact confusion this page
-   exists to prevent.                                                        */
+   exists to prevent.
+
+   `mainEntity` is `personRef` rather than a bare `{ "@id": … }`: same `@id`, so
+   the merge is unchanged, but with `@type` and `name` inline for a reader that
+   resolves nothing. This URL was one of the two Search Console flagged for
+   "Invalid object type for field mainEntity" on 27 Aug 2026. See lib/schema.ts.
+                                                                             */
 const aboutPageJsonLd = {
   "@context": "https://schema.org",
   "@type": "ProfilePage",
@@ -81,7 +88,7 @@ const aboutPageJsonLd = {
   description: ANSWER,
   inLanguage: "en-US",
   isPartOf: { "@id": `${SITE_URL}/#website` },
-  mainEntity: { "@id": `${SITE_URL}/#person` },
+  mainEntity: personRef,
   about: { "@id": `${SITE_URL}/#person` },
   significantLink: [`${SITE_URL}/resume`, `${SITE_URL}/projects`, `${SITE_URL}/contact`],
 };
@@ -100,10 +107,12 @@ const whoIsJsonLd = {
     name: "Who is Suman Debnath?",
     text: "Who is Suman Debnath?",
     answerCount: 1,
+    ...qaAuthorship,
     acceptedAnswer: {
       "@type": "Answer",
       text: ANSWER,
       url: `${SITE_URL}/about`,
+      ...qaAnswerAuthorship,
     },
   },
 };

@@ -15,6 +15,7 @@ import OperationalHistory from "@/components/sections/OperationalHistory";
 import AcademicFoundations from "@/components/sections/AcademicFoundations";
 import Contact from "@/components/sections/Contact";
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "@/lib/projects";
+import { personRef } from "@/lib/schema";
 import RelatedPages from "@/components/ui/RelatedPages";
 
 /*
@@ -31,6 +32,11 @@ import RelatedPages from "@/components/ui/RelatedPages";
   Both strings come from lib/projects.ts, which is also where the root layout
   reads them, so this node and the page's own <title>/meta description cannot
   disagree.
+
+  `mainEntity` is `personRef` — a typed, named stub carrying the same `@id` — for
+  the same reason, one level down: a bare `{ "@id": … }` gave Google a
+  `mainEntity` it could not resolve. See lib/schema.ts. `about` keeps the pure
+  reference; nothing has reported trouble reading it.
 */
 const profilePageJsonLd = {
   "@context": "https://schema.org",
@@ -40,7 +46,7 @@ const profilePageJsonLd = {
   description: SITE_DESCRIPTION,
   url: SITE_URL,
   isPartOf: { "@id": `${SITE_URL}/#website` },
-  mainEntity: { "@id": `${SITE_URL}/#person` },
+  mainEntity: personRef,
   about: { "@id": `${SITE_URL}/#person` },
 };
 

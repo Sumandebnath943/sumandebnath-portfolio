@@ -23,6 +23,7 @@ import {
   type Track,
 } from "@/components/profile/ProfileSections";
 import { SITE_URL } from "@/lib/projects";
+import { personRef, qaAnswerAuthorship, qaAuthorship } from "@/lib/schema";
 import "./profile.css";
 import "./profile-sections.css";
 import RelatedPages from "@/components/ui/RelatedPages";
@@ -104,7 +105,12 @@ const profilePageJsonLd = {
   // Same @id as everywhere else, so this merges into the one entity rather than
   // describing a second person. `mainEntityOfPage` on the Person points at
   // /about, which stays the canonical description — this page is a facet of it.
-  mainEntity: { "@id": `${SITE_URL}/#person` },
+  //
+  // `personRef` carries that @id with `@type` and `name` inline. A bare
+  // `{ "@id": … }` is what Search Console flagged here on 27 Aug 2026 as
+  // "Invalid object type for field mainEntity" — it does not follow the
+  // reference across script blocks. See lib/schema.ts.
+  mainEntity: personRef,
   about: { "@id": `${SITE_URL}/#person` },
   significantLink: [`${SITE_URL}/resume`, `${SITE_URL}/about`, `${SITE_URL}/projects`],
 };
@@ -122,10 +128,12 @@ const knownForJsonLd = {
     name: "What is Suman Debnath known for?",
     text: "What is Suman Debnath known for?",
     answerCount: 1,
+    ...qaAuthorship,
     acceptedAnswer: {
       "@type": "Answer",
       text: ANSWER,
       url: `${SITE_URL}/profile`,
+      ...qaAnswerAuthorship,
     },
   },
 };

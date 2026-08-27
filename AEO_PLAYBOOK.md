@@ -391,6 +391,28 @@ therefore on every route; the rest are per-page.
 > the layout's node by `@id`. Do not "fix" it into one object; the page owns the
 > contact channel and the layout owns the identity.
 
+> **But do not make Google *follow* an `@id` to something it requires.** Every
+> `ProfilePage` used to say `mainEntity: { "@id": <site>/#person }`. Search
+> Console reported **"Invalid object type for field mainEntity"** — a critical
+> Profile-page issue — against `/about` and `/profile` on 27 Aug 2026, because it
+> does not dereference across `<script>` blocks. It *did* resolve on `/` and
+> `/resume`, which is worse than a clean failure: the behaviour is inconsistent,
+> so it cannot be relied on either way. All four now use **`personRef` from
+> `lib/schema.ts`** — the same `@id`, with `@type` and `name` inline. **Never
+> remove that `@id`**; it is what merges the stub back into the layout's Person,
+> and without it the site asserts a second, thinner Suman Debnath. `about` and
+> `isPartOf` keep pure references; nothing has reported trouble reading those.
+> Full account in `HANDOFF.md` §1.18.
+
+> **The four `QAPage` nodes carry `author`, `datePublished` and `upvoteCount: 0`.**
+> Google's recommended set, added 27 Aug 2026 after five non-critical Search
+> Console issues. `upvoteCount` is zero because these pages have no voting — do
+> not put a flattering number there. `datePublished` is a fixed constant, not
+> `routeDate()`, because a publication date that moves forward is a lie.
+> **Converting these to `FAQPage` was refused**: `/about`, `/profile` and
+> `/projects` already emit an `FAQPage` at `<url>#faq` via `<PageFaq>`, and a
+> second one per URL is a worse problem than the warnings were.
+
 **`ProfilePage` repeats `name` and `description` rather than inheriting them
 through `mainEntity`.** A parser that resolves `@id` references gets the Person
 either way; one that reads a single node and stops — which is what most identity
