@@ -1232,6 +1232,88 @@ and it should be done with the robot visible on a real screen.
 
 ---
 
+### 1.15 The off-site track opened, because Claude could not read the site (27 Aug 2026)
+
+**This started as a bug report and turned out not to be a bug.** Suman asked
+Claude about the site from his phone; it fetched the homepage and then failed on
+`/about`, `/resume` and `/agents/migi`. Screenshots came in asking what was
+broken.
+
+Nothing was. Verified from outside: all three URLs return **200** to a
+`Claude-User` user agent, byte-identical to what `Googlebot` and
+`Claude-SearchBot` get, with a self-referencing canonical on the right host and
+`<meta name="robots" content="index, follow">`. `sitemap.xml` serves all 66 URLs.
+No bot wall, no cloaking, no Vercel challenge.
+
+The failure was Claude's own URL allowlist: it may fetch a URL the user pasted or
+one a search returned, **not one it merely read inside a fetched page**. The
+homepage worked because it was pasted. The subpages existed only as links inside
+it.
+
+> **The second half is the part that matters.** Claude's workaround was to search
+> for those URLs so a real search result would authorise the fetch — and the
+> search returned nothing. Reproduced independently here: `site:` and
+> quoted-domain queries surface the parent `houseofnamus.com`, four other Suman
+> Debnaths, and Wikipedia. **Not one URL from this subdomain, including the
+> homepage.**
+
+That is §1.10's PentaCMD measurement again, from a new angle — previously a query
+returned nothing; now an assistant actively tried to reach the pages and could
+not find one. Two independent instruments, same reading. `AEO_PLAYBOOK` §6's
+"get indexed before doing any of this" is now measured twice.
+
+#### The Brave problem, which reorders the fix
+
+`scripts/indexnow.mjs` was dry-run: 66 URLs resolve, key file reachable and
+matching, submission ready. **But it does nothing for the index that caused
+this.** Claude searches **Brave**, and Brave participates in no push protocol and
+offers no submission console at all. IndexNow buys Bing, Yandex, Seznam, Naver —
+Copilot and DuckDuckGo downstream. Google needs Search Console. Brave needs
+inbound links and time, and nothing else.
+
+> **So playbook items 2 and 3 stopped being "after indexing" and became the
+> indexing.** For Brave there is no submission channel to wait on. Off-site links
+> are not a follow-up to getting indexed here; they are the mechanism.
+
+#### Done this session
+
+**GitHub profile README — live.** `Sumandebnath943/Sumandebnath943` did not exist;
+it was created public and pushed. Role line, `identity.targeting`, the
+disambiguation sentence's positive half and the PentaCMD/Qdex specs are
+**verbatim** from `lib/resume.ts` and `AEO_PLAYBOOK` §6 — paraphrase is what
+weakens the signal. Roughly thirty links into this domain from a well-indexed
+profile, which is the actual payload.
+
+> **The negation was drafted in and then removed on his instruction: "do not host
+> the competing token."** The §6 table does not cover off-site surfaces, and a
+> GitHub profile is both a human destination and a bulk-parsed one, so it was put
+> to him rather than decided. **He generalised the rule: no competing token
+> anywhere off-site either.** Treat §6's table as settled for GitHub, HuggingFace
+> and any future profile — positive half only.
+
+**HuggingFace model cards — drafted, not pushed.** Two corrections to what §6
+assumed. Both models are **already on HuggingFace with substantial cards** —
+`SumanDebnath943/PentaCMD-47M` (weights, tokenizer, inference code, full eval
+table) and `SumanDebnath943/Qdex-1.5B-GGUF` (**note the `-GGUF` suffix**; there is
+no bare `Qdex-1.5B` repo). So item 3 was never "write cards"; it was "add the
+backlink", and neither card contained a single link to this site.
+
+Drafts add: a byline-and-links line under the H1, a `## Author` block carrying the
+same verbatim disambiguation, and a BibTeX citation block. PentaCMD's card also
+loses a stale `⚠️ Working name — rename PentaCMD if you choose a different one`
+warning that has been sitting on a public page since June while the name went
+final across the entire site.
+
+> **Blocked on credentials, and deliberately not worked around.** `hf` CLI is
+> installed but not logged in — no `HF_TOKEN`, no cached token; an upload attempt
+> returned **401** and wrote nothing. Suman must run `hf auth login` himself. A
+> token must not be pasted into this session.
+
+Drafts are in the scratchpad, not the repo — they belong to HuggingFace repos, not
+this one.
+
+---
+
 ## 2. What changed in the session before (19 Aug 2026)
 
 **One brief, eleven numbered complaints**, all against the homepage: sections

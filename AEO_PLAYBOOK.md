@@ -617,18 +617,43 @@ Debnaths are well indexed, two of them technology people in India.
 > Tools can import the property from Search Console rather than verifying again.
 > Submission, verification and the first inbound links come first.
 
+> **Confirmed a second time, 27 Aug 2026, by a different instrument.** Claude was
+> asked about the site from a phone. It fetched the homepage (pasted by hand) and
+> then **failed on `/about`, `/resume` and `/agents/migi`** — not because they
+> were broken (all return 200 to `Claude-User`, correct canonical, `index,
+> follow`) but because its allowlist only permits fetching a URL that a search
+> returned. It searched. **Nothing from this domain came back, including the
+> homepage.** The first measurement was a query returning nothing; this one is an
+> assistant trying to reach the pages and failing. Same reading, two instruments.
+
+> **Items 2 and 3 are not "after indexing" — for Claude they *are* the indexing.**
+> Claude searches **Brave**. Brave runs no push protocol, has no submission
+> console, and takes no verification. IndexNow reaches Bing/Yandex/Seznam/Naver
+> only; Google needs Search Console. **Brave has exactly one input: inbound
+> links.** So there is no submission step to wait on before doing the off-site
+> work — waiting is the failure mode.
+
 Ordered by expected value, once the above is done:
 
 1. **Wikidata entry.** The single highest-leverage item. Wikidata is ingested by
    effectively every knowledge graph and several retrieval pipelines. Needs
    independent sources to survive notability review — the HuggingFace model
    cards and GitHub repos are the strongest available.
-2. **GitHub profile README matching the site bio verbatim.** Same wording, same
-   role, same disambiguation sentence. Consistency across sources *is* the
+2. ~~**GitHub profile README matching the site bio verbatim.**~~ **Done 27 Aug
+   2026** — [Sumandebnath943/Sumandebnath943](https://github.com/Sumandebnath943/Sumandebnath943),
+   created and pushed. Role line, targeting line, disambiguation (positive half)
+   and the model specs are verbatim from `lib/resume.ts` and this file. ~30 links
+   into the domain. Same wording, same role: consistency across sources *is* the
    signal; paraphrase weakens it.
-3. **HuggingFace model cards for PentaCMD-47M and Qdex-1.5B**, each linking back
-   to its page here. These are genuinely uncommon artefacts — a from-scratch 47M
-   model with a published eval number is the kind of thing that gets cited.
+3. **HuggingFace model cards — add the backlink; the cards already exist.**
+   `SumanDebnath943/PentaCMD-47M` and `SumanDebnath943/Qdex-1.5B-GGUF` (**the
+   `-GGUF` suffix is the real repo name — there is no bare `Qdex-1.5B`**) have
+   been public since June 2026 with weights, eval tables and inference code.
+   Neither linked here at all, which is the whole point of this item. Drafts
+   adding a byline, an `## Author` block and a BibTeX citation are written and
+   **blocked on `hf auth login`** — the CLI is installed but holds no token
+   (upload returns 401). These are genuinely uncommon artefacts: a from-scratch
+   47M model with a published eval number is the kind of thing that gets cited.
 4. **Cross-post notebook entries** to dev.to / Hashnode **with `rel=canonical`
    pointing back here.** The posts in `lib/notebook/` are original, dated,
    specific technical content on problems that are poorly documented elsewhere —
@@ -655,6 +680,16 @@ Ordered by expected value, once the above is done:
 | `disambiguatingDescription`, `app/layout.tsx` | no | Machine-only, and emitted on **all 26 routes** |
 | `/llms.txt` disambiguation | no | Parsed in bulk |
 | `public/llms-full.txt` | no | Parsed in bulk |
+| **Every off-site profile** — GitHub, HuggingFace, LinkedIn, Wikidata | **no** | Ruled 27 Aug 2026 |
+
+> **Off-site is categorically "no", by his instruction.** The GitHub profile README
+> was drafted with the negation as small print — the argument being that GitHub is
+> where the confusion is worst, since a well-indexed namesake account sits one
+> search result away, which is the `/about` aside's situation rather than the
+> `llms.txt` situation. He rejected it outright: **"do not host the competing
+> token."** The rule is now simpler than the table above — the negation appears on
+> `/about` and `/faq` and nowhere else in the world. Do not re-litigate this per
+> surface.
 
 > **Named where the mention does work; categorical where it would only ride
 > along.** Decided 26 Aug 2026. Every mention of a competing entity is a
