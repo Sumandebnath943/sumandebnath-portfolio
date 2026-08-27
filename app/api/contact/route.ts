@@ -77,24 +77,32 @@ function escapeHtml(s: string): string {
     .replace(/>/g, "&gt;");
 }
 
-async function notifyTelegram(fields: {
+type ContactFields = {
   name: string;
   email: string;
   intent: string;
   message: string;
   ip: string;
-}): Promise<boolean> {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
-  if (!token || !chatId) return false;
+};
 
-  const text =
+/** Built once so both bots send the same message rather than two drifting copies. */
+function contactMessage(fields: ContactFields): string {
+  return (
     `📬 <b>New message from the contact form</b>\n\n` +
     `<b>From:</b> ${escapeHtml(fields.name)}\n` +
     `<b>Email:</b> ${escapeHtml(fields.email)}\n` +
     `<b>About:</b> ${escapeHtml(fields.intent || "—")}\n` +
     `<b>IP:</b> ${escapeHtml(fields.ip)}\n\n` +
-    `${escapeHtml(fields.message)}`;
+    `${escapeHtml(fields.message)}`
+  );
+}
+
+async function notifyTelegram(fields: ContactFields): Promise<boolean> {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+  if (!token || !chatId) return false;
+
+  const text = contactMessage(fields);
 
   try {
     const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -110,6 +118,43 @@ async function notifyTelegram(fields: {
     return res.ok;
   } catch {
     return false;
+  }
+}
+
+/**
+ * Mirror the same message into the second bot — the human-only feed. A contact
+ * form submission is the most unambiguously human thing this site receives, so
+ * every one of them goes across.
+ *
+ * Returns nothing, on purpose. `notified` below decides whether the visitor is
+ * told their message failed to send, and that decision belongs to the main bot
+ * alone: a second chat being unreachable must never make a delivered message
+ * look undelivered. This resolves whatever happens, so it cannot reject the
+ * `Promise.all` it runs in either.
+ *
+ * Unset env vars make it a no-op, which is also the off switch.
+ */
+async function mirrorToHumanBot(fields: ContactFields): Promise<void> {
+  const token = process.env.TELEGRAM_HUMAN_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_HUMAN_CHAT_ID;
+  if (!token || !chatId) return;
+
+  try {
+    await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: contactMessage(fields),
+        parse_mode: "HTML",
+        disable_web_page_preview: true,
+      }),
+      // The main bot's send has no timeout and never needed one — it is the
+      // thing being waited for. This one is a passenger, so it gets a leash.
+      signal: AbortSignal.timeout(5_000),
+    });
+  } catch {
+    // A missing mirror is worth strictly less than a delivered message.
   }
 }
 
@@ -194,11 +239,15 @@ export async function POST(request: NextRequest) {
   // Both paths run regardless of the other's outcome: Telegram is the alert,
   // the database is the durable copy, and either one alone means the message
   // reached Suman.
+  // The mirror rides along as a third parallel call whose result is deliberately
+  // not destructured: it costs no extra wall-clock time and has no vote in what
+  // the visitor is told below.
   const [notified, stored] = await Promise.all([
     notifyTelegram({ name, email, intent, message, ip }),
     contactDbConfigured()
       ? saveContactMessage(submission)
       : Promise.resolve({ ok: false, error: "no database" }),
+    mirrorToHumanBot({ name, email, intent, message, ip }),
   ]);
 
   if (!notified && !stored.ok) {

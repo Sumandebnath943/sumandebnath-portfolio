@@ -1130,6 +1130,7 @@ need an entry.
 |---|---|
 | `DATABASE_URL` | Neon Postgres |
 | `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` | Visitor notifier |
+| `TELEGRAM_HUMAN_BOT_TOKEN`, `TELEGRAM_HUMAN_CHAT_ID` | Second bot — human-only feed. Optional; unset means no mirror |
 | `ADMIN_PASSWORD_HASH`, `ADMIN_SESSION_SECRET` | `/desk-4f7a` auth |
 | `CRON_SECRET` | Guards `/api/cron/purge` |
 | `GROQ_API_KEY` | AI assistant |

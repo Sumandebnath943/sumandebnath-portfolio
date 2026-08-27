@@ -64,6 +64,7 @@ them before and after your change rather than aiming for zero.**
 ## Environment
 
 `DATABASE_URL` · `TELEGRAM_BOT_TOKEN` · `TELEGRAM_CHAT_ID` ·
+`TELEGRAM_HUMAN_BOT_TOKEN` · `TELEGRAM_HUMAN_CHAT_ID` ·
 `ADMIN_PASSWORD_HASH` · `ADMIN_SESSION_SECRET` · `CRON_SECRET` · `GROQ_API_KEY`
 
 See `PROJECT_BIBLE.md` §9 for what each one powers.

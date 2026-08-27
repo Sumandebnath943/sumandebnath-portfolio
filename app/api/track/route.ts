@@ -412,12 +412,58 @@ async function editTelegram(
   }
 }
 
+// --- second bot: the human feed --------------------------------------------
+//
+// A strict subset of what the main bot already sent, in its own chat: visit
+// reports and hot actions, and nothing else. No arrivals, no journey cards, no
+// mute confirmations, and no crawler alerts — those are the three that turned
+// the main chat into a firehose, and they stay there.
+//
+// This is a *mirror*, not a second opinion. It never decides anything the main
+// bot did not already decide: if the main bot stayed quiet, so does this. The
+// only filtering is what the report path already does, which drops a firm
+// "automated" verdict before it ever gets here.
+//
+// Everything below is additive and switched off by default. With the two env
+// vars unset, `sendTelegram` returns immediately and this file behaves exactly
+// as it did before — which also makes deleting the vars a complete off switch,
+// no deploy required.
+
+function humanBot(): { token?: string; chatId?: string; on: boolean } {
+  const token = process.env.TELEGRAM_HUMAN_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_HUMAN_CHAT_ID;
+  return { token, chatId, on: Boolean(token && chatId) };
+}
+
+// `sendTelegram` lets a network error escape — fine where it is called, since
+// every one of those sites is already inside a try/catch. Here it must not be:
+// a mirror that throws would take the main bot's report down with it.
+async function mirrorSend(text: string): Promise<number | undefined> {
+  const { token, chatId, on } = humanBot();
+  if (!on) return undefined;
+  try {
+    return await sendTelegram(token, chatId, text);
+  } catch {
+    return undefined;
+  }
+}
+
+async function mirrorEdit(messageId: number, text: string): Promise<boolean> {
+  const { token, chatId, on } = humanBot();
+  if (!on) return false;
+  return editTelegram(token, chatId, messageId, text); // already swallows its own errors
+}
+
 // Reports already posted, so a visit that ends more than once (a reload looks
 // exactly like a departure at unload) updates its report instead of stacking a
 // second one. Per-instance and therefore best-effort, like the rate limiter —
 // the journey card above is the part that is guaranteed, because the browser
 // carries its message id rather than relying on this.
-const reportMsg = new Map<string, { mid: number; pages: number }>();
+//
+// `hmid` is the same thing for the second bot. Message ids are per-chat, so the
+// mirror needs its own; keeping it here means the correction behaviour is shared
+// and neither chat ends up with two reports for one visit.
+const reportMsg = new Map<string, { mid: number; pages: number; hmid?: number }>();
 
 // --- handler ---------------------------------------------------------------
 
@@ -672,14 +718,26 @@ export async function POST(request: NextRequest) {
           const key = id || "?";
           const prior = reportMsg.get(key);
           if (prior && count <= prior.pages) return;
+
+          // The second bot follows the same correction: rewrite its own copy of
+          // the report if it has one, otherwise post it. Runs after the main
+          // bot's send below, never before — the main chat is the primary and
+          // must not wait on the mirror.
+          const mirror = async (): Promise<number | undefined> => {
+            if (prior?.hmid && (await mirrorEdit(prior.hmid, d))) return prior.hmid;
+            return mirrorSend(d);
+          };
+
           if (prior && (await editTelegram(token, chatId, prior.mid, d))) {
-            reportMsg.set(key, { mid: prior.mid, pages: count });
+            const hmid = await mirror();
+            reportMsg.set(key, { mid: prior.mid, pages: count, hmid: hmid ?? prior.hmid });
             return;
           }
           const reportId = await sendTelegram(token, chatId, d, replyTo);
+          const hmid = await mirror();
           if (reportId) {
             if (reportMsg.size > 500) reportMsg.clear();
-            reportMsg.set(key, { mid: reportId, pages: count });
+            reportMsg.set(key, { mid: reportId, pages: count, hmid: hmid ?? prior?.hmid });
           }
         } catch {
           // A failed report must never surface anywhere.
@@ -767,6 +825,17 @@ export async function POST(request: NextRequest) {
       }
     } else {
       sentId = await sendTelegram(token, chatId, text, replyTo);
+    }
+
+    // Hot actions — a résumé download, an email or phone click — are the one
+    // live signal worth carrying into the human feed, so they go across as they
+    // happen rather than waiting to appear in the report's Actions line.
+    //
+    // Gated on `notifying` so this stays a mirror: when the main bot holds an
+    // action back because the visit still looks like a machine, so does this.
+    // Deferred, so the visitor's response never waits on a second chat.
+    if (body.type === "action" && notifying && humanBot().on) {
+      after(() => mirrorSend(text));
     }
 
     // Persist the visit for the dashboard. Deliberately after the Telegram send
