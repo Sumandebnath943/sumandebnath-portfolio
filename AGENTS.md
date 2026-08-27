@@ -39,7 +39,7 @@ Three documents carry the full context for this repo. They do not overlap.
 history only. They are superseded by `PROJECT_BIBLE.md` and their file paths no
 longer match the codebase — do not follow them.
 
-Seven things that are true regardless of the task:
+Eight things that are true regardless of the task:
 
 1. Commit straight to `main`. This project does not use feature branches.
 2. `next/image` only accepts `quality={75}` here — `images.qualities` is unset.
@@ -56,3 +56,8 @@ Seven things that are true regardless of the task:
 7. **`saveVisit()` returns `false`; it never throws.** Silent partial failure
    looks exactly like success here — check return values, and never read an
    absence of errors as evidence that something worked.
+8. **If he says the Telegram alerts are noisy** — bots, crawlers, auditors,
+   "bombarded", the real visits buried — the answer is `HANDOFF.md` §3 item 9:
+   give the crawler alerts their own chat. `/api/crawl` is where the volume
+   comes from, not the notifier. He already knows and has parked it, so raise
+   it **only** when he describes that symptom, never unprompted.
