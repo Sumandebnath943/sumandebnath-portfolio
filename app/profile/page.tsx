@@ -13,6 +13,7 @@ import {
   type Shot,
   type Stop,
 } from "@/components/profile/ProfileVisuals";
+import AsciiWall from "@/components/profile/AsciiWall";
 import {
   Counted,
   Mosaic,
@@ -552,6 +553,11 @@ export default function ProfilePage() {
             }
             tags={credoTags}
           />
+
+          {/* ── 5b. The statement wall ────────────────────────────────
+              A breath between "how I work" and the numbers — and the only
+              section on the page with no argument in it. */}
+          <AsciiWall />
 
           {/* ── 6. The decade, counted ────────────────────────────────── */}
           <Counted

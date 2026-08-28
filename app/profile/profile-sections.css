@@ -683,3 +683,222 @@
     opacity: 1;
   }
 }
+
+
+/* ═══ 5. The statement wall ══════════════════════════════════════════════
+   components/profile/AsciiWall.tsx — a photograph dissolved into 128×82 ASCII
+   characters, flowing, with three lines of display type rising off it.
+
+   ── Measured on the reference (benjamincreative.me) ──────────────────────
+   Section height 1188px on a 598px viewport — **199vh**, two full screens.
+   Type at 64px on a 1029px viewport (6.13vw), weight 500, line-height exactly
+   1.0, letter-spacing -2.5px (-0.039em), centred. The field is full bleed with
+   no fade at any edge, and it moves.
+
+   The first version of this section was 64vh with a still field, which is why
+   it read as a decorated strip rather than as a wall. Height is not a detail
+   here: at two screens the field stops being a background and becomes the
+   thing you are looking at.
+
+   The band spans **the sheet, not the viewport** — `--pf-rule-x` on both sides
+   puts its edges exactly on the two hairlines that run the height of the page.
+   Bleeding past them would paint over the page's spine, which is the one thing
+   holding the paper metaphor together (profile.css §header).
+   ─────────────────────────────────────────────────────────────────────── */
+.pf-ascii {
+  position: relative;
+  isolation: isolate;
+  margin-left: var(--pf-rule-x);
+  margin-right: var(--pf-rule-x);
+  /* ── Height is set by the picture, not by the viewport ──
+     The reference's panel is 1029 × 1188 — an aspect of 0.866, which is its
+     image's own aspect. That is why the photograph fills it exactly with
+     nothing cropped, and it is what makes the section read as a wall.
+
+     A `vh` height cannot do that: at 132vh the band came out at 979 × 787
+     against a field that wanted 979 × 1045, so a fifth of the portrait was
+     clipped off the top and bottom and the face stopped being a face.
+
+     128 cells × 0.6 wide ÷ 82 cells tall = 0.9366. Tie the band to that and
+     the whole photograph is always in frame. On this sheet it lands near
+     175vh, which is the scale the reference works at. The `min-height` is a
+     floor for narrow screens, where the aspect alone would leave a strip too
+     short to stand three lines of display type in. */
+  aspect-ratio: 0.9366;
+
+  /* ⚠ Both of these exist because of the same trap. `aspect-ratio` fixes a
+     *ratio*, not a height — so when `min-height` raises the box past the height
+     the ratio wanted, the ratio answers by widening it instead. On a 375px
+     phone that produced a 548px-wide band inside a 349px column: no visible
+     overflow, because `.pf-root` clips, but the picture was pushed off-centre
+     and cropped for no reason. Capping the width leaves height as the only
+     thing the ratio can give, which is what was intended.
+
+     The floor is only there so three lines of display type always have a strip
+     to stand in; on any desktop the ratio already gives far more. */
+  max-width: calc(100% - 2 * var(--pf-rule-x));
+  min-height: 420px;
+  display: grid;
+  place-items: center;
+  padding: clamp(40px, 7vh, 84px) clamp(16px, 4vw, 56px);
+  border-top: 1px solid var(--pf-frame);
+  border-bottom: 1px solid var(--pf-frame);
+  /* Safe here: this section has no sticky descendants. Do not copy onto one
+     that does — AGENTS.md trap 3. */
+  overflow: hidden;
+  background:
+    radial-gradient(
+      86% 70% at 42% 46%,
+      rgba(243, 180, 74, 0.22) 0%,
+      rgba(243, 180, 74, 0.07) 46%,
+      transparent 76%
+    ),
+    var(--pf-tile);
+}
+
+/* Both pictures live here — the static one and the moving one — and the canvas
+   measures itself against this box. `z-index: -1` puts the pair above the
+   section's own background and below the type without either needing to be
+   positioned: the same device `.sd-banner-host` uses, working for the same
+   reason (the `isolation` above keeps the -1 inside this section instead of
+   letting it escape to the root stacking context and vanish). */
+.pf-ascii-stage {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+
+  /* The container for the `<pre>`'s sizing, and it has to be *this* box rather
+     than the section: `.pf-ascii` carries horizontal padding, and container
+     query units resolve against the content box, so sizing the field there
+     made it 11.66px where the canvas — which measures this box — used 12.75px.
+     The static fallback then failed to reach the band's edges. */
+  container-type: inline-size;
+}
+
+.pf-ascii-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* The server-rendered field. 128 columns × 0.6em per cell = 76.8em, so
+   `100cqw / 76.8` is the size at which it spans the band precisely — a `vw`
+   size would be wrong by the sheet's inset at every breakpoint, which is what
+   the container unit is for.
+
+   The canvas hides this after its first frame; it is what remains under
+   reduced motion, with scripting off, and in the HTML. */
+.pf-ascii-field {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  display: grid;
+  place-content: center;
+  white-space: pre;
+  user-select: none;
+
+  /* The system monospace stack on purpose — `font-mono` is deliberately
+     unmapped on this site and therefore free (PAGE_OPTIMIZATION §3.4). Ten
+     thousand glyphs is not the place to introduce a webfont. */
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: clamp(5px, calc(100cqw / 76.8), 22px);
+  line-height: 1;
+
+  /* Ink where the picture is, warming towards the right — the same
+     left-dark / right-bright reading the reference has, in this page's colours
+     instead of red and silver. The canvas rebuilds this gradient per frame and
+     drifts it. */
+  color: transparent;
+  background-image: linear-gradient(
+    97deg,
+    rgba(22, 20, 14, 0.92) 0%,
+    rgba(22, 20, 14, 0.86) 26%,
+    rgba(120, 68, 10, 0.88) 56%,
+    rgba(168, 106, 8, 0.78) 78%,
+    rgba(150, 92, 12, 0.5) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* ── The three lines ────────────────────────────────────────────────────
+   Reference proportions, matched: 6.13vw, weight 500, leading exactly 1,
+   tracking -0.039em, centred. The leading is most of why it reads as one block
+   rather than three sentences — an earlier 1.04 was enough to lose it. */
+.pf-ascii-lines {
+  position: relative;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.pf-ascii-lines .ln {
+  font-family: var(--pf-sans);
+  font-weight: 500;
+  font-size: clamp(2.3rem, 6.13vw, 5.2rem);
+  line-height: 1;
+  letter-spacing: -0.039em;
+  color: var(--pf-ink);
+
+  /* Held off-stage until the band is on screen. */
+  opacity: 0;
+  transform: translate3d(0, 30px, 0);
+}
+
+/* The stagger. Third line last, which is the frame the reference's screenshot
+   was caught on.
+
+   ⚠ The resting state is declared **here as well as in the keyframe**, and it
+   has to be. `backwards` is the right fill — never `both`, per
+   PAGE_OPTIMIZATION §4.4 — but a backwards fill covers only the delay; the
+   moment the animation ends the element reverts to whatever the cascade says,
+   which above is `opacity: 0`. The first build of this section did exactly
+   that: all three lines played their entrance and then vanished, with the
+   animation still reported as running. Declaring the end state on the same
+   rule means the animation lands on it instead of falling off it. */
+.pf-ascii-lines.in .ln {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  animation: pf-ascii-rise 700ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(var(--i) * 120ms);
+}
+
+@keyframes pf-ascii-rise {
+  from { opacity: 0; transform: translate3d(0, 30px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+/* The marks, sized and lifted per glyph so all three read at one size and one
+   height — see the table in AsciiLines.tsx for where `--mk-s` and `--mk-v`
+   come from. Amber because on paper the mark is the one place this page lets
+   colour into the type; --pf-amber-2 is the documented 5.2:1 value.
+
+   ⚠ `--mk-s` and `--mk-v` are both expressed in the *line's* em, but `em`
+   inside `vertical-align` and `margin` on this element resolves against the
+   font-size this same rule just set. Dividing by `--mk-s` converts back, so
+   the numbers in the component stay in one frame of reference instead of each
+   needing to be pre-multiplied by hand. */
+.pf-ascii-lines .mk {
+  display: inline-block;
+  font-size: calc(var(--mk-s, 1) * 1em);
+  vertical-align: calc(var(--mk-v, 0) / var(--mk-s, 1) * 1em);
+  margin-left: calc(0.16 / var(--mk-s, 1) * 1em);
+  line-height: 1;
+  color: var(--pf-amber-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-ascii-lines .ln {
+    opacity: 1;
+    transform: none;
+  }
+  .pf-ascii-lines.in .ln {
+    animation: none;
+  }
+}

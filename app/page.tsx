@@ -13,6 +13,7 @@ import AIPhilosophy from "@/components/sections/AIPhilosophy";
 import PhilosophyFAQ from "@/components/sections/PhilosophyFAQ";
 import OperationalHistory from "@/components/sections/OperationalHistory";
 import AcademicFoundations from "@/components/sections/AcademicFoundations";
+import SignatureStrip from "@/components/sections/SignatureStrip";
 import Contact from "@/components/sections/Contact";
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "@/lib/projects";
 import { personRef } from "@/lib/schema";
@@ -81,6 +82,8 @@ export default function Home() {
         <OperationalHistory />
         <AcademicFoundations />
         <RelatedPages href="/" />
+        {/* The closing band. Last thing before the footer, homepage only. */}
+        <SignatureStrip />
         <Contact />
       </main>
 

@@ -774,6 +774,229 @@ html {
   [class*="pv-"] { animation: none !important; }
 }
 
+/* ─── Signature strip ────────────────────────────────────────────────────
+   The orange display band above the footer lives entirely in
+   components/sections/SignatureStrip.tsx and has **no CSS keyframe on
+   purpose**.
+
+   It was one — `sd-strip`, a linear -50% translate — until the reference was
+   measured properly. That band's speed tracks the page's own scroll speed and
+   eases back when the scroll stops, which no declarative animation can
+   express. The transform is now driven a frame at a time, gated to when the
+   band is on screen, and skipped entirely under reduced motion.
+
+   If you find yourself reaching for a keyframe here again, read the component
+   header first: the surge *is* the design. */
+
+/* ─── Operating principles accordion ─────────────────────────────────────
+   components/sections/AIPhilosophy.tsx — the "05 / Operating Principles" rows.
+
+   Modelled on the "What I do" accordion at nbnzia.com. The three measurements
+   that matter are written up in the component header; what they mean here:
+
+   · The row clips its own image. `.sd-prin { overflow: hidden }` is the
+     mechanism — the picture is parked a full height below its resting place
+     and slides up into the strip the row opens. It never fades.
+   · The image leads and the box follows. 420ms on the image against 320ms on
+     the height, and the image's curve is heavily front-loaded, so the picture
+     is most of the way home before the copy has finished arriving.
+   · Nothing dims. The open row is distinguished by being open.
+
+   Everything animated here is `transform`, `opacity` or `grid-template-rows`.
+   No filters, no blurs — PAGE_OPTIMIZATION §3.5. */
+
+.sd-prin-hit {
+  display: flex;
+  width: 100%;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 1.5rem 0;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sd-prin-ix {
+  flex-shrink: 0;
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  opacity: 0.75;
+  transition: opacity 320ms ease;
+}
+.sd-prin[data-open] .sd-prin-ix {
+  opacity: 1;
+}
+
+.sd-prin-title {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: #0a0a0a;
+  text-wrap: balance;
+  /* The only thing that moves on hover, and it is a transform. */
+  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* Hover only, never `[data-open]`. The reference's open row sits at exactly the
+   same x as the closed ones — measured, 141px either way — and shifting it
+   permanently just knocks the titles out of alignment with each other. This is
+   pointer feedback, not a state. */
+.sd-prin:hover .sd-prin-title {
+  transform: translateX(4px);
+}
+
+/* ── The curtain ──
+   Absolutely positioned so the row's own `overflow: hidden` is what hides it.
+   `translateY(100%)` parks it one full height below where it belongs, which is
+   the reference's trick exactly: closed, it is off the bottom of a 70px strip;
+   open, it slides into a row tall enough to hold it. */
+.sd-prin-media {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: clamp(180px, 24%, 260px);
+  aspect-ratio: 16 / 9;
+  transform: translateY(100%);
+  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 3px;
+  border: 1px solid rgba(26, 26, 26, 0.1);
+  background: #f4f4f2;
+}
+.sd-prin[data-open] .sd-prin-media {
+  transform: translateY(-50%);
+}
+.sd-prin-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── The panel ──
+   0fr → 1fr, so nothing has to know the content's height in advance and the
+   copy stays in the document while it is closed. */
+.sd-prin-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 320ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+.sd-prin[data-open] .sd-prin-panel {
+  grid-template-rows: 1fr;
+}
+.sd-prin-clip {
+  overflow: hidden;
+}
+.sd-prin-inner {
+  padding-bottom: 2.5rem;
+}
+
+/* The second, nested reveal: the copy slides up inside the box that is opening,
+   slightly behind it. One clip would have been fine; two is the difference. */
+.sd-prin-copy {
+  /* Keeps the text clear of the picture on the right. */
+  max-width: min(100%, 34rem);
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 320ms ease,
+    transform 380ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sd-prin[data-open] .sd-prin-copy {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 60ms;
+}
+
+.sd-prin-lead {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: #111;
+  margin-bottom: 0.75rem;
+}
+.sd-prin-body {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.75;
+  color: #444;
+  max-width: 58ch;
+}
+.sd-prin-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  transition: opacity 300ms ease;
+}
+.sd-prin-link:hover {
+  opacity: 0.7;
+}
+.sd-prin-link .dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  transform: translateY(-1px);
+}
+
+@media (min-width: 768px) {
+  .sd-prin-hit {
+    gap: 2rem;
+    padding: 2rem 0;
+  }
+  .sd-prin-ix {
+    width: 4rem;
+  }
+  .sd-prin-title {
+    font-size: 2rem;
+  }
+  .sd-prin-copy {
+    margin-left: 6rem;
+  }
+  .sd-prin-body {
+    font-size: 15px;
+  }
+}
+@media (min-width: 1024px) {
+  .sd-prin-title {
+    font-size: 2.4rem;
+  }
+}
+
+/* Below the breakpoint the picture cannot sit beside the copy without landing
+   on top of it. So it stops being a curtain, falls back into the flow inside
+   the panel, and is revealed by the panel opening instead — which is the same
+   idea one level up, and the only version a phone can actually see. */
+@media (max-width: 767px) {
+  .sd-prin-media {
+    position: static;
+    width: 100%;
+    margin-top: 1.5rem;
+    transform: none;
+  }
+  .sd-prin[data-open] .sd-prin-media {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sd-prin-title,
+  .sd-prin-media,
+  .sd-prin-panel,
+  .sd-prin-copy {
+    transition: none;
+  }
+}
+
 /* ─── Banner art ─────────────────────────────────────────────────────────
    Host + layer for components/ui/BannerArt.tsx.
 
