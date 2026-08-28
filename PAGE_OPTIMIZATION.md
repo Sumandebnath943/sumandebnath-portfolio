@@ -86,6 +86,40 @@ setTimeout(()=>console.log('rAF/sec', t/2), 2000);   // expect ~60, not 0
 If it prints 0, every animation observation from that session is void. Verify by
 DOM state (inline styles, class lists, `getAttribute`) which does not need rAF.
 
+**It also suspends IntersectionObserver and CSS transitions**, which is worse
+than it sounds: a hidden pane makes an on-screen-gated animation look like it
+never starts, and makes a `grid-template-rows` accordion look permanently stuck
+half-open. Both were mistaken for bugs on 28 Aug and hunted for a while. The
+pane can also go hidden *between* two tool calls, so a reading taken either side
+of a wait is not necessarily from the same state.
+
+### 1.6 `toDataURL` on a WebGL canvas will tell you a scene is static
+
+Hashing a third-party canvas twice to decide whether it animates is a test that
+**cannot fail**, and on 28 Aug it produced a wrong conclusion that shipped: a
+reference site's field was declared still and copied as a still image.
+
+Without `preserveDrawingBuffer: true` — which almost nothing sets, because it
+costs performance — the drawing buffer is cleared or recycled after each
+composite, so `toDataURL` and `getImageData` read whatever is left rather than
+the frame you saw. Identical bytes mean nothing.
+
+**To decide whether something is animating, use one of these instead:**
+
+```js
+// 1. Count the render loop. A live scene drives rAF continuously.
+let n=0; const o=window.requestAnimationFrame;
+window.requestAnimationFrame=function(cb){n++;return o.call(window,cb)};
+setTimeout(()=>{console.log('rAF/sec', n/2); window.requestAnimationFrame=o}, 2000);
+```
+
+2. **Two screenshots a few seconds apart**, compared by eye. Slow, unambiguous,
+   and it is what settled the question in the end.
+
+For **our own** 2D canvases `getImageData` is reliable — they are not WebGL and
+they are not cleared behind our backs. Sampling the field in `AsciiField.tsx`
+across paints is a valid check; sampling someone else's shader is not.
+
 ---
 
 ## 2. Where the site stands
@@ -364,6 +398,48 @@ Moved to `coverImage`, which centres them like every other landscape shot:
 **80 / 80**. The aspect ratios left in `SCREENSHOTS` run **0.11 to 0.53**; if a
 new one is anywhere near 1, it belongs on `coverImage`.
 
+### 3.6 Two per-frame loops added on purpose — 28 Aug 2026 (`23feac8`)
+
+Everything above this point is about *removing* per-frame work. This section
+added two loops back, so the budgets are recorded here rather than left to be
+rediscovered. Both were unavoidable: each animates something no declarative CSS
+can express, and both are modelled on measured behaviour of a reference site
+(HANDOFF §1.19).
+
+**`components/sections/SignatureStrip.tsx`** — the marquee band above the footer
+on `/`. Its speed tracks the page's own scroll speed and eases back when the
+scroll stops, which is not expressible as a keyframe.
+
+- One `transform` write per frame, no allocation, no layout read beyond
+  `scrollTop`.
+- Reads `document.scrollingElement.scrollTop` directly — **never a scroll
+  listener**; `body` is the scroll container here (AGENTS.md trap 4).
+- Runs **only** while the band intersects, `rootMargin: 150px`. It sits at the
+  bottom of a 26,000px page, so without the gate it would run for the whole
+  visit unseen.
+- Under `prefers-reduced-motion` the loop is never created.
+
+**`components/profile/AsciiField.tsx`** — the flowing character field on
+`/profile`. ~10,500 cells.
+
+- **Capped at 20fps**, not 60. It is a slow churn; three times the work would
+  look the same.
+- **One `fillText` per row per tone band — 246 calls a frame, not 10,496.** A
+  horizontal squeeze on the context makes a monospace advance land exactly on
+  the cell grid, so a whole row draws as one string. This is the load-bearing
+  decision; a per-cell version is roughly forty times the draw calls.
+- Glyph rasters are cached by the browser after the first frame, so steady-state
+  cost is cached blits and no text shaping.
+- `step = 2` below 768px — a quarter of the glyphs at twice the size.
+- IntersectionObserver-gated, `rootMargin: 200px`; never started under reduced
+  motion, where the server-rendered `<pre>` stays visible instead.
+- The canvas hands over from that `<pre>` **only after its first successful
+  frame**, so a canvas that never paints leaves the static picture in place.
+
+> If either of these ever shows up in a trace, the gate is the first thing to
+> check — not the loop body. A loop running off-screen is the failure mode both
+> are built to avoid.
+
 ## 4. Standing rules this session established
 
 ### 4.0 The body background is also the colour of a dropped frame
@@ -443,6 +519,20 @@ An animated value outranks a normal declaration. A forwards fill leaves the
 animation's end state in force — which silently killed the chat pill's `:hover`
 lift and would pin the mascot under a transform the chase is trying to drive.
 
+> **Then declare the end state on the same rule.** `backwards` covers the
+> *delay* and nothing after: the instant the animation finishes, the element
+> reverts to whatever the cascade says. If the base rule is the hidden state —
+> which it usually is, because that is how you keep an entrance off-stage until
+> it is triggered — the element plays its entrance and then vanishes. That is
+> exactly what the `/profile` statement lines did on 28 Aug, with the animation
+> still reporting as running:
+>
+> ```css
+> .ln            { opacity: 0; transform: translateY(30px); }   /* off-stage */
+> .in .ln        { opacity: 1; transform: none;                 /* ← required */
+>                  animation: rise 700ms var(--ease) backwards; }
+> ```
+
 ### 4.5 One-shot entrances belong in CSS keyframes, not transitions
 
 Setting a transition and its target in the same React commit means the browser
@@ -512,6 +602,35 @@ and `.nb-mast` now does on the notebook. Check for sticky descendants first —
 § the overflow/sticky rule in `AGENTS.md`.
 
 ---
+
+### 4.10 `aspect-ratio` fixes a ratio, so `min-height` can widen the box
+
+`aspect-ratio` does not set a height. It sets a *relationship*, and the browser
+is free to satisfy it from either side. Give a block both an `aspect-ratio` and
+a `min-height` that exceeds the height the ratio wanted, and the ratio answers by
+**growing the width**.
+
+On 28 Aug this put a **548px-wide band inside a 349px column** on a 375px phone
+(`.pf-ascii`, `app/profile/profile-sections.css`). Nothing looked broken —
+`.pf-root` carries `overflow-x: clip`, so the document never gained a scrollbar
+and `scrollWidth === clientWidth` still passed. The only symptom was a picture
+silently pushed off-centre and cropped.
+
+**If a box has `aspect-ratio` and any height floor, cap its width too:**
+
+```css
+aspect-ratio: 0.9366;
+max-width: calc(100% - 2 * var(--pf-rule-x));   /* leaves height as the only give */
+min-height: 420px;
+```
+
+Note that the usual overflow check does not catch this. Assert the width against
+the container instead:
+
+```js
+const el = document.querySelector('.pf-ascii');
+console.log(el.getBoundingClientRect().width, el.parentElement.clientWidth);
+```
 
 ## 5. Open, declined, and deliberately not done
 

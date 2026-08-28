@@ -166,15 +166,28 @@ both are worth reading before you touch them:
 
 ### 3.2 The homepage
 
-`/` is a composition of thirteen section components, in this order:
+`/` is a composition of fourteen section components, in this order:
 
 `Hero` → `Announcement` → **`Film`** → `ExperienceNarrative` → `NowBuilding` →
 `Experience` → `SystemsStack` → `Projects` → `AIPhilosophy` → `PhilosophyFAQ` →
-`OperationalHistory` → `AcademicFoundations` → `Contact`
+`OperationalHistory` → `AcademicFoundations` → `RelatedPages` →
+**`SignatureStrip`** → `Contact`
 
-All thirteen live in `components/sections/`. Reordering the homepage means
+All of them live in `components/sections/`. Reordering the homepage means
 reordering this list in `app/page.tsx` — the sections do not know about each
 other.
+
+`SignatureStrip` (added 28 Aug 2026) is the orange marquee band that closes the
+page, and it is **homepage-only** — it is not part of the footer and must not be
+mounted from the layout. Its speed tracks the reader's own scroll speed, so it
+carries a frame loop rather than a keyframe; the budget and the gating are in
+`PAGE_OPTIMIZATION.md` §3.6, and what it was modelled on is in HANDOFF §1.19.
+
+`AIPhilosophy` ("05 / Operating Principles") is a **hover accordion**: moving
+across a row opens it, and nothing closes one, so exactly one is always open.
+All six panels stay in the server-rendered HTML — collapsed with
+`grid-template-rows: 0fr` and made `inert`, never conditionally rendered — so the
+copy survives for readers and extractors that never fire a pointer event.
 
 `Film` (added 18 Aug 2026) is the one **light** section on an otherwise black
 page — a daylight band carrying the six-minute film. It is deliberately the
@@ -279,6 +292,32 @@ the site:
 What deliberately stays foreign is the **sheet**: the ruled paper, and the
 hairline border down each side. That is the page's spine, and it is the reason
 the route exists as something other than a light-mode `/about`.
+
+#### The statement wall (added 28 Aug 2026)
+
+Between "How I work" and "The decade, counted" sits `components/profile/
+AsciiWall.tsx` — a photograph of the user dissolved into 128×82 ASCII
+characters, ~175vh tall, with three lines of display type rising off it. It is
+modelled on a panel at `benjamincreative.me`; HANDOFF §1.19 has the measurements
+and `PAGE_OPTIMIZATION.md` §3.6 has the frame budget.
+
+Four things about it are structural, not stylistic:
+
+- **The picture is baked.** `scripts/build-ascii-portrait.mjs` converts
+  `public/profile/portrait.webp` and commits `lib/ascii-portrait.ts` (2.5 KB
+  gzipped). Re-run it after changing the source image, the grid or the ramp; the
+  site never runs it.
+- **It is shipped once.** The server renders the characters into a `<pre>`;
+  `AsciiField.tsx` reads its data **back out of that `<pre>`** instead of
+  importing the string, so the client bundle carries none of it. The `<pre>` is
+  also the reduced-motion, no-JavaScript and crawler version, and the canvas only
+  replaces it after a successful first frame.
+- **The band spans the sheet, not the viewport.** `--pf-rule-x` on both sides
+  puts its edges exactly on the two hairlines. Bleeding past them paints over the
+  page's spine.
+- **Its height comes from `aspect-ratio`, matching the character grid's display
+  aspect (0.9366).** A `vh` height crops the portrait — see
+  `PAGE_OPTIMIZATION.md` §4.10 for the trap that pairs with this.
 
 #### Five things that will break if you touch them without reading the file
 
@@ -1025,7 +1064,7 @@ entry is the card that links to it.
 
 ### 7.2 `components/sections/` — the homepage and dossier library
 
-Twelve of these compose `/` (§3.2). The rest are **dossiers** — long-form
+Fourteen of these compose `/` (§3.2). The rest are **dossiers** — long-form
 product panels used on the homepage and archive: `ImprintDossier`,
 `LegatusDossier`, `CiteDossier`, `RoasmindDossier`, `GeekCollectiblesDossier`,
 `EmberDossier`, `DPeDossier`, with `DossierMeta` and `ArchiveCard` as shared
@@ -1227,6 +1266,13 @@ it:
 Because these are ignored, a fresh clone cannot rebuild `robot.glb`, reframe
 journey art, or **re-render the film**. The source folders live on Suman's
 machine at `D:\project\sumandebnath\_source-*`.
+
+> **`scripts/build-ascii-portrait.mjs` is the exception that a fresh clone *can*
+> run.** Its input is `public/profile/portrait.webp`, which is committed, not a
+> `_source-*` folder. It writes `lib/ascii-portrait.ts`, which is also committed
+> — the site imports the result and never runs the script. Re-run it after
+> changing the source image, the grid or the character ramp, and commit the
+> output with the change.
 
 > `_source-film/` is the only copy of the film's inputs and of the studio that
 > assembles them. The published MP4 and the YouTube upload are outputs; they

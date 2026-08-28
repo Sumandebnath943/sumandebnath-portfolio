@@ -4,11 +4,11 @@ Where the project stands, what changed most recently, and what is worth doing
 next. For how the system is built read **PROJECT_BIBLE.md**; for how the site
 writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
-**Last updated:** 27 August 2026
-**Branch:** `main`, pushed through `67ba999`. Working tree clean.
-**Last session:** two Google Search Console structured-data reports cleared — a critical `ProfilePage.mainEntity` type error on `/about` and `/profile`, an invalid `dateModified` on `/resume`, and five recommended Q&A fields on all four `QAPage` URLs (§1.18). JSON-LD only; nothing visible changed. **Click "Validate fix" in both reports after the next deploy.**
-**Session before:** three external scanners triaged — Bing Webmaster, isitagentready.com and geometrics.app. Three things built, four dismissed as false positives, **nine refused as descriptions of a public API this site does not have** (§1.16). The one real defect: the author portrait carried `alt=""` on all 26 notebook pages.
-**Next up:** **run `scripts/indexnow.mjs` once after the next deploy** — Bing Webmaster turns out to be verified (§1.16), which was the blocker recorded in §1.10. Indexing beats every remaining scorecard point. Then **click "Validate fix" in both Search Console reports** (§1.18). After that, the homepage structure weakness in §3 is the oldest open item.
+**Last updated:** 28 August 2026
+**Branch:** `main`, pushed through `23feac8`. Working tree clean.
+**Last session:** three sections rebuilt from measurements taken on the two reference sites — a scroll-reactive marquee band closing the homepage, an ASCII-portrait statement wall on `/profile`, and "05 / Operating Principles" rebuilt as a hover accordion (§1.19). All three were built twice; the first pass copied the arrangement and none of the behaviour. **Read §1.19 before touching any of them** — six of the eight things that mattered were invisible in a screenshot.
+**Session before:** two Google Search Console structured-data reports cleared — a critical `ProfilePage.mainEntity` type error on `/about` and `/profile`, an invalid `dateModified` on `/resume`, and five recommended Q&A fields on all four `QAPage` URLs (§1.18). JSON-LD only; nothing visible changed. **Click "Validate fix" in both reports after the next deploy.**
+**Next up:** **run `scripts/indexnow.mjs` once after the next deploy** — Bing Webmaster turns out to be verified (§1.16), which was the blocker recorded in §1.10. Indexing beats every remaining scorecard point. Then **click "Validate fix" in both Search Console reports** (§1.18). After that, the homepage structure weakness in §3 is the oldest open item — note that §1.19 added a fourteenth section to `/` without addressing it.
 **Session before that:** four pieces of work, 25–26 Aug. Agentic readiness against an external audit, which found the identity JSON-LD was invisible without JavaScript — §1.8. Then **twenty-one notebook articles** in six batches, three new categories and a writing guide — §1.9. Then the target query set, the entity rework, and a measurement that reordered the priorities — §1.10. Then the notebook rebuilt as a publication — §1.11.
 
 > Run `git log --oneline -15` before trusting this section — it is a snapshot,
@@ -28,7 +28,8 @@ Recent history, newest first, gives an accurate picture of the trajectory:
 |---|---|
 | **Notebook** (`/notebook`) | **5 posts → 26**, 26 Aug (§1.9), rebuilt as a publication (§1.11), then **redesigned end to end** (§1.12): the reading page on one band with a five-module rail, colour driven by category accent, pull-quotes in all 26 posts and in-article promo cards in nine; the front page recomposed into five zones on a 3·4·3·4·2 rhythm. Six routes — the architecture now lives in **`PROJECT_BIBLE.md` §6.8**, which it did not before. **Read `BLOG_GUIDELINES.md` before touching a post and `NOTEBOOK_COVERS.md` before making an image.** One thing outstanding: the serif — see the end of §1.12. |
 | **Machine-readable identity** | Audited 25 Aug against Vercel's Is Agentic, **79 → 83** (§1.8). The `Person` and `WebSite` JSON-LD were emitted through `next/script` and existed only once JavaScript had run — now literal tags on all 26 routes. House of Namus added as a real `Organization`. Markdown content negotiation was **refused on purpose**; the reasoning and the one condition for revisiting it are in `AEO_PLAYBOOK.md` §8. |
-| **Profile** (`/profile`) | Built 23 Aug over two passes, extended 24 Aug with four more sections (§1.6). The only light page on the site — ruled cream paper, a 280vh pinned hero that zooms into a drawn monitor, a word reveal, and a conveyor street with a walking robot. Modelled on a reference the user supplied, then pulled back towards the site's own type, pills, accents and closing. **The figure and the dog still need redrawing** — §1.5. |
+| **Profile** (`/profile`) | Built 23 Aug over two passes, extended 24 Aug with four more sections (§1.6), and given a **statement wall** 28 Aug (§1.19) — a baked ASCII portrait, ~175vh, flowing on a capped canvas, with three lines rising off it. The only light page on the site — ruled cream paper, a 280vh pinned hero that zooms into a drawn monitor, a word reveal, and a conveyor street with a walking robot. Modelled on a reference the user supplied, then pulled back towards the site's own type, pills, accents and closing. **The figure and the dog still need redrawing** — §1.5. |
+| **Reference-built sections** | Three, all 28 Aug (§1.19): `SignatureStrip` (homepage marquee, scroll-reactive), `AsciiWall` (`/profile`), `AIPhilosophy` rebuilt as a hover accordion. Two carry per-frame loops — both gated to on-screen, both off under reduced motion. **Budgets and the two measurement traps are in `PAGE_OPTIMIZATION.md` §3.6 and §1.6.** |
 | **Banking Co-pilot** (`/banking/rm-copilot`) | Built 22 Aug. New **Banking** group under Portfolio. Fully prerendered; 382 KB of WebP, one eager image. Done. |
 | **Hero lock** | Extended 22 Aug from the homepage to all ten product pages — `components/ui/HeroLock.tsx`. Done. |
 | **Admin dashboard** (`/desk-4f7a`) | Built 13–14 Aug across five phases. Live, password-gated, recording. |
@@ -46,7 +47,7 @@ Recent history, newest first, gives an accurate picture of the trajectory:
 | **The film** (`Who am I?`) | Made 17–18 Aug. 5:57, on YouTube as `4AP2eui9720`, embedded on the homepage. Retitled 19 Aug. Done. |
 | **Skills declaration** | AEO, GEO, SEO and agentic readiness now land in all five surfaces that declare expertise — `knowsAbout` in the Person JSON-LD, `coreSkills` (which feeds /resume *and* the AI assistant), the capabilities FAQ, the homepage stack and `llms-full.txt`. **`AEO_PLAYBOOK.md` §3.6b is the list; read it before adding a skill anywhere.** — §1.14 |
 | **Homepage density** | Reworked 19 Aug. Three sections roughly halved in height, two closers restyled, three copy blocks refreshed — §2. |
-| **Homepage structure** | **Still weak.** Thirteen sections, no spine. The 19 Aug pass fixed density and copy, not order — §3. |
+| **Homepage structure** | **Still weak.** Now *fourteen* sections, no spine — `SignatureStrip` was added 28 Aug (§1.19) between the Related block and the footer. The 19 Aug pass fixed density and copy, not order — §3. |
 | **Performance** | **Done — see `PAGE_OPTIMIZATION.md`**, which is now the standing reference and should be read before any further perf work or any test run. PSI **94 mobile / 88 desktop**, other four categories 100. TBT 18,775 → 83 ms, weight 3,791 → 861 KiB. Tier C and the GA work were **declined on purpose**; do not re-propose them. |
 
 > **§1.1 and §1.2 below are the session narrative — what was decided, when, and
@@ -1672,6 +1673,94 @@ The emitted JSON-LD was read back out of `.next/server/app/{index,about,profile,
 the change is entirely inside `<script type="application/ld+json">`, which no
 runtime code reads. Search Console will stay red until Google recrawls; click
 **Validate fix** in both reports after the deploy.
+
+---
+
+### 1.19 Three sections rebuilt from the references' mechanics (28 Aug 2026)
+
+Three sections, each modelled on a site the user supplied: a marquee band at the
+foot of the homepage and an accordion replacing the "05 / Operating Principles"
+grid (`benjamincreative.me` and `nbnzia.com`), plus a statement wall on
+`/profile`. Committed as `23feac8`.
+
+**All three were built twice.** The first pass worked from screenshots, and the
+verdict on it was exact: *"they look like the references, but their mechanism,
+their feel, their elegance are nothing like the references."* That is worth
+recording as a method note, because the second pass only worked by opening the
+references in the browser pane and **measuring** them — transforms sampled frame
+by frame, computed styles read off the live DOM, pseudo-elements enumerated. Six
+of the eight things that made the difference were invisible in a screenshot.
+
+#### What measurement found that a screenshot could not
+
+| | Screenshot said | Measurement said |
+|---|---|---|
+| Marquee speed | constant | **~80px/s idle → ~186 while scrolling**, same direction, easing back over ~1s |
+| Marquee band | flat orange | vertical gradient `#FD6A3A → #FB4617`, **and a `border-top: 1px solid rgba(255,255,255,0.25)` inset 32px** |
+| Marquee type | heavy caps | **PP Neue Montreal Medium (500), title case**, -3px tracking, band 2.30× the type size |
+| ASCII field | abstract texture | **a photograph**, full bleed, panel aspect = the image's aspect |
+| ASCII section | a band | **1188px on a 598px viewport — 199vh** |
+| Third line | grey | **white**; all three rise staggered, and grey is a *frame of the entrance* |
+| Accordion | click to toggle | **hover**, and it never closes — which is why it needs no `+`/`−` |
+| Accordion image | a fade | **a curtain**: parked at `translateY(100%)`, clipped by the row, sliding up |
+
+#### Two measurement errors of my own, both recorded in the commit
+
+**`toDataURL` on a WebGL canvas lies.** Hashing the reference's canvas twice
+1.2s apart returned identical bytes, and on that basis the first build shipped a
+still field. Without `preserveDrawingBuffer` the buffer is stale by the time
+`toDataURL` reads it, so the test would report **any** scene as unchanging. Two
+screenshots three seconds apart are completely different, and patching
+`requestAnimationFrame` on the live page counts ~274 callbacks a second. The
+rule is now in `PAGE_OPTIMIZATION.md` §1.6.
+
+**A hidden preview pane freezes CSS transitions too.** §1.5 of that document
+already warns that the pane suspends rAF; it also suspends transitions, which
+made the accordion look stuck mid-open and sent me hunting a bug that was not
+there. Check `document.visibilityState` before believing any interaction test.
+
+#### The statement wall, and why the picture is baked
+
+`scripts/build-ascii-portrait.mjs` converts `public/profile/portrait.webp` into
+128×82 characters and commits the result to `lib/ascii-portrait.ts` — 11 KB of
+text, **2.5 KB gzipped**. The server renders it into a `<pre>`; that is what a
+crawler, a reader with JavaScript off and anyone on reduced motion gets. The
+canvas then reads its data **back out of that `<pre>`** rather than importing
+it, so the photograph is shipped exactly once.
+
+Three things about it that are not taste and should not be adjusted by feel:
+
+- **The crop matches the grid's *display* aspect, not `COLS:ROWS`.** Cells are
+  0.6 as wide as they are tall, so a 128×82 grid displays at 0.937. Cropping to
+  128:82 stretches the face.
+- **The band is `aspect-ratio: 0.9366`, not a `vh` height.** At 132vh the band
+  came out 979×787 against a field that wanted 979×1045 and a fifth of the
+  portrait was cut off. The reference's panel is its image's aspect for exactly
+  this reason. It lands near 175vh on the sheet.
+- **The field draws in three tone bands**, not one colour. A ten-step ramp
+  encodes tone in the *shape* of each glyph; drawing them all at one alpha
+  throws that away and the photograph flattens into texture. This was the single
+  change that made the portrait read.
+
+#### Verified
+
+`tsc --noEmit`, eslint and the production build all clean. On the prod build:
+the canvas advances frames (signature changes across paints); the strip measures
+2.31 against the reference's 2.30 with the hairline and gradient present; the
+accordion opens on hover with exactly one row open, caught mid-curtain at
+`mediaY: -16` travelling to `-67`. No horizontal overflow at 375px on either
+page. All six principles are in the server-rendered HTML with all six thumbnails
+referenced. Console clean apart from the pre-existing `_vercel/insights` 404s on
+localhost.
+
+#### One thing that is deliberately not a replica
+
+**The typeface.** Both references use PP Neue Montreal Medium, which is not
+licensed here. Manrope at 500 with the references' exact tracking (-0.039em on
+the wall, -0.033em on the strip) and leading (1.0) is the closest thing already
+loaded — every *metric* matches, the letterforms do not. Do not add a font for
+this; §4 of the Bible and `PAGE_OPTIMIZATION.md` §3.4 both cost real work to
+settle.
 
 ---
 
