@@ -5,7 +5,7 @@ next. For how the system is built read **PROJECT_BIBLE.md**; for how the site
 writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
 **Last updated:** 29 August 2026
-**Branch:** `main`, pushed through `23feac8`; **`403f9a2` and `bf12586` are committed locally and not pushed.** Working tree clean.
+**Branch:** `main`, pushed through `95eb5ff`. Working tree clean.
 **Last session:** a twenty-seventh notebook article — the flat stretch between builds, evidenced off this repository's own commit log — scored to the top of the editor's ranking, and the first cover deliberately outside the §2 house style (§1.20). **Read §1.20 before adding a post**: it records why the headline was rewritten, and why the front page's "Editor's selection" tile does not show the highest-scoring article.
 **Session before:** three sections rebuilt from measurements taken on the two reference sites — a scroll-reactive marquee band closing the homepage, an ASCII-portrait statement wall on `/profile`, and "05 / Operating Principles" rebuilt as a hover accordion (§1.19). All three were built twice; the first pass copied the arrangement and none of the behaviour. **Read §1.19 before touching any of them** — six of the eight things that mattered were invisible in a screenshot.
 **Session before that:** two Google Search Console structured-data reports cleared — a critical `ProfilePage.mainEntity` type error on `/about` and `/profile`, an invalid `dateModified` on `/resume`, and five recommended Q&A fields on all four `QAPage` URLs (§1.18). JSON-LD only; nothing visible changed. **Click "Validate fix" in both reports after the next deploy.**
@@ -1870,7 +1870,7 @@ he kept it.
 - The only console errors are the two `_vercel/insights` 404s, which do not exist
   outside Vercel.
 
-**Not pushed.** Both commits are on local `main`.
+Pushed to `origin/main` on 29 August 2026, which is what triggers the deploy.
 
 ---
 
