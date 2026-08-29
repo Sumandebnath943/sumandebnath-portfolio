@@ -15,7 +15,11 @@ const migiStats = [
   { figure: "24/7", label: "Running unattended" },
 ];
 
-const focus = [
+// `accent` marks the one card that carries the hero's ember tone — the
+// hire-me card. Keep it to a single card; two accents and neither reads.
+type Focus = { label: string; text: string; accent?: boolean };
+
+const focus: Focus[] = [
   {
     label: "Also Building",
     text: "ROASmind — an AI-native marketing operating system unifying Meta, Google and LinkedIn. 200,000+ lines, now in private testing.",
@@ -26,7 +30,8 @@ const focus = [
   },
   {
     label: "Available For",
-    text: "AI Product Manager and AI Product Marketing roles, AI-native product collaborations, and full-stack AI engineering engagements.",
+    text: "Senior Brand Marketing Manager, AI Product Manager and AI Product Marketing roles, and AI-native product collaborations.",
+    accent: true,
   },
 ];
 
@@ -116,12 +121,40 @@ export default function NowBuilding() {
           {focus.map((f) => (
             <div
               key={f.label}
-              className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 md:p-7"
+              className={`relative isolate overflow-hidden rounded-2xl border p-6 md:p-7 ${
+                f.accent
+                  ? "now-card-surface border-[#FF5500] bg-[linear-gradient(135deg,#FF4400_0%,#FF6A1A_28%,#FFB066_52%,#FF6A1A_76%,#FF4400_100%)]"
+                  : "border-white/[0.06] bg-white/[0.02]"
+              }`}
             >
-              <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#86868B] mb-4">
+              {/* Molten lobes + a passing glaze. Decorative only, and both are
+                  stopped by the reduced-motion guard in globals.css. */}
+              {f.accent && (
+                <>
+                  <span
+                    aria-hidden
+                    className="now-card-wave pointer-events-none absolute -inset-1/4 -z-10 blur-2xl bg-[radial-gradient(ellipse_45%_38%_at_28%_30%,rgba(255,208,140,0.65)_0%,transparent_62%),radial-gradient(ellipse_42%_36%_at_74%_72%,rgba(255,56,0,0.6)_0%,transparent_62%)]"
+                  />
+                  <span
+                    aria-hidden
+                    className="now-card-glaze pointer-events-none absolute inset-y-0 left-0 -z-10 w-1/4 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.38)_50%,transparent_100%)]"
+                  />
+                </>
+              )}
+              <p
+                className={`font-mono text-[10px] uppercase tracking-[0.3em] mb-4 ${
+                  f.accent ? "font-bold text-[#4A1600]" : "text-[#86868B]"
+                }`}
+              >
                 {f.label}
               </p>
-              <p className="font-manrope text-[15px] leading-[1.7] text-white/85">
+              <p
+                className={`font-manrope text-[15px] leading-[1.7] ${
+                  f.accent
+                    ? "font-semibold text-[#1A0A02]"
+                    : "text-white/85"
+                }`}
+              >
                 {f.text}
               </p>
             </div>

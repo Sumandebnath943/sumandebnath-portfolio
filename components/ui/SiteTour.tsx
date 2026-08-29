@@ -10,7 +10,7 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import { driver, type Driver } from "driver.js";
 import "driver.js/dist/driver.css";
-import { Sparkles, X } from "lucide-react";
+import { Route, X } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
 import { chapterFor, TOUR_STEPS, TOUR_POSITION_KEY } from "@/lib/tour-steps";
 import { useRobotChat } from "@/components/robot/RobotChatContext";
@@ -337,9 +337,9 @@ export default function SiteTour() {
         .driverjs-theme {
           background-color: #0A0A0C !important;
           color: #F5F0E6 !important;
-          border: 1px solid rgba(255, 128, 0, 0.3) !important;
+          border: 1px solid rgba(255, 85, 0, 0.3) !important;
           border-radius: 12px !important;
-          box-shadow: 0 10px 40px -10px rgba(255, 128, 0, 0.2) !important;
+          box-shadow: 0 10px 40px -10px rgba(255, 85, 0, 0.2) !important;
           font-family: inherit !important;
           z-index: 999999 !important;
         }
@@ -351,7 +351,7 @@ export default function SiteTour() {
         }
         .driver-popover-title {
           font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
-          color: #FF8000 !important;
+          color: #FF5500 !important;
           font-size: 14px !important;
           text-transform: uppercase !important;
           letter-spacing: 0.1em !important;
@@ -391,9 +391,9 @@ export default function SiteTour() {
           onClick={() => setShowPrompt((p) => !p)}
           // 33px wide is a thin thumb target; the invisible ::after widens the
           // hit area leftward without changing the tab's drawn width.
-          className="relative touch-manipulation after:absolute after:content-[''] after:-inset-y-1 after:-left-3 after:right-0 flex flex-col items-center justify-center bg-[#0A0A0C]/90 backdrop-blur-md border border-[#FF8000]/30 border-r-0 rounded-l-lg p-2 py-3 text-[#FF8000] hover:bg-[#FF8000]/10 transition-colors shadow-[-4px_0_15px_-4px_rgba(255,128,0,0.2)]"
+          className="relative touch-manipulation after:absolute after:content-[''] after:-inset-y-1 after:-left-3 after:right-0 flex flex-col items-center justify-center bg-[#0A0A0C]/90 backdrop-blur-md border border-[#FF5500]/30 border-r-0 rounded-l-lg p-2 py-3 text-[#FF5500] hover:bg-[#FF5500]/10 transition-colors shadow-[-4px_0_15px_-4px_rgba(255,85,0,0.2)]"
         >
-          <Sparkles size={16} className="mb-2" />
+          <Route size={16} className="mb-2" />
           <span className="[writing-mode:vertical-rl] font-mono text-[10px] uppercase tracking-widest font-semibold">
             {inProgress ? "Resume Tour" : "Take a Tour"}
           </span>
@@ -412,7 +412,7 @@ export default function SiteTour() {
             animate={{ opacity: 1, x: 0, y: "-50%" }}
             exit={{ opacity: 0, x: 100, y: "-50%" }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed top-1/2 right-12 z-[950] flex w-[min(280px,calc(100vw_-_5rem))] flex-col gap-3 rounded-2xl rounded-tr-none rounded-br-none border border-[#FF8000]/30 border-r-0 bg-[#0A0A0C]/95 p-5 shadow-[-10px_0_40px_-10px_rgba(255,128,0,0.25)] backdrop-blur-xl"
+            className="fixed top-1/2 right-12 z-[950] flex w-[min(280px,calc(100vw_-_5rem))] flex-col gap-3 rounded-2xl rounded-tr-none rounded-br-none border border-[#FF5500]/30 border-r-0 bg-[#0A0A0C]/95 p-5 shadow-[-10px_0_40px_-10px_rgba(255,85,0,0.25)] backdrop-blur-xl"
           >
             <button
               onClick={() => setShowPrompt(false)}
@@ -422,8 +422,8 @@ export default function SiteTour() {
               <X size={16} />
             </button>
             <div className="flex items-center gap-2">
-              <span className="flex h-2 w-2 rounded-full bg-[#FF8000] animate-pulse" />
-              <h4 className="font-mono text-[10px] font-semibold uppercase tracking-widest text-[#FF8000]">
+              <span className="flex h-2 w-2 rounded-full bg-[#FF5500] animate-pulse" />
+              <h4 className="font-mono text-[10px] font-semibold uppercase tracking-widest text-[#FF5500]">
                 Guided Tour
               </h4>
             </div>
@@ -437,9 +437,9 @@ export default function SiteTour() {
                 <div className="flex gap-3 pt-2 flex-col">
                   <button
                     onClick={resumeTour}
-                    className="flex w-full items-center justify-center gap-2 rounded-full bg-[#FF8000]/10 border border-[#FF8000]/30 py-2 text-[12px] font-semibold text-[#FF8000] transition-colors hover:bg-[#FF8000]/20"
+                    className="flex w-full items-center justify-center gap-2 rounded-full bg-[#FF5500]/10 border border-[#FF5500]/30 py-2 text-[12px] font-semibold text-[#FF5500] transition-colors hover:bg-[#FF5500]/20"
                   >
-                    <Sparkles size={14} /> Resume Tour
+                    <Route size={14} /> Resume Tour
                   </button>
                   <button
                     onClick={startTour}
@@ -467,9 +467,9 @@ export default function SiteTour() {
                 <div className="flex gap-3 pt-2 flex-col">
                   <button
                     onClick={startTour}
-                    className="flex w-full items-center justify-center gap-2 rounded-full bg-[#FF8000]/10 border border-[#FF8000]/30 py-2 text-[12px] font-semibold text-[#FF8000] transition-colors hover:bg-[#FF8000]/20"
+                    className="flex w-full items-center justify-center gap-2 rounded-full bg-[#FF5500]/10 border border-[#FF5500]/30 py-2 text-[12px] font-semibold text-[#FF5500] transition-colors hover:bg-[#FF5500]/20"
                   >
-                    <Sparkles size={14} /> Start Tour
+                    <Route size={14} /> Start Tour
                   </button>
                   <button
                     onClick={() => setShowPrompt(false)}

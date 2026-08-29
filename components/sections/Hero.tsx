@@ -215,7 +215,10 @@ export default function Hero() {
           <span className="block">I Build</span>
           <span className="block">Experiences With</span>
           <span className="block">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF8000] via-[#FF4500] to-[#FF8000]">
+            {/* Hot core: brightest stop sits mid-word. The old symmetric
+                orange→red→orange put its darkest stop where the eye lands,
+                which is what made it read flat. */}
+            <span className="text-transparent bg-clip-text bg-[linear-gradient(90deg,#FF5500_0%,#FF6B1A_26%,#FF9A4D_50%,#FF6B1A_74%,#FF5500_100%)] [text-shadow:none]">
               Intelligence
             </span>
           </span>

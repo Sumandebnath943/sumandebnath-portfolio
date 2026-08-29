@@ -496,6 +496,39 @@ html {
   [class*="pact-"] { animation: none !important; }
 }
 
+/* ─── "Now / Currently" — the Available For card's molten surface ───────── */
+
+/* The colour itself travels: an oversized gradient panned back and forth. */
+@keyframes now-ember-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+/* Two soft lobes rolling under the surface — the wave. */
+@keyframes now-ember-wave {
+  0%, 100% { transform: translate3d(-5%, 2%, 0) scale(1.15); }
+  50%      { transform: translate3d(5%, -4%, 0) scale(1.32); }
+}
+
+/* Diagonal glaze crossing the card, then a long pause before it returns. */
+@keyframes now-glaze {
+  0%        { transform: translateX(-180%) skewX(-18deg); }
+  55%, 100% { transform: translateX(420%) skewX(-18deg); }
+}
+
+.now-card-surface {
+  background-size: 220% 220%;
+  animation: now-ember-shift 14s ease-in-out infinite;
+}
+.now-card-wave  { animation: now-ember-wave 11s ease-in-out infinite; }
+.now-card-glaze { animation: now-glaze 7.5s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .now-card-surface,
+  .now-card-wave,
+  .now-card-glaze { animation: none !important; }
+}
+
 /* ─── PentaCMD (SLM) landing — spectrum / language-model motion system ──── */
 
 /* Seamless horizontal marquee (track is duplicated). */

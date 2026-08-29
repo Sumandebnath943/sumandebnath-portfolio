@@ -125,13 +125,21 @@ export default function Announcement() {
   const loop = [...announcements, ...announcements];
 
   return (
-    <div className="w-full bg-[#050505] border-b border-white/[0.08] relative flex items-stretch overflow-hidden">
+    <div className="w-full bg-[#0A0A0C] border-t border-[#FF5500]/20 border-b border-white/[0.08] relative flex items-stretch overflow-hidden">
+      {/* Ember wash — the hero's own #FF5500 glow continued into the strip, so
+          the bar reads as part of the hero instead of a black seam under it.
+          Kept clear of both edge-fade zones so the fades stay colour-exact. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_200%_at_42%_50%,rgba(255,85,0,0.16)_0%,transparent_75%)]"
+      />
+
       {/* ── Fixed label ── */}
-      <div className="relative z-20 flex items-center gap-2 pl-4 pr-3 sm:pl-6 sm:pr-5 bg-[#050505] border-r border-white/[0.08] shrink-0">
-        <span className="flex items-center justify-center w-6 h-6 rounded-full bg-[#3fb950]/15 text-[#3fb950] shrink-0">
+      <div className="relative z-20 flex items-center gap-2 pl-4 pr-3 sm:pl-6 sm:pr-5 border-r border-white/[0.08] shrink-0">
+        <span className="flex items-center justify-center w-6 h-6 rounded-full bg-[#FF5500]/15 text-[#FF7A45] shrink-0">
           <Radio size={12} className="animate-pulse" />
         </span>
-        <span className="hidden sm:inline font-mono text-[10px] uppercase tracking-[0.2em] text-[#3fb950] font-semibold whitespace-nowrap">
+        <span className="hidden sm:inline font-mono text-[10px] uppercase tracking-[0.2em] text-[#FF7A45] font-semibold whitespace-nowrap">
           Live Feed
         </span>
       </div>
@@ -148,8 +156,8 @@ export default function Announcement() {
         </div>
 
         {/* edge fades */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-[#050505] to-transparent z-10" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-[#050505] to-transparent z-10" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-[#0A0A0C] to-transparent z-10" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-[#0A0A0C] to-transparent z-10" />
       </div>
     </div>
   );
