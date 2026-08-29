@@ -134,10 +134,22 @@ Each line is a follow-up message. Format: **subject — accent — on-screen tex
 > On-screen text: **EIGHT IN ELEVEN DAYS**
 
 **`empty-between-projects`**
-> A bare bulb wired to a hand crank on a workbench. While a hand turns the crank
-> the bulb is lit and the bench is visible; the hand has just let go, and the
-> unlit half of the same bench is drawn receding into dark. Accent `#8a5a1f` on
-> the lit filament only. On-screen text: **ONLY WHILE IT TURNS**
+> A hand turning a crank generator on a dark workbench, wired to a bare bulb that
+> is lit only while the crank turns. Warm light falls on the near bench; the rest
+> of the workshop recedes into black. On-screen text: **ONLY WHILE IT TURNS**
+
+> **⚠ This one is not in the §2 style and it was not an accident.** It is a dark
+> photographic render with a warm orange key light, not flat cream-and-ink
+> screen-print, so it is the only cover in the set that does not belong to the
+> one-hand-one-publication rule above. Ship it or restyle it — but **do not read
+> it as the new house style until §2 is actually rewritten**, or the next author
+> will split the set in half. The other twenty-six are still the standard.
+>
+> Two practical notes if it is redrawn: the type sits about 91% of the way across
+> the frame, which clears the article lede's 16:9 crop by roughly fifteen pixels
+> — inside the safe area, but only just, so pull it left. And the file converts to
+> **77 KB** rather than the set's 189 KB average, because a dark photograph has
+> almost none of the flat grain §5 says is expensive.
 
 ### Marketing & AI · accent `#1f5f6b` deep teal
 

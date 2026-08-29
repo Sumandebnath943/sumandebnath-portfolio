@@ -14,7 +14,16 @@ import type { Post } from "../types";
 
 const post: Post = {
   slug: "empty-between-projects",
-  title: "I only feel capable while something is being built",
+  // The first version of this headline was "I only feel capable while something
+  // is being built". It is the honest sentence and it is still the argument, but
+  // it is the wrong thing to put in a shop window: this notebook sits on a site
+  // whose other job is convincing a client or an employer, and a headline that
+  // volunteers a limit on the author's own capability works against that on every
+  // surface it appears — the index, the search result, the card somebody shares.
+  //
+  // The body keeps the admission, because that is where its value is. The
+  // headline states what the piece concludes instead of what it confesses.
+  title: "The empty week after a build is a cost, not a verdict",
   answer:
     "The low that arrives between builds is usually mistaken for boredom or burnout. For someone who came to building late and without training, it is closer to losing the evidence: the ability only feels real while something is being made, so an empty week reads as proof it was never there.",
   description:
@@ -53,6 +62,9 @@ const post: Post = {
   popularityScore: 87,
   tags: ["Career", "Process", "AI-Native"],
   readingMinutes: 8,
+  cover: "/notebook/empty-between-projects.webp",
+  coverAlt:
+    "A hand turning a crank generator on a dark workbench, wired to a bare bulb that is lit only while the crank is being turned.",
   facts: [
     { label: "Commits, 18 July – 11 August 2026", value: "6, spread over four days" },
     { label: "Commits, 12 – 28 August 2026", value: "183, over sixteen days" },
