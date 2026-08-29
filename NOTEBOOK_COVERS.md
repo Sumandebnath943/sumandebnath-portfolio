@@ -138,18 +138,27 @@ Each line is a follow-up message. Format: **subject — accent — on-screen tex
 > is lit only while the crank turns. Warm light falls on the near bench; the rest
 > of the workshop recedes into black. On-screen text: **ONLY WHILE IT TURNS**
 
-> **⚠ This one is not in the §2 style and it was not an accident.** It is a dark
-> photographic render with a warm orange key light, not flat cream-and-ink
-> screen-print, so it is the only cover in the set that does not belong to the
-> one-hand-one-publication rule above. Ship it or restyle it — but **do not read
-> it as the new house style until §2 is actually rewritten**, or the next author
-> will split the set in half. The other twenty-six are still the standard.
+> **⚠ The one cover outside the house style. Shipped as a deliberate exception,
+> decided by Suman on 29 August 2026.** It is a dark photographic render with a
+> warm orange key light — not flat cream-and-ink screen-print — so it is the only
+> image in the set that does not answer to the one-hand-one-publication rule in
+> §2. Three options were put: ship it as the exception, restyle it flat, or
+> rewrite §2 and migrate the other twenty-six. He took the first.
 >
-> Two practical notes if it is redrawn: the type sits about 91% of the way across
-> the frame, which clears the article lede's 16:9 crop by roughly fifteen pixels
-> — inside the safe area, but only just, so pull it left. And the file converts to
-> **77 KB** rather than the set's 189 KB average, because a dark photograph has
-> almost none of the flat grain §5 says is expensive.
+> **What that decision does and does not license.** It licenses this cover, and
+> nothing else. **§2 is still the house style; a new post gets a flat cream cover
+> unless somebody rewrites §2 on purpose.** One outlier in twenty-seven reads as
+> an exception. Two reads as a set that has quietly split in half, and at that
+> point there is no house style left to return to — which is the failure this
+> document exists to prevent. If a second one is ever wanted, that is the moment
+> to rewrite §2 properly rather than to grant a second exception.
+>
+> Two measurements taken while wiring it in, both useful if it is ever redrawn:
+> the type sits about **91% of the way across the frame**, clearing the article
+> lede's 16:9 crop by roughly fifteen pixels — inside the safe area, but only
+> just, so pull it left. And it converts to **77 KB** against the set's 189 KB
+> average, because a dark photograph carries almost none of the flat paper grain
+> §5 identifies as the expensive part of this style.
 
 ### Marketing & AI · accent `#1f5f6b` deep teal
 
@@ -379,6 +388,10 @@ generate all twenty-six before shipping any.
 Paste `§2`, take the accent for the post's category from `§3`, and write one line
 in the shape of `§4`: **a single concrete object or scene that carries the
 article's argument, plus four words at most.**
+
+> One cover in `§4` — `empty-between-projects` — is deliberately outside this
+> style and is marked there. It is an exception that was decided, not a
+> precedent. Follow `§2`.
 
 The test for the metaphor is whether somebody who has not read the post can guess
 what it is about. "A robot at a laptop" fails that test for every article here.

@@ -4,12 +4,13 @@ Where the project stands, what changed most recently, and what is worth doing
 next. For how the system is built read **PROJECT_BIBLE.md**; for how the site
 writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
-**Last updated:** 28 August 2026
-**Branch:** `main`, pushed through `23feac8`. Working tree clean.
-**Last session:** three sections rebuilt from measurements taken on the two reference sites — a scroll-reactive marquee band closing the homepage, an ASCII-portrait statement wall on `/profile`, and "05 / Operating Principles" rebuilt as a hover accordion (§1.19). All three were built twice; the first pass copied the arrangement and none of the behaviour. **Read §1.19 before touching any of them** — six of the eight things that mattered were invisible in a screenshot.
-**Session before:** two Google Search Console structured-data reports cleared — a critical `ProfilePage.mainEntity` type error on `/about` and `/profile`, an invalid `dateModified` on `/resume`, and five recommended Q&A fields on all four `QAPage` URLs (§1.18). JSON-LD only; nothing visible changed. **Click "Validate fix" in both reports after the next deploy.**
+**Last updated:** 29 August 2026
+**Branch:** `main`, pushed through `23feac8`; **`403f9a2` and `bf12586` are committed locally and not pushed.** Working tree clean.
+**Last session:** a twenty-seventh notebook article — the flat stretch between builds, evidenced off this repository's own commit log — scored to the top of the editor's ranking, and the first cover deliberately outside the §2 house style (§1.20). **Read §1.20 before adding a post**: it records why the headline was rewritten, and why the front page's "Editor's selection" tile does not show the highest-scoring article.
+**Session before:** three sections rebuilt from measurements taken on the two reference sites — a scroll-reactive marquee band closing the homepage, an ASCII-portrait statement wall on `/profile`, and "05 / Operating Principles" rebuilt as a hover accordion (§1.19). All three were built twice; the first pass copied the arrangement and none of the behaviour. **Read §1.19 before touching any of them** — six of the eight things that mattered were invisible in a screenshot.
+**Session before that:** two Google Search Console structured-data reports cleared — a critical `ProfilePage.mainEntity` type error on `/about` and `/profile`, an invalid `dateModified` on `/resume`, and five recommended Q&A fields on all four `QAPage` URLs (§1.18). JSON-LD only; nothing visible changed. **Click "Validate fix" in both reports after the next deploy.**
 **Next up:** **run `scripts/indexnow.mjs` once after the next deploy** — Bing Webmaster turns out to be verified (§1.16), which was the blocker recorded in §1.10. Indexing beats every remaining scorecard point. Then **click "Validate fix" in both Search Console reports** (§1.18). After that, the homepage structure weakness in §3 is the oldest open item — note that §1.19 added a fourteenth section to `/` without addressing it.
-**Session before that:** four pieces of work, 25–26 Aug. Agentic readiness against an external audit, which found the identity JSON-LD was invisible without JavaScript — §1.8. Then **twenty-one notebook articles** in six batches, three new categories and a writing guide — §1.9. Then the target query set, the entity rework, and a measurement that reordered the priorities — §1.10. Then the notebook rebuilt as a publication — §1.11.
+**Earlier:** four pieces of work, 25–26 Aug. Agentic readiness against an external audit, which found the identity JSON-LD was invisible without JavaScript — §1.8. Then **twenty-one notebook articles** in six batches, three new categories and a writing guide — §1.9. Then the target query set, the entity rework, and a measurement that reordered the priorities — §1.10. Then the notebook rebuilt as a publication — §1.11.
 
 > Run `git log --oneline -15` before trusting this section — it is a snapshot,
 > and the commit log is the authority on what has happened since.
@@ -26,7 +27,7 @@ Recent history, newest first, gives an accurate picture of the trajectory:
 
 | Area | State |
 |---|---|
-| **Notebook** (`/notebook`) | **5 posts → 26**, 26 Aug (§1.9), rebuilt as a publication (§1.11), then **redesigned end to end** (§1.12): the reading page on one band with a five-module rail, colour driven by category accent, pull-quotes in all 26 posts and in-article promo cards in nine; the front page recomposed into five zones on a 3·4·3·4·2 rhythm. Six routes — the architecture now lives in **`PROJECT_BIBLE.md` §6.8**, which it did not before. **Read `BLOG_GUIDELINES.md` before touching a post and `NOTEBOOK_COVERS.md` before making an image.** One thing outstanding: the serif — see the end of §1.12. |
+| **Notebook** (`/notebook`) | **5 posts → 26**, 26 Aug (§1.9), **27** on 29 Aug (§1.20 — and one cover deliberately outside the house style), rebuilt as a publication (§1.11), then **redesigned end to end** (§1.12): the reading page on one band with a five-module rail, colour driven by category accent, pull-quotes in all 26 posts and in-article promo cards in nine; the front page recomposed into five zones on a 3·4·3·4·2 rhythm. Six routes — the architecture now lives in **`PROJECT_BIBLE.md` §6.8**, which it did not before. **Read `BLOG_GUIDELINES.md` before touching a post and `NOTEBOOK_COVERS.md` before making an image.** One thing outstanding: the serif — see the end of §1.12. |
 | **Machine-readable identity** | Audited 25 Aug against Vercel's Is Agentic, **79 → 83** (§1.8). The `Person` and `WebSite` JSON-LD were emitted through `next/script` and existed only once JavaScript had run — now literal tags on all 26 routes. House of Namus added as a real `Organization`. Markdown content negotiation was **refused on purpose**; the reasoning and the one condition for revisiting it are in `AEO_PLAYBOOK.md` §8. |
 | **Profile** (`/profile`) | Built 23 Aug over two passes, extended 24 Aug with four more sections (§1.6), and given a **statement wall** 28 Aug (§1.19) — a baked ASCII portrait, ~175vh, flowing on a capped canvas, with three lines rising off it. The only light page on the site — ruled cream paper, a 280vh pinned hero that zooms into a drawn monitor, a word reveal, and a conveyor street with a walking robot. Modelled on a reference the user supplied, then pulled back towards the site's own type, pills, accents and closing. **The figure and the dog still need redrawing** — §1.5. |
 | **Reference-built sections** | Three, all 28 Aug (§1.19): `SignatureStrip` (homepage marquee, scroll-reactive), `AsciiWall` (`/profile`), `AIPhilosophy` rebuilt as a hover accordion. Two carry per-frame loops — both gated to on-screen, both off under reduced motion. **Budgets and the two measurement traps are in `PAGE_OPTIMIZATION.md` §3.6 and §1.6.** |
@@ -1761,6 +1762,115 @@ the wall, -0.033em on the strip) and leading (1.0) is the closest thing already
 loaded — every *metric* matches, the letterforms do not. Do not add a font for
 this; §4 of the Bible and `PAGE_OPTIMIZATION.md` §3.4 both cost real work to
 settle.
+
+---
+
+### 1.20 A twenty-seventh article, and one cover outside the house style (29 Aug 2026)
+
+One post — `empty-between-projects`, in **Career** — plus the first cover that
+does not belong to the `NOTEBOOK_COVERS.md` §2 style. Commits `403f9a2` and
+`bf12586`.
+
+The subject is the flat stretch between builds: the elation while something is
+being made, and the emptiness when there is nothing left to add. The two
+neighbouring posts already own the adjacent ground — `finishing-is-not-building`
+is why the projects die, `the-cost-of-building-alone` is the absence of
+disagreement — so this one had to claim different territory, and does: the low is
+capability going unproved. With no degree, no engineer job title and no team to
+vouch, the artefact is the only evidence the ability exists, and it has a shelf
+life. That also explains what the burnout framing cannot — why the low lands
+hardest **after** a good stretch rather than a bad one.
+
+**The evidence is this repository's own log, checked rather than recalled.** Six
+commits between 18 July and 11 August, spread over four days, longest gap eight
+days; 183 between 12 and 28 August, over sixteen days. Nothing else changed in
+between. `git log --date=short --pretty=%ad | sort | uniq -c` reproduces it.
+
+#### The headline was changed, and the reason generalises
+
+The first title was *"I only feel capable while something is being built"* — the
+honest sentence, and still the argument the body makes. His verdict was one word:
+self-destructive.
+
+He is right, and it is worth stating as a standing rule rather than a one-off
+correction. **The notebook is not a diary; it sits on a site whose other job is
+convincing a client or an employer.** A headline appears on the index, in the
+search result, and on whatever card gets shared — three surfaces where nobody has
+read the body yet. A title that volunteers a limit on the author's own capability
+works against the site everywhere it lands, however true it is inside the piece.
+
+Now *"The empty week after a build is a cost, not a verdict"*: the same claim
+stated as what the piece concludes rather than what it confesses. The body keeps
+every admission, because a reader who reaches it has opted in. The reasoning is
+in a comment above the `title` field so it does not get reverted later by
+somebody who thinks the first version was braver.
+
+#### Two things about the popularity score that are not obvious
+
+`popularityScore: 87` was chosen to sit one above `overflow-hidden-kills-position-sticky`
+at 86, which makes this `mostPopularPost()` and the head of the editor's ranking
+on `/notebook/all?sort=ranked`. The per-factor comment argues all five numbers
+rather than asserting the total, per `BLOG_GUIDELINES.md` §8.
+
+**But the front page's "Editor's selection" tile still shows the sticky article,
+and that is not a bug.** `magazine()` fills its zones in order and each marks
+what it consumed — `hero`, `picks`, `brief`, `row`, then `features`. This post is
+the newest, so `brief` takes it for the LATEST column before `features` ever
+looks at the score. The highest-scoring *unused* post is what reaches the tile.
+Anyone who wants a new post in the popularity slot has to either flag it
+`featured: true` (which moves it to the lead instead) or reorder the zones — do
+not "fix" it by inflating the score, which is already at the top of the ranking
+everywhere the ranking is actually rendered.
+
+#### The cover is a deliberate exception, not a new style
+
+Supplied as a finished image: a hand turning a crank generator on a dark
+workbench, a bare bulb lit only while the crank turns, **ONLY WHILE IT TURNS** set
+in the right third. It is photographic, dark, and lit warm orange — none of which
+is the flat cream-and-ink screen-print the other twenty-six share.
+
+Raised as a three-way decision (ship it, restyle it, or rewrite §2 and migrate the
+set) and **he chose to ship it as the exception.** That decision is recorded in
+`NOTEBOOK_COVERS.md` §4 beside the post, with the guardrail attached: one
+exception is survivable, a second one splits the set, and §2 is still the house
+style until somebody rewrites it on purpose.
+
+Two measurements from wiring it in, both useful later:
+
+- **77 KB**, against the set's 189 KB average. A dark photograph carries almost
+  none of the flat paper grain that `NOTEBOOK_COVERS.md` §5 identifies as the
+  expensive part of this style.
+- The type sits about **91% across the frame**, clearing the article lede's 16:9
+  crop by roughly fifteen pixels. Inside the safe area, but only just — verified
+  by looking at the rendered lede, not by trusting the arithmetic.
+- Running `scripts/build-notebook-covers.mjs` re-encoded all twenty-seven and the
+  other twenty-six came out **byte-identical**, so nothing extra entered history.
+  Check `git status public/notebook` after running it; the §5 warning about
+  permanent blobs is real.
+
+#### One editorial boundary, decided rather than judged
+
+The post uses the word *depression*, because he does, and it is qualified in the
+body as conversational rather than clinical. A boxed warning states where the
+article stops: a low that does not lift when the work restarts, or that is
+present while building too, is not what the piece describes and belongs to a
+doctor. `BLOG_GUIDELINES.md` §7 requires anything sensitive to be raised rather
+than resolved by judgement — it was raised, with the softer wording offered, and
+he kept it.
+
+#### Verified
+
+- `npx tsc --noEmit` and `npm run build` both clean; the route prerenders.
+- The post is in `/sitemap.xml`, `/notebook/rss.xml`, `/llms.txt` and
+  `/notebook/category/career` — all four checked by fetching them, not assumed
+  from the registry.
+- Rendered at `/notebook/empty-between-projects` with the cover loading through
+  `next/image`; first in the editor's ranking on `/notebook/all`.
+- `node scripts/build-route-dates.mjs` run.
+- The only console errors are the two `_vercel/insights` 404s, which do not exist
+  outside Vercel.
+
+**Not pushed.** Both commits are on local `main`.
 
 ---
 
