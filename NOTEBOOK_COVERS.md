@@ -133,6 +133,12 @@ Each line is a follow-up message. Format: **subject — accent — on-screen tex
 > Accent `#8a5a1f` on the two standing flags only.
 > On-screen text: **EIGHT IN ELEVEN DAYS**
 
+**`empty-between-projects`**
+> A bare bulb wired to a hand crank on a workbench. While a hand turns the crank
+> the bulb is lit and the bench is visible; the hand has just let go, and the
+> unlit half of the same bench is drawn receding into dark. Accent `#8a5a1f` on
+> the lit filament only. On-screen text: **ONLY WHILE IT TURNS**
+
 ### Marketing & AI · accent `#1f5f6b` deep teal
 
 **`cited-by-chatgpt-what-i-changed`**

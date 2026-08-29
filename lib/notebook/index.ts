@@ -41,6 +41,7 @@ import aiSkillsForAMarketingCv from "./posts/ai-skills-for-a-marketing-cv";
 import whatAiNativeActuallyMeans from "./posts/what-ai-native-actually-means";
 import shippingAProductInAWeekend from "./posts/shipping-a-product-in-a-weekend";
 import isAiGeneratedCodeSafeForProduction from "./posts/is-ai-generated-code-safe-for-production";
+import emptyBetweenProjects from "./posts/empty-between-projects";
 
 export type { Post, Block, PostFact, Category } from "./types";
 export {
@@ -79,6 +80,7 @@ const POSTS: Post[] = [
   whatAiNativeActuallyMeans,
   shippingAProductInAWeekend,
   isAiGeneratedCodeSafeForProduction,
+  emptyBetweenProjects,
 ];
 
 export const NOTEBOOK_PATH = "/notebook";
