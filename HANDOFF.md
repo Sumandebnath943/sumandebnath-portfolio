@@ -4,11 +4,18 @@ Where the project stands, what changed most recently, and what is worth doing
 next. For how the system is built read **PROJECT_BIBLE.md**; for how the site
 writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
-**Last updated:** 29 August 2026
+**Last updated:** 1 September 2026
 **Branch:** `main`, pushed through `95eb5ff`. Working tree clean.
-**Last session:** a twenty-seventh notebook article — the flat stretch between builds, evidenced off this repository's own commit log — scored to the top of the editor's ranking, and the first cover deliberately outside the §2 house style (§1.20). **Read §1.20 before adding a post**: it records why the headline was rewritten, and why the front page's "Editor's selection" tile does not show the highest-scoring article.
-**Session before:** three sections rebuilt from measurements taken on the two reference sites — a scroll-reactive marquee band closing the homepage, an ASCII-portrait statement wall on `/profile`, and "05 / Operating Principles" rebuilt as a hover accordion (§1.19). All three were built twice; the first pass copied the arrangement and none of the behaviour. **Read §1.19 before touching any of them** — six of the eight things that mattered were invisible in a screenshot.
-**Session before that:** two Google Search Console structured-data reports cleared — a critical `ProfilePage.mainEntity` type error on `/about` and `/profile`, an invalid `dateModified` on `/resume`, and five recommended Q&A fields on all four `QAPage` URLs (§1.18). JSON-LD only; nothing visible changed. **Click "Validate fix" in both reports after the next deploy.**
+**Last session:** the crawler alerts learned to check two things they had been
+asserting without evidence — whether the crawler is who its user agent claims
+(against the vendors' published IP ranges) and whether anything was actually
+served (§1.21). Prompted by two forged "ChatGPT-User" probes for `/.env.sample`
+and `/.git/HEAD`; **nothing was exposed** — both 404, and `.env*` has never been
+committed. Run **`node scripts/crawler-check.mjs`** after touching `proxy.ts`,
+`lib/crawler.ts` or `lib/crawler-verify.ts`.
+**Session before:** a twenty-seventh notebook article — the flat stretch between builds, evidenced off this repository's own commit log — scored to the top of the editor's ranking, and the first cover deliberately outside the §2 house style (§1.20). **Read §1.20 before adding a post**: it records why the headline was rewritten, and why the front page's "Editor's selection" tile does not show the highest-scoring article.
+**Session before that:** three sections rebuilt from measurements taken on the two reference sites — a scroll-reactive marquee band closing the homepage, an ASCII-portrait statement wall on `/profile`, and "05 / Operating Principles" rebuilt as a hover accordion (§1.19). All three were built twice; the first pass copied the arrangement and none of the behaviour. **Read §1.19 before touching any of them** — six of the eight things that mattered were invisible in a screenshot.
+**Earlier still:** two Google Search Console structured-data reports cleared — a critical `ProfilePage.mainEntity` type error on `/about` and `/profile`, an invalid `dateModified` on `/resume`, and five recommended Q&A fields on all four `QAPage` URLs (§1.18). JSON-LD only; nothing visible changed. **Click "Validate fix" in both reports after the next deploy.**
 **Next up:** **run `scripts/indexnow.mjs` once after the next deploy** — Bing Webmaster turns out to be verified (§1.16), which was the blocker recorded in §1.10. Indexing beats every remaining scorecard point. Then **click "Validate fix" in both Search Console reports** (§1.18). After that, the homepage structure weakness in §3 is the oldest open item — note that §1.19 added a fourteenth section to `/` without addressing it.
 **Earlier:** four pieces of work, 25–26 Aug. Agentic readiness against an external audit, which found the identity JSON-LD was invisible without JavaScript — §1.8. Then **twenty-one notebook articles** in six batches, three new categories and a writing guide — §1.9. Then the target query set, the entity rework, and a measurement that reordered the priorities — §1.10. Then the notebook rebuilt as a publication — §1.11.
 
@@ -34,7 +41,7 @@ Recent history, newest first, gives an accurate picture of the trajectory:
 | **Banking Co-pilot** (`/banking/rm-copilot`) | Built 22 Aug. New **Banking** group under Portfolio. Fully prerendered; 382 KB of WebP, one eager image. Done. |
 | **Hero lock** | Extended 22 Aug from the homepage to all ten product pages — `components/ui/HeroLock.tsx`. Done. |
 | **Admin dashboard** (`/desk-4f7a`) | Built 13–14 Aug across five phases. Live, password-gated, recording. |
-| **Visitor notifier** | Rebuilt 13–14 Aug: journey card, crawler and scanner handling, Postgres persistence. |
+| **Visitor notifier** | Rebuilt 13–14 Aug: journey card, crawler and scanner handling, Postgres persistence. **Crawler alerts now verify identity and outcome** — 1 Sep (§1.21): the claimed vendor is checked against its published IP ranges, and a request for a path that is not a route says so instead of claiming a page was fetched. Run `node scripts/crawler-check.mjs` after touching any of it. |
 | **Privacy** (`/privacy`) | Rewritten twice as the truth changed. Now states real retention periods. |
 | **Next.js** | Upgraded 16.2.6 → 16.3.0. Production audit clean. |
 | **MIGI Android App page** | Rebuilt 12 Aug for the V2 native app. Done. |
@@ -1871,6 +1878,86 @@ he kept it.
   outside Vercel.
 
 Pushed to `origin/main` on 29 August 2026, which is what triggers the deploy.
+
+---
+
+### 1.21 The crawler alerts learn to check identity and outcome (1 Sep 2026)
+
+Two alerts arrived reporting that **OpenAI · ChatGPT live fetch** had "fetched a
+page" — `/.env.sample` and `/.git/HEAD`. Both statements were wrong, in two
+different ways, and each was wrong because of something the notifier could not
+see rather than a bug in it.
+
+**Nothing was exposed.** Both paths 404. `.env*` is git-ignored and has never
+been committed (`git log --all -- '.env*'` is empty), Vercel serves build output
+and `public/`, not the repository directory, and the dashboard gate still
+answers 307 to login. That was verified against production before anything was
+changed, and none of it needed fixing.
+
+**What was wrong, and why:**
+
+1. **"Fetched a page" was asserted for a 404.** `proxy.ts` runs *before* routes
+   resolve — the Next docs are explicit that a proxy cannot observe the
+   downstream response — so a probe that got nothing and a genuine fetch of
+   `/resume` produced identical sentences. There is no way to read the real
+   status there, so the path is classified instead: `classifyPath()` in
+   `lib/crawler.ts` answers two separate questions, `known` (does this match a
+   real route) and `probe` (is this a recognised attack target).
+2. **The vendor label was taken from the user agent alone.** A UA is a string
+   the client picks, and "ChatGPT-User" is worth picking because it gets waved
+   past filters that stop `curl`. Both IPs were Cloudflare; all 204 prefixes
+   OpenAI publishes for that agent are Azure. `lib/crawler-verify.ts` now checks
+   the client IP against the vendor's own published list.
+
+**Why this is an AEO fix and not only a security one:** the crawler feed exists
+to show whether answer engines are actually reading the site. A forger inflates
+the single number the feed is for. Forged and probe rows now file as
+`bot_verdict = 'scanner'` rather than `'crawler'` — an existing value that
+`lib/db.ts` already counts as automated, so no migration and no dashboard change
+— which keeps the "who has read the site" figures honest.
+
+**The rule that makes "forged" trustworthy.** It is an accusation, so it is only
+ever made from a list that loaded *and* parsed. Network failure, empty array, no
+published list, missing IP — all return `unverified`, never `forged`. A wrong
+"verified" costs one missed scanner; a wrong "forged" teaches him to distrust
+the alerts, which costs the whole feature. `docs.claude.com/claudebot.json` is
+exactly that trap: it answers **200 with an HTML page**, so a parser that
+shrugged at non-JSON would brand every genuine Claude fetch a forgery. There is
+a guard for it.
+
+**Anthropic publishes no IP list** as of 1 Sep 2026 — `claudebot.json`,
+`claude-user.json` and `ips.json` are all 404 on `anthropic.com`. So Claude-User,
+Claude-SearchBot and ClaudeBot always report `unverified`. That is honest rather
+than a gap to paper over; if Anthropic ever publishes one it is a three-line
+change in `VENDORS`. OpenAI, Google, Microsoft and Perplexity are all checkable.
+
+**Two hand-maintained things, both now guarded.** `scripts/crawler-check.mjs`
+(91 assertions, run it after touching any of this) walks `app/` and fails if
+`STATIC_ROUTES` has drifted, because a stale list would make the notifier lie in
+the *opposite* direction — reporting a real page as a 404. It also pins the
+probe patterns against real slugs: the first draft matched `secrets` as a bare
+substring and flagged `/notebook/keeping-secrets-out-of-ai-built-apps` — a
+published article — as an attack. Every pattern is now segment-anchored, and
+`classifyPath` returns early for any path that resolves to a real route, so the
+worst a careless pattern can do is miss an attack rather than libel an article.
+
+Verified against a **production build** as §6 of `AGENTS.md` requires, with
+outbound `fetch` intercepted so no test alert reached the phone and no row
+reached Neon. The two real arrivals were replayed and now read:
+
+```
+🚨 Forged user agent — claims to be OpenAI · ChatGPT live fetch
+📄 /.env.sample — 404, no such route
+⚠️ Probe for: env file — API keys and database URLs
+❌ IP is in none of OpenAI's published ranges
+```
+
+Rollback point: tag `pre-crawler-verify` at `02a7c94`.
+
+**Known limit, not addressed on purpose:** dedupe is still per crawler·IP·path,
+so a scanner sweeping forty paths still produces forty messages. That is
+unchanged behaviour, not a regression, and collapsing it would be a judgement
+call about what he wants to see — raise it only if he says the scans are noisy.
 
 ---
 

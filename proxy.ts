@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { ADMIN_PATH, SESSION_COOKIE, authConfigured, internalKey, verifySession } from "@/lib/auth";
-import { identifyCrawler, isPageRequest } from "@/lib/crawler";
+import { classifyPath, identifyCrawler, isPageRequest } from "@/lib/crawler";
 
 // Two unrelated jobs, both of which have to happen before a page is served.
 //
@@ -69,6 +69,10 @@ function gateDashboard(request: NextRequest, pathname: string) {
 async function reportCrawler(request: NextRequest, pathname: string, ua: string, crawler: string) {
   try {
     const h = request.headers;
+    // Classified here rather than in the endpoint only because the pathname is
+    // already in hand; it is pure string work over a fixed list, and it runs
+    // for crawlers only, so the ordinary visitor path is untouched.
+    const { known, probe } = classifyPath(pathname);
     await fetch(new URL("/api/crawl", request.nextUrl.origin), {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-crawl-key": internalKey() },
@@ -76,6 +80,8 @@ async function reportCrawler(request: NextRequest, pathname: string, ua: string,
         crawler,
         ua,
         path: pathname,
+        known,
+        probe,
         ip: (h.get("x-forwarded-for") || "").split(",")[0].trim() || h.get("x-real-ip") || "",
         country: h.get("x-vercel-ip-country") || "",
         region: h.get("x-vercel-ip-country-region") || "",

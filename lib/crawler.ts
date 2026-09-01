@@ -133,3 +133,126 @@ export function isPageRequest(pathname: string): boolean {
   // Anything else with a file extension is an asset, not a page.
   return !/\.[a-z0-9]{2,5}$/i.test(pathname);
 }
+
+// ── Did anything actually get served? ────────────────────────────────────────
+//
+// The alert used to say "fetched a page" for every arrival, because that is all
+// the proxy could know. It runs *before* routes are resolved — that is the whole
+// point of the file, and the Next docs are explicit that a proxy cannot see the
+// downstream response — so a request for /.git/HEAD and a request for /resume
+// were reported in identical language. Two probes that got a 404 read exactly
+// like two successful fetches.
+//
+// So the path is classified here instead. Two independent questions, because
+// they fail in opposite directions and must not be collapsed:
+//
+//   known  — does this match the shape of a real route? Errs toward "yes". A
+//            mistyped notebook slug is reported as a page, which is a shrug.
+//            A real page reported as a 404 would be a lie, so the route list
+//            below is exact and the slug families are shapes, not lookups.
+//   probe  — is this a recognised attack target? Errs toward "no". Nothing on
+//            this site begins with a dot or mentions wp-admin, so a hit here
+//            is never ambiguous.
+//
+// Resolving real slugs would mean importing lib/notebook and lib/projects into
+// the proxy's bundle to answer a question worth one word in a Telegram message.
+// Shapes are the right trade.
+
+/** Every static public route. /desk-4f7a is absent on purpose — the proxy
+ *  branches on it long before this runs. Add a page, add it here.
+ *
+ *  Exported only so `scripts/crawler-check.mjs` can walk app/ and refuse to let
+ *  this drift; nothing at runtime reads it directly. */
+export const STATIC_ROUTES = new Set([
+  "/",
+  "/about",
+  "/agents/migi",
+  "/agents/pact-agent",
+  "/agents/pentashell",
+  "/apps/forget-anything",
+  "/apps/migi-app",
+  "/banking/rm-copilot",
+  "/contact",
+  "/faq",
+  "/fun-apps",
+  "/games/pixelville",
+  "/journey",
+  "/learnings",
+  "/llms/qdex-1.5b",
+  "/notebook",
+  "/notebook/all",
+  "/philosophy",
+  "/privacy",
+  "/profile",
+  "/projects",
+  "/projects/aegis-vault",
+  "/resume",
+  "/slms/pentacmd",
+  "/terms",
+  // Reached through isPageRequest's explicit allowance above.
+  "/llms.txt",
+  "/llms-full.txt",
+]);
+
+const SLUG = "[a-z0-9]+(?:-[a-z0-9]+)*";
+
+/** The dynamic families, as shapes. */
+const ROUTE_SHAPES = [
+  new RegExp(`^/notebook/${SLUG}$`),
+  new RegExp(`^/notebook/category/${SLUG}$`),
+  /^\/notebook\/page\/\d+$/,
+  new RegExp(`^/projects/${SLUG}$`),
+];
+
+// Recognised probe targets, each with what the scanner was hoping to find.
+//
+// ⚠ Every pattern is anchored to whole path segments, never a bare substring.
+// The first draft used /secrets/ unanchored and duly flagged
+// /notebook/keeping-secrets-out-of-ai-built-apps — a published article — as an
+// attack. An alert that cries wolf over his own writing is worse than no alert,
+// so if a pattern here cannot be segment-anchored it does not belong.
+const SEG = "(?:^|/)";
+const PROBES: [RegExp, string][] = [
+  [/^\/\.git(\/|$)/i, "git repository — source and history"],
+  [/^\/\.env(\.|\/|$)/i, "env file — API keys and database URLs"],
+  [/^\/\.(aws|ssh|npmrc|docker|htpasswd|svn|hg|vscode|idea)(\/|$)/i, "developer credentials"],
+  [new RegExp(`${SEG}(wp-admin|wp-login\\.php|wp-content|wp-includes|xmlrpc\\.php|wordpress)(/|$)`, "i"), "WordPress"],
+  [new RegExp(`${SEG}(phpmyadmin|phpinfo\\.php|eval-stdin\\.php|cgi-bin|vendor|phpunit)(/|$)`, "i"), "PHP tooling"],
+  [/^\/(administrator|admin|cpanel|webmail|manager)(\/|$)/i, "admin panel"],
+  [new RegExp(`${SEG}(backup|backups|dump|db|database)(/|$)|\\.(sql|bak|dump)$`, "i"), "database backup"],
+  [new RegExp(`${SEG}(config\\.json|credentials|secrets?)(/|$)|\\.(pem|key|p12|pfx)$|${SEG}id_rsa`, "i"), "secrets file"],
+  [new RegExp(`${SEG}(actuator|server-status|telescope|_profiler|debug)(/|$)`, "i"), "framework debug endpoint"],
+];
+
+export interface PathVerdict {
+  /** Matches a real route on this site, so something was genuinely served. */
+  known: boolean;
+  /** What the request was fishing for, or null if it is not a known probe. */
+  probe: string | null;
+}
+
+export function classifyPath(pathname: string): PathVerdict {
+  // /.well-known/ is the one legitimate dotted path — ai-catalog.json lives
+  // there — so it counts as a route rather than falling to the dot rule below.
+  const wellKnown = pathname.startsWith("/.well-known/");
+
+  const known =
+    wellKnown ||
+    STATIC_ROUTES.has(pathname) ||
+    STATIC_ROUTES.has(pathname.replace(/\/$/, "")) ||
+    ROUTE_SHAPES.some((re) => re.test(pathname));
+
+  // A path that resolves to a real route cannot be a probe, whatever it is
+  // called. This is the guard that makes the patterns below safe to extend: the
+  // worst a careless one can now do is miss an attack, not libel an article.
+  if (known) return { known, probe: null };
+
+  for (const [re, what] of PROBES) {
+    if (re.test(pathname)) return { known, probe: what };
+  }
+  // Any other dotted segment. Nothing this site serves looks like that and
+  // scanners try hundreds of them, so a catch-all beats a longer list.
+  if (/(^|\/)\.[^/]/.test(pathname)) return { known, probe: "hidden dotfile" };
+
+  return { known, probe: null };
+}

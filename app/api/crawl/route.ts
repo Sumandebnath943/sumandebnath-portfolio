@@ -2,6 +2,7 @@ import { after } from "next/server";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { internalKeyValid } from "@/lib/auth";
+import { verifyCrawler } from "@/lib/crawler-verify";
 import { dbConfigured, saveVisit } from "@/lib/db";
 
 // Crawler alerts. Called by proxy.ts when a page request arrives from something
@@ -53,6 +54,8 @@ export async function POST(request: NextRequest) {
     referer?: string;
     lat?: string;
     lng?: string;
+    known?: boolean;
+    probe?: string | null;
   } = {};
   try {
     b = await request.json();
@@ -69,25 +72,58 @@ export async function POST(request: NextRequest) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
 
+  const ua = (b.ua || "").slice(0, 400);
+  // Absent means "assume it was served". A deploy skew where the proxy has not
+  // caught up must never invent a 404 for a page that really rendered.
+  const served = b.known !== false;
+  const probe = typeof b.probe === "string" ? b.probe.slice(0, 80) : null;
+
   after(async () => {
     try {
       const place = [b.city, b.region, b.country].filter(Boolean).join(", ");
       const located = b.postal ? `${place} · ${b.postal}` : place || "Unknown location";
 
+      // Checked here, inside after(), so the crawler's own response has already
+      // gone out before any list is fetched.
+      const id = await verifyCrawler(ua, ip);
+
       if (token && chatId) {
+        // The headline is the honest summary of the two questions now answered:
+        // was it really them, and did they get anything.
+        const headline =
+          id.verdict === "forged"
+            ? `🚨 <b>Forged user agent</b> — claims to be ${esc(crawler)}`
+            : served
+              ? `🕷️ <b>${esc(crawler)}</b> fetched a page`
+              : `🕷️ <b>${esc(crawler)}</b> requested a page that does not exist`;
+
+        const identity =
+          id.verdict === "verified"
+            ? `✅ Verified — ${esc(id.detail)}`
+            : id.verdict === "forged"
+              ? `❌ ${esc(id.detail)}`
+              : `❔ Unverified — ${esc(id.detail)}`;
+
         const lines = [
-          `🕷️ <b>${esc(crawler)}</b> fetched a page`,
-          `📄 ${esc(path)}`,
+          headline,
+          served ? `📄 ${esc(path)}` : `📄 ${esc(path)} — <b>404</b>, no such route`,
+          probe ? `⚠️ Probe for: ${esc(probe)}` : "",
+          identity,
           `📍 ${esc(located)}`,
           b.asn ? `🏢 AS${esc(b.asn)}` : "",
           ip ? `🌐 <code>${esc(ip)}</code>` : "",
           b.referer ? `↩️ ${esc(b.referer.slice(0, 200))}` : "",
           b.tz ? `🕒 ${esc(b.tz)}` : "",
-          `🤖 <code>${esc((b.ua || "").slice(0, 300))}</code>`,
+          `🤖 <code>${esc(ua.slice(0, 300))}</code>`,
           "",
-          // Worth saying plainly: this is the shape of hit a link preview makes,
-          // which is what happens moments after a résumé link is shared.
-          `<i>No journey to follow — a crawler fetches once and leaves.</i>`,
+          probe || !served
+            ? // Said plainly so a scan never reads like a visit. Nothing was
+              // served, so there is nothing to be concerned about — the alert
+              // exists to show the wall held, not to raise an alarm.
+              `<i>Nothing was served — the path does not exist here.</i>`
+            : // The shape of hit a link preview makes, which is what happens
+              // moments after a résumé link is shared.
+              `<i>No journey to follow — a crawler fetches once and leaves.</i>`,
         ].filter(Boolean);
 
         await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -124,14 +160,28 @@ export async function POST(request: NextRequest) {
           asn: b.asn && /^\d+$/.test(b.asn) ? Number(b.asn) : null,
           network: b.asn ? `AS${b.asn}` : null,
           timezone: b.tz || null,
-          userAgent: (b.ua || "").slice(0, 400),
+          userAgent: ua,
           device: crawler,
           referrer: b.referer || null,
           source: crawler,
           // Its own verdict, so the dashboard can separate "a scraper pretending
           // to be a browser" from "a link preview that announced itself".
-          botVerdict: "crawler",
-          botReason: crawler,
+          //
+          // A forgery or a probe files as 'scanner' rather than 'crawler'. That
+          // is not a new vocabulary word — lib/db.ts already counts 'scanner'
+          // as automated and already knows to demote it to 'human' if the row
+          // ever shows interaction, so this slots in without a migration and
+          // without touching the dashboard. It also keeps the crawler figures
+          // honest: a forged ChatGPT-User no longer inflates the count of
+          // answer engines that have actually read the site.
+          botVerdict: id.verdict === "forged" || probe ? "scanner" : "crawler",
+          botReason: [
+            crawler,
+            id.verdict === "forged" ? `forged (${id.vendor})` : id.verdict,
+            probe ? `probe: ${probe}` : served ? "" : "404",
+          ]
+            .filter(Boolean)
+            .join(" · "),
           interacted: false,
           isBounce: true,
           lat: b.lat ? Number(b.lat) : null,
