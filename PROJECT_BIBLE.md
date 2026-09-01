@@ -129,11 +129,11 @@ architecture in §6.8; writing rules in `BLOG_GUIDELINES.md`.
 **API**
 - `app/api/track` — visitor notifier relay (dynamic)
 - `app/api/contact` — contact form
-- `app/api/crawl` — crawler probe
+- `app/api/crawl` — crawler alert: verifies the claimed identity, then messages and records
 - `app/api/cron/purge` — retention purge, daily at 03:20 UTC (`vercel.json`)
 - `pages/api/chat.js` — the AI assistant (Pages Router, deliberately)
 
-Adding a page means touching **five** wire-in points, not one — see §8.
+Adding a page means touching **eight** wire-in points, not one — see §8.
 
 ### 3.1 Global chrome — what `app/layout.tsx` mounts on every page
 
@@ -672,8 +672,8 @@ a wrong guess costs nothing — the next update corrects it.
 |---|---|---|
 | `human` / returning | ordinary network, human signals | arrival + card + report |
 | `unclear` | mixed signals — still treated as a person | arrival + card + report |
-| `scanner` | hosting network (Azure/AWS/GCP) **and no interaction yet** | **one** |
-| `crawler` | identified by user agent in `lib/crawler.ts` | **one**, silent |
+| `scanner` | hosting network (Azure/AWS/GCP) **and no interaction yet**, **or** a crawler whose user agent is forged or whose path is a probe | **one** |
+| `crawler` | identified by user agent in `lib/crawler.ts`, **and not caught lying** | **one**, silent |
 
 > **A hosting network alone proves nothing.** Link checkers run a genuine
 > headless Chrome on Azure — but so does a recruiter behind a corporate proxy,
@@ -692,6 +692,72 @@ a wrong guess costs nothing — the next update corrects it.
 That one decides whether a *beacon* deserves a visitor alert; this decides
 whether a *page request* deserves a crawler alert. Changing one must not
 quietly alter the other.
+
+#### Crawler alerts assert two things they must be able to prove
+
+A crawler alert makes two claims — *who* arrived and *what they got*. Both were
+asserted without evidence until 1 Sep 2026, and both were wrong the day two
+forged `ChatGPT-User` requests probed `/.env.sample` and `/.git/HEAD`
+(`HANDOFF.md` §1.21). Neither was a bug in the notifier; each was something it
+could not see.
+
+**Who — `lib/crawler-verify.ts`.** A user agent is a string the client picks,
+and "ChatGPT-User" is worth picking because it is waved past filters that stop
+`curl`. `verifyCrawler(ua, ip)` checks the client IP against the vendor's own
+published prefix list and returns `verified`, `forged` or `unverified`.
+
+> **The one rule: `forged` is an accusation, so it is only ever made from a list
+> that loaded *and* parsed.** Network failure, a non-JSON body, an empty array,
+> a vendor that publishes nothing, a missing or unparseable IP — every one
+> returns `unverified`. A wrong `verified` costs one missed scanner; a wrong
+> `forged` teaches him to distrust the alerts, which costs the whole feature.
+> `docs.claude.com/claudebot.json` answers **200 with an HTML page**, and a
+> parser that shrugged at non-JSON would brand every real Claude fetch a
+> forgery. There is a guard; do not remove it.
+
+Lists are fetched at alert time and cached 12 h (failures 10 min), from
+`/api/crawl` inside `after()` — **never from `proxy.ts`**, which runs on every
+request and must not grow a network dependency. Committing a snapshot instead
+was rejected: a stale list starts calling real crawlers forgeries.
+
+**OpenAI, Google, Microsoft and Perplexity publish lists. Anthropic does not**
+(`claudebot.json`, `claude-user.json`, `ips.json` all 404 on `anthropic.com`,
+checked 1 Sep 2026), so every Claude agent reports `unverified`. That is honest,
+not a gap to paper over — without a published range there is no way to separate
+a real Claude fetch from a forged one. If Anthropic ever publishes one it is a
+three-line addition to `VENDORS`.
+
+**What they got — `classifyPath()` in `lib/crawler.ts`.** `proxy.ts` runs
+*before* routes resolve and cannot observe the downstream response, so the alert
+used to say "fetched a page" for a 404. The path is classified instead, into two
+independent answers that fail in opposite directions: `known` (matches a real
+route) errs toward yes, `probe` (a recognised attack target) errs toward no.
+
+> **Trap: `STATIC_ROUTES` in `lib/crawler.ts` is hand-written — add a page, add
+> it there.** Resolving real slugs would drag `lib/notebook` and `lib/projects`
+> into the proxy's bundle to answer a question worth one word in a Telegram
+> message, so the dynamic families are matched as *shapes*. A drifted list makes
+> the notifier lie in the opposite direction: reporting a real page as a 404.
+> `scripts/crawler-check.mjs` walks `app/` and fails if it drifts.
+
+> **Trap: probe patterns run against his own writing.** The first draft matched
+> `secrets` as a bare substring and flagged
+> `/notebook/keeping-secrets-out-of-ai-built-apps` — a published article — as an
+> attack. Every pattern is segment-anchored, and `classifyPath` returns early
+> for any path that resolves to a real route, so the worst a careless pattern
+> can do is miss an attack rather than libel an article. Keep both properties.
+
+**Run `node scripts/crawler-check.mjs` after touching `proxy.ts`,
+`lib/crawler.ts` or `lib/crawler-verify.ts`** — 91 assertions covering CIDR
+matching in both address families, the never-accuse rule, the probe patterns,
+and the `STATIC_ROUTES` drift guard. It reaches the network for the identity
+block and reports `SKIP` rather than failing when offline.
+
+> **This is an AEO fix as much as a security one.** The crawler feed exists to
+> show whether answer engines are actually reading the site (`AEO_PLAYBOOK.md`
+> §5.6). A forger inflates the single number the feed is for, which is why forged
+> and probe rows file as `bot_verdict = 'scanner'` — an existing value `lib/db.ts`
+> already counts as automated, so no migration and no dashboard change.
 
 **A second bot carries the human signal** — visit reports, hot actions and
 contact messages only, in its own chat, via `TELEGRAM_HUMAN_BOT_TOKEN` /
@@ -1039,7 +1105,8 @@ article is exactly what a non-JavaScript crawler cannot read.
 | `contact.ts`, `contact-intents.ts` | Contact routing |
 | `db.ts` | All Neon queries |
 | `auth.ts`, `admin-path.ts` | Dashboard auth |
-| `crawler.ts` | Crawler identification for `proxy.ts` |
+| `crawler.ts` | Crawler identification and path classification for `proxy.ts` |
+| `crawler-verify.ts` | Checks a claimed crawler identity against the vendor's published IPs |
 | `tour-steps.ts` | driver.js steps |
 | `useDeferredReveal.ts`, `utils.ts` | Shared helpers |
 
@@ -1098,7 +1165,7 @@ and one hard-coded ink fails contrast on at least one of them.
 
 ---
 
-## 8. Adding a product page — the seven wire-in points
+## 8. Adding a product page — the eight wire-in points
 
 Missing one of these is the most common defect in this repo. A new page needs:
 
@@ -1146,6 +1213,13 @@ Missing one of these is the most common defect in this repo. A new page needs:
    with self-contained answers. Read the rules at the top of that file first, and
    **do not duplicate a question that already exists in `lib/faqs.ts`**. See
    `AEO_PLAYBOOK.md` §3.
+8. **`STATIC_ROUTES` in `lib/crawler.ts`** — one line, the route's path. Miss it
+   and the crawler notifier starts reporting the new page as *"requested a page
+   that does not exist — 404, no such route"* on every crawl, which is the
+   notifier lying in the one direction it was rebuilt to stop (§ the crawler
+   subsystem above). Nothing visible on the site breaks, so this fails silently.
+   **`node scripts/crawler-check.mjs` catches it** — it walks `app/` and refuses
+   to let the list drift. Run it; do not rely on remembering step 8.
 
 Also set page-level `metadata` with `alternates.canonical` and an `openGraph`
 image, and put screenshots under `public/<slug>/`.

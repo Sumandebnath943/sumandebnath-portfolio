@@ -668,6 +668,12 @@ purpose; pumping link equity into legal pages is wasted.
 Debnath", from multiple devices in temporary-chat mode, and the beacon confirms
 OpenAI agent arrivals. Claude, Gemini and Grok do not.
 
+> **The arrival half of that was unverified when it was written** — identity was
+> taken from the user agent, which anyone can set, and forged `ChatGPT-User`
+> requests have since been caught. The naming result is independent and stands;
+> the arrival counts should not be quoted as a figure. See "A crawler alert is
+> only evidence if the crawler was who it said" at the end of this section.
+
 That gap is not a crawlability problem — nothing on this site blocks any of
 them, and `proxy.ts` only logs crawlers, it never gates them. It is a question
 of **whose index each assistant answers from**:
@@ -701,6 +707,48 @@ Detection is now per-agent rather than per-company, because
 `ClaudeBot` (training), `Claude-SearchBot` (indexing) and `Claude-User` (live
 fetch) mean three completely different things and collapsing them to "Anthropic"
 throws away the only information the alert carries.
+
+### A crawler alert is only evidence if the crawler was who it said (1 Sep 2026)
+
+**Read this before citing arrival counts as evidence of anything.**
+
+Detection above is by user agent, and a user agent is a string the client picks.
+"ChatGPT-User" costs nothing to type and is worth typing, because a UA that
+reads like a well-behaved answer engine is waved past filters that stop `curl`.
+On 1 Sep 2026 two requests carrying OpenAI's exact `ChatGPT-User` string probed
+`/.env.sample` and `/.git/HEAD` from Cloudflare IPs, while every prefix OpenAI
+publishes for that agent is Azure. Both were logged as OpenAI arrivals.
+
+`lib/crawler-verify.ts` now checks the client IP against the vendor's own
+published prefix list before the alert is written, and forged or probing rows
+file as `bot_verdict = 'scanner'` rather than `'crawler'`.
+
+> **This matters here more than it does in the notifier.** §5.6 reasons from
+> "the beacon confirms OpenAI agent arrivals". If some fraction of those
+> arrivals were forgeries, that sentence was measuring scanners. The conclusion
+> still holds — ChatGPT names Suman, which is independent evidence the loop is
+> closed — but **arrival counts logged before 1 Sep 2026 are unverified and
+> should not be quoted as a figure.** From that date, `verified` in the alert
+> means the IP was checked; `unverified` means it could not be.
+
+| Vendor | Publishes a checkable IP list |
+|---|---|
+| OpenAI | Yes — `gptbot`, `searchbot`, `chatgpt-user` |
+| Google | Yes — Googlebot, special crawlers, user-triggered fetchers |
+| Microsoft / Bing | Yes |
+| Perplexity | Yes — bot and user |
+| **Anthropic** | **No** — every Claude agent reports `unverified` |
+
+Anthropic publishing nothing is worth knowing for a second reason: Claude's
+visibility is already the weakest of the five (§5.6, and §6.1), and it is also
+the one arrival this site can never confirm. Do not read `unverified` on a
+Claude row as suspicion — it is the only answer available.
+
+> **The rule that makes the verdict trustworthy: `forged` is only ever asserted
+> from a list that loaded and parsed.** Every failure returns `unverified`. A
+> wrong `verified` costs one missed scanner; a wrong `forged` would poison the
+> evidence this playbook reasons from. `PROJECT_BIBLE.md` has the mechanism and
+> the traps; `HANDOFF.md` §1.21 has the session.
 
 ### The push channel
 
