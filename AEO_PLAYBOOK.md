@@ -473,11 +473,14 @@ Three things this pattern requires, and nothing enforces any of them:
 - **Copy the `@id` from the live page; never compose it.** `/#software` vs
   `#software`, http vs https, a trailing slash — a near-miss is two nodes again,
   and the markup validates either way, so it fails silently.
-- **Diff the properties first.** A merged node carries the *union* of both
-  sides' statements, so a difference that was harmless while they were separate
-  nodes becomes a contradiction. IMPRINT was `ProductivityApplication` here and
-  `LifestyleApplication` there; `featureList` still differs, and that one is
-  open.
+- **Diff the properties first, and separate a *contradiction* from a mere
+  *difference*.** A merged node carries the union of both sides' statements.
+  IMPRINT was `ProductivityApplication` here and `LifestyleApplication` there —
+  one slot, two answers, a real contradiction, and it was aligned to the live
+  value. Its `featureList` differs too — eight here, six there — but a feature
+  list is additive, so the union is simply the longer list. **Ask before
+  editing either way**: Suman confirmed on 5 Sep that both extra features are
+  real, so nothing was trimmed (`HANDOFF.md` §1.22).
 - **Only set it when the product's own site actually publishes the node.**
   Pointing an `@id` at a domain that declares nothing is worse than the default:
   it hands the entity to a page that never claims it.

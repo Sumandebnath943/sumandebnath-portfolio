@@ -2015,22 +2015,30 @@ alt text). All five are fixed; `public/llms-full.txt` carried a sixth.
 > the live node's** — that is the check this pattern needs and nothing enforces
 > it.
 
-**Left alone deliberately**
+**Three things left alone — all three put to Suman on 5 Sep, all three answered**
 
-- **The `/projects` archive card and its `ItemList` node.** The list item is an
-  anonymous `SoftwareApplication` with no `@id`, so it competes with nothing;
-  giving it one would also assert the list's hardcoded
-  `applicationCategory: "BusinessApplication"` onto the merged entity, which is
-  the contradiction above in a new place.
-- **`capabilities` in `lib/projects.ts`** (which feeds `featureList` only —
-  nothing renders it). It lists eight; the live product's own `featureList`
-  lists six and does not include Human Circles or Identity Credential. Now that
-  the nodes merge, the portfolio is asserting two features the product does not
-  claim. **Raised with Suman; his call, not a silent edit.**
-- **The duplicate `SoftwareApplication` script.** `app/projects/[slug]/page.tsx`
-  and `DossierMeta` both emit it, so every dossier carries the node twice.
-  Identical `@id`s merge, so it is untidy rather than wrong — pre-existing, and
-  removing `DossierMeta`'s copy would touch all seven dossiers.
+- **`capabilities` in `lib/projects.ts` stays at eight. Confirmed, do not trim
+  it.** The field feeds `featureList` only; nothing renders it. It lists eight,
+  and the live product's own `featureList` lists six — no **Human Circles**, no
+  **Identity Credential**. Merging the nodes made that look like the portfolio
+  putting words in the product's mouth, so it was raised rather than edited.
+  **Suman confirmed both features are real** (5 Sep 2026). The lists differ
+  because IMPRINT's own is shorter, not because this one overclaims. The two
+  visible capability cards stay too. If anything moves, it is IMPRINT's list
+  growing — never this one shrinking.
+- **The `/projects` archive card and its `ItemList` node — refused, do not
+  re-propose.** The list item is an anonymous `SoftwareApplication` with no
+  `@id`, so it competes with nothing. Giving it the merged `@id` would also
+  assert the list's hardcoded `applicationCategory: "BusinessApplication"` onto
+  the entity — the contradiction above in a new place — so it would need a
+  per-project exception in a loop that has none. Offered with that trade-off;
+  **Suman chose to skip it.** Small gain, special-cased code.
+- **The duplicate `SoftwareApplication` script — deferred to §3 item 10.**
+  `app/projects/[slug]/page.tsx` and `DossierMeta` both emit it, so every
+  dossier carries the node twice. Identical `@id`s merge, so it is untidy
+  rather than wrong; pre-existing, and the fix touches all seven dossiers.
+  **Suman deferred it and asked for it to be written down** — §3 item 10 is
+  that reminder.
 
 Verified on the dev build: title 57 chars, one `@id`, `subjectOf` present,
 seven IMPRINT links on the dossier page, no horizontal overflow at 375px, and
@@ -2605,6 +2613,27 @@ opportunities, roughly in value order.
    fetching it" sequence would span two chats. The dashboard is unaffected —
    crawler rows still land in Postgres with `botVerdict = "crawler"`, so
    `/desk-4f7a` remains the single joined-up view.
+
+10. **Every dossier emits its `SoftwareApplication` JSON-LD twice.** Noticed
+    5 Sep 2026 while merging IMPRINT's entity (§1.22). `app/projects/[slug]/
+    page.tsx` builds the node and prints it; `components/sections/DossierMeta.tsx`
+    — mounted near the foot of each dossier — builds the same node from the same
+    function and prints it again. All seven dossiers carry it: IMPRINT, LEGATUS,
+    CITE, ROASmind, Geek Collectibles, EMBER, D-PE.ai.
+
+    **Not a bug.** Both copies are byte-identical and carry the same `@id`, so a
+    consumer merges them into one node. It costs a few hundred duplicated bytes
+    per page and nothing else. It has been this way since `DossierMeta` was
+    written.
+
+    **The fix** is to delete the `<script>` from `DossierMeta` and keep the
+    page's copy — `DossierMeta`'s real job is the "Open …" CTA. Two lines, but
+    it changes all seven pages at once, so it wants its own commit and a check
+    that each dossier still emits exactly one node afterwards.
+
+    **Suman was told and deferred it, 5 Sep 2026** — "not required right now".
+    This entry is the reminder he asked for. It is tidiness, not correctness;
+    do not bundle it into unrelated work, and do not re-raise it as a defect.
 
 ---
 
