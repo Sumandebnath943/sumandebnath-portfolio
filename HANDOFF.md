@@ -4,17 +4,24 @@ Where the project stands, what changed most recently, and what is worth doing
 next. For how the system is built read **PROJECT_BIBLE.md**; for how the site
 writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
-**Last updated:** 1 September 2026
-**Branch:** `main`, pushed through `95eb5ff`. Working tree clean.
-**Last session:** the crawler alerts learned to check two things they had been
+**Last updated:** 5 September 2026
+**Branch:** `main`, pushed through `473d1d8`. Working tree clean.
+**Last session:** IMPRINT's project entry now deep-links the product's own
+written layer — `/methodology`, `/research`, `/glossary`, `/faq` — instead of
+pointing at its homepage three times, and its `SoftwareApplication` `@id` was
+moved onto the product's own domain so the two graphs merge into one entity
+(§1.22). "Behavioral cloning" is gone from all six places it lived; it named
+something IMPRINT does not do. **Read the two block quotes in §1.22 before
+setting `entityId` on any other project.**
+**Session before:** the crawler alerts learned to check two things they had been
 asserting without evidence — whether the crawler is who its user agent claims
 (against the vendors' published IP ranges) and whether anything was actually
 served (§1.21). Prompted by two forged "ChatGPT-User" probes for `/.env.sample`
 and `/.git/HEAD`; **nothing was exposed** — both 404, and `.env*` has never been
 committed. Run **`node scripts/crawler-check.mjs`** after touching `proxy.ts`,
 `lib/crawler.ts` or `lib/crawler-verify.ts`.
-**Session before:** a twenty-seventh notebook article — the flat stretch between builds, evidenced off this repository's own commit log — scored to the top of the editor's ranking, and the first cover deliberately outside the §2 house style (§1.20). **Read §1.20 before adding a post**: it records why the headline was rewritten, and why the front page's "Editor's selection" tile does not show the highest-scoring article.
-**Session before that:** three sections rebuilt from measurements taken on the two reference sites — a scroll-reactive marquee band closing the homepage, an ASCII-portrait statement wall on `/profile`, and "05 / Operating Principles" rebuilt as a hover accordion (§1.19). All three were built twice; the first pass copied the arrangement and none of the behaviour. **Read §1.19 before touching any of them** — six of the eight things that mattered were invisible in a screenshot.
+**Session before that:** a twenty-seventh notebook article — the flat stretch between builds, evidenced off this repository's own commit log — scored to the top of the editor's ranking, and the first cover deliberately outside the §2 house style (§1.20). **Read §1.20 before adding a post**: it records why the headline was rewritten, and why the front page's "Editor's selection" tile does not show the highest-scoring article.
+**And before that:** three sections rebuilt from measurements taken on the two reference sites — a scroll-reactive marquee band closing the homepage, an ASCII-portrait statement wall on `/profile`, and "05 / Operating Principles" rebuilt as a hover accordion (§1.19). All three were built twice; the first pass copied the arrangement and none of the behaviour. **Read §1.19 before touching any of them** — six of the eight things that mattered were invisible in a screenshot.
 **Earlier still:** two Google Search Console structured-data reports cleared — a critical `ProfilePage.mainEntity` type error on `/about` and `/profile`, an invalid `dateModified` on `/resume`, and five recommended Q&A fields on all four `QAPage` URLs (§1.18). JSON-LD only; nothing visible changed. **Click "Validate fix" in both reports after the next deploy.**
 **Next up:** **run `scripts/indexnow.mjs` once after the next deploy** — Bing Webmaster turns out to be verified (§1.16), which was the blocker recorded in §1.10. Indexing beats every remaining scorecard point. Then **click "Validate fix" in both Search Console reports** (§1.18). After that, the homepage structure weakness in §3 is the oldest open item — note that §1.19 added a fourteenth section to `/` without addressing it.
 **Earlier:** four pieces of work, 25–26 Aug. Agentic readiness against an external audit, which found the identity JSON-LD was invisible without JavaScript — §1.8. Then **twenty-one notebook articles** in six batches, three new categories and a writing guide — §1.9. Then the target query set, the entity rework, and a measurement that reordered the priorities — §1.10. Then the notebook rebuilt as a publication — §1.11.
@@ -1958,6 +1965,78 @@ Rollback point: tag `pre-crawler-verify` at `02a7c94`.
 so a scanner sweeping forty paths still produces forty messages. That is
 unchanged behaviour, not a regression, and collapsing it would be a judgement
 call about what he wants to see — raise it only if he says the scans are noisy.
+
+---
+
+### 1.22 IMPRINT deep-linked, and its entity merged with the product's own (5 Sep 2026)
+
+IMPRINT has published a written layer — `/methodology`, `/research`,
+`/glossary`, `/faq` — and every IMPRINT link on this site pointed at the product
+homepage. A second homepage link corroborates nothing; a deep link to a specific
+technical page does, which is the off-site half of `AEO_PLAYBOOK.md` §2.
+
+Checked against the live pages on 5 Sep before anything was written, not assumed
+from memory. All four exist; `/faq` really does carry thirty questions and
+`/glossary` fifteen terms, seven from the literature and eight IMPRINT defines.
+
+**What changed**
+
+| Surface | Change |
+|---|---|
+| `/projects/imprint` header | A second pill, "Read the Drift Score method", beside "Visit the live product". Generic — `secondaryLink` on `ProjectMeta`, so any project can carry one |
+| `/projects/imprint` dossier | A new **"The Written Layer"** block between the capabilities grid and the closing statement. Four link cards, methodology featured across the full row. Built from the capabilities card's own classes, so it introduces no new visual system |
+| Homepage deck card | `links[0]` now points at `/methodology`, labelled "Drift Score Method". The deck renders **one** product link and nothing else, so it spends it on the method; the homepage is still one hop away via "Full Dossier" |
+| Positioning, all three copies | "Behavioral cloning & identity preservation." → **"Identity preservation, by measuring cognitive drift."** |
+| `metaTitle` | Added: `IMPRINT — The identity preservation engine`. The composed title was 69 characters before this session and 77 after the longer positioning; it is 57 now |
+| JSON-LD | `@id` moved to `https://imprint.houseofnamus.com/#software` — the id the product's own graph publishes — plus `subjectOf` → the live `/methodology#article` |
+
+**"Behavioral cloning" was the real problem, not the links.** It named
+something IMPRINT does not do — it measures a person against their *own*
+recorded baseline, it clones nobody — and it was the first thing a reader met,
+in the `<title>`. The same string lived in **three** files
+(`lib/projects.ts`, `lib/archive-projects.ts`,
+`components/sections/Projects.tsx`) and two more phrasings of it sat in the
+dossier ("The Mirror — AI behavioral cloning reflection", and the screenshot's
+alt text). All five are fixed; `public/llms-full.txt` carried a sixth.
+
+> **Two `@id`s for one product is two entities, and the merge is exact or it is
+> nothing.** `entityId` on `ProjectMeta` overrides the default
+> `${SITE_URL}/projects/<slug>#software`. It is set for IMPRINT only, and it was
+> **copied from the live page's JSON-LD, not composed** — a trailing slash or
+> `/#software` vs `#software` is two nodes again, and the markup validates
+> either way, so it fails silently. Same reasoning as anchoring the Organization
+> node on `houseofnamus.com` (`AEO_PLAYBOOK.md` §3.6): the product's own domain
+> owns the product's identity; this portfolio describes it.
+
+> **A merged node carries the union of both sides' statements, so a
+> contradiction becomes a real one.** IMPRINT was `ProductivityApplication`
+> here and `LifestyleApplication` on its own site. Aligned to the live value.
+> **Before setting `entityId` on any other project, diff its properties against
+> the live node's** — that is the check this pattern needs and nothing enforces
+> it.
+
+**Left alone deliberately**
+
+- **The `/projects` archive card and its `ItemList` node.** The list item is an
+  anonymous `SoftwareApplication` with no `@id`, so it competes with nothing;
+  giving it one would also assert the list's hardcoded
+  `applicationCategory: "BusinessApplication"` onto the merged entity, which is
+  the contradiction above in a new place.
+- **`capabilities` in `lib/projects.ts`** (which feeds `featureList` only —
+  nothing renders it). It lists eight; the live product's own `featureList`
+  lists six and does not include Human Circles or Identity Credential. Now that
+  the nodes merge, the portfolio is asserting two features the product does not
+  claim. **Raised with Suman; his call, not a silent edit.**
+- **The duplicate `SoftwareApplication` script.** `app/projects/[slug]/page.tsx`
+  and `DossierMeta` both emit it, so every dossier carries the node twice.
+  Identical `@id`s merge, so it is untidy rather than wrong — pre-existing, and
+  removing `DossierMeta`'s copy would touch all seven dossiers.
+
+Verified on the dev build: title 57 chars, one `@id`, `subjectOf` present,
+seven IMPRINT links on the dossier page, no horizontal overflow at 375px, and
+the new cards measured by computed style at **6.53 / 20.37 / 5.62** — all AA.
+The deck card's content height is 505px at 375px, mid-pack against Migi's 545,
+so nothing is clipped by the fixed 660 card. `npm run build` clean.
 
 ---
 

@@ -39,9 +39,46 @@ export interface ProjectMeta {
   description: string;
   category: string;
   url: string | null;
+  /**
+   * A second header CTA beside "Visit the live product". Optional.
+   *
+   * Use it when the product publishes a specific page worth linking on its own
+   * — a published method, a spec — rather than another route to the homepage.
+   * A deep link to a technical page corroborates the claim; a second homepage
+   * link corroborates nothing. Keep the label short: both pills share one
+   * `flex-wrap` row and a long one pushes the second to its own line.
+   */
+  secondaryLink?: { label: string; href: string };
   status: ProjectStatus;
   applicationCategory: string;
   capabilities: string[];
+  /**
+   * Overrides the `@id` of this project's `SoftwareApplication` node. Optional.
+   *
+   * The default anchors the node on this domain, which is right for a project
+   * that exists only as a dossier here. When the product runs on its own domain
+   * **and publishes its own `SoftwareApplication`**, that domain owns the
+   * entity — the same reasoning that anchors the Organization node on
+   * `houseofnamus.com` rather than here (AEO_PLAYBOOK §3.6). Set this to the
+   * *exact* `@id` the product's own graph publishes and the two graphs merge
+   * into one entity instead of competing as two.
+   *
+   * Copy it from the live page, do not compose it: a near-miss (`/#software`
+   * vs `#software`, http vs https, a trailing slash) is two nodes again, and it
+   * fails silently — the markup validates either way.
+   *
+   * Because a merged node carries the union of both sides' statements, anything
+   * set here must not *contradict* the live node. `applicationCategory` is the
+   * one that bit: IMPRINT was `ProductivityApplication` here and
+   * `LifestyleApplication` there.
+   */
+  entityId?: string;
+  /**
+   * `@id`s of documents *about* this product, published on its own domain.
+   * Optional. Same rule as `entityId` — copy each from the live page's own
+   * JSON-LD, never compose one.
+   */
+  subjectOf?: string[];
   primaryAccent: string;
 }
 
@@ -50,13 +87,30 @@ export const projects: ProjectMeta[] = [
     slug: "imprint",
     number: "01",
     name: "IMPRINT",
-    positioning: "Behavioral cloning & identity preservation.",
+    // "Behavioral cloning" until 5 Sep 2026, in all three copies of this string
+    // (here, lib/archive-projects.ts, components/sections/Projects.tsx). It
+    // named something the product does not do — IMPRINT measures a person
+    // against their own recorded baseline, it does not clone anyone's
+    // behaviour — and it was the first thing a reader met, in the <title>.
+    positioning: "Identity preservation, by measuring cognitive drift.",
+    // The sentence above is 51 characters, which puts the composed title at 77
+    // once the root layout appends " · Suman Debnath". This is the opt-out
+    // documented on the field; the old positioning already overran at 69.
+    metaTitle: "IMPRINT — The identity preservation engine",
     description:
-      "IMPRINT is the identity preservation engine defending the human mind against AI dependency. It maps a baseline of human cognition, stress-tests it inside AI-mediated scenarios, and quantifies how much of an individual's judgment, taste, and instinct is still authentically theirs.",
+      "IMPRINT is the identity preservation engine. It records a cognitive baseline — how you actually think and write — then measures cognitive drift: how far your thinking has moved from that baseline as you delegate more work to AI. The Drift Score composites four weighted signals, and the method is published in full.",
     category: "Identity Preservation System",
     url: "https://imprint.houseofnamus.com",
+    secondaryLink: {
+      label: "Read the Drift Score method",
+      href: "https://imprint.houseofnamus.com/methodology",
+    },
     status: "Live",
-    applicationCategory: "ProductivityApplication",
+    // Matches the live node at imprint.houseofnamus.com/#software. See
+    // `entityId` — the two must not disagree, and this one used to.
+    applicationCategory: "LifestyleApplication",
+    entityId: "https://imprint.houseofnamus.com/#software",
+    subjectOf: ["https://imprint.houseofnamus.com/methodology#article"],
     capabilities: [
       "Baseline Imprint",
       "The Forge",
@@ -210,7 +264,12 @@ export function softwareApplicationJsonLd(p: ProjectMeta) {
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "@id": `${SITE_URL}/projects/${p.slug}#software`,
+    // Anchored here by default; on the product's own domain when the product
+    // publishes its own node there. See `entityId` on ProjectMeta.
+    "@id": p.entityId ?? `${SITE_URL}/projects/${p.slug}#software`,
+    ...(p.subjectOf?.length
+      ? { subjectOf: p.subjectOf.map((id) => ({ "@id": id })) }
+      : {}),
     name: p.name,
     alternateName: p.positioning,
     description: p.description,

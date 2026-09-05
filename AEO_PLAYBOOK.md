@@ -457,6 +457,36 @@ Three things about it are deliberate:
 > the check is equally wrong: they are legitimate credential data. The honest
 > answer was to add a real Organization, and it cleared the check on its own.
 
+### 3.6a A product on its own domain owns its own `@id`
+
+The same rule as the Organization node above, applied to products (5 Sep 2026,
+IMPRINT — `HANDOFF.md` §1.22). `softwareApplicationJsonLd` anchors a project's
+`SoftwareApplication` at `${SITE_URL}/projects/<slug>#software`, which is right
+for a project that exists only as a dossier here. When the product runs on its
+own domain **and publishes its own `SoftwareApplication` node**, that domain
+owns the entity, and two `@id`s for one product is two competing entities.
+`entityId` on `ProjectMeta` overrides the default; `subjectOf` links the
+documents the product publishes about itself.
+
+Three things this pattern requires, and nothing enforces any of them:
+
+- **Copy the `@id` from the live page; never compose it.** `/#software` vs
+  `#software`, http vs https, a trailing slash — a near-miss is two nodes again,
+  and the markup validates either way, so it fails silently.
+- **Diff the properties first.** A merged node carries the *union* of both
+  sides' statements, so a difference that was harmless while they were separate
+  nodes becomes a contradiction. IMPRINT was `ProductivityApplication` here and
+  `LifestyleApplication` there; `featureList` still differs, and that one is
+  open.
+- **Only set it when the product's own site actually publishes the node.**
+  Pointing an `@id` at a domain that declares nothing is worse than the default:
+  it hands the entity to a page that never claims it.
+
+**Deep-link the product's technical pages, not its homepage.** A second link to
+a homepage the site already links twice corroborates nothing. A link to a
+specific, defensible page — a published method, a spec — is the on-site half of
+the off-site work in §2, and it is the anchor text that carries the claim.
+
 ### 3.6b Skills live in five places, and they must agree
 
 Added 27 Aug 2026, when the homepage began claiming AEO, GEO and agentic

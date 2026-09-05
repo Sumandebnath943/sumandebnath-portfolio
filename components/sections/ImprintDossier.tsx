@@ -9,7 +9,9 @@ import DossierMeta from "./DossierMeta";
 const capabilities = [
   { title: "Baseline Imprint", desc: "Core identity mapping and preservation." },
   { title: "The Forge", desc: "Interactive scenario stress-testing." },
-  { title: "The Mirror", desc: "AI behavioral cloning reflection." },
+  // Was "AI behavioral cloning reflection." The product's own feature list
+  // calls this "Socratic reflection (The Mirror)"; nothing here clones anyone.
+  { title: "The Mirror", desc: "Socratic reflection on your own thinking." },
   { title: "Drift Score", desc: "Quantified measurement of dependency." },
   { title: "Skill Vault", desc: "Cryptographic proof of human capability." },
   { title: "Calibration Sessions", desc: "Guided cognitive reclamation." },
@@ -27,6 +29,45 @@ const capabilities = [
  * still reads as random, but it is the same on both sides, needs no effect,
  * and costs nothing per render.
  */
+// ── THE WRITTEN LAYER ──
+//
+// Deep links into IMPRINT's own published documentation, added 5 Sep 2026.
+// Every other IMPRINT link on this site pointed at the product homepage, and a
+// second homepage link corroborates nothing — a specific technical page does.
+// The order is deliberate: the methodology is the one defensible contribution
+// that exists nowhere else, so it leads and takes the full row.
+//
+// Titles are the live pages' own <h1>s and the counts are theirs, checked
+// against the live site on 5 Sep 2026. If one of these pages is rewritten,
+// re-check the numbers here rather than assuming they held.
+const writtenLayer = [
+  {
+    href: "https://imprint.houseofnamus.com/methodology",
+    kicker: "Methodology",
+    title: "How the Drift Score is calculated",
+    desc: "Four weighted signals — 40 / 25 / 20 / 15 — the exact formula for each, the fallback values, the score bands, and a limitations section as long as the explanation.",
+    featured: true,
+  },
+  {
+    href: "https://imprint.houseofnamus.com/research",
+    kicker: "Research",
+    title: "The research on AI and cognition",
+    desc: "A curated index of the work on cognitive offloading and AI reliance — each study summarised with what it does not establish.",
+  },
+  {
+    href: "https://imprint.houseofnamus.com/glossary",
+    kicker: "Glossary",
+    title: "The cognitive drift glossary",
+    desc: "Fifteen defined terms: seven from the literature, eight IMPRINT defines — Echo Drift, Drift Score, cognitive baseline and the rest.",
+  },
+  {
+    href: "https://imprint.houseofnamus.com/faq",
+    kicker: "FAQ",
+    title: "Thirty answered questions",
+    desc: "What drift is, how it is scored, what the research does and does not show, what data is kept, and what it costs.",
+  },
+];
+
 const PARTICLES = Array.from({ length: 15 }, (_, i) => {
   // Fractional parts of an irrational multiple — evenly spread, no clustering.
   const r = (n: number) => ((i + 1) * n) % 1;
@@ -213,7 +254,7 @@ export default function ImprintDossier() {
                 <div className="relative w-full">
                   <Image 
                     src="/screenshots/imprint.png"
-                    alt="IMPRINT product interface — drift score dashboard, behavioral cloning sessions, and identity credential vault"
+                    alt="IMPRINT product interface — drift score dashboard, calibration sessions, and identity credential vault"
                     width={1920}
                     height={4000}
                     className="w-full h-auto"
@@ -260,6 +301,60 @@ export default function ImprintDossier() {
                   {cap.desc}
                 </p>
               </m.div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── THE WRITTEN LAYER ── */}
+        <div className="mb-16">
+          <m.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+            className="mb-12"
+          >
+            <p className="font-mono text-[10px] text-[#86868B] uppercase tracking-[0.3em] mb-4">
+              Published in Full
+            </p>
+            <h3 className="font-serif italic text-3xl md:text-4xl text-white">
+              The Written Layer
+            </h3>
+            <p className="font-manrope text-sm md:text-base text-[#86868B] leading-relaxed max-w-2xl mt-4">
+              IMPRINT publishes its own method, its sources and its limits. These
+              are the pages, on the product&apos;s own domain.
+            </p>
+          </m.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {writtenLayer.map((doc, i) => (
+              <m.a
+                key={doc.href}
+                href={doc.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.7, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                className={`group block p-6 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:border-[#FF5A1F]/40 hover:bg-[#FF5A1F]/[0.02] transition-colors duration-500 ${
+                  doc.featured ? "md:col-span-3" : ""
+                }`}
+              >
+                <div className="w-8 h-[1px] bg-white/20 mb-6 group-hover:bg-[#FF5A1F]/60 transition-colors duration-500" />
+                <p className="font-mono text-[10px] text-[#FF5A1F] uppercase tracking-[0.3em] mb-3">
+                  {doc.kicker}
+                </p>
+                <h4 className="font-manrope font-medium text-white text-sm mb-2">
+                  {doc.title}
+                  <span className="inline-block ml-1.5 text-[#FF5A1F] transition-transform group-hover:translate-x-0.5">
+                    ↗
+                  </span>
+                </h4>
+                <p className="text-xs text-[#86868B] leading-relaxed max-w-2xl">
+                  {doc.desc}
+                </p>
+              </m.a>
             ))}
           </div>
         </div>

@@ -79,9 +79,11 @@ export const archiveProjects: ArchiveProject[] = [
   {
     slug: "imprint",
     name: "IMPRINT",
-    positioning: "Behavioral cloning & identity preservation.",
+    // Third copy of this string — lib/projects.ts and
+    // components/sections/Projects.tsx hold the other two. Keep them identical.
+    positioning: "Identity preservation, by measuring cognitive drift.",
     description:
-      "The identity preservation engine defending the human mind against AI dependency.",
+      "Records a cognitive baseline, then measures how far your thinking has moved from it as you delegate more work to AI.",
     type: "Identity Preservation System",
     status: "Live",
     stack: ["Next.js", "Claude", "Context Engineering", "Behavioral Models"],

@@ -249,13 +249,19 @@ const projects: ProjectData[] = [
     id: "imprint",
     number: "07",
     title: "IMPRINT",
-    positioning: "Behavioral cloning & identity preservation.",
+    // See lib/projects.ts — this string lives in three files and they must
+    // agree. "Behavioral cloning" named something the product does not do.
+    positioning: "Identity preservation, by measuring cognitive drift.",
     emotion: "A reckoning. A mirror held against AI dependency.",
     atmosphere: "Heavy, philosophical, cinematic.",
-    capabilities: ["Identity Analysis", "Behavioral Cloning", "Sentience Testing"],
+    capabilities: ["Cognitive Baseline", "Drift Score", "Skill Vault"],
     tools: ["Next.js", "OpenAI", "Framer Motion"],
     status: "Live",
-    links: [{ label: "Enter System", href: "https://imprint.houseofnamus.com", variant: "primary" }],
+    // A card renders `links[0]` and nothing else — the deck's CTA row has room
+    // for one product link beside "Full Dossier". So it spends that one link on
+    // the published method rather than on a third route to the homepage, which
+    // the dossier and the projects index both already carry.
+    links: [{ label: "Drift Score Method", href: "https://imprint.houseofnamus.com/methodology", variant: "primary" }],
     screenshots: [],
     theme: {
       primaryAccent: "#FF4500", // Molten ember orange

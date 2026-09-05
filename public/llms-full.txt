@@ -139,15 +139,21 @@ Brand & Marketing:
 ## FLAGSHIP PROJECTS
 
 ### PROJECT 01: IMPRINT
-Positioning: Behavioral cloning & identity preservation.
+Positioning: Identity preservation, by measuring cognitive drift.
 Category: Identity Preservation System
 Status: Live
 URL: https://imprint.houseofnamus.com
 Dossier: https://sumandebnath.houseofnamus.com/projects/imprint
+Methodology: https://imprint.houseofnamus.com/methodology
+Research index: https://imprint.houseofnamus.com/research
+Glossary: https://imprint.houseofnamus.com/glossary
+FAQ: https://imprint.houseofnamus.com/faq
 
-IMPRINT is the identity preservation engine defending the human mind against AI dependency. It maps a baseline of human cognition, stress-tests it inside AI-mediated scenarios, and quantifies how much of an individual's judgment, taste, and instinct is still authentically theirs.
+IMPRINT is the identity preservation engine. It records a cognitive baseline — how you actually think and write — then measures cognitive drift: how far your thinking has moved from that baseline as you delegate more work to AI.
 
-In a world where AI increasingly mediates how we think, communicate, and decide, IMPRINT exists to answer one question: how much of your thinking is still yours? The system establishes a cognitive baseline, then runs the user through structured AI-mediated scenarios designed to reveal where human instinct ends and AI dependency begins.
+In a world where AI increasingly mediates how we think, communicate, and decide, IMPRINT exists to answer one question: how much of your thinking is still yours? The system establishes a cognitive baseline, then measures the distance between that baseline and what a person produces once AI is doing part of the work.
+
+The scoring method is published in full at /methodology: the Drift Score composites four weighted signals — baseline divergence (40%), vault inactivity (25%), AI dependence (20%) and journal irregularity (15%) — with the exact formula for each, the fallback values, the score bands, and a limitations section as long as the explanation. The research it draws on is indexed at /research, each study summarised with what it does not establish; /glossary defines fifteen terms and /faq answers thirty questions.
 
 Core capabilities: Baseline Imprint, The Forge, The Mirror, Drift Score, Skill Vault, Calibration Sessions, Human Circles, Identity Credential.
 Technology: Next.js, Claude, Context Engineering, Behavioral Models.

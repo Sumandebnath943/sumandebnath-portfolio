@@ -135,16 +135,34 @@ export default async function ProjectPage({ params }: Props) {
             {project.description}
           </p>
 
-          {project.url && (
-            <a
-              href={project.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 mt-8 rounded-full border border-white/15 bg-white/[0.04] px-5 py-2.5 font-manrope text-[13px] font-medium text-white/85 transition-colors hover:border-white/30 hover:bg-white/[0.08]"
-            >
-              Visit the live product
-              <span className="transition-transform group-hover:translate-x-0.5">↗</span>
-            </a>
+          {(project.url || project.secondaryLink) && (
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              {project.url && (
+                <a
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-5 py-2.5 font-manrope text-[13px] font-medium text-white/85 transition-colors hover:border-white/30 hover:bg-white/[0.08]"
+                >
+                  Visit the live product
+                  <span className="transition-transform group-hover:translate-x-0.5">↗</span>
+                </a>
+              )}
+              {/* A deep link to a specific technical page the product publishes,
+                  not a second route to its homepage. See `secondaryLink`. */}
+              {project.secondaryLink && (
+                <a
+                  href={project.secondaryLink.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-2 rounded-full border px-5 py-2.5 font-manrope text-[13px] font-medium text-white/85 transition-colors hover:bg-white/[0.06] hover:text-white"
+                  style={{ borderColor: `${project.primaryAccent}59` }}
+                >
+                  {project.secondaryLink.label}
+                  <span className="transition-transform group-hover:translate-x-0.5">↗</span>
+                </a>
+              )}
+            </div>
           )}
         </header>
 
