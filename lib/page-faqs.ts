@@ -96,6 +96,30 @@ export const PAGE_FAQS: Record<string, PageFaq[]> = {
       q: "How do you keep a fleet of 46 autonomous agents from drifting?",
       a: "With an evaluation harness rather than supervision. MIGI runs over 500 automated eval checks, so a regression in any agent's behaviour is caught by a failing check instead of by someone noticing the output looks wrong. Human-approval gates sit in front of the actions that are expensive to undo.",
     },
+    // Added 7 Sep 2026. Both are pointed at agent and agentic-AI query shapes,
+    // which the first two answer only incidentally — "MIGI" and "fleet" match a
+    // reader who already knows the name, and nobody searching "multi-agent
+    // system" or "what does it cost to run AI agents" types either word.
+    //
+    // Deliberately page-scoped, not generic. The definitional questions — what
+    // an AI agent is, how one differs from an automation script — belong to the
+    // notebook article that owns that keyword. Answering them here as well would
+    // be the §4 collision this file's header warns about, with the two URLs
+    // competing against each other rather than against anybody else.
+    {
+      q: "What is MIGI MAS?",
+      a: "MIGI MAS is a multi-agent system built on top of the MIGI agent fleet. Rather than triggering one agent at a time, the operator hands it a goal in plain language: a supervisor agent plans the work, specialist worker agents research, draft and critique it, and existing fleet agents can be composed as tools inside a mission. It executes real actions only after human approval.",
+    },
+    {
+      // The cost question was here first and moved out on 7 Sep 2026, when
+      // /notebook/what-ai-agents-cost-to-run was published to own it with a
+      // measured figure and the architecture behind it. Two URLs answering
+      // "what does this cost" is the §4 collision, and the one with the numbers
+      // in it should win. This page keeps the third pillar instead, which is
+      // page-scoped and which nothing else answers.
+      q: "What is MIGI ECHO?",
+      a: "MIGI ECHO is the knowledge pillar of MIGI — a private retrieval-augmented generation (RAG) system built on the operator's own notes, documents, web pages and code repositories. It is asked questions by text or by voice, answers from that knowledge base rather than from general model training, cites where each answer came from, and reads the reply back aloud.",
+    },
   ],
 
   // ── Applied systems ──────────────────────────────────────────────────────

@@ -9,6 +9,7 @@ import RelatedPages from "@/components/ui/RelatedPages";
 import Contact from "@/components/sections/Contact";
 import PageFaq from "@/components/ui/PageFaq";
 import HeroLock from "@/components/ui/HeroLock";
+import { personRef } from "@/lib/schema";
 import { Reveal, StatCounter } from "@/components/penta/PentaWidgets";
 import { DashboardShowcase, ArchitectureFlow } from "@/components/migi/MigiVisuals";
 import MigiVideo from "@/components/migi/MigiVideo";
@@ -74,8 +75,15 @@ export const metadata: Metadata = {
   title: "Migi — 46 AI Agents in One Operator OS",
   description:
     "Migi grew from a fleet of 46 self-running AI agents into a three-pillar operator OS: MIGI (the fleet), MIGI MAS (a multi-agent system you hand a goal), and MIGI ECHO (a knowledge brain you talk to) — one secure control panel, three identities. Now with intelligent model routing (the right AI per job, a fallback for every agent), self-testing and self-healing, and independently security-audited + hardened. Built solo with Claude Code, on entirely free infrastructure.",
+  // The three head terms were missing and the near-misses did not cover them:
+  // "AI agent fleet" and "autonomous agents" do not lexically match somebody
+  // typing "AI agents" or "agentic AI". Three added, not fifteen —
+  // AEO_PLAYBOOK §8 records that no major engine has used this tag for ranking
+  // in over a decade, so this is the cheapest and least valuable line in the
+  // change. The work that matters is the FAQ answers and the featureList below.
   keywords: [
-    "Migi", "AI agent fleet", "multi-agent system", "MAS", "RAG knowledge brain", "autonomous agents",
+    "Migi", "AI agents", "agentic AI", "autonomous AI agents",
+    "AI agent fleet", "multi-agent system", "MAS", "RAG knowledge brain", "autonomous agents",
     "agent orchestration", "GitHub Actions agents", "Claude Code", "AI generalist", "personal AI automation",
     "Telegram bot agents", "Suman Debnath",
   ],
@@ -91,26 +99,61 @@ export const metadata: Metadata = {
 };
 
 /* ── Schema ─────────────────────────────────────────────────────────────── */
+//
+// Both nodes previously wrote their own `{ "@type": "Person", name: … }` with no
+// `@id`, which is the second-thinner-Suman-Debnath problem lib/schema.ts exists
+// to prevent — see AEO_PLAYBOOK §3.5. `personRef` carries the same two fields
+// plus the `@id` that merges them back into the layout's full Person.
+//
+// The `@id` on the application node is new too. MIGI runs on its own domain, but
+// that domain is private and is named nowhere on this site, so §3.6a's
+// "a product on its own domain owns its own @id" does not apply: this page is
+// the only public description of MIGI and is the correct anchor for the entity.
 const appLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
+  "@id": `${SITE}/agents/migi#software`,
   name: "Migi",
   applicationCategory: "BusinessApplication",
+  applicationSubCategory: "Autonomous AI agent orchestration",
   operatingSystem: "Cloud (GitHub Actions + Vercel)",
   description:
     "A personal three-pillar operator OS: MIGI, a fleet of 46 autonomous AI agents; MIGI MAS, a multi-agent system that plans and executes goals; and MIGI ECHO, a personal knowledge brain (RAG) you talk to. Orchestrated on GitHub Actions and commanded through one secure Next.js control panel.",
   url: `${SITE}/agents/migi`,
-  author: { "@type": "Person", name: "Suman Debnath", url: SITE },
+  // AEO_PLAYBOOK §3.3 — the specifics that get quoted are the ones held in a
+  // structure rather than in a sentence. Every line here restates something the
+  // page states visibly; nothing was added that the page does not already show.
+  featureList: [
+    "46 autonomous AI agents, each running as its own scheduled or event-driven GitHub Actions workflow",
+    "MIGI MAS — a multi-agent system that takes a goal in plain language, plans it with a supervisor agent and executes it with specialist workers",
+    "MIGI ECHO — a private retrieval-augmented (RAG) knowledge base, asked by text or voice, answering with citations",
+    "Intelligent model routing — a premium model on quality-critical work, free models on the routine, and an ordered fallback chain behind every agent",
+    "More than 500 automated evaluation checks guarding agent behaviour",
+    "Self-testing and self-healing agents that operate the fleet itself",
+    "A two-factor-authenticated control panel that switches between all three identities from one toggle",
+    "Two-way Telegram control over an event-driven webhook — trigger any agent, read any captured state",
+    "Human approval gates in front of every action that publishes or is expensive to undo",
+    "Independently security-audited and hardened",
+  ],
+  author: personRef,
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
 };
 const articleLd = {
   "@context": "https://schema.org",
   "@type": "TechArticle",
   headline: "Migi — a personal suite of 46 autonomous AI agents",
-  author: { "@type": "Person", name: "Suman Debnath" },
-  publisher: { "@type": "Person", name: "Suman Debnath" },
+  author: personRef,
+  publisher: personRef,
   description:
     "How one operator designed, built and now runs a 46 agent fleet and a secure control dashboard end to end with Claude Code, on free infrastructure.",
+  // What the article is about, as entities rather than as adjectives in the
+  // description. These are the two subjects the page is trying to be findable
+  // for and the description states neither in a form a parser can pick out.
+  about: [
+    { "@type": "Thing", name: "AI agents" },
+    { "@type": "Thing", name: "Multi-agent systems" },
+    { "@type": "Thing", name: "Agentic AI" },
+  ],
   mainEntityOfPage: `${SITE}/agents/migi`,
 };
 

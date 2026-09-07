@@ -297,6 +297,14 @@ const personJsonLd = {
     "Context engineering",
     "Agentic systems",
     "Agentic AI",
+    // Added 7 Sep 2026. "Agentic AI" and "Agentic systems" were here; the plain
+    // term people actually type was not, and neither was the multi-agent one —
+    // so the highest-value of the five surfaces in AEO_PLAYBOOK §3.6b did not
+    // claim the subject MIGI is the site's largest demonstration of.
+    // Acronym and expansion in one entry, per rule 1 of that section.
+    "AI agents",
+    "Multi-agent systems (MAS)",
+    "AI agent orchestration",
     "LLM orchestration",
     "Multi-model AI orchestration",
     "AI workflows",

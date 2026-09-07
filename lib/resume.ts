@@ -94,6 +94,12 @@ export const coreSkills: SkillGroup[] = [
       "AI Product Development",
       "Prompt Engineering",
       "Agentic AI",
+      // Added 7 Sep 2026 alongside `knowsAbout` in app/layout.tsx. This array
+      // also feeds the skills block in lib/systemPrompt.ts, so without these the
+      // site's own assistant could describe MIGI but could not say that building
+      // multi-agent systems is something Suman does.
+      "AI Agents & Agent Orchestration",
+      "Multi-Agent Systems (MAS)",
       "RAG Systems",
       "AI Workflow Design",
       "Multi-Team Leadership",
