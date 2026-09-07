@@ -29,7 +29,7 @@ committed. Run **`node scripts/crawler-check.mjs`** after touching `proxy.ts`,
 `lib/crawler.ts` or `lib/crawler-verify.ts`.
 **And before that:** a twenty-seventh notebook article — the flat stretch between builds, evidenced off this repository's own commit log — scored to the top of the editor's ranking, and the first cover deliberately outside the §2 house style (§1.20). **Read §1.20 before adding a post**: it records why the headline was rewritten, and why the front page's "Editor's selection" tile does not show the highest-scoring article.
 **Earlier still:** three sections rebuilt from measurements taken on the two reference sites — a scroll-reactive marquee band closing the homepage, an ASCII-portrait statement wall on `/profile`, and "05 / Operating Principles" rebuilt as a hover accordion (§1.19). All three were built twice; the first pass copied the arrangement and none of the behaviour. **Read §1.19 before touching any of them** — six of the eight things that mattered were invisible in a screenshot.
-**Next up:** the two items below have been waiting on "the next deploy" since 27 Aug. **That deploy has now happened** — `adc1377`, 7 Sep — so both are unblocked and neither needs anything built first. **Run `scripts/indexnow.mjs` once**; Bing Webmaster turns out to be verified (§1.16), which was the blocker recorded in §1.10, and indexing beats every remaining scorecard point. Then **click "Validate fix" in both Search Console reports** (§1.18). After that: syndicate the next article using `AEO_PLAYBOOK.md` §6 item 4 for the platform quirks and **§6.2 for when** — publish, IndexNow, then syndicate 3–7 days later, not same-day as on 7 Sep. **§6.2 also says there is no posting schedule and should not be one**; zero posts in a month is a correct outcome, and cadence is not the lever anyway — and beyond that the homepage structure weakness in §3 is the oldest open item, with §1.19 having added a fourteenth section to `/` without addressing it.
+**Next up:** **both long-standing items are now closed.** IndexNow was run 7 Sep — 68 URLs, accepted 200 (§1.23). The two Search Console reports were validated on 27 Aug and **passed on 28 Aug with 0 affected items**; that instruction sat here ten days after it had already been carried out, so check the report before repeating an action this file asks for. What is actually next: syndicate the next article using `AEO_PLAYBOOK.md` §6 item 4 for the platform quirks and **§6.2 for when** — publish, IndexNow, then syndicate 3–7 days later, not same-day as on 7 Sep. **§6.2 also says there is no posting schedule and should not be one**; zero posts in a month is a correct outcome, and cadence is not the lever anyway — and beyond that the homepage structure weakness in §3 is the oldest open item, with §1.19 having added a fourteenth section to `/` without addressing it.
 **Earlier:** four pieces of work, 25–26 Aug. Agentic readiness against an external audit, which found the identity JSON-LD was invisible without JavaScript — §1.8. Then **twenty-one notebook articles** in six batches, three new categories and a writing guide — §1.9. Then the target query set, the entity rework, and a measurement that reordered the priorities — §1.10. Then the notebook rebuilt as a publication — §1.11.
 
 > Run `git log --oneline -15` before trusting this section — it is a snapshot,
@@ -1695,6 +1695,21 @@ The emitted JSON-LD was read back out of `.next/server/app/{index,about,profile,
 the change is entirely inside `<script type="application/ld+json">`, which no
 runtime code reads. Search Console will stay red until Google recrawls; click
 **Validate fix** in both reports after the deploy.
+
+> **Both passed.** Validation started 27 Aug, passed 28 Aug, **0 affected items**
+> on each — confirmed against the Search Console reports on 8 Sep, which still
+> show `Validation passed` and a zero count. The critical `mainEntity` error and
+> the `dateModified` warning are closed; `personRef` and `schemaDateTime()` did
+> what they were written to do.
+>
+> Both fixes re-verified live on 8 Sep: `/about` and `/profile` emit
+> `"mainEntity":{"@type":"Person","@id":…,"name":"Suman Debnath",…}` and
+> `/resume` emits `"dateModified":"2026-08-13T00:00:00+05:30"`.
+>
+> As §1.18 predicted, **nothing changed visibly in Google** — this site was never
+> eligible for those rich results. What it bought was a cleared critical error
+> and two quiet reports, so the next real defect is not buried under known
+> warnings. That was the whole return, and it was worth two clicks.
 
 ---
 
