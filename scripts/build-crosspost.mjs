@@ -30,10 +30,28 @@
 
 import { writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
+import sharp from "sharp";
 import { createJiti } from "jiti";
 
 const SITE = "https://sumandebnath.houseofnamus.com";
 const OUT_DIR = "_crosspost";
+
+/**
+ * JPEG copies of this post's images, for platforms that cannot read WebP.
+ *
+ * **dev.to rejects WebP outright** — "Image has an unsupported type", from
+ * Forem's upload validator. The request has been open since July 2020
+ * (forem/forem#9118) and the site serves every notebook image as WebP, so every
+ * cross-post hits this.
+ *
+ * These are committed rather than generated at paste time because the body
+ * references them by URL: dev.to fetches the image from this domain when the
+ * article renders, so the file has to be live, not sitting on a laptop. Only
+ * images belonging to a cross-posted article are converted, so this does not
+ * duplicate all twenty-nine covers.
+ */
+const JPEG_DIR = "public/notebook/crosspost";
+const JPEG_QUALITY = 82;
 
 const jiti = createJiti(import.meta.url, {
   // lib/notebook/types.ts imports BannerArt through the "@/" alias. It is a
@@ -89,6 +107,42 @@ const abs = (href) => (href.startsWith("/") ? SITE + href : href);
  *  label and blurb the site renders. */
 let lookupPage = () => undefined;
 
+/** Set in main(). Maps a site image path to its published JPEG twin. */
+let imageUrl = (src) => abs(src);
+
+/** Every image path this post references — the cover and any figure blocks. */
+function imagePaths(post) {
+  const out = post.cover ? [post.cover] : [];
+  for (const b of post.blocks) if (b.kind === "figure") out.push(b.src);
+  return [...new Set(out)];
+}
+
+/** Writes a JPEG twin of each image into public/ and returns a path → URL map. */
+async function buildJpegs(post) {
+  const paths = imagePaths(post);
+  if (paths.length === 0) return { map: new Map(), written: [] };
+
+  await mkdir(JPEG_DIR, { recursive: true });
+  const map = new Map();
+  const written = [];
+
+  for (const src of paths) {
+    const base = path.basename(src).replace(/\.[^.]+$/, "");
+    const to = path.join(JPEG_DIR, `${base}.jpg`);
+    // `flatten` matters: a WebP with transparency becomes black where it was
+    // clear, because JPEG has no alpha channel. Paper, not white — it matches
+    // the notebook's own background if any image ever has a transparent edge.
+    const info = await sharp(path.join("public", src))
+      .flatten({ background: "#f2ece0" })
+      .jpeg({ quality: JPEG_QUALITY, mozjpeg: true })
+      .toFile(to);
+    map.set(src, `${SITE}/notebook/crosspost/${base}.jpg`);
+    written.push({ to, size: info.size });
+  }
+
+  return { map, written };
+}
+
 /** Rewrites the inline subset's internal links to absolute URLs.
  *  `**bold**` and `` `code` `` are already Markdown and pass through. */
 const inline = (text) => text.replace(/\[([^\]]+)\]\((\/[^)]*)\)/g, (_, label, href) => `[${label}](${abs(href)})`);
@@ -123,7 +177,7 @@ function renderBlock(b) {
     case "table":
       return [tableOf(b.head, b.rows), b.caption ? `\n*${inline(b.caption)}*` : ""].filter(Boolean).join("\n");
     case "figure":
-      return [`![${b.alt.replace(/[[\]]/g, "")}](${abs(b.src)})`, b.caption ? `*${inline(b.caption)}*` : ""]
+      return [`![${b.alt.replace(/[[\]]/g, "")}](${imageUrl(b.src)})`, b.caption ? `*${inline(b.caption)}*` : ""]
         .filter(Boolean)
         .join("\n\n");
     case "promote": {
@@ -165,7 +219,7 @@ function render(post) {
     `description: ${JSON.stringify(post.description)}`,
     `tags: ${devtoTags(post).join(", ")}`,
     `canonical_url: ${url}`,
-    post.cover ? `cover_image: ${abs(post.cover)}` : null,
+    post.cover ? `cover_image: ${imageUrl(post.cover)}` : null,
     "---",
   ]
     .filter(Boolean)
@@ -213,17 +267,26 @@ async function main() {
     return;
   }
 
+  const { map, written } = await buildJpegs(post);
+  imageUrl = (src) => map.get(src) ?? abs(src);
+
   await mkdir(OUT_DIR, { recursive: true });
   const out = path.join(OUT_DIR, `${post.slug}.md`);
   const md = render(post);
   await writeFile(out, md, "utf8");
 
   const words = md.split(/\s+/).length;
+  const kb = (n) => `${(n / 1024).toFixed(0)} KB`;
   console.log(`  ${out}`);
   console.log(`  canonical_url  ${SITE}/notebook/${post.slug}`);
   console.log(`  tags           ${devtoTags(post).join(", ")}`);
-  console.log(`  cover_image    ${post.cover ? abs(post.cover) : "(none)"}`);
+  console.log(`  cover_image    ${post.cover ? imageUrl(post.cover) : "(none)"}`);
   console.log(`  ~${words} words, arrives as a DRAFT (published: false)`);
+  if (written.length) {
+    console.log(`\n  JPEG twins (dev.to rejects WebP — forem/forem#9118):`);
+    for (const w of written) console.log(`    ${w.to.padEnd(58)} ${kb(w.size).padStart(8)}`);
+    console.log(`\n  Commit and deploy these before publishing, or the images 404.`);
+  }
 }
 
 main();
