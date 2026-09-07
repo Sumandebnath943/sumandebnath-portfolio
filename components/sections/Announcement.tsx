@@ -7,6 +7,15 @@ type Announcement = {
   desc: string;
   href: string;
   color: string;
+  /**
+   * Set only on the notebook's featured article, which runs first and gets the
+   * highlighted treatment. The value is the chip's text.
+   *
+   * Everything else in this ticker is a product; an article among them reads as
+   * one unless it is marked, and "Migi" and "MIGI Android App" already prove how
+   * easily two entries blur together at ticker speed.
+   */
+  badge?: string;
 };
 
 const announcements: Announcement[] = [
@@ -91,10 +100,24 @@ const announcements: Announcement[] = [
 ];
 
 function TickerItem({ a }: { a: Announcement }) {
+  const featured = Boolean(a.badge);
   return (
     <a
       href={a.href}
-      className="group/item flex items-center gap-2.5 pr-8 pl-0 whitespace-nowrap"
+      className={
+        "group/item flex items-center gap-2.5 whitespace-nowrap " +
+        // The highlighted item carries its own pill, so it takes the padding
+        // inside the pill rather than as a gap after the previous entry.
+        (featured ? "mr-8 rounded-full py-1 pl-2.5 pr-4" : "pr-8 pl-0")
+      }
+      style={
+        featured
+          ? {
+              background: `linear-gradient(90deg, ${a.color}1f 0%, ${a.color}0a 60%, transparent 100%)`,
+              boxShadow: `inset 0 0 0 1px ${a.color}38`,
+            }
+          : undefined
+      }
     >
       {/* accent separator dot */}
       <span className="relative flex h-1.5 w-1.5 shrink-0">
@@ -105,24 +128,52 @@ function TickerItem({ a }: { a: Announcement }) {
         <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: a.color }} />
       </span>
 
+      {featured && (
+        <span
+          className="font-mono text-[9px] uppercase tracking-[0.16em] font-bold rounded-full px-2 py-[3px] shrink-0"
+          style={{ background: a.color, color: "#0A0A0C" }}
+        >
+          {a.badge}
+        </span>
+      )}
+
       <span
-        className="font-manrope text-[13px] font-semibold text-white/90 transition-colors group-hover/item:text-white"
-        style={{ textShadow: `0 0 18px ${a.color}30` }}
+        className={
+          "font-manrope text-[13px] font-semibold transition-colors group-hover/item:text-white " +
+          (featured ? "text-white" : "text-white/90")
+        }
+        style={{ textShadow: `0 0 18px ${a.color}${featured ? "55" : "30"}` }}
       >
         {a.title}
       </span>
-      <span className="font-manrope text-[13px] text-white/55">{a.desc}</span>
+      <span className={"font-manrope text-[13px] " + (featured ? "text-white/70" : "text-white/55")}>
+        {a.desc}
+      </span>
       <ArrowUpRight
         size={13}
-        className="shrink-0 text-white/30 transition-all group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5"
+        className={
+          "shrink-0 transition-all group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5 " +
+          (featured ? "text-white/60" : "text-white/30")
+        }
       />
     </a>
   );
 }
 
-export default function Announcement() {
+/**
+ * @param featured the notebook's featured article, composed in app/page.tsx.
+ *
+ * Passed in rather than read here, because this is a client component and
+ * importing the notebook registry would ship all twenty-eight posts — every
+ * block of every article — into the browser bundle to render one headline.
+ * The page is a server component and already has the registry.
+ */
+export default function Announcement({ featured }: { featured?: Announcement }) {
+  // The article leads: it is the one entry that changes, and a reader who has
+  // seen the product list before has no reason to read it again.
+  const items = featured ? [featured, ...announcements] : announcements;
   // Two back-to-back copies make the -50% translate loop seamlessly.
-  const loop = [...announcements, ...announcements];
+  const loop = [...items, ...items];
 
   return (
     <div className="w-full bg-[#0A0A0C] border-t border-[#FF5500]/20 border-b border-white/[0.08] relative flex items-stretch overflow-hidden">

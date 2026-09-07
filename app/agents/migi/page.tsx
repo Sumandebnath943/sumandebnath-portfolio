@@ -608,10 +608,15 @@ export default function MigiPage() {
               <h2 className="font-manrope font-bold text-[1.9rem] md:text-[2.8rem] leading-[1.08] tracking-[-0.03em] mb-4">
                 Pillar one: meet the fleet.
               </h2>
+              {/* "Thirty-plus agents" was wrong in both directions — the fleet is
+                  46, and this section renders 25 cards, so a reader who counted
+                  got a third number. The copy now states all three: the fleet
+                  size, the grouping, and how many are shown. `AREAS` holds seven
+                  entries and 25 agent cards; if either changes, change this. */}
               <p className="text-[15px] leading-relaxed max-w-2xl mb-12" style={{ color: MIGI.muted }}>
-                Thirty-plus agents, grouped into seven areas — a career-and-growth layer, and a staff
-                layer that runs the fleet itself. Each does one useful thing, framed the same way:
-                what it does, and why it helps.
+                Forty-six agents across seven areas — a career-and-growth layer, and a staff
+                layer that runs the fleet itself. Twenty-five of them are below, each framed
+                the same way: what it does, and why it helps.
               </p>
             </Reveal>
 

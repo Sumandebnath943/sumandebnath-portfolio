@@ -18,6 +18,41 @@ import Contact from "@/components/sections/Contact";
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "@/lib/projects";
 import { personRef } from "@/lib/schema";
 import RelatedPages from "@/components/ui/RelatedPages";
+import { featuredPost, postUrl } from "@/lib/notebook";
+
+/**
+ * The notebook's featured article, as a ticker entry.
+ *
+ * Derived from the registry rather than typed into the ticker's own list, so
+ * flipping `featured` on a post is the only thing anyone has to do — the same
+ * reasoning as /llms.txt and lib/route-dates.ts in AEO_PLAYBOOK §4. A
+ * hand-maintained copy of a headline is a copy that goes stale.
+ *
+ * Composed here rather than inside Announcement because that component is
+ * `"use client"`: importing the registry there would ship every block of all
+ * twenty-eight posts to the browser to render one line.
+ *
+ * **The chip only claims "new" while that is true.** `featured` has no expiry
+ * and an article can hold the slot for months, so the word is derived from the
+ * publication date against build time rather than asserted. Same rule as the
+ * notebook's "Editor's pick" badge, which refuses to say "most read" because
+ * nothing here counts readers — a label that can quietly become false is worse
+ * than a duller one that cannot.
+ */
+function featuredTicker() {
+  const post = featuredPost();
+  const days =
+    (Date.now() - new Date(`${post.published}T00:00:00Z`).getTime()) / 86_400_000;
+  return {
+    title: post.title,
+    desc: post.description,
+    href: postUrl(post.slug),
+    // Warm gold. Distinct from every product colour in the ticker, and it reads
+    // as editorial next to the product accents rather than competing with them.
+    color: "#FFC24B",
+    badge: days <= 45 ? "New essay" : "Essay",
+  };
+}
 
 /*
   The homepage node.
@@ -70,7 +105,7 @@ export default function Home() {
       {/* Page sections — server-rendered so all content lives in initial HTML */}
       <main>
         <Hero />
-        <Announcement />
+        <Announcement featured={featuredTicker()} />
         <Film />
         <ExperienceNarrative />
         <NowBuilding />
