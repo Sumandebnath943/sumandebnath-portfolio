@@ -984,8 +984,45 @@ Ordered by expected value, once the above is done:
    >
    > **Do not assume any platform behaves like dev.to.** dev.to honours the
    > `canonical_url` front-matter field, which is why the generator emits it.
-   > Medium ignores the concept entirely unless asked. Check the tag on the third
-   > platform too, whatever it turns out to be.
+   > Medium ignores the concept entirely unless asked. Hashnode has the field but
+   > calls it **"Original article URL"**, not canonical.
+   >
+   > ### The first syndication, verified 8 Sep 2026
+   >
+   > `what-ai-agents-cost-to-run` is live on all three, **and all three canonicals
+   > were checked rather than assumed** — which is the only reason the Medium
+   > fault was caught, since it had published looking perfectly correct.
+   >
+   > | Platform | Article | Canonical | Profile link back |
+   > |---|---|---|---|
+   > | dev.to | [`…mine-has-cost-5-1in1`](https://dev.to/suman_debnath_1/the-ai-agent-cost-guides-say-200-a-month-mine-has-cost-5-1in1) | ✅ | `rel="noopener me ugc"` |
+   > | Medium | [`…45f66d66ec46`](https://medium.com/@sumandebnath943/the-ai-agent-cost-guides-say-200-a-month-mine-has-cost-5-45f66d66ec46) | ✅ *after the fix below* | `rel="noopener follow"` |
+   > | Hashnode | [`what-ai-agents-cost-to-run`](https://sumandebnath.hashnode.dev/what-ai-agents-cost-to-run) | ✅ | `nofollow ugc` |
+   >
+   > **Medium's post-publish fix works.** It was self-canonicalising, was
+   > corrected through Advanced Settings without deleting the story, and now
+   > resolves here. The documented procedure is proven, not theoretical.
+   >
+   > **Only Medium's backlink is `follow`.** dev.to and Hashnode are `ugc` /
+   > `nofollow`, so they pass no ranking equity. Do not present syndication as
+   > link building — the return is corroboration and reach into indexes that are
+   > not Google's, which is what §6.1 says is actually missing.
+   >
+   > **Copy the article's metadata; differentiate the index pages.** Slug, title
+   > and description on a syndicated *post* should be identical to the original —
+   > once the canonical is set, matching metadata tells Google the two documents
+   > are one document, which is the goal. The publication's *homepage* is the
+   > opposite case: it is **not** canonicalised to anything, so an index titled
+   > like `/notebook` competes with `/notebook` as an original, on a domain with
+   > more authority. Hashnode's is titled "Suman Debnath — republished notes on
+   > AI agents" for exactly that reason, and its About page is "About this
+   > notebook" rather than "About Suman Debnath", which would have collided with
+   > `/about`'s entity query under §3.1b.
+   >
+   > **Images: the generator emits JPEG twins under `/notebook/crosspost/`.**
+   > dev.to rejects WebP. Hashnode hot-links them from this domain rather than
+   > re-hosting, so those files are load-bearing for a published article on
+   > another site — do not delete or rename them.
 5. **LinkedIn headline and About section matching the site.** Copy written
    27 Aug 2026 and handed over — headline 131 chars, About ~1,150, both built
    from `identity.headline`, `identity.targeting` and `summary` in

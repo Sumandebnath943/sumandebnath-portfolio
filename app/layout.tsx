@@ -288,6 +288,8 @@ const personJsonLd = {
     "https://bsky.app/profile/sumandebnath.bsky.social",
     "https://mastodon.social/@sumandebnath",
     "https://dev.to/suman_debnath_1",
+    "https://medium.com/@sumandebnath943",
+    "https://hashnode.com/@sumandebnath",
   ],
   knowsAbout: [
     "AI-native product engineering",
@@ -633,6 +635,23 @@ export default function RootLayout({
             AEO_PLAYBOOK §6 is actually short of — a second independent source
             that resolves to the same person. */}
         <link rel="me" href="https://dev.to/suman_debnath_1" />
+        {/* Medium and Hashnode, added 8 Sep 2026 once the first article was
+            syndicated to all three and each profile was confirmed to link back.
+
+            **Only dev.to reciprocates with an actual `rel="me"`.** Medium's
+            About link is `rel="noopener follow"` and Hashnode's is
+            `noopener noreferrer nofollow ugc` — both point here, neither says
+            `me`. That is fine and it is what HuggingFace's precondition
+            actually required: a profile that *points back*, not one that
+            speaks microformats. Recorded so nobody later reads the asymmetry
+            as an oversight and goes looking for a setting that does not exist.
+
+            The corollary is that only Medium's link passes ranking equity —
+            dev.to and Hashnode are `ugc`/`nofollow`. None of this is link
+            building; it is corroboration, which is what AEO_PLAYBOOK §6 is
+            short of. */}
+        <link rel="me" href="https://medium.com/@sumandebnath943" />
+        <link rel="me" href="https://hashnode.com/@sumandebnath" />
 
         {/*
           Plain <script>, NOT next/script — and the difference is the whole
