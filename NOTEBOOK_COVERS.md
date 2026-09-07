@@ -58,15 +58,22 @@ The arithmetic, so nobody has to redo it:
 > are 3:2 now. If a slot needs a square mark, it needs a different asset.
 
 > **A 16:9 master costs 7.8% off each side in the 3:2 slots — measured, not
-> estimated.** `what-ai-agents-cost-to-run` was supplied at 1280×720 rather than
-> the house 3:2, so it is native in the article lede and trimmed in the lead
-> story, rail and foot thumbnails. It survives because its baked-in headline sits
-> inside the middle 85%; the strapline underneath loses its first characters and
-> the lamp on the right edge disappears. **Acceptable for a supplied image with
-> text already in it, and not a licence to stop generating at 3:2** — anything
-> with type nearer the edge than 8% will clip in the most prominent slot on the
-> blog. Check a 16:9 master against `/notebook` before committing it, never
-> against the article page, which is the one place it fits perfectly.
+> estimated, and the reason the rule above is a rule.** `what-ai-agents-cost-to-run`
+> shipped for one commit at 1280×720. Its baked-in headline survived, sitting
+> inside the middle 85%, but the strapline underneath lost its first characters
+> and the lamp on the right edge disappeared — in the lead-story slot, which is
+> the most prominent image on the blog. It was replaced with a 3:2 reframe of the
+> same scene the same day.
+>
+> The asymmetry is worth holding on to. **A 3:2 master trims vertically and a
+> 16:9 master trims horizontally, and only one of those is designed for.** These
+> images are composed with headroom above and desk below; nothing is composed
+> with 8% of dead space at the left margin. So a 3:2 master is safe in every slot
+> including the 16:9 lede, and a 16:9 master is safe in exactly one.
+>
+> **Check any master that is not 3:2 against `/notebook`, never against the
+> article page** — the article page is the one place a wide image fits perfectly,
+> which makes it the one place that tells you nothing.
 
 **1280 wide is still the ceiling** (§5) and a full-bleed desktop lede would want
 about 2400. That is why the lede is *wide-contained* at 936px rather than edge
