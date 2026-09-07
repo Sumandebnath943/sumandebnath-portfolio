@@ -73,3 +73,7 @@ _source-film/
 
 # Originals for the /profile filmstrip — served copies live in public/profile/
 _source-profile-photos/
+
+# Generated cross-post Markdown — derived from lib/notebook, paste-and-discard.
+# The canonical article is the tracked artefact; this is a transport format.
+/_crosspost/
