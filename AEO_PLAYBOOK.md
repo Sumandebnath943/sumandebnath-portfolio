@@ -1132,6 +1132,66 @@ mention on the site.
 
 ---
 
+### 6.2 Publishing cadence — why there is no schedule (8 Sep 2026)
+
+**There is no posting schedule and there should not be one.**
+`WRITING_INFORMATION_GAIN.md` §1 kills Level 0, admits Level 1 only if nothing
+better exists, and sets the target at Level 2 — *real numbers, a specific case,
+a named example nobody else has*. That bar is **supply-limited**: it requires
+having done something measurable before there is anything to write. No calendar
+produces it.
+
+`what-ai-agents-cost-to-run` is the proof. It exists because an agent fleet ran
+for two months and produced a real bill. Nothing about a weekly slot would have
+generated that piece.
+
+**Own site: event-driven. Realistically 8–12 a year.** The trigger to write is
+one of these, never the date:
+
+- Something ran long enough to produce real numbers
+- Something broke in a way the documentation does not cover
+- The thing people keep asking about got done, and can now be reported
+
+**Volume is not the constraint and never was.** There are 27 articles; §6.1 says
+the bottleneck is indexing and inbound corroboration. A twenty-eighth mediocre
+post does not help it and costs twice — the set is diluted, and
+`BLOG_GUIDELINES.md`'s no-duplicate-question rule gets harder to satisfy with
+every post added. **Zero posts in a month is a correct outcome, not a lapse.**
+
+**The three platforms get 1:1 with the site and never anything original.**
+Everything syndicated is a canonical'd copy (§6 item 4). Posting original work
+to Medium puts the authoritative version on someone else's domain, which is the
+exact failure the canonical exists to prevent. So the platforms have no cadence
+of their own to manage — no post here, nothing there.
+
+**Stagger the syndication rather than same-day.** On 7 Sep all three went out
+the day of publication. Better:
+
+| Day | Action |
+|---|---|
+| 0 | Publish on this site |
+| 0 | `node scripts/indexnow.mjs` |
+| +3 to +7 | Syndicate to all three, canonical set, **each one verified by fetching the tag** |
+
+The delay lets this copy be crawled and indexed first. Canonicals should make
+that unnecessary — but Medium silently self-canonicalised on the first attempt,
+so the assumption that a platform does the right thing is now known to be
+unsafe. The wait costs nothing.
+
+> **Cadence is not the lever, and raising it will not move the number.** Of the
+> four assistants: Copilot is reachable by IndexNow push, Gemini through Search
+> Console, Grok through time. **Claude grounds on Brave, which has no submission
+> channel at all — only inbound links move it, and those come from other people
+> linking here.**
+>
+> So the recurring habit worth having is not writing. It is being where the
+> audience already is — answering a real question in a thread or a forum where a
+> link back is earned rather than dropped. That is what Brave indexes. **One of
+> those a week beats one extra article a month**, and it is the half of §6 that
+> is still barely started.
+
+---
+
 ## 7. The target query set
 
 **Written 26 Aug 2026, and it lives in `TARGET_QUERIES.md`.** Twenty-nine
