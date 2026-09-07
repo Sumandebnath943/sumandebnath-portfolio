@@ -4,26 +4,32 @@ Where the project stands, what changed most recently, and what is worth doing
 next. For how the system is built read **PROJECT_BIBLE.md**; for how the site
 writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
-**Last updated:** 5 September 2026
-**Branch:** `main`, pushed through `473d1d8`. Working tree clean.
-**Last session:** IMPRINT's project entry now deep-links the product's own
+**Last updated:** 8 September 2026
+**Branch:** `main`, pushed through `adc1377`. Working tree clean.
+**Last session:** the first notebook article was syndicated to **dev.to, Medium
+and Hashnode**, all three canonicalised back here (§1.23). **Medium published it
+self-canonicalising and gave no warning** — verify the tag by fetching it, never
+trust the editor. Also: nine profiles are now declared three ways each, and
+`AEO_PLAYBOOK.md` §6 gained the per-platform rules. **A clean `git push` is not
+a deploy** — Vercel silently dropped one; the check is in the block quote at the
+end of §1.23.
+**Session before:** IMPRINT's project entry now deep-links the product's own
 written layer — `/methodology`, `/research`, `/glossary`, `/faq` — instead of
 pointing at its homepage three times, and its `SoftwareApplication` `@id` was
 moved onto the product's own domain so the two graphs merge into one entity
 (§1.22). "Behavioral cloning" is gone from all six places it lived; it named
 something IMPRINT does not do. **Read the two block quotes in §1.22 before
 setting `entityId` on any other project.**
-**Session before:** the crawler alerts learned to check two things they had been
+**Session before that:** the crawler alerts learned to check two things they had been
 asserting without evidence — whether the crawler is who its user agent claims
 (against the vendors' published IP ranges) and whether anything was actually
 served (§1.21). Prompted by two forged "ChatGPT-User" probes for `/.env.sample`
 and `/.git/HEAD`; **nothing was exposed** — both 404, and `.env*` has never been
 committed. Run **`node scripts/crawler-check.mjs`** after touching `proxy.ts`,
 `lib/crawler.ts` or `lib/crawler-verify.ts`.
-**Session before that:** a twenty-seventh notebook article — the flat stretch between builds, evidenced off this repository's own commit log — scored to the top of the editor's ranking, and the first cover deliberately outside the §2 house style (§1.20). **Read §1.20 before adding a post**: it records why the headline was rewritten, and why the front page's "Editor's selection" tile does not show the highest-scoring article.
-**And before that:** three sections rebuilt from measurements taken on the two reference sites — a scroll-reactive marquee band closing the homepage, an ASCII-portrait statement wall on `/profile`, and "05 / Operating Principles" rebuilt as a hover accordion (§1.19). All three were built twice; the first pass copied the arrangement and none of the behaviour. **Read §1.19 before touching any of them** — six of the eight things that mattered were invisible in a screenshot.
-**Earlier still:** two Google Search Console structured-data reports cleared — a critical `ProfilePage.mainEntity` type error on `/about` and `/profile`, an invalid `dateModified` on `/resume`, and five recommended Q&A fields on all four `QAPage` URLs (§1.18). JSON-LD only; nothing visible changed. **Click "Validate fix" in both reports after the next deploy.**
-**Next up:** **run `scripts/indexnow.mjs` once after the next deploy** — Bing Webmaster turns out to be verified (§1.16), which was the blocker recorded in §1.10. Indexing beats every remaining scorecard point. Then **click "Validate fix" in both Search Console reports** (§1.18). After that, the homepage structure weakness in §3 is the oldest open item — note that §1.19 added a fourteenth section to `/` without addressing it.
+**And before that:** a twenty-seventh notebook article — the flat stretch between builds, evidenced off this repository's own commit log — scored to the top of the editor's ranking, and the first cover deliberately outside the §2 house style (§1.20). **Read §1.20 before adding a post**: it records why the headline was rewritten, and why the front page's "Editor's selection" tile does not show the highest-scoring article.
+**Earlier still:** three sections rebuilt from measurements taken on the two reference sites — a scroll-reactive marquee band closing the homepage, an ASCII-portrait statement wall on `/profile`, and "05 / Operating Principles" rebuilt as a hover accordion (§1.19). All three were built twice; the first pass copied the arrangement and none of the behaviour. **Read §1.19 before touching any of them** — six of the eight things that mattered were invisible in a screenshot.
+**Next up:** the two items below have been waiting on "the next deploy" since 27 Aug. **That deploy has now happened** — `adc1377`, 7 Sep — so both are unblocked and neither needs anything built first. **Run `scripts/indexnow.mjs` once**; Bing Webmaster turns out to be verified (§1.16), which was the blocker recorded in §1.10, and indexing beats every remaining scorecard point. Then **click "Validate fix" in both Search Console reports** (§1.18). After that: syndicate the next article using `AEO_PLAYBOOK.md` §6 item 4 — the platform quirks are now written down, so it should be mechanical — and beyond that the homepage structure weakness in §3 is the oldest open item, with §1.19 having added a fourteenth section to `/` without addressing it.
 **Earlier:** four pieces of work, 25–26 Aug. Agentic readiness against an external audit, which found the identity JSON-LD was invisible without JavaScript — §1.8. Then **twenty-one notebook articles** in six batches, three new categories and a writing guide — §1.9. Then the target query set, the entity rework, and a measurement that reordered the priorities — §1.10. Then the notebook rebuilt as a publication — §1.11.
 
 > Run `git log --oneline -15` before trusting this section — it is a snapshot,
@@ -42,7 +48,8 @@ Recent history, newest first, gives an accurate picture of the trajectory:
 | Area | State |
 |---|---|
 | **Notebook** (`/notebook`) | **5 posts → 26**, 26 Aug (§1.9), **27** on 29 Aug (§1.20 — and one cover deliberately outside the house style), rebuilt as a publication (§1.11), then **redesigned end to end** (§1.12): the reading page on one band with a five-module rail, colour driven by category accent, pull-quotes in all 26 posts and in-article promo cards in nine; the front page recomposed into five zones on a 3·4·3·4·2 rhythm. Six routes — the architecture now lives in **`PROJECT_BIBLE.md` §6.8**, which it did not before. **Read `BLOG_GUIDELINES.md` before touching a post and `NOTEBOOK_COVERS.md` before making an image.** One thing outstanding: the serif — see the end of §1.12. |
-| **Machine-readable identity** | Audited 25 Aug against Vercel's Is Agentic, **79 → 83** (§1.8). The `Person` and `WebSite` JSON-LD were emitted through `next/script` and existed only once JavaScript had run — now literal tags on all 26 routes. House of Namus added as a real `Organization`. Markdown content negotiation was **refused on purpose**; the reasoning and the one condition for revisiting it are in `AEO_PLAYBOOK.md` §8. |
+| **Syndication / off-site** | Opened 27 Aug (§1.15), first article shipped 7–8 Sep (§1.23): `what-ai-agents-cost-to-run` on **dev.to, Medium and Hashnode**, all three canonicalised here and all three verified. **Medium self-canonicalises silently — always fetch the tag.** Per-platform rules, the metadata copy-vs-differentiate rule and the JPEG-twin constraint are in **`AEO_PLAYBOOK.md` §6 item 4**; read it before syndicating the next one. |
+| **Machine-readable identity** | Audited 25 Aug against Vercel's Is Agentic, **79 → 83** (§1.8). **Nine profiles as of 7 Sep**, each declared three ways — `sameAs`, `rel="me"`, footer pills — with Medium and Hashnode added once their profiles pointed back (§1.23). Nine is the ceiling for the pill row. The `Person` and `WebSite` JSON-LD were emitted through `next/script` and existed only once JavaScript had run — now literal tags on all 26 routes. House of Namus added as a real `Organization`. Markdown content negotiation was **refused on purpose**; the reasoning and the one condition for revisiting it are in `AEO_PLAYBOOK.md` §8. |
 | **Profile** (`/profile`) | Built 23 Aug over two passes, extended 24 Aug with four more sections (§1.6), and given a **statement wall** 28 Aug (§1.19) — a baked ASCII portrait, ~175vh, flowing on a capped canvas, with three lines rising off it. The only light page on the site — ruled cream paper, a 280vh pinned hero that zooms into a drawn monitor, a word reveal, and a conveyor street with a walking robot. Modelled on a reference the user supplied, then pulled back towards the site's own type, pills, accents and closing. **The figure and the dog still need redrawing** — §1.5. |
 | **Reference-built sections** | Three, all 28 Aug (§1.19): `SignatureStrip` (homepage marquee, scroll-reactive), `AsciiWall` (`/profile`), `AIPhilosophy` rebuilt as a hover accordion. Two carry per-frame loops — both gated to on-screen, both off under reduced motion. **Budgets and the two measurement traps are in `PAGE_OPTIMIZATION.md` §3.6 and §1.6.** |
 | **Banking Co-pilot** (`/banking/rm-copilot`) | Built 22 Aug. New **Banking** group under Portfolio. Fully prerendered; 382 KB of WebP, one eager image. Done. |
@@ -2048,6 +2055,71 @@ so nothing is clipped by the fixed 660 card. `npm run build` clean.
 
 ---
 
+### 1.23 The first article syndicated to three platforms (7–8 Sep 2026)
+
+The off-site track opened in §1.15 finally carries something. `what-ai-agents-cost-to-run`
+is republished on dev.to, Medium and Hashnode, all three canonicalised back
+here, all three verified rather than assumed.
+
+**Verifying is the whole point of this entry.** Medium published the article
+*self-canonicalising* — pointing at its own Medium URL — while looking entirely
+correct in the editor. Nothing warned. Had the tag not been fetched and read,
+the site would have been competing against a higher-authority copy of its own
+article, which is the exact failure syndication is supposed to avoid. The fix
+is in Medium's **Advanced Settings** on a published story and does not require
+deleting and reposting; `AEO_PLAYBOOK.md` §6 item 4 has the procedure.
+
+| Platform | Canonical | Backlink `rel` |
+|---|---|---|
+| dev.to | honours `canonical_url` front matter | `noopener me ugc` |
+| Medium | **self-canonicalises unless told otherwise** | `noopener follow` |
+| Hashnode | field exists, named "Original article URL" | `nofollow ugc` |
+
+Four things worth carrying forward, all recorded in `AEO_PLAYBOOK.md` §6:
+
+- **Only Medium's backlink is `follow`.** The other two pass no ranking equity.
+  Syndication buys corroboration and reach into non-Google indexes — it is not
+  link building, and should not be sold to yourself as such.
+- **Copy a syndicated post's metadata exactly; differentiate the publication
+  homepage.** Once the canonical is set, an identical title and slug are the
+  signal that two documents are one document. The publication's *index* is the
+  opposite case — it is canonicalised to nothing, so an index titled like
+  `/notebook` competes with `/notebook` as an original on a stronger domain.
+- **The JPEG twins under `/notebook/crosspost/` are load-bearing.** dev.to
+  rejects WebP, so the generator emits both; Hashnode then *hot-links* the JPEG
+  from this domain rather than re-hosting it. A published article on someone
+  else's site breaks if those files move.
+- **Nine profiles are now declared three ways each** — `sameAs`, `rel="me"`,
+  and the footer pills. Medium and Hashnode joined on the same precondition
+  dev.to and HuggingFace waited on: the profile has to point back first. Note
+  that **only dev.to reciprocates with an actual `rel="me"`**; the other two
+  link back without it. That asymmetry is recorded beside the links in
+  `app/layout.tsx` so nobody goes hunting for a setting that does not exist.
+
+Nine pills is the ceiling for that row — it wraps to four lines at 375px
+already. A tenth profile needs an argument, not just an account.
+
+> **A successful `git push` is not a deploy.** `dfed086` reached `main` and
+> Vercel never claimed it: commit status `pending` with zero statuses, no
+> deployment record, and production quietly serving a three-hour-old build.
+> Not a failed build, not a stale CDN — the build was never queued. An empty
+> commit re-fired the webhook and was picked up in 60 seconds, which rules out
+> a paused project, a lapsed token and a deployment limit; a dropped event,
+> nothing more.
+>
+> **The check is `gh api repos/<owner>/<repo>/deployments?per_page=1` — does
+> the newest deployment SHA match `HEAD`?** Do not read a clean push as a live
+> site. This is the third silent failure this project has collected, after
+> `saveVisit()` returning `false` without throwing and Medium's canonical:
+> something reports success and the thing you wanted never happened.
+
+Deployed as `adc1377`. Verified against production, not the build log: nine
+`rel="me"` links in `<head>`, both new profiles in `sameAs`, nine footer pills
+with correct icons, no overflow at 375px, and all three canonicals re-checked
+after the deploy.
+
+---
+
 ## 2. What changed in the session before (19 Aug 2026)
 
 **One brief, eleven numbered complaints**, all against the homepage: sections
@@ -2663,6 +2735,29 @@ npx eslint <the files you changed>
 Ten pre-existing `react-hooks` errors are expected — nine in
 `components/robot/`, one in `VisitorPing`. **§1.14 lists them and why each one
 stays.** Anything outside that set is yours.
+
+#### After pushing: confirm the deploy actually ran
+
+A clean `git push` is not a deploy. Vercel dropped one on 7 Sep — commit on
+`main`, status `pending` with zero statuses, no deployment record, production
+serving a three-hour-old build with no error anywhere (§1.23). Check that the
+newest deployment SHA matches `HEAD`:
+
+```bash
+gh api "repos/Sumandebnath943/sumandebnath-portfolio/deployments?per_page=1" --jq '.[0]|"\(.sha[0:7])  \(.created_at)"'
+```
+
+If it does not match after a few minutes, an empty commit re-fires the webhook:
+
+```bash
+git commit --allow-empty -m "chore: re-trigger deploy" && git push origin main
+```
+
+If *that* is also ignored, the fault is on the Vercel side — a paused project,
+a disconnected Git integration, or a deployment limit — and only the dashboard
+will show it. Then verify the change against production rather than the build
+log; `X-Vercel-Cache: HIT` with a large `Age` means you are reading a cached
+page, and a query string does **not** bust it.
 
 #### The browser pane
 
