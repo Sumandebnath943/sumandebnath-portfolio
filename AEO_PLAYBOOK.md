@@ -924,6 +924,32 @@ Ordered by expected value, once the above is done:
    pointing back here.** The posts in `lib/notebook/` are original, dated,
    specific technical content on problems that are poorly documented elsewhere —
    the highest-citation-probability material on the site.
+
+   > **Generated, not hand-converted: `node scripts/build-crosspost.mjs <slug>`.**
+   > It renders a post's typed blocks to dev.to-flavoured Markdown, rewrites
+   > every internal link and image absolute, maps the tag vocabulary onto tags
+   > Forem actually indexes, and derives `canonical_url` from the slug so it
+   > cannot be forgotten. **That field is the whole exercise** — without it a
+   > cross-post is not a backlink, it is a duplicate competing with the original
+   > on a domain with more authority, so the copy wins. Output carries
+   > `published: false`; the last step is a human pressing publish.
+   >
+   > **The account, set up 7 Sep 2026: [dev.to/suman_debnath_1](https://dev.to/suman_debnath_1).**
+   > Its Personal website field emits `rel="noopener me ugc"`, so the identity
+   > claim is genuinely reciprocal — which is the precondition HuggingFace waited
+   > on, and the reason the site's three declarations were added only after the
+   > field was filled in rather than when the account was created.
+   >
+   > **`ugc` means no ranking equity passes.** Do not present dev.to cross-posts
+   > as link building. What they buy is a second independent source resolving to
+   > the same person, plus reach into an index that is not Google's — which is
+   > the actual shortage, since Brave (§6.1) takes no submissions and has inbound
+   > links as its only input.
+   >
+   > **dev.to's bio field caps around 200 characters.** The 247-character
+   > verbatim positive disambiguation is rejected; the compressed form — role,
+   > PentaCMD-47M, the MIGI fleet, House of Namus — fits at 138. Measured by
+   > trying it, not read from documentation.
 5. **LinkedIn headline and About section matching the site.** Copy written
    27 Aug 2026 and handed over — headline 131 chars, About ~1,150, both built
    from `identity.headline`, `identity.targeting` and `summary` in

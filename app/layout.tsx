@@ -287,6 +287,7 @@ const personJsonLd = {
     "https://x.com/iamSdebnath",
     "https://bsky.app/profile/sumandebnath.bsky.social",
     "https://mastodon.social/@sumandebnath",
+    "https://dev.to/suman_debnath_1",
   ],
   knowsAbout: [
     "AI-native product engineering",
@@ -621,6 +622,17 @@ export default function RootLayout({
             claim is made twice on every page. */}
         <link rel="me" href="https://bsky.app/profile/sumandebnath.bsky.social" />
         <link rel="me" href="https://mastodon.social/@sumandebnath" />
+        {/* dev.to, added 7 Sep 2026 — and added only after checking, the same
+            precondition HuggingFace waited on above. The profile's Personal
+            website field emits `rel="noopener me ugc"`, so the `me` half is
+            genuinely reciprocal rather than a claim made in one direction.
+
+            The `ugc` half is worth knowing and not worth minding: it tells
+            search engines not to pass ranking equity, so this is not a
+            link-building move. It is an identity assertion, which is what
+            AEO_PLAYBOOK §6 is actually short of — a second independent source
+            that resolves to the same person. */}
+        <link rel="me" href="https://dev.to/suman_debnath_1" />
 
         {/*
           Plain <script>, NOT next/script — and the difference is the whole
