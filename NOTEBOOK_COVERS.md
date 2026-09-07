@@ -5,6 +5,17 @@ a prompt for each existing article, and the rules for adding one.
 
 Companion: `BLOG_GUIDELINES.md` (writing the posts themselves).
 
+> **Images inside an article use this same pipeline.** Since 7 Sep 2026 a post
+> can carry a `figure` block as well as a `cover` — see the type in
+> `lib/notebook/types.ts`. Put the master in `_masters/notebook-covers/` named
+> `<slug>-<something>.png` so it sorts beside its post's cover and cannot be
+> confused with another post's, run the same converter, and point the block's
+> `src` at the WebP it writes. `width` and `height` on the block are the real
+> pixel dimensions of that file — 1280 wide, and whatever height the ratio gives
+> — because `next/image` uses them to reserve the box and prevent layout shift.
+> The in-article slot does no cropping at all, so the safe-area rules below
+> apply to it only insofar as the same file is also a cover.
+
 ---
 
 ## 1. How to use this
@@ -45,6 +56,17 @@ The arithmetic, so nobody has to redo it:
 > cropping at all, because these are drawn to be trimmed vertically. The rail
 > thumbnails shipped square for one commit and visibly clipped the artwork; they
 > are 3:2 now. If a slot needs a square mark, it needs a different asset.
+
+> **A 16:9 master costs 7.8% off each side in the 3:2 slots — measured, not
+> estimated.** `what-ai-agents-cost-to-run` was supplied at 1280×720 rather than
+> the house 3:2, so it is native in the article lede and trimmed in the lead
+> story, rail and foot thumbnails. It survives because its baked-in headline sits
+> inside the middle 85%; the strapline underneath loses its first characters and
+> the lamp on the right edge disappears. **Acceptable for a supplied image with
+> text already in it, and not a licence to stop generating at 3:2** — anything
+> with type nearer the edge than 8% will clip in the most prominent slot on the
+> blog. Check a 16:9 master against `/notebook` before committing it, never
+> against the article page, which is the one place it fits perfectly.
 
 **1280 wide is still the ceiling** (§5) and a full-bleed desktop lede would want
 about 2400. That is why the lede is *wide-contained* at 936px rather than edge

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getPage } from "@/lib/pages";
 import type { Block } from "@/lib/notebook";
 
@@ -193,6 +194,32 @@ function renderBlock(block: Block, i: number): React.ReactNode {
         </aside>
       );
     }
+
+    case "figure":
+      return (
+        // `nb-wide` breaks the image out of the 38rem measure the prose is set
+        // to. A picture constrained to the text column is a postage stamp; the
+        // column exists for reading comfort and an image is not read.
+        <figure key={key} className="nb-figure">
+          <Image
+            src={block.src}
+            alt={block.alt}
+            width={block.width}
+            height={block.height}
+            // `quality` is fixed at 75 across this repo — `images.qualities` is
+            // unset, and any other value fails the build. AGENTS.md §2.
+            quality={75}
+            // Every figure is below the fold by definition: the cover is the
+            // first image and this sits several sections down.
+            loading="lazy"
+            sizes="(max-width: 52rem) 100vw, 46rem"
+            className="nb-figure-img"
+          />
+          {block.caption && (
+            <figcaption className="nb-cap">{inline(block.caption, key)}</figcaption>
+          )}
+        </figure>
+      );
 
     case "table":
       return (

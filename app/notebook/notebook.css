@@ -67,6 +67,27 @@
   --nb-ember-2: #93401e;
   --nb-ember-3: #9c4d1a;
 
+  /* ── The answer block's own ramp ─────────────────────────────────────────
+     Split from the ember ramp on 7 Sep 2026. The answer block used the same
+     three burnt-orange stops as the rail's table of contents, and against warm
+     cream paper that is an analogous pairing — a brown box on a beige page.
+     It read as dull, which for the one block on the page written to be quoted
+     is the wrong outcome.
+
+     Teal to emerald instead. It sits opposite clay on the wheel, so it is the
+     first genuinely saturated thing on a paper page rather than another warm
+     neutral, and the cool half of the spectrum is where "vibrant" and "calm"
+     can both be true at once. It is also the uncommon choice: blog UI reaches
+     for blue, grey or purple almost every time.
+
+     Every stop clears WCAG AA for cream body text — measured 7.94, 5.92 and
+     5.11 to one — using the same method as the ember ramp above. The ember
+     stops are untouched, so the rail's contents card keeps its warm identity
+     and the two blocks no longer look like the same component twice. */
+  --nb-answer-1: #0b4a52;
+  --nb-answer-2: #0f6360;
+  --nb-answer-3: #16775c;
+
   background: var(--nb-paper);
   color: var(--nb-ink);
 }
@@ -215,12 +236,12 @@
   margin: 2.5rem 0 0;
   padding: 1.5rem 1.75rem;
   /* Flat first, for anything without gradient support in this position. */
-  background: var(--nb-ember-2);
+  background: var(--nb-answer-2);
   background: linear-gradient(
     135deg,
-    var(--nb-ember-1) 0%,
-    var(--nb-ember-2) 52%,
-    var(--nb-ember-3) 100%
+    var(--nb-answer-1) 0%,
+    var(--nb-answer-2) 52%,
+    var(--nb-answer-3) 100%
   );
   border-radius: 0.9rem;
   /* A hairline of the light end, so the block has an edge against paper rather
@@ -622,13 +643,32 @@
 /* ── The in-article promo ───────────────────────────────────────────────────
    The one card allowed to interrupt the prose. It takes the target page's own
    accent from lib/pages.ts rather than the article's, because it belongs to
-   where it points, not to where it sits. */
+   where it points, not to where it sits.
+
+   ## Why the accent is not used directly as text
+
+   It was, and on a light accent it was unreadable. `/agents/migi` carries
+   `#C6F24E` — a lime chosen to sit on that page's near-black ink — and the
+   kicker and CTA rendered it as 9px and 11px uppercase mono on paper. That is
+   roughly **1.06:1**. The clay-family accents every other promote card uses sit
+   near 6:1, so the bug could not appear until a light accent shipped.
+
+   `--promo-ink` mixes the accent toward ink far enough that any accent in
+   lib/pages.ts clears AA for small text, while keeping its hue. At 38% the lime
+   lands about 4.9:1 and clay about 10:1 — clay is darker than it strictly needs
+   to be, which is the price of one ratio serving every accent, and no loss on a
+   9px label.
+
+   The raw accent keeps the jobs where it is decoration rather than text: the
+   3px left border, and the wash behind the card. Colour the furniture, not the
+   copy. */
 .nb-promote {
+  --promo-ink: color-mix(in srgb, var(--promo, var(--nb-clay)) 38%, var(--nb-ink));
   margin: 2.75rem 0;
   border: 1px solid var(--nb-rule);
   border-left: 3px solid var(--promo, var(--nb-clay));
   border-radius: 0.75rem;
-  background: var(--nb-surface);
+  background: color-mix(in srgb, var(--promo, var(--nb-clay)) 7%, var(--nb-surface));
   padding: 1.25rem 1.5rem;
 }
 
@@ -637,7 +677,7 @@
   font-size: 0.5625rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--promo, var(--nb-ink-mute));
+  color: var(--promo-ink, var(--nb-ink-mute));
   margin: 0 0 0.6rem;
 }
 
@@ -656,7 +696,7 @@
 }
 
 .nb-promote-link:hover .nb-promote-title {
-  color: var(--promo, var(--nb-clay));
+  color: var(--promo-ink, var(--nb-clay));
 }
 
 .nb-promote-blurb {
@@ -673,7 +713,40 @@
   font-size: 0.6875rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--promo, var(--nb-clay));
+  color: var(--promo-ink, var(--nb-clay));
+}
+
+/* ── In-article figure ──────────────────────────────────────────────────────
+   Wider than the 38rem prose measure, because a picture is looked at rather
+   than read and the measure exists for reading. It stays inside the reading
+   column's grid cell rather than going full-bleed: the article shares a row
+   with the rail on desktop, so a true edge-to-edge image would have to escape
+   the grid and would then collide with it.
+
+   `aspect-ratio` plus `height: auto` keeps the box reserved from the width and
+   the intrinsic ratio, so nothing shifts when the bytes land. */
+.nb-figure {
+  margin: 2.75rem 0;
+  width: 100%;
+}
+
+.nb-figure-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--nb-rule);
+  border-radius: 0.75rem;
+  background: var(--nb-paper-deep);
+}
+
+@media (min-width: 64rem) {
+  /* Break the measure on desktop only. Below that the reading column already
+     is the full width, so pulling wider would push the page into horizontal
+     scroll — the mobile bug the table wrapper exists to avoid. */
+  .nb-figure {
+    width: calc(100% + 4.5rem);
+    margin-left: -2.25rem;
+  }
 }
 
 /* ── Quote ──────────────────────────────────────────────────────────────── */

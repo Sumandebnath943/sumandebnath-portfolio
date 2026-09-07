@@ -58,7 +58,39 @@ export type Block =
    * list `/projects` in `seeAlso`; dropping that card into all of them would
    * reproduce exactly the interchangeable ad slot this is modelled on.
    */
-  | { kind: "promote"; href: string; note?: string };
+  | { kind: "promote"; href: string; note?: string }
+  /**
+   * An image inside the article body.
+   *
+   * Added 7 Sep 2026. Until then a post could carry exactly one image — its
+   * `cover` — and there was no way to put a picture next to the argument it
+   * illustrates.
+   *
+   * `src` is a path under /public, produced by the same pipeline the covers
+   * use: drop the master into `_masters/notebook-covers/` and run
+   * `node scripts/build-notebook-covers.mjs`, which resizes to 1280 and encodes
+   * WebP. Name it `<slug>-<something>.png` so it sorts beside its post's cover
+   * and cannot be mistaken for another post's.
+   *
+   * **`width` and `height` are the real pixel dimensions of the file, not a
+   * display size.** They exist so `next/image` can reserve the box before the
+   * bytes arrive; getting them wrong reintroduces layout shift, which is the
+   * one thing PAGE_OPTIMIZATION.md measures this site on.
+   *
+   * `alt` is required and is not optional in spirit either — NOTEBOOK_COVERS
+   * §10.3 records 52 instances of an empty alt on the author portrait as the
+   * single genuine defect three separate scanners found. Describe what the
+   * picture shows. If it illustrates an argument, `caption` is where the
+   * argument goes; alt describes, caption asserts.
+   */
+  | {
+      kind: "figure";
+      src: string;
+      alt: string;
+      width: number;
+      height: number;
+      caption?: string;
+    };
 
 export interface PostFact {
   label: string;
