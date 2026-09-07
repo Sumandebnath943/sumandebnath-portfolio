@@ -950,6 +950,42 @@ Ordered by expected value, once the above is done:
    > verbatim positive disambiguation is rejected; the compressed form — role,
    > PentaCMD-47M, the MIGI fleet, House of Namus — fits at 138. Measured by
    > trying it, not read from documentation.
+   >
+   > ### ⚠ Medium self-canonicalises unless you tell it not to (7 Sep 2026)
+   >
+   > **A story written or pasted into Medium's editor emits
+   > `<link rel="canonical">` pointing at itself.** Verified on the first
+   > cross-post: dev.to carried the correct canonical back here and Medium
+   > carried its own URL. That is the worst possible outcome of this whole item —
+   > Medium's domain authority vastly exceeds this one's, so an uncanonicalised
+   > copy does not merely fail to help, it competes and wins, and the original
+   > gets discounted.
+   >
+   > **It fails silently and it looks identical to success.** The post publishes,
+   > renders correctly and reads fine. Nothing surfaces the problem. The only way
+   > to know is to fetch the published URL and grep for the canonical tag, which
+   > takes one command and should be done on every platform, every time:
+   >
+   > ```bash
+   > curl -s -L <published-url> | grep -o '<link[^>]*rel="canonical"[^>]*>'
+   > ```
+   >
+   > **Two ways to get it right on Medium**, both confirmed against Medium's own
+   > help centre rather than assumed:
+   >
+   > - **Import rather than paste.** The import tool takes the source URL, pulls
+   >   the content and sets the canonical automatically. This is the correct
+   >   route for a cross-post and should be the default.
+   > - **Fix it after publishing**, which does not require deleting the story:
+   >   story page → three-dot menu → *Edit story* → three-dot menu → *More
+   >   settings* → *Advanced Settings* → **"This story was originally published
+   >   elsewhere"** → paste the link → *Save canonical link* → **Publish** to
+   >   apply. Only the story's author can do this.
+   >
+   > **Do not assume any platform behaves like dev.to.** dev.to honours the
+   > `canonical_url` front-matter field, which is why the generator emits it.
+   > Medium ignores the concept entirely unless asked. Check the tag on the third
+   > platform too, whatever it turns out to be.
 5. **LinkedIn headline and About section matching the site.** Copy written
    27 Aug 2026 and handed over — headline 131 chars, About ~1,150, both built
    from `identity.headline`, `identity.targeting` and `summary` in
