@@ -45,7 +45,10 @@ function featuredTicker() {
     (Date.now() - new Date(`${post.published}T00:00:00Z`).getTime()) / 86_400_000;
   return {
     title: post.title,
-    desc: post.description,
+    // No supporting line. Post titles here are number-led claims that already
+    // say the whole thing — "The AI agent cost guides say $200 a month. Mine
+    // has cost $5." needs nothing after it, and the 158-character `description`
+    // is written for a search result, where the reader is not moving.
     href: postUrl(post.slug),
     // Warm gold. Distinct from every product colour in the ticker, and it reads
     // as editorial next to the product accents rather than competing with them.
