@@ -8,13 +8,13 @@
 // nothing, and a hand-maintained constant is one nobody remembers to bump.
 
 export const ROUTE_DATES: Record<string, string> = {
-  "/": "2026-08-28",
+  "/": "2026-09-05",
   "/resume": "2026-08-27",
   "/journey": "2026-08-25",
   "/about": "2026-08-27",
   "/profile": "2026-08-28",
   "/contact": "2026-08-25",
-  "/projects": "2026-08-27",
+  "/projects": "2026-09-05",
   "/learnings": "2026-08-27",
   "/philosophy": "2026-08-28",
   "/faq": "2026-08-26",
@@ -31,15 +31,15 @@ export const ROUTE_DATES: Record<string, string> = {
   "/apps/migi-app": "2026-08-25",
   "/games/pixelville": "2026-08-25",
   "/banking/rm-copilot": "2026-08-27",
-  "/notebook": "2026-08-26",
+  "/notebook": "2026-08-29",
 };
 
 /** Shared date for the /projects/[slug] dossiers — they all render from the
  *  same source files, so an individual date per slug would be fiction. */
-export const PROJECT_DOSSIER_DATE = "2026-08-28";
+export const PROJECT_DOSSIER_DATE = "2026-09-05";
 
 /** Used when a route has no entry above — a page added without regenerating. */
-export const FALLBACK_DATE = "2026-08-28";
+export const FALLBACK_DATE = "2026-09-05";
 
 export function routeDate(route: string): Date {
   return new Date(ROUTE_DATES[route] ?? FALLBACK_DATE);

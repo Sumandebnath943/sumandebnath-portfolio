@@ -27,6 +27,13 @@ Three documents carry the full context for this repo. They do not overlap.
   `/notebook`.** The typed-block format, the title and answer-block rules, the
   closed category list, the capped tag vocabulary, the no-duplicate-question
   constraint, the voice rules, and what may never be published.
+- **`WRITING_INFORMATION_GAIN.md` + `WRITING_HUMAN_VOICE.md`** — **mandatory
+  before drafting any article, and they outrank `BLOG_GUIDELINES.md` wherever
+  they conflict.** The information-gain gate that decides whether a piece is
+  worth writing at all, the persona step, the rule that every subheading is a
+  complete thought, the vocabulary blacklist and the sentence-rhythm targets.
+  `BLOG_GUIDELINES.md` §0 records why they were added and which of its own rules
+  they overturned. Skipping them produced one article that was rejected on sight.
 - **`TARGET_QUERIES.md`** — the prompts this site is trying to be the answer to,
   the grading scale, and the results log. **A person runs it by hand; an agent
   cannot.** Read `§2` before offering to "run the queries".

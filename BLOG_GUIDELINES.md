@@ -9,6 +9,65 @@ Companion documents: `AEO_PLAYBOOK.md` (why any of this is shaped the way it is)
 
 ---
 
+## 0. Read the two writing guides first. Every time. No exceptions.
+
+**`WRITING_INFORMATION_GAIN.md` and `WRITING_HUMAN_VOICE.md` are mandatory
+pre-flight for every article, and they outrank this file wherever they
+disagree with it.** They are Suman's, added 7 Sep 2026, and they are copied into
+this repo rather than referenced at their original path so they cannot go
+missing and cannot drift from what was actually followed.
+
+They exist because of a specific failure. A draft on AI agents was written
+against this file alone, passed every check in it, and was rejected on sight.
+The three faults are worth naming, because this file did not catch any of them:
+
+1. **Every subheading was a withheld fragment.** "The chain that caught it."
+   "The model was never the unreliable part." Each hides its subject to sound
+   interesting. Six in a row is a signature, and the reader's verdict was "pure
+   AI slop — very random and not self-explanatory".
+2. **The topic was too narrow to matter.** It was built on one incident nobody
+   else has had. A reader has to be able to see themselves in the first
+   paragraph.
+3. **No information gain.** It never established what everyone else says, so it
+   could not establish what it knew that they did not.
+
+### The three gates, in order
+
+**Gate 1 — information gain.** Score the angle before outlining. Level 0
+(restates the field) is killed. Level 1 (new framing, no new data) only if
+nothing better exists. **Level 2 (real numbers, a real case) is the target** and
+Level 3 (a new framework) is the best outcome. Getting there means research
+first: find what the top pieces on the topic all say, then find the question
+they all leave unanswered. **Fewer than 15 specific data points in the outline
+means there is no article yet.** Go and find more; never pad.
+
+**Gate 2 — the persona.** Decide, in writing, before drafting: what does this
+person believe, what cliché do they refuse to repeat, what is the one opinion a
+balanced writer would hedge on. Hold it for the whole piece. A neutral,
+comprehensive, helpful voice is the failure mode, not the safe option.
+
+**Gate 3 — subheadings are a mini-outline.** **Every `h2` is a complete thought
+with a subject and a claim, readable alone by someone who skims.** "Eleven agents
+had a backup provider that was never actually connected" — not "The silent
+failure". This is the single rule most likely to be broken, and it is the one
+that gets a piece dismissed fastest.
+
+### Where the guides overrule this file
+
+| Topic | This file used to say | The rule now |
+|---|---|---|
+| Title register | "Prefer the question form" | **Number-led claim. Never a question** — question headlines lose roughly 3-to-1 on reader preference |
+| Where the question goes | The title | **`metaTitle` and `faqs`** — which is where an answer engine matches it anyway, so nothing is given up |
+| Subheadings | Unspecified | Complete thoughts, always |
+
+> **The AEO argument for question-shaped titles was never lost, it moved.**
+> `metaTitle` already existed to let the H1 and the search result want different
+> words (§2b). The searchable question goes there and into `faqs`, which is the
+> block that actually gets lifted. The H1 is then free to be the thing that makes
+> somebody read.
+
+---
+
 ## 1. The three-step mechanic
 
 1. `lib/notebook/posts/<slug>.ts`, default-exporting a `Post`.
@@ -45,15 +104,27 @@ An answer engine matches a user's question against headings before it matches
 body text. "Why does position: sticky silently stop working?" is findable;
 "Sticky positioning notes" is not.
 
-Both registers are in use and both are fine:
+Both registers are in the archive. **Only one of them is correct for a new
+post.**
 
 - **Question** — "Why is my JSON-LD missing from the HTML in Next.js?"
 - **Claim** — "I spend a fifth of every project before I write the first prompt"
 
-Prefer the question form when the post answers a thing people literally search
-for. Prefer the claim form when the post's value is the argument rather than the
-lookup. Put the searchable keyword in the **slug** either way, so the title is
-free to be a hook.
+> **⚠ Superseded 7 Sep 2026 by §0. Number-led claims only; do not write a new
+> question-shaped title.** Question-format headlines lose to number-led ones by
+> roughly 3-to-1 in reader-preference testing, and thirteen of the first
+> twenty-six titles here were questions. The searchable question is not lost —
+> it moves to `metaTitle` and to `faqs`, which is the block an answer engine
+> lifts. The existing question titles stay; they are indexed and renaming a live
+> URL's H1 buys nothing.
+
+Target roughly **11 words and 65 characters** for the H1, sentence case, with a
+number in it wherever a number is honest. Single digits or 10 beat large ones —
+a "15 ways" headline now reads as a chore. Use zero or one superlative, never
+two or three, which lands as neither credible nor exciting.
+
+Put the searchable keyword in the **slug** as well, so the URL states the
+promise in plain words.
 
 > **⚠ This rule, applied to a whole archive at once, produced a blog that read
 > like an FAQ — and that is not hypothetical.** Counted across the first
@@ -226,7 +297,7 @@ slug does not collide with an existing one.
 
 **Tags are open but disciplined.** Reuse before inventing. The vocabulary in use:
 
-`AEO` · `AI-Native` · `Career` · `Colour` · `CSS` · `Debugging` · `Design` ·
+`AEO` · `Agents` · `AI-Native` · `Career` · `Colour` · `CSS` · `Debugging` · `Design` ·
 `Documentation` · `Engineering` · `Layout` · `Marketing` · `Migration` ·
 `Next.js` · `Process` · `Prompting` · `React` · `Routing` · `Security` · `SEO` ·
 `StrictMode` · `Structured Data` · `three.js` · `WebGL`
@@ -252,6 +323,24 @@ filter. Two consequences for an author:
 ---
 
 ## 6. Voice — how not to read as machine-written
+
+> **`WRITING_HUMAN_VOICE.md` §3 and §5 are the operative rules here and this
+> section is the site-specific supplement.** That file carries the vocabulary
+> blacklist (`delves`, `underscores`, `meticulously`, `showcasing`,
+> `intricacies`, `pioneers`, "provide valuable insight", and the rest), the
+> sentence-rhythm targets, and the density method. Three of its mechanics are
+> worth restating because they are measurable and they are the ones that get
+> skipped:
+>
+> - **One sentence of six words or fewer per ~150 words**, and never three
+>   consecutive sentences within five words of each other in length. Default
+>   generated prose sits flat around 0.2–0.4 variance; human writing is 0.6–1.2.
+> - **Every paragraph carries a fact, number or name the reader could not have
+>   guessed from the headline.** Write the section sparse, then densify at the
+>   same length by cutting hedges to make room — three or four passes, stopping
+>   before it reads as a spec sheet.
+> - **Do not over-correct.** "however", "between", "analysis" and "using" are
+>   normal words at normal frequency. Banning them makes prose worse for nothing.
 
 This matters commercially: a post flagged as generated is a post that gets
 dismissed, and the audience for several of these is already sceptical. **No
@@ -339,6 +428,22 @@ argued with, and an opaque score invites nothing but agreement.
 ---
 
 ## 9. Before calling a post done
+
+**Run the ship checklist in `WRITING_HUMAN_VOICE.md` §6 and the one in
+`WRITING_INFORMATION_GAIN.md` §10 first.** Failing more than two items in
+either means another pass, not a publish. The three that this repo has actually
+got wrong, in order of how easy they are to miss:
+
+- [ ] **Every `h2` is a complete thought, not a withheld fragment.** Read the
+      headings alone, in sequence. If they read as a list of teasers rather than
+      an outline of the argument, rewrite all of them.
+- [ ] **The piece establishes what the field already says before saying what it
+      knows.** A reader who has read three other articles on the topic must
+      learn something in the first section.
+- [ ] **Nothing here could be written about a different topic by swapping two
+      nouns.** This is the one rule the other rules are versions of.
+
+Then the mechanical checks:
 
 ```bash
 npx tsc --noEmit
