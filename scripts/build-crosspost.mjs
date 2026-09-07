@@ -275,9 +275,24 @@ async function main() {
   const md = render(post);
   await writeFile(out, md, "utf8");
 
+  // Two files, because dev.to has two editors and they want opposite things.
+  //
+  // The v1 editor is one Markdown box that parses front matter, so `<slug>.md`
+  // pastes whole. The v2 "Rich + Markdown" editor has separate Title, Tags and
+  // Canonical URL fields and treats a pasted `---` block as body text — it
+  // would publish the front matter as visible content at the top of the
+  // article. `<slug>.body.md` is everything after it, so v2 users paste one
+  // file into one box and fill three fields by hand.
+  const bodyOut = path.join(OUT_DIR, `${post.slug}.body.md`);
+  const body = md.split(/^---$/m).slice(2).join("---").replace(/^\n+/, "");
+  await writeFile(bodyOut, body, "utf8");
+
   const words = md.split(/\s+/).length;
   const kb = (n) => `${(n / 1024).toFixed(0)} KB`;
-  console.log(`  ${out}`);
+  console.log(`  ${out}       ← v1 editor: paste whole, front matter included`);
+  console.log(`  ${bodyOut}  ← v2 editor: paste into the body box only`);
+  console.log("");
+  console.log(`  title          ${post.title}`);
   console.log(`  canonical_url  ${SITE}/notebook/${post.slug}`);
   console.log(`  tags           ${devtoTags(post).join(", ")}`);
   console.log(`  cover_image    ${post.cover ? imageUrl(post.cover) : "(none)"}`);
