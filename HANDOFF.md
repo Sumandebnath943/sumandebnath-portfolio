@@ -5,9 +5,17 @@ next. For how the system is built read **PROJECT_BIBLE.md**; for how the site
 writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
 **Last updated:** 8 September 2026
-**Branch:** `main`, pushed through `adc1377`. Working tree clean.
-**Last session:** the first notebook article was syndicated to **dev.to, Medium
-and Hashnode**, all three canonicalised back here (§1.23). **Medium published it
+**Branch:** `main`, pushed through `f87e90e`. Working tree clean.
+**Last session:** a Search Console breadcrumb warning turned out to be **37
+broken pages, not the four the report named** — a mid-trail `ListItem` with no
+`item` voids the whole `BreadcrumbList`, silently (§1.24). **Sweep the live HTML
+before trusting a report's scope.** Underneath it: `/projects` named none of the
+nine products documented in depth here, the nav emits **no** product links
+without JavaScript, and a "Documented in depth" block now closes the page.
+Breadcrumbs validation was started 8 Sep and is **in flight — check the report,
+do not re-click**.
+**Earlier the same day:** the first notebook article was syndicated to **dev.to,
+Medium and Hashnode**, all three canonicalised back here (§1.23). **Medium published it
 self-canonicalising and gave no warning** — verify the tag by fetching it, never
 trust the editor. Also: nine profiles are now declared three ways each, and
 `AEO_PLAYBOOK.md` §6 gained the per-platform rules. **A clean `git push` is not
@@ -29,7 +37,7 @@ committed. Run **`node scripts/crawler-check.mjs`** after touching `proxy.ts`,
 `lib/crawler.ts` or `lib/crawler-verify.ts`.
 **And before that:** a twenty-seventh notebook article — the flat stretch between builds, evidenced off this repository's own commit log — scored to the top of the editor's ranking, and the first cover deliberately outside the §2 house style (§1.20). **Read §1.20 before adding a post**: it records why the headline was rewritten, and why the front page's "Editor's selection" tile does not show the highest-scoring article.
 **Earlier still:** three sections rebuilt from measurements taken on the two reference sites — a scroll-reactive marquee band closing the homepage, an ASCII-portrait statement wall on `/profile`, and "05 / Operating Principles" rebuilt as a hover accordion (§1.19). All three were built twice; the first pass copied the arrangement and none of the behaviour. **Read §1.19 before touching any of them** — six of the eight things that mattered were invisible in a screenshot.
-**Next up:** **both long-standing items are now closed.** IndexNow was run 7 Sep — 68 URLs, accepted 200 (§1.23). The two Search Console reports were validated on 27 Aug and **passed on 28 Aug with 0 affected items**; that instruction sat here ten days after it had already been carried out, so check the report before repeating an action this file asks for. What is actually next: syndicate the next article using `AEO_PLAYBOOK.md` §6 item 4 for the platform quirks and **§6.2 for when** — publish, IndexNow, then syndicate 3–7 days later, not same-day as on 7 Sep. **§6.2 also says there is no posting schedule and should not be one**; zero posts in a month is a correct outcome, and cadence is not the lever anyway — and beyond that the homepage structure weakness in §3 is the oldest open item, with §1.19 having added a fourteenth section to `/` without addressing it.
+**Next up:** **one item is in flight and needs nothing from you.** The breadcrumbs report was validated on 8 Sep after the §1.24 fix went live; validation re-crawls its own sample over days, so pages it has not reached yet keep reading as errors while the fix is deployed. **Check the report before clicking Validate fix again** — the same instruction sat here ten days after it had already been carried out in August, which is the failure this line exists to prevent. IndexNow was run 8 Sep — 68 URLs, accepted 200 (§1.24), after the 7 Sep run (§1.23); the protocol discourages resubmitting unchanged URLs, so do not run it again without a real change. The two structured-data reports from August passed on 28 Aug with 0 affected items and are closed. **Deferred by decision:** section index pages at `/agents`, `/models` and `/apps` — four of the six groupings hold one product each today, and a one-item index is a doorway page; revisit when those branches grow (§1.24). What is actually next: syndicate the next article using `AEO_PLAYBOOK.md` §6 item 4 for the platform quirks and **§6.2 for when** — publish, IndexNow, then syndicate 3–7 days later, not same-day as on 7 Sep. **§6.2 also says there is no posting schedule and should not be one**; zero posts in a month is a correct outcome, and cadence is not the lever anyway — and beyond that the homepage structure weakness in §3 is the oldest open item, with §1.19 having added a fourteenth section to `/` without addressing it.
 **Earlier:** four pieces of work, 25–26 Aug. Agentic readiness against an external audit, which found the identity JSON-LD was invisible without JavaScript — §1.8. Then **twenty-one notebook articles** in six batches, three new categories and a writing guide — §1.9. Then the target query set, the entity rework, and a measurement that reordered the priorities — §1.10. Then the notebook rebuilt as a publication — §1.11.
 
 > Run `git log --oneline -15` before trusting this section — it is a snapshot,
@@ -2132,6 +2140,68 @@ Deployed as `adc1377`. Verified against production, not the build log: nine
 `rel="me"` links in `<head>`, both new profiles in `sameAs`, nine footer pills
 with correct icons, no overflow at 375px, and all three canonicals re-checked
 after the deploy.
+
+---
+
+### 1.24 A breadcrumb warning that was hiding a missing page (8 Sep 2026)
+
+Search Console flagged **"Missing field 'item'"** on the breadcrumbs report,
+naming four URLs. The crumb at position 2 of `/agents/pentashell` — the "Agents"
+section — carried a `name` and no `item`, because `Breadcrumbs.tsx` deliberately
+omitted it for sections with no route. The reasoning was right and the encoding
+was wrong: `/agents` does not exist and a crumb must never 404, but Google
+requires `item` on every step except the last, and an invalid `BreadcrumbList`
+is **discarded whole** rather than degraded. Those pages showed a bare URL in
+results, not a shortened trail — silent and total, which is how it survived the
+two validation rounds in §1.18.
+
+> **Search Console named four pages. Thirty-seven were broken.** Checked against
+> the live HTML, not the source: all nine pages under a routeless section
+> grouping, plus all 28 notebook posts, where the bad item sat at position 3.
+> The report lists examples from what it has recrawled since the error appeared.
+> Treating its list as the set of affected URLs would have left five product
+> pages broken. **Sweep the live HTML yourself before believing a report's
+> scope.**
+
+Unlinked mid-trail crumbs are now dropped from the JSON-LD with positions
+renumbered from 1; they stay in the visible trail. The notebook posts got the
+opposite treatment — `/notebook/category/[slug]` is a real route, so that crumb
+now links and posts gained a fuller four-step trail than they had before.
+
+**Then the finding underneath it.** `/projects` renders `archive-projects.ts`,
+fourteen products that mostly live on their own domains, and it named none of
+the nine documented in depth here — while its own `QAPage` answer four lines
+above the grid named three of them. Measured on live HTML: the homepage carried
+8 of 9 links, `/projects` 3 of 9 through the Related rail alone, and any leaf
+page **zero**, because the nav renders product links only once a submenu opens.
+A "Documented in depth" block now closes the page — nine cards from
+`dossierPages()`, `ItemList` extended 14 → 23. See `AEO_PLAYBOOK.md` §5.5a and
+`PROJECT_BIBLE.md` §8 point 9, which is the flag to set on the next product page.
+
+Two counts were corrected because the page they point at changed: the
+`CollectionPage`'s `numberOfItems`, and `/llms.txt`'s systems figure, which was
+`projects.length + archiveProjects.length` — double-counting seven flagships
+that appear in both lists while omitting the nine dossiers. It reads 23+ now.
+`public/llms-full.txt` is hand-maintained and separately said "13+ systems"
+against an archive of 14; corrected by hand. **That file's counts do not derive
+from anything — check them when the archive grows.**
+
+Deployed across `f9dad69`, `b7b9ad6`, `b97df9c` and `f87e90e`, each verified
+against production: 37 pages with no mid-trail item missing, nine
+server-rendered dossier links where six had none, 23 contiguous ItemList
+positions, and both llms surfaces reading their corrected figures. IndexNow was
+run — 68 URLs, accepted 200.
+
+> **Breadcrumbs validation was started on 8 Sep 2026 and is in flight.** Per the
+> lesson at the top of this file, **check the report before clicking Validate
+> fix again** — it re-crawls its own sample over several days, and pages it has
+> not reached yet keep showing as errors while the fix is live. Nothing to do
+> unless it comes back failed.
+
+**Deferred, deliberately:** section index pages at `/agents`, `/models` and
+`/apps`, which would restore the middle crumb legitimately. Four of the six
+section groupings hold exactly one product today, and a one-item index is a
+doorway page. Revisit when the thin branches have more products.
 
 ---
 
