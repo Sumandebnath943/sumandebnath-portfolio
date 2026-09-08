@@ -33,6 +33,11 @@ import { SITE_URL } from "@/lib/projects";
  * `/agents` route** — it would 404. A crumb that leads nowhere is worse than no
  * crumb, so section names that have no page are rendered as plain text, not
  * links. Pass `href: null` for those.
+ *
+ * Those unlinked sections appear in the visible trail but **not** in the JSON-LD,
+ * for the reason spelled out at the `schemaItems` filter below. The two halves
+ * still come from one array; the schema half just declines to name a step it
+ * cannot give a URL for.
  */
 
 export interface Crumb {
@@ -66,12 +71,21 @@ export default function Breadcrumbs({
 
   const items: Crumb[] = [{ label: "Home", href: "/" }, ...trail];
 
-  // Only linked crumbs carry a `position` in the schema; an unlinked section is
-  // still a named step, so it keeps its position with a `name` and no `item`.
+  // A `ListItem` without `item` is only legal as the *last* step of the list —
+  // Google treats the current page's own URL as optional and everything above it
+  // as required. Emitting an unlinked section in the middle earns "Missing field
+  // 'item'" in Search Console, which invalidates the whole BreadcrumbList, so the
+  // page loses the trail in its result entirely — the failure is silent and total
+  // rather than partial. Unlinked mid-trail sections are therefore dropped from
+  // the schema and positions renumbered contiguously from 1; they stay in the
+  // visible trail, which is where a reader is served by seeing them. The schema
+  // then describes only the hierarchy a crawler can actually walk.
+  const schemaItems = items.filter((c, i) => c.href || i === items.length - 1);
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: items.map((c, i) => ({
+    itemListElement: schemaItems.map((c, i) => ({
       "@type": "ListItem",
       position: i + 1,
       name: c.label,

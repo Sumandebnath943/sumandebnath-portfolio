@@ -666,9 +666,20 @@ sits in the site rather than treating every URL as free-floating.
 
 > **A crumb must never lead to a 404.** `/agents`, `/apps`, `/slms`, `/llms`,
 > `/games` and `/banking` are menu groupings with no route behind them. Pass
-> `href: null` for those — the component renders them as plain text and omits
-> `item` from the schema. One dossier crumb was also pointing at `/#projects`, a
+> `href: null` for those — the component renders them as plain text and leaves
+> them out of the schema. One dossier crumb was also pointing at `/#projects`, a
 > homepage anchor, which told crawlers the page sat under the homepage.
+
+> **An unlinked section cannot sit *inside* the JSON-LD list.** It first shipped
+> as a `ListItem` carrying `name` and `position` but no `item`, which reads as
+> reasonable and is invalid: Google requires `item` on every step except the
+> last. Search Console flagged "Missing field 'item'" on all eleven pages with a
+> section crumb, and an invalid `BreadcrumbList` is discarded whole — those pages
+> showed a bare URL in results, not a shortened trail. The component now drops
+> unlinked mid-trail crumbs from the schema and renumbers `position` from 1, so
+> `/agents/pentashell` publishes Home → Pentashell while the reader still sees
+> Home / Agents / Pentashell. Fixing it properly instead means giving the
+> sections real index pages; until then the schema claims only what it can link.
 
 ### 5.5 Measured balance
 

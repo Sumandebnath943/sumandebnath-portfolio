@@ -18,6 +18,7 @@ import { CATEGORY_ACCENT } from "@/lib/notebook/types";
 import { toCardPost } from "@/lib/notebook/card";
 import {
   allPosts,
+  categorySlug,
   formatPostDate,
   furtherReading,
   getPost,
@@ -213,7 +214,10 @@ export default async function NotebookPostPage({
               <Breadcrumbs
                 trail={[
                   { label: "Notebook", href: "/notebook" },
-                  { label: post.category, href: null },
+                  // The category archive is a real route, so this crumb links —
+                  // `href: null` here was leaving the post's trail one step
+                  // shorter than the hierarchy it actually sits in.
+                  { label: post.category, href: `/notebook/category/${categorySlug(post.category)}` },
                   { label: post.title, href: postUrl(post.slug) },
                 ]}
                 variant="paper"

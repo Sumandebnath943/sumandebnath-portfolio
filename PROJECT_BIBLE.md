@@ -1197,7 +1197,10 @@ Missing one of these is the most common defect in this repo. A new page needs:
 
    `<Breadcrumbs>` emits the visible trail *and* the `BreadcrumbList` JSON-LD —
    do not also hand-roll one. Pass `href: null` for a section with no route:
-   `/agents`, `/apps`, `/slms`, `/llms`, `/games` and `/banking` all 404.
+   `/agents`, `/apps`, `/slms`, `/llms`, `/games` and `/banking` all 404. Such a
+   crumb shows in the visible trail and is omitted from the JSON-LD — a middle
+   `ListItem` with no `item` is invalid and voids the whole list. See
+   `AEO_PLAYBOOK.md` §5.4.
 
    `<Contact />` **is the footer** — the closing panel, the four-column sitemap
    and the white legal strip. It is mounted per page, never from the layout,
