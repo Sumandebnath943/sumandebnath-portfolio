@@ -35,6 +35,14 @@ export interface PageEntry {
   group: PageGroup;
   /** The page's accent, matching Navigation.tsx. Drives the card's hairline. */
   accent: string;
+  /**
+   * This page is a full product dossier living on this site, as opposed to a
+   * section, a person page or a product that lives on its own domain.
+   *
+   * Set on the nine pages that `lib/archive-projects.ts` does not cover, so
+   * `/projects` can list them under their own heading — see `dossierPages()`.
+   */
+  dossier?: true;
 }
 
 export const GROUP_LABELS: Record<PageGroup, string> = {
@@ -85,6 +93,7 @@ export const PAGES: PageEntry[] = [
     blurb: "Trust-first local CLI coding agent — a permission contract before any action",
     group: "agents",
     accent: "#FF5500",
+    dossier: true,
   },
   {
     href: "/agents/pentashell",
@@ -92,6 +101,7 @@ export const PAGES: PageEntry[] = [
     blurb: "Natural-language-to-terminal CLI running on the custom PentaCMD-47M model",
     group: "agents",
     accent: "#2FE2F0",
+    dossier: true,
   },
   {
     href: "/agents/migi",
@@ -99,6 +109,7 @@ export const PAGES: PageEntry[] = [
     blurb: "A 46-agent autonomous fleet with 500+ automated eval checks",
     group: "agents",
     accent: "#C6F24E",
+    dossier: true,
   },
 
   // ── Models ───────────────────────────────────────────────────────────────
@@ -108,6 +119,7 @@ export const PAGES: PageEntry[] = [
     blurb: "A 47M-parameter language model trained from scratch on 299K command pairs",
     group: "models",
     accent: "#38BDF8",
+    dossier: true,
   },
   {
     href: "/llms/qdex-1.5b",
@@ -115,6 +127,7 @@ export const PAGES: PageEntry[] = [
     blurb: "QLoRA fine-tuning pipeline for Qwen2.5-Coder-1.5B, benchmarked with HumanEval",
     group: "models",
     accent: "#2DD4BF",
+    dossier: true,
   },
 
   // ── Apps & systems ───────────────────────────────────────────────────────
@@ -124,6 +137,7 @@ export const PAGES: PageEntry[] = [
     blurb: "AI relationship-manager copilot — 12 modules, deterministic scoring, 5 security phases",
     group: "apps",
     accent: "#D9A961",
+    dossier: true,
   },
   {
     href: "/projects/aegis-vault",
@@ -138,6 +152,7 @@ export const PAGES: PageEntry[] = [
     blurb: "Native Android client for the MIGI agent fleet",
     group: "apps",
     accent: "#C6F24E",
+    dossier: true,
   },
   {
     href: "/apps/forget-anything",
@@ -145,6 +160,7 @@ export const PAGES: PageEntry[] = [
     blurb: "Android app using geofencing and WiFi-departure triggers as reminders",
     group: "apps",
     accent: "#DAA520",
+    dossier: true,
   },
   {
     href: "/games/pixelville",
@@ -152,6 +168,7 @@ export const PAGES: PageEntry[] = [
     blurb: "Procedural city builder with a real economy, seasons, crime and democracy",
     group: "apps",
     accent: "#F5B94A",
+    dossier: true,
   },
   {
     href: "/fun-apps",
@@ -240,6 +257,36 @@ export function getPage(href: string): PageEntry | undefined {
 
 export function pagesInGroup(group: PageGroup): PageEntry[] {
   return PAGES.filter((p) => p.group === group);
+}
+
+/**
+ * The product pages documented in depth on this site, in `PAGES` order — so
+ * they group as agents, then models, then apps, without a second ordering to
+ * maintain.
+ *
+ * ## Why this exists
+ *
+ * `/projects` renders `lib/archive-projects.ts`, which describes fourteen
+ * products that mostly live on their own domains. It did not, until this
+ * existed, name any of these nine — so the page titled "What has Suman Debnath
+ * built?" omitted Pentashell, the MIGI fleet, PACT Agent, PentaCMD-47M,
+ * Qdex-1.5B, PixelVille, the Banking Co-pilot and both Android apps, while its
+ * own `QAPage` answer named three of them. The markup asserted what the page
+ * did not show.
+ *
+ * **Rendered from here rather than added to the archive on purpose.** An
+ * `ArchiveProject` carries `positioning`, `description`, `type`, `status`,
+ * `stack` and `kind` — facts that already exist on each product page and in
+ * this file. Writing them a second time creates exactly the drift this registry
+ * was built to end (see the header). A card needs a label, a blurb and an
+ * accent; those are here, and they stay true by construction.
+ *
+ * **AEGIS VAULT is deliberately not flagged.** It is a dossier on this site,
+ * but `archiveProjects` already carries it with a `detailUrl`, so flagging it
+ * would render the same product twice on one page.
+ */
+export function dossierPages(): PageEntry[] {
+  return PAGES.filter((p) => p.dossier);
 }
 
 // ── The related graph ──────────────────────────────────────────────────────

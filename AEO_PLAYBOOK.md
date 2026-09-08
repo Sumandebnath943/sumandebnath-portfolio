@@ -706,6 +706,48 @@ purpose; pumping link equity into legal pages is wasted.
 
 ---
 
+### 5.5a The archive described fourteen of twenty-three (8 Sep 2026)
+
+`/projects` renders `lib/archive-projects.ts`, fourteen products that mostly live
+on their own domains. It named **none** of the nine with a full write-up on this
+site — while its own `QAPage` answer, four lines above the grid, named the MIGI
+fleet, PentaCMD-47M and the Banking Co-pilot. The page titled *"What has Suman
+Debnath built?"* was the one page on the site that did not list what he had
+built.
+
+Measured on the live HTML before the fix, links to those nine:
+
+| Page | Server-rendered links to the nine |
+|---|---|
+| `/` | 8 of 9 — `/apps/migi-app` had none |
+| `/projects` | 3 of 9, and only via the Related rail |
+| any leaf page | **0** |
+
+> **The nav is not a crawl path.** Its product links render only once a submenu
+> is opened, so a crawler that does not execute JavaScript sees none of them from
+> any page. The homepage was carrying nearly the whole internal link graph for
+> the product pages on its own. This is worth remembering before treating "it's
+> in the menu" as "it's linked".
+
+A **Documented in depth** block now closes the page, rendered from
+`dossierPages()` in `lib/pages.ts` — nine cards, nine server-rendered `<a href>`,
+and the `ItemList` extended from 14 to 23 items so the count and the page agree.
+
+> **Rendered from the page registry, not copied into the archive.** An
+> `ArchiveProject` wants `positioning`, `status`, `stack` and `kind`; those facts
+> already exist on each product page. Writing them a second time is the drift
+> `lib/pages.ts` exists to prevent. A card needs a label, a blurb and an accent,
+> and those stay true by construction. AEGIS VAULT is deliberately unflagged —
+> the archive already carries it, and flagging it would render it twice.
+
+**Do not oversell what this buys.** `/llms.txt` is generated from `lib/pages.ts`
+and already listed all nine with blurbs, as does `llms-full.txt`, so an engine
+reading the AI surfaces could always see them. The gains are narrower and real:
+a second differently-worded internal link from a priority-0.9 page, the
+`/apps/migi-app` gap closed, one URL that enumerates the whole set for something
+assembling a citation, and a page that finally delivers the claim in its own
+title.
+
 ## 5.6 Which index each assistant actually queries
 
 **Measured 25 Aug 2026.** ChatGPT names Suman prominently for "who is Suman

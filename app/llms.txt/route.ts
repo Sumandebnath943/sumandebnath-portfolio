@@ -2,7 +2,7 @@ import { SITE_URL, projects } from "@/lib/projects";
 import { archiveProjects } from "@/lib/archive-projects";
 import { identity, summary, targetRoles } from "@/lib/resume";
 import { allFaqs } from "@/lib/faqs";
-import { GROUP_LABELS, PAGES, type PageGroup } from "@/lib/pages";
+import { dossierPages, GROUP_LABELS, PAGES, type PageGroup } from "@/lib/pages";
 import { allPosts, notebookModified, postUrl } from "@/lib/notebook";
 import { FALLBACK_DATE } from "@/lib/route-dates";
 
@@ -96,6 +96,17 @@ export function GET() {
       return `- ${link} — ${p.positioning} ${p.description.replace(/\s+/g, " ").trim()} Status: ${p.status}.`;
     });
 
+  // Distinct products this site documents: the fourteen archive entries plus
+  // the nine pages with a full write-up here.
+  //
+  // It was `projects.length + archiveProjects.length`, which was wrong in both
+  // directions at once — every flagship in `projects` also appears in
+  // `archiveProjects` by name, so those seven were counted twice, while the
+  // nine dossier pages were not counted at all. `/projects` now renders both
+  // halves, so the figure and the page a reader is sent to check it against
+  // finally describe the same set.
+  const productCount = archiveProjects.length + dossierPages().length;
+
   const pageLines = GROUP_ORDER.flatMap((group) => {
     const inGroup = PAGES.filter((p) => p.group === group);
     if (inGroup.length === 0) return [];
@@ -182,7 +193,7 @@ Each is stated on the page linked beside it.
 |---|---|---|
 | Years in brand and digital marketing | 9+ | ${abs("/resume")} |
 | Years shipping AI-native products | 2+ | ${abs("/resume")} |
-| AI systems built and shipped independently | ${projects.length + archiveProjects.length}+ | ${abs("/projects")} |
+| AI systems built and shipped independently | ${productCount}+ | ${abs("/projects")} |
 | Autonomous agents in the MIGI fleet | 46 | ${abs("/agents/migi")} |
 | Automated eval checks guarding that fleet | 500+ | ${abs("/agents/migi")} |
 | PentaCMD-47M parameter count | 47 million | ${abs("/slms/pentacmd")} |

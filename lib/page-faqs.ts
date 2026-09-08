@@ -234,6 +234,14 @@ export const PAGE_FAQS: Record<string, PageFaq[]> = {
       q: "Did Suman Debnath build these alone?",
       a: "Yes. Every system in the archive was designed, built and shipped independently, using AI-native engineering environments — Claude Code, Antigravity, Cursor, Codex and Lovable — as the working method rather than as an assistant bolted onto a conventional one.",
     },
+    {
+      // Distinct from /faq's "What kind of products has Suman built?", which
+      // answers with categories, and from the live-status question above. This
+      // one answers "where do I go to read the detail", which is what the
+      // dossier block added to this page actually offers.
+      q: "Which of Suman Debnath's products have a full technical write-up?",
+      a: "Nine products have a dedicated page on sumandebnath.houseofnamus.com documenting how they were built: the PACT Agent, Pentashell and the 46-agent MIGI fleet; the PentaCMD-47M and Qdex-1.5B language models; the Banking Co-pilot; the MIGI Android app and Forget Anything?; and the PixelVille city builder. Each page covers the architecture and the measured results rather than a feature list. They are listed together under “Documented in depth” on the projects page.",
+    },
   ],
 
   "/about": [

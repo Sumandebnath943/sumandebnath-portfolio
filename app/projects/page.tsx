@@ -6,7 +6,9 @@ import RelatedPages from "@/components/ui/RelatedPages";
 import PageFaq from "@/components/ui/PageFaq";
 import Contact from "@/components/sections/Contact";
 import ArchiveCard from "@/components/sections/ArchiveCard";
+import DossierCard from "@/components/sections/DossierCard";
 import { archiveProjects } from "@/lib/archive-projects";
+import { dossierPages, GROUP_LABELS } from "@/lib/pages";
 import { SITE_URL } from "@/lib/projects";
 import { qaAnswerAuthorship, qaAuthorship } from "@/lib/schema";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
@@ -73,6 +75,11 @@ const builtJsonLd = {
   },
 };
 
+/* The nine products with a full write-up on this domain. `lib/archive-projects.ts`
+   does not describe any of them — see `dossierPages()` for why they are listed
+   from the page registry instead of being copied into that file. */
+const dossiers = dossierPages();
+
 const collectionJsonLd = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
@@ -86,8 +93,13 @@ const collectionJsonLd = {
   mainEntity: {
     "@type": "ItemList",
     name: "AI-Native Project Archive",
-    numberOfItems: archiveProjects.length,
-    itemListElement: archiveProjects.map((p, i) => ({
+    // The archive plus the nine in-depth dossiers below it. The count and the
+    // list have to describe the same page: this node previously claimed
+    // fourteen items while the `QAPage` answer beside it named the MIGI fleet,
+    // PentaCMD-47M and the Banking Co-pilot, none of which were in it.
+    numberOfItems: archiveProjects.length + dossiers.length,
+    itemListElement: [
+      ...archiveProjects.map((p, i) => ({
       "@type": "ListItem",
       position: i + 1,
       item: {
@@ -111,7 +123,26 @@ const collectionJsonLd = {
               : "https://schema.org/PreOrder",
         },
       },
-    })),
+      })),
+      // Absolute URLs on this domain, so an engine reading the list can walk
+      // straight to the page that documents each one. `applicationCategory`
+      // stays the schema.org vocabulary term; the section a product belongs to
+      // is the more specific `applicationSubCategory`.
+      ...dossiers.map((p, i) => ({
+        "@type": "ListItem",
+        position: archiveProjects.length + i + 1,
+        item: {
+          "@type": "SoftwareApplication",
+          name: p.label,
+          description: p.blurb,
+          applicationCategory: "DeveloperApplication",
+          applicationSubCategory: GROUP_LABELS[p.group],
+          url: `${SITE_URL}${p.href}`,
+          author: { "@id": `${SITE_URL}/#person` },
+          creator: { "@id": `${SITE_URL}/#person` },
+        },
+      })),
+    ],
   },
 };
 
@@ -205,6 +236,13 @@ export default function ProjectsArchivePage() {
                 </span>{" "}
                 secondary
               </span>
+              {/* Every count above describes `archiveProjects`. This one
+                  describes the block further down the page, so the row adds up
+                  to what the page actually shows rather than to one of its two
+                  halves. */}
+              <a href="#dossiers" className="transition-colors hover:text-white/85">
+                <span className="text-white/65">{dossiers.length}</span> documented in depth
+              </a>
             </div>
           </div>
         </section>
@@ -215,6 +253,48 @@ export default function ProjectsArchivePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-7">
               {archiveProjects.map((p) => (
                 <ArchiveCard key={p.slug} project={p} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── DOCUMENTED IN DEPTH ──
+            The nine products with a full write-up on this site. This block is
+            the reason the page can now stand behind its own title: the archive
+            above describes products that mostly live on their own domains, and
+            until this existed nothing on this page named the agents, the models
+            or the apps built here — six of the nine had no server-rendered link
+            from this URL at all. */}
+        <section
+          id="dossiers"
+          aria-labelledby="dossiers-heading"
+          className="relative px-6 md:px-10 pb-32"
+        >
+          <div className="max-w-6xl mx-auto border-t border-white/[0.06] pt-20">
+            <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-white/55 mb-6">
+              Documented in depth
+            </p>
+            <h2
+              id="dossiers-heading"
+              className="font-manrope font-semibold text-3xl md:text-5xl leading-[1.08] tracking-tight mb-6 max-w-3xl"
+            >
+              The builds with a{" "}
+              <span className="font-serif italic font-normal text-white/70">
+                full write-up
+              </span>{" "}
+              on this site
+            </h2>
+            <p className="font-manrope text-[17px] md:text-lg text-white/70 leading-[1.75] max-w-3xl mb-14">
+              {dossiers.length} products — the agents, the two language models
+              trained and fine-tuned from scratch, the Android apps, the
+              procedural city builder and the audited banking copilot — each
+              with its own page covering how it was built, what it measures and
+              what broke along the way.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+              {dossiers.map((page) => (
+                <DossierCard key={page.href} page={page} />
               ))}
             </div>
           </div>

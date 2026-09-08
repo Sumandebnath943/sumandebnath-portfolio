@@ -1165,7 +1165,7 @@ and one hard-coded ink fails contrast on at least one of them.
 
 ---
 
-## 8. Adding a product page — the eight wire-in points
+## 8. Adding a product page — the nine wire-in points
 
 Missing one of these is the most common defect in this repo. A new page needs:
 
@@ -1223,6 +1223,17 @@ Missing one of these is the most common defect in this repo. A new page needs:
    subsystem above). Nothing visible on the site breaks, so this fails silently.
    **`node scripts/crawler-check.mjs` catches it** — it walks `app/` and refuses
    to let the list drift. Run it; do not rely on remembering step 8.
+
+9. **`dossier: true` on its `lib/pages.ts` entry** — the flag that lists the page
+   on `/projects` under **Documented in depth**, via `dossierPages()`. Miss it
+   and the new product is absent from the one page whose job is to enumerate
+   what has been built, while `/projects` quietly keeps claiming a total that no
+   longer matches its own grid. Nine pages sat in exactly that state until
+   8 Sep 2026 — see `AEO_PLAYBOOK.md` §5.5a.
+
+   Set it on a product with a real write-up here. Do **not** set it on a product
+   that `lib/archive-projects.ts` already carries with a `detailUrl` (AEGIS VAULT
+   is the standing example) — that renders the same product twice on one page.
 
 Also set page-level `metadata` with `alternates.canonical` and an `openGraph`
 image, and put screenshots under `public/<slug>/`.
