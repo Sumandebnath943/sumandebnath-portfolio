@@ -438,6 +438,79 @@ Two conclusions, and the second is the more actionable:
 > surfaced the AWS advocate, the ORNL researcher, the Anyscale ML lead and the
 > New Delhi web engineer together.
 
+### Search-index spot check — 10 Sep 2026
+
+> **Same instrument as 26 Aug, same caveats.** A search index, not an assistant;
+> US-weighted against an India-weighted set; the backend is unnamed and is **not**
+> any of the five engines in the run above. Run by an agent, which is why it is a
+> spot check and not a run (§2). Recorded because it agrees with the phone
+> screenshots on every structural point, and because three of its findings are
+> not in any document.
+
+Four questions, cold, on the same day as the five-engine run:
+*Who is Suman Debnath? / Where does Suman Debnath work? / What is Suman Debnath
+working on? / What skills does Suman Debnath have?*
+
+**Across four queries and 35 result slots, this domain appeared zero times.** Not
+demoted — absent. Identical to the 26 Aug finding, two weeks and a full off-page
+programme later. **The Crusoe/AWS advocate answered all four.**
+
+| Domain | Slots | Whose page |
+|---|---|---|
+| `ai.engineer` | **4 of 4 queries** | the AWS/Crusoe advocate |
+| `datascienceportfol.io` | **4 of 4 queries** | the AWS/Crusoe advocate |
+| `sessionize.com` | 2 | the AWS/Crusoe advocate |
+| `ornl.gov` | 2 queries, 3 slots | the power-systems researcher |
+| `dev.to/debnsuma` | 2 | the AWS/Crusoe advocate |
+| **`houseofnamus.com`** | **0** | — |
+
+Three findings, none of them previously recorded:
+
+1. **He has joined three platforms where the namesake already holds the top
+   slot.** Sessionize, datascienceportfol.io and dev.to are all in `sameAs`, and
+   on all three the index returns the *namesake's* page. On dev.to the namesake
+   holds [`dev.to/debnsuma`](https://dev.to/debnsuma) — the handle that reads as
+   canonical — against `dev.to/suman_debnath_1`.
+
+   > **This is not an argument to stop, and it does change the valuation.** A
+   > profile on a domain a competitor dominates is not an independent source
+   > corroborating you; it is a thin page filed underneath an established one on
+   > the same host. `AEO_PLAYBOOK.md` §6.4 item 3 says
+   > `datascienceportfol.io` is worth an hour. It is worth it as a **contest on a
+   > page the index demonstrably reads**, which is a stronger reason than the one
+   > written there.
+
+2. **The full-stack namesake has a portfolio domain:
+   [`sumandebnath.co.in`](https://www.sumandebnath.co.in/)** — "Web Developer,
+   Flutter Developer, UI/UX Designer". This is the one ChatGPT surfaced as
+   "sumandebnath" in the run above, now with an address. **He ranks for a
+   *capability* query** (§4's commercially important third), and of all the
+   namesakes he is the least separated by field and the closest in document type:
+   a personal portfolio on a name-matching domain. **Recorded, not to be named on
+   the site** — the 26 Aug refusal on enumerating namesakes stands.
+
+3. **Twelve of 35 slots are Wikipedia pages for people who are not any Suman
+   Debnath** — Suman Deodhar, Bindu, Jadab Lal, Samapika, Jayanta, Krishna,
+   Narayan, Somen and Swapan Debnath. Pure surname padding. **Claude did the same
+   thing on the phone the same day**, citing Suman Deodhar and Swapan Debnath.
+   Two instruments, one behaviour: the index holds thin material on the *name*
+   and falls back to the encyclopedia layer to fill the gap. That is weak but
+   real support for the Wikidata item being worth its gate.
+
+**Which of the four is most winnable, and it is not the obvious one.** *"What
+skills does Suman Debnath have?"* returned three different people with three
+unrelated skill lists — AI/ML, organometallic chemistry, web development. The
+index has **no confident answer** to it, which is a fragmented query rather than
+a defended one, and it is exactly what §3.6b's five skill surfaces and `/resume`
+are built to answer. *"Where does Suman Debnath work?"* is the hardest: ORNL
+publishes a staff directory page and the advocate has ai.engineer, LinkedIn and
+Sessionize. Both are institutional employment records, and `worksFor` here has
+no third party behind it.
+
+> **One data point, not a verdict.** It is one index, US-weighted, queried once.
+> What earns it a place in this log is that it agrees with the five-engine run on
+> every structural point while using a completely different instrument.
+
 ---
 
 ## 11. Reading the results

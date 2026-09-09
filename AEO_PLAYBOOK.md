@@ -1476,6 +1476,24 @@ something in the panels rather than from theory:
    a confirmed retrieval surface with a thin page on it, which is an hour of work
    against a measured target rather than a throwaway.
 
+   > **Strengthened the same day by a second instrument** —
+   > `TARGET_QUERIES.md` §10, search-index spot check, 10 Sep 2026. Four cold
+   > queries, 35 slots, this domain absent from all of them, and
+   > `datascienceportfol.io` and `ai.engineer` returned on **4 of 4 queries
+   > each** — both for the namesake.
+   >
+   > **The finding that changes the reasoning: three of the platforms in
+   > `sameAs` are ones the namesake already dominates.** Sessionize,
+   > datascienceportfol.io and dev.to all return *his* page, and on dev.to he
+   > holds `dev.to/debnsuma` against `dev.to/suman_debnath_1`. **A profile on a
+   > domain a competitor owns the top slot on is not an independent source
+   > corroborating you** — it is a thin page filed underneath an established one
+   > on the same host. That is a better argument for filling these out than
+   > "one more node", and a worse one for opening a fourth.
+   >
+   > It does not reopen §6.3's queue. It sharpens why item 1 above — pages
+   > somebody else *writes about him* — is the category that actually pays.
+
 > **§6.2's closing note is now evidence-backed rather than reasoned.** It says
 > the recurring habit worth having is answering real questions where they are
 > asked, and that "one of those a week beats one extra article a month… the half
