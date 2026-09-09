@@ -754,6 +754,13 @@ title.
 Debnath", from multiple devices in temporary-chat mode, and the beacon confirms
 OpenAI agent arrivals. Claude, Gemini and Grok do not.
 
+> **Re-measured 10 Sep 2026, and the last sentence is now too coarse — see §6.4.**
+> ChatGPT still leads with him. **Gemini Flash-Lite names him** third of three,
+> uncited; **Gemini Pro does not name him at all**, so "Gemini" is not one
+> answer and grading per vendor averages the two together. Perplexity carries the
+> domain in its source panel and demotes him. Claude is unchanged and is the only
+> flat absence left.
+
 > **The arrival half of that was unverified when it was written** — identity was
 > taken from the user agent, which anyone can set, and forged `ChatGPT-User`
 > requests have since been caught. The naming result is independent and stands;
@@ -770,7 +777,13 @@ of **whose index each assistant answers from**:
 | **Claude** | Brave's index | Presence in Brave: inbound links and time |
 | **Gemini** | Google's index | Search Console verification + indexing |
 | **Copilot** | Bing's index | Bing Webmaster + IndexNow |
+| **Perplexity** | Its own crawler plus a web index | **Has the domain already** (§6.4) — what it needs is corroboration, not access |
 | **Grok** | X, plus a web index | Posts on X linking the site |
+
+> **Perplexity was missing from this table until 10 Sep 2026** and is in
+> `TARGET_QUERIES.md` §2's engine list, so the two files disagreed. It is also
+> the one row where "what it needs" is no longer an access problem — which is the
+> distinction §6.4 exists to draw.
 
 OpenAI is the only one of the five that both crawls and indexes in-house, which
 is exactly why on-site work paid off there first and fastest. For the others the
@@ -872,6 +885,14 @@ Debnaths are well indexed, two of them technology people in India.
 > Submission, verification and the first inbound links come first.
 
 ### 6.1 The indexing picture is split, not flat (27 Aug 2026)
+
+> **⚠ OVERTAKEN 10 Sep 2026 — read §6.4 before acting on this section.** Its
+> split was two-way: Google has the site, nothing else does. It is now three of
+> five engines, and **the binding constraint has moved from being indexed to
+> being preferred** — which needs different work. Only the Claude/Brave half of
+> what follows is still current. Kept in full because the reasoning about *why*
+> Brave has one input still governs that half, and because the shape of the
+> reversal is the point.
 
 **Google has the site. The index behind Claude's search does not.** Both halves
 were measured on 27 Aug and they disagree completely, which is why the flat
@@ -1388,6 +1409,100 @@ plus a Google Scholar profile do the real work without touching an employer.
 | Show HN | The DOI existing; the report is the armour for that comment section |
 | Wikidata | **Two** Tier 2 placements published. Self-published sources fail notability, and a deleted item is worse than no item |
 | r/LocalLLaMA | **Subreddit** karma. A 6-year account with 18k comment karma still shows 0 there — global karma does not transfer |
+
+---
+
+### 6.4 It is not an indexing problem any more — it is a prominence one (10 Sep 2026)
+
+**Measured across all five engines on "Who is suman debnath?", one run each.
+Screenshots; the full log with verbatim answers is `TARGET_QUERIES.md` §10.**
+
+§6.1 is written around a single question — *is this domain in the index?* On
+27 Aug the answer was yes for Google and no for everything else, and every
+priority in §6.3 follows from that. **Two weeks later three of five engines
+demonstrably hold the material**, and the question that decides the outcome has
+changed underneath the plan.
+
+| Engine | Holds this domain? | Outcome |
+|---|---|---|
+| **ChatGPT** | Yes — cited **four** §3.1b entity pages by title | Leads with him. Correct products, correct positioning |
+| **Gemini Flash-Lite** | Almost certainly — his bullet is `identity.headline` in substance | Named third of three, **no source chip** where the other two have one |
+| **Perplexity** | **Yes — `houseofnamus.com` is in the cited-source panel** | Reduced to the words "brand marketing" in a closing list |
+| **Gemini Pro** | No sign of it | Absent. Three namesakes |
+| **Claude** | No | Absent. Brave still holds nothing — §6.1's one surviving half |
+
+> **Retrieved-and-demoted is a distinct failure, and it is the new one.**
+> `TARGET_QUERIES.md` §2 gained a grade for it — **R** — on this run, because
+> the existing five could not express what Perplexity did. **D is fixed by
+> getting into an index. R is fixed only by §6.** Treating an R as a D produces
+> submission work that is already done; treating it as a C produces another
+> article, which will not move it either.
+
+#### What the source panels say, and it is the same thing five times
+
+Every engine that ranked a namesake first ranked him off a page **somebody else
+owns**: ORNL's staff directory, Forbes, `ai.engineer`, a Purdue CV PDF, an Amazon
+author page, Google Scholar, Science Friday, ResearchGate.
+
+**`sameAs` reached thirteen on 9 Sep and every one of the thirteen is
+self-asserted** — his site, his GitHub, his HuggingFace, his LinkedIn, his three
+syndication accounts, his ORCID, his profile pages. Not one is a third party
+writing about him. That is the whole gap, stated as a count.
+
+> **ChatGPT hedged, and the hedge names the cause.** It wrote "**Claims to have
+> built** systems including a 46-agent autonomous AI fleet and a 47-million-
+> parameter language model" — and hedged nothing else in the answer. That is what
+> a fact with exactly one source looks like when the source is its subject.
+>
+> **This is reasoning from one observation, not measurement.** It is consistent
+> with everything else on this page and it is not proof. Do not quote it as a
+> mechanism.
+
+#### What changes in the queue
+
+Nothing is removed and no new destination is added. Three re-rankings, each from
+something in the panels rather than from theory:
+
+1. **Pending third-party placements outrank any new self-made surface.** engrXiv's
+   DOI, VentureBeat, Open Source For You and the AI Engineer CFPs are the only
+   items in §6.3 that end with a page somebody else owns carrying his name.
+   Wikidata is gated on two of them anyway, so this is one bottleneck, not two.
+2. **The AI Engineer CFP moves to the top of that group.** `ai.engineer` was cited
+   by **three of the four engines that did not grade A** — both Geminis and
+   Perplexity — inside a single query. §6.3 files it as one submission among six.
+   It is the most-read surface anything in the queue touches.
+3. **`datascienceportfol.io` is misvalued at "thin, cheap, one more `sameAs`
+   node".** Both Gemini runs cited it — for the *namesake's* profile on it. It is
+   a confirmed retrieval surface with a thin page on it, which is an hour of work
+   against a measured target rather than a throwaway.
+
+> **§6.2's closing note is now evidence-backed rather than reasoned.** It says
+> the recurring habit worth having is answering real questions where they are
+> asked, and that "one of those a week beats one extra article a month… the half
+> of §6 that is still barely started". **Perplexity and Brave are the two engines
+> being lost, and both weight community and forum content heavily.** The note was
+> written from first principles; this run is the first measurement pointing the
+> same way.
+
+#### What this does *not* license
+
+- **No new pages.** ChatGPT cited four entity pages by title and the §3.1b table
+  predicted exactly which four. The on-site half is working, and
+  `TARGET_QUERIES.md` §11's rule stands: a bad identity grade is never a missing
+  page.
+- **No fifth namesake, and no new negation.** The run surfaced two more — a
+  full-stack developer with his own `sumandebnath` portfolio site, and an NIT
+  Agartala electrical engineer on about.me. §6's refusal of 26 Aug 2026 covers
+  this and is not reopened by there being more of them; that was the argument
+  *for* the refusal.
+- **No cadence change.** §6.2 holds. Volume was not the constraint and this run
+  does not make it one.
+
+> **Every grade here is a single run.** §7's rule is three runs and the modal
+> answer, and this satisfies none of it. **The three re-rankings above are drawn
+> from the cited-source panels, not from the ordering** — which index holds what
+> does not vary between runs, and that is the only reason they are actionable on
+> one sample. Re-run before quoting any grade.
 
 ---
 

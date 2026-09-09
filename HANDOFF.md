@@ -2781,11 +2781,29 @@ opportunities, roughly in value order.
    either. **This is Suman's to do, not a coding task**, and it outranks
    everything below.
 
-   > **Run the `TARGET_QUERIES.md` baseline before any of it.** Twenty-nine
-   > prompts with the page that owns each and a grading scale, written 26 Aug and
-   > **not yet run**. Wikidata takes months to show up in an index; without a
-   > before, there is no way to tell whether it worked, and the whole point of
-   > §6 is that it is the only lever left.
+   > ~~**Run the `TARGET_QUERIES.md` baseline before any of it.**~~
+   > **⚠ PARTLY OVERTAKEN 10 Sep 2026 — read `AEO_PLAYBOOK.md` §6.4 and
+   > `TARGET_QUERIES.md` §10 first.** The paragraph above is the 27 Aug ordering
+   > and two of its three items are done; the third, Wikidata, is gated on
+   > placements rather than on a baseline.
+   >
+   > **One query — "Who is suman debnath?" — was run across all five engines on
+   > 10 Sep.** Three of the five hold this domain's material. ChatGPT leads with
+   > him and cites four entity pages; Perplexity has the domain in its source
+   > panel and demotes him to two words; Claude and Gemini Pro are still absent.
+   > **So the constraint has moved from being indexed to being preferred**, and
+   > the only lever on that is independent corroboration — thirteen `sameAs`
+   > entries and not one of them is a third party writing about him.
+   >
+   > **The re-ranked queue is in §6.4**, in short: the pending third-party
+   > placements (engrXiv DOI, VentureBeat, OSFY, the AI Engineer CFPs) outrank any
+   > new self-made profile, the **AI Engineer CFP** is the highest-value single
+   > item in it, and `datascienceportfol.io` is worth an hour it was not thought
+   > to be worth.
+   >
+   > **The full baseline is still unrun and still wanted** — one query is not
+   > sixty, and one run per engine is not the three §2 asks for. It is no longer a
+   > gate on starting, because the work it was gating has already started.
 
 1. **Watch a week of real traffic before building more on the dashboard.** It
    has never been used against real data. Pagination and CSV export are the

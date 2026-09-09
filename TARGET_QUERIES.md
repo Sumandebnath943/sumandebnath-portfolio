@@ -9,8 +9,13 @@ before drawing any conclusion from a result here — most of what moves these
 numbers is off-site, and knowing *which engine* changed tells you *which index*
 moved.
 
-> **Nothing has been run yet.** The log in §10 is empty on purpose. Do not fill
-> it with estimates, and do not treat the absence of a baseline as a baseline.
+> ~~**Nothing has been run yet.** The log in §10 is empty on purpose.~~
+> **Superseded 10 Sep 2026 — one query has been run across all five engines.**
+> See §10. It is **not** the minimum baseline: one prompt, one run per engine,
+> where §2 asks for three runs and a modal answer. The half of it that does not
+> depend on the modal rule is still the most useful thing in this file.
+> Do not fill the rest of the log with estimates, and do not treat one query as
+> a baseline for sixty.
 
 ---
 
@@ -78,6 +83,7 @@ statement about one index rather than about "AI":
 |---|---|
 | **A — Cited** | Names the right Suman Debnath **and** links `sumandebnath.houseofnamus.com` |
 | **B — Named** | Names him correctly, no link to the site |
+| **R — Demoted** | The domain is in the engine's cited-source list, but he is not named as a person — reduced to a category noun in a trailing list, or ranked below the namesakes |
 | **C — Leaked** | Uses material that is only on this site, or names a product, without attributing either |
 | **D — Absent** | Neither the person nor the work appears |
 | **X — Wrong person** | Answers about the AWS Principal Developer Advocate, the power-systems researcher, or another namesake |
@@ -90,6 +96,23 @@ statement about one index rather than about "AI":
 >
 > C is the interesting middle. It means the content is winning and the
 > attribution is not.
+
+> **R was added 10 Sep 2026, because the first real run produced a state the
+> five grades could not express.** Perplexity carried `houseofnamus.com` in its
+> cited-source panel and still reduced him to the words "brand marketing" in a
+> closing list of other people with the name. That is not B — he is not named.
+> It is not C — the domain is attributed. It is not D — it was retrieved.
+>
+> **R is a third failure mode and it needs a third kind of work.** D is an
+> indexing failure and is fixed by getting into the index. C is an attribution
+> failure and is largely the engine's choice. **R is a *prominence* failure: the
+> index has you, the ranker does not prefer you** — and the only lever on that is
+> `AEO_PLAYBOOK.md` §6, independent sources that corroborate the entity. Reading
+> an R as a C invites another article, which is the one thing that will not move
+> it.
+>
+> **In value order: A > B > R > C > D > X.** R sits above C because a reader can
+> still follow the link.
 
 ### How much to actually run
 
@@ -282,21 +305,86 @@ that only holds the latest result cannot show one.
 ### Template
 
 ```
-## <date> — <engine>
+### <date> — <engine or "all five engines">
 
 | Query | Grade | Cited sources | Answer (verbatim, trimmed to the relevant sentences) |
 |---|---|---|---|
 ```
 
-### Runs
+> **`###`, not `##`.** A run block at `##` breaks out of this section and
+> swallows every run recorded before it. Corrected 10 Sep 2026 when the first
+> entry did exactly that to the 26 Aug spot check below.
 
-**No answer-engine run yet.** The set was written 26 Aug 2026, expanded the same
-day once the supporting articles were published, and has not been run against any
-assistant. That work requires a person (§2).
+### Runs
 
 **Run the minimum baseline before any §6 work starts** — the core eighteen, one
 engine, three runs, about an hour. There is nothing to compare a Wikidata entry
-against otherwise.
+against otherwise. The run below is not it.
+
+### 10 Sep 2026 — "Who is suman debnath?" — all five engines, one run each
+
+Run by Suman from a phone, logged out or in temporary/incognito chat per §2.
+Screenshots taken. **This is one prompt and one run per engine**, so §7's "do not
+trust a single run" applies to every grade in the table. Recorded anyway, because
+the source panels are worth more than the grades — see the box below.
+
+| Engine | Grade | Cited sources | Answer (verbatim, trimmed) |
+|---|---|---|---|
+| **ChatGPT** | **A** | **Four pages on this domain** — "Who is Suman Debnath? — Senior Brand Marketing Manager & AI-Native Product Builder", "FAQ — Brand Marketer Turned AI Product Builder", "What is Suman Debnath known for?", "What is Suman Debnath's experience? — Résumé & career history". Plus LinkedIn (700+/800+ profiles), ORNL, a namesake's own `sumandebnath` portfolio, four ResearchGate profiles, about.me, indiankanoon | "There are **many people named Suman Debnath**… One notable Suman Debnath I found is: Senior Brand Marketing Manager and AI-native product builder, based between Pune and Kolkata. Has around 9 years of brand/digital marketing experience… **Claims to have built** systems including a 46-agent autonomous AI fleet and a 47-million-parameter language model. His portfolio lists projects such as ROASmind, IMPRINT, LEGATUS, CITE, EMBER and D-PE.ai." |
+| **Gemini Flash-Lite Extended** | **C** | AI Engineer, "Build your data portfolio" (datascienceportfol.io), ORNL. **No chip on his bullet**; the other two both have one | Third of three: "**Suman Debnath (Marketing & AI-Native Products):** A senior brand marketing manager and independent AI product builder based in India, known for combining digital marketing leadership with shipping custom language models and agentic systems." |
+| **Perplexity** | **R** | ai.engineer, **forbes.com**, purdue.edu (CV PDF), amazon.com, **houseofnamus.com** ("Senior Brand Marketing Manager & AI-Native Product Builder"), linkedin.com | Leads with Crusoe. Closes: "There are also Suman Debnaths working in power-grid research, mechanical-engineering research, electric utilities, **and brand marketing**, so the intended person depends on where you encountered the name." |
+| **Gemini Pro Extended** | **D** | ai.engineer, "Build your data portfolio", ORNL, ResearchGate | Three entities, none of them him: Crusoe/AWS, ORNL, and "Suman Debnath (Academic / Mechanical Engineering) — An Assistant Professor at Chandigarh University." |
+| **Claude (Sonnet 5)** | **D** | ORNL, Science Friday, GitHub (`debnsuma`), Amazon, AWS Builder Center, Google Scholar, Purdue, LinkedIn, **Wikipedia** (for two adjacent names) | "There are a few people by this name; the two most notable are: **Dr. Suman Debnath (Oak Ridge National Laboratory)**… **Suman Debnath (debnsuma)** — A Technical Lead in AI/ML at Anyscale." |
+
+#### What this run establishes, and what it does not
+
+> **Split the findings by how noisy they are.** The *rankings* are a single
+> sample and will move between runs. The *source panels* are structural — which
+> index holds what does not flip run to run. **Every conclusion below is drawn
+> from the panels, not the ordering**, which is why they are worth recording
+> from one run when the grades are not.
+
+1. **`AEO_PLAYBOOK.md` §6.1's flat reading is spent.** Three of five engines
+   demonstrably hold this domain's material. See §6.4 of that file, written from
+   this run.
+2. **§3.1b works.** ChatGPT cited four entity pages, and their titles map exactly
+   onto four rows of the §3.1b table. That is the clearest evidence the
+   one-question-one-URL scheme has produced what it was built for. **The URLs
+   themselves were not visible in the screenshot** — the page titles are the
+   match, which is strong and is not a URL. Grade A recorded on that basis.
+3. **"Claims to have built" is the tell.** ChatGPT hedged the 46-agent fleet and
+   the 47M model, and hedged nothing else. That is the shape of a fact with one
+   source, and the source is the subject. It is the single most direct piece of
+   evidence for §6 that this file has produced.
+4. **Thirteen `sameAs` entries, none independent.** Every engine that ranked a
+   namesake first did so off a page somebody else owns — ORNL, Forbes,
+   ai.engineer, a Purdue CV PDF, an Amazon author page, Google Scholar, Science
+   Friday. His thirteen are all self-asserted. **A fourteenth self-made profile
+   does not address this.**
+5. **`ai.engineer` was cited by three of the four engines that did not grade A**,
+   in one query. Whatever else is in the §6.3 queue, the AI Engineer CFP is
+   sitting on the most-read surface in this table.
+6. **`datascienceportfol.io` is in Gemini's retrieval set**, cited in both Gemini
+   runs — for the namesake's profile. §6.3 files it as "thin, cheap, one more
+   `sameAs` node". That valuation is wrong.
+7. **Two more namesakes surfaced**, taking the count past the four §6 names: a
+   full-stack developer with his own `sumandebnath` portfolio site — the same
+   document type competing for the same navigational query — and an NIT Agartala
+   electrical engineer on about.me. **Recorded here only.** Enumerating namesakes
+   in public copy was refused 26 Aug 2026 and this does not reopen it.
+8. **The bare name is doing better than this file predicted.** §3 marks it
+   un-starred with "Expect D or X for a long time". It returned one A, one C, one
+   R and two D — and **no X on any engine.** Nothing resolved him *as* somebody
+   else; the failures were absence and demotion.
+9. **Gemini Pro did worse than Gemini Flash-Lite.** The larger model landed
+   further away. Grade per model, not per vendor — a single "Gemini" row would
+   have averaged away the only C in the run.
+
+#### The next run
+
+Three runs per engine on this same prompt, before acting on the Perplexity or
+Gemini Flash-Lite readings specifically. Grades 2, 3 and 4 above do not depend on
+the modal rule and do not need re-running to be acted on.
 
 ### Search-index spot check — 26 Aug 2026
 
