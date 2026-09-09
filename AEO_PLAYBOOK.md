@@ -1097,9 +1097,44 @@ Ordered by expected value, once the above is done:
    > mastodon.social and it renders green — Mastodon fetches the page and looks
    > for a `rel="me"` pointing back, which is now there.
    >
-   > **Keep `sameAs`, the `rel="me"` links and the footer pills in step.** They
-   > are the same assertion in three languages; a profile in one but not the
-   > others is a claim half-made, and HuggingFace sat that way for months.
+   > ~~**Keep `sameAs`, the `rel="me"` links and the footer pills in step.**~~
+   > **⚠ SUPERSEDED 9 Sep 2026 — the three surfaces now diverge on purpose.**
+   > The original rule is kept because its reasoning still governs the first two.
+   >
+   > ### The three surfaces answer different questions (9 Sep 2026)
+   >
+   > At thirteen profiles the old rule became impossible to follow. `Contact.tsx`
+   > caps the pill row at **nine** — a hard layout constraint recorded in its own
+   > comment, because a tenth wraps it to a third line on a phone. So "keep all
+   > three in step" and "the pill row stops at nine" cannot both hold. Resolved
+   > toward the layout:
+   >
+   > | Surface | Grows | Admission test |
+   > |---|---|---|
+   > | `sameAs` | **Freely** | Is it really your profile? Machine-readable, no layout cost |
+   > | `rel="me"` | **Only on reciprocity** | Does that profile emit `rel="me"` back? |
+   > | Footer pills | **Curated, capped at nine** | Would a reader want this one? |
+   >
+   > **`rel="me"` is the one with a real test, and it is not "did we add it
+   > everywhere else".** It is a two-way claim: asserting it against a profile
+   > that does not answer is the same half-made assertion HuggingFace sat in for
+   > months, pointed the other way. Measured 9 Sep — Sessionize emits a plain
+   > `rel="nofollow"` back; Stack Overflow and datascienceportfol.io emit no link
+   > to this domain at all. None of the four went into `rel="me"`, and that is
+   > correct rather than incomplete.
+   >
+   > **`sameAs` reached thirteen** on 9 Sep 2026: the original six, plus dev.to,
+   > Medium and Hashnode (7 Sep), plus **ORCID, Stack Overflow, Sessionize and
+   > datascienceportfol.io**. ORCID leads that four — it is the only registry
+   > identifier rather than a profile page, and CrossRef pushes works onto it
+   > automatically once a DOI exists, so it corroborates without being
+   > maintained.
+   >
+   > **What the old rule was actually protecting is still true:** a profile in
+   > `sameAs` that the site never links anywhere a human can see is weaker than
+   > one it does. The pill row is where that is paid, and nine of thirteen is a
+   > deliberate editorial cut, not drift. Before adding a tenth pill, ask what it
+   > displaces — not whether the arrays have the same length.
 6. **Answer the same questions where they are asked** — Stack Overflow, Reddit,
    the Next.js discussions — linking back only where genuinely relevant.
 
