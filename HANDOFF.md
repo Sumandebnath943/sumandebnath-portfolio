@@ -2205,6 +2205,121 @@ doorway page. Revisit when the thin branches have more products.
 
 ---
 
+### 1.25 The off-page programme runs, and a preprint gets submitted (8–9 Sep 2026)
+
+`AEO_PLAYBOOK.md` §6 called off-site corroboration "the part that is not code"
+and "where the remaining ceiling is". It stopped being a list. Ten working
+documents were written — one per destination, all facts sourced from this repo
+— and most of them were executed.
+
+**Live now:** Open Source India talk proposal · Open Source For You article
+idea emailed · LinkedIn profile copy confirmed applied · **ORCID
+`0009-0006-9581-7890`** · Sessionize speaker profile · AI Engineer CFPs
+submitted to Code Summit and NYC · **VentureBeat guest article submitted** ·
+**engrXiv preprint submitted (8193)** · datascienceportfol.io profile · two
+Stack Overflow answers · the second article syndicated to all three platforms.
+
+#### The preprint, and the AI policy that nearly went wrong
+
+A technical report on PentaCMD-47M was drafted from `SLM - 20m/PROJECT_REPORT.md`
+— 47.2M params, 299,329 pairs, 86.7% blended exact-match, the leak-free grouped
+split, and the finding that validation loss *anti-correlates* with task accuracy
+under that split. All three references were verified against primary sources,
+and Chinchilla's 20:1 ratio was used to check the "~400× under compute-optimal"
+claim by arithmetic (it is ≈419×) rather than repeating it.
+
+> **The agent drafted the prose, and that made the submission non-compliant.**
+> engrXiv's AI policy permits "pre-writing work such as literature searches,
+> idea generation and organization" and copy-editing. It prohibits **"using
+> AI-generated text verbatim, including whole paragraphs and sections"**, and
+> requires disclosure — *"failure to disclose, or implausible disclosures, are
+> grounds for rejection"*.
+>
+> Disclosure does not convert a prohibited use into a permitted one. Suman
+> rewrote the entire manuscript in his own words, which moved the agent's
+> contribution into the permitted categories and made the disclosure true. The
+> submission also carries **"permanent and cannot be withdrawn"**.
+>
+> **The lesson generalises past engrXiv:** an agent drafting a document that
+> the human then attests to is a compliance question, not a style question, and
+> it has to be raised before the draft, not at the checkbox.
+
+**TechRxiv was the original venue and is closed** — submissions suspended
+during a platform transition, no stated timeline, existing DOIs still resolve.
+engrXiv (IEEE-adjacent, on OSF) does the same job: free, **no endorsement
+requirement**, DOI on submission, Google Scholar indexed. Two dead ends found
+on the way, worth not rediscovering: **Zenodo is not indexed by Google
+Scholar**, and **arXiv now requires an endorser** for first-time posters in a
+category (policy changed 21 Jan 2026).
+
+#### The second syndication, and Medium's import breaking
+
+`cited-by-chatgpt-what-i-changed` is live on all three, canonicals verified by
+fetching. Three new traps:
+
+- **Medium's Import tool produced a broken article** and had to be abandoned
+  for a manual paste. **Medium has no table support** — the piece has two
+  tables, and they were converted to prose. A Medium-specific file now sits at
+  `_crosspost/<slug>.MEDIUM.md`; the generator does not produce it.
+- **Checking Medium with `curl` returns 403.** Their bot protection blocks the
+  default user agent, and a 403 reads exactly like a dead article. Pass a
+  browser UA or the canonical check silently fails.
+- **dev.to removed the post for "not meeting community guidelines", then
+  restored it.** An article *about* keyword stuffing and entity manipulation
+  reads to a classifier like an article *doing* those things. It resolved
+  without an appeal being sent.
+
+#### Stack Overflow: the target was wrong by 725×
+
+The plan named five answers. Queried against the Stack Exchange API — real view
+counts, votes-sorted — **only two targets exist.** The first answer had gone to
+a question with **109 views** while the canonical question on the same topic has
+**79,182**. JSON-LD, the `proxy.ts` rename and three.js r152 have *no* questions
+at all; Next.js 16 is simply too new.
+
+> **Search before writing, and use the API rather than the site** — Stack
+> Overflow's own search hits a CAPTCHA, which must not be worked around.
+> `api.stackexchange.com` is blocked to WebFetch but reachable from the browser
+> pane's `javascript_tool`.
+
+#### Identity surfaces, and a rule that had to break
+
+`sameAs` reached **thirteen**. `Contact.tsx` caps the footer pill row at nine,
+and §6 required all three surfaces to stay in step — impossible at profile ten.
+Resolved and recorded in **`AEO_PLAYBOOK.md` §6**: `sameAs` grows freely,
+`rel="me"` grows only on measured reciprocity, the pill row stays curated.
+
+**ResearchGate was removed from the programme entirely.** It requires an
+institutional email; the only one available is PIBM's, and publishing
+independent work under an employer's address invites a moonlighting reading.
+Suman declined it and the reasoning is better than the item was worth —
+`nofollow`, minor traffic, and the DOI plus Google Scholar do the real work.
+
+**HubSpot is held.** Their guidelines publish no submission address at all, and
+their exclusivity clause is stricter than assumed: a published piece **may never
+appear anywhere else, including your own site**.
+
+#### The cover that cropped
+
+The new cover for `cited-by-chatgpt-what-i-changed` arrived at 1536×1024 (3:2).
+`.nb-cover` is `aspect-ratio: 16/9` with `object-cover`, so it cropped 80px off
+the top — taking the signature. Padded to 1820×1024 with a colour sampled from
+the image's own dark wall rather than cropped. **Covers for this slot should be
+16:9 natively — 1920×1080.**
+
+> **A `Jest worker` error that was not the image.** The page appeared to break
+> with *"Jest worker encountered 2 child process exceptions"* plus repeated
+> `write EPIPE`. The webp was valid and the page returned 200 on a fresh server.
+> The long-running dev server's workers had died. **`Jest worker` + `EPIPE`
+> together always means worker death — restart before debugging content.** The
+> same instability had already crashed `tsc --noEmit` with a stack dump.
+
+**Working documents live outside the repo**, in the session scratchpad: one file
+per destination, plus `ACCOUNTS-AND-PROFILES.md` carrying seven bios at fixed
+character counts and every canonical URL.
+
+---
+
 ## 2. What changed in the session before (19 Aug 2026)
 
 **One brief, eleven numbered complaints**, all against the homepage: sections

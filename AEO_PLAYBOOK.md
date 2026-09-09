@@ -1056,6 +1056,38 @@ Ordered by expected value, once the above is done:
    > corrected through Advanced Settings without deleting the story, and now
    > resolves here. The documented procedure is proven, not theoretical.
    >
+   > ### The second syndication, 9 Sep 2026 — and three new traps
+   >
+   > `cited-by-chatgpt-what-i-changed` is live on all three, canonicals verified
+   > by fetching. Nothing about the first run's procedure survived contact
+   > unchanged:
+   >
+   > - **Medium's Import tool produced a broken article.** §6 item 4 says
+   >   "import rather than paste… should be the default". It failed here and the
+   >   piece had to be pasted manually, which means the post-publish canonical
+   >   fix is not a fallback but the **normal** route. Assume you will need it.
+   > - **Medium has no table support.** This article carries two tables; both had
+   >   to be rewritten as prose. `scripts/build-crosspost.mjs` does not produce a
+   >   Medium variant — one was hand-written to `_crosspost/<slug>.MEDIUM.md`,
+   >   with every markdown marker stripped, because Medium's editor renders none
+   >   of them. **Any article with a table needs this step.**
+   > - **`curl` gets 403 from Medium.** Their bot protection blocks the default
+   >   user agent, and a 403 reads exactly like a deleted article. The canonical
+   >   check below is useless against Medium without a browser UA:
+   >
+   > ```bash
+   > curl -s -L -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 \
+   >   (KHTML, like Gecko) Chrome/140.0 Safari/537.36" <url> \
+   >   | grep -oE '<link[^>]*rel="canonical"[^>]*>'
+   > ```
+   >
+   > > **dev.to removed the article for "not meeting community guidelines", then
+   > > restored it** without an appeal being sent. Worth expecting rather than
+   > > panicking about: a piece *about* keyword stuffing and entity manipulation
+   > > reads to an automated classifier like a piece *doing* those things. The
+   > > canonical being set correctly from the start is what makes the appeal
+   > > trivial if it happens again.
+   >
    > **Only Medium's backlink is `follow`.** dev.to and Hashnode are `ugc` /
    > `nofollow`, so they pass no ranking equity. Do not present syndication as
    > link building — the return is corroboration and reach into indexes that are
@@ -1277,6 +1309,85 @@ unsafe. The wait costs nothing.
 > link back is earned rather than dropped. That is what Brave indexes. **One of
 > those a week beats one extra article a month**, and it is the half of §6 that
 > is still barely started.
+
+---
+
+### 6.3 The off-page programme, executed (8–9 Sep 2026)
+
+§6 was a list for two weeks. This is what happened when it was run, and what it
+cost to find out. **Working documents live in the session scratchpad**, one per
+destination, plus `ACCOUNTS-AND-PROFILES.md` carrying seven bios at fixed
+character counts and every canonical URL.
+
+| Destination | State | Note |
+|---|---|---|
+| **engrXiv** | **Submitted (8193)** | Replaces TechRxiv. DOI on acceptance |
+| **ORCID** | `0009-0006-9581-7890` | Public, bio, 4 URLs, both employments |
+| **VentureBeat** | Submitted | ~14 business days; no body links permitted |
+| **Open Source India** | Talk proposed | Event 7–8 Oct |
+| **Open Source For You** | Idea emailed | `osfyedit@efyindia.com`, idea-first |
+| **AI Engineer** | Two CFPs submitted | Code Summit + NYC, via Sessionize |
+| **Stack Overflow** | 2 answers | See the 725× note below |
+| **datascienceportfol.io** | Live | Thin, cheap, one more `sameAs` node |
+| **Wikidata** | **Gated** | Needs two placements published first |
+| **HubSpot** | **Held** | No submission address exists — see below |
+| **ResearchGate** | **Refused** | See below |
+
+#### Four rules that only emerged by doing it
+
+**1. Verify the venue is open before writing for it.** TechRxiv had the whole
+scholarly track designed around it and is closed — submissions suspended for a
+platform transition, no timeline. Two further dead ends, worth not
+rediscovering: **Zenodo is not indexed by Google Scholar** (their own help pages
+say so), and **arXiv requires an endorser** for a first-time poster in any
+category since 21 Jan 2026. engrXiv is the one that is actually open: free, no
+endorsement, DOI on submission, Scholar-indexed since 2017.
+
+**2. An agent drafting a document the human then attests to is a compliance
+question.** engrXiv's AI policy permits idea generation, organisation and
+copy-editing; it prohibits **using AI-generated text verbatim, including whole
+paragraphs and sections**, and requires disclosure. Disclosure does not make a
+prohibited use permitted. The manuscript was rewritten by Suman in his own
+words before submission, and the submission is **permanent and cannot be
+withdrawn**. Raise this before drafting, never at the checkbox.
+
+**3. Search before writing, with real numbers.** The Stack Overflow plan named
+five answers; **two targets exist.** The first answer went to a question with
+**109 views** when the canonical question on the same topic has **79,182** —
+725×. Three of the five topics have no questions at all. Stack Overflow's own
+search hits a CAPTCHA, which must not be worked around; `api.stackexchange.com`
+is blocked to WebFetch but reachable from the browser pane's `javascript_tool`,
+and returns `view_count`, `score` and `answer_count` votes-sorted.
+
+**4. Read the exclusivity clause, not just the "unpublished" rule.** HubSpot
+requires that a published piece **never appear anywhere else, including your own
+site** — permanently, with their right to edit it for their own SEO, insert
+their CTAs, and delete it. That is a different trade from VentureBeat's and it
+costs an article outright. It is also unreachable: their guidelines publish **no
+submission address, form or email**, and the practical route is finding an
+editor on LinkedIn.
+
+#### ResearchGate is refused, and the reason is not the one in §6
+
+Not a link-value judgement. It requires an **institutional email**; the only one
+available is PIBM's, and publishing independent work under an employer's address
+invites a moonlighting reading. Suman declined it on that basis, which is a
+better reason than the item was worth — `nofollow`, minor traffic, and the DOI
+plus a Google Scholar profile do the real work without touching an employer.
+
+> **The item was mis-sold in the first plan** as "the easy half" of the
+> scholarly track. It never was. Independent researchers without an
+> institutional address must appeal manually and show *peer-reviewed*
+> publications, which a preprint is not.
+
+#### What is still gated, and on what
+
+| Item | Waiting on |
+|---|---|
+| Google Scholar profile | The engrXiv DOI being indexed — weeks, and Scholar's timing is not controllable |
+| Show HN | The DOI existing; the report is the armour for that comment section |
+| Wikidata | **Two** Tier 2 placements published. Self-published sources fail notability, and a deleted item is worse than no item |
+| r/LocalLLaMA | **Subreddit** karma. A 6-year account with 18k comment karma still shows 0 there — global karma does not transfer |
 
 ---
 
