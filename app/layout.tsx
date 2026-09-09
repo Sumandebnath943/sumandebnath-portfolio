@@ -290,6 +290,20 @@ const personJsonLd = {
     "https://dev.to/suman_debnath_1",
     "https://medium.com/@sumandebnath943",
     "https://hashnode.com/@sumandebnath",
+    // Added 9 Sep 2026. ORCID first of the four: it is the only one here that
+    // is a registry identifier rather than a profile page, and CrossRef pushes
+    // works onto it automatically, so it corroborates without being edited.
+    //
+    // None of these four go in `rel="me"` below, and that is deliberate rather
+    // than an oversight. Checked on 9 Sep: Sessionize emits a plain
+    // `rel="nofollow"` back, and Stack Overflow and datascienceportfol.io emit
+    // no link to this domain at all. `rel="me"` is a two-way identity claim —
+    // asserting it against a profile that does not answer is the half-made
+    // claim §6 records for HuggingFace. `sameAs` has no such requirement.
+    "https://orcid.org/0009-0006-9581-7890",
+    "https://stackoverflow.com/users/33103420/suman-debnath",
+    "https://sessionize.com/suman-debnath/",
+    "https://www.datascienceportfol.io/sumandebnath",
   ],
   knowsAbout: [
     "AI-native product engineering",
