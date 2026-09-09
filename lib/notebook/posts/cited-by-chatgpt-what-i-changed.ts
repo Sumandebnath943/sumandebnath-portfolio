@@ -30,7 +30,7 @@ const post: Post = {
   readingMinutes: 8,
   cover: "/notebook/cited-by-chatgpt-what-i-changed.webp",
   coverAlt:
-    "A single paragraph being lifted out of a printed page between two quotation marks, leaving a clean rectangular gap.",
+    "An illustrated desk scene: a laptop showing ChatGPT answering \"who is Suman Debnath\" and citing sumandebnath.houseofnamus.com, beside an open notebook ticking off llms.txt, structured data, answer blocks and entity disambiguation — with keyword stuffing left unticked and marked as not having worked.",
   facts: [
     { label: "First observed", value: "24 August 2026" },
     { label: "Queries", value: "\"who is suman debnath\", \"suman debnath portfolio\"" },
