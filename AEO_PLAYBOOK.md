@@ -994,6 +994,35 @@ Ordered by expected value, once the above is done:
    > ask him to run `hf auth login`, or hand over the web-UI steps (model page →
    > Files and versions → `README.md` → pencil → commit), which need no token at
    > all and are what he used.
+
+   > **⚠ OPEN, 10 Sep 2026 — the Qdex card still quotes a superseded benchmark.**
+   > `SumanDebnath943/Qdex-1.5B-GGUF` reports instruction-mode HumanEval as
+   > **39.0% (64/164)**. The site says **42.1% (69/164)** and is right: the
+   > harness had a scoring bug failing correct solutions on output-formatting
+   > artifacts, the extractor was hardened, a regression test added, and the full
+   > 164-problem run repeated. `/llms/qdex-1.5b` carries the account.
+   >
+   > The site side was fixed in `c14c94e` — `components/sections/Projects.tsx`
+   > was the last place in the repo still on 39.0%, and it was the homepage.
+   > **The model card is the remaining divergence and it is the one that matters
+   > more:** it is the artefact's own page, it is what an engine reads to check
+   > the claim, and it currently contradicts this domain.
+   >
+   > A full replacement card is drafted. Two things it does beyond the number:
+   > the "recovering ~97% of the base model's raw ability" line had to be
+   > rewritten, because at 42.1% against the base's 40.2% that is an overtake,
+   > not a recovery — and it **states the correction openly** rather than
+   > silently raising the figure. A card documenting a bug that was undercounting
+   > its own model reads as careful; a number that quietly moves up does not.
+
+   > **The GitHub repo behind it is worse and is not yet fixed.**
+   > `Sumandebnath943/Qdex-1.5B` is linked from the model card as *Source* and
+   > from the homepage as *View on GitHub*, and its benchmark table still reads
+   > `_TBD_` under "These will be filled in after the GPU runs." The runs
+   > happened months ago. **For anyone verifying the 42.1%, a repo presenting the
+   > project as unfinished is a worse outcome than the stale number was.** It
+   > also disagrees with the model card on training length — "~3 epochs" there
+   > against 2 epochs / 5,000 steps on the card.
 4. **Cross-post notebook entries** to dev.to / Hashnode **with `rel=canonical`
    pointing back here.** The posts in `lib/notebook/` are original, dated,
    specific technical content on problems that are poorly documented elsewhere —
@@ -1349,12 +1378,12 @@ character counts and every canonical URL.
 | **Open Source For You** | Idea emailed | `osfyedit@efyindia.com`, idea-first |
 | **AI Engineer** | Two CFPs submitted | Code Summit + NYC, via Sessionize |
 | **Stack Overflow** | 2 answers | See the 725× note below |
-| **datascienceportfol.io** | Live | Thin, cheap, one more `sameAs` node |
+| **datascienceportfol.io** | **Built out 10 Sep** | Was "thin, cheap". Both valuations were wrong — see rule 5 |
 | **Wikidata** | **Gated** | Needs two placements published first |
 | **HubSpot** | **Held** | No submission address exists — see below |
 | **ResearchGate** | **Refused** | See below |
 
-#### Four rules that only emerged by doing it
+#### Five rules that only emerged by doing it
 
 **1. Verify the venue is open before writing for it.** TechRxiv had the whole
 scholarly track designed around it and is closed — submissions suspended for a
@@ -1387,6 +1416,65 @@ their CTAs, and delete it. That is a different trade from VentureBeat's and it
 costs an article outright. It is also unreachable: their guidelines publish **no
 submission address, form or email**, and the practical route is finding an
 editor on LinkedIn.
+
+**5. Read the profile you just claimed. `sameAs` asserts a page nobody checked.**
+Added 10 Sep 2026, and it is the most embarrassing thing in this file.
+
+`app/layout.tsx` has carried `https://www.datascienceportfol.io/sumandebnath`
+in `sameAs` since 9 Sep. On 10 Sep the page it points at was fetched for the
+first time. **It said "Sumand Debnath"** — in the `<h1>` and in the `<title>`.
+
+> **A profile whose job is to make one string resolvable did not contain that
+> string.** `sameAs` is the site formally asserting "this page is also me", so
+> for a day the strongest machine-readable identity claim on 26 routes pointed
+> at a page naming somebody who does not exist. It cost nothing to check and
+> nobody checked.
+
+The same fault had already happened once, in the same programme, and is
+recorded three items above as a passing clause: HuggingFace, 27 Aug — "name
+spelling corrected". It was not read as a *class* of failure then. It is one.
+
+- **The check is one fetch.** Confirm the name renders correctly in the heading
+  **and** the `<title>` before the URL goes into `sameAs`, not after.
+- **It fails silently and looks like success.** The profile exists, renders,
+  and is live. Nothing surfaces the problem. Same shape as `saveVisit()`
+  returning `false` (`AGENTS.md` §7) and Medium's silent self-canonicalisation
+  (§6 item 4) — the pattern this project keeps meeting is *the absence of an
+  error is not evidence that anything worked*.
+
+**And "thin, cheap" was wrong in the other direction.** The profile was not
+empty — bio, 17 skills, 4 projects, 3 roles. It was about a third of the depth
+of the namesake's profile on the same template, which is a different problem
+and needs different work. Both valuations came from never having opened the page.
+
+##### The field budgets, measured — so the next one is not guesswork
+
+Every field on that platform silently truncates. Measured 10 Sep by comparing
+the ten-project profile that outranks his against what the form accepted:
+
+| Field | Working budget | Notes |
+|---|---|---|
+| About | **~800 chars** | 793 fit, 924 did not |
+| Skills (page-level) | **~300 chars** | Total across all tags — a *character* cap, not a count. Short tokens buy more tags |
+| Project title | **66–72** | Cap is higher (89 seen). Bare product names lose — the searchable half goes after the brand |
+| Project tags | **6–7 tags, ≤133 chars** | **Capability tags, not stack.** "Envelope encryption", "Row-level authorisation", "Dead-man-switch design" |
+| Project description | **≤300** | The strong profiles run 264–300. Anything under ~150 reads unfinished |
+
+> **The tags are skills, not a stack, and that distinction cost a rewrite.**
+> The first draft used a house palette — `AI Product Development`, `Next.js`,
+> `Supabase` — on every card, which was both generic *and* wrong (neither
+> LEGATUS nor ROASmind uses Supabase). The second draft swapped in the real
+> `stack` arrays from `lib/archive-projects.ts`, which was the wrong *kind of
+> field*. What works is the register Suman had already used on the Banking card
+> himself: capabilities the person demonstrated, each provable by a project card
+> further down the same page.
+
+> **Write the copy from the repo's product data, never from memory.**
+> `components/{aegis,banking,migi,pentashell,qdex}/*-data.ts` export `STATS`,
+> `BADGES`, `FEATURES`, `MODEL_SPECS`, `PROOF` and `SCOPE`; the two dossier
+> components carry IMPRINT's and LEGATUS's. That is where ~86.7% (not "~87%"),
+> Argon2id at 64MB/3 iterations, the 40/25/20/15 weighting and 404-not-403 came
+> from. Guessing produced copy that had to be thrown away twice.
 
 #### ResearchGate is refused, and the reason is not the one in §6
 
@@ -1471,10 +1559,19 @@ something in the panels rather than from theory:
    by **three of the four engines that did not grade A** — both Geminis and
    Perplexity — inside a single query. §6.3 files it as one submission among six.
    It is the most-read surface anything in the queue touches.
-3. **`datascienceportfol.io` is misvalued at "thin, cheap, one more `sameAs`
-   node".** Both Gemini runs cited it — for the *namesake's* profile on it. It is
-   a confirmed retrieval surface with a thin page on it, which is an hour of work
-   against a measured target rather than a throwaway.
+3. ~~**`datascienceportfol.io` is misvalued at "thin, cheap, one more `sameAs`
+   node".**~~ **Done 10 Sep 2026 — §6.3 rule 5 has the account and the field
+   budgets.** Both Gemini runs cited it — for the *namesake's* profile on it. It
+   was a confirmed retrieval surface with a thin page on it, which made it an
+   hour of work against a measured target rather than a throwaway.
+
+   **Verified live the same day:** the name renders correctly, and nine project
+   cards run 66–72-character titles, 120–130 characters of tags and 282–300
+   characters of description against the namesake's 264–300 — so on the one
+   platform confirmed to sit in Gemini's retrieval set, this is now the deeper
+   profile rather than a third of one. **ROASmind was deliberately left off**;
+   it is the only product in `lib/resume.ts` marked *In Testing*, and nine
+   shipped things read stronger than ten with a promise among them.
 
    > **Strengthened the same day by a second instrument** —
    > `TARGET_QUERIES.md` §10, search-index spot check, 10 Sep 2026. Four cold

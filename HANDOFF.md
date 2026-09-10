@@ -2804,6 +2804,19 @@ opportunities, roughly in value order.
    > **The full baseline is still unrun and still wanted** — one query is not
    > sixty, and one run per engine is not the three §2 asks for. It is no longer a
    > gate on starting, because the work it was gating has already started.
+   >
+   > **Done 10 Sep: `datascienceportfol.io` is built out and verified live** —
+   > name corrected (it had been publishing "Sumand Debnath" while sitting in
+   > `sameAs`), About at 787 of ~800, skills at 296 of ~300, and nine project
+   > cards at the depth of the namesake profile that outranks it. `AEO_PLAYBOOK`
+   > §6.3 rule 5 has the account and the measured field budgets.
+   >
+   > **Two off-site items are open and both need him, not code:** the Qdex
+   > HuggingFace card still quotes the superseded 39.0% HumanEval figure (a full
+   > replacement card is drafted — `AEO_PLAYBOOK` §6 item 3), and the
+   > `Qdex-1.5B` GitHub repo still shows `_TBD_` benchmarks months after the runs.
+   > **The highest-value item in the queue remains the AI Engineer CFP** —
+   > `ai.engineer` was cited by three of the four engines that did not grade A.
 
 1. **Watch a week of real traffic before building more on the dashboard.** It
    has never been used against real data. Pagination and CSV export are the
