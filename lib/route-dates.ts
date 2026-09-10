@@ -31,7 +31,7 @@ export const ROUTE_DATES: Record<string, string> = {
   "/apps/migi-app": "2026-08-25",
   "/games/pixelville": "2026-08-25",
   "/banking/rm-copilot": "2026-08-27",
-  "/notebook": "2026-09-09",
+  "/notebook": "2026-09-10",
 };
 
 /** Shared date for the /projects/[slug] dossiers — they all render from the

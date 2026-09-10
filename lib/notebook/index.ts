@@ -44,6 +44,7 @@ import isAiGeneratedCodeSafeForProduction from "./posts/is-ai-generated-code-saf
 import emptyBetweenProjects from "./posts/empty-between-projects";
 import whatAiAgentsCostToRun from "./posts/what-ai-agents-cost-to-run";
 import fakeAiCrawlersForgedUserAgents from "./posts/fake-ai-crawlers-forged-user-agents";
+import evaluationHarnessScoringBug from "./posts/evaluation-harness-scoring-bug";
 
 export type { Post, Block, PostFact, Category } from "./types";
 export {
@@ -56,6 +57,7 @@ export {
 
 /** Newest first. `allPosts()` sorts by date, so ordering here is not load-bearing. */
 const POSTS: Post[] = [
+  evaluationHarnessScoringBug,
   fakeAiCrawlersForgedUserAgents,
   whatAiAgentsCostToRun,
   overflowHiddenKillsPositionSticky,
