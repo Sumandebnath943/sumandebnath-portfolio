@@ -63,7 +63,17 @@ if (!online) {
   check("verified: last address of the /28", (await verifyCrawler(OPENAI_UA, "104.208.184.207")).verdict, "verified");
   check("forged: one past the /28", (await verifyCrawler(OPENAI_UA, "104.208.184.208")).verdict, "forged");
 
-  // IPv6 has to work too — Vercel hands it to us and every list publishes it.
+  // Anthropic, added 2026-09-11 from claude.com/crawling/bots.json. 216.73.216.0/22
+  // is the only range in it wider than a /32; the rest are single hosts.
+  check("verified: inside Anthropic's /22", (await verifyCrawler(CLAUDE_UA, "216.73.216.1")).verdict, "verified");
+  check("verified: last address of the /22", (await verifyCrawler(CLAUDE_UA, "216.73.219.255")).verdict, "verified");
+  check("forged: one past the /22", (await verifyCrawler(CLAUDE_UA, "216.73.220.0")).verdict, "forged");
+  // The Cloudflare address the forged ChatGPT-User probes came from. Before
+  // Anthropic's list was wired in this returned "unverified" for the wrong
+  // reason — no list to check, rather than an IP that is genuinely not theirs.
+  check("forged: 104.23.175.224 as Claude-User", (await verifyCrawler(CLAUDE_UA, "104.23.175.224")).verdict, "forged");
+
+  // IPv6 has to work too — Vercel hands it to us and most lists publish it.
   check("verified: v6 inside Googlebot's /64", (await verifyCrawler(GOOGLE_UA, "2001:4860:4801:10::5")).verdict, "verified");
   check("forged: v6 outside it", (await verifyCrawler(GOOGLE_UA, "2001:4860:4801:99::5")).verdict, "forged");
   check("a v4 address never matches a v6 prefix", (await verifyCrawler(GOOGLE_UA, "104.23.175.224")).verdict, "forged");
@@ -72,7 +82,9 @@ if (!online) {
 // The safety rule, and the reason "forged" can be trusted when it does appear:
 // an accusation is only ever made from a list that loaded. These hold offline.
 console.log("\n--- never accuse without evidence ---");
-check("Claude-User is unverified, not forged", (await verifyCrawler(CLAUDE_UA, "104.23.175.224")).verdict, "unverified");
+// Anthropic's bots.json carries 26 IPv4 prefixes and no ipv6Prefix at all, so a
+// real Claude fetch over v6 matches nothing. "Cannot check" — never an accusation.
+check("Claude-User over IPv6 is unverified", (await verifyCrawler(CLAUDE_UA, "2400:cb00:1::1")).verdict, "unverified");
 check("no client IP is unverified", (await verifyCrawler(OPENAI_UA, "")).verdict, "unverified");
 check("unparseable IP is unverified", (await verifyCrawler(OPENAI_UA, "not-an-ip")).verdict, "unverified");
 check("a vendor with no list is unverified", (await verifyCrawler("LinkedInBot/1.0", "1.2.3.4")).verdict, "unverified");

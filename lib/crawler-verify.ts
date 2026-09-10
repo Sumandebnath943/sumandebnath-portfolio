@@ -49,13 +49,22 @@ interface Vendor {
 // Only vendors that publish a machine-readable list of the IPs their crawlers
 // use. Anything absent here is unverifiable by design and says so.
 //
-// ⚠ Anthropic publishes no such list as of 2026-09-01 — claudebot.json,
-// claude-user.json and ips.json are all 404 on anthropic.com, and the
-// docs.claude.com path is an HTML soft-404. So Claude-User, Claude-SearchBot
-// and ClaudeBot always come back "unverified". That is honest, not a gap to
-// paper over: without a published range there is no way to tell a real Claude
-// fetch from a forged one, and guessing would be worse than admitting it. If
-// Anthropic ever publishes one, adding it here is a three-line change.
+// Anthropic added 2026-09-11: https://claude.com/crawling/bots.json.
+//
+// The comment here previously said Anthropic published no such list, on the
+// evidence of four 404s — claudebot.json, claude-user.json and ips.json on
+// anthropic.com, plus the docs.claude.com soft-404. All four were guessed
+// paths. The real one had been live since at least 2026-08-18 (its own
+// creationTime), so every Claude fetch was reported "unverified" for weeks on
+// the strength of a conclusion drawn from four addresses nobody publishes.
+// **A 404 on a path you invented is not evidence that a vendor publishes
+// nothing.** Read their crawler documentation instead.
+//
+// ⚠ Anthropic publishes IPv4 prefixes only — 26 of them when this was added,
+// and not one ipv6Prefix. That is why verifyCrawler() carries an address-family
+// guard below. Without it a genuine Claude fetch arriving over IPv6 matches no
+// prefix, falls past the loop, and is reported "forged" — the single verdict
+// this file exists to never get wrong.
 const VENDORS: [RegExp, Vendor][] = [
   [
     /chatgpt-user|oai-searchbot|gptbot/i,
@@ -67,6 +76,13 @@ const VENDORS: [RegExp, Vendor][] = [
         "https://openai.com/chatgpt-user.json",
       ],
     },
+  ],
+  [
+    // The three agents bots.json covers. Legacy strings (anthropic-ai,
+    // Claude-Web) are deliberately absent: they are not in that list, so
+    // matching them here would send a real one to "forged".
+    /claudebot|claude-user|claude-searchbot/i,
+    { name: "Anthropic", lists: ["https://claude.com/crawling/bots.json"] },
   ],
   [
     /googlebot|google-inspectiontool|googleother|google-extended/i,
@@ -289,6 +305,20 @@ export async function verifyCrawler(ua: string, ip: string): Promise<VerifyResul
       verdict: "unverified",
       vendor: vendor.name,
       detail: `could not load ${vendor.name}'s published ranges`,
+    };
+  }
+
+  // A vendor that publishes only IPv4 cannot clear an IPv6 client, and
+  // `contains()` refuses a width mismatch outright — so without this the loop
+  // below finds nothing and the function convicts a crawler for arriving over
+  // the wrong protocol. Anthropic's list is IPv4-only today, which makes this
+  // the difference between "we cannot check" and a false accusation.
+  const family = parsed.width === 128 ? 6 : 4;
+  if (!usable.some((list) => list.some((p) => p.width === parsed.width))) {
+    return {
+      verdict: "unverified",
+      vendor: vendor.name,
+      detail: `${vendor.name} publishes no IPv${family} ranges to check against`,
     };
   }
 
