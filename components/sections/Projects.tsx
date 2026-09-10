@@ -155,9 +155,13 @@ const projects: ProjectData[] = [
     number: "02",
     title: "Qdex-1.5B",
     positioning: "A 1.5B coding LLM that runs on your laptop.",
-    emotion: "Taught to answer when asked — 1.2% → 39.0% on HumanEval.",
+    // 42.1%, not 39.0%. The benchmark had a scoring bug that failed correct
+    // solutions on output-formatting artifacts; the extractor was hardened, a
+    // regression test added, and the full run repeated — the account is on
+    // /llms/qdex-1.5b. 39.0% is the pre-fix number and must not come back.
+    emotion: "Taught to answer when asked — 1.2% → 42.1% on HumanEval.",
     atmosphere: "QLoRA fine-tune. CPU-only, no GPU.",
-    capabilities: ["QLoRA Instruction-Tune", "Runs on 16GB CPU", "1.2% → 39.0% HumanEval"],
+    capabilities: ["QLoRA Instruction-Tune", "Runs on 16GB CPU", "1.2% → 42.1% HumanEval"],
     tools: ["Qwen2.5-Coder", "Unsloth", "GGUF / Ollama"],
     status: "Live",
     links: [{ label: "View on GitHub", href: "https://github.com/Sumandebnath943/Qdex-1.5B", variant: "primary" }],
