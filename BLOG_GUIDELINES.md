@@ -175,6 +175,40 @@ Falls back to `tags` when unset.
 applies to keywords too — two articles targeting one phrase compete with each
 other rather than with anybody else.
 
+#### Run the search before you set the phrase. Not after. (11 Sep 2026)
+
+**Search every candidate phrase and read what ranks, before drafting.** This is
+not optional polish; it is the second half of Gate 1, and doing it from judgement
+instead of from results has already been caught once.
+
+`fake-ai-crawlers-forged-user-agents` was drafted with four keyword phrases
+chosen by inspection, and `gapInCoverage` scored at 16 on the assumption that
+nobody had covered the topic. One search corrected all of it:
+
+- **The phrase was contested.** "Verify AI crawler by IP" is held by Search
+  Engine Journal, HAProxy, GeoIPHub and three free bot-verifier tools. A how-to
+  on this site loses to every one of them. The keywords were retargeted onto the
+  incident and the two findings, where the competing page count is near zero.
+- **`gapInCoverage` was wrong by five points** — 16 to 11, and `popularityScore`
+  71 to 66. The score is an editorial forecast (§8), but a forecast made without
+  looking is a guess wearing a number.
+- **It surfaced a counter-argument the draft had no answer to.** `ChatGPT-User`
+  is a user-directed fetcher, so an address outside the published range is not on
+  its own evidence of forgery. The article now puts that objection before its own
+  conclusion. Without the search it would have shipped with a hole in it.
+- **It caught a factual overclaim.** The draft said five vendors publish crawler
+  IP lists. Apple, DuckDuckGo and Common Crawl publish them too; five was the
+  number this site's verifier reads.
+
+So the order is: pick the angle, **search it**, read the top results, then set
+`keywords` and score `gapInCoverage` from what you found. Two of the four
+corrections above were factual rather than strategic, which is the argument for
+doing this even on an article whose keywords you are confident about.
+
+> **A crowded phrase is not a reason to kill the article.** It is a reason to
+> target a different phrase within it. The how-to half of that topic was well
+> covered and the incident half was not covered at all.
+
 ### The answer block
 
 This is the block a model lifts and quotes. It has to survive being read with no
