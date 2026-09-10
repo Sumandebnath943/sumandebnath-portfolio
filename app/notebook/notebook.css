@@ -1023,18 +1023,28 @@
    band rather than the reading measure — so it starts on the prose's left edge
    and runs out under the rail.
 
-   **16:9, not the artwork's native 3:2.** The covers are drawn with all
-   meaning inside the middle 80% of the frame, so that a sliver may crop top and
-   bottom (NOTEBOOK_COVERS.md §1). Cutting 16:9 out of 3:2 removes 7.8% from
-   each edge, which is inside that safe area. 2:1 would remove 12.5% and is not
-   — that is the reason this is not the wider, more cinematic ratio.
+   **3:2 — the artwork's native ratio, so this box crops nothing.**
 
-   `PostCover` renders with `fill` + `object-cover`, so the crop is done by this
-   box. That is framing the covers were designed for, and is not the thing
-   PAGE_OPTIMIZATION §4.2 forbids: no derivative is being fixed up after the
-   fact, and no transparent padding is being hidden. */
+   It was 16:9 until 11 Sep 2026, on the reasoning that cutting 16:9 out of 3:2
+   removes 7.8% from the top and bottom edges and that NOTEBOOK_COVERS.md §1's
+   middle-80% safe area absorbs it. The arithmetic held. The premise did not:
+   the covers carry the signature mark in a **bottom corner**, which is by
+   definition outside the middle 80% vertically, so the 7.8% bottom crop took a
+   bite out of it on every article page.
+
+   **A safe area protects the subject, not the furniture.** A signature, a
+   logo or a page number lives at an edge on purpose, and any rule that says
+   "the edges are expendable" is a rule that will eat it. Every cover slot on
+   the site is 3:2 now — lede, grid card, lead story, row, rail thumbnail and
+   compact — so a 3:2 master renders whole in all six and there is no crop left
+   to reason about.
+
+   `PostCover` still renders `fill` + `object-cover`; with the ratios matched
+   that is a no-op rather than a crop. Nothing here fixes up a derivative after
+   the fact or hides transparent padding, which is what PAGE_OPTIMIZATION §4.2
+   forbids. */
 .nb-cover {
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 3 / 2;
   width: 100%;
   margin: 2.5rem 0 0;
   border: 1px solid var(--nb-rule);

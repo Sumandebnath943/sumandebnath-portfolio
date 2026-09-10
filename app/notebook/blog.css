@@ -150,12 +150,18 @@
   color: inherit;
 }
 
-/* 5:3 rather than the artwork's 3:2, and that is deliberate. It trims about a
-   tenth off the top and bottom, which the covers are drawn to survive —
-   NOTEBOOK_COVERS.md §1 keeps every subject inside the middle 80% — and it buys
-   a denser grid. The hero is a different case: it was cropping 40%, not 10%. */
+/* 3:2 — the artwork's native ratio, so this box crops nothing.
+
+   This was 5:3 (40/24) on the reasoning that trimming a tenth off top and
+   bottom was inside the middle-80% safe area NOTEBOOK_COVERS.md §1 reserves.
+   The arithmetic was right and the premise was wrong: the covers carry the
+   signature mark in a **bottom corner**, which is outside the middle 80%
+   vertically, so any crop at all takes a bite out of it.
+
+   The safe area protects the subject, not the furniture. Every slot is 3:2 now
+   and there is no crop to reason about anywhere. */
 .nb-card-cover {
-  aspect-ratio: 40 / 24;
+  aspect-ratio: 3 / 2;
   width: 100%;
 }
 

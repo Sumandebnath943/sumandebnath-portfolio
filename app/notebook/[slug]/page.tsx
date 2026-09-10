@@ -261,8 +261,9 @@ export default async function NotebookPostPage({
           {/* The lede, between the masthead and the body.
 
               It now fills the article band instead of the reading measure, so
-              it shares the prose's left edge and runs out under the rail. See
-              `.nb-cover` for why the ratio is 16:9 and not something wider.
+              it shares the prose's left edge and runs out under the rail. The
+              ratio is 3:2, matching the artwork, so nothing is cropped — see
+              `.nb-cover` for what it was before and why that was wrong.
 
               `sizes` describes the band, not the viewport: above 64rem the box
               is always 936px, because the band caps at 58.5rem well before
