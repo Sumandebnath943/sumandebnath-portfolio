@@ -43,6 +43,7 @@ import shippingAProductInAWeekend from "./posts/shipping-a-product-in-a-weekend"
 import isAiGeneratedCodeSafeForProduction from "./posts/is-ai-generated-code-safe-for-production";
 import emptyBetweenProjects from "./posts/empty-between-projects";
 import whatAiAgentsCostToRun from "./posts/what-ai-agents-cost-to-run";
+import fakeAiCrawlersForgedUserAgents from "./posts/fake-ai-crawlers-forged-user-agents";
 
 export type { Post, Block, PostFact, Category } from "./types";
 export {
@@ -55,6 +56,7 @@ export {
 
 /** Newest first. `allPosts()` sorts by date, so ordering here is not load-bearing. */
 const POSTS: Post[] = [
+  fakeAiCrawlersForgedUserAgents,
   whatAiAgentsCostToRun,
   overflowHiddenKillsPositionSticky,
   nextjs16MiddlewareIsNowProxy,
