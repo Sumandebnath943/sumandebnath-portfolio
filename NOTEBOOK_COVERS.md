@@ -1,7 +1,11 @@
 # Notebook cover art — the house style and every prompt
 
-Twenty-six covers, one visual system. This file holds the reusable style block,
-a prompt for each existing article, and the rules for adding one.
+Thirty-three covers in two visual systems — the flat screen-print the archive
+was drawn in, and the cinematic style everything since September 2026 uses. This
+file holds both style blocks, a prompt for each existing article, and the rules
+for adding one.
+
+**Writing a new cover? §2, §3a and §7.** The rest is history and reference.
 
 Companion: `BLOG_GUIDELINES.md` (writing the posts themselves).
 
@@ -27,9 +31,9 @@ way to end up with twenty-six unrelated pictures.
 
 | Setting | Value |
 |---|---|
-| Aspect | **3:2** (1536 × 1024). `PostCover` draws at 400 × 260, so a 16:9 image loses its sides |
-| Safe area | Keep all text and the main object **inside the middle 80%** — a sliver crops top and bottom |
-| Text length | **Four words maximum.** Image models still fumble long strings; short lines survive |
+| Aspect | **3:2** (1536 × 1024). Every slot on the site is 3:2 as of 11 Sep 2026, so nothing crops — see §1.1 |
+| Edges | **Nothing is cropped, but do not fill the last few per cent.** The signature lives in a bottom corner |
+| Text | **The article's title, trimmed if long.** Set in the left third; see §2 for the layout |
 | Retries | Expect two or three attempts per image, almost always for the text |
 | File | Save as `_masters/notebook-covers/<slug>.png`, then run the converter — **never commit the PNG**, see §5 |
 
@@ -37,43 +41,59 @@ way to end up with twenty-six unrelated pictures.
 > yourself.** A cover with mangled lettering is worse than a cover with none, and
 > `PostCover` falls back to generated art if you leave `cover` unset.
 
-### 1.1 Where the safe area actually gets spent
+### 1.1 Every slot is 3:2, so nothing crops anywhere
 
-Added 26 Aug 2026, when the notebook redesign put the same 3:2 master into four
-differently-shaped boxes. `PostCover` renders `fill` + `object-cover`, so **the
-box does the cropping** and the middle-80% rule above is what makes that safe.
-The arithmetic, so nobody has to redo it:
+**Settled 11 Sep 2026. All six cover slots render a 3:2 master whole.**
 
-| Slot | Box | Cut from a 3:2 master | Verdict |
-|---|---|---|---|
-| Article lede — `.nb-cover` | **16:9** | 7.8% off each edge | Inside the safe area |
-| Front-page grid card — `.nb-card-cover` | **5:3** | ~5% off each edge | Comfortable |
-| Lead story, rail, headline and foot thumbnails | **3:2** | nothing | Native ratio, no crop |
-| *(rejected)* a wider cinematic lede | 2:1 | **12.5% off each edge** | **Outside it — do not** |
+| Slot | Box |
+|---|---|
+| Article lede — `.nb-cover` | 3:2 |
+| Front-page grid card — `.nb-card-cover` | 3:2 |
+| Lead story — `.nb-lead-cover` | 3:2 |
+| Row card — `.nb-row-cover` | 3:2 |
+| Rail thumbnail — `.nb-hl-cover` | 3:2 |
+| Compact card — `.nb-compact-cover` | 3:2 |
 
-> **Square is the one that broke it.** A 1:1 thumbnail cuts **a third off each
-> side**, not a sliver off the top — the safe area does not protect horizontal
-> cropping at all, because these are drawn to be trimmed vertically. The rail
-> thumbnails shipped square for one commit and visibly clipped the artwork; they
-> are 3:2 now. If a slot needs a square mark, it needs a different asset.
+`PostCover` still renders `fill` + `object-cover`. With the ratios matched that
+is a no-op rather than a crop. Verified on a production build: every slot
+reports a box ratio of exactly 1.500, and the lede is 936 × 624 against a
+936 × 624 image.
 
-> **A 16:9 master costs 7.8% off each side in the 3:2 slots — measured, not
-> estimated, and the reason the rule above is a rule.** `what-ai-agents-cost-to-run`
-> shipped for one commit at 1280×720. Its baked-in headline survived, sitting
-> inside the middle 85%, but the strapline underneath lost its first characters
-> and the lamp on the right edge disappeared — in the lead-story slot, which is
-> the most prominent image on the blog. It was replaced with a 3:2 reframe of the
-> same scene the same day.
->
-> The asymmetry is worth holding on to. **A 3:2 master trims vertically and a
-> 16:9 master trims horizontally, and only one of those is designed for.** These
-> images are composed with headroom above and desk below; nothing is composed
-> with 8% of dead space at the left margin. So a 3:2 master is safe in every slot
-> including the 16:9 lede, and a 16:9 master is safe in exactly one.
->
-> **Check any master that is not 3:2 against `/notebook`, never against the
-> article page** — the article page is the one place a wide image fits perfectly,
-> which makes it the one place that tells you nothing.
+#### Why it was not, and why that reasoning failed
+
+Two slots used to crop on purpose — the lede at 16:9 (7.8% off top and bottom)
+and the grid card at 5:3 (about a tenth). Both were justified from the same
+premise: the covers keep every subject inside the middle 80%, so the edges are
+free. **The arithmetic was correct every time it was checked. The premise was
+the thing that was wrong.**
+
+The covers carry a signature mark in a bottom corner, which is outside the
+middle 80% by definition. So the lede's bottom crop took a bite out of it on
+every article page, and the "sliver" that the safe area was supposed to absorb
+was landing on the one element placed at an edge on purpose.
+
+> **A safe area protects the subject, not the furniture.** A signature, a logo,
+> a page number or a credit sits at an edge deliberately, and any rule of the
+> form "the outer N% is expendable" will eventually eat one. That is the
+> generalisable part and it is the reason this section is no longer a table of
+> crop percentages.
+
+Two related findings from the period when slots did crop, kept because they are
+still true of any ratio mismatch:
+
+- **A square slot cuts a third off each side.** Rail thumbnails shipped 1:1 for
+  one commit and visibly clipped the artwork. Vertical trimming and horizontal
+  trimming are not the same risk, and these images are composed for neither now.
+- **A 16:9 master in a 3:2 slot loses 7.8% off each side** — measured, when
+  `what-ai-agents-cost-to-run` shipped at 1280×720 for one commit and lost the
+  first characters of its strapline in the lead-story slot. It was reframed to
+  3:2 the same day. `cited-by-chatgpt-what-i-changed` was padded to 16:9 by hand
+  in September and regenerated from its 3:2 master on 11 Sep.
+
+**Masters must be 3:2. Nothing else is safe, and now nothing else is necessary.**
+Check with `node -e` on the file header or any image tool before converting; a
+non-3:2 master no longer gets cropped into shape by a box, it just renders
+letterboxed or clipped depending on which dimension is long.
 
 **1280 wide is still the ceiling** (§5) and a full-bleed desktop lede would want
 about 2400. That is why the lede is *wide-contained* at 936px rather than edge
@@ -85,6 +105,45 @@ applies.
 ---
 
 ## 2. The style block — paste this first
+
+**Current house style, settled 11 Sep 2026.** Cinematic scene photography, not
+flat illustration. Paste this once at the top of a fresh image conversation and
+keep all of a batch in that one conversation.
+
+> House style for my blog hero images. Cinematic, photorealistic 3D render of a
+> real physical scene — dark, warm and shallow-focus, lit by one practical
+> source: a window at golden hour, a desk lamp, city lights through glass. Not
+> flat illustration, not vector, not minimalist.
+>
+> **Layout: the left third is type, the right two-thirds is the scene.** The
+> headline sits in a large high-contrast display serif, white, with the final
+> clause in one accent colour I will name each time. Optionally one small grey
+> sans-serif strapline beneath it. Generous dark negative space behind the type
+> so every word stays legible.
+>
+> **Format: 3:2, 1536 × 1024.** Nothing is cropped, but keep the outer few per
+> cent clear of anything that matters.
+>
+> Props in the scene must carry the article's argument, not decorate it: books
+> whose spines you can read, a mug with a line on it, a handwritten notebook, a
+> framed print on the wall. Show the failed or unfinished thing as well as the
+> successful one.
+>
+> Render every word of text exactly as given and spell it correctly. No people's
+> faces. No brand logos other than the one I attach.
+
+Then, per image: the article's full title, the on-image text (the title, trimmed
+if it is long), the accent colour, the scene, and the logo instruction —
+*featured only, small, in a bottom corner, not the main highlight.*
+
+> **The signature is why §1.1 exists.** It sits at a frame edge on purpose, so
+> no slot may crop. Do not move it to the centre to make a crop safe; fix the
+> slot.
+
+### 2a. The previous house style, and the twenty-six covers that use it
+
+Superseded 11 Sep 2026 and kept because most of the archive is still drawn in
+it. **Do not mix the two in one batch, and do not use this for a new post.**
 
 > Flat editorial illustration in the manner of a broadsheet newspaper's
 > technology section. Screen-print feel: solid shapes, no gradients, no glow, no
@@ -107,12 +166,45 @@ applies.
 >
 > The whole set should look like it was drawn by one hand for one publication.
 
+**The archive is mixed and that is now the accepted state.** This file used to
+record `empty-between-projects` as the single licensed exception and warn that
+"two reads as a set that has quietly split in half". Two became eight before
+anybody rewrote the rule, which is the actual lesson: **a style decision made
+one cover at a time is a style change that has not been written down yet.** New
+posts get §2. The flat covers stay as they are — reissuing twenty-six images to
+match is a cost with no reader on the other end of it.
+
 ---
 
-## 3. Accent by category
+## 3. Accent per image
 
-Taken from `CATEGORY_ACCENT` in `lib/notebook/types.ts`, so the covers sit inside
-the same palette as the filter chips and the generated art.
+### 3a. The dark style (§2) — pick per article, not per category
+
+The category accents in §3b are chosen to sit on cream and carry black text.
+**On a dark scene they read as mud.** The current style needs a bright accent
+that holds against near-black, so it is picked for the individual image:
+
+| Use | Accent |
+|---|---|
+| Alarm, forgery, something going wrong | `#F0A83C` amber · `#F2685E` red · `#E8674C` rust |
+| Measurement, correction, a number improving | `#5FE3A1` mint · `#7FE3C4` teal-mint |
+| Distance, engines, systems being observed | `#7FB6F5` cool blue · `#6FC3E8` sky |
+| Method, rules, process | `#B79CF0` violet |
+| Career, craft, the human side | `#E0A96D` bronze · `#F5C453` yellow |
+
+> **Vary it across consecutive posts.** The family resemblance comes from the
+> layout, the serif and the signature — not from repeating one colour. Two
+> articles running the same accent back to back on the index looks like a
+> mistake rather than a system.
+
+**One accent per image, on the closing clause of the headline** and optionally
+one object in the scene. Never two accents, never as a wash.
+
+### 3b. The flat style (§2a) — accent by category
+
+Taken from `CATEGORY_ACCENT` in `lib/notebook/types.ts`, so those covers sit
+inside the same palette as the filter chips and the generated art. Still correct
+for the twenty-six covers already drawn in that style.
 
 | Category | Accent |
 |---|---|
@@ -128,6 +220,12 @@ the same palette as the filter chips and the generated art.
 ---
 
 ## 4. The prompts
+
+> **§4 is a record, not a template.** Every prompt below was written for the
+> flat style in §2a and its four-words-of-on-screen-text rule. They are kept
+> because they document what each existing cover shows and would be needed to
+> reissue one. **A new post's prompt is written against §2 and §3a instead** —
+> see §7 for the shape.
 
 Each line is a follow-up message. Format: **subject — accent — on-screen text.**
 
@@ -167,27 +265,28 @@ Each line is a follow-up message. Format: **subject — accent — on-screen tex
 > is lit only while the crank turns. Warm light falls on the near bench; the rest
 > of the workshop recedes into black. On-screen text: **ONLY WHILE IT TURNS**
 
-> **⚠ The one cover outside the house style. Shipped as a deliberate exception,
-> decided by Suman on 29 August 2026.** It is a dark photographic render with a
-> warm orange key light — not flat cream-and-ink screen-print — so it is the only
-> image in the set that does not answer to the one-hand-one-publication rule in
-> §2. Three options were put: ship it as the exception, restyle it flat, or
-> rewrite §2 and migrate the other twenty-six. He took the first.
+> **This was the first cover in what is now the house style, and at the time it
+> was filed as a one-off.** Decided by Suman on 29 August 2026: a dark
+> photographic render with a warm orange key light rather than flat cream-and-ink
+> screen-print. Three options were put — ship it as an exception, restyle it
+> flat, or rewrite §2 and migrate the other twenty-six. He took the first.
 >
-> **What that decision does and does not license.** It licenses this cover, and
-> nothing else. **§2 is still the house style; a new post gets a flat cream cover
-> unless somebody rewrites §2 on purpose.** One outlier in twenty-seven reads as
-> an exception. Two reads as a set that has quietly split in half, and at that
-> point there is no house style left to return to — which is the failure this
-> document exists to prevent. If a second one is ever wanted, that is the moment
-> to rewrite §2 properly rather than to grant a second exception.
+> **The note that used to sit here said it licensed this cover and nothing
+> else**, and warned that "two reads as a set that has quietly split in half".
+> That warning was correct and it was ignored seven more times before anybody
+> came back to rewrite §2 — which happened on 11 Sep 2026, and only because a
+> cropped signature forced a look at the covers. **The exception was the new
+> style arriving early; nobody recognised it as that for a fortnight.**
 >
-> Two measurements taken while wiring it in, both useful if it is ever redrawn:
-> the type sits about **91% of the way across the frame**, clearing the article
-> lede's 16:9 crop by roughly fifteen pixels — inside the safe area, but only
-> just, so pull it left. And it converts to **77 KB** against the set's 189 KB
-> average, because a dark photograph carries almost none of the flat paper grain
-> §5 identifies as the expensive part of this style.
+> The rule worth carrying forward is in §2a: a style decision taken one cover at
+> a time is a style change nobody has written down yet. When the second exception
+> shows up, rewrite the style block instead of granting it.
+>
+> One measurement from wiring it in, still useful: it converts to **77 KB**
+> against the flat set's 189 KB average, because a dark photograph carries almost
+> none of the paper grain §5 identifies as the expensive part of that style. The
+> other measurement recorded here — how close its type sat to the lede's 16:9
+> crop — no longer applies; §1.1 removed the crop.
 
 ### Marketing & AI · accent `#1f5f6b` deep teal
 
@@ -414,14 +513,29 @@ generate all twenty-six before shipping any.
 
 ## 7. Adding a cover for a new post
 
-Paste `§2`, take the accent for the post's category from `§3`, and write one line
-in the shape of `§4`: **a single concrete object or scene that carries the
-article's argument, plus four words at most.**
+Paste `§2`, pick an accent from `§3a` that no recent post is using, then send one
+message carrying five things:
 
-> One cover in `§4` — `empty-between-projects` — is deliberately outside this
-> style and is marked there. It is an exception that was decided, not a
-> precedent. Follow `§2`.
+1. **The article's full title**, so the model knows what it is illustrating.
+2. **The on-image text** — the title, trimmed if long, split across two or three
+   lines with the closing clause marked as the accent-coloured one.
+3. **The accent colour**, as a hex value.
+4. **The scene**, in two or three sentences. Name the props and what is written
+   on them.
+5. **The logo instruction** — *featured only, small, in a bottom corner, not the
+   main highlight.*
 
-The test for the metaphor is whether somebody who has not read the post can guess
+Then paste a short **more context** paragraph: the article's real numbers and
+its finding. It is what stops the model inventing a generic tech scene.
+
+> **Check what the model wrote on the props before shipping it.** Two of the
+> five covers made on 11 Sep 2026 carry invented specifics — one shows IP
+> addresses and a date that do not match the article's, and one shows nine
+> plausible generic rules where the article is about nine particular ones. The
+> scene is illustration and can be loose. **Anything legible that looks like
+> data is a claim**, and the article underneath it is being read by people who
+> check.
+
+The test for the scene is whether somebody who has not read the post can guess
 what it is about. "A robot at a laptop" fails that test for every article here.
-An empty box with a long shadow of full ones does not.
+Five headstones named after the five bugs does not.
