@@ -47,6 +47,7 @@ import fakeAiCrawlersForgedUserAgents from "./posts/fake-ai-crawlers-forged-user
 import evaluationHarnessScoringBug from "./posts/evaluation-harness-scoring-bug";
 import whenAiEnginesNameTheWrongPerson from "./posts/when-ai-engines-name-the-wrong-person";
 import whenToAddARuleToAgentsMd from "./posts/when-to-add-a-rule-to-agents-md";
+import bugsThatNeverProduceAnError from "./posts/bugs-that-never-produce-an-error";
 
 export type { Post, Block, PostFact, Category } from "./types";
 export {
@@ -59,6 +60,7 @@ export {
 
 /** Newest first. `allPosts()` sorts by date, so ordering here is not load-bearing. */
 const POSTS: Post[] = [
+  bugsThatNeverProduceAnError,
   whenToAddARuleToAgentsMd,
   whenAiEnginesNameTheWrongPerson,
   evaluationHarnessScoringBug,
