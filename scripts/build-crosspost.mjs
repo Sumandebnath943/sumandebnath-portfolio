@@ -207,6 +207,251 @@ function devtoTags(post) {
   return [...seen].slice(0, 4);
 }
 
+// ── Hashnode ────────────────────────────────────────────────────────────────
+//
+// Hashnode takes the same Markdown body as dev.to — it renders tables, bold and
+// inline code — but almost none of the same front matter keys. Field names are
+// from Hashnode's own `Hashnode-source-from-github-template` README, checked
+// rather than assumed, because AEO_PLAYBOOK §6 item 4's standing warning is that
+// no platform behaves like dev.to.
+//
+//   canonical      NOT canonical_url. Hashnode calls it "Original article URL"
+//                  in the editor, which is the same field under another name.
+//   subtitle       A surface dev.to does not have. `metaTitle` is wrong here —
+//                  that is written to be truncated at 60 characters in a search
+//                  result. The post's own `description` reads better under a
+//                  headline, so that is what goes in.
+//   seoTitle       This is where `metaTitle` belongs.
+//   seoDescription Same string as `description`; Hashnode uses it for the meta
+//                  tag rather than deriving one from the first paragraph.
+//   saveAsDraft    true, always. Same rule as dev.to's `published: false` — the
+//                  last step is a human pressing publish on their own account.
+//
+// Tags are Hashnode's own vocabulary, not Forem's, so they are not the dev.to
+// list: Hashnode has no "seo" tag with any following, and prefers the spelled
+// forms. Five is its maximum.
+const HASHNODE_TAGS = {
+  AEO: "seo",
+  SEO: "seo",
+  Marketing: "marketing",
+  Security: "security",
+  Debugging: "debugging",
+  Engineering: "software-engineering",
+  Process: "productivity",
+  Documentation: "documentation",
+  Agents: "ai",
+  "AI-Native": "ai",
+  "Structured Data": "seo",
+  Career: "career",
+  Prompting: "ai",
+};
+
+function hashnodeTags(post) {
+  const seen = new Set();
+  for (const t of post.tags) {
+    const mapped = HASHNODE_TAGS[t] ?? t.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    if (mapped) seen.add(mapped);
+  }
+  return [...seen].slice(0, 5);
+}
+
+function renderHashnode(post, body) {
+  const url = `${SITE}/notebook/${post.slug}`;
+  const front = [
+    "---",
+    `title: ${JSON.stringify(post.title)}`,
+    `subtitle: ${JSON.stringify(post.description)}`,
+    `slug: ${post.slug}`,
+    `canonical: ${url}`,
+    `tags: ${hashnodeTags(post).join(", ")}`,
+    post.cover ? `cover: ${imageUrl(post.cover)}` : null,
+    post.metaTitle ? `seoTitle: ${JSON.stringify(post.metaTitle)}` : null,
+    `seoDescription: ${JSON.stringify(post.description)}`,
+    "enableToc: true",
+    "saveAsDraft: true",
+    "---",
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  return `${front}\n\n${body}`;
+}
+
+// ── Medium ──────────────────────────────────────────────────────────────────
+//
+// **Medium's editor renders no Markdown at all**, so every marker has to go —
+// learned on 9 Sep 2026 when a piece carrying two tables was pasted and the
+// pipes arrived as literal pipes. It also has no table support of any kind, so
+// tables are flattened into prose rather than reproduced.
+//
+// Headings survive as plain lines; the last step is selecting each one in
+// Medium's editor and pressing its large-T button. The posting sheet lists
+// which lines those are so nobody has to guess from a wall of text.
+const stripMd = (t) =>
+  String(t)
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, "$1")
+    .replace(/\*\*([^*]+)\*\*/g, "$1")
+    .replace(/`([^`]+)`/g, "$1");
+
+function mediumBlock(b) {
+  switch (b.kind) {
+    case "p":
+    case "h2":
+    case "h3":
+      return stripMd(b.text);
+    case "ul":
+    case "ol":
+      // No bullet characters. Medium turns a pasted "- " into a list only
+      // sometimes, and a literal dash left behind reads as a typo, so each item
+      // becomes its own paragraph — which is what the 9 Sep file did by hand.
+      return b.items.map((i) => stripMd(i)).join("\n\n");
+    case "code":
+      return b.code;
+    case "callout":
+      // The title is dropped rather than kept as a line. It is a label for a
+      // box, and without the box it reads as a heading that introduces nothing.
+      return stripMd(b.text);
+    case "quote":
+      return stripMd(b.text);
+    case "table":
+      return [
+        ...b.rows.map((r) => r.map((c, i) => `${b.head[i] ? `${stripMd(b.head[i])}: ` : ""}${stripMd(c)}`).join(" — ")),
+        b.caption ? stripMd(b.caption) : null,
+      ]
+        .filter(Boolean)
+        .join("\n\n");
+    case "figure":
+      // Medium does not fetch images from a pasted body; they are uploaded by
+      // hand. The caption carries the argument, so it stays.
+      return b.caption ? stripMd(b.caption) : null;
+    case "promote": {
+      const page = lookupPage(b.href);
+      if (!page) throw new Error(`build-crosspost: "${b.href}" is not in lib/pages.ts`);
+      return `${page.label} — ${stripMd(b.note ?? page.blurb)}: ${abs(b.href)}`;
+    }
+    case "pullquote":
+      return null;
+    default:
+      throw new Error(`build-crosspost: no Medium rule for block kind "${b.kind}"`);
+  }
+}
+
+function renderMedium(post) {
+  const parts = [post.title, "", stripMd(post.answer)];
+
+  if (post.facts?.length) {
+    // One run of sentences rather than a list, matching the hand-written file
+    // from 9 Sep. A column of "label: value" lines with no table around them
+    // reads as broken formatting; a paragraph reads as a paragraph.
+    parts.push("", post.facts.map((f) => `${stripMd(f.label)}: ${stripMd(f.value)}.`).join(" "));
+  }
+
+  for (const b of post.blocks) {
+    const t = mediumBlock(b);
+    if (t) parts.push("", t);
+  }
+
+  if (post.faqs?.length) {
+    for (const f of post.faqs) parts.push("", stripMd(f.q), "", stripMd(f.a));
+  }
+
+  parts.push("", `Written while building. More at ${SITE.replace(/^https:\/\//, "")}`, "");
+  return parts.join("\n");
+}
+
+// ── The posting sheet ───────────────────────────────────────────────────────
+//
+// Every field each platform asks for, with the value already decided, so
+// publishing is copying rather than judging at eleven at night. The canonical
+// line is repeated per platform on purpose: it is the field that decides
+// whether a cross-post is a backlink or a competitor, and Medium's is the one
+// that has silently gone wrong before.
+function renderSheet(post) {
+  const url = `${SITE}/notebook/${post.slug}`;
+  const h2s = post.blocks.filter((b) => b.kind === "h2").map((b) => stripMd(b.text));
+  const figures = post.blocks.filter((b) => b.kind === "figure");
+
+  return `# Posting sheet — ${post.title}
+
+Original: ${url}
+Published on the site: ${post.published}
+**Syndicate no earlier than ${post.published} + 3 days** (AEO_PLAYBOOK §6.2).
+
+---
+
+## dev.to
+
+Paste \`${post.slug}.md\` into the v1 Markdown editor, or \`${post.slug}.body.md\`
+into the v2 editor and fill these by hand:
+
+| Field | Value |
+| --- | --- |
+| Title | ${post.title} |
+| Canonical URL | ${url} |
+| Tags | ${devtoTags(post).join(", ")} |
+| Cover image | ${post.cover ? imageUrl(post.cover) : "(none)"} |
+
+Arrives as a draft. dev.to renders its own "Originally published at" line from
+the canonical, so do not add one.
+
+---
+
+## Hashnode
+
+Paste \`${post.slug}.HASHNODE.md\`. If the editor is used rather than the GitHub
+source flow, the front matter maps to these fields:
+
+| Editor field | Value |
+| --- | --- |
+| Title | ${post.title} |
+| Subtitle | ${post.description} |
+| **Original article URL** | ${url} |
+| Tags | ${hashnodeTags(post).join(", ")} |
+| Cover image | ${post.cover ? imageUrl(post.cover) : "(none)"} |
+| SEO title | ${post.metaTitle ?? post.title} |
+| SEO description | ${post.description} |
+
+**"Original article URL" is the canonical field.** Hashnode does not call it
+canonical anywhere in its UI, which is how it gets missed.
+
+---
+
+## Medium
+
+Paste \`${post.slug}.MEDIUM.md\`. It carries no Markdown, because Medium's editor
+renders none.
+
+| Field | Value |
+| --- | --- |
+| Title | ${post.title} |
+| Subtitle | ${post.description} |
+| Tags (max 5) | ${hashnodeTags(post).join(", ")} |
+| Cover image | upload \`${post.cover ? path.basename(imageUrl(post.cover)) : "(none)"}\` by hand |
+
+After pasting, style these lines as headings (select the line, press the large T):
+
+${h2s.map((h) => `- ${h}`).join("\n")}
+${figures.length ? `\nUpload ${figures.length} in-body image${figures.length > 1 ? "s" : ""} by hand; the captions are already in the text.` : ""}
+
+### ⚠ Set the canonical AFTER publishing, and then verify it
+
+Medium publishes a pasted story **self-canonicalising** and gives no warning —
+it did exactly that on 7 Sep 2026. Publish first, then:
+
+> Story settings (…) → Advanced settings → **"This story was originally
+> published elsewhere"** → paste ${url} → Save canonical link.
+
+Then fetch the published URL and check the tag. \`curl\` gets 403 from Medium
+without a browser user agent, and a 403 reads exactly like a deleted article:
+
+\`\`\`bash
+curl -s -L -A "Mozilla/5.0" <published-url> | grep -oE '<link[^>]*rel="canonical"[^>]*>'
+\`\`\`
+
+It should print ${url} — not the Medium URL.
+`;
+}
+
 function render(post) {
   const url = `${SITE}/notebook/${post.slug}`;
 
@@ -287,10 +532,22 @@ async function main() {
   const body = md.split(/^---$/m).slice(2).join("---").replace(/^\n+/, "");
   await writeFile(bodyOut, body, "utf8");
 
+  const hashnodeOut = path.join(OUT_DIR, `${post.slug}.HASHNODE.md`);
+  await writeFile(hashnodeOut, renderHashnode(post, body), "utf8");
+
+  const mediumOut = path.join(OUT_DIR, `${post.slug}.MEDIUM.md`);
+  await writeFile(mediumOut, renderMedium(post), "utf8");
+
+  const sheetOut = path.join(OUT_DIR, `${post.slug}.POSTING.md`);
+  await writeFile(sheetOut, renderSheet(post), "utf8");
+
   const words = md.split(/\s+/).length;
   const kb = (n) => `${(n / 1024).toFixed(0)} KB`;
-  console.log(`  ${out}       ← v1 editor: paste whole, front matter included`);
-  console.log(`  ${bodyOut}  ← v2 editor: paste into the body box only`);
+  console.log(`  ${out}       ← dev.to v1: paste whole, front matter included`);
+  console.log(`  ${bodyOut}  ← dev.to v2: paste into the body box only`);
+  console.log(`  ${hashnodeOut}  ← Hashnode: canonical field is "canonical"`);
+  console.log(`  ${mediumOut}    ← Medium: no Markdown, no tables`);
+  console.log(`  ${sheetOut}   ← every field for all three, start here`);
   console.log("");
   console.log(`  title          ${post.title}`);
   console.log(`  canonical_url  ${SITE}/notebook/${post.slug}`);
