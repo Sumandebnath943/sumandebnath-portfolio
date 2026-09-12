@@ -51,6 +51,17 @@ export const identity = {
   portfolio: "https://sumandebnath.houseofnamus.com",
   availability: "Open to remote / relocation",
   noticePeriod: "90 days",
+  // Registered 9 Sep 2026. **Not a credential, and must never be rendered as
+  // one** — an ORCID is free self-registration with no vetting, so putting it
+  // beside the Certifications entries would claim standing that was not earned.
+  // It is here because it is the identifier the Zenodo dataset DOI
+  // (10.5281/zenodo.22721272, /slms/pentacmd) is bound to: it is what ties a
+  // published artifact to *this* Suman Debnath rather than to one of the
+  // namesakes the engines keep returning. Rendered as a plain line at the foot
+  // of the record, the way a paper's author block carries one, and read by
+  // app/layout.tsx for the `sameAs` array so the URL exists in exactly one file.
+  orcid: "0009-0006-9581-7890",
+  orcidHref: "https://orcid.org/0009-0006-9581-7890",
 } as const;
 
 export const summary =

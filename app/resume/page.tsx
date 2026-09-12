@@ -544,6 +544,20 @@ export default function ResumePage() {
                 </div>
               ))}
             </div>
+
+            {/* The foot of the document — the last line before the page stops
+                being a résumé. An ORCID is an identifier, not an achievement,
+                so it sits here as a flat address rather than in the list above
+                it: free to register, no assessor, nothing earned. What it does
+                carry is the Zenodo dataset DOI, which is bound to this iD — so
+                it is the line that says the published artifact belongs to this
+                Suman Debnath. lib/resume.ts owns the value. */}
+            <p className="rz-orcid">
+              ORCID{" "}
+              <a href={identity.orcidHref} target="_blank" rel="noopener noreferrer">
+                {identity.orcid}
+              </a>
+            </p>
           </div>
         </section>
 

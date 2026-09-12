@@ -300,7 +300,7 @@ const personJsonLd = {
     // no link to this domain at all. `rel="me"` is a two-way identity claim —
     // asserting it against a profile that does not answer is the half-made
     // claim §6 records for HuggingFace. `sameAs` has no such requirement.
-    "https://orcid.org/0009-0006-9581-7890",
+    identity.orcidHref,
     "https://stackoverflow.com/users/33103420/suman-debnath",
     "https://sessionize.com/suman-debnath/",
     "https://www.datascienceportfol.io/sumandebnath",

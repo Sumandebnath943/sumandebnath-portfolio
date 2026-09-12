@@ -659,6 +659,24 @@
   opacity: 0.6;
 }
 
+/* The foot of the record. Deliberately quieter than .rz-cert h3 above it — an
+   identifier is an address, not an accomplishment, so it gets no amber and no
+   bullet. The digits stay selectable text because people copy an ORCID. */
+.rz-orcid {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cream-mute);
+  margin-top: 3rem;
+}
+.rz-orcid a {
+  color: var(--cream-soft);
+  border-bottom: 1px solid rgba(237, 231, 218, 0.2);
+  transition: color 0.3s, border-color 0.3s;
+}
+.rz-orcid a:hover { color: var(--amber); border-bottom-color: rgba(250, 204, 21, 0.5); }
+
 /* ── Beyond the résumé — visibly not part of the document ─────────────── */
 
 .rz-beyond { background: var(--paper); padding-block: clamp(3.5rem, 8vw, 5rem); }
@@ -864,7 +882,7 @@
   .rz-role-title, .rz-quote, .rz-kv-v, .rz-idx-d, .rz-lede, .rz-bullet p,
   .rz-cert li, .rz-eyebrow, .rz-skill h3, .rz-cert h3 { color: #000 !important; }
   .rz-contact, .rz-role-when, .rz-role-org, .rz-edu-i, .rz-edu-y,
-  .rz-tick-l, .rz-idx-n, .rz-kv-k, .rz-earlier { color: #333 !important; }
+  .rz-tick-l, .rz-idx-n, .rz-kv-k, .rz-earlier, .rz-orcid { color: #333 !important; }
   .rz a { color: #000 !important; text-decoration: none !important; border-bottom: none !important; }
   .rz-actions, .rz-cta, .rz-beyond, .rz-seam-note { display: none !important; }
   .rz-warm, .rz-dark, .rz-soil, .rz-mast { padding-block: 0.8rem !important; }
