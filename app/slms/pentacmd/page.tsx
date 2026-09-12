@@ -28,6 +28,14 @@ import {
 const GITHUB = "https://github.com/Sumandebnath943/pentacmd";
 const HF = "https://huggingface.co/SumanDebnath943/PentaCMD-47M";
 
+// The training dataset, deposited on Zenodo 12 Sep 2026 with a registered DOI.
+// Rendered as the bare identifier rather than a shields.io badge on purpose:
+// an external <img> would need a new remotePattern and would break the page's
+// own glyph convention (GitHubMark / HuggingFaceMark are inline SVG). A DOI is
+// also something people copy into a citation, so it has to be selectable text.
+const ZENODO_DOI = "10.5281/zenodo.22721272";
+const ZENODO = `https://doi.org/${ZENODO_DOI}`;
+
 export const metadata: Metadata = {
   // 64 chars with the layout's " · Suman Debnath" suffix. Was 114 — the shell
   // list was the whole overrun and none of it survived truncation anyway.
@@ -99,6 +107,11 @@ const softwareJsonLd = {
   programmingLanguage: "Python",
   license: "https://opensource.org/license/mit",
   codeRepository: GITHUB,
+  // The DOI is the one identifier here that is not self-asserted — DataCite
+  // registered it and it is bound to an ORCID, so it is worth more to an engine
+  // resolving this entity than another link on this domain is.
+  identifier: ZENODO,
+  sameAs: [GITHUB, HF, ZENODO],
   author: { "@type": "Person", name: "Suman Debnath", url: SITE_URL },
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
   keywords:
@@ -259,6 +272,24 @@ export default function PentaCmdPage() {
                     Run it <span>↓</span>
                   </a>
                 </div>
+              </Reveal>
+
+              {/* Deliberately not a fourth pill. The three above are actions;
+                  this is a citation, and it is read and copied rather than
+                  clicked. Kept quiet, monospace and selectable. */}
+              <Reveal delay={0.3}>
+                <p className="mt-5 font-dmmono text-xs text-[#8b90a6]">
+                  Training dataset ·{" "}
+                  <a
+                    href={ZENODO}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#a9b0c8] underline decoration-white/20 underline-offset-4 hover:text-[#FACC15] hover:decoration-[#FACC15]/50 transition-colors duration-300"
+                  >
+                    doi:{ZENODO_DOI}
+                  </a>{" "}
+                  <span className="text-[#6b7085]">— 299,329 pairs, leak-free split, MIT</span>
+                </p>
               </Reveal>
             </div>
             </div>
