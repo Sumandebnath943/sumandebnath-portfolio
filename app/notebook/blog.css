@@ -1000,22 +1000,36 @@
   counter-reset: hl;
 }
 
-.nb-hl-list > li + li {
-  border-top: 1px solid var(--nb-rule);
+/* Each item is a block in its own category colour.
+
+   A 3px left rule was tried first and was not enough: at a glance the list
+   still read as one cream column with a detail at the edge. The fill is what
+   makes the category legible before the label is — which is the whole point of
+   colour-coding a list.
+
+   14% keeps `--nb-ink` comfortably above 4.5:1 on all eight accents, including
+   the two darkest (Career bronze and Next.js slate). Raising it past ~20%
+   starts failing on those two, so this is a ceiling rather than a taste call.
+
+   The dividing rule between items goes: with each item filled and gapped, a
+   border between them is a line drawn between two things that are already
+   separate. */
+.nb-hl-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
-/* Colour-coded down the edge. The category label carries its accent already,
-   but it is 9px uppercase mono — at that size a dark accent like Next.js slate
-   is indistinguishable from the muted ink around it. A 3px rule is legible at a
-   glance and lets the list be read by category without reading the words. */
 .nb-hl-list > li {
+  background: color-mix(in srgb, var(--tint) 14%, transparent);
   border-left: 3px solid var(--tint, transparent);
-  padding-left: 0.7rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+  padding: 0.1rem 0.75rem 0.1rem 0.7rem;
   transition: background 0.2s;
 }
 
 .nb-hl-list > li:hover {
-  background: color-mix(in srgb, var(--tint) 7%, transparent);
+  background: color-mix(in srgb, var(--tint) 24%, transparent);
 }
 
 .nb-hl-link {

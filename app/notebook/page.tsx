@@ -7,7 +7,6 @@ import Contact from "@/components/sections/Contact";
 import RelatedPages from "@/components/ui/RelatedPages";
 import PageFaq from "@/components/ui/PageFaq";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
-import ArchiveConstellation from "@/components/notebook/ArchiveConstellation";
 import {
   LeadStory,
   HeadlineList,
@@ -134,7 +133,6 @@ export default function NotebookIndexPage() {
             story off the first screen. */}
         <header className="nb-mast nb-mast--blog sd-banner-host">
           <BannerArt seed="/notebook" accent="#7B61FF" variant="paper" />
-          <ArchiveConstellation counts={categories} />
           <div className="nb-wide">
             <Breadcrumbs
               trail={[{ label: "Notebook", href: "/notebook" }]}

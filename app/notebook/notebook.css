@@ -142,47 +142,6 @@
   padding: 10rem 0 3rem;
   border-bottom: 1px solid var(--nb-rule);
   overflow: hidden;
-  position: relative;
-}
-
-/* ── The masthead's right-hand half ─────────────────────────────────────────
-   One dot per article, coloured by category — see `ArchiveConstellation`.
-
-   It starts at 46% rather than 50% so the drift has somewhere to go without
-   ever reaching the standfirst, which is the longest line on the left and the
-   one that would look crowded first. Purely decorative: `aria-hidden` on the
-   host, `pointer-events: none` so it never intercepts a click meant for the
-   breadcrumb or the RSS link underneath it.
-
-   Hidden below 64rem. On a narrow screen the type already fills the width, and
-   an animation behind wrapped text is noise rather than atmosphere. */
-.nb-constellation {
-  position: absolute;
-  inset: 0 0 0 46%;
-  pointer-events: none;
-  z-index: 0;
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 22%, #000 82%, transparent);
-  mask-image: linear-gradient(to right, transparent, #000 22%, #000 82%, transparent);
-}
-
-.nb-constellation canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-/* The masthead's own content sits above it. `.nb-mast` was not positioned
-   before this, so the stacking context is new — if anything inside the
-   masthead starts overlapping, this is why. */
-.nb-mast > .nb-wide {
-  position: relative;
-  z-index: 1;
-}
-
-@media (max-width: 64rem) {
-  .nb-constellation {
-    display: none;
-  }
 }
 
 .nb-eyebrow {
