@@ -486,9 +486,18 @@ export const certifications: CertificationGroup[] = [
   },
   {
     issuer: "Google",
+    // No group year: these three were not earned together, and the two
+    // undated ones are not mine to date. The year rides on the item instead,
+    // the way the "AI & Digital" group above does it.
     period: "",
     items: [
-      "Google Analytics Individual Qualification",
+      // Was listed as "Google Analytics Individual Qualification" — the name
+      // Google retired in 2023 when Universal Analytics was switched off. He
+      // sat the current exam and Skillshop issued it under today's name, so
+      // the credential was always real; only the label was three years old.
+      // **It expires Mar 2027** — Google gives these 12 months and does not
+      // auto-renew, so this line needs re-checking then, not assuming.
+      "Google Analytics Certification (Mar 2026)",
       "Advanced Google Analytics",
       "Google Digital Unlocked: Fundamentals of Digital Marketing",
     ],
