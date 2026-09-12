@@ -175,7 +175,10 @@ export function HeadlineList({
         }`}
       >
         {posts.map((p) => (
-          <li key={p.slug}>
+          // The per-item tint drives the left rule in `.nb-hl-list > li`. The
+          // category label was already coloured, but at 10px it read as grey —
+          // a rule down the edge is what makes the list scannable by category.
+          <li key={p.slug} style={{ ["--tint" as string]: CATEGORY_ACCENT[p.category] }}>
             <Link href={`/notebook/${p.slug}`} className="nb-hl-link">
               {/* The text is wrapped whether or not there is a thumbnail, so
                   the numeral and the picture each get one grid cell to sit
@@ -328,7 +331,10 @@ export function CategoryStrip({
   categories: { category: Category; count: number }[];
 }) {
   return (
-    <nav className="nb-strip" aria-label="Article categories">
+    <nav className="nb-strip" aria-labelledby="nb-strip-title">
+      <h2 id="nb-strip-title" className="nb-strip-title">
+        Browse by category
+      </h2>
       <ul className="nb-strip-list">
         {categories.map(({ category, count }) => (
           <li key={category}>

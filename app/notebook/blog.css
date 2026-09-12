@@ -706,33 +706,60 @@
   list-style: none;
 }
 
+/* Filled, not edged.
+
+   The previous note here argued that "eight filled pills in a row is a paint
+   chart, eight edges is a legend", and kept the accent as a 3px left border on
+   cream. In place it read as eight identical cream chips with a detail nobody
+   looked at — the failure recorded in HANDOFF §1.12, where every box carrying
+   the same light tone reads as undesigned.
+
+   Filled, each category is identifiable before the label is read, which is the
+   only job this strip has. The accents are all dark enough for white type. */
 .nb-strip-item {
   display: inline-flex;
   align-items: baseline;
   gap: 0.55rem;
-  padding: 0.5rem 0.9rem 0.5rem 0.75rem;
-  border: 1px solid var(--nb-rule);
-  /* The accent as a left edge rather than a fill: eight filled pills in a row
-     is a paint chart, eight edges is a legend. */
-  border-left: 3px solid var(--tint);
+  padding: 0.5rem 0.95rem;
+  border: 1px solid var(--tint);
   border-radius: 0.55rem;
-  background: #faf7f1;
+  background: var(--tint);
   font-size: 0.875rem;
-  color: var(--nb-ink);
+  font-weight: 500;
+  color: #fff;
   text-decoration: none;
-  transition: border-color 0.2s, background 0.2s;
+  transition: filter 0.2s, transform 0.2s;
 }
 
 .nb-strip-item:hover {
-  background: color-mix(in srgb, var(--tint) 9%, #faf7f1);
-  border-color: color-mix(in srgb, var(--tint) 40%, transparent);
-  border-left-color: var(--tint);
+  filter: brightness(1.12);
+  transform: translateY(-1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nb-strip-item:hover {
+    transform: none;
+  }
 }
 
 .nb-strip-count {
   font-family: var(--font-dm-mono), ui-monospace, monospace;
   font-size: 0.6875rem;
+  /* On the fill rather than the page, so this takes its contrast from the chip
+     and not from `--nb-ink-mute`, which is tuned for cream. */
+  color: rgb(255 255 255 / 0.72);
+}
+
+/* The strip had no heading — a bare row of chips under the lead story with
+   nothing saying what it was. */
+.nb-strip-title {
+  font-family: var(--font-dm-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
   color: var(--nb-ink-mute);
+  margin: 0 0 0.9rem;
+  font-weight: 400;
 }
 
 /* ── The archive, as rows ───────────────────────────────────────────────── */
@@ -977,6 +1004,20 @@
   border-top: 1px solid var(--nb-rule);
 }
 
+/* Colour-coded down the edge. The category label carries its accent already,
+   but it is 9px uppercase mono — at that size a dark accent like Next.js slate
+   is indistinguishable from the muted ink around it. A 3px rule is legible at a
+   glance and lets the list be read by category without reading the words. */
+.nb-hl-list > li {
+  border-left: 3px solid var(--tint, transparent);
+  padding-left: 0.7rem;
+  transition: background 0.2s;
+}
+
+.nb-hl-list > li:hover {
+  background: color-mix(in srgb, var(--tint) 7%, transparent);
+}
+
 .nb-hl-link {
   display: block;
   padding: 0.7rem 0;
@@ -1074,15 +1115,37 @@
 .nb-cardrow {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1.5rem 2rem;
+  gap: 1.75rem 2.75rem;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
+/* The gap alone was not reading as separation. Each card is text plus a
+   thumbnail with no border or fill of its own, so one card's picture sat next
+   to the next card's title with nothing between them and the row scanned as
+   one block.
+
+   The rule goes on **every** item and is made transparent on the first rather
+   than applied to `li + li`, so all four keep identical padding and the columns
+   stay equal — `1fr` divides the track, but padding on three of four would make
+   their content boxes narrower than the first. */
+.nb-cardrow > li {
+  border-left: 1px solid var(--nb-rule);
+  padding-left: 1.4rem;
+}
+
+.nb-cardrow > li:first-child {
+  border-left-color: transparent;
+}
+
 @media (max-width: 68rem) {
   .nb-cardrow {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  /* Two columns, so the third item starts a row and is now a left edge too. */
+  .nb-cardrow > li:nth-child(odd) {
+    border-left-color: transparent;
   }
 }
 
@@ -1090,6 +1153,12 @@
   .nb-cardrow {
     grid-template-columns: 1fr;
     gap: 1.1rem;
+  }
+  /* One column: the separator is horizontal, so the vertical rule and its
+     indent both come off. Leaving them gives every card a stray left edge. */
+  .nb-cardrow > li {
+    border-left: 0;
+    padding-left: 0;
   }
   .nb-cardrow > li + li {
     padding-top: 1.1rem;
