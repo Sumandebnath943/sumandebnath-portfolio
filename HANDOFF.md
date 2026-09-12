@@ -55,7 +55,7 @@ Recent history, newest first, gives an accurate picture of the trajectory:
 
 | Area | State |
 |---|---|
-| **Notebook** (`/notebook`) | **5 posts → 26**, 26 Aug (§1.9), **27** on 29 Aug (§1.20), **33** on 11–12 Sep (§1.26 — five new, one per day, three still queued by SHA), rebuilt as a publication (§1.11), then **redesigned end to end** (§1.12): the reading page on one band with a five-module rail, colour driven by category accent, pull-quotes and in-article promo cards; the front page recomposed into five zones on a 3·4·3·4·2 rhythm. Six routes — the architecture lives in **`PROJECT_BIBLE.md` §6.8**. **Read `BLOG_GUIDELINES.md` before touching a post and `NOTEBOOK_COVERS.md` before making an image** — both changed on 11 Sep. **Every cover slot is 3:2 as of §1.26**; the 16:9 lede and 5:3 card are gone, and the "one cover outside the house style" from §1.20 turned out to be the house style arriving early. One thing outstanding: the serif — see the end of §1.12. |
+| **Notebook** (`/notebook`) | **5 posts → 26**, 26 Aug (§1.9), **27** on 29 Aug (§1.20), **33** on 11–12 Sep (§1.26 — five new, written one per day; **all five live since 13 Sep**, the last three pushed together rather than on their dates — §1.27), rebuilt as a publication (§1.11), then **redesigned end to end** (§1.12): the reading page on one band with a five-module rail, colour driven by category accent, pull-quotes and in-article promo cards; the front page recomposed into five zones on a 3·4·3·4·2 rhythm. Six routes — the architecture lives in **`PROJECT_BIBLE.md` §6.8**. **Read `BLOG_GUIDELINES.md` before touching a post and `NOTEBOOK_COVERS.md` before making an image** — both changed on 11 Sep. **Every cover slot is 3:2 as of §1.26**; the 16:9 lede and 5:3 card are gone, and the "one cover outside the house style" from §1.20 turned out to be the house style arriving early. One thing outstanding: the serif — see the end of §1.12. |
 | **Syndication / off-site** | Opened 27 Aug (§1.15), first article shipped 7–8 Sep (§1.23): `what-ai-agents-cost-to-run` on **dev.to, Medium and Hashnode**, all three canonicalised here and all three verified. **Medium self-canonicalises silently — always fetch the tag.** Per-platform rules, the metadata copy-vs-differentiate rule and the JPEG-twin constraint are in **`AEO_PLAYBOOK.md` §6 item 4**; **§6.2 covers cadence** — there is no schedule, the platforms are 1:1 with this site and never carry originals, and syndication lags publication by 3–7 days. Read both before syndicating the next one. |
 | **Machine-readable identity** | Audited 25 Aug against Vercel's Is Agentic, **79 → 83** (§1.8). **Nine profiles as of 7 Sep**, each declared three ways — `sameAs`, `rel="me"`, footer pills — with Medium and Hashnode added once their profiles pointed back (§1.23). Nine is the ceiling for the pill row. The `Person` and `WebSite` JSON-LD were emitted through `next/script` and existed only once JavaScript had run — now literal tags on all 26 routes. House of Namus added as a real `Organization`. Markdown content negotiation was **refused on purpose**; the reasoning and the one condition for revisiting it are in `AEO_PLAYBOOK.md` §8. |
 | **Profile** (`/profile`) | Built 23 Aug over two passes, extended 24 Aug with four more sections (§1.6), and given a **statement wall** 28 Aug (§1.19) — a baked ASCII portrait, ~175vh, flowing on a capped canvas, with three lines rising off it. The only light page on the site — ruled cream paper, a 280vh pinned hero that zooms into a drawn monitor, a word reveal, and a conveyor street with a walking robot. Modelled on a reference the user supplied, then pulled back towards the site's own type, pills, accents and closing. **The figure and the dog still need redrawing** — §1.5. |
@@ -2440,6 +2440,100 @@ from this domain, so they must be deployed before anything is syndicated.
 **Still queued:** S3–S5 by SHA above, syndication from 18 Sep (alternate days),
 M3/M2/M4 on 13–15 Sep. **IndexNow has not been run and is his call** — once or
 twice a week, never per-publish.
+
+> **Overtaken by events — see §1.27.** All three were pushed at once on the night
+> of 12–13 Sep. The dates above are what was planned, not what happened. The
+> "M1 live 12 Sep" line further up is also a day out: M1 went live on the 11th.
+
+---
+
+### 1.27 The Medium run, an SEO panel nobody was opening, and a push that overtook the schedule (12–13 Sep 2026)
+
+A small session that found one real process defect and then lost its own plan to
+a parallel session. Nothing broke. The schedule did.
+
+**The Medium calendar slipped by one and corrected itself.** The plan was M5 on
+Fri 11 and M1 on Sat 12. M1 went out on the 11th, in M5's slot. The fix was to
+post **M5 on the 12th rather than shuffle anything** — the two simply traded
+days, M3/M2/M4 on 13–15 Sep were untouched, and no gap appeared. Worth keeping
+because the instinct is to cascade the whole calendar; the cheaper move is
+almost always to swap two items and leave the rest alone.
+
+The swap was safe to make because the sheet said so. `M5-…POSTING.md` records
+*"M2 → M4 is the one ordering that genuinely matters; the rest is preference"* —
+**an ordering constraint written down at the time is what makes a later
+rearrangement a two-minute decision instead of a re-read of five articles.**
+
+**M5's title changed on the day it shipped.** It was *"I shipped 8 repos in 11
+days. Six were dead within three."* **"Within three" has no unit.** The reader
+has to reach back to "11 days" to supply one, and a fast eye reads "three" as
+three of the eight. It published as *"I shipped 8 projects in 11 days. Six of
+them were abandoned by day three."* — unit named, subset named. "Repos" became
+"projects" at the same time, because `productivity` and `creativity` are two of
+the five tags and that audience does not use the word; the body's own first line
+still says "Eight repositories", so nothing was lost.
+
+> **Medium freezes the URL slug when the draft is first saved and never updates
+> it on a title edit.** M5's slug carries a title it was briefly given and did
+> not keep. Harmless, and it even carries useful words, but it means a headline
+> changed after first save is permanently out of step with its own link. Decide
+> the title before the first save, or accept the mismatch.
+
+**The finding worth keeping: "Do not open Advanced settings" was too blunt, and
+it was in every Medium sheet.** That panel holds two unrelated things — the
+canonical field *and* the SEO title and description. The instruction was written
+to protect the first and had the side effect of suppressing the second, so every
+Medium exclusive was set to ship with no search headline and no search blurb,
+falling back to whatever Medium guessed. Corrected in M2, M3, M4 and M5 to:
+
+> Open Advanced settings, set the SEO title and description, and **do not touch
+> the canonical / "originally published elsewhere" field.**
+
+**A prohibition scoped to a container rather than to the thing that is actually
+dangerous will quietly cost you everything else in that container.** The
+canonical rule itself was never wrong — M5's live page was checked and is
+correctly self-canonical.
+
+**SEO fields now drafted for M2, M3 and M4**, recorded in each sheet with its
+reasoning. Three decisions in them:
+
+| Piece | Call |
+|---|---|
+| **M3** | SEO title takes the practical angle (free Kaggle T4, one real run) because the display title already owns the courses angle — the only condition `BLOG_GUIDELINES.md` §`metaTitle` allows the field to be set under |
+| **M2** | Takes the trust gap — *"Why developers don't trust AI code: 84% use, 3% trust"* — reusing the compression the article's own subtitle and second heading already use, with the full "use or plan to use" still in the body |
+| **M4** | **No SEO title at all.** Its headline is 59 characters and already question-shaped. The guideline says leave it unset when the title is already short and searchable, and anything written would have been a worse version of a headline that works |
+
+> **Two numbers were deliberately kept out of the snippets.** M3's 1.2% → 42.1%
+> is the exact misreading that article exists to correct — the base model could
+> already code and scored 1.2% because nothing had taught it to answer — and a
+> search result has no room for the correction, so it would sell a 35×
+> capability gain to everyone who never clicks. M2's 2.74× is cross-site
+> scripting specifically, not vulnerabilities in general. **A number whose
+> meaning depends on context the snippet cannot carry does not belong in the
+> snippet**, and least of all in two articles arguing that almost-right claims
+> are the dangerous kind.
+
+**Then a parallel session pushed all ten queued commits at once**, plus an
+eleventh (`217991e`, the ORCID on `/resume`). What that cost and what it did not:
+
+- **The one-per-day cadence is gone.** S3, S4 and S5 went live together. §1.26
+  dated them separately so the cadence would be real; that is spent and does not
+  come back.
+- **S4 and S5 are live carrying dates that have not happened** — 14 and 15 Sep.
+  `lib/notebook/index.ts` has no future-date gate; `allPosts()` returns
+  everything. **Left alone on purpose.** They become true on the 15th, and
+  re-dating all three to one day would be less accurate than what is there.
+  Those dates are now the only surviving trace of the cadence plan. RSS readers
+  generally hide future-dated items, so subscribers may still receive them a day
+  apart.
+- **The JPEG cover twins in `f95eea0` are deployed**, so the hard blocker on
+  syndication is gone ahead of schedule. **The 18/20/22/24/26 Sep spacing was
+  the design, not the blocker** — it still stands.
+- **IndexNow still not run.** His call, as always, and there is now a second
+  reason to wait until the 15th: it would push two URLs whose `datePublished`
+  has not arrived.
+
+**Medium was untouched by the push** — a separate track, still on its own dates.
 
 ---
 
