@@ -55,7 +55,7 @@ Recent history, newest first, gives an accurate picture of the trajectory:
 
 | Area | State |
 |---|---|
-| **Notebook** (`/notebook`) | **5 posts → 26**, 26 Aug (§1.9), **27** on 29 Aug (§1.20 — and one cover deliberately outside the house style), rebuilt as a publication (§1.11), then **redesigned end to end** (§1.12): the reading page on one band with a five-module rail, colour driven by category accent, pull-quotes in all 26 posts and in-article promo cards in nine; the front page recomposed into five zones on a 3·4·3·4·2 rhythm. Six routes — the architecture now lives in **`PROJECT_BIBLE.md` §6.8**, which it did not before. **Read `BLOG_GUIDELINES.md` before touching a post and `NOTEBOOK_COVERS.md` before making an image.** One thing outstanding: the serif — see the end of §1.12. |
+| **Notebook** (`/notebook`) | **5 posts → 26**, 26 Aug (§1.9), **27** on 29 Aug (§1.20), **33** on 11–12 Sep (§1.26 — five new, one per day, three still queued by SHA), rebuilt as a publication (§1.11), then **redesigned end to end** (§1.12): the reading page on one band with a five-module rail, colour driven by category accent, pull-quotes and in-article promo cards; the front page recomposed into five zones on a 3·4·3·4·2 rhythm. Six routes — the architecture lives in **`PROJECT_BIBLE.md` §6.8**. **Read `BLOG_GUIDELINES.md` before touching a post and `NOTEBOOK_COVERS.md` before making an image** — both changed on 11 Sep. **Every cover slot is 3:2 as of §1.26**; the 16:9 lede and 5:3 card are gone, and the "one cover outside the house style" from §1.20 turned out to be the house style arriving early. One thing outstanding: the serif — see the end of §1.12. |
 | **Syndication / off-site** | Opened 27 Aug (§1.15), first article shipped 7–8 Sep (§1.23): `what-ai-agents-cost-to-run` on **dev.to, Medium and Hashnode**, all three canonicalised here and all three verified. **Medium self-canonicalises silently — always fetch the tag.** Per-platform rules, the metadata copy-vs-differentiate rule and the JPEG-twin constraint are in **`AEO_PLAYBOOK.md` §6 item 4**; **§6.2 covers cadence** — there is no schedule, the platforms are 1:1 with this site and never carry originals, and syndication lags publication by 3–7 days. Read both before syndicating the next one. |
 | **Machine-readable identity** | Audited 25 Aug against Vercel's Is Agentic, **79 → 83** (§1.8). **Nine profiles as of 7 Sep**, each declared three ways — `sameAs`, `rel="me"`, footer pills — with Medium and Hashnode added once their profiles pointed back (§1.23). Nine is the ceiling for the pill row. The `Person` and `WebSite` JSON-LD were emitted through `next/script` and existed only once JavaScript had run — now literal tags on all 26 routes. House of Namus added as a real `Organization`. Markdown content negotiation was **refused on purpose**; the reasoning and the one condition for revisiting it are in `AEO_PLAYBOOK.md` §8. |
 | **Profile** (`/profile`) | Built 23 Aug over two passes, extended 24 Aug with four more sections (§1.6), and given a **statement wall** 28 Aug (§1.19) — a baked ASCII portrait, ~175vh, flowing on a capped canvas, with three lines rising off it. The only light page on the site — ruled cream paper, a 280vh pinned hero that zooms into a drawn monitor, a word reveal, and a conveyor street with a walking robot. Modelled on a reference the user supplied, then pulled back towards the site's own type, pills, accents and closing. **The figure and the dog still need redrawing** — §1.5. |
@@ -2317,6 +2317,129 @@ the image's own dark wall rather than cropped. **Covers for this slot should be
 **Working documents live outside the repo**, in the session scratchpad: one file
 per destination, plus `ACCOUNTS-AND-PROFILES.md` carrying seven bios at fixed
 character counts and every canonical URL.
+
+---
+
+### 1.26 Five articles, five Medium originals, and a dataset with a DOI (11–12 Sep 2026)
+
+The biggest single session so far. Twelve commits, five new notebook articles,
+five Medium exclusives that will never appear here, a rewritten cover standard,
+and the first identifier on this site that is not self-asserted.
+
+**Five notebook articles, dated one per day so the cadence is real:**
+
+| Date | Slug | Category | Push |
+|---|---|---|---|
+| 11 Sep | `fake-ai-crawlers-forged-user-agents` | Practice | live |
+| 12 Sep | `evaluation-harness-scoring-bug` | Practice | live |
+| 13 Sep | `when-ai-engines-name-the-wrong-person` | Marketing & AI | `2954028` |
+| 14 Sep | `when-to-add-a-rule-to-agents-md` | Method | `d307e8c` |
+| 15 Sep | `bugs-that-never-produce-an-error` | Practice | `9cddce3` |
+
+Each committed separately with the registry grown one entry at a time, so every
+commit builds on its own — a single commit adding all five imports would have
+referenced four files that did not exist yet.
+
+**`WRITING_HUMAN_VOICE.md` was measured, not just read.** A throwaway script
+scored each piece before shipping: sentence-length variation 0.59–0.76 against
+the guide's 0.6–1.2 human band, blacklist vocabulary, British spelling. Two
+lessons worth keeping:
+
+- **The metric cannot tell an asyndetic list from flat rhythm.** Several pieces
+  flagged 4–6 "runs of near-equal sentences" that were all one deliberate
+  fragment list — *"Forbes. A conference site. Google Scholar."* Cutting those to
+  satisfy the number would have made the prose worse. Over-correction is a
+  failure mode the guide names and the script cannot see.
+- **The measure is std/mean, not variance/mean.** Rebuilt from memory after a
+  scratchpad wipe and got this wrong — every piece read ~10× too varied, and a
+  finished article briefly scored 6.74. Caught only by re-running the script
+  against an article whose score was already known. **Calibrate a rebuilt tool
+  against a known value before trusting it on new work.**
+
+**Every cover slot is 3:2 now** (`d990ed7`). The lede was 16:9 and the grid card
+5:3, both argued from `NOTEBOOK_COVERS.md` §1's middle-80% safe area. The
+arithmetic was right; the premise was not — the covers carry a signature in a
+bottom corner, which is outside the middle 80% by definition, so the "free"
+sliver was eating the one element placed at an edge on purpose. **A safe area
+protects the subject, not the furniture.** §1.1 and §2 of that document were
+rewritten; §2 now records the dark cinematic style as the house style and the
+flat screen-print as superseded, because the "single licensed exception" of
+29 Aug had quietly become eight.
+
+**Syndication tooling, extended** (`f95eea0`, `a27a8be`). `build-crosspost.mjs`
+now emits Hashnode and Medium variants plus a per-article posting sheet.
+Hashnode's field names came from its own template README rather than assumed
+from dev.to's: the canonical field is `canonical`, and **its editor labels it
+"Original article URL" and never uses the word canonical**, which is how it gets
+missed. Medium gets plain text — its editor renders no Markdown and has no
+tables. `build-medium-exclusive.mjs` is separate because those five have no
+`Post` object and no canonical pointing home.
+
+**Off-site, all executed by him:**
+
+- **M1 live on Medium**, 12 Sep. Four more staged. See `AEO_PLAYBOOK.md` §6.2 —
+  this overturns the never-anything-original rule, deliberately.
+- **Better Marketing audition submitted** as an unpublished draft. Three earlier
+  article ideas were researched and killed first: the GA4/AI-crawler angle
+  (seven publications already cover it), "publishing more won't fix invisibility"
+  (**now the consensus position** — MarketingProfs ran it), and the
+  absence-vs-demotion diagnostic (already a published checklist elsewhere).
+  What survived is the one thing AEO vendors structurally cannot write.
+- **engrXiv declined the PentaCMD report** — *"policy and/or out-of-scope"*.
+  Their About page: *"We do not accept works in the areas of mathematics,
+  theoretical physics, computer science, information technology, or
+  cybersecurity without a strong engineering connection."* No rewrite fixes
+  that, and no other project here clears it either. TechRxiv is closed for a
+  platform migration; OSF Preprints stopped accepting submissions in Aug 2025.
+  **The paper plan is parked pending TechRxiv reopening, and dropped if it does
+  not.** Suman's own reason for not pushing harder: he did not prepare the
+  manuscript and will not claim authorship of one.
+
+> **The dataset was deposited instead, and it is the important part.**
+> `10.5281/zenodo.22721272` — 299,329 pairs, the leak-free split, MIT, ORCID
+> attached, indexed in OpenAIRE. A dataset DOI claims *"I built this dataset"*
+> and makes no claim about a manuscript, which is exactly the part he does own.
+>
+> **NL2Bash's licence question is closed.** The technical report left it open;
+> `TellinaTool/nl2bash/data/bash/LICENSE` is MIT, Copyright (c) 2020 NL2Bash
+> dataset, even though the repo as a whole is GPL. Redistribution is clear with
+> the notice carried along.
+>
+> The leak-free claim was **verified against the exact uploaded bytes** before
+> publishing, not taken from the report: zero shared commands and zero shared
+> instructions across all three split pairs.
+
+**`ecf601b` cites that DOI on `/slms/pentacmd`** — as bare monospace text, not a
+shields.io badge, which would need a new `remotePattern` and would break the
+page's inline-SVG glyph convention. It also goes into the `SoftwareApplication`
+schema as `identifier` and joins `sameAs`. **That is the first identifier on
+this site that is not self-asserted** — DataCite registered it, it resolves to
+someone else's infrastructure, and it carries the same ORCID. §6.4 says the
+constraint is prominence and corroboration; this is one unit of the second.
+
+**`lib/crawler-verify.ts` corrected** (`157c479`). A dated comment claimed
+Anthropic published no machine-readable crawler ranges. It is at
+`claude.com/crawling/bots.json` and its own `creationTime` predates that comment
+by two weeks — four guessed URLs had 404'd and the absence was read as proof.
+The unplanned half: Anthropic's file carries 26 IPv4 prefixes and **no IPv6 at
+all**, and `contains()` refuses a family mismatch, so a genuine Claude fetch over
+IPv6 would have fallen through to `forged`. **A verifier whose failure mode is a
+false accusation is worse than no verifier.** The guard is vendor-agnostic.
+95 assertions pass.
+
+**`BLOG_GUIDELINES.md` gained the SERP step** (`3364b66`): run the search before
+setting keywords, not after. It cost four corrections on the first article,
+two of them factual rather than strategic.
+
+**Local-only, deliberately** (`_crosspost/` is gitignored): 25 syndication files
+for the site five, 15 files for the Medium exclusives, `LinkedIn-posts.docx` and
+`.pdf` carrying eight ready-to-post captions. The JPEG twins in
+`public/notebook/crosspost/` **are** committed — dev.to and Hashnode fetch them
+from this domain, so they must be deployed before anything is syndicated.
+
+**Still queued:** S3–S5 by SHA above, syndication from 18 Sep (alternate days),
+M3/M2/M4 on 13–15 Sep. **IndexNow has not been run and is his call** — once or
+twice a week, never per-publish.
 
 ---
 

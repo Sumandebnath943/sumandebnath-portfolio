@@ -1328,11 +1328,33 @@ post does not help it and costs twice — the set is diluted, and
 `BLOG_GUIDELINES.md`'s no-duplicate-question rule gets harder to satisfy with
 every post added. **Zero posts in a month is a correct outcome, not a lapse.**
 
-**The three platforms get 1:1 with the site and never anything original.**
-Everything syndicated is a canonical'd copy (§6 item 4). Posting original work
-to Medium puts the authoritative version on someone else's domain, which is the
-exact failure the canonical exists to prevent. So the platforms have no cadence
-of their own to manage — no post here, nothing there.
+**The three platforms get 1:1 with the site — with one deliberate exception,
+taken 11 Sep 2026.** Everything *syndicated* is a canonical'd copy (§6 item 4).
+Posting original work to Medium puts the authoritative version on someone else's
+domain, which is the exact failure the canonical exists to prevent.
+
+> **Overturned in one direction only: five Medium-exclusive articles.** Suman
+> decided on 11 Sep 2026 to write five originals for Medium that have no copy
+> here and never will. The first, *"Marketers aren't losing jobs to AI"*, went
+> live 12 Sep.
+>
+> The reasoning that made the old rule right does not apply to them. A canonical
+> exists to say *the authoritative copy is elsewhere* — these have no elsewhere.
+> Medium's own self-canonical is correct for a Medium original, and setting
+> "originally published elsewhere" on one would point at a URL that 404s.
+>
+> **That inversion is the live hazard.** The habit built on the syndicated five
+> is the opposite of the rule for the exclusive five, and both flows run in the
+> same fortnight. Every posting sheet in `_crosspost/` states which applies at
+> the top, in bold, for that reason.
+>
+> These are not the site diluted onto another platform. They are written for a
+> different audience in a different register — see `_crosspost/medium-exclusives/`
+> — and the site loses nothing by their absence.
+
+So the platforms still have no *syndication* cadence of their own to manage — no
+post here, nothing there — but Medium now has an editorial line that this site
+does not own.
 
 **Stagger the syndication rather than same-day.** On 7 Sep all three went out
 the day of publication. Better:
