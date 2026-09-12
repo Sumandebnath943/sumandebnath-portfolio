@@ -1336,7 +1336,8 @@ domain, which is the exact failure the canonical exists to prevent.
 > **Overturned in one direction only: five Medium-exclusive articles.** Suman
 > decided on 11 Sep 2026 to write five originals for Medium that have no copy
 > here and never will. The first, *"Marketers aren't losing jobs to AI"*, went
-> live 12 Sep.
+> live 11 Sep; *"I shipped 8 projects in 11 days"* followed on 12 Sep. The
+> remaining three run 13–15 Sep.
 >
 > The reasoning that made the old rule right does not apply to them. A canonical
 > exists to say *the authoritative copy is elsewhere* — these have no elsewhere.
