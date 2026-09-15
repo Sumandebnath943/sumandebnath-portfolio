@@ -950,6 +950,15 @@ than rendering wrong in production; `types.ts` argues it at length. There is no
 globbing — the explicit `POSTS` array is what keeps the index, the sitemap, RSS,
 `/llms.txt` and the category archives from disagreeing.
 
+> **There is no publication gate. A post in `POSTS` is live the moment the build
+> deploys.** `allPosts()` sorts on `published` and returns everything — a date in
+> the future changes the ordering and the displayed date, nothing else. So the
+> registry entry *is* the publish action, and the only thing holding an article
+> back is that the commit has not been pushed. Recorded 13 Sep 2026 after a push
+> put five articles live at once, two of them stamped with dates that had not yet
+> happened (`HANDOFF.md` §1.27). Nothing was broken by it — but if a scheduled
+> cadence is ever wanted for real, it has to be built here, not assumed.
+
 #### Composition — two functions decide what appears where
 
 `magazine()` composes the front page and `furtherReading(post)` composes the
@@ -1096,7 +1105,7 @@ article is exactly what a non-JavaScript crawler cannot read.
 
 | File | Role |
 |---|---|
-| `resume.ts` | **Single source of truth for career facts.** Feeds `/resume`, the AI system prompt, `/contact`, and the KRA bullets in `components/sections/OperationalHistory.tsx` (homepage + `/about`). Edit this, never the consumers. |
+| `resume.ts` | **Single source of truth for career facts.** Feeds `/resume`, the AI system prompt, `/contact`, and the KRA bullets in `components/sections/OperationalHistory.tsx` (homepage + `/about`). Also owns the **ORCID** (`identity.orcid` / `identity.orcidHref`), which `app/layout.tsx` reads for its `sameAs` array — anything that belongs on a business card lives here and nowhere else. Edit this, never the consumers. |
 | `projects.ts`, `archive-projects.ts` | Project cards and the archive |
 | `journey.ts` | `/journey` content |
 | `learnings-data.ts` | Certificates |

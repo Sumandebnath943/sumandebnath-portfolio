@@ -52,7 +52,14 @@ longer match the codebase — do not follow them.
 
 Nine things that are true regardless of the task:
 
-1. Commit straight to `main`. This project does not use feature branches.
+1. Commit straight to `main` — no feature branches — but **push only when he
+   asks.** Committing is private; pushing publishes, because `main` auto-deploys
+   and the only undo is a force-push. Two things make this easy to get wrong:
+   `git push` sends the **branch, not your commit**, and a clean `git status`
+   means nothing is *uncommitted*, not that nothing is *waiting*. Run
+   `git log --oneline @{u}..` and name what is ahead before offering. On 12 Sep
+   an agent read this line as standing permission and pushed eleven commits, ten
+   of them his, publishing five queued articles at once (§1.27, §1.28).
 2. `next/image` only accepts `quality={75}` here — `images.qualities` is unset.
 3. An ancestor with `overflow-hidden` silently disables `position: sticky`.
 4. The body is the scroll container, so `window` scroll listeners never fire.

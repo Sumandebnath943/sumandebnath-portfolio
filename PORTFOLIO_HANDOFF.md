@@ -78,7 +78,7 @@ short rule: `VERSION 2 · STANDALONE NATIVE ANDROID`.
 |---|---|
 | `/` | He builds AI-native systems, and here they are. Carries **the film** (§3b). |
 | `/journey` | The story a résumé cannot tell — interactive, illustrated, gesture-gated. |
-| `/resume` | Career as a page, not a PDF. Two registers that converge. |
+| `/resume` | Career as a page, not a PDF. Two registers that converge. The document **ends at the Certifications section** — everything below it is marked as an addition, not part of the record — and its last line is a flat `ORCID` identifier, an address rather than an award. Nothing else on the page is undated: date a certification group, never leave `period: ""`. |
 | `/about`, `/philosophy` | How he thinks; each has its own identity, not a shared template. |
 | `/profile` | The decade in short — what it adds up to, where the work has been, what he uses every day. `/about` argues the *crossing* from marketing to AI; this states the profile itself and asks nothing of the reader. **The only light page on the site**: cream paper, amber marks. Eleven sections and the longest page on the site, built to be scrolled rather than read — copy runs plainer and shorter than anywhere else, because the paper, the drawings and the charts are doing the arguing. |
 | `/faq` | Answers real questions, and feeds FAQ schema for AEO. |

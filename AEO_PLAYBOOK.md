@@ -1217,6 +1217,24 @@ Ordered by expected value, once the above is done:
    > one it does. The pill row is where that is paid, and nine of thirteen is a
    > deliberate editorial cut, not drift. Before adding a tenth pill, ask what it
    > displaces — not whether the arrays have the same length.
+   >
+   > **ORCID is now paid for, and not in the pill row** (12 Sep 2026). `/resume`
+   > ends with a plain `ORCID 0009-0006-9581-7890` line at the foot of the
+   > record — the surface a paper's author block would use. That satisfies the
+   > rule above without spending a pill, because the pill row is a row of
+   > *destinations worth a click* and an ORCID is a *citation handle*; putting it
+   > there would have made it compete with GitHub and HuggingFace for attention
+   > it does not want.
+   >
+   > **An identifier is not a credential, and must never be dressed as one.** It
+   > is deliberately not an entry in the `/resume` Certifications list. ORCID is
+   > free self-registration with no assessor; a Zenodo DOI is issued on upload
+   > with no review. What the pair actually buys is that `10.5281/zenodo.22721272`
+   > is bound to this iD, so a published artifact resolves to *this* Suman Debnath
+   > rather than to one of the namesakes §6.4 keeps losing to. That is an
+   > entity-resolution claim, and it is the only claim being made. Listing either
+   > beside things that were sat and passed would trade a true small claim for a
+   > false larger one.
 6. **Answer the same questions where they are asked** — Stack Overflow, Reddit,
    the Next.js discussions — linking back only where genuinely relevant.
 
