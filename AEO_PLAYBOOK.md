@@ -1890,6 +1890,30 @@ as `describedby`.
 media types, 2–4 `representativeQueries` each, served `application/json` with
 `Access-Control-Allow-Origin: *`.
 
+> **It conforms to AI Catalog `specVersion: "1.0"` (fixed 7 Oct 2026).**
+> PageSpeed's *Agentic Browsing* category failed it as "schema is invalid": it
+> shipped as `0.2`, entries used `id` instead of `identifier`, and `host` used
+> `name` where HostInfo requires `displayName`. HostInfo allows only
+> `displayName`, `identifier`, `documentationUrl`, `logoUrl`, so the old host
+> `description`/`contact` moved into the spec's official metadata extension
+> (`extensions["https://ai-catalog.org/extensions/metadata"]`). The host
+> `identifier` is the bare domain, **not `did:web:`** — there is no
+> `/.well-known/did.json`, and claiming a DID would be advertising machinery the
+> site doesn't have (§10.5). Normative source: the CDDL in
+> `github.com/Agent-Card/ai-catalog/specification/ai-catalog.md`.
+>
+> **Eight "Low" warnings remain on purpose.** Lighthouse flags `text/plain`,
+> `text/html`, `application/xml` and `application/rss+xml` as "not standard
+> discovery types". Its list contains only agent cards, MCP cards, skills
+> bundles and registries, and none of those describe a text file, a page or a
+> feed. The spec's own example lists `application/parquet`. The type has to say
+> what the file actually is.
+>
+> The ARD spec has since renamed the path to `/.well-known/ard.json`
+> (`rel="ard"`) and treats `ai-catalog.json` as the predecessor that consumers
+> *may* consult. Lighthouse still audits `ai-catalog.json`. Serving both is an
+> open decision, not yet taken.
+
 > **Do not add `rel="author"` to the Link header.** The root layout already
 > emits `<link rel="author" href="{SITE_URL}">`. A second author claim with a
 > different value is the same half-made assertion §6 records for `sameAs` and

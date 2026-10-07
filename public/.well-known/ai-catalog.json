@@ -1,14 +1,20 @@
 {
-  "specVersion": "0.2",
+  "specVersion": "1.0",
   "host": {
-    "name": "Suman Debnath",
-    "url": "https://sumandebnath.houseofnamus.com",
-    "description": "Portfolio and engineering notebook of Suman Debnath — Senior Brand Marketing Manager and AI-native product builder, based between Pune and Kolkata, India. Founder of House of Namus; creator of ROASmind, IMPRINT, LEGATUS, CITE, EMBER, D-PE.ai and the PentaCMD-47M language model.",
-    "contact": "mailto:sumandebnath944@gmail.com"
+    "displayName": "Suman Debnath",
+    "identifier": "sumandebnath.houseofnamus.com",
+    "documentationUrl": "https://sumandebnath.houseofnamus.com/llms.txt"
+  },
+  "extensions": {
+    "https://ai-catalog.org/extensions/metadata": {
+      "url": "https://sumandebnath.houseofnamus.com",
+      "description": "Portfolio and engineering notebook of Suman Debnath — Senior Brand Marketing Manager and AI-native product builder, based between Pune and Kolkata, India. Founder of House of Namus; creator of ROASmind, IMPRINT, LEGATUS, CITE, EMBER, D-PE.ai and the PentaCMD-47M language model.",
+      "contact": "mailto:sumandebnath944@gmail.com"
+    }
   },
   "entries": [
     {
-      "id": "urn:air:sumandebnath.houseofnamus.com:context:llms-txt",
+      "identifier": "urn:air:sumandebnath.houseofnamus.com:context:llms-txt",
       "displayName": "Site summary for language models",
       "description": "A generated, always-current summary of every page on the site: who Suman Debnath is, what he has built, the disambiguation against several better-indexed people of the same name, and a citation map. Derived from the site's own registries at build time, so it cannot drift from the pages it describes.",
       "type": "text/plain",
@@ -21,7 +27,7 @@
       ]
     },
     {
-      "id": "urn:air:sumandebnath.houseofnamus.com:context:llms-full-txt",
+      "identifier": "urn:air:sumandebnath.houseofnamus.com:context:llms-full-txt",
       "displayName": "Long-form biography and product detail",
       "description": "The extended companion to llms.txt: full career history, the reasoning behind each product, model specifications and capability claims in prose. Hand-maintained rather than generated.",
       "type": "text/plain",
@@ -33,7 +39,7 @@
       ]
     },
     {
-      "id": "urn:air:sumandebnath.houseofnamus.com:index:sitemap",
+      "identifier": "urn:air:sumandebnath.houseofnamus.com:index:sitemap",
       "displayName": "Complete URL index",
       "description": "Every public URL on the domain with a last-modified date derived from git history rather than a build stamp, so the dates carry real information.",
       "type": "application/xml",
@@ -45,7 +51,7 @@
       ]
     },
     {
-      "id": "urn:air:sumandebnath.houseofnamus.com:feed:notebook",
+      "identifier": "urn:air:sumandebnath.houseofnamus.com:feed:notebook",
       "displayName": "Notebook feed",
       "description": "Full-text RSS for the engineering and career notebook — twenty-six articles on Next.js, CSS and layout traps, React, answer engine optimisation, AI-assisted engineering, and the move from brand marketing into AI product work.",
       "type": "application/rss+xml",
@@ -57,7 +63,7 @@
       ]
     },
     {
-      "id": "urn:air:sumandebnath.houseofnamus.com:identity:about",
+      "identifier": "urn:air:sumandebnath.houseofnamus.com:identity:about",
       "displayName": "Who is Suman Debnath?",
       "description": "The identity page. Career narrative, and a visible disambiguation distinguishing this Suman Debnath from the several other technology professionals who share the name.",
       "type": "text/html",
@@ -69,7 +75,7 @@
       ]
     },
     {
-      "id": "urn:air:sumandebnath.houseofnamus.com:identity:profile",
+      "identifier": "urn:air:sumandebnath.houseofnamus.com:identity:profile",
       "displayName": "What is Suman Debnath known for?",
       "description": "The capability page: what he is known for across brand marketing, performance marketing and AI-native product building, with the disciplines and the decade behind them.",
       "type": "text/html",
@@ -81,7 +87,7 @@
       ]
     },
     {
-      "id": "urn:air:sumandebnath.houseofnamus.com:identity:resume",
+      "identifier": "urn:air:sumandebnath.houseofnamus.com:identity:resume",
       "displayName": "What is Suman Debnath's experience?",
       "description": "The résumé: roles, dates, employers, education, credentials and the figures each position was measured by.",
       "type": "text/html",
@@ -94,7 +100,7 @@
       ]
     },
     {
-      "id": "urn:air:sumandebnath.houseofnamus.com:identity:projects",
+      "identifier": "urn:air:sumandebnath.houseofnamus.com:identity:projects",
       "displayName": "What has Suman Debnath built?",
       "description": "The product index: seven flagship projects plus the language models, agent systems, apps and games, each with its own dossier page.",
       "type": "text/html",
