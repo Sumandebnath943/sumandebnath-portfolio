@@ -5,13 +5,6 @@
     "identifier": "sumandebnath.houseofnamus.com",
     "documentationUrl": "https://sumandebnath.houseofnamus.com/llms.txt"
   },
-  "extensions": {
-    "https://ai-catalog.org/extensions/metadata": {
-      "url": "https://sumandebnath.houseofnamus.com",
-      "description": "Portfolio and engineering notebook of Suman Debnath — Senior Brand Marketing Manager and AI-native product builder, based between Pune and Kolkata, India. Founder of House of Namus; creator of ROASmind, IMPRINT, LEGATUS, CITE, EMBER, D-PE.ai and the PentaCMD-47M language model.",
-      "contact": "mailto:sumandebnath944@gmail.com"
-    }
-  },
   "entries": [
     {
       "identifier": "urn:air:sumandebnath.houseofnamus.com:context:llms-txt",

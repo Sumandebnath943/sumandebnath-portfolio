@@ -1894,13 +1894,14 @@ media types, 2–4 `representativeQueries` each, served `application/json` with
 > PageSpeed's *Agentic Browsing* category failed it as "schema is invalid": it
 > shipped as `0.2`, entries used `id` instead of `identifier`, and `host` used
 > `name` where HostInfo requires `displayName`. HostInfo allows only
-> `displayName`, `identifier`, `documentationUrl`, `logoUrl`, so the old host
-> `description`/`contact` moved into the spec's official metadata extension
-> (`extensions["https://ai-catalog.org/extensions/metadata"]`). The host
-> `identifier` is the bare domain, **not `did:web:`** — there is no
-> `/.well-known/did.json`, and claiming a DID would be advertising machinery the
-> site doesn't have (§10.5). Normative source: the CDDL in
-> `github.com/Agent-Card/ai-catalog/specification/ai-catalog.md`.
+> `displayName`, `identifier`, `documentationUrl`, `logoUrl`. Lighthouse's
+> validator strictly enforces `additionalProperties: false` at root (rejecting
+> root-level `extensions`), so the document carries strictly `specVersion`, `host`
+> and `entries`. The site description and contact email remain declared in
+> `llms.txt`, JSON-LD and `/about`. The host `identifier` is the bare domain,
+> **not `did:web:`** — there is no `/.well-known/did.json`, and claiming a DID
+> would be advertising machinery the site doesn't have (§10.5). Normative source:
+> the CDDL in `github.com/Agent-Card/ai-catalog/specification/ai-catalog.md`.
 >
 > **Eight "Low" warnings remain on purpose.** Lighthouse flags `text/plain`,
 > `text/html`, `application/xml` and `application/rss+xml` as "not standard

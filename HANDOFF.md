@@ -10,10 +10,9 @@ writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 with `"ai-catalog.json schema is invalid"`. The manifest was upgraded from 0.2 to
 AI Catalog spec 1.0 (`dc02dbe`): `id` → `identifier` across all eight entries,
 `host` restructured to `HostInfo` (`displayName`, `identifier`,
-`documentationUrl`) with description and contact preserved under the official
-metadata extension. Eight "Low" media-type warnings were retained on purpose
-(§1.29, `AEO_PLAYBOOK.md` §10.4). Pushed together with the unpushed docs from
-15 Sep (`ff52068`).
+`documentationUrl`) with root extensions omitted to satisfy Lighthouse's
+`additionalProperties: false` root schema. Eight "Low" media-type warnings
+were retained on purpose (§1.29, `AEO_PLAYBOOK.md` §10.4).
 **Session before (12–15 Sep):** the ORCID now signs the foot of `/resume` — **as an address,
 not an award** (§1.28). Identifiers are not credentials: ORCID is free
 self-registration and a Zenodo DOI is issued on upload, so neither belongs in
@@ -2672,7 +2671,7 @@ Catalog specification `1.0`:
 |---|---|---|
 | `specVersion: "0.2"` | Schema requires `"1.0"`. | Bumped to `"1.0"`. |
 | `id` on all 8 entries | AI Catalog & ARD schemas require `identifier`. | Renamed to `identifier` on all 8 entries (`urn:air:...`). |
-| `host` used `name`, `url`, `description`, `contact` | `HostInfo` schema allows only `displayName` (required), optional `identifier`, `documentationUrl`, and `logoUrl`. | Reshaped `host` to `displayName: "Suman Debnath"`, `identifier: "sumandebnath.houseofnamus.com"`, `documentationUrl: ".../llms.txt"`. Old `description` and `contact` moved to `extensions["https://ai-catalog.org/extensions/metadata"]`. |
+| `host` used `name`, `url`, `description`, `contact` | `HostInfo` schema allows only `displayName` (required), optional `identifier`, `documentationUrl`, and `logoUrl`. Lighthouse enforces `additionalProperties: false` at root. | Reshaped `host` to `displayName: "Suman Debnath"`, `identifier: "sumandebnath.houseofnamus.com"`, `documentationUrl: ".../llms.txt"`. Old `description` and `contact` omitted from root (already fully declared in `llms.txt`, JSON-LD and `/about`). |
 
 #### Decisions taken
 
