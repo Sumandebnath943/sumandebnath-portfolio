@@ -4,9 +4,17 @@ Where the project stands, what changed most recently, and what is worth doing
 next. For how the system is built read **PROJECT_BIBLE.md**; for how the site
 writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
-**Last updated:** 15 September 2026
-**Branch:** `main`, pushed through `c8c5046`. Working tree clean.
-**Last session:** the ORCID now signs the foot of `/resume` — **as an address,
+**Last updated:** 7 October 2026
+**Branch:** `main`, pushed through `dc02dbe`. Working tree clean.
+**Last session (7 Oct 2026):** PageSpeed's new *Agentic Browsing* audit failed
+with `"ai-catalog.json schema is invalid"`. The manifest was upgraded from 0.2 to
+AI Catalog spec 1.0 (`dc02dbe`): `id` → `identifier` across all eight entries,
+`host` restructured to `HostInfo` (`displayName`, `identifier`,
+`documentationUrl`) with description and contact preserved under the official
+metadata extension. Eight "Low" media-type warnings were retained on purpose
+(§1.29, `AEO_PLAYBOOK.md` §10.4). Pushed together with the unpushed docs from
+15 Sep (`ff52068`).
+**Session before (12–15 Sep):** the ORCID now signs the foot of `/resume` — **as an address,
 not an award** (§1.28). Identifiers are not credentials: ORCID is free
 self-registration and a Zenodo DOI is issued on upload, so neither belongs in
 the Certifications list; what the pair buys is that the dataset DOI resolves to
@@ -2644,6 +2652,48 @@ proctored and failable, reachable free through Microsoft's Cloud Skills Challeng
 voucher windows. The larger point stands and is §6.4's: seventeen completion
 certificates already sit on the page, the eighteenth changes nothing, and the
 accepted CFP or the published article outranks all of them.
+
+---
+
+### 1.29 AI Catalog 1.0 schema fix for PageSpeed Agentic Browsing (7 Oct 2026)
+
+PageSpeed Insights introduced a new preview category: **Agentic Browsing**,
+auditing whether websites expose discoverable resources and catalogs for AI
+agents (testing against the Agentic Resource Discovery / AI Catalog specification).
+The audit failed with `ai-catalog.json schema is invalid` (3/4 passed).
+
+#### What failed and what was fixed
+
+`public/.well-known/ai-catalog.json` had been written against early draft `0.2`
+(26 Aug 2026, §1.8 / `AEO_PLAYBOOK.md` §10.4). Three things broke under AI
+Catalog specification `1.0`:
+
+| Defect | Why | Fix |
+|---|---|---|
+| `specVersion: "0.2"` | Schema requires `"1.0"`. | Bumped to `"1.0"`. |
+| `id` on all 8 entries | AI Catalog & ARD schemas require `identifier`. | Renamed to `identifier` on all 8 entries (`urn:air:...`). |
+| `host` used `name`, `url`, `description`, `contact` | `HostInfo` schema allows only `displayName` (required), optional `identifier`, `documentationUrl`, and `logoUrl`. | Reshaped `host` to `displayName: "Suman Debnath"`, `identifier: "sumandebnath.houseofnamus.com"`, `documentationUrl: ".../llms.txt"`. Old `description` and `contact` moved to `extensions["https://ai-catalog.org/extensions/metadata"]`. |
+
+#### Decisions taken
+
+- **Host identifier is the domain, not `did:web:`**. The specification examples
+  use `did:web:example.com`, which requires hosting a DID document at
+  `/.well-known/did.json`. Claiming a DID without publishing one would be
+  advertising machinery the site does not have (`AEO_PLAYBOOK.md` §10.5).
+  `sumandebnath.houseofnamus.com` is a valid identifier.
+- **Eight "Low" media type warnings left in place deliberately.** Lighthouse's
+  validator flags `text/plain`, `text/html`, `application/xml` and
+  `application/rss+xml` as not being "standard discovery types" (expecting
+  `application/agent-card+json`, `application/mcp-server-card+json`, etc.). The
+  spec itself is artifact-agnostic and uses `application/parquet` in its own
+  example. A text file or web page must be described by its true media type;
+  claiming they are agent cards would be false claims.
+- **`/.well-known/ard.json` not added yet.** The ARD spec designates
+  `/.well-known/ard.json` as the current path and `ai-catalog.json` as the
+  predecessor, but Lighthouse currently audits `ai-catalog.json`. Kept as
+  `ai-catalog.json` for now; both can be served if needed.
+
+Pushed as `dc02dbe` alongside the previously unpushed docs commit `ff52068`.
 
 ---
 
