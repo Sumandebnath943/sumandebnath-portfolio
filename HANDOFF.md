@@ -5,14 +5,14 @@ next. For how the system is built read **PROJECT_BIBLE.md**; for how the site
 writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
 **Last updated:** 7 October 2026
-**Branch:** `main`, pushed through `dc02dbe`. Working tree clean.
+**Branch:** `main`, pushed through `2689b83`. Working tree clean.
 **Last session (7 Oct 2026):** PageSpeed's new *Agentic Browsing* audit failed
 with `"ai-catalog.json schema is invalid"`. The manifest was upgraded from 0.2 to
 AI Catalog spec 1.0 (`dc02dbe`): `id` → `identifier` across all eight entries,
-`host` restructured to `HostInfo` (`displayName`, `identifier`,
-`documentationUrl`) with root extensions omitted to satisfy Lighthouse's
-`additionalProperties: false` root schema. Eight "Low" media-type warnings
-were retained on purpose (§1.29, `AEO_PLAYBOOK.md` §10.4).
+and `host` restructured to `HostInfo`. Root `extensions` was then removed in
+`2689b83` to satisfy Lighthouse's strict `additionalProperties: false` root schema.
+Verified live on PageSpeed Insights: **4/4 passed**. Eight "Low" media-type
+warnings were retained on purpose (§1.29, `AEO_PLAYBOOK.md` §10.4).
 **Session before (12–15 Sep):** the ORCID now signs the foot of `/resume` — **as an address,
 not an award** (§1.28). Identifiers are not credentials: ORCID is free
 self-registration and a Zenodo DOI is issued on upload, so neither belongs in
@@ -2692,7 +2692,8 @@ Catalog specification `1.0`:
   predecessor, but Lighthouse currently audits `ai-catalog.json`. Kept as
   `ai-catalog.json` for now; both can be served if needed.
 
-Pushed as `dc02dbe` alongside the previously unpushed docs commit `ff52068`.
+Pushed as `dc02dbe` (initial 1.0 upgrade) followed by `2689b83` (root extensions
+removal). Verified live on PageSpeed Insights: **4/4 passed**.
 
 ---
 
