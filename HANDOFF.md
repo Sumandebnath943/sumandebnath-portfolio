@@ -6,6 +6,9 @@ writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
 **Last updated:** 12 October 2026
 **Branch:** `main`, pushed through `0f263b8`.
+**Also 12 Oct:** security headers, first step — nosniff, Referrer-Policy,
+X-Frame-Options, and a Permissions-Policy that only blocks unused features
+(§1.31). CSP deliberately deferred as its own decision.
 **Last session (12 Oct 2026):** Markdown content negotiation on `/` and a
 Markdown 404, via `next.config.ts` rewrites, reversing part of
 `AEO_PLAYBOOK.md` §8 at his request (§1.30, playbook §11). Verified live,
@@ -2731,6 +2734,52 @@ narrow build. **The durable record is `AEO_PLAYBOOK.md` §11.**
   are in-memory, so per Vercel instance, not global. Raise only if he asks.
 
 Rollback tag: `pre-markdown-negotiation`.
+
+### 1.31 Security headers, first step (12 Oct 2026)
+
+securityheaders.com graded the site **D**: only HSTS (Vercel's default) was
+sent. Nothing had been refused — the headers had simply never been set, while
+the Banking Co-pilot and Aegis Vault pages advertise CSP, frame-deny and
+nosniff. That mismatch is the reason to fix it; the real risk on a site with
+no visitor accounts was low.
+
+Added in `next.config.ts` `headers()`:
+
+- **Every response:** `X-Content-Type-Options: nosniff`,
+  `Referrer-Policy: strict-origin-when-cross-origin` (the browser default,
+  stated).
+- **Documents:** `X-Frame-Options: SAMEORIGIN`, and a `Permissions-Policy`
+  that lists **only features nothing here uses** (camera, geolocation,
+  payment, usb, serial, hid, midi, magnetometer, display-capture,
+  browsing-topics).
+
+> **Every feature the site uses is left unlisted on purpose** — microphone
+> (robot voice), clipboard-write and web-share (copy/share buttons), and
+> everything the youtube-nocookie iframes delegate through `allow=`. Listing
+> one blocks the delegation silently: the video still plays and merely loses
+> fullscreen or PiP, so nobody notices. `scripts/security-headers-check.mjs`
+> reads every `allow=` and API call in `app/` and `components/` and fails if
+> the policy names any of them.
+
+Verified against `prod`: `security-headers-check.mjs` 34/34,
+`markdown-check.mjs` 45/45; in the browser, both MIGI iframes still hold
+fullscreen/PiP/EME/accelerometer/gyroscope and the top level still holds
+microphone and clipboard. Local console noise that is **not** from this change:
+`Unrecognized feature: 'web-share'` comes from `MigiVideo.tsx`'s own `allow`
+attribute; the `/_vercel/*` scripts 404 locally and nosniff now names that
+"MIME type text/plain" — on Vercel they exist and are JavaScript. Check that
+live after a push.
+
+**Not done — CSP, its own decision.** A strict CSP needs per-request nonces,
+which means dynamic rendering of every page and gives back the static/CDN
+performance in `PAGE_OPTIMIZATION.md`. A static-compatible CSP needs
+`'unsafe-inline'` (Next's inline flight scripts, the pre-paint script in
+`app/layout.tsx`, GA4 init) and an allowlist: googletagmanager, the Vercel
+scripts, youtube-nocookie, cdnjs (pdf.js on `/learnings`). Ship it
+`Content-Security-Policy-Report-Only` first. Expected grade: ~B now, A with
+an enforced CSP; A+ unlikely without nonces.
+
+Rollback tag: `pre-security-headers`.
 
 ---
 

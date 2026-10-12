@@ -130,7 +130,69 @@ const nextConfig: NextConfig = {
       '</projects>; rel="describedby"; type="text/html"',
     ].join(", ");
 
+    /**
+     * Security baseline — added 12 Oct 2026 after securityheaders.com graded
+     * the site D (only HSTS, which Vercel sends by default). Nothing had been
+     * refused here; these had simply never been set. CSP is deliberately NOT
+     * here yet — see HANDOFF §1.31 for why it is its own decision.
+     *
+     * nosniff + Referrer-Policy go on every response: nosniff matters most on
+     * scripts and stylesheets, which is exactly what the document-only rule
+     * below would skip. strict-origin-when-cross-origin is the browsers' own
+     * default, stated rather than assumed; same-origin navigations keep the full
+     * URL, cross-origin ones get the origin only.
+     */
+    const everywhere = [
+      { key: "X-Content-Type-Options", value: "nosniff" },
+      { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+    ];
+
+    /**
+     * Permissions-Policy lists ONLY features nothing on this site uses. Every
+     * feature that is used is left unlisted on purpose, so it keeps the browser
+     * default (`self`, delegable through an iframe's `allow`):
+     *
+     *   microphone        — the robot's voice input (components/robot/useWebSpeech.ts)
+     *   clipboard-write   — every copy button, and the YouTube embeds' `allow`
+     *   web-share         — the notebook's share button, and MigiVideo's `allow`
+     *   fullscreen, autoplay, encrypted-media, picture-in-picture,
+     *   accelerometer, gyroscope — delegated to the youtube-nocookie iframes in
+     *                       Film.tsx and MigiVideo.tsx
+     *
+     * ⚠ Listing any of those as `()` or `(self)` blocks the delegation and the
+     * embed loses it silently — the video still plays, so nobody notices. Before
+     * adding a name below, grep app/ and components/ for it AND for every
+     * iframe `allow=` attribute. Names must be ones Chromium recognises, or every
+     * page load logs "Unrecognized feature" to the console.
+     */
+    const permissionsPolicy = [
+      "camera=()",
+      "geolocation=()",
+      "payment=()",
+      "usb=()",
+      "serial=()",
+      "hid=()",
+      "midi=()",
+      "magnetometer=()",
+      "display-capture=()",
+      // Opts out of Chrome's Topics API — interest profiling for ads, which
+      // this site has no part in.
+      "browsing-topics=()",
+    ].join(", ");
+
     return [
+      { source: "/:path*", headers: everywhere },
+      {
+        // Documents only, same pattern as the Link rule below. SAMEORIGIN, not
+        // DENY: nothing frames this site today, but a page of his own embedding
+        // another should not need this file edited first.
+        source: "/((?!_next/|api/).*)",
+        headers: [
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "Permissions-Policy", value: permissionsPolicy },
+        ],
+      },
+
       { source: "/hdri/:file*", headers: immutable },
       { source: "/robot-v3.glb", headers: immutable },
 
