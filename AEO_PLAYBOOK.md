@@ -2051,10 +2051,10 @@ How each §8 objection is answered:
   to every App Router response (`server/base-server.js` `setVaryHeader`), and
   the handler's `Vary: Accept` arrives as a second line. RFC 9110 §5.3 makes that
   equivalent to one combined line, but a scanner reading only the first line
-  would miss `Accept`. The prerender metadata stores `vary: Accept` alone, so
-  what Vercel sends may differ — **`scripts/markdown-check.mjs <live URL>`
-  prints the raw lines; run it after the deploy.** If Ora still fails on
-  "Vary missing Accept" with two lines live, that is the cause.
+  would miss `Accept`. **Production does not have this problem:** measured
+  12 Oct against the live URL, Vercel serves the prerendered metadata and
+  sends a single `Vary: Accept` line on both responses. Do not "fix" the local
+  two-line output. `scripts/markdown-check.mjs <URL>` prints the raw lines.
 - **Config headers beat handler headers on the same key.** The handler's
   canonical `Link` was silently dropped by the site-wide discovery `Link` rule;
   `/index.md`'s canonical now lives in `next.config.ts` as a later rule.

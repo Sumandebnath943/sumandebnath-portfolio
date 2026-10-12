@@ -5,11 +5,11 @@ next. For how the system is built read **PROJECT_BIBLE.md**; for how the site
 writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
 **Last updated:** 12 October 2026
-**Branch:** `main`, pushed through `ea1d244`; the 12 Oct commit is local until he asks for a push.
+**Branch:** `main`, pushed through `0f263b8`.
 **Last session (12 Oct 2026):** Markdown content negotiation on `/` and a
 Markdown 404, via `next.config.ts` rewrites, reversing part of
-`AEO_PLAYBOOK.md` §8 at his request (§1.30, playbook §11). Needs a live check
-after the push: `node scripts/markdown-check.mjs <live URL>`.
+`AEO_PLAYBOOK.md` §8 at his request (§1.30, playbook §11). Verified live,
+45/45.
 **Session before (7 Oct 2026):** PageSpeed's new *Agentic Browsing* audit failed
 with `"ai-catalog.json schema is invalid"`. The manifest was upgraded from 0.2 to
 AI Catalog spec 1.0 (`dc02dbe`): `id` → `identifier` across all eight entries,
@@ -2715,10 +2715,10 @@ narrow build. **The durable record is `AEO_PLAYBOOK.md` §11.**
   to live.
 - New check: **`node scripts/markdown-check.mjs`** (45 pass against `prod`).
   `crawler-check.mjs` still 95/95.
-- **Unverified until deployed:** whether Vercel sends `Vary` as one line or two.
-  Locally it is two (Next appends its own); run
-  `node scripts/markdown-check.mjs https://sumandebnath.houseofnamus.com` after
-  the push and read the "raw Vary" block, then re-run Ora.
+- **Verified live 12 Oct** after pushing `0f263b8`: `markdown-check.mjs` 45/45
+  against the production URL, and Vercel sends **one** `Vary` line on both
+  Markdown responses — `Accept` alone. The two-line `Vary` is a `next start`
+  artifact only. Re-running Ora is his.
 - **Open, not started:** Suman asked whether a JSON API/OpenAPI spec is worth
   having. Recommendation was no for discovery (§10.5 stands); he wants to
   discuss whether any *agent action* — e.g. the résumé assistant — is worth
