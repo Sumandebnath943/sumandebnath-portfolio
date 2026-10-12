@@ -2770,7 +2770,11 @@ attribute; the `/_vercel/*` scripts 404 locally and nosniff now names that
 "MIME type text/plain" — on Vercel they exist and are JavaScript. Check that
 live after a push.
 
-**Not done — CSP, its own decision.** A strict CSP needs per-request nonces,
+**Pushed as `69b5adb`; verified live** — both check scripts pass against the
+production URL, and `/_vercel/*` scripts are served as JavaScript.
+
+**CSP — parked by his decision, 12 Oct.** Not refused; do not raise it unless
+he asks. The analysis, for when he does: a strict CSP needs per-request nonces,
 which means dynamic rendering of every page and gives back the static/CDN
 performance in `PAGE_OPTIMIZATION.md`. A static-compatible CSP needs
 `'unsafe-inline'` (Next's inline flight scripts, the pre-paint script in
