@@ -1251,7 +1251,7 @@ Then run **`node scripts/build-route-dates.mjs`** so the sitemap carries a real
 `lastModified` for the new route.
 
 `/llms.txt` needs no action — it is generated from `lib/pages`, `lib/projects`
-and the notebook registry by `app/llms.txt/route.ts`, so adding the page above
+and the notebook registry by `lib/llms-txt.ts`, so adding the page above
 adds it there too. **`public/llms-full.txt` is still hand-written** and does
 need an entry.
 

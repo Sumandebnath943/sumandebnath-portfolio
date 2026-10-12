@@ -9,7 +9,7 @@
 // One list, consumed by:
 //   • components/layout/SiteFooter.tsx   — the site-wide link map
 //   • components/ui/RelatedPages.tsx     — the per-page related rail
-//   • app/llms.txt/route.ts              — the generated AI context file
+//   • lib/llms-txt.ts                    — the generated AI context file
 //
 // Navigation.tsx and CommandPalette.tsx deliberately still hold their own
 // structures: the nav is a *designed* hierarchy with nesting and ordering that

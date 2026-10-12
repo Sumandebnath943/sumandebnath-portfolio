@@ -58,6 +58,39 @@ const nextConfig: NextConfig = {
     ];
   },
 
+  /**
+   * Markdown content negotiation — the homepage and the 404 only.
+   *
+   * Added 12 Oct 2026, reversing half of AEO_PLAYBOOK.md §8. A request whose
+   * Accept header names `text/markdown` gets Markdown; everything else is
+   * untouched. Browsers never send that media type, so no person's request
+   * matches either rule. The pattern is the one Next's own guide uses
+   * (docs/01-app/02-guides/backend-for-frontend.md, "Content negotiation").
+   *
+   *   beforeFiles — `/` → `/index.md`. Has to be beforeFiles: `/` is a real
+   *                 page, and afterFiles rewrites only run once pages have
+   *                 failed to match, so an afterFiles rule here never fires.
+   *   fallback    — anything unmatched → `/missing.md`, a Markdown 404.
+   *                 Fallback runs after every page, file and dynamic route has
+   *                 been tried, so Next's router decides what is real — no list
+   *                 of routes to keep in sync, which was the reason §8 refused
+   *                 this the first time.
+   *
+   * Done here rather than in proxy.ts on purpose: the proxy runs on every
+   * request and can only be verified against a production build (AGENTS.md §6).
+   * These rules add nothing to that path.
+   */
+  async rewrites() {
+    const wantsMarkdown = [
+      { type: "header" as const, key: "accept", value: "(.*)text/markdown(.*)" },
+    ];
+    return {
+      beforeFiles: [{ source: "/", has: wantsMarkdown, destination: "/index.md" }],
+      afterFiles: [],
+      fallback: [{ source: "/:path*", has: wantsMarkdown, destination: "/missing.md" }],
+    };
+  },
+
   async headers() {
     const immutable = [
       { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
@@ -109,6 +142,19 @@ const nextConfig: NextConfig = {
       {
         source: "/((?!_next/|api/).*)",
         headers: [{ key: "Link", value: discovery }],
+      },
+
+      // /index.md is the homepage as Markdown (see rewrites() above), so it
+      // points back at the HTML as canonical and is never indexed as a
+      // duplicate. Set here rather than in the route handler because the rule
+      // above already sets Link on this path, and a config header wins over the
+      // handler's own — the handler's canonical was silently dropped. Being the
+      // later rule for the same key, this one replaces the line above.
+      {
+        source: "/index.md",
+        headers: [
+          { key: "Link", value: `${discovery}, </>; rel="canonical"` },
+        ],
       },
 
       // ARD manifest: JSON, and readable cross-origin so a registry or an agent
