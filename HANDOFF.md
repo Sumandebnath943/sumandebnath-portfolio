@@ -2721,10 +2721,14 @@ narrow build. **The durable record is `AEO_PLAYBOOK.md` §11.**
   artifact only.
 - **Ora: 100/100** (snapshot 05:09 UTC). An 81 minutes earlier was a scan run
   before the deploy went live — playbook §11.4.
-- **Open, not started:** Suman asked whether a JSON API/OpenAPI spec is worth
-  having. Recommendation was no for discovery (§10.5 stands); he wants to
-  discuss whether any *agent action* — e.g. the résumé assistant — is worth
-  exposing. Product decision first.
+- **JSON API / OpenAPI: decided no.** §10.5 stands. Exposing the résumé
+  assistant (`pages/api/chat.js`) as an agent action was reviewed and **left as
+  is by his decision**. It cannot leak secrets — no tools, no DB, the prompt is
+  `lib/resume.ts` data already shown on `/contact` and `/resume`. Two hardening
+  items were offered and **parked, not refused**: (1) `identity.phone` is in
+  `lib/systemPrompt.ts`, a scrapeable route around the §8 rule that keeps the
+  phone out of machine-readable surfaces; (2) the 500/day cap and per-IP limits
+  are in-memory, so per Vercel instance, not global. Raise only if he asks.
 
 Rollback tag: `pre-markdown-negotiation`.
 
