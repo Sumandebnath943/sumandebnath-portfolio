@@ -2059,7 +2059,18 @@ How each §8 objection is answered:
   canonical `Link` was silently dropped by the site-wide discovery `Link` rule;
   `/index.md`'s canonical now lives in `next.config.ts` as a later rule.
 
-### 11.4 Verifying
+### 11.4 Result
+
+**100/100**, Ora snapshot 12 Oct 2026, 05:09 UTC. Both Essential items cleared.
+A scan minutes earlier read **81** with the pre-deploy evidence verbatim — it ran
+before the deploy was live, not against the new code. **Rescan before reacting
+to a score taken around a deploy.** The same 81 also failed *Brand name
+discoverability* ("Suman Debnath AI portfolio" outside the top 10), which then
+passed at 100. That item is a live search ranking and will flip on its own;
+it is §6 work, not a code regression, and the audit's "put the product in the
+homepage title" fix stays refused.
+
+### 11.5 Verifying
 
 `node scripts/markdown-check.mjs` against the `prod` build (port 3200): 45
 checks covering both negotiated responses, four non-Markdown `Accept` variants

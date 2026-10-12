@@ -9,7 +9,7 @@ writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 **Last session (12 Oct 2026):** Markdown content negotiation on `/` and a
 Markdown 404, via `next.config.ts` rewrites, reversing part of
 `AEO_PLAYBOOK.md` §8 at his request (§1.30, playbook §11). Verified live,
-45/45.
+45/45; **Is Agentic 100/100**.
 **Session before (7 Oct 2026):** PageSpeed's new *Agentic Browsing* audit failed
 with `"ai-catalog.json schema is invalid"`. The manifest was upgraded from 0.2 to
 AI Catalog spec 1.0 (`dc02dbe`): `id` → `identifier` across all eight entries,
@@ -2718,7 +2718,9 @@ narrow build. **The durable record is `AEO_PLAYBOOK.md` §11.**
 - **Verified live 12 Oct** after pushing `0f263b8`: `markdown-check.mjs` 45/45
   against the production URL, and Vercel sends **one** `Vary` line on both
   Markdown responses — `Accept` alone. The two-line `Vary` is a `next start`
-  artifact only. Re-running Ora is his.
+  artifact only.
+- **Ora: 100/100** (snapshot 05:09 UTC). An 81 minutes earlier was a scan run
+  before the deploy went live — playbook §11.4.
 - **Open, not started:** Suman asked whether a JSON API/OpenAPI spec is worth
   having. Recommendation was no for discovery (§10.5 stands); he wants to
   discuss whether any *agent action* — e.g. the résumé assistant — is worth
