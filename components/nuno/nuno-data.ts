@@ -45,7 +45,7 @@ export const NU = {
 } as const;
 
 export const LINKS = {
-  live: "https://nuno-lemon.vercel.app",
+  live: "https://nuno.houseofnamus.com",
 } as const;
 
 export type Shot = { src: string; alt: string; w: number; h: number };

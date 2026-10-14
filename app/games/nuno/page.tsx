@@ -435,7 +435,7 @@ export default function NunoPage() {
                   style={{ background: "rgba(46,179,79,0.14)", color: NU.greenLight, border: "1px solid rgba(95,210,122,0.35)" }}
                 >
                   <span className="nu-anim w-1.5 h-1.5 rounded-full" style={{ background: NU.greenLight, animation: "nu-blink 1.6s steps(1) infinite" }} />
-                  Live · nuno-lemon.vercel.app
+                  Live · nuno.houseofnamus.com
                 </span>
               </div>
             </Reveal>
