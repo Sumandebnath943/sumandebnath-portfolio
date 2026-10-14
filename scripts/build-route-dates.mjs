@@ -48,6 +48,7 @@ const ROUTES = {
   "/apps/forget-anything": ["app/apps/forget-anything", "components/forget-anything"],
   "/apps/migi-app": ["app/apps/migi-app", "components/migi-app"],
   "/games/pixelville": ["app/games/pixelville", "components/pixelville"],
+  "/games/nuno": ["app/games/nuno", "components/nuno"],
   "/banking/rm-copilot": ["app/banking/rm-copilot", "components/banking"],
 
   "/notebook": ["app/notebook/page.tsx", "lib/notebook"],

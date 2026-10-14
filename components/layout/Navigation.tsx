@@ -99,6 +99,7 @@ const navLinks: NavLink[] = [
         color: "#F5B94A",
         submenus: [
           { label: "Pixelville", href: "/games/pixelville", color: "#F5B94A" },
+          { label: "NUNO", href: "/games/nuno", color: "#FFC21A" },
         ],
       },
       {

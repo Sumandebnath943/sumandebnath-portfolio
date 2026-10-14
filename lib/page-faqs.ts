@@ -209,6 +209,21 @@ export const PAGE_FAQS: Record<string, PageFaq[]> = {
     },
   ],
 
+  "/games/nuno": [
+    {
+      q: "What game modes does NUNO have?",
+      a: "NUNO has six modes, each following the published rules of the UNO game it is based on: Classic (108 cards), No Mercy (168), Flip (112 two-sided), Attack (112, with a card launcher instead of a draw pile), All Wild (112, every card wild) and Spin (108, with a nine-space wheel). Decks, card effects and scoring match the official games. NUNO is an independent fan project and is not affiliated with Mattel.",
+    },
+    {
+      q: "How does NUNO run online multiplayer without a game server?",
+      a: "In NUNO the host’s browser runs the authoritative game, and every other player connects to it directly over WebRTC using PeerJS; a public signalling server only introduces the browsers to each other. The host sends each player a view built for their own seat — their hand and everyone else’s card counts, never the draw pile or whether a Wild Draw Four was a bluff. The trade-off is that the game ends if the host leaves.",
+    },
+    {
+      q: "Can you play NUNO with friends on a phone?",
+      a: "Yes. NUNO was built for friends on phones: the host opens a room, shares a six-letter code or link, and bots fill any empty seats. It has built-in voice chat, holds a dropped player’s seat for two minutes in the lobby, and keeps the room alive when the host switches apps to send the invite. Some phones on mobile data need a relay that, as of October 2026, is not yet switched on.",
+    },
+  ],
+
   // ── Site sections ────────────────────────────────────────────────────────
   "/notebook": [
     {

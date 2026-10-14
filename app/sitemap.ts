@@ -60,6 +60,7 @@ const ROUTES: Entry[] = [
   { path: "/apps/forget-anything", changeFrequency: "monthly", priority: 0.8 },
   { path: "/apps/migi-app", changeFrequency: "monthly", priority: 0.8 },
   { path: "/games/pixelville", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/games/nuno", changeFrequency: "monthly", priority: 0.8 },
   { path: "/banking/rm-copilot", changeFrequency: "monthly", priority: 0.8 },
   { path: "/fun-apps", changeFrequency: "monthly", priority: 0.7 },
   { path: "/privacy", changeFrequency: "yearly", priority: 0.3 },

@@ -110,6 +110,12 @@ export const PAGE_ANSWERS: Record<string, PageAnswer> = {
     variant: "dark",
     align: "center",
   },
+  "/games/nuno": {
+    text: "NUNO is a browser card game by Suman Debnath that plays the official rules of UNO and five of its spin-offs, for 2 to 10 players. It has no game server: the host’s browser runs the game, friends connect to it directly over WebRTC, and each phone is sent only its own player’s cards.",
+    accent: "#FFC21A",
+    variant: "dark",
+    align: "center",
+  },
 };
 
 export function answerForPage(href: string): PageAnswer | undefined {

@@ -171,6 +171,13 @@ export const PAGES: PageEntry[] = [
     dossier: true,
   },
   {
+    href: "/games/nuno",
+    label: "NUNO",
+    blurb: "Browser card game on the official rules of UNO and five spin-offs — peer-to-peer, 2–10 players",
+    group: "apps",
+    accent: "#FFC21A",
+  },
+  {
     href: "/fun-apps",
     label: "Fun Apps",
     blurb: "Experiments and toys, including the Soul Canvas 3D portrait",
@@ -329,6 +336,7 @@ const RELATED: Record<string, string[]> = {
   "/apps/migi-app": ["/agents/migi", "/apps/forget-anything", "/games/pixelville"],
   "/apps/forget-anything": ["/apps/migi-app", "/games/pixelville", "/fun-apps"],
   "/games/pixelville": ["/fun-apps", "/apps/migi-app", "/profile"],
+  "/games/nuno": ["/games/pixelville", "/fun-apps", "/projects"],
   "/fun-apps": ["/games/pixelville", "/apps/forget-anything", "/philosophy"],
 
   // The legal pages get real destinations rather than each other. Without an
