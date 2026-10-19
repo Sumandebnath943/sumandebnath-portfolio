@@ -38,6 +38,9 @@ const post: Post = {
   popularityScore: 75,
   tags: ["Next.js", "Routing", "AEO"],
   readingMinutes: 7,
+  cover: "/notebook/nextjs-markdown-content-negotiation.webp",
+  coverAlt:
+    "A nighttime desk illuminated by a warm lamp, featuring a laptop displaying terminal windows routing Markdown requests via HTTP headers, with handwritten technical notes propped beside it.",
   facts: [
     { label: "Framework", value: "Next.js 16.3.0 (App Router)" },
     { label: "Homepage rule", value: "beforeFiles rewrite: / → /index.md (200)" },

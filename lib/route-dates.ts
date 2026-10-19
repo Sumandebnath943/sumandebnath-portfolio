@@ -32,7 +32,7 @@ export const ROUTE_DATES: Record<string, string> = {
   "/games/pixelville": "2026-08-25",
   "/games/nuno": "2026-10-14",
   "/banking/rm-copilot": "2026-08-27",
-  "/notebook": "2026-09-12",
+  "/notebook": "2026-10-19",
 };
 
 /** Shared date for the /projects/[slug] dossiers — they all render from the
@@ -40,7 +40,7 @@ export const ROUTE_DATES: Record<string, string> = {
 export const PROJECT_DOSSIER_DATE = "2026-09-10";
 
 /** Used when a route has no entry above — a page added without regenerating. */
-export const FALLBACK_DATE = "2026-10-14";
+export const FALLBACK_DATE = "2026-10-19";
 
 export function routeDate(route: string): Date {
   return new Date(ROUTE_DATES[route] ?? FALLBACK_DATE);
