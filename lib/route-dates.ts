@@ -9,7 +9,7 @@
 
 export const ROUTE_DATES: Record<string, string> = {
   "/": "2026-09-10",
-  "/resume": "2026-09-07",
+  "/resume": "2026-09-12",
   "/journey": "2026-08-25",
   "/about": "2026-08-27",
   "/profile": "2026-08-28",
@@ -25,14 +25,14 @@ export const ROUTE_DATES: Record<string, string> = {
   "/agents/pact-agent": "2026-08-27",
   "/agents/pentashell": "2026-08-25",
   "/agents/migi": "2026-09-07",
-  "/slms/pentacmd": "2026-08-27",
+  "/slms/pentacmd": "2026-09-12",
   "/llms/qdex-1.5b": "2026-08-27",
   "/apps/forget-anything": "2026-08-25",
   "/apps/migi-app": "2026-08-25",
   "/games/pixelville": "2026-08-25",
   "/games/nuno": "2026-10-14",
   "/banking/rm-copilot": "2026-08-27",
-  "/notebook": "2026-09-10",
+  "/notebook": "2026-09-12",
 };
 
 /** Shared date for the /projects/[slug] dossiers — they all render from the

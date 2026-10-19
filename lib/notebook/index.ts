@@ -13,7 +13,7 @@
 //
 // Nothing else. The index page, the sitemap, the feed and llms.txt all derive.
 
-import { CATEGORIES, categorySlug, type Category, type Post } from "./types";
+import { CATEGORIES, type Category, type Post } from "./types";
 
 import overflowHiddenKillsPositionSticky from "./posts/overflow-hidden-kills-position-sticky";
 import nextjs16MiddlewareIsNowProxy from "./posts/nextjs-16-middleware-is-now-proxy";
@@ -48,6 +48,7 @@ import evaluationHarnessScoringBug from "./posts/evaluation-harness-scoring-bug"
 import whenAiEnginesNameTheWrongPerson from "./posts/when-ai-engines-name-the-wrong-person";
 import whenToAddARuleToAgentsMd from "./posts/when-to-add-a-rule-to-agents-md";
 import bugsThatNeverProduceAnError from "./posts/bugs-that-never-produce-an-error";
+import nextjsMarkdownContentNegotiation from "./posts/nextjs-markdown-content-negotiation";
 
 export type { Post, Block, PostFact, Category } from "./types";
 export {
@@ -60,6 +61,7 @@ export {
 
 /** Newest first. `allPosts()` sorts by date, so ordering here is not load-bearing. */
 const POSTS: Post[] = [
+  nextjsMarkdownContentNegotiation,
   bugsThatNeverProduceAnError,
   whenToAddARuleToAgentsMd,
   whenAiEnginesNameTheWrongPerson,
