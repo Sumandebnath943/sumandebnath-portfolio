@@ -116,6 +116,14 @@ export const PAGE_ANSWERS: Record<string, PageAnswer> = {
     variant: "dark",
     align: "center",
   },
+  // The one left-aligned product hero: it copies the app's own layout, copy
+  // on the left and the spider on the right.
+  "/crawlers/that-one-crawler": {
+    text: "That One Crawler is a free SEO and AI-search audit tool for blogs, built by Suman Debnath as the second version of his Crawl Daddy crawler. It crawls up to 1,000 pages, runs 47 checks on each, and scores every page twice — for search rankings and for AI-answer readiness — at $0 hosting.",
+    accent: "#D6FF3D",
+    variant: "paper",
+    align: "left",
+  },
 };
 
 export function answerForPage(href: string): PageAnswer | undefined {

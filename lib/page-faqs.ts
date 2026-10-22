@@ -224,6 +224,21 @@ export const PAGE_FAQS: Record<string, PageFaq[]> = {
     },
   ],
 
+  "/crawlers/that-one-crawler": [
+    {
+      q: "What is the difference between Crawl Daddy and That One Crawler?",
+      a: "That One Crawler is the second version of Crawl Daddy, Suman Debnath’s SEO crawler. Crawl Daddy was a Flask server with headless Chromium on Replit that had to be republished every 30 days; That One Crawler runs on Vercel’s free tier with the crawl driven from the visitor’s browser. It keeps Crawl Daddy’s SEO score formula, so scores compare, and adds an AI-readiness score, guarded AI writing help, four focused tools and 30 guides.",
+    },
+    {
+      q: "How does That One Crawler audit a whole site on free serverless hosting?",
+      a: "That One Crawler moves the crawl into the visitor’s browser. The browser runs discovery, crawling, link checks and PageSpeed, about six pages at a time, and calls small stateless API routes that each finish in seconds, so no route outlives a serverless time limit. Results are stored in the visitor’s own browser, which means no database, no queue and no server to keep alive.",
+    },
+    {
+      q: "How does That One Crawler score a page for AI search?",
+      a: "That One Crawler gives every page an AI-readiness score from 0 to 100, separate from its SEO score. Seven checks make it up: a short answer straight after the H1 (20 points), answer paragraphs under headings (20), question-style headings (15), an FAQ section or markup (15), specific facts and numbers (10), lists or tables (10), and an author and date (10).",
+    },
+  ],
+
   // ── Site sections ────────────────────────────────────────────────────────
   "/notebook": [
     {

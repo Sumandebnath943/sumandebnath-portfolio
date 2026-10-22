@@ -62,6 +62,7 @@ const ROUTES: Entry[] = [
   { path: "/games/pixelville", changeFrequency: "monthly", priority: 0.8 },
   { path: "/games/nuno", changeFrequency: "monthly", priority: 0.8 },
   { path: "/banking/rm-copilot", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/crawlers/that-one-crawler", changeFrequency: "monthly", priority: 0.8 },
   { path: "/fun-apps", changeFrequency: "monthly", priority: 0.7 },
   { path: "/privacy", changeFrequency: "yearly", priority: 0.3 },
   { path: "/terms", changeFrequency: "yearly", priority: 0.3 },

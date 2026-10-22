@@ -178,6 +178,13 @@ export const PAGES: PageEntry[] = [
     accent: "#FFC21A",
   },
   {
+    href: "/crawlers/that-one-crawler",
+    label: "That One Crawler",
+    blurb: "Free SEO and AI-search audit tool for blogs — Crawl Daddy rebuilt so the visitor’s browser runs the crawl",
+    group: "apps",
+    accent: "#D6FF3D",
+  },
+  {
     href: "/fun-apps",
     label: "Fun Apps",
     blurb: "Experiments and toys, including the Soul Canvas 3D portrait",
@@ -337,6 +344,7 @@ const RELATED: Record<string, string[]> = {
   "/apps/forget-anything": ["/apps/migi-app", "/games/pixelville", "/fun-apps"],
   "/games/pixelville": ["/fun-apps", "/apps/migi-app", "/profile"],
   "/games/nuno": ["/games/pixelville", "/fun-apps", "/projects"],
+  "/crawlers/that-one-crawler": ["/notebook", "/agents/pentashell", "/projects"],
   "/fun-apps": ["/games/pixelville", "/apps/forget-anything", "/philosophy"],
 
   // The legal pages get real destinations rather than each other. Without an

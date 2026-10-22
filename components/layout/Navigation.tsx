@@ -109,6 +109,16 @@ const navLinks: NavLink[] = [
           { label: "Banking RM Copilot", href: "/banking/rm-copilot", color: "#D9A961" },
         ],
       },
+      {
+        label: "Crawlers",
+        color: "#D6FF3D",
+        submenus: [
+          // V1 has no page here — the entry goes straight to its own domain, in a
+          // new tab. V2's page carries the comparison between the two.
+          { label: "Crawl Daddy", href: "https://crawldaddy.houseofnamus.com", color: "#FFC83D" },
+          { label: "That One Crawler", href: "/crawlers/that-one-crawler", color: "#D6FF3D" },
+        ],
+      },
       { label: "Fun Apps", href: "/fun-apps", color: "#FF8C00" },
     ],
   },
@@ -163,6 +173,18 @@ const MOBILE_SUBROW =
   "hover:bg-black/[0.05] active:bg-black/[0.08] rounded-lg " +
   "transition-colors duration-150 touch-manipulation";
 
+const isExternal = (href?: string) => !!href && /^https?:\/\//.test(href);
+
+/** Marks an entry that leaves the site: a visible arrow, and words for a screen reader. */
+function ExternalMark() {
+  return (
+    <>
+      <span aria-hidden className="ml-1 opacity-60">↗</span>
+      <span className="sr-only"> (opens in a new tab)</span>
+    </>
+  );
+}
+
 /** The accent already carried by every nav entry, surfaced as a status dot. */
 function Dot({ color, small = false }: { color?: string; small?: boolean }) {
   return (
@@ -201,6 +223,12 @@ export default function Navigation() {
 
   const handleNavClick = (href: string) => {
     setMobileOpen(false);
+    if (isExternal(href)) {
+      // A product living on its own domain (Crawl Daddy). New tab, so the
+      // portfolio stays where the visitor left it.
+      window.open(href, "_blank", "noopener,noreferrer");
+      return;
+    }
     if (href.startsWith("#")) {
       if (typeof window !== "undefined" && window.location.pathname !== "/") {
         // Coming from a sub-page (/about, /projects, /faq, etc.): force a
@@ -324,6 +352,7 @@ export default function Navigation() {
                                         className="text-left px-3 py-2 text-xs font-medium text-[#bdbdc2] transition-all hover:text-[var(--c)] hover:bg-[var(--cb)] hover:shadow-[inset_0_0_0_1px_var(--cr)] rounded-lg whitespace-nowrap"
                                       >
                                         {leaf.label}
+                                        {isExternal(leaf.href) && <ExternalMark />}
                                       </button>
                                     ))}
                                   </div>
@@ -513,7 +542,10 @@ export default function Navigation() {
                                   className={MOBILE_SUBROW}
                                 >
                                   <Dot color={leaf.color} small />
-                                  <span className="truncate">{leaf.label}</span>
+                                  <span className="truncate">
+                                    {leaf.label}
+                                    {isExternal(leaf.href) && <ExternalMark />}
+                                  </span>
                                 </button>
                               ))}
                             </div>
