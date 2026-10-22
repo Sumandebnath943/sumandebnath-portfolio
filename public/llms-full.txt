@@ -1,7 +1,7 @@
 # Suman Debnath — Complete Portfolio Content
 ## llms-full.txt · Full-text AI ingestion file
 ## Site: https://sumandebnath.houseofnamus.com
-## Version: August 2026
+## Version: October 2026
 
 > This file is a complete, plain-text representation of the entire portfolio
 > for AI agents, LLM crawlers, and RAG systems. A single HTTP GET to
@@ -270,6 +270,10 @@ Forget Anything? — Android app. Live at https://sumandebnath.houseofnamus.com/
 
 PixelVille — Procedurally-generated city builder. Live at https://sumandebnath.houseofnamus.com/games/pixelville. A simulation game with a real economy, seasons, weather, crime, democracy and disasters.
 
+NUNO — Browser card game on the official rules of UNO and five of its spin-offs. Live at https://sumandebnath.houseofnamus.com/games/nuno, with the game itself at https://nuno.houseofnamus.com. Six modes — Classic, No Mercy, Flip, Attack, All Wild and Spin — each following the published instruction sheet of the game it is based on, for 2 to 10 players against bots or friends. There is no game server: the host’s browser runs the authoritative game, friends connect to it directly over WebRTC (PeerJS), and each phone is sent a view built for its own seat, so it never receives anyone else’s cards. Seven themes, synthesised sound, voice chat. An independent fan project, not affiliated with Mattel.
+
+That One Crawler — Free SEO and AI-search audit tool for blogs, and the second version of Crawl Daddy. Live at https://sumandebnath.houseofnamus.com/crawlers/that-one-crawler, with the tool itself at https://thatonecrawler.houseofnamus.com. The problem: Crawl Daddy was a Flask server with headless Chromium on Replit that had to be republished every 30 days to stay online. The build: the visitor’s browser drives the crawl and calls small stateless serverless routes that each finish in seconds, so it runs on Vercel’s free tier with no database, queue or server to keep alive, and scans are stored in the visitor’s own browser. It crawls up to 1,000 pages and up to 400 links and images per scan, runs 47 checks per page across nine categories, and scores every page twice: an SEO score kept identical to Crawl Daddy’s formula, and a separate AI-readiness (GEO/AEO) score. Six AI writing tasks run on free Groq and Gemini tiers, with page text fenced against prompt injection and every answer checked for numbers and links that are not in the source. Four focused tools (meta tag, GEO & AEO, broken link and keyword cannibalization checkers), 30 guides, 143 unit tests. It audits its own site at SEO 91 and AI readiness 93 with zero issues across 38 pages. It reports no search volumes and does not render JavaScript-only pages.
+
 Soul Canvas — Cinematic 3D psychological portrait. Live at https://sumandebnath.houseofnamus.com/fun-apps. Twenty-four questions render a visitor's inner architecture as a living particle sculpture.
 
 Banking Co-pilot — AI Relationship Manager copilot for retail and priority banking. Live at https://sumandebnath.houseofnamus.com/banking/rm-copilot, with the product itself at https://bankingcopilot.houseofnamus.com. The problem: a Relationship Manager covering a book of customers has to answer, quickly, what is happening across every product a customer holds, whether they are a risk and why in terms compliance accepts, what to offer them next and whether they are eligible, whether a submitted Aadhaar matches the person on file, and what bank policy actually says — with each answer living in a different system, making the RM the integration layer. The build: twelve modules in four domains inside one authenticated shell — Customer 360, Financial Health Score and Lead Qualification; Loan Recommendation, Risk Prediction and Explainable AI; RAG Knowledge Base, RM Chat and Next Best Action; Government Scheme Matcher, Document Intelligence and Analytics. Roughly 12,300 lines of TypeScript across 18 API routes on Next.js 16, React 19, Auth.js v5, Supabase Postgres with pgvector, Groq for text generation and Google Gemini for embeddings and document vision.
@@ -282,7 +286,7 @@ Three things distinguish it. First, every score is deterministic — financial h
 
 Slide Doctor — Presentation intelligence meets operational storytelling. Live at https://slidedoctor.houseofnamus.com. An AI-assisted presentation auditing system analyzing structure, visual hierarchy, narrative flow, and executive communication quality.
 
-Crawl Daddy — AI-native technical SEO intelligence. Live at https://crawldaddy.houseofnamus.com. A website crawling and SEO intelligence system for scanning large website ecosystems, detecting structural issues, analyzing PageSpeed data, and generating AI-assisted optimization insights.
+Crawl Daddy — AI-native technical SEO intelligence. Live at https://crawldaddy.houseofnamus.com. A website crawling and SEO intelligence system for scanning large website ecosystems, detecting structural issues, analyzing PageSpeed data, and generating AI-assisted optimization insights. Version one: its successor, That One Crawler, is documented at https://sumandebnath.houseofnamus.com/crawlers/that-one-crawler.
 
 Brief Killer — Turning chaotic thinking into structured execution. Live at https://briefkiller.houseofnamus.com. An AI-native briefing engine transforming scattered thoughts and unstructured ideas into actionable project frameworks and execution-ready briefs.
 
@@ -403,6 +407,8 @@ Founder: Suman Debnath
 - Forget Anything? (Android): https://sumandebnath.houseofnamus.com/apps/forget-anything
 - MIGI Android App: https://sumandebnath.houseofnamus.com/apps/migi-app
 - PixelVille: https://sumandebnath.houseofnamus.com/games/pixelville
+- NUNO (card game): https://sumandebnath.houseofnamus.com/games/nuno
+- That One Crawler (Crawl Daddy V2): https://sumandebnath.houseofnamus.com/crawlers/that-one-crawler
 - Banking Co-pilot (AI RM Copilot): https://sumandebnath.houseofnamus.com/banking/rm-copilot
 - Aegis Vault: https://sumandebnath.houseofnamus.com/projects/aegis-vault
 - IMPRINT Dossier: https://sumandebnath.houseofnamus.com/projects/imprint

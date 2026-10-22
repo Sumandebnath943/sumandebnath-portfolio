@@ -112,6 +112,22 @@ const commands: Command[] = [
     icon: "🏦",
   },
   {
+    id: "nuno",
+    command: "/nuno",
+    label: "NUNO",
+    description: "Browser card game on the official UNO rules and five spin-offs — peer-to-peer, no game server",
+    href: "/games/nuno",
+    icon: "🃏",
+  },
+  {
+    id: "that-one-crawler",
+    command: "/crawler",
+    label: "That One Crawler",
+    description: "Crawl Daddy V2 — free SEO and AI-search audit for blogs, 47 checks, $0 to host",
+    href: "/crawlers/that-one-crawler",
+    icon: "🕷",
+  },
+  {
     id: "stack",
     command: "/stack",
     label: "Systems Stack",

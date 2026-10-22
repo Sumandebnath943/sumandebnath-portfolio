@@ -73,7 +73,7 @@ Every route is statically prerendered unless noted.
 **Core**
 - `/` — home
 - `/about`, `/philosophy`, `/faq`, `/contact`, `/privacy`
-- `/profile` — **the only light page on the site.** Ruled cream paper, amber
+- `/profile` — **the light page with the paper system.** Ruled cream paper, amber
   corner brackets, a 280vh pinned hero you fall into. It is a second answer to
   "who is this": `/about` argues the *transition* in gold on near-black,
   `/profile` states the profile itself. Its layout is modelled on
@@ -107,9 +107,18 @@ architecture in §6.8; writing rules in `BLOG_GUIDELINES.md`.
 | `/llms/qdex-1.5b` | Qdex-1.5B model | Green `#34D399` |
 | `/apps/forget-anything` | Forget Anything? | Gold `#D4AF37` + emerald `#50C878` |
 | `/games/pixelville` | PixelVille | Gold `#F5B94A` / warm `#ffe6b0` on night blue `#20304a` |
+| `/games/nuno` | **NUNO** (browser card game, peer-to-peer) | Yellow `#FFC21A` + card red/green/blue on night `#17143d` |
+| `/crawlers/that-one-crawler` | **That One Crawler** (Crawl Daddy V2, SEO audit) | **Light**: lime `#d6ff3d` + violet `#7148e8` on cream `#f6f1e6`, ink `#1a1712` |
 | `/projects/aegis-vault` | AEGIS VAULT | Deep vault green `#07120A`, teal `#2DD4BF` |
 | `/banking/rm-copilot` | **Banking Co-pilot** (AI RM copilot) | Petrol `#4FA3D8` + brass `#D9A961` on `#070E14` |
 | `/fun-apps` | The lighter shelf | Near-black `#1a1a1a` |
+
+> **Crawl Daddy has no page here.** Portfolio → Crawlers lists it, but the entry
+> opens `crawldaddy.houseofnamus.com` in a new tab — `Navigation.tsx` has an
+> `isExternal()` branch for exactly this. That One Crawler is its successor, and
+> is the only product page that copies its app's **light** design rather than
+> the dark site: 2px ink borders, hard offset shadows, and Bricolage Grotesque
+> loaded in the page file so no other route pays for the face.
 
 > **Naming trap:** **PentaCMD is the model; Pentashell is the CLI.** They are
 > different products with different pages and different palettes. Do not merge
@@ -1206,7 +1215,7 @@ Missing one of these is the most common defect in this repo. A new page needs:
 
    `<Breadcrumbs>` emits the visible trail *and* the `BreadcrumbList` JSON-LD —
    do not also hand-roll one. Pass `href: null` for a section with no route:
-   `/agents`, `/apps`, `/slms`, `/llms`, `/games` and `/banking` all 404. Such a
+   `/agents`, `/apps`, `/slms`, `/llms`, `/games`, `/banking` and `/crawlers` all 404. Such a
    crumb shows in the visible trail and is omitted from the JSON-LD — a middle
    `ListItem` with no `item` is invalid and voids the whole list. See
    `AEO_PLAYBOOK.md` §5.4.

@@ -98,7 +98,7 @@ export function llmsTxt(): string {
     });
 
   // Distinct products this site documents: the fourteen archive entries plus
-  // the nine pages with a full write-up here.
+  // the eleven pages with a full write-up here.
   //
   // It was `projects.length + archiveProjects.length`, which was wrong in both
   // directions at once — every flagship in `projects` also appears in

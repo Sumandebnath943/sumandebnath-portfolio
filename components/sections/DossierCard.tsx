@@ -8,7 +8,7 @@ import { GROUP_LABELS, type PageEntry } from "@/lib/pages";
  *
  * `ArchiveCard` renders an `ArchiveProject` — poster art, a status pill, a
  * positioning line, a stack list and a flip side. Those fields do not exist for
- * these nine pages and inventing them would mean maintaining a second copy of
+ * these pages and inventing them would mean maintaining a second copy of
  * facts that already live on the product page itself (see `dossierPages()`).
  * This card carries only what `lib/pages.ts` already knows to be true: the
  * name, the one-line blurb, the section it belongs to and its accent.
@@ -20,10 +20,10 @@ import { GROUP_LABELS, type PageEntry } from "@/lib/pages";
  *
  * ## A server component, and it must stay one
  *
- * The whole point of the block is that nine real `<a href>` elements exist in
+ * The whole point of the block is that eleven real `<a href>` elements exist in
  * the server-rendered HTML of `/projects`. The site's nav renders its product
  * links only once a submenu is opened, so a crawler that does not run
- * JavaScript sees none of them — before this, six of these nine had no
+ * JavaScript sees none of them — before this, six of the original nine had no
  * server-rendered link from this page at all. Do not make this interactive.
  */
 export default function DossierCard({ page }: { page: PageEntry }) {

@@ -39,7 +39,7 @@ export interface PageEntry {
    * This page is a full product dossier living on this site, as opposed to a
    * section, a person page or a product that lives on its own domain.
    *
-   * Set on the nine pages that `lib/archive-projects.ts` does not cover, so
+   * Set on the eleven pages that `lib/archive-projects.ts` does not cover, so
    * `/projects` can list them under their own heading — see `dossierPages()`.
    */
   dossier?: true;
@@ -176,6 +176,7 @@ export const PAGES: PageEntry[] = [
     blurb: "Browser card game on the official rules of UNO and five spin-offs — peer-to-peer, 2–10 players",
     group: "apps",
     accent: "#FFC21A",
+    dossier: true,
   },
   {
     href: "/crawlers/that-one-crawler",
@@ -183,6 +184,7 @@ export const PAGES: PageEntry[] = [
     blurb: "Free SEO and AI-search audit tool for blogs — Crawl Daddy rebuilt so the visitor’s browser runs the crawl",
     group: "apps",
     accent: "#D6FF3D",
+    dossier: true,
   },
   {
     href: "/fun-apps",
@@ -327,11 +329,11 @@ const RELATED: Record<string, string[]> = {
   "/profile": ["/resume", "/journey", "/fun-apps"],
   "/philosophy": ["/about", "/faq", "/notebook"],
 
-  "/notebook": ["/learnings", "/projects", "/faq"],
+  "/notebook": ["/learnings", "/crawlers/that-one-crawler", "/projects"],
   "/learnings": ["/notebook", "/resume", "/profile"],
   "/faq": ["/about", "/contact", "/philosophy"],
 
-  "/agents/pact-agent": ["/agents/pentashell", "/projects/aegis-vault", "/notebook"],
+  "/agents/pact-agent": ["/agents/pentashell", "/crawlers/that-one-crawler", "/projects/aegis-vault"],
   "/agents/pentashell": ["/slms/pentacmd", "/agents/pact-agent", "/llms/qdex-1.5b"],
   "/agents/migi": ["/apps/migi-app", "/agents/pact-agent", "/banking/rm-copilot"],
 
@@ -342,10 +344,10 @@ const RELATED: Record<string, string[]> = {
   "/projects/aegis-vault": ["/banking/rm-copilot", "/agents/pact-agent", "/apps/forget-anything"],
   "/apps/migi-app": ["/agents/migi", "/apps/forget-anything", "/games/pixelville"],
   "/apps/forget-anything": ["/apps/migi-app", "/games/pixelville", "/fun-apps"],
-  "/games/pixelville": ["/fun-apps", "/apps/migi-app", "/profile"],
+  "/games/pixelville": ["/games/nuno", "/fun-apps", "/apps/migi-app"],
   "/games/nuno": ["/games/pixelville", "/fun-apps", "/projects"],
   "/crawlers/that-one-crawler": ["/notebook", "/agents/pentashell", "/projects"],
-  "/fun-apps": ["/games/pixelville", "/apps/forget-anything", "/philosophy"],
+  "/fun-apps": ["/games/pixelville", "/games/nuno", "/apps/forget-anything"],
 
   // The legal pages get real destinations rather than each other. Without an
   // entry here the fallback is same-group siblings, and the "legal" group is

@@ -78,6 +78,19 @@ const announcements: Announcement[] = [
     href: "/games/pixelville",
     color: "#F5B94A",
   },
+  // Added 22 Oct 2026 at Suman's request, taking the reel from seven to nine.
+  {
+    title: "NUNO",
+    desc: "Six official UNO rule sets. No game server.",
+    href: "/games/nuno",
+    color: "#FFC21A",
+  },
+  {
+    title: "That One Crawler",
+    desc: "Crawl Daddy V2: 47 SEO checks, $0 to host.",
+    href: "/crawlers/that-one-crawler",
+    color: "#D6FF3D",
+  },
   {
     title: "The Journey",
     desc: "2013 to now, told with the real artefacts.",

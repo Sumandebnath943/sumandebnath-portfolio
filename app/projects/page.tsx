@@ -75,7 +75,7 @@ const builtJsonLd = {
   },
 };
 
-/* The nine products with a full write-up on this domain. `lib/archive-projects.ts`
+/* The eleven products with a full write-up on this domain. `lib/archive-projects.ts`
    does not describe any of them — see `dossierPages()` for why they are listed
    from the page registry instead of being copied into that file. */
 const dossiers = dossierPages();
@@ -93,7 +93,7 @@ const collectionJsonLd = {
   mainEntity: {
     "@type": "ItemList",
     name: "AI-Native Project Archive",
-    // The archive plus the nine in-depth dossiers below it. The count and the
+    // The archive plus the eleven in-depth dossiers below it. The count and the
     // list have to describe the same page: this node previously claimed
     // fourteen items while the `QAPage` answer beside it named the MIGI fleet,
     // PentaCMD-47M and the Banking Co-pilot, none of which were in it.
@@ -259,11 +259,11 @@ export default function ProjectsArchivePage() {
         </section>
 
         {/* ── DOCUMENTED IN DEPTH ──
-            The nine products with a full write-up on this site. This block is
+            The eleven products with a full write-up on this site. This block is
             the reason the page can now stand behind its own title: the archive
             above describes products that mostly live on their own domains, and
             until this existed nothing on this page named the agents, the models
-            or the apps built here — six of the nine had no server-rendered link
+            or the apps built here — six of the original nine had no server-rendered link
             from this URL at all. */}
         <section
           id="dossiers"
@@ -286,8 +286,8 @@ export default function ProjectsArchivePage() {
             </h2>
             <p className="font-manrope text-[17px] md:text-lg text-white/70 leading-[1.75] max-w-3xl mb-14">
               {dossiers.length} products — the agents, the two language models
-              trained and fine-tuned from scratch, the Android apps, the
-              procedural city builder and the audited banking copilot — each
+              trained and fine-tuned from scratch, the Android apps, two browser
+              games, an SEO crawler and the audited banking copilot — each
               with its own page covering how it was built, what it measures and
               what broke along the way.
             </p>
