@@ -50,6 +50,7 @@ const ROUTES = {
   "/games/pixelville": ["app/games/pixelville", "components/pixelville"],
   "/games/nuno": ["app/games/nuno", "components/nuno"],
   "/banking/rm-copilot": ["app/banking/rm-copilot", "components/banking"],
+  "/crawlers/that-one-crawler": ["app/crawlers/that-one-crawler", "components/that-one-crawler"],
 
   "/notebook": ["app/notebook/page.tsx", "lib/notebook"],
 };
