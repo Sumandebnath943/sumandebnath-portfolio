@@ -24,7 +24,11 @@ import {
   SCAN_STEPS,
   SEO_SCORE,
   AI_SCORE,
+  AGENT_SCORE,
   CHECK_CATEGORIES,
+  AGENT_TIERS,
+  AGENT_RULES,
+  PROMPT_POINTS,
   AI_TASKS,
   GUARDS,
   TOOLS,
@@ -38,6 +42,7 @@ import {
   POSTSCRIPTS,
   STACK,
   type Shot,
+  type ScoreRow,
 } from "@/components/that-one-crawler/toc-data";
 
 /*
@@ -62,7 +67,7 @@ const PATH = "/crawlers/that-one-crawler";
 export const metadata: Metadata = {
   title: "That One Crawler · Crawl Daddy, reprised",
   description:
-    "That One Crawler is a free SEO and AI-search audit tool for blogs, rebuilt from Crawl Daddy so the visitor’s browser runs the crawl. It checks up to 1,000 pages against 47 checks, scores every page for SEO and for AI readiness, and costs $0 to host.",
+    "That One Crawler is a free SEO and AI-search audit tool for blogs, rebuilt from Crawl Daddy so the visitor’s browser runs the crawl. It runs 53 checks on up to 1,000 pages, scores every page for SEO and AI search, audits whether AI agents can get in, and costs $0 to host.",
   keywords: [
     "That One Crawler", "Crawl Daddy", "SEO audit tool", "free SEO audit for blogs", "GEO checker", "AEO checker",
     "AI search readiness", "broken link checker", "keyword cannibalization", "meta tag checker", "serverless crawler", "Suman Debnath",
@@ -72,7 +77,7 @@ export const metadata: Metadata = {
     type: "website",
     title: "That One Crawler · Crawl Daddy, reprised",
     description:
-      "The crawl moved into the browser: 47 checks, two scores per page, guarded AI fixes on free tiers — and a site that passes its own audit.",
+      "The crawl moved into the browser: 53 checks per page, a 24-check AI-agent audit, one prompt that hands every fix to a coding agent — and a site that passes its own audit.",
     url: `${SITE}${PATH}`,
     images: [{ url: IMG.og.src, width: IMG.og.w, height: IMG.og.h, alt: IMG.og.alt }],
   },
@@ -85,7 +90,7 @@ const appLd = {
   name: "That One Crawler",
   alternateName: "Crawl Daddy V2",
   description:
-    "A free SEO and AI-search audit tool for blogs. It crawls up to 1,000 pages, runs 47 checks on each, and scores every page for classic SEO and for AI-answer readiness, with AI writing help on free tiers.",
+    "A free SEO and AI-search audit tool for blogs. It crawls up to 1,000 pages, runs 53 checks on each, scores every page for classic SEO and for AI-answer readiness, checks whether AI agents can use the site, and adds AI writing help on free tiers.",
   url: LINKS.live,
   applicationCategory: "DeveloperApplication",
   operatingSystem: "Any modern web browser",
@@ -101,7 +106,7 @@ const articleLd = {
   author: { "@type": "Person", name: "Suman Debnath" },
   publisher: { "@type": "Person", name: "Suman Debnath" },
   description:
-    "How Crawl Daddy, a Flask crawler that had to be republished every 30 days, became That One Crawler: a browser-driven crawl over stateless serverless routes, a second score for AI readiness, AI help with a fabrication guard, and a site that passes its own audit.",
+    "How Crawl Daddy, a Flask crawler that had to be republished every 30 days, became That One Crawler: a browser-driven crawl over stateless serverless routes, an SEO score that follows the issue list, scores for AI search and AI agents, AI help with a fabrication guard, and a site that passes its own audit.",
   mainEntityOfPage: `${SITE}${PATH}`,
 };
 
@@ -234,12 +239,15 @@ function Frame({
   );
 }
 
+type ScoreKind = "seo" | "ai" | "agent";
+const RING_COLOR: Record<ScoreKind, string> = { seo: TC.lime, ai: TC.ai, agent: TC.agent };
+
 /** The app's ScoreRing: an ink arc under a slimmer coloured one, like a sticker. */
-function ScoreRing({ value, kind, label, grade }: { value: number; kind: "seo" | "ai"; label: string; grade: string }) {
+function ScoreRing({ value, kind, label, grade }: { value: number; kind: ScoreKind; label: string; grade: string }) {
   const r = 40;
   const c = 2 * Math.PI * r;
   const off = c * (1 - value / 100);
-  const color = kind === "ai" ? TC.ai : TC.lime;
+  const color = RING_COLOR[kind];
   return (
     <figure className="flex flex-col items-center gap-2 shrink-0">
       <div className="relative w-28 h-28">
@@ -404,8 +412,8 @@ export default function ThatOneCrawlerPage() {
               <Headline a="Same instincts." b="Faster legs." />
               <p className="text-[15.5px] leading-relaxed max-w-2xl mb-12" style={{ color: TC.ink2 }}>
                 Crawl Daddy came first: a Flask server on Replit that crawled with headless Chromium and had to be
-                republished every 30 days to stay online. That One Crawler is the rebuild — the same job and the same
-                SEO formula, with none of the babysitting, and a lot more on top. Both are live.
+                republished every 30 days to stay online. That One Crawler is the rebuild — the same job with none of
+                the babysitting, and a lot more on top. Both are live.
               </p>
             </Reveal>
 
@@ -440,8 +448,8 @@ export default function ThatOneCrawlerPage() {
                   </div>
                   <div className="p-5 flex-1 flex flex-col">
                     <p className="font-manrope text-[14px] leading-relaxed mb-5" style={{ color: TC.ink2 }}>
-                      Next.js on Vercel’s free tier, a second score for AI search, guarded AI fixes, four focused tools and
-                      30 guides. It costs nothing to keep running.
+                      Next.js on Vercel’s free tier, scores for AI search and AI agents, guarded AI fixes, six focused
+                      tools and 32 guides. It costs nothing to keep running.
                     </p>
                     <div className="mt-auto">
                       <PrimaryButton href={LINKS.live}>Open That One Crawler <span aria-hidden>↗</span></PrimaryButton>
@@ -563,49 +571,53 @@ export default function ThatOneCrawlerPage() {
                   sizes="(max-width: 1152px) 100vw, 1100px"
                 />
                 <p className="font-manrope text-[12.5px] mt-4" style={{ color: TC.cream3 }}>
-                  A 25-page scan of wordpress.org/news, captured mid-crawl. The verdict fills in while the pages arrive;
-                  this one finished in 25 seconds.
+                  A 25-page scan of wordpress.org/news, captured fifteen pages in. The verdict fills in while the pages
+                  arrive, and the AI-agent ring is still checking alongside the crawl.
                 </p>
               </div>
             </Reveal>
           </div>
         </section>
 
-        {/* ════════════════════════════ 03 · TWO SCORES ════════════════════════════ */}
+        {/* ════════════════════════════ 03 · FOUR RINGS ════════════════════════════ */}
         <section className="px-6 py-20 md:py-28" style={{ borderTop: `2px solid ${TC.ink}` }}>
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="03" kicker="the report · seo and ai readiness" />
-              <Headline a="One crawl." b="Two different questions." />
+              <SectionLabel index="03" kicker="the report · four rings" />
+              <Headline a="One crawl." b="Four different questions." />
               <p className="text-[15.5px] leading-relaxed max-w-2xl mb-12" style={{ color: TC.ink2 }}>
-                Classic SEO asks whether a page can rank. AI search asks whether a page can be quoted. Those are
-                different questions, so every page gets two numbers — lime for SEO, violet for AI readiness — on rings
-                of equal size, so neither reads as the footnote.
+                Classic SEO asks whether a page can rank. AI search asks whether it can be quoted. AI agents asks
+                whether an assistant can get into the site at all, and Speed asks Google’s Lighthouse when PageSpeed
+                runs. Every answer gets its own ring — lime, violet, teal, blue — all the same size, so none of them
+                reads as the footnote.
               </p>
             </Reveal>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {[
-                { kind: "seo" as const, title: "SEO score", note: "Kept identical to Crawl Daddy’s formula, so old and new scores compare.", rows: SEO_SCORE, value: OWN_AUDIT[0].value, label: "SEO score", color: TC.lime },
-                { kind: "ai" as const, title: "AI-readiness score", note: "New in V2. GEO and AEO: can an answer engine lift a clean answer from this page?", rows: AI_SCORE, value: OWN_AUDIT[1].value, label: "AI readiness", color: TC.ai },
-              ].map((s, i) => (
+            <Reveal>
+              <Frame shot={IMG.verdict} label="the verdict · wordpress.org/news · 25 pages · with pagespeed" sizes="(max-width: 1152px) 100vw, 1100px" className="mb-12" />
+            </Reveal>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {([
+                { kind: "seo", title: "SEO", note: "Since 22 October 2026, 100 minus weighted issues, so the number always follows the issue list. It replaced Crawl Daddy’s fixed checklist.", rows: SEO_SCORE, value: OWN_AUDIT[0].value, label: "SEO", grade: "Excellent" },
+                { kind: "ai", title: "AI search", note: "GEO and AEO, per page: can an answer engine lift a clean answer? Only the checks that apply count — a contact page needs no FAQ.", rows: AI_SCORE, value: OWN_AUDIT[1].value, label: "AI search", grade: "Excellent" },
+                { kind: "agent", title: "AI agents", note: "Once per site, modelled on is-agentic.com — and on the site it was tuned against, it gives the same score.", rows: AGENT_SCORE, value: OWN_AUDIT[2].value, label: "AI agents", grade: "Agent-ready" },
+              ] satisfies { kind: ScoreKind; title: string; note: string; rows: ScoreRow[]; value: number; label: string; grade: string }[]).map((s, i) => (
                 <Reveal key={s.kind} delay={i * 0.06}>
-                  <div className="rounded-2xl h-full p-6 md:p-7" style={{ background: TC.card, ...brutal(6) }}>
-                    <div className="flex items-center gap-5 mb-6">
-                      <ScoreRing value={s.value} kind={s.kind} label={s.label} grade="Excellent" />
-                      <div>
-                        <h3 className="toc-display font-extrabold text-[1.6rem] tracking-[-0.02em] leading-tight">{s.title}</h3>
-                        <p className="font-manrope text-[13.5px] leading-relaxed mt-1.5" style={{ color: TC.ink2 }}>{s.note}</p>
-                      </div>
+                  <div className="rounded-2xl h-full p-6" style={{ background: TC.card, ...brutal(6) }}>
+                    <div className="flex items-center gap-4 mb-4">
+                      <ScoreRing value={s.value} kind={s.kind} label={s.label} grade={s.grade} />
+                      <h3 className="toc-display font-extrabold text-[1.6rem] tracking-[-0.02em] leading-tight">{s.title}</h3>
                     </div>
+                    <p className="font-manrope text-[13.5px] leading-relaxed mb-5" style={{ color: TC.ink2 }}>{s.note}</p>
                     <ul className="space-y-2.5">
                       {s.rows.map((r) => (
-                        <li key={r.rule} className="grid grid-cols-[2.4rem_1fr] gap-3 items-center">
-                          <span className="toc-display font-extrabold text-[15px] text-right" style={{ color: TC.ink }}>{r.pts}</span>
+                        <li key={r.rule} className="grid grid-cols-[2.6rem_1fr] gap-3 items-center">
+                          <span className="toc-display font-extrabold text-[15px] text-right whitespace-nowrap" style={{ color: r.color ?? TC.ink }}>{r.pts}</span>
                           <div>
                             <p className="font-manrope text-[13px] leading-snug" style={{ color: TC.ink2 }}>{r.rule}</p>
                             <div className="h-2 mt-1 rounded-full overflow-hidden" style={{ background: TC.sunk }}>
-                              <div className="h-full rounded-full" style={{ width: `${(r.pts / 20) * 100}%`, background: s.color, boxShadow: `inset 0 0 0 1px ${TC.ink}` }} />
+                              <div className="h-full rounded-full" style={{ width: `${r.w * 100}%`, background: r.color ?? RING_COLOR[s.kind], boxShadow: `inset 0 0 0 1px ${TC.ink}` }} />
                             </div>
                           </div>
                         </li>
@@ -616,14 +628,15 @@ export default function ThatOneCrawlerPage() {
               ))}
             </div>
             <p className="font-dmmono text-[11px] mt-4" style={{ color: TC.ink3 }}>
-              The rings show the app’s own audit of its own site: SEO 91, AI readiness 93.
+              The rings show the app’s own audit of its own site: SEO 100, AI search 95, AI agents 100. Speed is
+              Lighthouse’s performance score, averaged over the first 25 pages.
             </p>
 
             <Reveal delay={0.04}>
               <div className="mt-14">
-                <h3 className="toc-display font-extrabold text-[1.6rem] md:text-[2rem] tracking-[-0.02em] mb-2">47 checks, nine categories, one guide each.</h3>
+                <h3 className="toc-display font-extrabold text-[1.6rem] md:text-[2rem] tracking-[-0.02em] mb-2">53 checks, ten categories, one guide each.</h3>
                 <p className="font-manrope text-[14.5px] leading-relaxed max-w-2xl mb-5" style={{ color: TC.ink2 }}>
-                  Every check carries a severity, a “why it matters” and a “how to fix it”, and links to one of 30
+                  Every check carries a severity, a “why it matters” and a “how to fix it”, and links to one of 32
                   plain-English guides. The site-wide ones — duplicates, cannibalization, orphans, click depth — can
                   only run once the whole crawl is in, so they run in the browser at the end.
                 </p>
@@ -639,24 +652,108 @@ export default function ThatOneCrawlerPage() {
             </Reveal>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-14">
-              <Reveal className="md:col-span-2">
-                <Frame shot={IMG.verdict} label="the verdict · wordpress.org/news · 25 pages · 25s" sizes="(max-width: 1152px) 100vw, 1100px" />
-              </Reveal>
               <Reveal>
                 <Frame shot={IMG.pages} label="pages · sortable, filterable, csv" aspect="16 / 10" sizes="(max-width: 768px) 100vw, 560px" />
               </Reveal>
               <Reveal delay={0.06}>
                 <Frame shot={IMG.links} label="links · broken, orphans, buried, hubs" aspect="16 / 10" sizes="(max-width: 768px) 100vw, 560px" />
               </Reveal>
+              <Reveal className="md:col-span-2">
+                <Frame shot={IMG.speed} label="speed · lighthouse, core web vitals, fix these first" aspect="16 / 7" sizes="(max-width: 1152px) 100vw, 1100px" />
+              </Reveal>
+            </div>
+
+            {/* the report's way out: every finding, as one prompt */}
+            <Reveal delay={0.04}>
+              <div className="mt-14 rounded-2xl p-6 md:p-8 grid lg:grid-cols-[0.85fr_1.15fr] gap-8 items-center" style={{ background: TC.sunk, border: `2px solid ${TC.ink}` }}>
+                <div>
+                  <span className="inline-block rounded-lg px-2.5 py-1 font-manrope text-[13px] font-extrabold mb-4" style={{ background: TC.lime, color: TC.ink, ...brutal(2) }}>
+                    ✦ Prompt to improve
+                  </span>
+                  <h3 className="toc-display font-extrabold text-[1.6rem] md:text-[2rem] tracking-[-0.02em] leading-tight mb-4">
+                    Every finding, as one prompt for your coding agent.
+                  </h3>
+                  <p className="font-manrope text-[14px] leading-relaxed mb-5" style={{ color: TC.ink2 }}>
+                    A report is a to-do list someone still has to do. So every finding can leave the report as a single
+                    prompt to paste into Claude Code, Cursor or Codex: pick what to include, preview it, copy it or
+                    download it as Markdown. Every tool has the same button.
+                  </p>
+                  <ul className="space-y-2.5">
+                    {PROMPT_POINTS.map((p) => (
+                      <li key={p} className="flex gap-3">
+                        <span className="mt-[7px] w-2 h-2 rounded-full shrink-0" style={{ background: TC.ink }} />
+                        <span className="font-manrope text-[13.5px] leading-relaxed" style={{ color: TC.ink }}>{p}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <Frame shot={IMG.prompt} label="prompt to improve · 37 findings · 18 recommended" sizes="(max-width: 1024px) 100vw, 560px" className="max-w-[560px] w-full mx-auto" />
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* ════════════════════════════ 04 · AI AGENTS ════════════════════════════ */}
+        <section className="px-6 py-20 md:py-28" style={{ background: TC.night, color: TC.cream, borderTop: `2px solid ${TC.ink}` }}>
+          <div className="max-w-6xl mx-auto">
+            <Reveal>
+              <SectionLabel index="04" kicker="ai agent readiness · 24 checks · one per site" tone="night" />
+              <h2 className="toc-display font-extrabold text-[2.15rem] md:text-[3.2rem] leading-[1] tracking-[-0.03em] mb-5 text-balance" style={{ color: TC.cream }}>
+                Can an assistant <span style={{ color: TC.agentLight }}>even get in?</span>
+              </h2>
+              <p className="text-[15.5px] leading-relaxed max-w-2xl mb-12" style={{ color: TC.cream2 }}>
+                A page can be perfectly quotable behind a firewall that turns ChatGPT away. That isn’t a question about
+                a page’s prose — it’s about the site’s plumbing — so it’s checked once per site, alongside the crawl,
+                and every result shows the evidence it was based on.
+              </p>
+            </Reveal>
+
+            <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-8 items-start">
+              <Reveal>
+                <Frame shot={IMG.agents} label="ai agents tab · wordpress.org/news · 94 / 100" sizes="(max-width: 1024px) 100vw, 640px" shadow={TC.agentLight} />
+              </Reveal>
+              <div className="space-y-4">
+                {AGENT_RULES.map((r, i) => (
+                  <Reveal key={r.title} delay={i * 0.05}>
+                    <div className="rounded-xl p-5" style={{ background: TC.night2, border: `1.5px solid ${TC.nightLine}` }}>
+                      <h3 className="toc-display font-extrabold text-[1.15rem] tracking-[-0.01em] mb-1.5" style={{ color: TC.cream }}>{r.title}</h3>
+                      <p className="font-manrope text-[13px] leading-relaxed" style={{ color: TC.cream2 }}>{r.body}</p>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-10">
+              {AGENT_TIERS.map((t, i) => (
+                <Reveal key={t.tier} delay={i * 0.05}>
+                  <div className="rounded-2xl h-full overflow-hidden" style={{ background: TC.night2, border: `1.5px solid ${TC.nightLine}` }}>
+                    <div className="flex items-center justify-between gap-3 px-5 py-3" style={i === 0 ? { background: TC.agentLight, color: TC.ink } : { borderBottom: `1.5px solid ${TC.nightLine}` }}>
+                      <span className="font-manrope font-extrabold text-[14px]" style={i === 0 ? undefined : { color: TC.cream }}>
+                        {t.tier} <span className="font-dmmono text-[11px] font-normal opacity-80">· {t.checks.length}</span>
+                      </span>
+                      <span className="font-dmmono text-[10.5px] uppercase tracking-[0.14em]" style={{ color: i === 0 ? TC.ink : TC.agentLight }}>{t.pts}</span>
+                    </div>
+                    <ul className="px-5 py-4 space-y-1.5">
+                      {t.checks.map((c) => (
+                        <li key={c} className="flex gap-2.5 font-manrope text-[13px] leading-snug" style={{ color: TC.cream2 }}>
+                          <span aria-hidden style={{ color: TC.agentLight }}>✓</span>
+                          {c}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </Reveal>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* ════════════════════════════ 04 · AI WITH GUARDRAILS ════════════════════════════ */}
+        {/* ════════════════════════════ 05 · AI WITH GUARDRAILS ════════════════════════════ */}
         <section className="px-6 py-20 md:py-28" style={{ background: TC.ai, color: "#ffffff", borderTop: `2px solid ${TC.ink}`, borderBottom: `2px solid ${TC.ink}` }}>
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="04" kicker="ai help · free tiers · guardrails" tone="violet" />
+              <SectionLabel index="05" kicker="ai help · free tiers · guardrails" tone="violet" />
               <Headline a="AI fixes," b="fact-checked before you see them." tone="violet" />
               <p className="text-[15.5px] leading-relaxed max-w-2xl mb-12" style={{ color: "#ffffff" }}>
                 Six writing tasks — title and description, a quick-answer intro, question headings, a section rewrite,
@@ -712,16 +809,16 @@ export default function ThatOneCrawlerPage() {
           </div>
         </section>
 
-        {/* ════════════════════════════ 05 · FOUR TOOLS ════════════════════════════ */}
+        {/* ════════════════════════════ 06 · SIX TOOLS ════════════════════════════ */}
         <section className="px-6 py-20 md:py-28">
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="05" kicker="four focused tools · one engine" />
-              <Headline a="Four tools." b="Each does one job." />
+              <SectionLabel index="06" kicker="six focused tools · one engine" />
+              <Headline a="Six tools." b="Each does one job." />
               <p className="text-[15.5px] leading-relaxed max-w-2xl mb-12" style={{ color: TC.ink2 }}>
-                Not four doors into the same scan. Two check a single page in seconds; two crawl the site. They share
-                the engine underneath, and every site crawl is saved like any scan, so the full report is one click
-                away.
+                Not six doors into the same scan. Three check a single page in seconds, one checks the whole site’s
+                plumbing in about fifteen, and two crawl the site. They share the engine underneath, each has its own
+                Prompt to improve, and every site crawl is saved like any scan, so the full report is one click away.
               </p>
             </Reveal>
 
@@ -730,6 +827,8 @@ export default function ThatOneCrawlerPage() {
                 const head = {
                   lime: { background: TC.lime, color: TC.ink },
                   ai: { background: TC.ai, color: "#ffffff" },
+                  agent: { background: TC.agent, color: "#ffffff" },
+                  note: { background: TC.note, color: "#ffffff" },
                   ink: { background: TC.ink, color: TC.cream },
                   paper: { background: TC.sunk, color: TC.ink },
                 }[t.tone];
@@ -785,7 +884,8 @@ export default function ThatOneCrawlerPage() {
                   <h3 className="toc-display font-extrabold text-[1.6rem] tracking-[-0.02em] leading-tight">An honest keyword engine.</h3>
                   <p className="font-manrope text-[14px] leading-relaxed mt-2" style={{ color: TC.ink2 }}>
                     Deterministic, and it never makes anything up. Cannibalization only counts indexable pages that
-                    point their canonical at themselves.
+                    point their canonical at themselves and carry the keyword in their title plus their H1 or URL —
+                    never the homepage, category hubs, or contact and legal pages.
                   </p>
                 </div>
                 <ul className="space-y-2.5">
@@ -801,12 +901,12 @@ export default function ThatOneCrawlerPage() {
           </div>
         </section>
 
-        {/* ════════════════════════════ 06 · ENGINEERING NOTES ════════════════════════════ */}
+        {/* ════════════════════════════ 07 · ENGINEERING NOTES ════════════════════════════ */}
         <section className="px-6 py-20 md:py-28" style={{ background: TC.night, color: TC.cream, borderTop: `2px solid ${TC.ink}` }}>
           <div className="max-w-5xl mx-auto">
             <Reveal>
-              <SectionLabel index="06" kicker="engineering notes" tone="night" />
-              <Headline a="Four problems" b="worth writing down." tone="night" />
+              <SectionLabel index="07" kicker="engineering notes" tone="night" />
+              <Headline a="Five problems" b="worth writing down." tone="night" />
             </Reveal>
 
             <div className="space-y-5 mt-10">
@@ -839,31 +939,33 @@ export default function ThatOneCrawlerPage() {
           </div>
         </section>
 
-        {/* ════════════════════════════ 07 · ITS OWN AUDIT ════════════════════════════ */}
+        {/* ════════════════════════════ 08 · ITS OWN AUDIT ════════════════════════════ */}
         <section className="px-6 py-20 md:py-28" style={{ background: TC.lime, borderTop: `2px solid ${TC.ink}`, borderBottom: `2px solid ${TC.ink}` }}>
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="07" kicker="it practises what it preaches" tone="lime" />
+              <SectionLabel index="08" kicker="it practises what it preaches" tone="lime" />
               <Headline a="It had to pass" b="its own audit." tone="lime" />
               <p className="text-[15.5px] leading-relaxed max-w-2xl mb-10" style={{ color: TC.ink }}>
                 A tool that grades other people’s SEO doesn’t get to fail its own. The app is run against its own site
                 as part of every check, and any new notice on its own pages is treated as a bug in the copy or in the
-                checker.
+                checker. The only agent check it skips is a bonus one: the well-known discovery files a content site
+                doesn’t need.
               </p>
             </Reveal>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-10">
               {[
-                { v: "91", l: "SEO score", s: "its own site, out of 100" },
-                { v: "93", l: "AI readiness", s: "its own site, out of 100" },
+                { v: String(OWN_AUDIT[0].value), l: "SEO", s: "its own site, out of 100" },
+                { v: String(OWN_AUDIT[1].value), l: "AI search", s: "its own site, out of 100" },
+                { v: String(OWN_AUDIT[2].value), l: "AI agents", s: "its own site, out of 100" },
                 { v: "0", l: "issues", s: "no critical, warning or notice" },
-                { v: "38", l: "pages", s: "every URL in its sitemap" },
+                { v: "45", l: "pages", s: "every URL in its sitemap" },
               ].map((x, i) => (
-                <Reveal key={x.l} delay={i * 0.04}>
-                  <div className="toc-card rounded-xl h-full p-5" style={i === 2 ? { background: TC.ink, color: TC.cream, ...brutal(5) } : { background: TC.card, ...brutal(5) }}>
-                    <p className="toc-display font-extrabold text-[3rem] leading-none tracking-[-0.04em]" style={{ color: i === 2 ? TC.limeHex : TC.ink }}>{x.v}</p>
+                <Reveal key={x.l} delay={i * 0.04} className={i === 4 ? "col-span-2 lg:col-span-1" : undefined}>
+                  <div className="toc-card rounded-xl h-full p-5" style={i === 3 ? { background: TC.ink, color: TC.cream, ...brutal(5) } : { background: TC.card, ...brutal(5) }}>
+                    <p className="toc-display font-extrabold text-[3rem] leading-none tracking-[-0.04em]" style={{ color: i === 3 ? TC.limeHex : TC.ink }}>{x.v}</p>
                     <p className="font-manrope font-extrabold text-[14px] mt-2">{x.l}</p>
-                    <p className="font-manrope text-[12px] mt-0.5" style={{ color: i === 2 ? TC.cream2 : TC.ink2 }}>{x.s}</p>
+                    <p className="font-manrope text-[12px] mt-0.5" style={{ color: i === 3 ? TC.cream2 : TC.ink2 }}>{x.s}</p>
                   </div>
                 </Reveal>
               ))}
@@ -885,21 +987,21 @@ export default function ThatOneCrawlerPage() {
               </Reveal>
               <div className="grid grid-cols-1 gap-6">
                 <Reveal delay={0.05}>
-                  <Frame shot={IMG.geoSelf} label="its own GEO checker, on its own guide · 90 / 100" aspect="16 / 9" sizes="(max-width: 1024px) 100vw, 620px" />
+                  <Frame shot={IMG.geoSelf} label="its own GEO checker, on its own guide · 100 / 100" aspect="16 / 9" sizes="(max-width: 1024px) 100vw, 620px" />
                 </Reveal>
                 <Reveal delay={0.1}>
-                  <Frame shot={IMG.guide} label="one of 30 guides · direct answer, byline, on-this-page" aspect="16 / 9" sizes="(max-width: 1024px) 100vw, 620px" />
+                  <Frame shot={IMG.guide} label="one of 32 guides · direct answer, byline, on-this-page" aspect="16 / 9" sizes="(max-width: 1024px) 100vw, 620px" />
                 </Reveal>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ════════════════════════════ 08 · PERSONALITY ════════════════════════════ */}
+        {/* ════════════════════════════ 09 · PERSONALITY ════════════════════════════ */}
         <section className="px-6 py-20 md:py-28">
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="08" kicker="the voice · the spider" />
+              <SectionLabel index="09" kicker="the voice · the spider" />
               <Headline a="Brutally honest." b="Never mean." />
               <p className="text-[15.5px] leading-relaxed max-w-2xl mb-12" style={{ color: TC.ink2 }}>
                 An audit is a list of things you did wrong, so the app says them like a friend would. The jokes never
@@ -950,11 +1052,11 @@ export default function ThatOneCrawlerPage() {
           </div>
         </section>
 
-        {/* ════════════════════════════ 09 · LIMITS ════════════════════════════ */}
+        {/* ════════════════════════════ 10 · LIMITS ════════════════════════════ */}
         <section className="px-6 py-20 md:py-28" style={{ background: TC.sunk, borderTop: `2px solid ${TC.ink}` }}>
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <SectionLabel index="09" kicker="constraints · honest postscripts" tone="lime" />
+              <SectionLabel index="10" kicker="constraints · honest postscripts" tone="lime" />
               <Headline a="What it can’t do," b="stated plainly." />
             </Reveal>
 
@@ -990,11 +1092,11 @@ export default function ThatOneCrawlerPage() {
           </div>
         </section>
 
-        {/* ════════════════════════════ 10 · STACK + CTA ════════════════════════════ */}
+        {/* ════════════════════════════ 11 · STACK + CTA ════════════════════════════ */}
         <section className="px-6 pt-20 md:pt-28 pb-24" style={{ borderTop: `2px solid ${TC.ink}` }}>
           <div className="max-w-5xl mx-auto">
             <Reveal>
-              <SectionLabel index="10" kicker="the stack" />
+              <SectionLabel index="11" kicker="the stack" />
               <div className="flex flex-wrap gap-2 mb-14">
                 {STACK.map((s) => (
                   <Chip key={s}>{s}</Chip>

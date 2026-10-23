@@ -123,7 +123,7 @@ const commands: Command[] = [
     id: "that-one-crawler",
     command: "/crawler",
     label: "That One Crawler",
-    description: "Crawl Daddy V2 — free SEO and AI-search audit for blogs, 47 checks, $0 to host",
+    description: "Crawl Daddy V2 — free SEO and AI-search audit for blogs, 53 checks, $0 to host",
     href: "/crawlers/that-one-crawler",
     icon: "🕷",
   },

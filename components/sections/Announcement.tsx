@@ -87,7 +87,7 @@ const announcements: Announcement[] = [
   },
   {
     title: "That One Crawler",
-    desc: "Crawl Daddy V2: 47 SEO checks, $0 to host.",
+    desc: "Crawl Daddy V2: 53 SEO checks, $0 to host.",
     href: "/crawlers/that-one-crawler",
     color: "#D6FF3D",
   },

@@ -227,7 +227,7 @@ export const PAGE_FAQS: Record<string, PageFaq[]> = {
   "/crawlers/that-one-crawler": [
     {
       q: "What is the difference between Crawl Daddy and That One Crawler?",
-      a: "That One Crawler is the second version of Crawl Daddy, Suman Debnath’s SEO crawler. Crawl Daddy was a Flask server with headless Chromium on Replit that had to be republished every 30 days; That One Crawler runs on Vercel’s free tier with the crawl driven from the visitor’s browser. It keeps Crawl Daddy’s SEO score formula, so scores compare, and adds an AI-readiness score, guarded AI writing help, four focused tools and 30 guides.",
+      a: "That One Crawler is the second version of Crawl Daddy, Suman Debnath’s SEO crawler. Crawl Daddy was a Flask server with headless Chromium on Replit that had to be republished every 30 days; That One Crawler runs on Vercel’s free tier with the crawl driven from the visitor’s browser. It replaces Crawl Daddy’s fixed SEO checklist with a score that follows the issue list, and adds an AI-search score, a 24-check AI agent audit, guarded AI writing help, six focused tools and 32 guides.",
     },
     {
       q: "How does That One Crawler audit a whole site on free serverless hosting?",
@@ -235,7 +235,7 @@ export const PAGE_FAQS: Record<string, PageFaq[]> = {
     },
     {
       q: "How does That One Crawler score a page for AI search?",
-      a: "That One Crawler gives every page an AI-readiness score from 0 to 100, separate from its SEO score. Seven checks make it up: a short answer straight after the H1 (20 points), answer paragraphs under headings (20), question-style headings (15), an FAQ section or markup (15), specific facts and numbers (10), lists or tables (10), and an author and date (10).",
+      a: "That One Crawler gives every page an AI-readiness score from 0 to 100, separate from its SEO score. Seven checks make it up: a short answer straight after the H1 (20 points), answer paragraphs under headings (20), question-style headings (15), an FAQ section or markup (15), specific facts and numbers (10), lists or tables (10), and an author and date (10). Only the checks that apply to the page count, so a contact page is not marked down for having no FAQ.",
     },
   ],
 

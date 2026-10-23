@@ -108,7 +108,7 @@ architecture in §6.8; writing rules in `BLOG_GUIDELINES.md`.
 | `/apps/forget-anything` | Forget Anything? | Gold `#D4AF37` + emerald `#50C878` |
 | `/games/pixelville` | PixelVille | Gold `#F5B94A` / warm `#ffe6b0` on night blue `#20304a` |
 | `/games/nuno` | **NUNO** (browser card game, peer-to-peer) | Yellow `#FFC21A` + card red/green/blue on night `#17143d` |
-| `/crawlers/that-one-crawler` | **That One Crawler** (Crawl Daddy V2, SEO audit) | **Light**: lime `#d6ff3d` + violet `#7148e8` on cream `#f6f1e6`, ink `#1a1712` |
+| `/crawlers/that-one-crawler` | **That One Crawler** (Crawl Daddy V2, SEO audit) | **Light**: lime `#d6ff3d` + violet `#7148e8` + teal `#0b7f86` on cream `#f6f1e6`, ink `#1a1712` |
 | `/projects/aegis-vault` | AEGIS VAULT | Deep vault green `#07120A`, teal `#2DD4BF` |
 | `/banking/rm-copilot` | **Banking Co-pilot** (AI RM copilot) | Petrol `#4FA3D8` + brass `#D9A961` on `#070E14` |
 | `/fun-apps` | The lighter shelf | Near-black `#1a1a1a` |
