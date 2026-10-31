@@ -72,6 +72,26 @@ async function main() {
   const key = readKey();
   const urlList = paths.length ? paths.map((p) => `${SITE}${p}`) : await sitemapUrls();
 
+  // Ensure newly added flagship & AI discovery endpoints can be pushed cleanly:
+  //   --with-ai appends /llms.txt, /llms-full.txt, /index.md and /.well-known/ai-catalog.json
+  const ENSURED_SITEMAP_URLS = [`${SITE}/games/pixelville-next-dimension`];
+  const AI_DISCOVERY_URLS = [
+    `${SITE}/llms.txt`,
+    `${SITE}/llms-full.txt`,
+    `${SITE}/index.md`,
+    `${SITE}/.well-known/ai-catalog.json`,
+  ];
+  if (!paths.length) {
+    for (const u of ENSURED_SITEMAP_URLS) {
+      if (!urlList.includes(u)) urlList.push(u);
+    }
+  }
+  if (args.includes("--with-ai")) {
+    for (const u of AI_DISCOVERY_URLS) {
+      if (!urlList.includes(u)) urlList.push(u);
+    }
+  }
+
   if (urlList.length === 0) {
     console.error("Nothing to submit.");
     process.exit(1);

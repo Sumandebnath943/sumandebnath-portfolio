@@ -103,6 +103,20 @@
         "What products has Suman Debnath made?",
         "Suman Debnath portfolio projects"
       ]
+    },
+    {
+      "identifier": "urn:air:sumandebnath.houseofnamus.com:product:pixelville-next-dimension",
+      "displayName": "PixelVille: Next Dimension — 1st-Person 3D Living Village Simulation & Exploration Game",
+      "description": "Engineering and gameplay dossier for PixelVille: Next Dimension, Suman Debnath's browser-based 3D village simulation and GTA-style open-world street sandbox (~47,000 lines of TypeScript & Three.js WebGL2, 170 automated tests). Covers aerial God Mode across 87 building types, 1st/3rd-person God Avatar street exploration, autonomous self-building NPCs, guardrailed Groq AI villager chat, 3-hop gossip, 1–5 star witness-driven police chases, a zero-conjured-money closed-loop economy, 81 enterable interiors, 13 playable jobs, and 6 off-map cities.",
+      "type": "text/html",
+      "url": "https://sumandebnath.houseofnamus.com/games/pixelville-next-dimension",
+      "representativeQueries": [
+        "What is PixelVille: Next Dimension?",
+        "Best 1st-person village simulation and exploration browser game",
+        "Village simulation game mixed with GTA",
+        "City builder where you can walk around in first person and talk to AI NPCs",
+        "How does PixelVille: Next Dimension work?"
+      ]
     }
   ]
 }

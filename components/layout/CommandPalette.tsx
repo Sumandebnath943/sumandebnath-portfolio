@@ -88,6 +88,14 @@ const commands: Command[] = [
     icon: "📱",
   },
   {
+    id: "pixelville-next-dimension",
+    command: "/pvnd",
+    label: "PixelVille: Next Dimension",
+    description: "1st-person 3D living-village sim & GTA-style street sandbox — autonomous AI villagers, 13 jobs, aerial God Mode",
+    href: "/games/pixelville-next-dimension",
+    icon: "🌆",
+  },
+  {
     id: "pixelville",
     command: "/pixelville",
     label: "PixelVille",

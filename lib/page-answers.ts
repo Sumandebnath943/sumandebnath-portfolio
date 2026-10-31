@@ -104,6 +104,12 @@ export const PAGE_ANSWERS: Record<string, PageAnswer> = {
     variant: "dark",
     align: "center",
   },
+  "/games/pixelville-next-dimension": {
+    text: "PixelVille: Next Dimension is a browser-based first-person 3D village simulation and open-world exploration game built solo by Suman Debnath. Players switch seamlessly between aerial God Mode across 87 building types and street-level GTA-style exploration — driving, entering 81 interiors, working 13 jobs, and talking to autonomous AI-powered villagers in a closed-loop economy.",
+    accent: "#F0C27A",
+    variant: "dark",
+    align: "center",
+  },
   "/games/pixelville": {
     text: "PixelVille is a procedurally generated city-builder with a working economy, seasons, weather, crime, democracy and disasters. Every city is generated from a seed rather than authored, and the systems interact — an economic downturn shows up in the crime rate and eventually at the ballot box. It runs in the browser.",
     accent: "#F5B94A",

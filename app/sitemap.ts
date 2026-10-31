@@ -59,6 +59,7 @@ const ROUTES: Entry[] = [
   { path: "/llms/qdex-1.5b", changeFrequency: "monthly", priority: 0.8 },
   { path: "/apps/forget-anything", changeFrequency: "monthly", priority: 0.8 },
   { path: "/apps/migi-app", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/games/pixelville-next-dimension", changeFrequency: "monthly", priority: 0.85 },
   { path: "/games/pixelville", changeFrequency: "monthly", priority: 0.8 },
   { path: "/games/nuno", changeFrequency: "monthly", priority: 0.8 },
   { path: "/banking/rm-copilot", changeFrequency: "monthly", priority: 0.8 },

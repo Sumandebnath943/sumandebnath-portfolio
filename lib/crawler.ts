@@ -177,6 +177,7 @@ export const STATIC_ROUTES = new Set([
   "/faq",
   "/fun-apps",
   "/games/nuno",
+  "/games/pixelville-next-dimension",
   "/games/pixelville",
   "/journey",
   "/learnings",

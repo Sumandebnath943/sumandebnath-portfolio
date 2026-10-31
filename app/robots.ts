@@ -126,6 +126,13 @@ export default function robots(): MetadataRoute.Robots {
       { userAgent: "Discordbot", allow: "/" },
       { userAgent: "WhatsApp", allow: "/" },
       { userAgent: "TelegramBot", allow: "/" },
+
+      // ── Additional search & IndexNow ecosystem crawlers ─────────────────
+      { userAgent: "GoogleOther", allow: "/" },
+      { userAgent: "DuckDuckBot", allow: "/" },
+      { userAgent: "YandexBot", allow: "/" },
+      { userAgent: "SeznamBot", allow: "/" },
+      { userAgent: "Yeti", allow: "/" },
     ],
     sitemap: `${SITE}/sitemap.xml`,
     // NOTE: no `host:` directive.

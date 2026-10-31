@@ -47,6 +47,7 @@ const ROUTES = {
   "/llms/qdex-1.5b": ["app/llms/qdex-1.5b", "components/qdex"],
   "/apps/forget-anything": ["app/apps/forget-anything", "components/forget-anything"],
   "/apps/migi-app": ["app/apps/migi-app", "components/migi-app"],
+  "/games/pixelville-next-dimension": ["app/games/pixelville-next-dimension", "components/pixelville-nd"],
   "/games/pixelville": ["app/games/pixelville", "components/pixelville"],
   "/games/nuno": ["app/games/nuno", "components/nuno"],
   "/banking/rm-copilot": ["app/banking/rm-copilot", "components/banking"],

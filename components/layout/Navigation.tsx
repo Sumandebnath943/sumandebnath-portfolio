@@ -98,6 +98,7 @@ const navLinks: NavLink[] = [
         label: "Games",
         color: "#F5B94A",
         submenus: [
+          { label: "PixelVille: Next Dimension", href: "/games/pixelville-next-dimension", color: "#F0C27A" },
           { label: "Pixelville", href: "/games/pixelville", color: "#F5B94A" },
           { label: "NUNO", href: "/games/nuno", color: "#FFC21A" },
         ],

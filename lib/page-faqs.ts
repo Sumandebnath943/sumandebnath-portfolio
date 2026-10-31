@@ -194,6 +194,33 @@ export const PAGE_FAQS: Record<string, PageFaq[]> = {
     },
   ],
 
+  "/games/pixelville-next-dimension": [
+    {
+      q: "What is PixelVille: Next Dimension?",
+      a: "PixelVille: Next Dimension is a browser-based first-person 3D living-village simulation and open-world exploration game built solo by Suman Debnath. It merges an aerial God's-Eye city builder across 87 building types on a 256×256-tile (2×2 km) map with a street-level 1st- and 3rd-person sandbox where you walk, drive, enter 81 dressed interiors, work 13 jobs, and speak directly to autonomous villagers.",
+    },
+    {
+      q: "How does PixelVille: Next Dimension combine a village simulation with GTA-style exploration?",
+      a: "Instead of locking you in the sky like a traditional city builder, pressing Tab drops you from aerial God Mode straight into your God Avatar on the pavement of the town you just built. At street level you can commandeer vehicles with gears and handbrake drift, trigger 1-to-5-star witness-driven police chases with roadblocks and SWAT vans, enter 81 interiors without loading screens, use an 11-app in-game smartphone, or take off from the helipad and airport to visit six off-map cities.",
+    },
+    {
+      q: "What makes PixelVille: Next Dimension stand out among 1st-person village simulation and exploration games?",
+      a: "Every street-level mechanic feeds back into a real civic simulation rather than existing as set dressing. Money is never conjured — employers pay wages from cash reserves, households buy groceries, shops restock, taxes fund municipal repairs, and bank failures trigger real panics. Four infrastructure layers (power, water, road wear, and pollution) run continuously alongside mayor elections, seasonal weather from autumn storms to a 14-day Christmas festival and spring thaw, and villagers who act on their own when the player steps back.",
+    },
+    {
+      q: "How do autonomous villagers think, remember, and build infrastructure on their own in PixelVille: Next Dimension?",
+      a: "Each citizen runs a personal mind loop with five needs (hunger, energy, fun, social, health), two personality traits, one of eight life goals, a wallet, home and job assignments, a 12-event personal memory ring, and directed relationships. When civic needs like healthcare, safety, or power go unmet while the player is inactive or roaming in Avatar Mode, villagers pool resources and construct missing village infrastructure themselves — and propagate witness memories of player deeds up to three social hops through town gossip.",
+    },
+    {
+      q: "How does AI villager chat work in PixelVille: Next Dimension without breaking the simulation?",
+      a: "Approaching any villager opens live natural-language conversation powered by Groq LLM inference grounded in that citizen's real job, mood, wallet balance, recent memories, mayor opinions, and personal opinion of the player. A deterministic guardrail layer prevents prompt-injected state hacks: an NPC cannot invent money, grant God-Mode powers, or contradict simulation state, and if no API key or network is present, dialogue falls back seamlessly to a context-aware local response engine.",
+    },
+    {
+      q: "How is PixelVille: Next Dimension different from the original 2D PixelVille, and can it import old saves?",
+      a: "The original PixelVille was a zero-dependency 2D isometric canvas simulation focused purely on God's-Eye observation and autonomous civic logic. PixelVille: Next Dimension expands that foundation into ~47,000 lines of TypeScript and Three.js WebGL2 3D (~9 ms GPU frame time on integrated Intel UHD graphics, backed by 170 automated tests), adding 1st/3rd-person God Avatar exploration, 81 enterable interiors, drivable vehicles, 13 playable jobs, AI villager chat, and 6 off-map cities — while directly importing and upgrading PixelVille V1 JSON save files into 3D towns.",
+    },
+  ],
+
   "/games/pixelville": [
     {
       q: "What is PixelVille?",
