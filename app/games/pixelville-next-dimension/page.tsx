@@ -555,6 +555,12 @@ export default function PixelvilleNextDimensionPage() {
                 <DualPerspectiveSwitcher />
               </Reveal>
 
+              <details className="pvnd-ledger pvnd-fold rounded-3xl mt-8" style={{ border: `1px solid ${ND.line}` }}>
+                <summary className="flex items-center justify-between gap-4 px-6 py-4 cursor-pointer select-none rounded-3xl" style={{ background: ND.panel }}>
+                  <span className="font-syne font-bold text-lg" style={{ color: ND.snow }}>Show the details</span>
+                  <span aria-hidden="true" className="pvnd-ledger-icon shrink-0 w-9 h-9 rounded-full grid place-items-center font-syne font-bold text-lg" style={{ background: "var(--acc)", color: ND.nightDeep }}>+</span>
+                </summary>
+                <div className="px-4 sm:px-6 pt-8 pb-6">
               {/* Always-rendered SSR summary of both modes + Founder's Lodge & Speed pill */}
               <div className="grid md:grid-cols-12 gap-5 mt-6">
                 <figure
@@ -620,6 +626,8 @@ export default function PixelvilleNextDimensionPage() {
                   </div>
                 </div>
               </div>
+                </div>
+              </details>
             </div>
           </section>
 
@@ -645,6 +653,12 @@ export default function PixelvilleNextDimensionPage() {
                 <CausalityChainInteractive />
               </Reveal>
 
+              <details className="pvnd-ledger pvnd-fold rounded-3xl mt-8" style={{ border: `1px solid ${ND.line}` }}>
+                <summary className="flex items-center justify-between gap-4 px-6 py-4 cursor-pointer select-none rounded-3xl" style={{ background: ND.panel }}>
+                  <span className="font-syne font-bold text-lg" style={{ color: ND.snow }}>Show the details</span>
+                  <span aria-hidden="true" className="pvnd-ledger-icon shrink-0 w-9 h-9 rounded-full grid place-items-center font-syne font-bold text-lg" style={{ background: "var(--acc)", color: ND.nightDeep }}>+</span>
+                </summary>
+                <div className="px-4 sm:px-6 pt-8 pb-6">
               {/* The 4 Interlocking Infrastructure Sims */}
               <div className="grid md:grid-cols-2 gap-4 mt-7">
                 {[
@@ -716,6 +730,8 @@ export default function PixelvilleNextDimensionPage() {
                   );
                 })}
               </div>
+                </div>
+              </details>
             </div>
           </section>
 
@@ -768,6 +784,12 @@ export default function PixelvilleNextDimensionPage() {
                 })}
               </div>
 
+              <details className="pvnd-ledger pvnd-fold rounded-3xl mt-8" style={{ border: `1px solid ${ND.line}` }}>
+                <summary className="flex items-center justify-between gap-4 px-6 py-4 cursor-pointer select-none rounded-3xl" style={{ background: ND.panel }}>
+                  <span className="font-syne font-bold text-lg" style={{ color: ND.snow }}>Show the details</span>
+                  <span aria-hidden="true" className="pvnd-ledger-icon shrink-0 w-9 h-9 rounded-full grid place-items-center font-syne font-bold text-lg" style={{ background: "var(--acc)", color: ND.nightDeep }}>+</span>
+                </summary>
+                <div className="px-4 sm:px-6 pt-8 pb-6">
               {/* Interactive 3-Hop Hearsay & Reputation Explorer */}
               <Reveal>
                 <GossipNetworkExplorer />
@@ -861,6 +883,8 @@ export default function PixelvilleNextDimensionPage() {
                   </div>
                 </div>
               </div>
+                </div>
+              </details>
             </div>
           </section>
 
@@ -886,6 +910,12 @@ export default function PixelvilleNextDimensionPage() {
                 <WantedConsole />
               </Reveal>
 
+              <details className="pvnd-ledger pvnd-fold rounded-3xl mt-8" style={{ border: `1px solid ${ND.line}` }}>
+                <summary className="flex items-center justify-between gap-4 px-6 py-4 cursor-pointer select-none rounded-3xl" style={{ background: ND.panel }}>
+                  <span className="font-syne font-bold text-lg" style={{ color: ND.snow }}>Show the details</span>
+                  <span aria-hidden="true" className="pvnd-ledger-icon shrink-0 w-9 h-9 rounded-full grid place-items-center font-syne font-bold text-lg" style={{ background: "var(--acc)", color: ND.nightDeep }}>+</span>
+                </summary>
+                <div className="px-4 sm:px-6 pt-8 pb-6">
               <div className="grid lg:grid-cols-12 gap-5 mt-6 items-stretch">
                 {/* Wasted screenshot + Busted/Wasted fairness rules */}
                 <figure
@@ -943,6 +973,8 @@ export default function PixelvilleNextDimensionPage() {
                   </div>
                 </div>
               </div>
+                </div>
+              </details>
             </div>
           </section>
 
@@ -981,6 +1013,12 @@ export default function PixelvilleNextDimensionPage() {
                 ))}
               </div>
 
+              <details className="pvnd-ledger pvnd-fold rounded-3xl mt-8" style={{ border: `1px solid ${ND.line}` }}>
+                <summary className="flex items-center justify-between gap-4 px-6 py-4 cursor-pointer select-none rounded-3xl" style={{ background: ND.panel }}>
+                  <span className="font-syne font-bold text-lg" style={{ color: ND.snow }}>Show the details</span>
+                  <span aria-hidden="true" className="pvnd-ledger-icon shrink-0 w-9 h-9 rounded-full grid place-items-center font-syne font-bold text-lg" style={{ background: "var(--acc)", color: ND.nightDeep }}>+</span>
+                </summary>
+                <div className="px-4 sm:px-6 pt-8 pb-6">
               {/* 4 Mayors + Hustings + Community Self-Build Banner */}
               <div
                 className="rounded-3xl p-6 sm:p-8"
@@ -1050,6 +1088,8 @@ export default function PixelvilleNextDimensionPage() {
                   </p>
                 </div>
               </div>
+                </div>
+              </details>
             </div>
           </section>
 
@@ -1076,6 +1116,12 @@ export default function PixelvilleNextDimensionPage() {
                 <JobShiftsExplorer />
               </Reveal>
 
+              <details className="pvnd-ledger pvnd-fold rounded-3xl mt-8" style={{ border: `1px solid ${ND.line}` }}>
+                <summary className="flex items-center justify-between gap-4 px-6 py-4 cursor-pointer select-none rounded-3xl" style={{ background: ND.panel }}>
+                  <span className="font-syne font-bold text-lg" style={{ color: ND.snow }}>Show the details</span>
+                  <span aria-hidden="true" className="pvnd-ledger-icon shrink-0 w-9 h-9 rounded-full grid place-items-center font-syne font-bold text-lg" style={{ background: "var(--acc)", color: ND.nightDeep }}>+</span>
+                </summary>
+                <div className="px-4 sm:px-6 pt-8 pb-6">
               {/* 81 Enterable Interiors + Hospital Shot + 11 PVTel Apps */}
               <div className="grid lg:grid-cols-12 gap-5 mt-12">
                 <div
@@ -1218,6 +1264,8 @@ export default function PixelvilleNextDimensionPage() {
                   </div>
                 </div>
               </div>
+                </div>
+              </details>
             </div>
           </section>
 
@@ -1263,6 +1311,12 @@ export default function PixelvilleNextDimensionPage() {
                 ))}
               </div>
 
+              <details className="pvnd-ledger pvnd-fold rounded-3xl mt-8" style={{ border: `1px solid ${ND.line}` }}>
+                <summary className="flex items-center justify-between gap-4 px-6 py-4 cursor-pointer select-none rounded-3xl" style={{ background: ND.panel }}>
+                  <span className="font-syne font-bold text-lg" style={{ color: ND.snow }}>Show the details</span>
+                  <span aria-hidden="true" className="pvnd-ledger-icon shrink-0 w-9 h-9 rounded-full grid place-items-center font-syne font-bold text-lg" style={{ background: "var(--acc)", color: ND.nightDeep }}>+</span>
+                </summary>
+                <div className="px-4 sm:px-6 pt-8 pb-6">
               {/* 14-Day Rockefeller Christmas Timeline */}
               <div
                 className="rounded-3xl p-6 sm:p-8 mb-8"
@@ -1353,6 +1407,8 @@ export default function PixelvilleNextDimensionPage() {
                   </p>
                 </div>
               </div>
+                </div>
+              </details>
             </div>
           </section>
 
