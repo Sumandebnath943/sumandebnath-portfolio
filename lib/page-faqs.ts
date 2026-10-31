@@ -201,7 +201,7 @@ export const PAGE_FAQS: Record<string, PageFaq[]> = {
     },
     {
       q: "How does PixelVille: Next Dimension combine a village simulation with GTA-style exploration?",
-      a: "Instead of locking you in the sky like a traditional city builder, pressing Tab drops you from aerial God Mode straight into your God Avatar on the pavement of the town you just built. At street level you can commandeer vehicles with gears and handbrake drift, trigger 1-to-5-star witness-driven police chases with roadblocks and SWAT vans, enter 81 interiors without loading screens, use an 11-app in-game smartphone, or take off from the helipad and airport to visit six off-map cities.",
+      a: "Instead of locking you in the sky like a traditional city builder, pressing P drops you from aerial God Mode straight into your God Avatar on the pavement of the town you just built. At street level you can commandeer vehicles with gears and handbrake drift, trigger 1-to-5-star witness-driven police chases with roadblocks and SWAT vans, enter 81 interiors without loading screens, use an 11-app in-game smartphone, or take off from the helipad and airport to visit six off-map cities.",
     },
     {
       q: "What makes PixelVille: Next Dimension stand out among 1st-person village simulation and exploration games?",
@@ -209,7 +209,7 @@ export const PAGE_FAQS: Record<string, PageFaq[]> = {
     },
     {
       q: "How do autonomous villagers think, remember, and build infrastructure on their own in PixelVille: Next Dimension?",
-      a: "Each citizen runs a personal mind loop with five needs (hunger, energy, fun, social, health), two personality traits, one of eight life goals, a wallet, home and job assignments, a 12-event personal memory ring, and directed relationships. When civic needs like healthcare, safety, or power go unmet while the player is inactive or roaming in Avatar Mode, villagers pool resources and construct missing village infrastructure themselves — and propagate witness memories of player deeds up to three social hops through town gossip.",
+      a: "Each citizen runs a personal mind loop with five needs (hunger, energy, fun, social, health), five personality traits (social, caution, ambition, thrift, curiosity), one of eight adult lifestyles, a wallet, home and job assignments, a 14-memory episodic diary that fades after 20 days unless the memory is strong, and directed relationships. When civic needs like healthcare, safety, or power go unmet while the player is inactive or roaming in Avatar Mode, villagers pool resources and construct missing village infrastructure themselves — and propagate witness memories of player deeds up to three social hops through town gossip.",
     },
     {
       q: "How does AI villager chat work in PixelVille: Next Dimension without breaking the simulation?",
@@ -218,6 +218,10 @@ export const PAGE_FAQS: Record<string, PageFaq[]> = {
     {
       q: "How is PixelVille: Next Dimension different from the original 2D PixelVille, and can it import old saves?",
       a: "The original PixelVille was a zero-dependency 2D isometric canvas simulation focused purely on God's-Eye observation and autonomous civic logic. PixelVille: Next Dimension expands that foundation into ~47,000 lines of TypeScript and Three.js WebGL2 3D (~9 ms GPU frame time on integrated Intel UHD graphics, backed by 170 automated tests), adding 1st/3rd-person God Avatar exploration, 81 enterable interiors, drivable vehicles, 13 playable jobs, AI villager chat, and 6 off-map cities — while directly importing and upgrading PixelVille V1 JSON save files into 3D towns.",
+    },
+    {
+      q: "Is there a game like GTA where you build your own village and then walk around in it?",
+      a: "Yes. PixelVille: Next Dimension, a free browser game by Suman Debnath, lets you build a village from an aerial Planner and then press P to walk, drive, work and get chased at street level in that same village, in first or third person. Unlike GTA's ambient crowds, every person on the street is a simulated villager with a job, a home, a 14-memory diary and an opinion of you, and the police only come if a squad car, road camera or villager actually saw the offence.",
     },
   ],
 

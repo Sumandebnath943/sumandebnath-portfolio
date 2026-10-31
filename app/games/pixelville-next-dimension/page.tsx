@@ -45,7 +45,7 @@ const SITE = "https://sumandebnath.houseofnamus.com";
 const PATH = "/games/pixelville-next-dimension";
 
 export const metadata: Metadata = {
-  title: "PixelVille: Next Dimension · 3D Village Sim",
+  title: "PixelVille: Next Dimension · 1st-Person Sim",
   description:
     "Build from the sky and roam in 1st person: a 3D living-village simulation & exploration game with autonomous NPCs, AI chat, 1–5★ chases and 13 playable jobs.",
   keywords: [
@@ -61,6 +61,9 @@ export const metadata: Metadata = {
     "self-governing village simulation",
     "Three.js 3D city builder",
     "PixelVille 3D",
+    "best first-person village simulation game",
+    "games like GTA but a village sim",
+    "free browser life simulation game",
     "Suman Debnath",
   ],
   alternates: { canonical: PATH },
@@ -190,6 +193,19 @@ const articleLd = {
   image: `${SITE}${IMG.loading.src}`,
 };
 
+/* ── Genre comparison (answers "games like GTA but a village sim") ─────── */
+const COMPARE_ROWS: [string, string, string, string][] = [
+  ["Build the town", "Yes, from above", "No", "87 building types from the aerial Planner"],
+  ["Walk and drive inside it", "No, or a camera fly-through", "Yes, in a ready-made city", "1st or 3rd person, cars, buses, trains, planes"],
+  ["People on the street", "Statistics and traffic", "Ambient extras", "Every one a simulated villager with a job and a home"],
+  ["Villagers remember you", "No", "Rarely", "A 14-memory diary each; stories about you spread by gossip"],
+  ["The town grows while you're idle", "Only what you zoned", "No", "Villagers save up and build what the village needs"],
+  ["Talk to anyone", "No", "Scripted lines", "Free conversation through a language model, with guardrails"],
+  ["Police and crime", "A coverage map", "A wanted level that often sees everything", "1–5 stars, only if a car, camera or villager saw it"],
+  ["Money", "Often conjured by the game", "Mostly yours", "Closed loop: every wage comes out of a real till"],
+  ["Price and platform", "Paid, desktop", "Paid, console or PC", "Free in any browser, phone included"],
+];
+
 /* ── Scoped CSS (animation-fill-mode: backwards per PROJECT_BIBLE §5) ──── */
 const KEYFRAMES = `
 @keyframes pvnd-pulse {
@@ -201,8 +217,13 @@ const KEYFRAMES = `
   to { opacity: 1; transform: translateY(0); }
 }
 .pvnd-rise { animation: pvnd-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards; }
+@keyframes pvnd-kenburns {
+  from { transform: scale(1.08); }
+  to { transform: scale(1); }
+}
+.pvnd-kenburns { animation: pvnd-kenburns 14s ease-out backwards; }
 @media (prefers-reduced-motion: reduce) {
-  .pvnd-rise, .pvnd-ring { animation: none !important; }
+  .pvnd-rise, .pvnd-ring, .pvnd-kenburns { animation: none !important; }
 }
 `;
 
@@ -280,23 +301,37 @@ export default function PixelvilleNextDimensionPage() {
         {/* overflow-x-clip keeps sticky children alive (AGENTS.md Rule 3) */}
         <main className="relative overflow-x-clip">
           {/* ═══════════════════════ HERO ═══════════════════════ */}
-          <section className="relative pt-28 sm:pt-32 pb-16 px-5 sm:px-8">
+          <section className="relative min-h-[92vh] flex items-end pt-28 pb-14 px-5 sm:px-8">
             <HeroLock />
 
-            {/* Ambient horizon & Founder-violet sky glow */}
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-x-0 top-0 h-[620px]"
-              style={{
-                background:
-                  "radial-gradient(ellipse 68% 46% at 50% 8%, rgba(165,139,255,0.20), rgba(240,194,122,0.10) 48%, transparent 78%)",
-              }}
-            />
+            {/* Full-bleed key art — the village itself is the hero */}
+            <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
+              <Image
+                src={IMG.foliage.src}
+                alt=""
+                fill
+                priority
+                sizes="100vw"
+                className="object-cover object-center pvnd-kenburns"
+              />
+              <div
+                className="absolute inset-0"
+                style={{
+                  background: `linear-gradient(180deg, rgba(5,8,15,0.78) 0%, rgba(5,8,15,0.25) 32%, rgba(5,8,15,0.55) 62%, ${ND.night} 100%)`,
+                }}
+              />
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "linear-gradient(90deg, rgba(5,8,15,0.82) 0%, rgba(5,8,15,0.45) 42%, transparent 72%), radial-gradient(ellipse 60% 50% at 18% 85%, rgba(165,139,255,0.22), transparent 70%)",
+                }}
+              />
+            </div>
 
-            <div className="relative max-w-6xl mx-auto text-center">
+            <div className="relative w-full max-w-6xl mx-auto">
               <Breadcrumbs
-                align="center"
-                className="mb-5"
+                className="mb-6"
                 trail={[
                   { label: "Portfolio", href: "/projects" },
                   { label: "Games", href: null },
@@ -309,53 +344,31 @@ export default function PixelvilleNextDimensionPage() {
               </div>
 
               <h1
-                className="font-syne font-extrabold text-[2.25rem] sm:text-5xl md:text-[3.85rem] leading-[1.05] tracking-[-0.025em] max-w-5xl mx-auto text-balance"
-                style={{ color: ND.snow }}
+                className="font-syne font-extrabold text-[2.5rem] sm:text-6xl md:text-[4.6rem] leading-[0.98] tracking-[-0.03em] max-w-4xl text-balance pvnd-rise"
+                style={{ color: ND.snow, textShadow: "0 4px 40px rgba(0,0,0,0.6)" }}
               >
-                PixelVille: Next Dimension —{" "}
-                <span style={{ color: ND.gold }}>
-                  1st-Person 3D Living Village Simulation
-                </span>{" "}
-                &amp;{" "}
-                <span style={{ color: ND.violet }}>
-                  Open-World Exploration Game
+                PixelVille: Next Dimension
+                <span className="block mt-3 text-[1.5rem] sm:text-[2.1rem] md:text-[2.6rem] leading-[1.1] tracking-[-0.02em]">
+                  <span style={{ color: ND.gold }}>The first-person village sim</span>{" "}
+                  <span style={{ color: ND.violet }}>that lives without you.</span>
                 </span>
               </h1>
 
-              {/* Extractable 51-word AEO definition directly after H1 */}
-              <PageAnswer href={PATH} />
-
               <p
-                className="font-manrope text-[15px] sm:text-[16.5px] leading-[1.75] max-w-3xl mx-auto mb-7"
-                style={{ color: ND.muted }}
+                className="font-manrope text-[15.5px] sm:text-[17px] leading-[1.7] max-w-2xl mt-6 mb-7"
+                style={{ color: "rgba(237,241,250,0.86)" }}
               >
-                Built solo from an original question —{" "}
-                <em style={{ color: ND.snow }}>
-                  what if a self-governing village simulator let you drop down onto the pavement and live inside it like GTA?
-                </em>{" "}
-                Every citizen holds a private memory, discovers shops by word of mouth, elects mayors, and pools household savings to build hospitals you ignore — while you switch at will between aerial God Mode and a physical body on the street.
+                Build the town from the sky like a city builder. Press{" "}
+                <kbd
+                  className="font-dmmono text-[12px] px-1.5 py-0.5 rounded"
+                  style={{ background: "rgba(255,255,255,0.12)", border: `1px solid ${ND.lineHi}`, color: ND.snow }}
+                >
+                  P
+                </kbd>{" "}
+                and drop onto its pavement like an open-world game: drive, work a shift, get chased. Ignore it, and the villagers vote, save up and build the hospital themselves.
               </p>
 
-              {/* Author & Freshness Dateline (GEO / AEO authorship signal) */}
-              <div
-                className="inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 font-dmmono text-[11px] mb-8 px-4 py-1.5 rounded-full"
-                style={{
-                  background: ND.panel,
-                  border: `1px solid ${ND.line}`,
-                  color: ND.muted,
-                }}
-              >
-                <span>
-                  Built solo by <strong style={{ color: ND.snow }}>Suman Debnath</strong>
-                </span>
-                <span aria-hidden="true">·</span>
-                <time dateTime="2026-10-31">October 2026</time>
-                <span aria-hidden="true">·</span>
-                <span style={{ color: ND.emerald }}>Free in Browser · No Install</span>
-              </div>
-
-              {/* Primary CTAs (Live Game + Internal anchors + PixelVille V1) */}
-              <div className="flex flex-wrap items-center justify-center gap-3.5 mb-12">
+              <div className="flex flex-wrap items-center gap-3.5 mb-7">
                 <a
                   href={LINKS.live}
                   target="_blank"
@@ -367,91 +380,82 @@ export default function PixelvilleNextDimensionPage() {
                     boxShadow: "0 14px 36px -10px rgba(240,194,122,0.55)",
                   }}
                 >
-                  <span>Play PixelVille: Next Dimension</span>
+                  <span>Play free in your browser</span>
                   <span aria-hidden="true">↗</span>
                 </a>
-
                 <a
                   href="#dual-mode"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full font-manrope font-semibold text-sm transition-colors hover:bg-white/10"
-                  style={{
-                    background: ND.panel,
-                    color: ND.snow,
-                    border: `1px solid ${ND.line}`,
-                  }}
+                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full font-manrope font-semibold text-sm transition-colors hover:bg-white/15"
+                  style={{ background: "rgba(5,8,15,0.55)", color: ND.snow, border: `1px solid ${ND.lineHi}`, backdropFilter: "blur(8px)" }}
                 >
-                  Explore All Systems ↓
+                  See every system ↓
                 </a>
-
                 <Link
                   href={LINKS.v1Page}
                   className="inline-flex items-center gap-2 px-5 py-3.5 rounded-full font-dmmono text-xs uppercase tracking-[0.14em] transition-colors hover:bg-white/10"
-                  style={{
-                    background: "transparent",
-                    color: ND.violet,
-                    border: "1px solid rgba(165,139,255,0.35)",
-                  }}
+                  style={{ color: ND.violet, border: "1px solid rgba(165,139,255,0.4)", background: "rgba(5,8,15,0.4)" }}
                 >
-                  Origin: PixelVille V1 (2D) →
+                  Where it began: PixelVille (2D) →
                 </Link>
               </div>
 
-              {/* Dual Hero Showcase Frame: Key Art + Live Flyover Menu */}
-              <div className="grid lg:grid-cols-12 gap-4 text-left">
-                <figure
-                  className="lg:col-span-7 rounded-2xl overflow-hidden"
-                  style={{
-                    background: ND.panel,
-                    border: `1px solid ${ND.lineHi}`,
-                    boxShadow: "0 30px 90px -28px rgba(0,0,0,0.85)",
-                  }}
-                >
-                  <Image
-                    src={IMG.loading.src}
-                    alt={IMG.loading.alt}
-                    width={IMG.loading.w}
-                    height={IMG.loading.h}
-                    priority
-                    sizes="(min-width: 1024px) 660px, 100vw"
-                    className="w-full h-auto block"
-                  />
-                  <figcaption
-                    className="px-4 py-3 font-manrope text-[12.5px] flex items-center justify-between gap-3"
-                    style={{ color: ND.muted }}
-                  >
-                    <span>
-                      <strong style={{ color: ND.gold }}>A Living Village, Now in 3D:</strong>{" "}
-                      Valley river, curved mainline rail, and the 117 m rugged mountain peak.
-                    </span>
-                    <span className="font-dmmono text-[10.5px] shrink-0" style={{ color: ND.faint }}>
-                      WebGL2 · PBR
-                    </span>
-                  </figcaption>
-                </figure>
+              <div
+                className="inline-flex flex-wrap items-center gap-x-3 gap-y-1 font-dmmono text-[11px] px-4 py-1.5 rounded-full"
+                style={{ background: "rgba(5,8,15,0.6)", border: `1px solid ${ND.line}`, color: ND.muted, backdropFilter: "blur(8px)" }}
+              >
+                <span>
+                  Built solo by <strong style={{ color: ND.snow }}>Suman Debnath</strong>
+                </span>
+                <span aria-hidden="true">·</span>
+                <time dateTime="2026-10-31">October 2026</time>
+                <span aria-hidden="true">·</span>
+                <span style={{ color: ND.emerald }}>Desktop · phone · gamepad · no install</span>
+              </div>
+            </div>
+          </section>
 
-                <figure
-                  className="lg:col-span-5 rounded-2xl overflow-hidden flex flex-col justify-between"
-                  style={{
-                    background: ND.panel,
-                    border: `1px solid ${ND.line}`,
-                  }}
-                >
-                  <Image
-                    src={IMG.landing.src}
-                    alt={IMG.landing.alt}
-                    width={IMG.landing.w}
-                    height={IMG.landing.h}
-                    sizes="(min-width: 1024px) 460px, 100vw"
-                    className="w-full h-auto block"
-                  />
-                  <figcaption
-                    className="px-4 py-3 font-manrope text-[12.5px]"
-                    style={{ color: ND.muted }}
-                  >
-                    <strong style={{ color: ND.snow }}>Live landing flyover:</strong>{" "}
-                    The title screen hovers in real time over your active save (<em>Rosedale · 250 villagers</em>) or spins up an instant <strong>Auto Village</strong>.
-                  </figcaption>
-                </figure>
+          {/* Extractable AEO definition, kept straight after the hero */}
+          <div className="px-5 sm:px-8 pt-10 pb-2">
+            <div className="max-w-4xl mx-auto">
+              <PageAnswer href={PATH} />
+            </div>
+          </div>
+
+          {/* ═══════════════════════ GENRE COMPARISON (AEO / GEO) ═══════════════════════ */}
+          <section id="compare" className="py-16 px-5 sm:px-8">
+            <div className="max-w-6xl mx-auto">
+              <h2
+                className="font-syne font-extrabold text-[1.85rem] sm:text-[2.4rem] leading-[1.1] tracking-[-0.02em] max-w-3xl mb-3"
+                style={{ color: ND.snow }}
+              >
+                How is it different from a city builder or a GTA-style game?
+              </h2>
+              <p className="font-manrope text-[15px] leading-[1.7] max-w-3xl mb-8" style={{ color: ND.muted }}>
+                City builders keep you in the sky. Open-world games give you a street full of extras. PixelVille: Next Dimension gives you both views of one simulation, where every person on the street is a villager with a job, a diary and an opinion of you.
+              </p>
+              <div className="overflow-x-auto rounded-2xl" style={{ border: `1px solid ${ND.line}` }}>
+                <table className="w-full min-w-[640px] text-left font-manrope text-[13.5px]">
+                  <thead>
+                    <tr style={{ background: ND.nightDeep }}>
+                      <th scope="col" className="px-4 py-3 font-dmmono text-[10.5px] uppercase tracking-[0.16em]" style={{ color: ND.faint }}>What you can do</th>
+                      <th scope="col" className="px-4 py-3 font-dmmono text-[10.5px] uppercase tracking-[0.16em]" style={{ color: ND.muted }}>Typical city builder</th>
+                      <th scope="col" className="px-4 py-3 font-dmmono text-[10.5px] uppercase tracking-[0.16em]" style={{ color: ND.muted }}>Typical open-world crime game</th>
+                      <th scope="col" className="px-4 py-3 font-dmmono text-[10.5px] uppercase tracking-[0.16em]" style={{ color: ND.gold, background: "rgba(240,194,122,0.08)" }}>PixelVille: Next Dimension</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {COMPARE_ROWS.map(([what, city, open, pv], i) => (
+                      <tr key={what} style={{ borderTop: `1px solid ${ND.line}`, background: i % 2 ? "rgba(255,255,255,0.015)" : "transparent" }}>
+                        <th scope="row" className="px-4 py-3 font-semibold" style={{ color: ND.snow }}>{what}</th>
+                        <td className="px-4 py-3" style={{ color: ND.faint }}>{city}</td>
+                        <td className="px-4 py-3" style={{ color: ND.faint }}>{open}</td>
+                        <td className="px-4 py-3 font-semibold" style={{ color: ND.snow, background: "rgba(240,194,122,0.06)" }}>
+                          <span aria-hidden="true" style={{ color: ND.emerald }}>✓ </span>{pv}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </section>
