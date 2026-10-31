@@ -504,10 +504,10 @@ export default function PixelvilleNextDimensionPage() {
               <Reveal>
                 <SectionHeader
                   num="01"
-                  kicker="THE CORE BREAKTHROUGH · GOD AVATAR ⇄ GOD PLANNER"
-                  titleA="How does PixelVille: Next Dimension merge a city builder with a"
-                  titleB="1st-person GTA street sandbox?"
-                  lead="Most town simulators lock you in the clouds over ant-sized agents; open-world street games fill blocks with disposable ambient traffic that despawns around the next corner. PixelVille: Next Dimension runs both perspectives simultaneously on one deterministic simulation — press P to build from the sky, then drop into your Founder body on the pavement and live with what you built."
+                  kicker="THE CORE IDEA · TWO VIEWS, ONE VILLAGE"
+                  titleA="Build it from the sky,"
+                  titleB="then press P and walk its streets."
+                  lead="City builders keep you in the clouds. Open-world games fill the streets with extras who vanish round the corner. Here both views run on the same simulation: the house you place from above is the house you can walk into a minute later, and the person at the door actually lives there."
                   hue="gold"
                 />
               </Reveal>
@@ -595,10 +595,10 @@ export default function PixelvilleNextDimensionPage() {
               <Reveal>
                 <SectionHeader
                   num="02"
-                  kicker="EMERGENT CAUSALITY · ZERO FAKE TRAFFIC OR CROWDS"
-                  titleA="Nothing on screen is decorative:"
-                  titleB="every vehicle, blackout, and casualty is real."
-                  lead="In PixelVille: Next Dimension, the 3D renderer reads the headless simulation and never fakes an actor. A fire engine passing your car was dispatched to an actual burning shop; a queue at a bus shelter is real commuters; a darkened street lamp is a real 32 × 32-tile district fault that also killed the junction signals ahead."
+                  kicker="NOTHING ON SCREEN IS FAKE"
+                  titleA="Every car, blackout and casualty"
+                  titleB="is something the simulation really did."
+                  lead="The fire engine that passes you was sent to a real fire. The queue at the bus stop is the villagers actually waiting. When a street goes dark, a real district has lost power, and its traffic lights went with it."
                   hue="sky"
                 />
               </Reveal>
@@ -687,10 +687,10 @@ export default function PixelvilleNextDimensionPage() {
               <Reveal>
                 <SectionHeader
                   num="03"
-                  kicker="COGNITIVE NPC ARCHITECTURE · GROQ LLM + DETERMINISTIC GUARDRAILS"
-                  titleA="How do villagers think, remember, gossip, and hold"
-                  titleB="live AI conversations?"
-                  lead="Every citizen in PixelVille: Next Dimension carries an individual cognitive state (mind.ts) that persists across saves. They discover your city block by block, form friendships that cool without contact, hold grudges or gratitude toward you across three hops of street gossip, and speak in character through a server-guarded language model."
+                  kicker="MINDS, NOT SCRIPTS · AI CHAT WITH GUARDRAILS"
+                  titleA="Villagers remember, gossip about you,"
+                  titleB="and talk back in their own words."
+                  lead="Each villager has five personality traits, a diary of up to 14 memories, friends and favourite places. What you do reaches them through gossip. Walk up to anyone and type: they answer in character through a language model, grounded in their real memories and the village's real news, while the rules of the world stay on the server."
                   hue="violet"
                 />
               </Reveal>
@@ -836,10 +836,10 @@ export default function PixelvilleNextDimensionPage() {
               <Reveal>
                 <SectionHeader
                   num="04"
-                  kicker="GTA-STYLE STREET SANDBOX · FAIR LINE-OF-SIGHT CONSEQUENCES"
-                  titleA="What happens when you break the law in your own village?"
-                  titleB="Witnesses, 1–5★ chases, showrooms & wardens."
-                  lead="There is no omniscient crime trigger. Running a red light, speeding past 60 km/h, driving the wrong carriageway of a twin avenue, or hijacking a family's saloon from their driveway only counts if a patrol car, road camera, or villager within 32 metres actually has an unobstructed line of sight."
+                  kicker="CRIME THAT FEELS FAIR"
+                  titleA="Break the law and the village notices,"
+                  titleB="but only if someone actually saw you."
+                  lead="Run a red light, speed, or take a family's car from their driveway, and it only counts if a squad car, a road camera or a villager saw it. Then come the 1 to 5 stars, with police driving from real stations along real roads."
                   hue="crimson"
                 />
               </Reveal>
@@ -914,10 +914,10 @@ export default function PixelvilleNextDimensionPage() {
               <Reveal>
                 <SectionHeader
                   num="05"
-                  kicker="ZERO CONJURED MONEY · ELECTIONS & COMMUNITY SELF-BUILDING"
-                  titleA="A closed-loop economy and a village that"
-                  titleB="governs and builds itself."
-                  lead="Every dollar in PixelVille: Next Dimension comes from somewhere and goes somewhere — verified by dedicated economy audit tests. And just like the original PixelVille's signature breakthrough, citizens never sit idle waiting on an inactive god: they campaign, vote on their own quality of life, and pool household savings to construct vital infrastructure you neglect."
+                  kicker="A CLOSED ECONOMY · A VILLAGE THAT RUNS ITSELF"
+                  titleA="Money is never conjured,"
+                  titleB="and the village builds what you forget to."
+                  lead="Every wage comes out of a workplace's own till and every public service runs on a budget, and the economy tests check it. Stop playing for a while and the villagers carry on: they campaign, vote for a mayor, and save up to build the hospital or school the village is missing."
                   hue="emerald"
                 />
               </Reveal>
@@ -1025,10 +1025,10 @@ export default function PixelvilleNextDimensionPage() {
               <Reveal>
                 <SectionHeader
                   num="06"
-                  kicker="13 LIVE-EVENT CAREERS · 81 DRESSED INTERIORS · 6 OFF-MAP CITIES"
-                  titleA="Work every job in town, walk inside 81 buildings, and"
-                  titleB="travel beyond the horizon."
-                  lead="Every shift in PixelVille: Next Dimension runs on real simulation events — never spawned dummy objectives. Clock in from PVTel's Jobs app or a workplace counter, borrow the company rig at the kerb, intercept live emergencies via Life.claim, and collect wages straight from the workplace's till (two to five good shifts buy a showroom car)."
+                  kicker="13 JOBS · 81 INTERIORS · 6 CITIES BEYOND THE MAP"
+                  titleA="Work a real shift, walk into 81 buildings,"
+                  titleB="and travel past the edge of the map."
+                  lead="All 13 jobs run on what the simulation is doing right now: real fires for the firefighter, real casualties for the paramedic, real customers at the counter. Your wages come out of the workplace's till, like everyone else's."
                   hue="gold"
                 />
               </Reveal>
@@ -1189,10 +1189,10 @@ export default function PixelvilleNextDimensionPage() {
               <Reveal>
                 <SectionHeader
                   num="07"
-                  kicker="PROCEDURAL PBR WORLD · ZERO IMAGE OR AUDIO ASSET FILES"
-                  titleA="Preetham skies, Spring Thaw, a 14-day Rockefeller Christmas, and"
-                  titleB="synthesised 3D WebAudio."
-                  lead="Every building facade, brick course, interior-mapped window, recursive tree, PBR surface texture, and positional sound effect is generated in code — paired with 93 retargeted LOD models for citizens, cabin-shaded vehicles, and 18 animal species across farms, parks, and a 5-enclosure zoo."
+                  kicker="A WORLD MADE IN CODE"
+                  titleA="Skies, seasons, festivals and sound,"
+                  titleB="all generated in code."
+                  lead="Every building, tree, texture and sound effect is generated in code. Only the people, vehicles and animals are downloaded models: 93 of them, each one credited in the game."
                   hue="sky"
                 />
               </Reveal>
@@ -1328,10 +1328,10 @@ export default function PixelvilleNextDimensionPage() {
               <Reveal>
                 <SectionHeader
                   num="08"
-                  kicker="GENRE POSITIONING · V1 (2D) → NEXT DIMENSION (3D)"
-                  titleA="How does PixelVille: Next Dimension compare to"
-                  titleB="PixelVille V1 and traditional city builders?"
-                  lead="Every single simulation behaviour from the original 2D PixelVille was ported behaviour-for-behaviour into strict TypeScript — so much so that Next Dimension imports original 2D PixelVille (v4) save files and wakes your old village up in 3D — before layering physical street embodiment, 4 infrastructure sims, guardrailed AI chat, and GTA-style vehicle & crime loops on top."
+                  kicker="WHERE IT CAME FROM · PIXELVILLE (2D) → NEXT DIMENSION (3D)"
+                  titleA="Everything the original did,"
+                  titleB="carried into 3D and taken further."
+                  lead="Every system of the 2D PixelVille was ported behaviour for behaviour, so an old PixelVille save imports and your village wakes up in 3D. On top of that sit a body on the street, jobs, chases, interiors and AI conversation."
                   hue="violet"
                 />
               </Reveal>
@@ -1388,10 +1388,10 @@ export default function PixelvilleNextDimensionPage() {
               <Reveal>
                 <SectionHeader
                   num="09"
-                  kicker="HEADLESS ARCHITECTURE · 170 VITEST CHECKS · COMPLETE A–Z LEDGER"
-                  titleA="9 ms on integrated laptop graphics — and"
-                  titleB="every big, medium, and small logic indexed."
-                  lead="Shipping a semi-realistic 2 × 2 km 3D open world inside a ~470 KB gzipped browser bundle meant refusing bloat: custom circle-vs-box swept physics instead of WASM engines, parallel Web-Worker texture baking cached in IndexedDB, 61–65 shaders pre-compiled before frame 1, GPU upload memory freeing (-150 MB RAM), and a fault-isolated guard() loop that never freezes."
+                  kicker="UNDER THE HOOD · 170 AUTOMATED TESTS"
+                  titleA="About 9 ms a frame on a laptop,"
+                  titleB="and every system listed, big or small."
+                  lead="The simulation runs with no graphics code at all, which is why 170 tests can play whole days of village life without opening a browser. Below is the full ledger of systems, sorted by size, so nothing small gets lost."
                   hue="emerald"
                 />
               </Reveal>
@@ -1491,10 +1491,10 @@ export default function PixelvilleNextDimensionPage() {
               <Reveal>
                 <SectionHeader
                   num="10"
-                  kicker="VISUAL ARCHIVE · ALL 20 IN-GAME CAPTURES"
-                  titleA="Every angle of the valley —"
-                  titleB="from kerb level to the clouds."
-                  lead="Click any capture to inspect full-resolution details: street motoring, the 11-app PVTel smartphone, the Founder's Lodge, dressed building entrances, aerial Planner railways, Fresnel water reflections, dusk shadows, and accessibility controls."
+                  kicker="GALLERY · 20 IN-GAME SCREENSHOTS"
+                  titleA="Every angle of the valley,"
+                  titleB="from the kerb to the clouds."
+                  lead="Click any screenshot to see it full size: driving, the phone, the Founder's Lodge, the railway from above, water, shadows at dusk and the accessibility settings."
                   hue="gold"
                 />
               </Reveal>
