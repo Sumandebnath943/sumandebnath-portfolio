@@ -378,16 +378,24 @@ export default function PixelvilleNextDimensionPage() {
                 ]}
               />
 
-              <div className="mb-5 pvnd-rise">
-                <DimensionWordmark />
+              <div className="mb-7 pvnd-rise">
+                <Image
+                  src="/pixelville-nd/pixelville-next-dimension-logo.webp"
+                  alt="PixelVille: Next Dimension logo, a first-person 3D village simulation and exploration game by Suman Debnath"
+                  width={1400}
+                  height={274}
+                  priority
+                  sizes="(min-width: 768px) 760px, 92vw"
+                  className="w-full max-w-[560px] sm:max-w-[680px] md:max-w-[760px] h-auto mx-auto drop-shadow-[0_8px_48px_rgba(0,0,0,0.65)]"
+                />
               </div>
 
               <h1
                 className="font-syne font-extrabold text-[2.5rem] sm:text-6xl md:text-[4.6rem] leading-[0.98] tracking-[-0.03em] max-w-4xl mx-auto text-balance pvnd-rise"
                 style={{ color: ND.snow, textShadow: "0 4px 40px rgba(0,0,0,0.6)" }}
               >
-                PixelVille: Next Dimension
-                <span className="block mt-3 text-[1.5rem] sm:text-[2.1rem] md:text-[2.6rem] leading-[1.1] tracking-[-0.02em]">
+                <span className="sr-only">PixelVille: Next Dimension: </span>
+                <span className="block text-[1.5rem] sm:text-[2.1rem] md:text-[2.6rem] leading-[1.1] tracking-[-0.02em]">
                   <span style={{ color: ND.gold }}>The first-person village sim</span>{" "}
                   <span style={{ color: ND.violet }}>that lives without you.</span>
                 </span>
