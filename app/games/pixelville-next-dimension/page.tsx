@@ -339,13 +339,13 @@ export default function PixelvilleNextDimensionPage() {
         {/* overflow-x-clip keeps sticky children alive (AGENTS.md Rule 3) */}
         <main className="relative overflow-x-clip">
           {/* ═══════════════════════ HERO ═══════════════════════ */}
-          <section className="relative min-h-[92vh] flex items-end pt-28 pb-14 px-5 sm:px-8">
+          <section className="relative min-h-[92vh] flex items-center pt-28 pb-16 px-5 sm:px-8">
             <HeroLock />
 
             {/* Full-bleed key art — the village itself is the hero */}
             <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
               <Image
-                src={IMG.foliage.src}
+                src="/pixelville-nd/keyart.webp"
                 alt=""
                 fill
                 priority
@@ -355,20 +355,21 @@ export default function PixelvilleNextDimensionPage() {
               <div
                 className="absolute inset-0"
                 style={{
-                  background: `linear-gradient(180deg, rgba(5,8,15,0.78) 0%, rgba(5,8,15,0.25) 32%, rgba(5,8,15,0.55) 62%, ${ND.night} 100%)`,
+                  background: `linear-gradient(180deg, rgba(5,8,15,0.72) 0%, rgba(5,8,15,0.35) 30%, rgba(5,8,15,0.55) 70%, ${ND.night} 100%)`,
                 }}
               />
               <div
                 className="absolute inset-0"
                 style={{
                   background:
-                    "linear-gradient(90deg, rgba(5,8,15,0.82) 0%, rgba(5,8,15,0.45) 42%, transparent 72%), radial-gradient(ellipse 60% 50% at 18% 85%, rgba(165,139,255,0.22), transparent 70%)",
+                    "radial-gradient(ellipse 62% 58% at 50% 52%, rgba(5,8,15,0.72), rgba(5,8,15,0.35) 60%, transparent 85%), radial-gradient(ellipse 60% 40% at 50% 100%, rgba(165,139,255,0.22), transparent 70%)",
                 }}
               />
             </div>
 
-            <div className="relative w-full max-w-6xl mx-auto">
+            <div className="relative w-full max-w-6xl mx-auto text-center">
               <Breadcrumbs
+                align="center"
                 className="mb-6"
                 trail={[
                   { label: "Portfolio", href: "/projects" },
@@ -382,7 +383,7 @@ export default function PixelvilleNextDimensionPage() {
               </div>
 
               <h1
-                className="font-syne font-extrabold text-[2.5rem] sm:text-6xl md:text-[4.6rem] leading-[0.98] tracking-[-0.03em] max-w-4xl text-balance pvnd-rise"
+                className="font-syne font-extrabold text-[2.5rem] sm:text-6xl md:text-[4.6rem] leading-[0.98] tracking-[-0.03em] max-w-4xl mx-auto text-balance pvnd-rise"
                 style={{ color: ND.snow, textShadow: "0 4px 40px rgba(0,0,0,0.6)" }}
               >
                 PixelVille: Next Dimension
@@ -393,7 +394,7 @@ export default function PixelvilleNextDimensionPage() {
               </h1>
 
               <p
-                className="font-manrope text-[15.5px] sm:text-[17px] leading-[1.7] max-w-2xl mt-6 mb-7"
+                className="font-manrope text-[15.5px] sm:text-[17px] leading-[1.7] max-w-2xl mx-auto mt-6 mb-7"
                 style={{ color: "rgba(237,241,250,0.86)" }}
               >
                 Build the town from the sky like a city builder. Press{" "}
@@ -406,7 +407,7 @@ export default function PixelvilleNextDimensionPage() {
                 and drop onto its pavement like an open-world game: drive, work a shift, get chased. Ignore it, and the villagers vote, save up and build the hospital themselves.
               </p>
 
-              <div className="flex flex-wrap items-center gap-3.5 mb-7">
+              <div className="flex flex-wrap items-center justify-center gap-3.5 mb-7">
                 <a
                   href={LINKS.live}
                   target="_blank"
@@ -438,7 +439,7 @@ export default function PixelvilleNextDimensionPage() {
               </div>
 
               <div
-                className="inline-flex flex-wrap items-center gap-x-3 gap-y-1 font-dmmono text-[11px] px-4 py-1.5 rounded-full"
+                className="inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 font-dmmono text-[11px] px-4 py-1.5 rounded-full"
                 style={{ background: "rgba(5,8,15,0.6)", border: `1px solid ${ND.line}`, color: ND.muted, backdropFilter: "blur(8px)" }}
               >
                 <span>
@@ -582,7 +583,7 @@ export default function PixelvilleNextDimensionPage() {
                 </figure>
 
                 <div
-                  className="md:col-span-5 rounded-2xl p-6 flex flex-col justify-between"
+                  className="md:col-span-5 rounded-2xl p-6 flex flex-col justify-center gap-4"
                   style={{ background: ND.panel, border: `1px solid ${ND.line}` }}
                 >
                   <div>
@@ -756,7 +757,7 @@ export default function PixelvilleNextDimensionPage() {
                   return (
                     <div
                       key={p.title}
-                      className="rounded-2xl p-5 flex flex-col justify-between"
+                      className="rounded-2xl p-5 flex flex-col justify-center gap-4"
                       style={{ background: ND.panel, border: `1px solid ${ND.line}` }}
                     >
                       <div>
@@ -798,7 +799,7 @@ export default function PixelvilleNextDimensionPage() {
               {/* Guardrailed Groq AI Chat + 8 Lifestyles */}
               <div className="grid lg:grid-cols-12 gap-5 mt-7">
                 <div
-                  className="lg:col-span-6 rounded-2xl p-6 flex flex-col justify-between"
+                  className="lg:col-span-6 rounded-2xl p-6 flex flex-col justify-center gap-4"
                   style={{ background: ND.panel, border: `1px solid ${ND.line}` }}
                 >
                   <div>
@@ -919,7 +920,7 @@ export default function PixelvilleNextDimensionPage() {
               <div className="grid lg:grid-cols-12 gap-5 mt-6 items-stretch">
                 {/* Wasted screenshot + Busted/Wasted fairness rules */}
                 <figure
-                  className="lg:col-span-7 rounded-2xl overflow-hidden flex flex-col justify-between"
+                  className="lg:col-span-7 rounded-2xl overflow-hidden flex flex-col [&>img]:grow [&>img]:object-cover"
                   style={{ background: ND.panel, border: `1px solid ${ND.line}` }}
                 >
                   <Image
@@ -942,7 +943,7 @@ export default function PixelvilleNextDimensionPage() {
 
                 {/* Fleet, Showrooms, Fuel, Damage & Parking Wardens */}
                 <div
-                  className="lg:col-span-5 rounded-2xl p-6 flex flex-col justify-between"
+                  className="lg:col-span-5 rounded-2xl p-6 flex flex-col justify-center gap-4"
                   style={{ background: ND.panel, border: `1px solid ${ND.line}` }}
                 >
                   <div>
@@ -1042,7 +1043,7 @@ export default function PixelvilleNextDimensionPage() {
                     return (
                       <div
                         key={m.archetype}
-                        className="rounded-2xl p-4 flex flex-col justify-between"
+                        className="rounded-2xl p-4 flex flex-col justify-center gap-4"
                         style={{ background: ND.nightDeep, border: `1px solid ${ND.line}` }}
                       >
                         <div>
@@ -1125,7 +1126,7 @@ export default function PixelvilleNextDimensionPage() {
               {/* 81 Enterable Interiors + Hospital Shot + 11 PVTel Apps */}
               <div className="grid lg:grid-cols-12 gap-5 mt-12">
                 <div
-                  className="lg:col-span-6 rounded-2xl overflow-hidden flex flex-col justify-between"
+                  className="lg:col-span-6 rounded-2xl overflow-hidden flex flex-col [&>img]:grow [&>img]:object-cover"
                   style={{ background: ND.panel, border: `1px solid ${ND.line}` }}
                 >
                   <Image
@@ -1182,7 +1183,7 @@ export default function PixelvilleNextDimensionPage() {
               {/* Swept-Path Traffic, Parking & 6 Off-Map Destination Cities */}
               <div className="grid lg:grid-cols-12 gap-5 mt-6">
                 <div
-                  className="lg:col-span-5 rounded-2xl p-6 flex flex-col justify-between"
+                  className="lg:col-span-5 rounded-2xl p-6 flex flex-col justify-center gap-4"
                   style={{ background: ND.panel, border: `1px solid ${ND.line}` }}
                 >
                   <div>
@@ -1288,7 +1289,7 @@ export default function PixelvilleNextDimensionPage() {
                 {[IMG.water, IMG.shadows, IMG.night].map((shot) => (
                   <figure
                     key={shot.id}
-                    className="rounded-2xl overflow-hidden flex flex-col justify-between"
+                    className="rounded-2xl overflow-hidden flex flex-col [&>img]:grow [&>img]:object-cover"
                     style={{ background: ND.panel, border: `1px solid ${ND.line}` }}
                   >
                     <Image
@@ -1520,7 +1521,7 @@ export default function PixelvilleNextDimensionPage() {
                 {[IMG.qualityTiers, IMG.gfxSettings, IMG.villageSettings].map((s) => (
                   <figure
                     key={s.id}
-                    className="rounded-2xl p-4 flex flex-col justify-between"
+                    className="rounded-2xl p-4 flex flex-col justify-center gap-4"
                     style={{ background: ND.panel, border: `1px solid ${ND.line}` }}
                   >
                     <div
