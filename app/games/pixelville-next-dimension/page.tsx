@@ -222,6 +222,40 @@ const KEYFRAMES = `
   to { transform: scale(1); }
 }
 .pvnd-kenburns { animation: pvnd-kenburns 14s ease-out backwards; }
+/* Each chapter gets its own accent so 26,000 px of navy doesn't read as one box */
+#compare { --acc: #F0C27A; }
+#dual-mode { --acc: #A58BFF; }
+#causality { --acc: #FF9A5C; }
+#living-minds { --acc: #F27BBD; }
+#street-sandbox { --acc: #FF6B6B; }
+#economy-democracy { --acc: #4ADE9A; }
+#jobs-transit { --acc: #5CC8FF; }
+#living-world { --acc: #8BDB6A; }
+#evolution { --acc: #F0C27A; }
+#systems-ledger { --acc: #6EE7E7; }
+#gallery { --acc: #F0C27A; }
+main > section[id] {
+  position: relative;
+  background-image:
+    radial-gradient(ellipse 55% 380px at 0% 0%, color-mix(in srgb, var(--acc) 13%, transparent), transparent 75%),
+    radial-gradient(ellipse 45% 320px at 100% 100%, color-mix(in srgb, var(--acc) 7%, transparent), transparent 75%);
+}
+main > section[id]::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: -1px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--acc) 30%, transparent 80%);
+  opacity: 0.55;
+}
+main > section[id]:nth-of-type(even) { background-color: rgba(255, 255, 255, 0.012); }
+main > section[id] :is(.rounded-2xl, .rounded-3xl):not(figure):not(:has(> img)) {
+  background-image: linear-gradient(165deg, color-mix(in srgb, var(--acc) 9%, transparent), transparent 55%) !important;
+  border-top-color: color-mix(in srgb, var(--acc) 50%, transparent) !important;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+main > section[id] :is(.rounded-2xl, .rounded-3xl):not(figure):hover {
+  border-color: color-mix(in srgb, var(--acc) 45%, transparent) !important;
+}
 @media (prefers-reduced-motion: reduce) {
   .pvnd-rise, .pvnd-ring, .pvnd-kenburns { animation: none !important; }
 }

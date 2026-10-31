@@ -2,6 +2,7 @@ import { SITE_URL, projects } from "@/lib/projects";
 import { archiveProjects } from "@/lib/archive-projects";
 import { identity, summary, targetRoles } from "@/lib/resume";
 import { allFaqs } from "@/lib/faqs";
+import { faqsForPage } from "@/lib/page-faqs";
 import { dossierPages, GROUP_LABELS, PAGES, type PageGroup } from "@/lib/pages";
 import { allPosts, notebookModified, postUrl } from "@/lib/notebook";
 import { FALLBACK_DATE } from "@/lib/route-dates";
@@ -123,7 +124,12 @@ export function llmsTxt(): string {
     `- [${p.title}](${abs(postUrl(p.slug))}) — published ${p.published}. ${p.answer}`,
   ]);
 
-  const faqLines = allFaqs.flatMap((f) => [`**Q: ${f.q}**`, "", `A: ${f.a}`, ""]);
+  // The site FAQ is about the person, so it never answers the game queries
+  // PixelVille: Next Dimension is meant to win ("a game like GTA where you
+  // build your own village"). Its definition and that question ride along here.
+  const ndFaqs = faqsForPage("/games/pixelville-next-dimension");
+  const gameFaqs = [ndFaqs[0], ndFaqs[ndFaqs.length - 1]].filter(Boolean);
+  const faqLines = [...allFaqs, ...gameFaqs].flatMap((f) => [`**Q: ${f.q}**`, "", `A: ${f.a}`, ""]);
 
   const body = `# Suman Debnath
 
