@@ -256,6 +256,10 @@ main > section[id] :is(.rounded-2xl, .rounded-3xl):not(figure):not(:has(> img)) 
 main > section[id] :is(.rounded-2xl, .rounded-3xl):not(figure):hover {
   border-color: color-mix(in srgb, var(--acc) 45%, transparent) !important;
 }
+.pvnd-ledger > summary { list-style: none; }
+.pvnd-ledger > summary::-webkit-details-marker { display: none; }
+.pvnd-ledger-icon { transition: transform 0.25s ease; }
+.pvnd-ledger[open] .pvnd-ledger-icon { transform: rotate(45deg); }
 @media (prefers-reduced-motion: reduce) {
   .pvnd-rise, .pvnd-ring, .pvnd-kenburns { animation: none !important; }
 }
@@ -1430,6 +1434,31 @@ export default function PixelvilleNextDimensionPage() {
                 />
               </Reveal>
 
+              {/* Folded so the ledger stops dominating the page; it stays in the
+                  server HTML, so crawlers and AI engines still read every line. */}
+              <details className="pvnd-ledger rounded-3xl" style={{ border: `1px solid ${ND.line}` }}>
+                <summary
+                  className="flex items-center justify-between gap-4 px-6 py-5 cursor-pointer select-none rounded-3xl"
+                  style={{ background: ND.panel }}
+                >
+                  <span>
+                    <span className="block font-syne font-bold text-xl sm:text-2xl" style={{ color: ND.snow }}>
+                      See every system, big or small
+                    </span>
+                    <span className="block font-manrope text-[13.5px] mt-1" style={{ color: ND.muted }}>
+                      Settings, performance, accessibility and the full A–Z ledger
+                    </span>
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className="pvnd-ledger-icon shrink-0 w-10 h-10 rounded-full grid place-items-center font-syne font-bold text-xl"
+                    style={{ background: ND.emerald, color: ND.nightDeep }}
+                  >
+                    +
+                  </span>
+                </summary>
+                <div className="px-4 sm:px-6 pt-8 pb-6">
+
               {/* Settings & Resilience Visual Strip */}
               <div className="grid sm:grid-cols-3 gap-4 mb-10">
                 {[IMG.qualityTiers, IMG.gfxSettings, IMG.villageSettings].map((s) => (
@@ -1512,6 +1541,8 @@ export default function PixelvilleNextDimensionPage() {
                   </div>
                 ))}
               </div>
+                </div>
+              </details>
             </div>
           </section>
 
