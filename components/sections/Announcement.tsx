@@ -73,6 +73,12 @@ const announcements: Announcement[] = [
     color: "#34D399",
   },
   {
+    title: "PixelVille: Next Dimension",
+    desc: "Build a 3D village, then walk around inside it.",
+    href: "/games/pixelville-next-dimension",
+    color: "#F0C27A",
+  },
+  {
     title: "PixelVille",
     desc: "A pixel village that elects its own mayors.",
     href: "/games/pixelville",
