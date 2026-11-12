@@ -1,0 +1,1385 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   /experience — Nine Years of Running the Floor
+   Editorial Operations Dossier & Production Floor Control Room
+   Palette: Obsidian (#080706), Editorial Gold (#F59E0B), Warm Paper (#F2ECE0),
+            After-Hours Ember (#120B07), Signal Emerald (#10B981)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.ex-root {
+  --ex-obsidian: #080706;
+  --ex-obsidian-elev: #100E0B;
+  --ex-obsidian-card: #15120E;
+  --ex-paper: #F2ECE0;
+  --ex-paper-card: #FAF7F2;
+  --ex-paper-elev: #E8DFCF;
+  --ex-ink: #14120E;
+  --ex-ink-body: #2B251D;
+  --ex-ink-muted: #564E43;
+  --ex-cream: #F5F0E6;
+  --ex-cream-body: rgba(245, 240, 230, 0.86);
+  --ex-cream-muted: rgba(245, 240, 230, 0.68);
+  --ex-amber: #F59E0B;
+  --ex-amber-bright: #FBBF24;
+  --ex-amber-deep: #B45309;
+  --ex-copper: #EA580C;
+  --ex-emerald: #10B981;
+  --ex-rule-dark: rgba(245, 240, 230, 0.12);
+  --ex-rule-paper: rgba(20, 18, 14, 0.14);
+
+  background-color: var(--ex-obsidian);
+  color: var(--ex-cream);
+  font-family: var(--font-manrope), system-ui, sans-serif;
+  position: relative;
+  overflow-x: clip;
+}
+
+/* ── Shared Layout Container ─────────────────────────────────────────────── */
+.ex-container {
+  width: 100%;
+  max-width: 1360px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(1.25rem, 4vw, 3.5rem);
+  padding-right: clamp(1.25rem, 4vw, 3.5rem);
+}
+
+/* ── 1. Masthead / Command Floor Hero (Obsidian Register) ────────────────── */
+.ex-hero {
+  position: relative;
+  background:
+    radial-gradient(ellipse 80% 55% at 78% 18%, rgba(245, 158, 11, 0.14), transparent 65%),
+    radial-gradient(ellipse 60% 50% at 15% 80%, rgba(234, 88, 12, 0.08), transparent 65%),
+    linear-gradient(180deg, #080706 0%, #0D0B08 72%, #080706 100%);
+  padding-top: clamp(7.25rem, 10vw, 9rem);
+  padding-bottom: clamp(4rem, 7vw, 6.5rem);
+  border-bottom: 1px solid var(--ex-rule-dark);
+}
+
+@media (max-height: 760px) {
+  .ex-hero {
+    padding-top: 7.25rem;
+  }
+}
+
+.ex-hero-grid-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(245, 240, 230, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(245, 240, 230, 0.03) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 35%, #000 35%, transparent 100%);
+}
+
+.ex-hero-topbar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.5rem;
+  margin-bottom: clamp(1.75rem, 3vw, 2.75rem);
+  border-bottom: 1px solid var(--ex-rule-dark);
+}
+
+.ex-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.32);
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ex-amber-bright);
+}
+
+.ex-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--ex-amber-bright);
+  box-shadow: 0 0 10px var(--ex-amber);
+}
+
+.ex-hero-main {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2.5rem, 4vw, 3.75rem);
+  align-items: start;
+}
+
+@media (min-width: 1080px) {
+  .ex-hero-main {
+    grid-template-columns: minmax(0, 1.28fr) minmax(380px, 0.88fr);
+  }
+}
+
+/* Literal AEO Question H1 Lockup */
+.ex-query-frame {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.45rem 0.9rem;
+  margin-bottom: 1.25rem;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(245, 240, 230, 0.16);
+  border-left: 3px solid var(--ex-amber);
+  border-radius: 4px;
+}
+
+.ex-query-tag {
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ex-amber-bright);
+  padding-right: 0.6rem;
+  border-right: 1px solid rgba(245, 240, 230, 0.18);
+}
+
+.ex-h1-question {
+  font-family: var(--font-dmmono), monospace;
+  font-size: clamp(0.78rem, 1.05vw, 0.92rem);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--ex-cream);
+  margin: 0;
+  line-height: 1.45;
+}
+
+/* Two-Register Monumental Display Headline */
+.ex-display-headline {
+  font-size: clamp(2.5rem, 5.4vw, 4.85rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  color: var(--ex-cream);
+  margin: 0 0 1.75rem 0;
+}
+
+.ex-display-sans {
+  display: block;
+  font-family: var(--font-manrope), sans-serif;
+  font-weight: 800;
+}
+
+.ex-display-serif {
+  display: block;
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--ex-amber-bright);
+  margin-top: 0.12em;
+}
+
+/* Extractable Answer Block (.ex-answer) */
+.ex-answer-card {
+  position: relative;
+  padding: clamp(1.25rem, 2.2vw, 1.75rem) clamp(1.25rem, 2.4vw, 2rem);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.09) 0%, rgba(21, 18, 14, 0.92) 48%, rgba(16, 14, 11, 0.96) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  border-left: 4px solid var(--ex-amber);
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 22px 50px -24px rgba(0, 0, 0, 0.75);
+}
+
+.ex-answer-kicker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ex-amber-bright);
+  margin-bottom: 0.65rem;
+}
+
+.ex-answer {
+  font-size: clamp(1rem, 1.2vw, 1.14rem);
+  line-height: 1.68;
+  color: var(--ex-cream);
+  font-weight: 500;
+  margin: 0;
+}
+
+.ex-standfirst {
+  font-size: clamp(0.98rem, 1.1vw, 1.08rem);
+  line-height: 1.72;
+  color: var(--ex-cream-body);
+  max-width: 68ch;
+  margin: 0 0 1.75rem 0;
+}
+
+.ex-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.ex-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1.35rem;
+  border-radius: 6px;
+  background: var(--ex-amber);
+  color: #0E0B07;
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ex-btn-primary:hover {
+  background: var(--ex-amber-bright);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 26px -8px rgba(245, 158, 11, 0.55);
+}
+
+.ex-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1.25rem;
+  border-radius: 6px;
+  background: rgba(245, 240, 230, 0.05);
+  border: 1px solid rgba(245, 240, 230, 0.2);
+  color: var(--ex-cream);
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.76rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.ex-btn-secondary:hover {
+  border-color: var(--ex-amber-bright);
+  background: rgba(245, 158, 11, 0.08);
+}
+
+/* Right Column: Live Floor Telemetry Console */
+.ex-console {
+  background: linear-gradient(180deg, rgba(24, 20, 15, 0.95) 0%, rgba(14, 12, 9, 0.98) 100%);
+  border: 1px solid rgba(245, 240, 230, 0.16);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow:
+    0 28px 64px -20px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.ex-console-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.2rem;
+  background: rgba(245, 240, 230, 0.04);
+  border-bottom: 1px solid rgba(245, 240, 230, 0.12);
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ex-cream-muted);
+}
+
+.ex-console-dots {
+  display: flex;
+  gap: 0.38rem;
+}
+
+.ex-console-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(245, 240, 230, 0.22);
+}
+
+.ex-console-dots span:first-child {
+  background: var(--ex-amber);
+}
+
+.ex-console-quad {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-bottom: 1px solid rgba(245, 240, 230, 0.12);
+}
+
+.ex-console-stat {
+  padding: 1.15rem 1.2rem;
+  border-right: 1px solid rgba(245, 240, 230, 0.1);
+  border-bottom: 1px solid rgba(245, 240, 230, 0.1);
+}
+
+.ex-console-stat:nth-child(2n) {
+  border-right: none;
+}
+
+.ex-console-stat:nth-child(n+3) {
+  border-bottom: none;
+}
+
+.ex-console-num {
+  font-family: var(--font-anton), Impact, sans-serif;
+  font-size: clamp(1.85rem, 2.6vw, 2.45rem);
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: var(--ex-amber-bright);
+  margin-bottom: 0.35rem;
+}
+
+.ex-console-label {
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ex-cream);
+  margin-bottom: 0.2rem;
+}
+
+.ex-console-sub {
+  font-size: 0.76rem;
+  line-height: 1.4;
+  color: var(--ex-cream-muted);
+}
+
+.ex-console-index {
+  padding: 1.1rem 1.2rem 1.25rem;
+}
+
+.ex-console-index-title {
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ex-cream-muted);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ex-console-links {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.35rem;
+}
+
+.ex-console-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.48rem 0.68rem;
+  border-radius: 5px;
+  background: rgba(245, 240, 230, 0.03);
+  border: 1px solid rgba(245, 240, 230, 0.08);
+  text-decoration: none;
+  color: var(--ex-cream);
+  font-size: 0.8rem;
+  transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.ex-console-link:hover {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.4);
+  transform: translateX(3px);
+}
+
+.ex-console-link-idx {
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.7rem;
+  color: var(--ex-amber-bright);
+  flex-shrink: 0;
+}
+
+.ex-console-link-text {
+  flex: 1;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ex-console-link-arrow {
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.75rem;
+  color: var(--ex-cream-muted);
+}
+
+/* Visible Disambiguation Strip */
+.ex-disambiguation {
+  position: relative;
+  z-index: 2;
+  margin-top: clamp(2.5rem, 4.5vw, 3.75rem);
+  padding: 1.15rem 1.4rem;
+  background: rgba(245, 240, 230, 0.03);
+  border: 1px solid rgba(245, 240, 230, 0.14);
+  border-radius: 6px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .ex-disambiguation {
+    grid-template-columns: 220px 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.ex-disambig-badge {
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ex-amber-bright);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.ex-disambig-badge strong {
+  color: var(--ex-cream);
+  font-size: 0.76rem;
+}
+
+.ex-disambig-copy {
+  font-size: 0.86rem;
+  line-height: 1.6;
+  color: var(--ex-cream-body);
+  margin: 0;
+}
+
+.ex-disambig-copy span {
+  color: var(--ex-cream-muted);
+}
+
+/* ── 2. Section 01: Career-Wide Operations Ledger (Warm Paper Register) ─── */
+.ex-ledger-section {
+  background-color: var(--ex-paper);
+  color: var(--ex-ink);
+  padding: clamp(4.5rem, 8vw, 7.5rem) 0;
+  border-bottom: 1px solid var(--ex-rule-paper);
+  position: relative;
+}
+
+.ex-section-header {
+  margin-bottom: clamp(2.5rem, 4.5vw, 3.75rem);
+  max-width: 860px;
+}
+
+.ex-kicker-paper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ex-amber-deep);
+  margin-bottom: 0.85rem;
+  font-weight: 600;
+}
+
+.ex-kicker-dark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ex-amber-bright);
+  margin-bottom: 0.85rem;
+}
+
+.ex-h2-paper {
+  font-size: clamp(1.9rem, 3.6vw, 3.1rem);
+  line-height: 1.08;
+  letter-spacing: -0.028em;
+  color: var(--ex-ink);
+  font-weight: 800;
+  margin: 0 0 1rem 0;
+}
+
+.ex-h2-paper em,
+.ex-h2-dark em {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.ex-h2-paper em {
+  color: var(--ex-amber-deep);
+}
+
+.ex-h2-dark {
+  font-size: clamp(1.9rem, 3.6vw, 3.1rem);
+  line-height: 1.08;
+  letter-spacing: -0.028em;
+  color: var(--ex-cream);
+  font-weight: 800;
+  margin: 0 0 1rem 0;
+}
+
+.ex-h2-dark em {
+  color: var(--ex-amber-bright);
+}
+
+.ex-lead-paper {
+  font-size: clamp(1rem, 1.15vw, 1.12rem);
+  line-height: 1.68;
+  color: var(--ex-ink-body);
+  margin: 0;
+}
+
+.ex-lead-dark {
+  font-size: clamp(1rem, 1.15vw, 1.12rem);
+  line-height: 1.68;
+  color: var(--ex-cream-body);
+  margin: 0;
+}
+
+/* Archival Ledger Table + Visual Scale Gauge */
+.ex-ledger-frame {
+  background: var(--ex-paper-card);
+  border: 1px solid rgba(20, 18, 14, 0.18);
+  border-radius: 10px;
+  box-shadow: 0 20px 45px -24px rgba(20, 18, 14, 0.18);
+  overflow: hidden;
+}
+
+.ex-ledger-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.95rem 1.5rem;
+  background: var(--ex-paper-elev);
+  border-bottom: 1px solid rgba(20, 18, 14, 0.14);
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ex-ink-muted);
+}
+
+.ex-ledger-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.ex-ledger-table thead th {
+  padding: 0.9rem 1.35rem;
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ex-ink-muted);
+  border-bottom: 2px solid var(--ex-ink);
+  background: rgba(20, 18, 14, 0.02);
+}
+
+.ex-ledger-table tbody tr {
+  border-bottom: 1px solid rgba(20, 18, 14, 0.12);
+  transition: background-color 0.18s ease;
+}
+
+.ex-ledger-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.ex-ledger-table tbody tr:hover {
+  background-color: rgba(245, 158, 11, 0.08);
+}
+
+.ex-ledger-table td {
+  padding: 1.25rem 1.35rem;
+  vertical-align: top;
+}
+
+.ex-ledger-metric-cell {
+  width: 170px;
+  white-space: nowrap;
+}
+
+.ex-ledger-metric {
+  font-family: var(--font-anton), Impact, sans-serif;
+  font-size: clamp(1.9rem, 2.8vw, 2.55rem);
+  line-height: 1;
+  color: var(--ex-ink);
+  display: block;
+}
+
+.ex-ledger-bar-track {
+  margin-top: 0.55rem;
+  height: 5px;
+  width: 100%;
+  max-width: 120px;
+  background: rgba(20, 18, 14, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.ex-ledger-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--ex-amber-deep), var(--ex-amber));
+  border-radius: 999px;
+}
+
+.ex-ledger-label-cell {
+  width: 240px;
+}
+
+.ex-ledger-label {
+  font-weight: 800;
+  font-size: 1.02rem;
+  color: var(--ex-ink);
+  line-height: 1.35;
+}
+
+.ex-ledger-scope {
+  font-size: 0.94rem;
+  line-height: 1.62;
+  color: var(--ex-ink-body);
+  max-width: 58ch;
+}
+
+.ex-ledger-where-cell {
+  width: 250px;
+}
+
+.ex-ledger-where-pill {
+  display: inline-block;
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: var(--ex-ink);
+  background: rgba(20, 18, 14, 0.06);
+  border: 1px solid rgba(20, 18, 14, 0.15);
+  padding: 0.35rem 0.65rem;
+  border-radius: 4px;
+}
+
+@media (max-width: 920px) {
+  .ex-ledger-table thead {
+    display: none;
+  }
+  .ex-ledger-table,
+  .ex-ledger-table tbody,
+  .ex-ledger-table tr,
+  .ex-ledger-table td {
+    display: block;
+    width: 100%;
+  }
+  .ex-ledger-table tr {
+    padding: 1.15rem 1.2rem;
+  }
+  .ex-ledger-table td {
+    padding: 0.3rem 0;
+  }
+  .ex-ledger-metric-cell,
+  .ex-ledger-label-cell,
+  .ex-ledger-where-cell {
+    width: 100%;
+  }
+  .ex-ledger-bar-track {
+    max-width: 200px;
+    margin-bottom: 0.35rem;
+  }
+}
+
+/* ── 3. Section 02: Interactive Cross-Company Attribution Matrix ─────────── */
+.ex-matrix-section {
+  background:
+    radial-gradient(ellipse 70% 50% at 20% 10%, rgba(245, 158, 11, 0.09), transparent 65%),
+    linear-gradient(180deg, #0D0B09 0%, #080706 100%);
+  padding: clamp(4.5rem, 8vw, 7rem) 0;
+  border-bottom: 1px solid var(--ex-rule-dark);
+}
+
+.ex-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+}
+
+.ex-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.65rem 1.05rem;
+  border-radius: 6px;
+  border: 1px solid rgba(245, 240, 230, 0.16);
+  background: rgba(245, 240, 230, 0.04);
+  color: var(--ex-cream);
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.ex-filter-btn:hover {
+  border-color: rgba(245, 158, 11, 0.5);
+  background: rgba(245, 158, 11, 0.09);
+}
+
+.ex-filter-btn[aria-pressed="true"] {
+  background: var(--ex-amber);
+  border-color: var(--ex-amber-bright);
+  color: #0D0A06;
+  font-weight: 700;
+  box-shadow: 0 10px 28px -10px rgba(245, 158, 11, 0.65);
+}
+
+.ex-filter-count {
+  padding: 0.12rem 0.42rem;
+  border-radius: 999px;
+  font-size: 0.66rem;
+  background: rgba(0, 0, 0, 0.22);
+  color: inherit;
+}
+
+/* Company Dossier Cards */
+.ex-company-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 1.15rem;
+}
+
+.ex-company-card {
+  position: relative;
+  padding: 1.5rem;
+  border-radius: 8px;
+  background: var(--ex-obsidian-card);
+  border: 1px solid rgba(245, 240, 230, 0.13);
+  transition: border-color 0.22s ease, opacity 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ex-company-card.is-highlighted {
+  border-color: var(--ex-amber);
+  box-shadow: 0 18px 42px -18px rgba(245, 158, 11, 0.32);
+}
+
+.ex-company-card.is-dimmed {
+  opacity: 0.48;
+}
+
+.ex-company-period {
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ex-amber-bright);
+  margin-bottom: 0.45rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.ex-company-org {
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: var(--ex-cream);
+  line-height: 1.3;
+  margin: 0 0 0.25rem 0;
+}
+
+.ex-company-role {
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.76rem;
+  color: var(--ex-cream-muted);
+  margin-bottom: 0.9rem;
+}
+
+.ex-company-scope {
+  font-size: 0.88rem;
+  line-height: 1.62;
+  color: var(--ex-cream-body);
+  margin: 0 0 1.15rem 0;
+}
+
+.ex-company-pillars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(245, 240, 230, 0.1);
+}
+
+.ex-company-pillar-chip {
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  padding: 0.25rem 0.55rem;
+  border-radius: 4px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: var(--ex-amber-bright);
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.ex-company-pillar-chip:hover {
+  background: rgba(245, 158, 11, 0.25);
+}
+
+/* ── 4. Section 03: Functional Pillars (Sticky Rail + Dossier Stack) ─────── */
+/* IMPORTANT: Zero overflow:hidden on .ex-pillars-section or .ex-pillars-layout
+   so position:sticky works reliably (PROJECT_BIBLE.md Rule #3) */
+.ex-pillars-section {
+  background-color: var(--ex-obsidian);
+  padding: clamp(4.5rem, 8vw, 7.5rem) 0;
+  border-bottom: 1px solid var(--ex-rule-dark);
+  position: relative;
+}
+
+.ex-pillars-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  align-items: start;
+}
+
+@media (min-width: 1080px) {
+  .ex-pillars-layout {
+    grid-template-columns: 290px minmax(0, 1fr);
+  }
+}
+
+.ex-sticky-rail {
+  position: sticky;
+  top: 6.25rem;
+  background: var(--ex-obsidian-elev);
+  border: 1px solid rgba(245, 240, 230, 0.14);
+  border-radius: 8px;
+  padding: 1.15rem;
+}
+
+@media (max-width: 1079px) {
+  .ex-sticky-rail {
+    position: relative;
+    top: 0;
+  }
+}
+
+.ex-rail-title {
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ex-amber-bright);
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(245, 240, 230, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ex-rail-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.ex-rail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: 5px;
+  text-decoration: none;
+  color: var(--ex-cream-muted);
+  font-size: 0.8rem;
+  border-left: 2px solid transparent;
+  transition: all 0.18s ease;
+}
+
+.ex-rail-item:hover {
+  color: var(--ex-cream);
+  background: rgba(245, 240, 230, 0.04);
+}
+
+.ex-rail-item.is-active {
+  color: var(--ex-cream);
+  background: rgba(245, 158, 11, 0.12);
+  border-left-color: var(--ex-amber);
+  font-weight: 700;
+}
+
+.ex-rail-item.is-dimmed {
+  opacity: 0.42;
+}
+
+.ex-rail-idx {
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.7rem;
+  color: var(--ex-amber-bright);
+  flex-shrink: 0;
+}
+
+/* Pillar Dossier Article Card */
+.ex-pillars-stack {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2.5rem, 4.5vw, 3.75rem);
+}
+
+.ex-pillar-card {
+  scroll-margin-top: 6.5rem;
+  background: linear-gradient(180deg, #13100C 0%, #0D0B08 100%);
+  border: 1px solid rgba(245, 240, 230, 0.15);
+  border-radius: 12px;
+  padding: clamp(1.5rem, 3.2vw, 2.75rem);
+  position: relative;
+  transition: border-color 0.25s ease, opacity 0.25s ease, box-shadow 0.25s ease;
+}
+
+.ex-pillar-card.is-spotlight {
+  border-color: rgba(245, 158, 11, 0.65);
+  box-shadow: 0 24px 60px -24px rgba(245, 158, 11, 0.22);
+}
+
+.ex-pillar-card.is-dimmed {
+  opacity: 0.45;
+}
+
+.ex-pillar-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  padding-bottom: 1.15rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(245, 240, 230, 0.12);
+}
+
+.ex-pillar-kicker {
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ex-amber-bright);
+}
+
+.ex-pillar-where {
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  color: var(--ex-cream);
+  background: rgba(245, 240, 230, 0.06);
+  border: 1px solid rgba(245, 240, 230, 0.16);
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+}
+
+.ex-pillar-headline-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 1.35rem;
+}
+
+@media (min-width: 768px) {
+  .ex-pillar-headline-row {
+    grid-template-columns: auto 1fr;
+    align-items: baseline;
+    gap: 1.5rem;
+  }
+}
+
+.ex-pillar-num {
+  font-family: var(--font-anton), Impact, sans-serif;
+  font-size: clamp(2.8rem, 4.5vw, 4.2rem);
+  line-height: 0.9;
+  color: rgba(245, 158, 11, 0.28);
+  user-select: none;
+}
+
+.ex-pillar-display {
+  font-size: clamp(1.65rem, 2.8vw, 2.45rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  margin: 0 0 0.45rem 0;
+}
+
+.ex-pillar-display-sans {
+  font-weight: 800;
+  color: var(--ex-cream);
+  margin-right: 0.35rem;
+}
+
+.ex-pillar-display-serif {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--ex-amber-bright);
+}
+
+/* Complete-Sentence Subheading (H2 for AEO extraction) */
+.ex-pillar-h2 {
+  font-size: clamp(1.02rem, 1.25vw, 1.18rem);
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--ex-cream);
+  margin: 0;
+  padding-left: 0.85rem;
+  border-left: 2px solid var(--ex-amber);
+}
+
+.ex-pillar-prose {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.ex-pillar-prose p {
+  font-size: clamp(0.96rem, 1.06vw, 1.05rem);
+  line-height: 1.75;
+  color: var(--ex-cream-body);
+  margin: 0;
+  max-width: 74ch;
+}
+
+/* Bespoke Schematic Diagram Frame inside each Pillar */
+.ex-schematic {
+  margin: 1.65rem 0;
+  padding: clamp(1.1rem, 2vw, 1.5rem);
+  background: rgba(8, 7, 6, 0.78);
+  border: 1px solid rgba(245, 158, 11, 0.24);
+  border-radius: 8px;
+}
+
+.ex-schematic-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px dashed rgba(245, 240, 230, 0.14);
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ex-amber-bright);
+}
+
+.ex-schematic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 0.75rem;
+}
+
+.ex-schematic-node {
+  padding: 0.85rem 1rem;
+  border-radius: 6px;
+  background: rgba(245, 240, 230, 0.035);
+  border: 1px solid rgba(245, 240, 230, 0.12);
+}
+
+.ex-schematic-node.is-accent {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.38);
+}
+
+.ex-schematic-node-kicker {
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ex-amber-bright);
+  margin-bottom: 0.25rem;
+}
+
+.ex-schematic-node-val {
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--ex-cream);
+  margin-bottom: 0.2rem;
+}
+
+.ex-schematic-node-desc {
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--ex-cream-muted);
+}
+
+/* Structured Extractable Fact List (<dl>) */
+.ex-facts-dl {
+  margin: 1.5rem 0;
+  padding: 1.15rem 1.35rem;
+  background: rgba(245, 240, 230, 0.03);
+  border: 1px solid rgba(245, 240, 230, 0.12);
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+}
+
+.ex-fact-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.25rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid rgba(245, 240, 230, 0.08);
+}
+
+.ex-fact-row:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+@media (min-width: 680px) {
+  .ex-fact-row {
+    grid-template-columns: 220px 1fr;
+    gap: 1.25rem;
+  }
+}
+
+.ex-fact-dt {
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.73rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ex-amber-bright);
+  font-weight: 600;
+}
+
+.ex-fact-dd {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.58;
+  color: var(--ex-cream);
+}
+
+/* Capability Tags */
+.ex-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 1.25rem;
+}
+
+.ex-tag {
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.69rem;
+  letter-spacing: 0.06em;
+  padding: 0.32rem 0.68rem;
+  border-radius: 4px;
+  background: rgba(245, 240, 230, 0.05);
+  border: 1px solid rgba(245, 240, 230, 0.14);
+  color: var(--ex-cream-body);
+}
+
+/* ── 5. Section 04: Pillar 08 — The Honest Postscript (2:14 AM Floor) ────── */
+.ex-postscript-section {
+  scroll-margin-top: 5rem;
+  background:
+    radial-gradient(ellipse 75% 60% at 85% 20%, rgba(234, 88, 12, 0.16), transparent 65%),
+    radial-gradient(ellipse 60% 50% at 10% 85%, rgba(245, 158, 11, 0.1), transparent 65%),
+    linear-gradient(180deg, #120B07 0%, #190F08 50%, #080706 100%);
+  padding: clamp(4.5rem, 8vw, 7.5rem) 0;
+  border-bottom: 1px solid var(--ex-rule-dark);
+  position: relative;
+}
+
+.ex-postscript-frame {
+  border: 1px solid rgba(234, 88, 12, 0.35);
+  border-radius: 12px;
+  background: rgba(15, 10, 6, 0.85);
+  padding: clamp(1.75rem, 3.8vw, 3.25rem);
+  box-shadow: 0 30px 70px -28px rgba(0, 0, 0, 0.9);
+}
+
+.ex-postscript-stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.38rem 0.85rem;
+  border-radius: 4px;
+  background: rgba(234, 88, 12, 0.16);
+  border: 1px solid rgba(234, 88, 12, 0.45);
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #FDBA74;
+  margin-bottom: 1.25rem;
+}
+
+.ex-postscript-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.1rem;
+  margin: 2rem 0;
+}
+
+.ex-postscript-card {
+  padding: 1.35rem;
+  border-radius: 8px;
+  background: rgba(245, 240, 230, 0.035);
+  border: 1px solid rgba(245, 240, 230, 0.13);
+  border-top: 3px solid var(--ex-copper);
+}
+
+.ex-postscript-card-idx {
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #FDBA74;
+  margin-bottom: 0.45rem;
+}
+
+.ex-postscript-card-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--ex-cream);
+  margin: 0 0 0.5rem 0;
+}
+
+.ex-postscript-card-text {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--ex-cream-body);
+  margin: 0;
+}
+
+.ex-postscript-quote {
+  margin: 2.25rem 0 0 0;
+  padding: 1.5rem 1.75rem;
+  border-left: 4px solid var(--ex-amber);
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.12) 0%, rgba(245, 158, 11, 0.02) 100%);
+  border-radius: 0 8px 8px 0;
+}
+
+.ex-postscript-quote p {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(1.35rem, 2.2vw, 1.85rem);
+  line-height: 1.38;
+  color: var(--ex-cream);
+  margin: 0 0 0.65rem 0;
+}
+
+.ex-postscript-quote footer {
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ex-amber-bright);
+}
+
+/* ── 6. Section 05: Verification & Bridge Strip ──────────────────────────── */
+.ex-bridge-section {
+  background: var(--ex-obsidian);
+  padding: clamp(3.5rem, 6vw, 5.5rem) 0;
+  border-bottom: 1px solid var(--ex-rule-dark);
+}
+
+.ex-bridge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-top: 1.75rem;
+}
+
+.ex-bridge-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.35rem 1.5rem;
+  border-radius: 8px;
+  background: rgba(245, 240, 230, 0.03);
+  border: 1px solid rgba(245, 240, 230, 0.14);
+  text-decoration: none;
+  color: var(--ex-cream);
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.ex-bridge-card:hover {
+  border-color: var(--ex-amber);
+  background: rgba(245, 158, 11, 0.08);
+  transform: translateY(-2px);
+}
+
+.ex-bridge-kicker {
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ex-amber-bright);
+  margin-bottom: 0.45rem;
+}
+
+.ex-bridge-title {
+  font-size: 1.12rem;
+  font-weight: 800;
+  margin: 0 0 0.35rem 0;
+}
+
+.ex-bridge-desc {
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--ex-cream-muted);
+  margin: 0 0 1rem 0;
+}
+
+.ex-bridge-cta {
+  font-family: var(--font-dmmono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ex-amber-bright);
+}
+
+/* Focus & Reduced Motion Accessibility */
+.ex-root a:focus-visible,
+.ex-root button:focus-visible {
+  outline: 2px solid var(--ex-amber-bright);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ex-btn-primary,
+  .ex-btn-secondary,
+  .ex-console-link,
+  .ex-company-card,
+  .ex-pillar-card,
+  .ex-bridge-card {
+    transition: none !important;
+    transform: none !important;
+  }
+}

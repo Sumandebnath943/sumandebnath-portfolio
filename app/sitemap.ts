@@ -35,6 +35,7 @@ type Entry = {
 const ROUTES: Entry[] = [
   { path: "", changeFrequency: "weekly", priority: 1 },
   { path: "/resume", changeFrequency: "monthly", priority: 0.95 },
+  { path: "/experience", changeFrequency: "monthly", priority: 0.9 },
   { path: "/journey", changeFrequency: "monthly", priority: 0.9 },
   { path: "/about", changeFrequency: "monthly", priority: 0.9 },
   { path: "/profile", changeFrequency: "monthly", priority: 0.9 },

@@ -339,6 +339,29 @@ export const PAGE_FAQS: Record<string, PageFaq[]> = {
       a: "Six: intelligence is infrastructure rather than a feature; systems compound where one-off execution collapses; human identity must survive automation; craft still separates meaningful systems from noise; speed is a creative advantage in AI-native work; and taste is what remains scarce when execution becomes cheap.",
     },
   ],
+
+  // /experience owns "What has Suman Debnath done in his 9+ years of marketing
+  // and brand leadership?" in its title, h1 and QAPage node. These four answer
+  // the operational follow-ups about the 21-person floor, the 50+ website
+  // ecosystem, the team AI workflows, and the ₹30–40L print vendor budget.
+  "/experience": [
+    {
+      q: "How large was the marketing and creative team Suman Debnath supervised?",
+      a: "Across his brand and digital marketing leadership, Suman Debnath supervised a cross-functional team of nearly 21 people spanning three core departments: graphic design, web development, and digital marketing. Between 12 and 15 team members reported to him directly, with the remaining 6 to 9 reporting indirectly across shared campaign and institutional workflows, while he also coordinated daily with admissions, counselling, sales, and academic stakeholders.",
+    },
+    {
+      q: "What did Suman Debnath's 50+ website and 1,000+ webpage ecosystem include?",
+      a: "Across nine-plus years of brand and digital leadership, Suman Debnath managed more than 50 websites totaling over 1,000 webpages. The institution and brand ecosystem covered main institutional and corporate domains, sister brands, academic programme microsites, and event and admissions landing pages — including five SEO-ready websites with integrated payment gateways built and launched within a single month.",
+    },
+    {
+      q: "How did Suman Debnath use AI workflows inside a traditional marketing team?",
+      a: "Before building standalone AI software under House of Namus, Suman Debnath deployed operational AI pipelines on his marketing and design production floor. These included automated AI funnels for merging and cleaning thousands of rows of CSV lead and student data daily, a custom GPT workflow that turned raw student photos into corporate portraits (saving 7–8 hours of manual editing per week), and GenAI ad-creative and web-launch pipelines that cut production cycles from weeks to hours.",
+    },
+    {
+      q: "Did Suman Debnath manage marketing budgets and paid advertising?",
+      a: "Suman Debnath directly owned a ₹30–40L annual print and offline production vendor budget covering brochures, OOH hoardings, newspaper ads, and event collateral. On the paid digital side, he led campaign strategy, ad creative production, remarketing architecture, external channel-partner paid outreach, and budget planning across Google and Meta, without directly holding the media-buying spend card.",
+    },
+  ],
 };
 
 // ── The one hard constraint ────────────────────────────────────────────────

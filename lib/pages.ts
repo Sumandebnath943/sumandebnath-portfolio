@@ -228,6 +228,14 @@ export const PAGES: PageEntry[] = [
 
   // ── The person ───────────────────────────────────────────────────────────
   {
+    href: "/experience",
+    label: "Experience",
+    blurb:
+      "Nine-plus years across every brand, team and marketing operation — 21 people, 50+ websites, 1,000+ assets, 150+ decks and AI workflows",
+    group: "person",
+    accent: "#F59E0B",
+  },
+  {
     href: "/profile",
     label: "Profile",
     blurb: "The decade in short — where the work has been, and the daily toolkit",
@@ -332,6 +340,7 @@ const RELATED: Record<string, string[]> = {
   "/resume": ["/journey", "/contact", "/learnings"],
   "/contact": ["/resume", "/faq", "/projects"],
 
+  "/experience": ["/resume", "/profile", "/projects"],
   "/about": ["/journey", "/philosophy", "/profile"],
   "/journey": ["/about", "/profile", "/learnings"],
   "/profile": ["/resume", "/journey", "/fun-apps"],

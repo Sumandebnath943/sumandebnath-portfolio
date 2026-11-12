@@ -176,6 +176,14 @@ const commands: Command[] = [
     icon: "?",
   },
   {
+    id: "experience",
+    command: "/experience",
+    label: "Experience — 9+ Years on the Floor",
+    description: "Nine-plus years across every brand, team & marketing operation: 21 people, 50+ websites, 1,000+ assets, 150+ decks & AI workflows",
+    href: "/experience",
+    icon: "▤",
+  },
+  {
     id: "resume",
     command: "/resume",
     label: "Résumé",
