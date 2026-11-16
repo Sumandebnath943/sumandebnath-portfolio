@@ -79,6 +79,10 @@ Every route is statically prerendered unless noted.
   `/profile` states the profile itself. Its layout is modelled on
   pleurat.com/about at the user's request — see §4.1.
 - `/resume` — the résumé as a page, not a PDF
+- `/experience` — the marketing operation in numbers: dark hero, a cream paper
+  employer timeline, seven accent-coloured "scale wall" rows, a solid amber
+  postscript. Fully server-rendered; content and the deliberate decisions live
+  in the header of `lib/experience.ts` (HANDOFF §1.35)
 - `/journey` — interactive life story
 - `/learnings` — certificates and coursework
 - `/projects`, `/projects/[slug]` (SSG), `/projects/aegis-vault`
@@ -1117,6 +1121,7 @@ article is exactly what a non-JavaScript crawler cannot read.
 | `resume.ts` | **Single source of truth for career facts.** Feeds `/resume`, the AI system prompt, `/contact`, and the KRA bullets in `components/sections/OperationalHistory.tsx` (homepage + `/about`). Also owns the **ORCID** (`identity.orcid` / `identity.orcidHref`), which `app/layout.tsx` reads for its `sameAs` array — anything that belongs on a business card lives here and nowhere else. Edit this, never the consumers. |
 | `projects.ts`, `archive-projects.ts` | Project cards and the archive |
 | `journey.ts` | `/journey` content |
+| `experience.ts` | `/experience` content, metadata and JSON-LD. Its figures must agree with `resume.ts` and `journey.ts`; the header records which facts were squared and why PIBM is named only once |
 | `learnings-data.ts` | Certificates |
 | `faqs.ts` | `/faq` and FAQ schema |
 | `systemPrompt.ts` | Assembles the assistant's context from `resume.ts` |

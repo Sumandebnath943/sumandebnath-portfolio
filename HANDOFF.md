@@ -4,9 +4,10 @@ Where the project stands, what changed most recently, and what is worth doing
 next. For how the system is built read **PROJECT_BIBLE.md**; for how the site
 writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
-**Last updated:** 26 October 2026
+**Last updated:** 16 November 2026
 **Branch:** `main`. Check `git log --oneline @{u}..` before offering a push — this line goes stale.
-**Last session (26 Oct 2026):** 35th notebook article (Post #2 of the 10-article queue) published with its hero cover — `ai-catalog-1-0-schema-changes` ("6 schema changes between AI Catalog 0.2 and 1.0 that break static audits", §1.32).
+**Last session (16 Nov 2026):** `/experience`, built with Google Antigravity on 12 Nov, audited and rebuilt as a "scale wall" — it named the AWS namesake, claimed `/resume`'s question, and stated three facts the rest of the site contradicts (§1.35). Pushed and verified live. **Audit anything Antigravity makes against the playbooks** — its output looks finished and breaks the rules silently.
+**Session before (26 Oct 2026):** 35th notebook article (Post #2 of the 10-article queue) published with its hero cover — `ai-catalog-1-0-schema-changes` ("6 schema changes between AI Catalog 0.2 and 1.0 that break static audits", §1.32).
 **Session before (23 Oct 2026):** That One Crawler page brought up to the product's 22 Oct accuracy overhaul — every figure, a new AI-agents section, Prompt to improve, six tools, five engineering notes, and all sixteen screenshots recaptured from the live app (§1.34).
 **Session before (22 Oct 2026):** That One Crawler page and a new Portfolio → Crawlers menu (Crawl Daddy is an external link); then NUNO and That One Crawler wired into every surface that had been left out (§1.33).
 **Session before (19 Oct 2026):** 34th notebook article added — `nextjs-markdown-content-negotiation` ("Two Next.js rewrites that serve Markdown to agents without breaking the cache"). 10-article publication queue planned; cadence decided as manual on-demand push every ~3 days rather than an automated cron (§1.32).
@@ -2886,6 +2887,60 @@ explained in a postscript.
 `Projects.tsx` (copy, chips, cover → `landing.webp`), `Announcement.tsx`,
 `CommandPalette.tsx`, `public/llms-full.txt`. `og.jpg` was left as is — the
 landing it shows hasn't changed.
+
+### 1.35 `/experience`, audited and rebuilt (12 & 16 Nov 2026)
+
+**12 Nov (`0092311`):** Suman built `/experience` with Google Antigravity — a
+record of the marketing years, wired into all the usual places. The wiring was
+right: sitemap, `STATIC_ROUTES`, nav, ⌘K, `lib/pages.ts` + `RELATED`,
+`lib/page-faqs.ts` (no duplicates of `lib/faqs.ts`), `llms-full.txt`, HeroLock,
+Breadcrumbs, the closing sequence, plain-tag JSON-LD with `personRef`. **What
+was wrong was everything a checklist does not catch:**
+
+| Problem | Rule it broke |
+|---|---|
+| A visible box naming the AWS developer advocate | `AEO_PLAYBOOK.md` §6 — negation on `/about` and `/faq` only |
+| Owned "What has Suman Debnath done in his 9+ years of marketing…?" | §3.1b — the `/resume` question in more words |
+| The h1 was a slogan; the question was only in the title | §3.1b — the h1 carries the query |
+| Answer block 85 words; meta description 274 chars | 40–60 words; ~155 chars |
+| WOLAMBO "2013 – Present", "31,541 weekly visitors" | `/journey`: not posted on in ~10 years |
+| Aamrit/Nivea/Raman Byte as "Marketing Executive 2016–2018" | `lib/resume.ts`: MBA summers/winters |
+| CBS Ventures "Kerala / Pune" | `lib/resume.ts`: Pune |
+| Route date `2026-10-31 // no git history yet` | `build-route-dates.mjs` was never re-run |
+
+And the design: ~19,350px at desktop, each figure repeated five or six times,
+every block the same amber box, costume labels ("FLOOR TELEMETRY // VERIFIED" —
+a self-asserted *verified*).
+
+**16 Nov (`8632364`, `75be5a6`, pushed and verified live):** rebuilt after four
+answers from Suman — *scale wall* design, a *distinct* question, facts squared
+with `/resume` and `/journey`, and **PIBM kept de-emphasised** (named once, on
+the timeline; his own earlier instruction). Now ~9,600px and fully
+server-rendered: dark hero with four numbers and the Q/A, a cream paper Gantt
+timeline, seven rows each with its own accent and its figure stated once, and a
+solid amber postscript in his own words ("small, small things", "dead panda").
+Owns **"How big a marketing operation has Suman Debnath run?"**; answer 58
+words. `llms.txt` routes scale questions here and lists three of its figures.
+Removed `components/experience/ExperienceVisuals.tsx` and the stale
+`EXPERIENCE_PAGE_CONTENT.md`. Rollback tag `checkpoint-pre-experience-rebuild`
+(local only).
+
+**Site-wide check, same day:** all 79 sitemap URLs 200, every JSON-LD block
+parses, self-canonicals, one h1 each; Markdown negotiation, 404 status, security
+headers, robots and `ai-catalog.json` all correct; build, `tsc`, lint and
+`crawler-check.mjs` (103/103) clean. **PageSpeed was not measured** — the API
+returned 429 on all six runs and the web UI stalled in a hidden pane.
+
+**Left open — Suman's call:**
+- `ai-catalog.json` lists PixelVille: Next Dimension as its only product
+  (added by Antigravity in `080fe41`); the other eight entries are identity and
+  index files. Keep it, remove it, or add the other products.
+- `public/llms-full.txt` line 34 still says he worked in marketing "from 2016
+  to 2023" and has "fully transitioned" — reads as if he has left PIBM.
+- Titles over the 44-character budget (§3.1c of the playbook): Pentashell 73,
+  MIGI app 73, PixelVille 78.
+- The PixelVille: Next Dimension session (31 Oct) has no entry in this file.
+- `/experience` uses the generic `/og-image.png`.
 
 ---
 

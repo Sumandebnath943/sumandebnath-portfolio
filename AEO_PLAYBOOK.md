@@ -163,6 +163,14 @@ and in a `QAPage` node:
 | What is Suman Debnath's experience? | `/resume` | **no — see below** |
 | What has Suman Debnath built? | `/projects` | yes |
 | What does Suman Debnath do? | `/faq` | no |
+| How big a marketing operation has Suman Debnath run? | `/experience` | yes |
+
+> **`/experience` owns the *scale* question, not "experience".** Added 12 Nov
+> 2026 with "What has Suman Debnath done in his 9+ years of marketing and brand
+> leadership?" — the `/resume` question in more words, which is exactly the
+> collision this section exists to prevent. Re-scoped 16 Nov 2026 to team, sites,
+> budget and volume (`HANDOFF.md` §1.35). Chronology, employers and education stay
+> on `/resume`. Despite its URL, do not hand `/experience` the generic query.
 
 > **`/resume` keeps its name as the h1 on purpose.** "Suman Debnath" is the
 > correct heading for a résumé document and already a strong entity signal;
