@@ -27,7 +27,7 @@ import path from "node:path";
 const ROUTES = {
   "/": ["app/page.tsx", "components/sections", "lib/projects.ts"],
   "/resume": ["app/resume", "lib/resume.ts"],
-  "/experience": ["app/experience", "components/experience", "lib/experience.ts"],
+  "/experience": ["app/experience", "lib/experience.ts"],
   "/journey": ["app/journey", "components/journey", "lib/journey.ts"],
   "/about": ["app/about"],
   "/profile": ["app/profile", "components/profile"],

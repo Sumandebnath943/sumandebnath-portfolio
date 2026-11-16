@@ -127,7 +127,7 @@ const navLinks: NavLink[] = [
     label: "About Me",
     color: "#FB7185",
     submenus: [
-      { label: "Experience (9+ Yrs)", href: "/experience", color: "#F59E0B" },
+      { label: "Experience", href: "/experience", color: "#F59E0B" },
       { label: "Profile", href: "/profile", color: "#F3B44A" },
       { label: "The Story", href: "/about", color: "#FB7185" },
       // /journey was reachable only from /resume and /profile — it was in the

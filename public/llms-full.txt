@@ -373,8 +373,8 @@ A: Suman approaches software development as a systems orchestration problem rath
 Q: What kind of collaborations is Suman open to?
 A: Suman is open to collaborations involving AI-native products, automation systems, SaaS ecosystems, intelligent workflows, branding systems, growth infrastructure, operational strategy, and future-focused AI-assisted execution environments.
 
-Q: What has Suman Debnath done in his 9+ years of marketing and brand leadership?
-A: Over nine-plus years across higher education, multi-brand corporate groups, and consumer brands — alongside building AI-native software under House of Namus — Suman Debnath has supervised a 21-person cross-functional team (12–15 direct, 6–9 indirect across design, web, and digital), managed a 50+ website and 1,000+ webpage institution and brand ecosystem, directed 1,000+ print and digital assets, built 150+ pitch and sales decks (including a live product demo deck for one of India's largest government education accrediting bodies), managed ₹30–40L in annual print vendor budgets, executed 50–100+ event branding materials in 3 working days for a 3-day flagship product launch, and deployed custom AI workflows for creative production and daily CSV data funnels. Full dossier: https://sumandebnath.houseofnamus.com/experience
+Q: How big a marketing operation has Suman Debnath run?
+A: Suman Debnath has spent nine years running brand and digital marketing operations: a 21-person design, web and digital team, 50+ websites with 1,000+ pages, a ₹30–40L annual print budget, 1,000+ print and digital assets and 150+ decks — most of it for a multi-brand higher-education group in Pune, where he has been Senior Brand Marketing Manager since 2019. Full breakdown: https://sumandebnath.houseofnamus.com/experience
 
 ---
 
@@ -392,7 +392,7 @@ Founder: Suman Debnath
 ## SITE STRUCTURE
 
 - Home: https://sumandebnath.houseofnamus.com
-- Experience (9+ Years Operational Record): https://sumandebnath.houseofnamus.com/experience
+- Experience (the marketing operation in numbers): https://sumandebnath.houseofnamus.com/experience
 - Résumé: https://sumandebnath.houseofnamus.com/resume
 - Contact: https://sumandebnath.houseofnamus.com/contact
 - About: https://sumandebnath.houseofnamus.com/about

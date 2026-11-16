@@ -231,7 +231,7 @@ export const PAGES: PageEntry[] = [
     href: "/experience",
     label: "Experience",
     blurb:
-      "Nine-plus years across every brand, team and marketing operation — 21 people, 50+ websites, 1,000+ assets, 150+ decks and AI workflows",
+      "The marketing operation in numbers — a 21-person team, 50+ websites, 1,000+ assets, 150+ decks and a ₹30–40L print budget",
     group: "person",
     accent: "#F59E0B",
   },

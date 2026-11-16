@@ -340,10 +340,10 @@ export const PAGE_FAQS: Record<string, PageFaq[]> = {
     },
   ],
 
-  // /experience owns "What has Suman Debnath done in his 9+ years of marketing
-  // and brand leadership?" in its title, h1 and QAPage node. These four answer
-  // the operational follow-ups about the 21-person floor, the 50+ website
-  // ecosystem, the team AI workflows, and the ₹30–40L print vendor budget.
+  // /experience owns "How big a marketing operation has Suman Debnath run?" in
+  // its title, h1 and QAPage node (lib/experience.ts). These four answer the
+  // follow-ups about the 21-person team, the 50+ website estate, the team AI
+  // workflows and the ₹30–40L print vendor budget.
   "/experience": [
     {
       q: "How large was the marketing and creative team Suman Debnath supervised?",
