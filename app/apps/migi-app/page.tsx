@@ -30,7 +30,7 @@ import {
 /* ── SEO ───────────────────────────────────────────────────────────────── */
 const SITE = "https://sumandebnath.houseofnamus.com";
 export const metadata: Metadata = {
-  title: "MIGI Android App — A Native Control Room for 46 AI Agents",
+  title: "MIGI Android App · 46-agent control room",
   description:
     "A standalone native Android client for the MIGI agent fleet, built in Kotlin and Jetpack Compose. 22 screens, instant push without Firebase, on-device voice, a home-screen widget — and zero API keys on the phone.",
   keywords: [

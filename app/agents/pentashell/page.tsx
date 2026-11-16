@@ -33,7 +33,7 @@ import {
 /* ── SEO ───────────────────────────────────────────────────────────────── */
 const SITE = "https://sumandebnath.houseofnamus.com";
 export const metadata: Metadata = {
-  title: "Pentashell · Plain English → One Terminal Command, Safely",
+  title: "Pentashell · English → one terminal command",
   description:
     "Pentashell is the local, no-GPU CLI for PentaCMD-47M — a 47M-parameter model built from scratch. Type plain English, get one terminal command, and run it only with your explicit approval. Destructive commands name the risk and demand a typed yes.",
   keywords: [

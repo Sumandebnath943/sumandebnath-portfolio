@@ -6,7 +6,7 @@ writes and what each page argues read **PORTFOLIO_HANDOFF.md**.
 
 **Last updated:** 16 November 2026
 **Branch:** `main`. Check `git log --oneline @{u}..` before offering a push — this line goes stale.
-**Last session (16 Nov 2026):** `/experience`, built with Google Antigravity on 12 Nov, audited and rebuilt as a "scale wall" — it named the AWS namesake, claimed `/resume`'s question, and stated three facts the rest of the site contradicts (§1.35). Pushed and verified live. **Audit anything Antigravity makes against the playbooks** — its output looks finished and breaks the rules silently.
+**Last session (16 Nov 2026):** `/experience`, built with Google Antigravity on 12 Nov, audited and rebuilt as a "scale wall" — it named the AWS namesake, claimed `/resume`'s question, and stated three facts the rest of the site contradicts (§1.35). Pushed and verified live. Then: `ai-catalog.json` back to eight entries, the `llms-full.txt` biography squared with the résumé, three titles inside budget, and the unrecorded 31 Oct PixelVille: Next Dimension session written up (§1.36). **Audit anything Antigravity makes against the playbooks** — its output looks finished and breaks the rules silently.
 **Session before (26 Oct 2026):** 35th notebook article (Post #2 of the 10-article queue) published with its hero cover — `ai-catalog-1-0-schema-changes` ("6 schema changes between AI Catalog 0.2 and 1.0 that break static audits", §1.32).
 **Session before (23 Oct 2026):** That One Crawler page brought up to the product's 22 Oct accuracy overhaul — every figure, a new AI-agents section, Prompt to improve, six tools, five engineering notes, and all sixteen screenshots recaptured from the live app (§1.34).
 **Session before (22 Oct 2026):** That One Crawler page and a new Portfolio → Crawlers menu (Crawl Daddy is an external link); then NUNO and That One Crawler wired into every surface that had been left out (§1.33).
@@ -2931,16 +2931,57 @@ headers, robots and `ai-catalog.json` all correct; build, `tsc`, lint and
 `crawler-check.mjs` (103/103) clean. **PageSpeed was not measured** — the API
 returned 429 on all six runs and the web UI stalled in a hidden pane.
 
-**Left open — Suman's call:**
-- `ai-catalog.json` lists PixelVille: Next Dimension as its only product
-  (added by Antigravity in `080fe41`); the other eight entries are identity and
-  index files. Keep it, remove it, or add the other products.
-- `public/llms-full.txt` line 34 still says he worked in marketing "from 2016
-  to 2023" and has "fully transitioned" — reads as if he has left PIBM.
-- Titles over the 44-character budget (§3.1c of the playbook): Pentashell 73,
-  MIGI app 73, PixelVille 78.
-- The PixelVille: Next Dimension session (31 Oct) has no entry in this file.
-- `/experience` uses the generic `/og-image.png`.
+**Follow-ups, fixed the same day at his request:**
+- `ai-catalog.json` back to its documented eight entries. Antigravity had added
+  PixelVille: Next Dimension as the only product, with superlative queries
+  ("Best 1st-person village simulation… browser game"). The manifest's design is
+  site files plus the pages that own an entity query (playbook §10.4); the game
+  stays discoverable through `llms.txt`, the sitemap and its own JSON-LD.
+- `public/llms-full.txt` biography no longer says he "fully transitioned" or
+  dates the PIBM role in the past tense; it now matches `lib/resume.ts` (Senior
+  Brand Marketing Manager since March 2019, CBS Ventures 2018, MBA internships).
+  **The homepage's "Chapter 01 · 2016 — 2023 / The Marketer" card was left
+  alone** — it is the site's deliberate two-chapter story, not a fact sheet.
+- Three titles brought inside the 44-character budget (playbook §3.1c):
+  Pentashell 73 → 59, MIGI app 73 → 56, PixelVille 78 → 59 with the suffix.
+  Social-card titles are unsuffixed and were not touched.
+- §1.36 below records the 31 Oct session.
+
+**Still open:** `/experience` uses the generic `/og-image.png`.
+
+### 1.36 PixelVille: Next Dimension (31 Oct 2026) — recorded late, 16 Nov
+
+Reconstructed from the commit log; nobody wrote it up at the time.
+
+**14:47 (`080fe41`, Google Antigravity):** `/games/pixelville-next-dimension`,
+a dossier for the 3D sequel to PixelVille — page, visuals and a ~1,000-line data
+file, 21 raw PNG screenshots under `public/pixelville-nd/`, and wire-ins to the
+sitemap, `STATIC_ROUTES`, nav, ⌘K, `lib/pages.ts`, `lib/page-answers.ts`,
+`lib/page-faqs.ts`, `lib/llms-txt.ts` and `llms-full.txt`. It also touched three
+things a product page never needs to:
+
+| File | What it did | Status |
+|---|---|---|
+| `public/.well-known/ai-catalog.json` | Added the game as the only product entry | **Removed 16 Nov** (§1.35) |
+| `app/robots.ts` | Five explicit `allow: "/"` rules (GoogleOther, DuckDuckBot, YandexBot, SeznamBot, Yeti) | Kept — redundant under `User-Agent: *` `Allow: /`, harmless |
+| `scripts/indexnow.mjs` | Always appends the ND URL to a sitemap run; adds `--with-ai` to append the four discovery files | Kept — only affects a run he starts himself |
+
+**15:18–15:53 (seven Claude commits, `2b44aba` → `093825e`):** the page was
+corrected and cut down. Facts checked against the game's `GAME_INFO.md` (P, not
+Tab, switches views; villagers have 5 traits and a 14-memory diary, not V1's 2
+and 12); a world section that claimed "zero asset files" beside 93 downloaded
+models was corrected; ten section headings rewritten as complete thoughts; a
+per-section accent so it stopped reading as one navy box; a comparison table
+against city builders and open-world games; detail folded behind *Show the
+details* (still in the server HTML) — **24,000 → 18,300 px**; key-art hero
+centred like the other game pages; the logo shrunk 977 KB PNG → 132 KB WebP;
+`FALLBACK_DATE` restored to `2026-10-26` after Antigravity had moved it; and a
+homepage project card (03) plus an announcement-reel line.
+
+> **The pattern repeats across §1.35 and §1.36:** Antigravity wires a page into
+> every surface correctly and then overreaches — a site-wide manifest, robots,
+> a script, a shared date constant — and states facts the rest of the site
+> contradicts. Diff everything outside the page's own folder.
 
 ---
 

@@ -34,7 +34,7 @@ import {
 /* ── SEO ───────────────────────────────────────────────────────────────── */
 const SITE = "https://sumandebnath.houseofnamus.com";
 export const metadata: Metadata = {
-  title: "PixelVille · A self-governing pixel-art village that remembers",
+  title: "PixelVille · A pixel village that remembers",
   description:
     "PixelVille is a cozy pixel-art village simulation where the town is genuinely autonomous. Its citizens aren't statistics — every villager has a personality, an episodic memory, a private map of only the places they've encountered, and a real decision engine. They form friendships, chase ambitions, open businesses, vote out mayors and rebuild the town themselves. ~11,700 lines of hand-written vanilla JS. Zero dependencies. Zero image assets.",
   keywords: [
