@@ -1197,8 +1197,10 @@ Missing one of these is the most common defect in this repo. A new page needs:
    `<slug>-data.ts`.
 2. **`components/layout/Navigation.tsx`** — add the entry under the right
    submenu, with the product's accent colour. A new category (a new sub-menu
-   such as **Banking**) is just a nested `submenus` array; the phone sheet
-   renders from the same structure, so both menus pick it up at once.
+   such as **Banking**) is just a nested `submenus` array; the phone menu
+   (`MobileMenu.tsx`, "the slab") renders from the same structure, so both menus
+   pick it up at once. To fold a desktop category into another on the phone (as
+   SLMs + LLMs → *Models*), add it to `MERGE` in `MobileMenu.tsx`.
 3. **`components/layout/CommandPalette.tsx`** — add id, `/command`, label,
    description, href, icon.
 4. **`app/sitemap.ts`** — add the URL with `changeFrequency` and `priority`.

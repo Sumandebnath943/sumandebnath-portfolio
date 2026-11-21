@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { m, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import MobileMenu from "@/components/layout/MobileMenu";
 
 type SubMenu = {
   label: string;
@@ -153,27 +154,10 @@ function hueVars(color?: string): React.CSSProperties | undefined {
   } as React.CSSProperties;
 }
 
-/* ── Phone menu styling ──────────────────────────────────────────────────
-   These only ever apply inside the `md:hidden` menu, so none of it can
-   reach the desktop bar. Rows are 48px+ tall for thumbs.                  */
-// Light sheet on a dark scrim. The dark-on-dark panel had nothing to separate
-// it from the page behind; inverting it makes the menu unmistakably its own
-// surface and lets the per-item accent dots read at full strength.
-// Rows sit at 44px — the touch-target floor and the usual mobile nav rhythm —
-// rather than the roomier 48px+ they had.
-const MOBILE_GROUP_LABEL =
-  "flex items-center gap-2.5 px-4 pt-4 pb-1.5 text-[10px] font-semibold uppercase " +
-  "tracking-[0.18em] text-[#5f5f66] before:h-px before:w-4 before:bg-black/20 before:content-['']";
-
-const MOBILE_ROW =
-  "flex items-center gap-3 text-left px-4 py-3 text-[15px] font-medium text-[#1f1f24] " +
-  "hover:bg-black/[0.05] active:bg-black/[0.08] rounded-xl " +
-  "transition-colors duration-150 touch-manipulation";
-
-const MOBILE_SUBROW =
-  "flex items-center gap-2.5 text-left px-3 py-3 text-[14px] font-medium text-[#4a4a53] " +
-  "hover:bg-black/[0.05] active:bg-black/[0.08] rounded-lg " +
-  "transition-colors duration-150 touch-manipulation";
+/* The phone menu lives in MobileMenu.tsx ("the slab") and renders from the
+   same navLinks, so it cannot fall behind the desktop bar. Its design
+   decisions — and the two earlier designs that were rejected — are written
+   at the top of that file. */
 
 const isExternal = (href?: string) => !!href && /^https?:\/\//.test(href);
 
@@ -187,35 +171,19 @@ function ExternalMark() {
   );
 }
 
-/** The accent already carried by every nav entry, surfaced as a status dot. */
-function Dot({ color, small = false }: { color?: string; small?: boolean }) {
-  return (
-    <span
-      aria-hidden
-      className={`shrink-0 rounded-full ${small ? "h-1 w-1" : "h-1.5 w-1.5"}`}
-      style={{ backgroundColor: color ?? "#6a6a70" }}
-    />
-  );
-}
-
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  // Which Portfolio subgroups are expanded in the phone menu. Collapsed by
-  // default: fully expanded the menu ran to 24 rows, taller than any phone.
-  const [openGroups, setOpenGroups] = useState<string[]>([]);
   const router = useRouter();
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
-  const toggleGroup = (label: string) =>
-    setOpenGroups((g) => (g.includes(label) ? g.filter((l) => l !== label) : [...g, label]));
-
-  // Collapse every group whenever the menu is toggled, so it always opens in
-  // its short resting state. Done here rather than in an effect keyed on
-  // mobileOpen, which would be a cascading render.
-  const toggleMobile = () => {
-    setMobileOpen((v) => !v);
-    setOpenGroups([]);
-  };
+  // Closing by Close or Escape hands focus back to the button that opened it.
+  // (Following a link closes it through handleNavClick instead, where focus
+  // belongs to the new page.)
+  const closeMobile = useCallback(() => {
+    setMobileOpen(false);
+    menuButtonRef.current?.focus();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
@@ -407,7 +375,7 @@ export default function Navigation() {
               }
               // lg, not md: a ⌘K badge is useless on a tablet with no keyboard,
               // and dropping it below 1024px buys the six-item bar the room it
-              // needs. The phone sheet still carries a "Search Command" row.
+              // needs. The phone menu's black bar still carries "Search ⌘K".
               className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/[0.08] text-[#bdbdc2] hover:text-[#f5f5f7] hover:border-white/[0.15] bg-white/[0.02] transition-all duration-200 text-xs font-mono"
             >
               <span>⌘K</span>
@@ -423,177 +391,34 @@ export default function Navigation() {
             </button>
           </div>
 
-          {/* Mobile Toggle */}
+          {/* Mobile Toggle — labelled, not a bare icon: NN/g found the
+              hamburger glyph alone is not universally read as "menu". Orange,
+              because pressing it turns the whole screen that colour. The
+              ::after widens the hit area to 44px+ without growing the pill.
+              Only "Menu", never "Close": the open sheet covers this bar and
+              carries its own Close. */}
           <button
-            // 18px icon + 13px padding each side = a 44px target. This control
-            // only exists below md, so the larger box costs desktop nothing.
-            className="md:hidden p-[13px] -m-[5px] mr-0 rounded-full text-[#bdbdc2] hover:text-[#f5f5f7] hover:bg-white/5 transition-all touch-manipulation"
-            onClick={toggleMobile}
-            aria-label="Toggle navigation"
+            ref={menuButtonRef}
+            className="md:hidden relative flex items-center gap-1.5 rounded-full bg-[#FF5500] px-3.5 py-2 font-dmmono text-[11px] uppercase tracking-[0.12em] text-[#0A0A0C] touch-manipulation after:absolute after:-inset-[6px] after:content-[''] active:bg-[#FF6B1A]"
+            onClick={() => setMobileOpen(true)}
+            aria-haspopup="dialog"
             aria-expanded={mobileOpen}
             aria-controls="mobile-nav-panel"
           >
-            {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+            Menu
+            <Menu size={14} strokeWidth={2.25} aria-hidden />
           </button>
         </nav>
       </m.header>
 
-      {/* Mobile Menu (Also dark mode locked) */}
+      {/* The phone menu — a full-screen orange sheet. See MobileMenu.tsx. */}
       <AnimatePresence>
         {mobileOpen && (
-          // A translucent panel over a dark page gave the menu nothing to sit
-          // against — page content bled through and the two merged into one
-          // dark mass. This scrim pushes the page back so the sheet reads as a
-          // separate layer, and doubles as tap-to-dismiss.
-          <m.div
-            key="mobile-scrim"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            onClick={toggleMobile}
-            aria-hidden
-            className="pointer-events-auto fixed inset-0 z-30 bg-black/70 backdrop-blur-[2px] md:hidden"
+          <MobileMenu
+            links={navLinks}
+            onClose={closeMobile}
+            onNavigate={handleNavClick}
           />
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {mobileOpen && (
-          <m.div
-            key="mobile-menu"
-            initial={{ opacity: 0, y: -10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            id="mobile-nav-panel"
-            // The panel hangs off a `fixed` parent, so the page scroll can never
-            // reach it — without its own scroll box, anything past the fold is
-            // simply unreachable. dvh (not vh) so the browser's collapsing
-            // toolbar can't push the last items out of range on a phone.
-            // Opaque and a step lighter than the page, so it is legible as its
-            // own surface instead of a translucent near-black slab that the
-            // site showed through.
-            className="pointer-events-auto absolute top-20 left-4 right-4 z-40 max-h-[calc(100dvh_-_6rem)] overflow-y-auto overscroll-contain rounded-[1.75rem] bg-[#FBFBF9] border border-black/[0.08] p-2.5 pb-[calc(0.625rem_+_env(safe-area-inset-bottom))] shadow-[0_24px_60px_-12px_rgba(0,0,0,0.55)]"
-          >
-            <div className="flex flex-col">
-              {/* Rendered straight off navLinks rather than from hardcoded
-                  blocks, so the sheet can never fall behind the desktop bar the
-                  way it did when routes were added to one and not the other.
-                  Each top-level group becomes a labelled block; a nested
-                  category inside it stays collapsed until tapped, because fully
-                  expanded the menu runs past the bottom of any phone. Every row
-                  keeps its accent dot — colours navLinks already carried but
-                  only the desktop hover state ever used. */}
-              {navLinks
-                .filter((link) => link.submenus)
-                .map((group) => (
-                  <div key={group.label} className="flex flex-col">
-                    <p className={MOBILE_GROUP_LABEL}>{group.label}</p>
-                    {group.submenus!.map((sub) => {
-                      // Leaf route or anchor — render it directly.
-                      if (!sub.submenus) {
-                        return (
-                          <button
-                            key={sub.href}
-                            onClick={() => handleNavClick(sub.href!)}
-                            className={MOBILE_ROW}
-                          >
-                            <Dot color={sub.color} />
-                            {sub.label}
-                          </button>
-                        );
-                      }
-                      // Category — collapsed until tapped.
-                      const expanded = openGroups.includes(sub.label);
-                      return (
-                        <div key={sub.label} className="flex flex-col">
-                          <button
-                            onClick={() => toggleGroup(sub.label)}
-                            aria-expanded={expanded}
-                            className={`${MOBILE_ROW} justify-between`}
-                          >
-                            <span className="flex items-center gap-3">
-                              <Dot color={sub.color} />
-                              {sub.label}
-                            </span>
-                            <span className="flex items-center gap-2.5">
-                              <span className="text-[11px] font-mono text-[#8a8a93]">
-                                {sub.submenus.length}
-                              </span>
-                              <svg
-                                width="11"
-                                height="11"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className={`text-[#8a8a93] transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
-                              >
-                                <path d="m6 9 6 6 6-6" />
-                              </svg>
-                            </span>
-                          </button>
-                          {expanded && (
-                            <div className="flex flex-col border-l border-black/[0.12] ml-[1.4rem] pl-2 my-0.5">
-                              {sub.submenus.map((leaf) => (
-                                <button
-                                  key={leaf.href}
-                                  onClick={() => handleNavClick(leaf.href!)}
-                                  className={MOBILE_SUBROW}
-                                >
-                                  <Dot color={leaf.color} small />
-                                  <span className="truncate">
-                                    {leaf.label}
-                                    {isExternal(leaf.href) && <ExternalMark />}
-                                  </span>
-                                </button>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                ))}
-
-              {/* Top-level routes with no dropdown of their own. */}
-              <p className={MOBILE_GROUP_LABEL}>More</p>
-              {navLinks
-                .filter((link) => !link.submenus)
-                .map((link) => (
-                  <button
-                    key={link.href}
-                    onClick={() => handleNavClick(link.href!)}
-                    className={MOBILE_ROW}
-                  >
-                    <Dot color={link.color} />
-                    {link.label}
-                  </button>
-                ))}
-
-              <div className="h-[1px] w-full bg-black/[0.08] my-1.5" />
-              <button
-                onClick={() => {
-                  setMobileOpen(false);
-                  window.dispatchEvent(new CustomEvent("open-command-palette"));
-                }}
-                className="text-left flex items-center justify-between px-4 py-3 text-[15px] font-medium text-[#1f1f24] hover:bg-black/[0.05] active:bg-black/[0.08] rounded-xl transition-colors duration-150 touch-manipulation"
-              >
-                Search Command
-                <span className="text-[11px] font-mono text-[#6b6b73] px-2 py-1 rounded bg-black/[0.05] border border-black/[0.08]">⌘K</span>
-              </button>
-              {/* The desktop bar carries this CTA in a `hidden md:flex` group,
-                  which left the phone menu with no way to start a conversation. */}
-              <button
-                onClick={() => handleNavClick("/contact")}
-                className="mt-1.5 flex items-center justify-center rounded-xl bg-[#1A1A1A] px-4 py-3 text-[15px] font-semibold text-white transition-colors hover:bg-black touch-manipulation"
-              >
-                Let&apos;s Talk
-              </button>
-            </div>
-          </m.div>
         )}
       </AnimatePresence>
     </div>

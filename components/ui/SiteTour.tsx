@@ -14,6 +14,7 @@ import { Route, X } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
 import { chapterFor, TOUR_STEPS, TOUR_POSITION_KEY } from "@/lib/tour-steps";
 import { useRobotChat } from "@/components/robot/RobotChatContext";
+import CareerModeButton from "@/components/ui/CareerModeButton";
 
 /**
  * The site tour.
@@ -386,7 +387,10 @@ export default function SiteTour() {
       {/* Below the nav (10000) so an open phone menu covers this tab rather
           than having it cut across the panel's edge. Still above page content;
           the driver.js tour overlay lives far higher and is unaffected. */}
-      <div className="fixed top-1/2 right-0 -translate-y-1/2 z-[900]">
+      {/* The right-edge dock: the tour tab, and under it the Career Mode tab
+          (the gamified one-page portfolio, CareerModeButton.tsx). Stacked in one
+          fixed column so the pair stays centred and can never overlap. */}
+      <div className="fixed top-1/2 right-0 -translate-y-1/2 z-[900] flex flex-col items-end gap-1.5">
         <button
           onClick={() => setShowPrompt((p) => !p)}
           // 33px wide is a thin thumb target; the invisible ::after widens the
@@ -398,6 +402,7 @@ export default function SiteTour() {
             {inProgress ? "Resume Tour" : "Take a Tour"}
           </span>
         </button>
+        <CareerModeButton variant="dock" />
       </div>
 
       <AnimatePresence>

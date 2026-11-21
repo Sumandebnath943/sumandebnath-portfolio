@@ -2983,6 +2983,34 @@ homepage project card (03) plus an announcement-reel line.
 > a script, a shared date constant — and states facts the rest of the site
 > contradicts. Diff everything outside the page's own folder.
 
+### 1.37 The phone menu rebuilt as "the slab", and Career Mode linked (21–22 Nov 2026)
+
+**Career Mode** — the gamified one-page portfolio at
+`hire.sumandebnath.houseofnamus.com` — is now linked from four places, all in
+`components/ui/CareerModeButton.tsx` (one URL constant, one pixel-controller SVG):
+the phone menu's sixth big word "Play"; a tab in the right-edge dock under
+*Take a Tour* (mounted inside `SiteTour.tsx`'s fixed column, so the two can never
+overlap); a fourth hero CTA; and a ghost button beside *Download PDF* on `/resume`.
+Every entry opens a new tab.
+
+**The desktop nav bar was deliberately left alone.** It is full: the pill caps at
+960px and the centred menu takes ~580px, so even an icon-only button collides
+with ⌘K. He is happy with the bar; do not reopen it.
+
+**The phone menu** is now `components/layout/MobileMenu.tsx`: a full-screen orange
+(`#FF5500`) sheet with six giant Anton words — Work, About, Notebook, Résumé,
+Contact, Play — Learnings/FAQ/Home sections on one small line, and a black bar
+(Search, WhatsApp). Work → collapsed group rows (SLMs + LLMs merged as *Models*,
+each row tagged) → numbered serif-italic project rows on a deeper band. One
+section and one group open at a time; opening on a project page opens its group
+and marks the row. It still renders from `navLinks`.
+
+What was rejected on the way, so nobody re-proposes it: the old light card sheet
+("confusing, unusable"); two dark grey-card redesigns ("everything looked the
+same"); sliding drill-down panels (against the NN/g research — accordions win at
+≤3 children); and the game's own violet-and-gold inside the site (a third
+palette). The reasoning is in the header of `MobileMenu.tsx`.
+
 ---
 
 ## 2. What changed in the session before (19 Aug 2026)

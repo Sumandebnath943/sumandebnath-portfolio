@@ -10,6 +10,7 @@ import Image from "next/image";
 // the hook form because it already holds a ref on its own section; the server
 // components use the <HeroLock /> component from the same module.
 import { useHeroLock } from "@/components/ui/HeroLock";
+import CareerModeButton from "@/components/ui/CareerModeButton";
 
 /* ── Live dual-clock hook ───────────────────────────────────────────────
    Renders nothing until mounted so the server/client markup matches and
@@ -251,6 +252,7 @@ export default function Hero() {
         >
           Career Journey
         </a>
+        <CareerModeButton variant="hero" />
       </m.div>
     </section>
   );

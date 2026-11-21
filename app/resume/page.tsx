@@ -14,6 +14,7 @@ import {
   schemaDateTime,
 } from "@/lib/schema";
 import RelatedPages from "@/components/ui/RelatedPages";
+import CareerModeButton from "@/components/ui/CareerModeButton";
 import "./resume.css";
 import {
   additionalProjects,
@@ -301,6 +302,8 @@ export default function ResumePage() {
                 </svg>
                 Download PDF
               </a>
+              {/* The same résumé, as a one-page game on its own domain. */}
+              <CareerModeButton variant="paper" />
               <Link href="/contact" className="rz-btn rz-btn-ghost">
                 Get in touch
               </Link>
