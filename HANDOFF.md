@@ -3000,9 +3000,11 @@ with ⌘K. He is happy with the bar; do not reopen it.
 **The phone menu** is now `components/layout/MobileMenu.tsx`: a full-screen orange
 (`#FF5500`) sheet where every desktop top-level item is a giant black Anton word,
 in the desktop order — Home, Work, About, Notebook, Learnings, Résumé, FAQ —
-then Contact and a bright-yellow **Play** (hard black shadow), over a black bar
-(Search, WhatsApp). Work → collapsed black group rows (SLMs + LLMs merged as
-*Models*, each row tagged) → white serif-italic pages. One section and one group
+then Contact and a bright-yellow **Play** (hard black shadow), a 2px rule with
+location/availability/target roles in small mono (from `identity`), and a black
+bar (Search, WhatsApp). Work → collapsed black group rows (SLMs + LLMs merged as
+*Models*, each row tagged) → black serif-italic pages on a cream card with a
+hard black shadow. One section and one group
 open at a time; opening on a page opens its section/group and underlines the
 row. It still renders from `navLinks`.
 
@@ -3011,7 +3013,8 @@ What was rejected on the way, so nobody re-proposes it: the old light card sheet
 same"); sliding drill-down panels (against the NN/g research — accordions win at
 ≤3 children); the game's own violet-and-gold inside the site (a third palette);
 numbered project rows on a darker band ("sequential, ugly"); all-black type;
-and Learnings/FAQ demoted to a small line. The reasoning is in the header of
+white text on the orange ("white fonts are bad"); and Learnings/FAQ demoted to
+a small line. The reasoning is in the header of
 `MobileMenu.tsx`.
 
 ---

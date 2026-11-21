@@ -14,11 +14,13 @@
  *     About, Notebook, Learnings, Résumé, FAQ), then Contact and Play. An earlier
  *     build demoted Learnings and FAQ to a small line at the bottom; he asked
  *     why, and there was no good answer — they are top-level on desktop.
- *   - COLOUR SAYS THE LEVEL. Black = something you open or a place (big words,
- *     Anton group rows). White serif italic = the pages inside. No row numbers
- *     and no darker band behind open groups: the numbered, banded version was
- *     rejected as "sequential" and ugly. White on #FF5500 is ~3.2:1, so leaf text
- *     must stay ≥24px (WCAG large text) — do not shrink it.
+ *   - SURFACE SAYS THE LEVEL. Black Anton on orange = something you open or a
+ *     place (big words, group rows). The pages inside sit on a cream card with a
+ *     hard black shadow, in black serif italic. Tried and rejected: numbered
+ *     rows on a darker band ("sequential, ugly"), and white text on the orange
+ *     ("white fonts are bad").
+ *   - A SIGN-OFF UNDER PLAY: a 2px rule and a few facts in small mono, read
+ *     from lib/resume.ts (`identity`), never typed here.
  *   - GROUPS START COLLAPSED and open one at a time (his explicit request).
  *   - NOTHING CLIPS. Leaf labels wrap rather than truncate (an italic face
  *     overhangs its box, and `truncate` cut it), and type tags (SLM, LLM) sit on
@@ -129,8 +131,10 @@ const allLeaves = (w: Word): Leaf[] =>
 // The big words scale with the screen's HEIGHT as well as its width, so all
 // nine plus Play fit a 375×667 phone without scrolling. Leading stays at 1: at
 // 0.92 the accents on RÉSUMÉ ran into the baseline of the word above.
-const WORD_SIZE = "text-[length:min(16vw,7.4dvh)]";
-const WORD = `font-anton uppercase leading-none tracking-[0.005em] ${WORD_SIZE}`;
+// 1.08 rather than 1: at 1 the É of RÉSUMÉ touched LEARNINGS above it. More
+// than that and the stack stops reading as one block.
+const WORD_SIZE = "text-[length:min(16vw,6.4dvh)]";
+const WORD = `font-anton uppercase leading-[1.08] tracking-[0.005em] ${WORD_SIZE}`;
 const MONO = "font-dmmono text-[11px] uppercase tracking-[0.14em]";
 
 export default function MobileMenu({
@@ -148,6 +152,9 @@ export default function MobileMenu({
   const closeRef = useRef<HTMLButtonElement>(null);
 
   const words = shapeWords(links);
+  // "Pune, Maharashtra, India" → "Pune, India": city and country fit one line.
+  const placeParts = identity.location.split(",").map((s) => s.trim());
+  const place = `${placeParts[0]}, ${placeParts[placeParts.length - 1]}`;
   const holds = (w: Word) => allLeaves(w).some((l) => l.href === pathname);
 
   // Open on wherever the visitor already is. Computed once, at mount — this
@@ -258,31 +265,40 @@ export default function MobileMenu({
           target={ext ? "_blank" : undefined}
           rel={ext ? "noopener noreferrer" : undefined}
           aria-current={here ? "page" : undefined}
-          className="flex min-h-11 items-center gap-2.5 py-1 text-white touch-manipulation active:opacity-70"
+          className="flex min-h-11 items-center gap-2.5 py-1 text-[#0A0A0C] touch-manipulation active:opacity-60"
         >
           <span
-            className={`pr-1 font-serif text-[25px] italic leading-[1.2] ${
-              here ? "underline decoration-2 underline-offset-[6px]" : ""
+            className={`pr-1 font-serif text-[23px] italic leading-[1.2] ${
+              here ? "underline decoration-[#FF5500] decoration-2 underline-offset-[6px]" : ""
             }`}
           >
             {leaf.label}
           </span>
-          {leaf.tag && <span className={`${MONO} shrink-0 text-[#0A0A0C]`}>{leaf.tag}</span>}
+          {leaf.tag && <span className={`${MONO} shrink-0 text-[#C2410C]`}>{leaf.tag}</span>}
           {ext && (
             <>
-              <span aria-hidden className="shrink-0 text-[15px]">↗</span>
+              <span aria-hidden className="shrink-0 text-[15px] text-[#C2410C]">↗</span>
               <span className="sr-only"> (opens in a new tab)</span>
             </>
           )}
-          {here && <span className={`${MONO} ml-auto shrink-0 pl-2 text-[#0A0A0C]`}>● Here</span>}
+          {here ? (
+            <span className={`${MONO} ml-auto shrink-0 pl-2 text-[#C2410C]`}>● Here</span>
+          ) : (
+            !ext && <span aria-hidden className="ml-auto shrink-0 pl-2 font-dmmono text-[13px] text-[#0A0A0C]/40">→</span>
+          )}
         </a>
       </li>
     );
   };
 
-  // A white rule down the left ties a list of pages to the black row above it.
+  // The light element: an open list sits on a cream card (the site's #F5F0E6)
+  // with the same hard black offset shadow as PLAY. White text on the orange
+  // was rejected, and black-on-orange for both levels read as one mass; the
+  // card separates the pages from the black rows without a third ink colour.
   const leafList = (items: Leaf[]) => (
-    <ul className="mb-2 ml-1 border-l-2 border-white/80 pl-4 pr-1">{items.map(leafRow)}</ul>
+    <ul className="mb-3 mr-[3px] mt-1 rounded-md bg-[#F5F0E6] px-4 py-1 shadow-[3px_3px_0_#0A0A0C] [&>li+li]:border-t [&>li+li]:border-[#0A0A0C]/10">
+      {items.map(leafRow)}
+    </ul>
   );
 
   const mark = (here: boolean) => (here ? "● " : "");
@@ -294,7 +310,7 @@ export default function MobileMenu({
       onClick={() => toggleSection(w.label)}
       aria-expanded={open === w.label}
       aria-controls={`mm-${w.label}`}
-      className="flex w-full items-start gap-1.5 py-[0.06em] text-left touch-manipulation"
+      className="flex w-full items-start gap-1.5 text-left touch-manipulation"
     >
       <span className={WORD}>{w.label}</span>
       <span className={`${MONO} mt-[0.5em]`}>
@@ -313,7 +329,7 @@ export default function MobileMenu({
         href={href}
         onClick={go(href)}
         aria-current={here ? "page" : undefined}
-        className="flex items-start gap-1.5 py-[0.06em] touch-manipulation"
+        className="flex items-start gap-1.5 touch-manipulation"
       >
         <span className={WORD}>{label}</span>
         {here && <span className={`${MONO} mt-[0.5em]`}>● Here</span>}
@@ -400,7 +416,7 @@ export default function MobileMenu({
       className="pointer-events-auto fixed inset-0 z-[60] flex flex-col bg-[#FF5500] text-[#0A0A0C] md:hidden"
     >
       {/* Scrolls as one piece; the black bar below stays put. */}
-      <div className="flex-1 overflow-y-auto overscroll-contain px-5 pb-8 pt-[max(1rem,env(safe-area-inset-top))]">
+      <div className="flex-1 overflow-y-auto overscroll-contain px-5 pb-5 pt-[max(1rem,env(safe-area-inset-top))]">
         <div className="flex items-center justify-between">
           <Link href="/" prefetch={false} onClick={go("/")} aria-label="Suman Debnath — home" className="relative block h-8 w-28">
             {/* The white wordmark, inked black for the orange ground. */}
@@ -455,6 +471,15 @@ export default function MobileMenu({
             />
             <span className={`${MONO} ml-auto text-right`}>My career · game ↗</span>
           </a>
+
+          {/* ── The sign-off: a rule, then a few facts in small type ───── */}
+          <div className={`${MONO} mt-3 border-t-2 border-[#0A0A0C] pt-2.5 leading-relaxed`}>
+            <p className="flex justify-between gap-3">
+              <span>{place}</span>
+              <span className="text-right">{identity.availability}</span>
+            </p>
+            <p>{identity.targeting}</p>
+          </div>
         </nav>
       </div>
 
