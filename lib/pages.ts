@@ -195,6 +195,13 @@ export const PAGES: PageEntry[] = [
     dossier: true,
   },
   {
+    href: "/ar/video-resume",
+    label: "AR Video Resume",
+    blurb: "A poster that plays the 5:58 film “Who am I?” when a phone points at it — WebAR in the phone’s browser, no app",
+    group: "apps",
+    accent: "#FF7E5F",
+  },
+  {
     href: "/fun-apps",
     label: "Fun Apps",
     blurb: "Experiments and toys, including the Soul Canvas 3D portrait",
@@ -365,6 +372,7 @@ const RELATED: Record<string, string[]> = {
   "/games/pixelville": ["/games/pixelville-next-dimension", "/games/nuno", "/fun-apps", "/apps/migi-app"],
   "/games/nuno": ["/games/pixelville", "/fun-apps", "/projects"],
   "/crawlers/that-one-crawler": ["/notebook", "/agents/pentashell", "/projects"],
+  "/ar/video-resume": ["/resume", "/journey", "/fun-apps"],
   "/fun-apps": ["/games/pixelville", "/games/nuno", "/apps/forget-anything"],
 
   // The legal pages get real destinations rather than each other. Without an

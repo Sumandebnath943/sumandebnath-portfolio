@@ -121,6 +121,13 @@ const navLinks: NavLink[] = [
           { label: "That One Crawler", href: "/crawlers/that-one-crawler", color: "#D6FF3D" },
         ],
       },
+      {
+        label: "AR",
+        color: "#FF7E5F",
+        submenus: [
+          { label: "AR Video Resume", href: "/ar/video-resume", color: "#FF7E5F" },
+        ],
+      },
       { label: "Fun Apps", href: "/fun-apps", color: "#FF8C00" },
     ],
   },

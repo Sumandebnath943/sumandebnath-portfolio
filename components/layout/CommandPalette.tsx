@@ -136,6 +136,14 @@ const commands: Command[] = [
     icon: "🕷",
   },
   {
+    id: "ar-video-resume",
+    command: "/ar",
+    label: "AR Video Resume",
+    description: "Point a phone at the poster and the 5:58 film plays on it — WebAR in the browser, no app",
+    href: "/ar/video-resume",
+    icon: "🪁",
+  },
+  {
     id: "stack",
     command: "/stack",
     label: "Systems Stack",

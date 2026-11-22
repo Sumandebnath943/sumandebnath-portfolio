@@ -3017,6 +3017,42 @@ white text on the orange ("white fonts are bad"); and Learnings/FAQ demoted to
 a small line. The reasoning is in the header of
 `MobileMenu.tsx`.
 
+### 1.38 `/ar/video-resume` and a new Portfolio → AR menu (22 Nov 2026)
+
+The **AR Video Resume** — a poster that plays *Who am I?* (the homepage film, the
+same 5:58 cut) on top of itself when a phone points at it. The AR experience
+itself is not on this site: it is one static `index.html` (MindAR 1.2.5 on
+A-Frame 1.5.0) at `https://sumandebnath943.github.io/poster-ar/`, source
+`D:\project\my ar project` (read-only) = `github.com/Sumandebnath943/poster-ar`.
+
+**His choices:** a **lean try-it page**, not a full dossier (so no stat band, no
+engineering notes, no `dossier: true`); the menu name *AR Video Resume*, not the
+AR site's own *Into the Void*; and **the repo is linked** — unlike Migi and That
+One Crawler.
+
+**The flow the page carries:** a QR code (static SVG, `public/ar-video-resume/qr.svg`,
+decoded and checked to resolve to the Pages URL) → the phone opens the scanner →
+*Reveal the poster* on the desktop opens it full screen → the phone scans → the
+film plays. Then a five-step guide, the five AR buttons + the end card, and a
+troubleshooting list. Phone visitors get a note first: the phone is the scanner,
+so they need a second screen or the downloadable poster.
+
+**One trap, fixed:** the poster overlay first rendered under the nav, mascot and
+side tabs because the hero is an `sd-banner-host` — an isolated stacking context
+— so no z-index inside it can win. It is now portalled to `<body>`. Any future
+full-screen overlay mounted from inside a hero needs the same.
+
+**Not verified:** an actual phone scanning the on-screen poster. The poster is
+re-encoded (2400px WebP, served through `next/image` at q75); the tracker's
+target was compiled from the original PNG. It should lock — the detail is all
+still there — but only a device test proves it. Facts in
+`components/ar-video-resume/ar-data.ts` come from the AR repo's git log and go
+stale if that repo changes.
+
+Wired in: nav, ⌘K `/ar`, sitemap, `STATIC_ROUTES`, `lib/pages.ts` + `RELATED`,
+page answer, three FAQs, llms-full.txt, route dates. Left out on purpose: the
+homepage Projects card and ticker, the dossier flag, other pages' related rails.
+
 ---
 
 ## 2. What changed in the session before (19 Aug 2026)

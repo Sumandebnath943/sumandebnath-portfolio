@@ -270,6 +270,21 @@ export const PAGE_FAQS: Record<string, PageFaq[]> = {
     },
   ],
 
+  "/ar/video-resume": [
+    {
+      q: "How do you view Suman Debnath’s AR video résumé?",
+      a: "Open sumandebnath943.github.io/poster-ar on a phone — the AR Video Resume page has a QR code for it — tap Enter AR Experience and allow the camera. Then point the phone at the poster, either revealed full screen on the page or printed. Once the poster is recognised, the 5:58 film “Who am I?” plays on top of it.",
+    },
+    {
+      q: "Why won’t the AR poster lock on, or why does the film keep dropping out?",
+      a: "The AR Video Resume tracks the poster’s fine detail, so it needs all four edges in view, an even light and no glare. Turn the screen’s brightness up, show the poster full screen, hold the phone about an arm’s length away and turn it sideways. If the camera never starts, the link has opened in an in-app browser such as LinkedIn’s or Instagram’s — open it in Safari or Chrome instead.",
+    },
+    {
+      q: "Does the AR video résumé need an app or send any data?",
+      a: "No. The AR Video Resume runs in the phone’s own browser using MindAR image tracking and A-Frame, from a single static page on GitHub Pages. It asks for the camera, and for the microphone only if the blow-to-fly kite button is used. The tracking runs on the phone and the page makes no upload of any kind.",
+    },
+  ],
+
   // ── Site sections ────────────────────────────────────────────────────────
   "/notebook": [
     {

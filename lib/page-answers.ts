@@ -130,6 +130,14 @@ export const PAGE_ANSWERS: Record<string, PageAnswer> = {
     variant: "paper",
     align: "left",
   },
+
+  // ── AR ───────────────────────────────────────────────────────────────────
+  "/ar/video-resume": {
+    text: "The AR Video Resume is a poster that plays Suman Debnath’s 5:58 film “Who am I?” on top of itself when a phone camera points at it. It runs in the phone’s own browser — MindAR image tracking on A-Frame, served as one static page from GitHub Pages — with no app, no account and no server.",
+    accent: "#FF7E5F",
+    variant: "dark",
+    align: "center",
+  },
 };
 
 export function answerForPage(href: string): PageAnswer | undefined {
