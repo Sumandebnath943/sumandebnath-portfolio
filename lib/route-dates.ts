@@ -35,7 +35,7 @@ export const ROUTE_DATES: Record<string, string> = {
   "/games/nuno": "2026-10-14",
   "/banking/rm-copilot": "2026-08-27",
   "/crawlers/that-one-crawler": "2026-10-23",
-  "/ar/video-resume": "2026-11-21", // no git history yet
+  "/ar/video-resume": "2026-11-22",
   "/notebook": "2026-10-26",
 };
 
@@ -44,7 +44,7 @@ export const ROUTE_DATES: Record<string, string> = {
 export const PROJECT_DOSSIER_DATE = "2026-11-21";
 
 /** Used when a route has no entry above — a page added without regenerating. */
-export const FALLBACK_DATE = "2026-11-21";
+export const FALLBACK_DATE = "2026-11-22";
 
 export function routeDate(route: string): Date {
   return new Date(ROUTE_DATES[route] ?? FALLBACK_DATE);
