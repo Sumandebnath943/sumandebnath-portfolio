@@ -146,6 +146,12 @@ export const PAGE_ANSWERS: Record<string, PageAnswer> = {
     variant: "dark",
     align: "center",
   },
+  "/crms/outreachos": {
+    text: "OutreachOS is a private, Gmail-connected job-search CRM built by Suman Debnath. It tracks hiring contacts across eight stages, from a queued introduction to interviews, offers or archive. It can schedule four touches, stop follow-ups when someone replies, and use AI to summarize and draft a response for the owner to review.",
+    accent: "#DDBD89",
+    variant: "dark",
+    align: "left",
+  },
 };
 
 export function answerForPage(href: string): PageAnswer | undefined {

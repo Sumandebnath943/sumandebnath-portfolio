@@ -144,6 +144,14 @@ const commands: Command[] = [
     icon: "🕷",
   },
   {
+    id: "outreachos",
+    command: "/outreachos",
+    label: "OutreachOS",
+    description: "Private Gmail CRM for job-search outreach and AI reply triage",
+    href: "/crms/outreachos",
+    icon: "✉",
+  },
+  {
     id: "ar-video-resume",
     command: "/ar",
     label: "AR Video Resume",

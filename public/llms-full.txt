@@ -288,6 +288,16 @@ Three things distinguish it. First, every score is deterministic — financial h
 
 ---
 
+## OUTREACHOS — GMAIL CRM FOR JOB-SEARCH OUTREACH
+
+OutreachOS is Suman Debnath’s private, single-owner job-search CRM. Its public showcase is at https://sumandebnath.houseofnamus.com/crms/outreachos. It imports hiring contacts from CSV or manual entry, checks email syntax, domain mail routing and suppression, and schedules four touches in a Gmail thread. Touch 2 has warm and cold variants. The four template tracks are Hybrid, Brand, AI Product Marketing and AI Product Management.
+
+The eight pipeline stages are Lead Queued, Outreach Active, Warm Engaged, Replied · Triage, Interviewing, Offer & Closing, Nurture / Future, and Closed / Archive. Approval Gate requires the owner to approve each touch. Auto-Pilot runs eligible prewritten touches. Both apply sending windows, pacing, caps, email prechecks and reply detection. AI summarizes inbound replies and may suggest a draft. The owner writes or reviews the reply and sends it from Gmail. Prechecks establish domain routing, while individual mailbox existence remains unknown.
+
+The private workspace includes lead dossiers, import history, approvals, template previews, Telegram alerts and analytics by touch, track and region. The showcase uses fictional contacts and illustrative data.
+
+---
+
 ## ADDITIONAL PROJECTS (EXTENDED ARCHIVE)
 
 Slide Doctor — Presentation intelligence meets operational storytelling. Live at https://slidedoctor.houseofnamus.com. An AI-assisted presentation auditing system analyzing structure, visual hierarchy, narrative flow, and executive communication quality.

@@ -203,6 +203,13 @@ export const PAGES: PageEntry[] = [
     dossier: true,
   },
   {
+    href: "/crms/outreachos",
+    label: "OutreachOS",
+    blurb: "Suman Debnath’s private job-search CRM with Gmail follow-ups, an eight-stage pipeline, email prechecks, and AI reply triage",
+    group: "apps",
+    accent: "#DDBD89",
+  },
+  {
     href: "/ar/video-resume",
     label: "AR Video Resume",
     blurb: "A poster that plays the 5:58 film “Who am I?” when a phone points at it — WebAR in the phone’s browser, no app",
@@ -382,6 +389,7 @@ const RELATED: Record<string, string[]> = {
   "/games/nuno": ["/games/pixelville", "/fun-apps", "/projects"],
   "/crawlers/that-one-crawler": ["/notebook", "/agents/pentashell", "/projects"],
   "/ar/video-resume": ["/resume", "/journey", "/fun-apps"],
+  "/crms/outreachos": ["/banking/rm-copilot", "/agents/pact-agent", "/projects"],
   "/fun-apps": ["/games/pixelville", "/games/nuno", "/apps/forget-anything"],
 
   // The legal pages get real destinations rather than each other. Without an

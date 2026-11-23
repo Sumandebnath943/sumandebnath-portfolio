@@ -11,6 +11,7 @@ type SubMenu = {
   label: string;
   href?: string;
   color?: string;
+  nativeLink?: boolean;
   submenus?: SubMenu[];
 };
 
@@ -123,6 +124,13 @@ const navLinks: NavLink[] = [
         ],
       },
       {
+        label: "CRMs",
+        color: "#DDBD89",
+        submenus: [
+          { label: "OutreachOS", href: "/crms/outreachos", color: "#DDBD89", nativeLink: true },
+        ],
+      },
+      {
         label: "AR",
         color: "#FF7E5F",
         submenus: [
@@ -168,6 +176,7 @@ function hueVars(color?: string): React.CSSProperties | undefined {
    at the top of that file. */
 
 const isExternal = (href?: string) => !!href && /^https?:\/\//.test(href);
+const nestedLeafClass = "text-left px-3 py-2 text-xs font-medium text-[#bdbdc2] transition-all hover:text-[var(--c)] hover:bg-[var(--cb)] hover:shadow-[inset_0_0_0_1px_var(--cr)] rounded-lg whitespace-nowrap";
 
 /** Marks an entry that leaves the site: a visible arrow, and words for a screen reader. */
 function ExternalMark() {
@@ -322,12 +331,16 @@ export default function Navigation() {
                                 {/* Side flyout */}
                                 <div className="absolute top-0 left-full pl-2 opacity-0 translate-x-1 pointer-events-none group-hover/sub:opacity-100 group-hover/sub:translate-x-0 group-hover/sub:pointer-events-auto transition-all duration-200 z-50">
                                   <div className="flex flex-col min-w-[150px] bg-[#0A0A0C]/95 backdrop-blur-xl border border-white/[0.08] rounded-xl p-1.5 shadow-2xl">
-                                    {sub.submenus.map((leaf) => (
+                                    {sub.submenus.map((leaf) => leaf.nativeLink ? (
+                                      <a key={leaf.href} href={leaf.href} style={hueVars(leaf.color)} className={nestedLeafClass}>
+                                        {leaf.label}
+                                      </a>
+                                    ) : (
                                       <button
                                         key={leaf.href}
                                         onClick={() => handleNavClick(leaf.href!)}
                                         style={hueVars(leaf.color)}
-                                        className="text-left px-3 py-2 text-xs font-medium text-[#bdbdc2] transition-all hover:text-[var(--c)] hover:bg-[var(--cb)] hover:shadow-[inset_0_0_0_1px_var(--cr)] rounded-lg whitespace-nowrap"
+                                        className={nestedLeafClass}
                                       >
                                         {leaf.label}
                                         {isExternal(leaf.href) && <ExternalMark />}

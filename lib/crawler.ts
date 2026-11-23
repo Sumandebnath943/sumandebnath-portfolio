@@ -176,6 +176,7 @@ export const STATIC_ROUTES = new Set([
   "/banking/rm-copilot",
   "/contact",
   "/crawlers/that-one-crawler",
+  "/crms/outreachos",
   "/experience",
   "/faq",
   "/fun-apps",

@@ -299,6 +299,24 @@ export const PAGE_FAQS: Record<string, PageFaq[]> = {
       a: "No. The AR Video Resume runs in the phone’s own browser using MindAR image tracking and A-Frame, from a single static page on GitHub Pages. It asks for the camera, and for the microphone only if the blow-to-fly kite button is used. The tracking runs on the phone and the page makes no upload of any kind.",
     },
   ],
+  "/crms/outreachos": [
+    {
+      q: "What are the eight stages in the OutreachOS pipeline?",
+      a: "OutreachOS has eight stages: Lead Queued, Outreach Active, Warm Engaged, Replied · Triage, Interviewing, Offer & Closing, Nurture / Future, and Closed / Archive. The first three can run a sequence. Replies pause follow-ups, and the owner moves leads through interviews and offers.",
+    },
+    {
+      q: "How does OutreachOS differ in Approval Gated and Automated modes?",
+      a: "OutreachOS requires approval for each touch in Approval Gated mode, called Approval Gate in the app. Automated mode, called Auto-Pilot, sends eligible, prewritten sequence touches without that approval step. Both modes apply prechecks, send windows, pacing, caps, and a final Gmail reply check.",
+    },
+    {
+      q: "Does OutreachOS use AI to reply to recruiters automatically?",
+      a: "OutreachOS uses AI to label and summarize incoming replies and suggest a draft for positive or neutral messages. Drafts stay in the CRM for the owner to review and send from Gmail. Reply detection and the follow-up stop work independently of the model.",
+    },
+    {
+      q: "Can OutreachOS email prechecks verify an individual mailbox?",
+      a: "OutreachOS prechecks verify address syntax, domain mail routing, and local suppression rules. A pass confirms the domain can accept mail in principle. An individual mailbox or catch-all status is still unknown because OutreachOS uses DNS and skips SMTP mailbox probing.",
+    },
+  ],
 
   // ── Site sections ────────────────────────────────────────────────────────
   "/notebook": [

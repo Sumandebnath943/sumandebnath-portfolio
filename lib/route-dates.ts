@@ -37,6 +37,7 @@ export const ROUTE_DATES: Record<string, string> = {
   "/banking/rm-copilot": "2026-08-27",
   "/crawlers/that-one-crawler": "2026-10-23",
   "/ar/video-resume": "2026-11-22",
+  "/crms/outreachos": "2026-11-23", // no git history yet
   "/notebook": "2026-10-26",
 };
 

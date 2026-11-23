@@ -55,6 +55,7 @@ const ROUTES = {
   "/banking/rm-copilot": ["app/banking/rm-copilot", "components/banking"],
   "/crawlers/that-one-crawler": ["app/crawlers/that-one-crawler", "components/that-one-crawler"],
   "/ar/video-resume": ["app/ar/video-resume", "components/ar-video-resume"],
+  "/crms/outreachos": ["app/crms/outreachos", "public/outreachos"],
 
   "/notebook": ["app/notebook/page.tsx", "lib/notebook"],
 };
