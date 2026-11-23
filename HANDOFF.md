@@ -3053,6 +3053,50 @@ Wired in: nav, ⌘K `/ar`, sitemap, `STATIC_ROUTES`, `lib/pages.ts` + `RELATED`,
 page answer, three FAQs, llms-full.txt, route dates. Left out on purpose: the
 homepage Projects card and ticker, the dossier flag, other pages' related rails.
 
+### 1.39 `/agents/milo` — Milo, the voice-first agent maker (23 Nov 2026)
+
+**Milo** — "talk your own AI agents into existence". A voice-first PWA where a
+fluffy tangerine planet turns a spoken request into a small agent played by one
+of 24 fluffy characters. Live at `milo.houseofnamus.com` (single owner, behind a
+passcode — the page links its **public** page, `/about.html`, never the app as a
+thing to try). Source `D:\project\agents-milo` (read-only); its
+`docs/AGENT_CATALOG.md`, `docs/PROJECT_BIBLE.md` and `shared/` are the number
+source, recorded in the header of `components/milo/milo-data.ts`.
+
+**His asks, all on the page:** adorable and fun to scroll; the full cast with
+avatars; all the details; some agents it can create; plainly a **starting app**
+that makes basic agents today, with full-scale external agents as the future
+plan; and the YouTube short `OZR0oXydGK0` embedded.
+
+**Built the way the app is built.** Milo's art is never redrawn (his own design
+rule). `public/milo/milo-body.svg` and `milo-moon.svg` are generated from the
+app's `miloBodySvg()` / `miloMoonSvg()`, and `MiloLive` layers them exactly as
+the app's `MiloFace.tsx` does — fur as cached `<img>`, a filter-free face SVG on
+top — so blinking, glancing and talking never re-run the fur filter. The 24
+character SVGs are the app's own files, copied. Interactive bits: Milo's eyes
+follow the pointer and he talks back when poked; a four-state reference sheet
+(waiting / listening / thinking / talking); a toy agent maker; flip cards for the
+cast; the 23 starters in Milo's five groups; the cast hopping along a parade.
+
+**The toy maker is honest about what it is.** Wishes map to real starters. Typed
+text runs the app's *fallback* `pickAvatar()` keyword rule and shows the words
+it matched — in the app the drafting model picks first. It is why "frost … protect
+my plants" can cast Rook: "protect" outscores "plant". That is the real rule.
+
+**The short is a facade**, like the homepage film: nothing from YouTube loads
+until play is pressed (checked: zero youtube requests before the click), which
+keeps `/privacy`'s promise without editing it. It plays `youtube-nocookie.com`.
+
+**No AI vendor or model names**, same as MIGI and as Milo's own public page.
+
+Wired in: nav (Agents), ⌘K `/milo`, sitemap, `STATIC_ROUTES` (crawler-check
+107/107), `lib/pages.ts` + `RELATED` + `dossier: true`, page answer, three FAQs,
+llms-full.txt, route dates. **Left out on purpose, because he asked for no other
+changes:** the homepage Projects card and ticker, and other pages' related rails
+— so Milo is reached from the menus, ⌘K and `/projects`, and no other page's
+content links to it yet. Add `/agents/milo` to a sibling's `RELATED` list when
+he wants an in-content inbound link.
+
 ---
 
 ## 2. What changed in the session before (19 Aug 2026)

@@ -44,6 +44,7 @@ const ROUTES = {
   "/agents/pact-agent": ["app/agents/pact-agent", "components/pact"],
   "/agents/pentashell": ["app/agents/pentashell", "components/pentashell"],
   "/agents/migi": ["app/agents/migi", "components/migi"],
+  "/agents/milo": ["app/agents/milo", "components/milo"],
   "/slms/pentacmd": ["app/slms/pentacmd", "components/penta"],
   "/llms/qdex-1.5b": ["app/llms/qdex-1.5b", "components/qdex"],
   "/apps/forget-anything": ["app/apps/forget-anything", "components/forget-anything"],

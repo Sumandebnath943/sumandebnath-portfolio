@@ -72,6 +72,14 @@ const commands: Command[] = [
     icon: "◐",
   },
   {
+    id: "milo",
+    command: "/milo",
+    label: "Milo — Voice-First Agent Maker",
+    description: "Talk your own AI agents into existence — 24 fluffy characters, and it asks before it acts",
+    href: "/agents/milo",
+    icon: "🌙",
+  },
+  {
     id: "forget-anything",
     command: "/forget",
     label: "Forget Anything?",

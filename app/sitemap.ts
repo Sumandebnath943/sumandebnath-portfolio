@@ -56,6 +56,7 @@ const ROUTES: Entry[] = [
   { path: "/agents/pact-agent", changeFrequency: "monthly", priority: 0.8 },
   { path: "/agents/pentashell", changeFrequency: "monthly", priority: 0.8 },
   { path: "/agents/migi", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/agents/milo", changeFrequency: "monthly", priority: 0.8 },
   { path: "/slms/pentacmd", changeFrequency: "monthly", priority: 0.8 },
   { path: "/llms/qdex-1.5b", changeFrequency: "monthly", priority: 0.8 },
   { path: "/apps/forget-anything", changeFrequency: "monthly", priority: 0.8 },

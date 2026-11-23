@@ -122,6 +122,21 @@ export const PAGE_FAQS: Record<string, PageFaq[]> = {
     },
   ],
 
+  "/agents/milo": [
+    {
+      q: "What is Milo, the voice-first agent maker?",
+      a: "Milo is a voice-first web app by Suman Debnath that turns a spoken request into a small AI agent. Milo asks a question or two, casts one of 24 fluffy characters to play the agent, and on a yes the agent runs straight away and then on its own schedule, messaging its owner in the app, by phone notification or on Telegram. Anything that would act on the outside world waits for approval.",
+    },
+    {
+      q: "What kinds of agents can Milo build today?",
+      a: "Milo builds basic, single-job agents: a morning weather-and-news brief, a rain alert, a price watcher, a job radar, a research digest, a word of the day, an uptime check — 23 ready-made starters in all, or one described in plain words. Its agents check weather and news, search the web, read public pages, remember past runs and post to Discord or Slack after approval. They cannot log in to sites, read email or calendars, or buy anything yet; those connectors are on the roadmap.",
+    },
+    {
+      q: "How does Milo stop an AI agent from doing something unexpected?",
+      a: "Milo treats each agent as data rather than code: a model writes a JSON spec, which is validated and repaired against a fixed tool catalogue, and each run may use only the tools that agent declared, up to 8 model steps and 12 tool calls. Any outward action, such as posting to a team channel, becomes an approval request, and after approval the stored action runs exactly as approved with no model in between.",
+    },
+  ],
+
   // ── Applied systems ──────────────────────────────────────────────────────
   // The first three were previously hand-rolled as FAQPage JSON-LD inside
   // app/banking/rm-copilot/page.tsx with **no visible counterpart anywhere on

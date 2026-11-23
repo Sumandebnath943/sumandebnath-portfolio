@@ -68,6 +68,7 @@ const navLinks: NavLink[] = [
           { label: "PACT Agent", href: "/agents/pact-agent", color: "#FF5500" },
           { label: "Pentashell", href: "/agents/pentashell", color: "#2FE2F0" },
           { label: "Migi — Personal Suite of AI Agents", href: "/agents/migi", color: "#C6F24E" },
+          { label: "Milo — Voice-First Agent Maker", href: "/agents/milo", color: "#FF6F3C" },
         ],
       },
       {

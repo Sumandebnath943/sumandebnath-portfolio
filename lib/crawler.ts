@@ -167,6 +167,7 @@ export const STATIC_ROUTES = new Set([
   "/",
   "/about",
   "/agents/migi",
+  "/agents/milo",
   "/agents/pact-agent",
   "/agents/pentashell",
   "/apps/forget-anything",

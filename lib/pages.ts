@@ -111,6 +111,14 @@ export const PAGES: PageEntry[] = [
     accent: "#C6F24E",
     dossier: true,
   },
+  {
+    href: "/agents/milo",
+    label: "Milo",
+    blurb: "Voice-first agent maker — describe a job out loud and one of 24 fluffy characters runs it on a schedule, asking before it acts",
+    group: "agents",
+    accent: "#FF6F3C",
+    dossier: true,
+  },
 
   // ── Models ───────────────────────────────────────────────────────────────
   {
@@ -360,6 +368,7 @@ const RELATED: Record<string, string[]> = {
   "/agents/pact-agent": ["/agents/pentashell", "/crawlers/that-one-crawler", "/projects/aegis-vault"],
   "/agents/pentashell": ["/slms/pentacmd", "/agents/pact-agent", "/llms/qdex-1.5b"],
   "/agents/migi": ["/apps/migi-app", "/agents/pact-agent", "/banking/rm-copilot"],
+  "/agents/milo": ["/agents/migi", "/agents/pact-agent", "/apps/migi-app"],
 
   "/slms/pentacmd": ["/agents/pentashell", "/llms/qdex-1.5b", "/notebook"],
   "/llms/qdex-1.5b": ["/slms/pentacmd", "/agents/pentashell", "/projects"],

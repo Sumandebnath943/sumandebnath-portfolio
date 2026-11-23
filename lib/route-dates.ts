@@ -26,6 +26,7 @@ export const ROUTE_DATES: Record<string, string> = {
   "/agents/pact-agent": "2026-08-27",
   "/agents/pentashell": "2026-11-16",
   "/agents/migi": "2026-09-07",
+  "/agents/milo": "2026-11-23", // no git history yet
   "/slms/pentacmd": "2026-09-12",
   "/llms/qdex-1.5b": "2026-08-27",
   "/apps/forget-anything": "2026-08-25",

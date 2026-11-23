@@ -76,6 +76,14 @@ export const PAGE_ANSWERS: Record<string, PageAnswer> = {
     variant: "paper",
     align: "center",
   },
+  "/agents/milo": {
+    text: "Milo is a voice-first agent maker built by Suman Debnath. Its owner describes a small job out loud; Milo casts one of 24 fluffy characters to do it, and on a yes the agent runs on its own schedule and reports back, asking first before anything leaves the app. It is a starting app: basic agents today, external connectors next.",
+    accent: "#FF6F3C",
+    variant: "dark",
+    // The Milo hero is two columns with the text on the left, so the answer
+    // takes the left-rule layout rather than the centred one.
+    align: "left",
+  },
 
   // ── Applied systems ──────────────────────────────────────────────────────
   "/banking/rm-copilot": {

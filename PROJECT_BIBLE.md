@@ -105,6 +105,7 @@ architecture in §6.8; writing rules in `BLOG_GUIDELINES.md`.
 |---|---|---|
 | `/agents/migi` | The MIGI agent fleet | Lime `#C6F24E` on cream `#F4F3ED` + ink |
 | `/apps/migi-app` | **MIGI Android App** (V2 native + V1 archive) | Lime `#C6F24E` + aqua `#35E0FF` on graphite |
+| `/agents/milo` | **Milo** (voice-first agent maker, 24-character cast) | Tangerine `#FF6F3C` + moon `#FFD6C2` on night `#0b0b0d`, moon-paper `#FFF5EE` bands, one sunset gradient |
 | `/agents/pact-agent` | PACT agent | Terracotta `#CF5C36` |
 | `/agents/pentashell` | Pentashell CLI | Cyan `#2FE2F0`, magenta `#F25FD0`, violet `#9B6BF2` |
 | `/slms/pentacmd` | PentaCMD model | Green `#34D399` + violet `#A78BFA` |
