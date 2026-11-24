@@ -1,7 +1,7 @@
 "use client";
 import { PUBLIC_EMAIL } from "@/lib/public-contact";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { chatRequest } from "@/lib/portfolio-chat/history";
@@ -133,7 +133,7 @@ export default function ChatTakeover() {
   // ── Voice + responsive ──
   const [voiceMode, setVoiceMode] = useState(false);
   const voiceModeRef = useRef(false);
-  voiceModeRef.current = voiceMode;
+  const resumeMicRef = useRef(false);
   const openRef = useRef(open);
   openRef.current = open;
   const [isMobile, setIsMobile] = useState(false);
@@ -297,36 +297,47 @@ export default function ChatTakeover() {
     return () => { clearTimeout(timer); setIdleMsg(null); };
   }, [open, phase, isAnimating, speech.speaking, isLoading]);
 
-  const handleClose = useCallback(() => {
-    clearPhaseTimers();
+  const stopVoice = () => {
+    voiceModeRef.current = false;
+    resumeMicRef.current = false;
     speech.stopListen();
     speech.cancelSpeak();
+    speech.setNotice("");
     setVoiceMode(false);
+  };
+
+  const handleClose = () => {
+    clearPhaseTimers();
+    stopVoice();
     setPhase("outro");
     setRobotAnim("Jumping");
     setRotationY(FACE_RIGHT);
     phaseTimers.current.push(setTimeout(() => closeChat(), PHASE_MS));
-  }, [closeChat, speech]);
+  };
 
-  const toggleVoice = useCallback(() => {
+  const toggleVoice = () => {
     if (!speech.supported) return;
-    setVoiceMode((prev) => {
-      const next = !prev;
-      if (next) speech.listen();
-      else { speech.stopListen(); speech.cancelSpeak(); }
-      return next;
-    });
-  }, [speech]);
+    if (voiceModeRef.current) { stopVoice(); return; }
+    speech.enableAudio();
+    voiceModeRef.current = true;
+    setVoiceMode(true);
+    speech.listen();
+  };
 
   // Speak an assistant reply aloud (voice mode), then resume listening.
-  const respond = useCallback((text: string, links?: ReplyLinks) => {
+  function respond(text: string, links?: ReplyLinks, voiceTicket?: string) {
     animateResponse(text, links);
-    if (voiceModeRef.current) {
-      speech.speak(text, () => {
-        if (voiceModeRef.current && openRef.current) speech.listen();
-      });
+    if (!voiceModeRef.current || !openRef.current) return;
+    if (!voiceTicket) {
+      speech.setNotice("Gemini voice is unavailable for this reply. You can keep chatting by text.");
+      return;
     }
-  }, [speech]);
+    void speech.speak(text, voiceTicket, () => {
+      if (!voiceModeRef.current || !openRef.current) return;
+      if (typewriterRef.current) resumeMicRef.current = true;
+      else speech.listen();
+    });
+  }
 
   // ── Chat behaviour ──
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages, isLoading]);
@@ -355,6 +366,10 @@ export default function ChatTakeover() {
         typewriterRef.current = null;
         setIsAnimating(false);
         lastActivity.current = Date.now();
+        if (resumeMicRef.current && voiceModeRef.current && openRef.current) {
+          resumeMicRef.current = false;
+          speech.listen();
+        }
       }
     }, TYPEWRITER_SPEED_MS);
   }
@@ -362,6 +377,12 @@ export default function ChatTakeover() {
   async function sendMessage(text: string) {
     const userText = text.trim();
     if (!userText || isLoading || isAnimating) return;
+    const wantsVoice = voiceModeRef.current;
+    if (wantsVoice) {
+      resumeMicRef.current = false;
+      speech.stopListen();
+      speech.cancelSpeak();
+    }
     lastActivity.current = Date.now();
     const updated = [...messages, { role: "user", content: userText } as Message];
     setMessages(updated);
@@ -371,12 +392,12 @@ export default function ChatTakeover() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: chatRequest(updated, window.location.pathname),
+        body: chatRequest(updated, window.location.pathname, wantsVoice),
       });
       const data = await res.json().catch(() => ({}));
       if (res.status === 429) { respond("Please wait a moment before sending another message."); return; }
       if (!res.ok || !data.message) { respond(data.error || `Something went wrong. Please email ${PUBLIC_EMAIL} directly.`); return; }
-      respond(data.message, { sources: data.sources, catalog: data.catalog });
+      respond(data.message, { sources: data.sources, catalog: data.catalog }, data.voiceTicket);
     } catch {
       respond(`Network error. Please email ${PUBLIC_EMAIL} directly.`);
     } finally {
@@ -451,7 +472,9 @@ export default function ChatTakeover() {
                 <div className="ct-avatar">SD</div>
                 <div>
                   <div className="ct-title">Suman&apos;s Assistant</div>
-                  <div className="ct-sub"><span className="ct-status" />Available · Ask me anything</div>
+                  <span className="ct-rag" title="Uses published portfolio sources to answer questions">
+                    <span className="ct-status" aria-hidden="true" />RAG enabled
+                  </span>
                 </div>
               </div>
               {messages.length > 1 && (
@@ -459,7 +482,7 @@ export default function ChatTakeover() {
                   className="ct-reset"
                   disabled={isLoading || isAnimating}
                   onClick={() => {
-                    speech.cancelSpeak();
+                    stopVoice();
                     setMessages([INITIAL_MESSAGE]);
                     setInput("");
                     inputRef.current?.focus();
@@ -516,13 +539,18 @@ export default function ChatTakeover() {
               </div>
             )}
 
+            {voiceMode && (speech.notice || speech.speaking) && (
+              <p className="ct-voice-notice" role="status">{speech.notice || "Aoede is speaking…"}</p>
+            )}
             <div className="ct-input-bar">
               {speech.supported && (
                 <button
                   className={`ct-mic ${voiceMode ? "on" : ""} ${speech.listening ? "listening" : ""}`}
                   onClick={toggleVoice}
                   aria-label={voiceMode ? "Turn off voice mode" : "Turn on voice mode"}
-                  title={voiceMode ? "Voice mode on — click to turn off" : "Talk to the robot"}
+                  aria-pressed={voiceMode}
+                  disabled={!voiceMode && (isLoading || isAnimating)}
+                  title={voiceMode ? "Turn off Gemini voice" : "Use Gemini voice"}
                 >
                   <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
                     <path d="M12 2a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z" fill="currentColor" />
@@ -534,7 +562,7 @@ export default function ChatTakeover() {
                 ref={inputRef}
                 className="ct-input"
                 type="text"
-                placeholder={voiceMode ? (speech.listening ? "Listening…" : "Voice mode on") : "Ask something…"}
+                placeholder={speech.listening ? "Listening…" : "Ask something…"}
                 value={input}
                 maxLength={MAX_USER_CHARS}
                 onChange={(e) => setInput(e.target.value)}
@@ -691,8 +719,8 @@ const TAKEOVER_CSS = `
   .ct-header-left { display: flex; align-items: center; gap: 12px; }
   .ct-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg,#F04E00,#FF8A33); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; box-shadow: 0 2px 8px rgba(240,78,0,0.3); }
   .ct-title { font-size: 15px; font-weight: 600; color: #1D1D1F; letter-spacing: -0.02em; }
-  .ct-sub { font-size: 12px; color: #86868B; margin-top: 2px; display: flex; align-items: center; gap: 6px; }
-  .ct-status { width: 7px; height: 7px; border-radius: 50%; background: #34C759; box-shadow: 0 0 0 3px rgba(52,199,89,0.15); }
+  .ct-rag { display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; padding: 2px 8px; border: 1px solid #bddbc8; border-radius: 999px; background: #edf7f0; color: #23633e; font-size: 11px; font-weight: 650; white-space: nowrap; }
+  .ct-status { width: 6px; height: 6px; border-radius: 50%; background: #128047; box-shadow: 0 0 0 2px #cae8d4; }
   .ct-close { background: rgba(0,0,0,0.04); border: none; cursor: pointer; color: #86868B; padding: 8px; border-radius: 10px; display: flex; transition: background .15s,color .15s; }
   .ct-close:hover { background: rgba(0,0,0,0.08); color: #1D1D1F; }
 
@@ -733,6 +761,8 @@ const TAKEOVER_CSS = `
   .ct-input:disabled { opacity: .5; }
   .ct-mic { background: #f0eeec; border: 1px solid rgba(0,0,0,0.1); border-radius: 14px; color: #5b5b5f; cursor: pointer; padding: 13px 14px; display: flex; transition: background .15s, color .15s, box-shadow .15s; flex-shrink: 0; }
   .ct-mic:hover { background: #e8e6e3; color: #1D1D1F; }
+  .ct-mic:disabled { opacity: .45; cursor: default; }
+  .ct-voice-notice { font-size: 12px; color: #565357; margin: 6px 28px 0; }
   .ct-mic.on { background: linear-gradient(135deg,#F04E00,#FF8A33); color: #fff; border-color: transparent; box-shadow: 0 2px 8px rgba(240,78,0,0.3); }
   .ct-mic.listening { animation: ct-mic-pulse 1.3s ease-out infinite; }
   @keyframes ct-mic-pulse { 0%{box-shadow:0 0 0 0 rgba(240,78,0,0.45)} 70%{box-shadow:0 0 0 10px rgba(240,78,0,0)} 100%{box-shadow:0 0 0 0 rgba(240,78,0,0)} }

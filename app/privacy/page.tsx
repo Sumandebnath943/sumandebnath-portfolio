@@ -216,6 +216,16 @@ export default function PrivacyPage() {
               for its processing and retention practices.
             </Bullet>
             <Bullet>
+              With voice mode on, <span className="text-white/85">Gemini</span> turns the
+              assistant’s reply into audio. Your browser handles microphone transcription
+              and may use its own speech service. The portfolio sends the resulting text to
+              the chat. See the{" "}
+              <a href="https://ai.google.dev/gemini-api/terms" className="underline underline-offset-4">
+                Gemini API terms
+              </a>{" "}
+              for Google’s data handling practices.
+            </Bullet>
+            <Bullet>
               <span className="text-white/85">Telegram</span> — delivers my visit
               alerts to my private chat.
             </Bullet>

@@ -4,7 +4,7 @@ import type { ChatMessage } from "./types";
 const HISTORY_BYTES = 16_000;
 const RECALL_STOP_WORDS = new Set(["about", "before", "earlier", "first", "have", "more", "said", "that", "this", "what", "when", "which"]);
 
-export function chatRequest(transcript: ChatMessage[], pathname: string) {
+export function chatRequest(transcript: ChatMessage[], pathname: string, voice = false) {
   const messages = transcript.slice(-MAX_HISTORY_MESSAGES).map(({ role, content }) => ({
     role,
     content: content.slice(0, role === "user" ? MAX_USER_CHARS : MAX_ASSISTANT_CHARS),
@@ -24,7 +24,7 @@ export function chatRequest(transcript: ChatMessage[], pathname: string) {
     .slice(0, 2)
     .sort((a, b) => a.index - b.index)
     .map(({ content }) => content.slice(0, MAX_USER_CHARS));
-  const encode = () => JSON.stringify({ messages, pathname, earlierTurns });
+  const encode = () => JSON.stringify({ messages, pathname, earlierTurns, ...(voice && { voice }) });
   let body = encode();
   const encoder = new TextEncoder();
   while (messages.length > 1 && encoder.encode(body).byteLength > HISTORY_BYTES) {

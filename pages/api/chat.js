@@ -5,6 +5,8 @@ import { catalogKind, loadPortfolioSearch, resolveCitations } from '../../lib/po
 import { MAX_ASSISTANT_CHARS, MAX_HISTORY_MESSAGES, MAX_USER_CHARS } from '../../lib/portfolio-chat/types';
 import { PUBLIC_EMAIL } from '../../lib/public-contact';
 import { cleanVisitorText, hasControlDirective, isPrivateRequest, isSafeAnswer } from '../../lib/portfolio-chat/guardrails';
+import { boundaryReply, playfulReply } from '../../lib/portfolio-chat/replies';
+import { issueVoiceTicket, synthesizeVoice, verifyVoiceTicket } from '../../lib/portfolio-chat/voice';
 
 /**
  * The portfolio chat endpoint.
@@ -121,9 +123,6 @@ const BOT_UA =
 
 // ── Input handling ────────────────────────────────────────────────────────
 
-const INJECTION_RESPONSE =
-  "Nice try. My lane is Suman's public portfolio. Pick a project and I'll show you where the interesting bits are.";
-
 function normalizeMessages(messages) {
   return messages.slice(-MAX_HISTORY_MESSAGES).flatMap((entry) => {
     if (!entry || (entry.role !== 'user' && entry.role !== 'assistant')) return [];
@@ -170,7 +169,7 @@ const FORMAT = {
       type: 'object',
       properties: {
         answer: { type: 'string' },
-        kind: { type: 'string', enum: ['portfolio', 'insufficient', 'casual'] },
+        kind: { type: 'string', enum: ['portfolio', 'insufficient', 'casual', 'boundary'] },
         sourceIds: { type: 'array', items: { type: 'string' } },
       },
       required: ['answer', 'kind', 'sourceIds'],
@@ -187,6 +186,26 @@ const CATALOG_LABELS = {
 
 const CONTACT_SOURCE = { href: '/contact', title: 'Contact Suman' };
 const UNGROUNDED_RESPONSE = "I couldn't verify that from the portfolio. Try asking about a specific project or detail.";
+const VOICE_UNAVAILABLE = 'Gemini voice is unavailable right now. You can keep chatting by text.';
+
+async function sendVoice(req, res) {
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) return res.status(503).json({ error: VOICE_UNAVAILABLE });
+  const { text, voiceTicket } = req.body;
+  if (!verifyVoiceTicket(text, voiceTicket, key)) return res.status(400).json({ error: 'Invalid or expired voice ticket.' });
+  if (overDailyCap()) return res.status(429).json({ error: VOICE_UNAVAILABLE });
+  try {
+    const result = await synthesizeVoice(text, key);
+    if (result.wav) {
+      res.setHeader('Content-Type', 'audio/wav');
+      return res.status(200).send(result.wav);
+    }
+    console.error('Gemini voice error:', { status: result.status });
+  } catch (error) {
+    console.error('Gemini voice error:', { name: error?.name });
+  }
+  return res.status(503).json({ error: VOICE_UNAVAILABLE });
+}
 
 // ── Handler ───────────────────────────────────────────────────────────────
 
@@ -218,7 +237,14 @@ export default async function handler(req, res) {
     });
   }
 
-  const { messages, pathname, earlierTurns } = req.body || {};
+  res.setHeader('Cache-Control', 'no-store');
+  if (req.body && Object.hasOwn(req.body, 'voiceTicket')) return sendVoice(req, res);
+
+  const { messages, pathname, earlierTurns, voice } = req.body || {};
+  const replyWith = (reply) => {
+    const voiceTicket = voice === true ? issueVoiceTicket(reply.message) : undefined;
+    return res.status(200).json({ ...reply, voiceTicket });
+  };
 
   if (!Array.isArray(messages)) {
     return res.status(400).json({ error: 'Invalid request: messages must be an array.' });
@@ -231,13 +257,13 @@ export default async function handler(req, res) {
   if (submitted.content.length > MAX_USER_CHARS) {
     return res.status(413).json({ error: 'That message is too long.' });
   }
-  if (hasControlDirective(submitted.content)) return res.status(200).json({ message: INJECTION_RESPONSE });
+  if (hasControlDirective(submitted.content)) return replyWith({ message: boundaryReply() });
 
   const question = cleanVisitorText(submitted.content, MAX_USER_CHARS);
   if (!question) return res.status(400).json({ error: 'Nothing to answer.' });
 
   if (/^(?:hi|hello|hey|hey there|hi there)[!. ]*$/i.test(question)) {
-    return res.status(200).json({
+    return replyWith({
       message: "Hey! Want the agent fleet, the job-search CRM, or the card game that runs without a game server?",
     });
   }
@@ -247,9 +273,12 @@ export default async function handler(req, res) {
     const wantsContact = asksForContact.test(question) || /\b(?:phone|mobile|whatsapp|call|text)\b/i.test(question);
     const message = wantsContact
       ? 'The best way to reach Suman is ' + PUBLIC_EMAIL + '. The contact page has a form, too.'
-      : "I can help with public details from Suman's portfolio. Which project are you curious about?";
-    return res.status(200).json({ message, sources: wantsContact ? [CONTACT_SOURCE] : [] });
+      : boundaryReply();
+    return replyWith({ message, sources: wantsContact ? [CONTACT_SOURCE] : [] });
   }
+
+  const joke = playfulReply(question);
+  if (joke) return replyWith({ message: joke });
 
   try {
     const search = loadPortfolioSearch();
@@ -258,7 +287,7 @@ export default async function handler(req, res) {
     const inventorySummary = kind ? `There are ${catalog.length} ${CATALOG_LABELS[kind]}.` : '';
     const asksForDetails = /\b(?:and|then)\s+(?:explain|tell|compare|describe|which|what|how)\b/i.test(question);
     if (catalog && !asksForDetails) {
-      return res.status(200).json({
+      return replyWith({
         message: inventorySummary,
         catalog,
       });
@@ -315,19 +344,20 @@ export default async function handler(req, res) {
     try {
       reply = JSON.parse(completion.choices?.[0]?.message?.content ?? '');
     } catch {
-      return res.status(200).json({ message: UNGROUNDED_RESPONSE });
+      return replyWith({ message: UNGROUNDED_RESPONSE });
     }
+    if (reply?.kind === 'boundary') return replyWith({ message: boundaryReply() });
     const response = typeof reply?.answer === 'string' ? toPlainText(reply.answer) : '';
     const sources = resolveCitations(reply?.sourceIds, evidence);
     if (response.length > MAX_ASSISTANT_CHARS || !isSafeAnswer(response, marker) || COMPENSATION_PATTERN.test(response)) {
-      return res.status(200).json({ message: UNGROUNDED_RESPONSE });
+      return replyWith({ message: UNGROUNDED_RESPONSE });
     }
     if (!response || !sources || !['portfolio', 'insufficient', 'casual'].includes(reply.kind) ||
       (reply.kind === 'portfolio' && sources.length === 0)) {
-      return res.status(200).json({ message: UNGROUNDED_RESPONSE });
+      return replyWith({ message: UNGROUNDED_RESPONSE });
     }
 
-    return res.status(200).json({ message: [inventorySummary, response].filter(Boolean).join('\n\n'), sources, catalog });
+    return replyWith({ message: [inventorySummary, response].filter(Boolean).join('\n\n'), sources, catalog });
   } catch (error) {
     // Provider errors may contain account details or snippets of user data.
     console.error('Chat API error:', { name: error?.name, status: error?.status });

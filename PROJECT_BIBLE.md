@@ -876,6 +876,12 @@ passes visitor turns and source excerpts as quoted user data, validates model
 output and citation IDs, and redirects personal-contact requests to the public
 hiring address.
 
+The chat header displays a RAG badge. Voice mode uses browser speech recognition
+for input where supported and Gemini’s Aoede voice for replies. The Gemini key
+is `GEMINI_API_KEY`. The chat API signs the exact approved reply before it can be
+sent for speech, applies the same request limits, and returns WAV audio after the
+text is already visible. Browser or provider failures leave the text chat usable.
+
 ### 6.4 The 3D robot mascot (`components/robot/`)
 
 `three` + R3F, model at `public/robot.glb`, built from FBX by

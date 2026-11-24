@@ -1,99 +1,146 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+type Recognition = {
+  lang: string;
+  interimResults: boolean;
+  continuous: boolean;
+  onresult: null | ((event: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void);
+  onend: null | (() => void);
+  onerror: null | ((event: { error: string }) => void);
+  start: () => void;
+  abort: () => void;
+};
 
-/**
- * Thin wrapper around the browser's free Web Speech APIs:
- * SpeechRecognition (mic → text) + speechSynthesis (text → robot voice).
- * Best support in Chrome/Edge; gracefully reports `supported: false` elsewhere.
- */
+function recognitionConstructor() {
+  const browser = window as Window & {
+    SpeechRecognition?: new () => Recognition;
+    webkitSpeechRecognition?: new () => Recognition;
+  };
+  return browser.SpeechRecognition ?? browser.webkitSpeechRecognition;
+}
+
+const subscribeToSupport = () => () => {};
+const supportsAudio = () => typeof AudioContext !== "undefined";
+const noServerAudio = () => false;
+
 export function useWebSpeech(onTranscript: (text: string) => void) {
-  const [supported, setSupported] = useState(false);
+  const supported = useSyncExternalStore(subscribeToSupport, supportsAudio, noServerAudio);
   const [listening, setListening] = useState(false);
   const [speaking, setSpeaking] = useState(false);
-
-  const recogRef = useRef<any>(null);
-  const voiceRef = useRef<SpeechSynthesisVoice | null>(null);
-  // Latest-callback ref, kept in step in an effect rather than written during
-  // render. The initial value is already right for the first pass, and the only
-  // reader is a speech-recognition result event.
+  const [notice, setNotice] = useState("");
+  const recognition = useRef<Recognition | null>(null);
+  const context = useRef<AudioContext | null>(null);
+  const playback = useRef<AudioBufferSourceNode | null>(null);
+  const request = useRef<AbortController | null>(null);
   const onTranscriptRef = useRef(onTranscript);
-  useEffect(() => {
-    onTranscriptRef.current = onTranscript;
-  }, [onTranscript]);
+
+  useEffect(() => { onTranscriptRef.current = onTranscript; }, [onTranscript]);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    const synth = window.speechSynthesis;
-    if (!SR || !synth) { setSupported(false); return; }
-    setSupported(true);
-
-    const r = new SR();
-    r.lang = "en-US";
-    r.interimResults = false;
-    r.maxAlternatives = 1;
-    r.continuous = false;
-    r.onresult = (e: any) => {
-      const t = e.results?.[0]?.[0]?.transcript?.trim();
-      if (t) onTranscriptRef.current?.(t);
+    const SpeechRecognition = recognitionConstructor();
+    if (!SpeechRecognition) return;
+    const mic = new SpeechRecognition();
+    mic.lang = "en-US";
+    mic.interimResults = false;
+    mic.continuous = false;
+    mic.onresult = ({ results }) => {
+      const transcript = results[0]?.[0]?.transcript.trim();
+      if (transcript) onTranscriptRef.current(transcript);
     };
-    r.onend = () => setListening(false);
-    r.onerror = () => setListening(false);
-    recogRef.current = r;
-
-    // Pick the most natural-sounding English voice available.
-    const pickVoice = () => {
-      const voices = synth.getVoices();
-      if (!voices.length) return;
-      voiceRef.current =
-        voices.find((v) => /en[-_]US/i.test(v.lang) && /natural|google us english|samantha|aria|jenny|libby/i.test(v.name)) ||
-        voices.find((v) => /en[-_]US/i.test(v.lang)) ||
-        voices.find((v) => /^en/i.test(v.lang)) ||
-        voices[0];
+    mic.onend = () => setListening(false);
+    mic.onerror = ({ error }) => {
+      setListening(false);
+      if (error === "not-allowed" || error === "service-not-allowed" || error === "audio-capture" || error === "network") {
+        setNotice("Microphone unavailable. Type a message to hear a Gemini reply.");
+      }
     };
-    pickVoice();
-    synth.addEventListener?.("voiceschanged", pickVoice);
-
+    recognition.current = mic;
     return () => {
-      try { r.abort(); } catch { /* noop */ }
-      synth.cancel();
-      synth.removeEventListener?.("voiceschanged", pickVoice);
+      mic.onresult = mic.onend = mic.onerror = null;
+      mic.abort();
+      recognition.current = null;
     };
+  }, []);
+
+  useEffect(() => () => {
+    request.current?.abort();
+    void context.current?.close().catch(() => {});
+    request.current = null;
+    playback.current = null;
+    context.current = null;
   }, []);
 
   const listen = useCallback(() => {
-    const r = recogRef.current;
-    if (!r) return;
-    try { r.start(); setListening(true); } catch { /* already started */ }
+    const mic = recognition.current;
+    if (!mic) {
+      setNotice("This browser can play replies. Type a message to hear one.");
+      return;
+    }
+    try { mic.start(); setListening(true); } catch { /* The previous turn is still stopping. */ }
   }, []);
 
   const stopListen = useCallback(() => {
-    const r = recogRef.current;
-    if (r) { try { r.stop(); } catch { /* noop */ } }
+    recognition.current?.abort();
     setListening(false);
   }, []);
 
-  const speak = useCallback((text: string, onEnd?: () => void) => {
-    const synth = window.speechSynthesis;
-    if (!synth) { onEnd?.(); return; }
-    synth.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    if (voiceRef.current) u.voice = voiceRef.current;
-    u.rate = 1.03;
-    u.pitch = 1.0;
-    u.onstart = () => setSpeaking(true);
-    u.onend = () => { setSpeaking(false); onEnd?.(); };
-    u.onerror = () => { setSpeaking(false); onEnd?.(); };
-    synth.speak(u);
+  const enableAudio = useCallback(() => {
+    context.current ??= new AudioContext();
+    // Resume in the button gesture so the later, asynchronous reply can play.
+    void context.current.resume().catch(() => {});
+    setNotice("");
   }, []);
 
   const cancelSpeak = useCallback(() => {
-    window.speechSynthesis?.cancel();
+    request.current?.abort();
+    request.current = null;
+    if (playback.current) {
+      playback.current.onended = null;
+      playback.current.stop();
+      playback.current.disconnect();
+      playback.current = null;
+    }
     setSpeaking(false);
   }, []);
 
-  return { supported, listening, speaking, listen, stopListen, speak, cancelSpeak };
+  const speak = useCallback(async (text: string, voiceTicket: string, onEnd: () => void) => {
+    cancelSpeak();
+    const audio = context.current;
+    if (!audio) return;
+    const controller = new AbortController();
+    request.current = controller;
+    setNotice("");
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, voiceTicket }),
+        signal: controller.signal,
+      });
+      if (!response.ok) throw new Error("Voice request failed");
+      const buffer = await audio.decodeAudioData(await response.arrayBuffer());
+      if (controller.signal.aborted) return;
+      if (audio.state !== "running") throw new Error("Audio playback is unavailable");
+      const source = audio.createBufferSource();
+      source.buffer = buffer;
+      source.connect(audio.destination);
+      source.onended = () => {
+        source.disconnect();
+        playback.current = null;
+        setSpeaking(false);
+        onEnd();
+      };
+      source.start();
+      playback.current = source;
+      setSpeaking(true);
+    } catch {
+      if (!controller.signal.aborted) setNotice("Gemini voice couldn’t play this reply. You can keep chatting by text.");
+    } finally {
+      if (request.current === controller) request.current = null;
+    }
+  }, [cancelSpeak]);
+
+  return { supported, listening, speaking, notice, setNotice, listen, stopListen, enableAudio, speak, cancelSpeak };
 }
