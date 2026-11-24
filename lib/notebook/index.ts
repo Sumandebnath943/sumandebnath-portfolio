@@ -50,6 +50,7 @@ import whenToAddARuleToAgentsMd from "./posts/when-to-add-a-rule-to-agents-md";
 import bugsThatNeverProduceAnError from "./posts/bugs-that-never-produce-an-error";
 import nextjsMarkdownContentNegotiation from "./posts/nextjs-markdown-content-negotiation";
 import aiCatalog10SchemaChanges from "./posts/ai-catalog-1-0-schema-changes";
+import retrievalAugmentedGenerationRag from "./posts/retrieval-augmented-generation-rag";
 
 export type { Post, Block, PostFact, Category } from "./types";
 export {
@@ -62,6 +63,7 @@ export {
 
 /** Newest first. `allPosts()` sorts by date, so ordering here is not load-bearing. */
 const POSTS: Post[] = [
+  retrievalAugmentedGenerationRag,
   aiCatalog10SchemaChanges,
   nextjsMarkdownContentNegotiation,
   bugsThatNeverProduceAnError,

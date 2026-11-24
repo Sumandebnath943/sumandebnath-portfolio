@@ -316,6 +316,9 @@ export interface Post {
   /** Alt text. Required whenever `cover` is set. */
   coverAlt?: string;
 
+  /** Use the cover image in social cards and article structured data. */
+  shareCover?: boolean;
+
   /**
    * Promotes the post to the lead slot on the index. At most one should carry
    * it; if several do, the newest wins.

@@ -48,6 +48,7 @@ export async function generateMetadata({
   if (!post) return {};
 
   const url = `${SITE_URL}${postUrl(post.slug)}`;
+  const shareImage = post.shareCover && post.cover ? { url: post.cover, alt: post.coverAlt } : undefined;
 
   return {
     // `metaTitle` where the headline and the search result want different words
@@ -66,12 +67,13 @@ export async function generateMetadata({
       modifiedTime: postModified(post),
       authors: [SITE_URL],
       tags: post.tags,
-      images: ["/og-image.png"],
+      images: shareImage ? [shareImage] : ["/og-image.png"],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.description,
+      ...(shareImage && { images: [shareImage] }),
     },
   };
 }
@@ -120,6 +122,7 @@ export default async function NotebookPostPage({
     name: post.title,
     description: post.description,
     abstract: post.answer,
+    ...(post.shareCover && post.cover && { image: [`${SITE_URL}${post.cover}`] }),
     url,
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
     datePublished: post.published,
