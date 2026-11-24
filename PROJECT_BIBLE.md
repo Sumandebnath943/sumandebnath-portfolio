@@ -876,17 +876,19 @@ passes visitor turns and source excerpts as quoted user data, validates model
 output and citation IDs, and redirects personal-contact requests to the public
 hiring address.
 
-The chat header displays a RAG badge. Voice mode uses browser speech recognition
-for input where supported and Gemini’s Aoede voice for replies. The Gemini key
-is `GEMINI_API_KEY`. The chat API signs the exact approved reply before it can be
-sent for speech, applies the same request limits, and returns WAV audio after the
-text is already visible. Browser or provider failures leave the text chat usable.
+The chat header displays a RAG badge. In voice mode the browser records up to
+20 seconds, and `/api/chat-transcribe` sends the clip to Gemini for transcription.
+The chat submits the resulting text through the same retrieval and guardrails as
+typed messages. Gemini’s Aoede voice speaks the approved reply. Both APIs use
+`GEMINI_API_KEY` and enforce request limits. The chat API signs the exact reply
+before speech synthesis. Browser or provider failures leave text chat usable.
 
 ### 6.4 The 3D robot mascot (`components/robot/`)
 
 `three` + R3F, model at `public/robot.glb`, built from FBX by
 `scripts/build-robot-glb.mjs` (fbx2gltf → gltf-transform → meshopt). The mascot
-has a chat takeover mode and Web Speech support (`useWebSpeech.ts`).
+has a chat takeover mode with recording (`useVoiceRecorder.ts`) and playback
+(`useChatVoice.ts`).
 
 ### 6.5 Site tour (`components/ui/SiteTour.tsx` + `lib/tour-steps.ts`)
 

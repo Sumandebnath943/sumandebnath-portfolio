@@ -94,6 +94,9 @@ export function createPortfolioSearch(index: PortfolioIndex) {
     const entities = explicit.length ? explicit : recent;
     const matchedPaths = new Set(entities.map((entry) => entry.href));
     const identityQuestion = queryWords.size === 0 && /\b(suman|debnath)\b/i.test(question);
+    // A short "what does he do?" is about the portfolio owner, even when each
+    // token is a stop word. Prefer the FAQ sections written to answer it.
+    const profileQuestion = !explicit.length && /^(?:(?:what does|who is) (?:he|suman(?: debnath)?)(?: do(?: for (?:work|a living))?)?|what is (?:his|suman(?: debnath)? s) (?:job|role|profession|occupation))$/.test(normalized(question));
     const entityWords = new Set(entities.flatMap((entry) => [...terms(entry.title)]));
     const detailWords = new Set([...queryWords].filter((word) => !entityWords.has(word)));
 
@@ -111,7 +114,11 @@ export function createPortfolioSearch(index: PortfolioIndex) {
       if (row.page.href === currentPage && (value > 0 || conversational)) value += conversational && !entities.length ? 4 : 1.5;
       if (matchedPaths.has(row.page.href)) value += explicit.length ? 11 : 7;
       if (row.page.parentHref && matchedPaths.has(row.page.parentHref) && value > 0) value += 4;
-      if (identityQuestion && ["/about", "/profile", "/resume"].includes(row.page.href)) value += 5;
+      if ((identityQuestion || profileQuestion) && ["/about", "/profile", "/resume"].includes(row.page.href)) value += 5;
+      if (profileQuestion && row.page.href === "/faq") {
+        const heading = normalized(row.passage.heading.split(" / ").at(-1) || "");
+        if (heading === "what does suman debnath do" || heading === "what is suman s current professional role") value += 20;
+      }
       if (detailWords.size === 0 && (row.passage.anchor === undefined || row.passage.heading === row.page.title)) value += 0.4;
       return value;
     }

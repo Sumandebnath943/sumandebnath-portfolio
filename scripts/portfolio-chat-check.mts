@@ -44,6 +44,8 @@ const cases: [question: string, href: string, detail: RegExp][] = [
   ["Where can I watch the film Who am I?", "/", /film|documentary/i],
   ["What is Career Mode?", "/resume", /playable version|game version|hire\.sumandebnath/i],
   ["Who is Suman Debnath?", "/about", /marketing|brand/i],
+  ["what does he do?", "/faq", /designs and ships AI.native products/i],
+  ["What is his job?", "/faq", /Senior Brand Marketing Manager/i],
 ];
 for (const [question, href, detail] of cases) {
   const evidence = search.retrieve(question, []);

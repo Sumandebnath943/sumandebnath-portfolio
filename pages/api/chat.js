@@ -7,6 +7,7 @@ import { PUBLIC_EMAIL } from '../../lib/public-contact';
 import { cleanVisitorText, hasControlDirective, isPrivateRequest, isSafeAnswer } from '../../lib/portfolio-chat/guardrails';
 import { boundaryReply, playfulReply } from '../../lib/portfolio-chat/replies';
 import { issueVoiceTicket, synthesizeVoice, verifyVoiceTicket } from '../../lib/portfolio-chat/voice';
+import { chatRequestAllowed, createChatLimits } from '../../lib/portfolio-chat/request-limits';
 
 /**
  * The portfolio chat endpoint.
@@ -38,88 +39,8 @@ export const config = { api: { bodyParser: { sizeLimit: 20_000 } } };
 /** Upstream call ceiling. A hung API must not hold the function open. */
 const UPSTREAM_TIMEOUT_MS = 25_000;
 
-// Per-IP. Deliberately tight: this is a chat widget on a portfolio, not a
-// product — nobody legitimate needs more.
-const RATE_WINDOW_MS = 60 * 1000;
-const RATE_MAX = 10;
-/** Hard ceiling on tracked IPs, so the map cannot grow without bound. */
-const RATE_MAP_MAX = 5_000;
-
-/**
- * Whole-instance daily ceiling.
- *
- * Per-IP limiting does nothing against a spread of addresses, and the bill
- * lands on Suman either way. This bounds the worst case: past it the endpoint
- * declines rather than spending, and says so honestly.
- */
-const DAILY_MAX_CALLS = 500;
-
-// ── Rate limiting ─────────────────────────────────────────────────────────
-
-const rateLimitMap = new Map();
-let dailyCount = 0;
-let dailyStamp = new Date().toISOString().slice(0, 10);
-
-/** Drop expired entries; if still oversized, drop oldest-first. */
-function pruneRateMap(now) {
-  for (const [key, record] of rateLimitMap) {
-    if (now - record.windowStart > RATE_WINDOW_MS) rateLimitMap.delete(key);
-  }
-  if (rateLimitMap.size <= RATE_MAP_MAX) return;
-  const excess = rateLimitMap.size - RATE_MAP_MAX;
-  let i = 0;
-  for (const key of rateLimitMap.keys()) {
-    if (i++ >= excess) break;
-    rateLimitMap.delete(key);
-  }
-}
-
-function isRateLimited(ip) {
-  const now = Date.now();
-  if (rateLimitMap.size > RATE_MAP_MAX) pruneRateMap(now);
-
-  const record = rateLimitMap.get(ip);
-  if (!record || now - record.windowStart > RATE_WINDOW_MS) {
-    rateLimitMap.set(ip, { count: 1, windowStart: now });
-    return false;
-  }
-  if (record.count >= RATE_MAX) return true;
-  record.count += 1;
-  return false;
-}
-
-function overDailyCap() {
-  const today = new Date().toISOString().slice(0, 10);
-  if (today !== dailyStamp) {
-    dailyStamp = today;
-    dailyCount = 0;
-  }
-  if (dailyCount >= DAILY_MAX_CALLS) return true;
-  dailyCount += 1;
-  return false;
-}
-
-// ── Request gating ────────────────────────────────────────────────────────
-
-/**
- * Same-origin only.
- *
- * Without this the endpoint is a free, anonymous LLM proxy for anyone who finds
- * the URL. A missing Origin header is a normal non-browser client and is
- * allowed through to the rate limiter rather than blocked outright.
- */
-function originAllowed(req) {
-  const origin = req.headers.origin;
-  if (!origin) return true;
-  try {
-    return new URL(origin).host === (req.headers.host || '');
-  } catch {
-    return false;
-  }
-}
-
-const BOT_UA =
-  /bot|crawl|spider|slurp|headless|lighthouse|axios|python-requests|curl|wget|go-http|scrapy|httpclient/i;
+// Ten requests per address per minute, and 500 paid calls per instance each day.
+const { isRateLimited, overDailyCap } = createChatLimits(10, 500);
 
 // ── Input handling ────────────────────────────────────────────────────────
 
@@ -214,11 +135,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  if (!originAllowed(req)) {
-    return res.status(403).json({ error: 'Request blocked.' });
-  }
-
-  if (BOT_UA.test(req.headers['user-agent'] || '')) {
+  if (!chatRequestAllowed(req)) {
     return res.status(403).json({ error: 'Request blocked.' });
   }
 
@@ -226,12 +143,7 @@ export default async function handler(req, res) {
     return res.status(413).json({ error: 'That message is too long.' });
   }
 
-  const ip =
-    (req.headers['x-forwarded-for'] || '').split(',')[0].trim() ||
-    req.socket.remoteAddress ||
-    'unknown';
-
-  if (isRateLimited(ip)) {
+  if (isRateLimited(req)) {
     return res.status(429).json({
       error: 'Too many requests. Please wait a moment before trying again.',
     });

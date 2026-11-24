@@ -15,7 +15,8 @@ import {
   HERO_GATE_CHAT_MS,
 } from "@/lib/intro";
 import { useRobotChat } from "./RobotChatContext";
-import { useWebSpeech } from "./useWebSpeech";
+import { useChatVoice } from "./useChatVoice";
+import { useVoiceRecorder } from "./useVoiceRecorder";
 import type { ClipName } from "./RobotModel";
 import type { TakeoverPhase, RobotTargets } from "./TakeoverRobotCanvas";
 
@@ -133,13 +134,13 @@ export default function ChatTakeover() {
   // ── Voice + responsive ──
   const [voiceMode, setVoiceMode] = useState(false);
   const voiceModeRef = useRef(false);
-  const resumeMicRef = useRef(false);
   const openRef = useRef(open);
   openRef.current = open;
   const [isMobile, setIsMobile] = useState(false);
   const [idleMsg, setIdleMsg] = useState<string | null>(null);
 
-  const speech = useWebSpeech((t) => sendMessage(t));
+  const speech = useChatVoice();
+  const recorder = useVoiceRecorder((transcript) => sendMessage(transcript));
 
   useEffect(() => {
     if (typeof window === "undefined" || !window.matchMedia) return;
@@ -299,8 +300,7 @@ export default function ChatTakeover() {
 
   const stopVoice = () => {
     voiceModeRef.current = false;
-    resumeMicRef.current = false;
-    speech.stopListen();
+    recorder.cancel();
     speech.cancelSpeak();
     speech.setNotice("");
     setVoiceMode(false);
@@ -315,28 +315,24 @@ export default function ChatTakeover() {
     phaseTimers.current.push(setTimeout(() => closeChat(), PHASE_MS));
   };
 
-  const toggleVoice = () => {
-    if (!speech.supported) return;
-    if (voiceModeRef.current) { stopVoice(); return; }
+  const recordVoice = () => {
+    if (recorder.phase === "recording") { recorder.stop(); return; }
+    if (recorder.phase !== "idle" || isLoading || isAnimating) return;
+    speech.cancelSpeak();
     speech.enableAudio();
     voiceModeRef.current = true;
     setVoiceMode(true);
-    speech.listen();
+    if (recorder.supported) void recorder.start();
   };
 
-  // Speak an assistant reply aloud (voice mode), then resume listening.
   function respond(text: string, links?: ReplyLinks, voiceTicket?: string) {
     animateResponse(text, links);
-    if (!voiceModeRef.current || !openRef.current) return;
+    if (!voiceModeRef.current || !openRef.current || !speech.supported) return;
     if (!voiceTicket) {
       speech.setNotice("Gemini voice is unavailable for this reply. You can keep chatting by text.");
       return;
     }
-    void speech.speak(text, voiceTicket, () => {
-      if (!voiceModeRef.current || !openRef.current) return;
-      if (typewriterRef.current) resumeMicRef.current = true;
-      else speech.listen();
-    });
+    void speech.speak(text, voiceTicket);
   }
 
   // ── Chat behaviour ──
@@ -366,10 +362,6 @@ export default function ChatTakeover() {
         typewriterRef.current = null;
         setIsAnimating(false);
         lastActivity.current = Date.now();
-        if (resumeMicRef.current && voiceModeRef.current && openRef.current) {
-          resumeMicRef.current = false;
-          speech.listen();
-        }
       }
     }, TYPEWRITER_SPEED_MS);
   }
@@ -377,12 +369,8 @@ export default function ChatTakeover() {
   async function sendMessage(text: string) {
     const userText = text.trim();
     if (!userText || isLoading || isAnimating) return;
-    const wantsVoice = voiceModeRef.current;
-    if (wantsVoice) {
-      resumeMicRef.current = false;
-      speech.stopListen();
-      speech.cancelSpeak();
-    }
+    const wantsVoice = voiceModeRef.current && speech.supported;
+    if (wantsVoice) speech.cancelSpeak();
     lastActivity.current = Date.now();
     const updated = [...messages, { role: "user", content: userText } as Message];
     setMessages(updated);
@@ -409,7 +397,18 @@ export default function ChatTakeover() {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(input); }
   }
 
-  const canSend = !isLoading && !isAnimating && input.trim().length > 0;
+  const recording = recorder.phase === "recording";
+  const captureInProgress = recorder.phase !== "idle";
+  const chatBusy = isLoading || isAnimating || captureInProgress;
+  const canSend = !chatBusy && input.trim().length > 0;
+  const micLabel = recording ? "Send recording" : recorder.supported ? "Record a question with Gemini" : "Enable spoken replies";
+  const voiceStatus = {
+    permission: "Allow microphone access in your browser to start recording.",
+    recording: "Recording… tap the mic to send, or wait for the 20-second limit.",
+    transcribing: "Gemini is transcribing your recording…",
+    idle: recorder.notice || speech.notice || (speech.speaking ? "Aoede is speaking…" :
+      recorder.supported ? "Voice mode on. Tap the mic to ask another question." : "Type a message to hear a Gemini reply."),
+  }[recorder.phase];
   const panelIn = open && phase !== "outro";
 
   // `solo`: a page owning the whole screen (the 404) gets no floating chat
@@ -532,29 +531,33 @@ export default function ChatTakeover() {
             {messages.length === 1 && !isLoading && (
               <div className="ct-suggestions">
                 {SUGGESTED_QUESTIONS.map((q) => (
-                  <button key={q} className="ct-suggestion" onClick={() => sendMessage(q)} disabled={isLoading || isAnimating}>
+                  <button key={q} className="ct-suggestion" onClick={() => sendMessage(q)} disabled={chatBusy}>
                     {q}
                   </button>
                 ))}
               </div>
             )}
 
-            {voiceMode && (speech.notice || speech.speaking) && (
-              <p className="ct-voice-notice" role="status">{speech.notice || "Aoede is speaking…"}</p>
+            {voiceMode && (
+              <div className="ct-voice-notice">
+                <p role="status">{voiceStatus}</p>
+                <button type="button" className="ct-voice-off" onClick={stopVoice}>Turn off voice</button>
+              </div>
             )}
             <div className="ct-input-bar">
-              {speech.supported && (
+              {(recorder.supported || speech.supported) && (
                 <button
-                  className={`ct-mic ${voiceMode ? "on" : ""} ${speech.listening ? "listening" : ""}`}
-                  onClick={toggleVoice}
-                  aria-label={voiceMode ? "Turn off voice mode" : "Turn on voice mode"}
-                  aria-pressed={voiceMode}
-                  disabled={!voiceMode && (isLoading || isAnimating)}
-                  title={voiceMode ? "Turn off Gemini voice" : "Use Gemini voice"}
+                  className={`ct-mic ${voiceMode ? "on" : ""} ${recording ? "listening" : ""}`}
+                  onClick={recordVoice}
+                  aria-label={micLabel}
+                  disabled={!recording && (chatBusy || (!recorder.supported && voiceMode))}
+                  title={micLabel}
                 >
                   <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 2a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z" fill="currentColor" />
-                    <path d="M19 11a7 7 0 0 1-14 0M12 18v3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                    {recording ? <rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" /> : <>
+                      <path d="M12 2a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z" fill="currentColor" />
+                      <path d="M19 11a7 7 0 0 1-14 0M12 18v3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                    </>}
                   </svg>
                 </button>
               )}
@@ -562,12 +565,12 @@ export default function ChatTakeover() {
                 ref={inputRef}
                 className="ct-input"
                 type="text"
-                placeholder={speech.listening ? "Listening…" : "Ask something…"}
+                placeholder="Ask something…"
                 value={input}
                 maxLength={MAX_USER_CHARS}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                disabled={isLoading || isAnimating}
+                disabled={chatBusy}
                 aria-label="Type your message"
               />
               <button className="ct-send" onClick={() => sendMessage(input)} disabled={!canSend} aria-label="Send message">
@@ -762,7 +765,8 @@ const TAKEOVER_CSS = `
   .ct-mic { background: #f0eeec; border: 1px solid rgba(0,0,0,0.1); border-radius: 14px; color: #5b5b5f; cursor: pointer; padding: 13px 14px; display: flex; transition: background .15s, color .15s, box-shadow .15s; flex-shrink: 0; }
   .ct-mic:hover { background: #e8e6e3; color: #1D1D1F; }
   .ct-mic:disabled { opacity: .45; cursor: default; }
-  .ct-voice-notice { font-size: 12px; color: #565357; margin: 6px 28px 0; }
+  .ct-voice-notice { width: 100%; max-width: 720px; margin: 6px auto 0; padding: 0 28px; color: #565357; font-size: 12px; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .ct-voice-off { flex-shrink: 0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
   .ct-mic.on { background: linear-gradient(135deg,#F04E00,#FF8A33); color: #fff; border-color: transparent; box-shadow: 0 2px 8px rgba(240,78,0,0.3); }
   .ct-mic.listening { animation: ct-mic-pulse 1.3s ease-out infinite; }
   @keyframes ct-mic-pulse { 0%{box-shadow:0 0 0 0 rgba(240,78,0,0.45)} 70%{box-shadow:0 0 0 10px rgba(240,78,0,0)} 100%{box-shadow:0 0 0 0 rgba(240,78,0,0)} }
@@ -781,7 +785,7 @@ const TAKEOVER_CSS = `
     /* Safari zooms the whole page when a focused input is under 16px. */
     .ct-input { font-size: 16px; }
     .ct-panel.in { transform: translateY(0); }
-    .ct-messages-inner, .ct-suggestions, .ct-input-bar { padding-left: 16px; padding-right: 16px; }
+    .ct-messages-inner, .ct-suggestions, .ct-voice-notice, .ct-input-bar { padding-left: 16px; padding-right: 16px; }
     /* The stacked suggestions and generous desktop padding left barely any room
        to actually read the conversation, so the reading area gets the space
        back: a taller panel and tighter vertical rhythm around the messages. */

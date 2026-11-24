@@ -216,10 +216,10 @@ export default function PrivacyPage() {
               for its processing and retention practices.
             </Bullet>
             <Bullet>
-              With voice mode on, <span className="text-white/85">Gemini</span> turns the
-              assistant’s reply into audio. Your browser handles microphone transcription
-              and may use its own speech service. The portfolio sends the resulting text to
-              the chat. See the{" "}
+              When you use the mic in the portfolio chat, <span className="text-white/85">Gemini</span>{" "}
+              transcribes your recording. The chat uses that text as your question.
+              With voice mode on, Gemini also turns the assistant’s text reply into audio.
+              See the{" "}
               <a href="https://ai.google.dev/gemini-api/terms" className="underline underline-offset-4">
                 Gemini API terms
               </a>{" "}

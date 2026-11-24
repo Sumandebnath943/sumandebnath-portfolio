@@ -157,7 +157,7 @@ const nextConfig: NextConfig = {
      * feature that is used is left unlisted on purpose, so it keeps the browser
      * default (`self`, delegable through an iframe's `allow`):
      *
-     *   microphone        — the robot's voice input (components/robot/useWebSpeech.ts)
+     *   microphone        — the robot's voice input (components/robot/useVoiceRecorder.ts)
      *   clipboard-write   — every copy button, and the YouTube embeds' `allow`
      *   web-share         — the notebook's share button, and MigiVideo's `allow`
      *   fullscreen, autoplay, encrypted-media, picture-in-picture,
