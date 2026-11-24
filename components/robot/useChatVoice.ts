@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { VOICE_LIMIT_MESSAGE, VOICE_PAUSED_MESSAGE } from "@/lib/portfolio-chat/types";
 
 const PCM_RATE = 24_000;
 const subscribeToSupport = () => () => {};
@@ -46,7 +47,6 @@ export function useChatVoice() {
     if (!audio) return;
     const controller = new AbortController();
     request.current = controller;
-    setNotice("");
     const playing = new Set<AudioBufferSourceNode>();
     const timeline: { start: number; end: number; offset: number }[] = [];
     let nextStart = 0;
@@ -79,6 +79,7 @@ export function useChatVoice() {
       if (!segment || now < segment.start) return;
       if (!started) {
         started = true;
+        setNotice("");
         setSpeaking(true);
       }
       onProgress(segment.offset + Math.min(now - segment.start, segment.end - segment.start), complete ? duration : undefined);
@@ -93,6 +94,10 @@ export function useChatVoice() {
         body: JSON.stringify({ text, voiceTicket, streamAudio: true }),
         signal: controller.signal,
       });
+      if (response.status === 429) {
+        setNotice(VOICE_LIMIT_MESSAGE);
+        return;
+      }
       if (!response.ok || !response.body || audio.state !== "running") throw new Error("Voice request failed");
       reader = response.body.getReader();
       for (;;) {
@@ -133,7 +138,7 @@ export function useChatVoice() {
       }, (Math.max(0, nextStart - audio.currentTime) + 4) * 1_000);
       await playbackDone;
     } catch {
-      if (!controller.signal.aborted) setNotice("Gemini voice couldn’t play this reply. The answer is in the chat.");
+      if (!controller.signal.aborted) setNotice(VOICE_PAUSED_MESSAGE);
     } finally {
       controller.signal.removeEventListener("abort", stopPlayback);
       await reader?.cancel().catch(() => {});

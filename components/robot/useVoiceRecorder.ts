@@ -11,6 +11,7 @@ type Capture = {
   source?: MediaStreamAudioSourceNode;
   worklet?: AudioWorkletNode;
   detector?: ReturnType<typeof createUtteranceDetector>;
+  retryAt?: number;
 };
 
 const subscribeToSupport = () => () => {};
@@ -73,7 +74,7 @@ export function useVoiceRecorder(onTranscript: (text: string) => void) {
 
   function resume(message = "") {
     const capture = active.current;
-    if (!capture?.worklet || capture.controller.signal.aborted || capture.accepting) return;
+    if (!capture?.worklet || capture.controller.signal.aborted || capture.accepting || (capture.retryAt ?? 0) > Date.now()) return;
     setListening(capture, true);
     setNotice(message);
     setPhase("listening");
@@ -93,6 +94,13 @@ export function useVoiceRecorder(onTranscript: (text: string) => void) {
       });
       const result = await response.json();
       if (capture.controller.signal.aborted) return;
+      const retryAfter = Number(response.headers.get("retry-after"));
+      if (response.status === 429 && Number.isFinite(retryAfter) && retryAfter > 0) {
+        capture.retryAt = Date.now() + retryAfter * 1_000;
+        setNotice(result.error || "My ears are taking a breather. You can still type your question.");
+        setPhase("idle");
+        return;
+      }
       if (!response.ok || typeof result.transcript !== "string") {
         resume(result.error || "I couldn’t transcribe that. Try speaking again or type your question.");
         return;

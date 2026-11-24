@@ -6,6 +6,8 @@ export const MAX_ASSISTANT_CHARS = 2_000;
 export const VOICE_RECORDING_MS = 24_000;
 export const VOICE_INPUT_RATE = 16_000;
 export const MAX_VOICE_BYTES = VOICE_RECORDING_MS * VOICE_INPUT_RATE * 2 / 1_000 + 44;
+export const VOICE_LIMIT_MESSAGE = "I’ve reached my voice limit for now. We can keep chatting in text.";
+export const VOICE_PAUSED_MESSAGE = "Voice is taking a breather. I’ll keep answering here in text.";
 
 export type ChatSource = { href: string; title: string };
 

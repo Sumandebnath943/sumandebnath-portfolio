@@ -882,9 +882,12 @@ pause, with a 24-second cap per utterance. `/api/chat-transcribe` sends each
 completed turn to Gemini with the public portfolio vocabulary. The chat submits
 the resulting text through the same retrieval and guardrails as typed messages.
 The chat API signs the approved reply and streams PCM from Gemini’s Puck voice.
-The text reveal follows the playback clock. The microphone pauses while a turn
-is processed and resumes after audio playback. Both APIs use `GEMINI_API_KEY`
-and enforce request limits. Browser or provider failures leave text chat usable.
+Groq’s Austin voice backs up playback and Whisper Large v3 Turbo backs up
+transcription. Both use the existing `GROQ_API_KEY`. Groq receives the recording
+or approved text only when its fallback is used. A reply stays with the same
+voice once playback begins. The text reveal follows the playback clock and the
+microphone pauses while the assistant replies. When speech providers reach their
+limits, the chat explains that it can continue in text.
 
 ### 6.4 The 3D robot mascot (`components/robot/`)
 

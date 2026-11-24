@@ -3,11 +3,12 @@ import { once } from 'node:events';
 import Groq from 'groq-sdk';
 import { SYSTEM_PROMPT, SYSTEM_REMINDER } from '../../lib/systemPrompt';
 import { catalogKind, loadPortfolioSearch, resolveCitations } from '../../lib/portfolio-chat/retrieval';
-import { MAX_ASSISTANT_CHARS, MAX_HISTORY_MESSAGES, MAX_USER_CHARS } from '../../lib/portfolio-chat/types';
+import { MAX_ASSISTANT_CHARS, MAX_HISTORY_MESSAGES, MAX_USER_CHARS, VOICE_LIMIT_MESSAGE, VOICE_PAUSED_MESSAGE } from '../../lib/portfolio-chat/types';
 import { PUBLIC_EMAIL } from '../../lib/public-contact';
 import { cleanVisitorText, hasControlDirective, isPrivateRequest, isSafeAnswer } from '../../lib/portfolio-chat/guardrails';
 import { boundaryReply, playfulReply } from '../../lib/portfolio-chat/replies';
-import { issueVoiceTicket, streamVoice, synthesizeVoice, verifyVoiceTicket } from '../../lib/portfolio-chat/voice';
+import { bufferedVoice, issueVoiceTicket, streamVoice, verifyVoiceTicket } from '../../lib/portfolio-chat/voice';
+import { SpeechUnavailable } from '../../lib/portfolio-chat/speech-fallback';
 import { chatRequestAllowed, createChatLimits } from '../../lib/portfolio-chat/request-limits';
 
 /**
@@ -108,44 +109,35 @@ const CATALOG_LABELS = {
 
 const CONTACT_SOURCE = { href: '/contact', title: 'Contact Suman' };
 const UNGROUNDED_RESPONSE = "I couldn't verify that from the portfolio. Try asking about a specific project or detail.";
-const VOICE_UNAVAILABLE = 'Gemini voice is unavailable right now. You can keep chatting by text.';
-
 async function sendVoice(req, res) {
-  const key = process.env.GEMINI_API_KEY;
-  if (!key) return res.status(503).json({ error: VOICE_UNAVAILABLE });
   const { text, voiceTicket } = req.body;
-  if (!verifyVoiceTicket(text, voiceTicket, key)) return res.status(400).json({ error: 'Invalid or expired voice ticket.' });
-  if (overDailyCap()) return res.status(429).json({ error: VOICE_UNAVAILABLE });
-  if (req.body.streamAudio === true) {
-    const controller = new AbortController();
-    const disconnected = () => controller.abort();
-    res.once('close', disconnected);
-    try {
-      for await (const chunk of streamVoice(text, key, controller.signal)) {
+  if (!verifyVoiceTicket(text, voiceTicket)) return res.status(400).json({ error: 'Invalid or expired voice ticket.' });
+  if (overDailyCap()) return res.status(429).json({ error: VOICE_LIMIT_MESSAGE });
+  const controller = new AbortController();
+  const signal = AbortSignal.any([controller.signal, AbortSignal.timeout(45_000)]);
+  const disconnected = () => controller.abort();
+  res.once('close', disconnected);
+  try {
+    if (req.body.streamAudio === true) {
+      for await (const chunk of streamVoice(text, signal)) {
         if (!res.headersSent) res.setHeader('Content-Type', 'application/octet-stream');
-        if (!res.write(chunk)) await once(res, 'drain', { signal: controller.signal });
+        if (!res.write(chunk)) await once(res, 'drain', { signal });
       }
       return res.end();
-    } catch (error) {
-      if (controller.signal.aborted) return;
-      console.error('Gemini speech stream error:', { name: error?.name });
-      if (res.headersSent) return res.destroy();
-      return res.status(503).json({ error: VOICE_UNAVAILABLE });
-    } finally {
-      res.off('close', disconnected);
     }
-  }
-  try {
-    const result = await synthesizeVoice(text, key);
-    if (result.wav) {
-      res.setHeader('Content-Type', 'audio/wav');
-      return res.status(200).send(result.wav);
-    }
-    console.error('Gemini voice error:', { status: result.status });
+    const wav = await bufferedVoice(text, signal);
+    res.setHeader('Content-Type', 'audio/wav');
+    return res.status(200).send(wav);
   } catch (error) {
-    console.error('Gemini voice error:', { name: error?.name });
+    if (controller.signal.aborted) return;
+    const failure = error instanceof SpeechUnavailable ? error : undefined;
+    console.error('Chat voice unavailable:', failure?.attempts ?? { name: error?.name });
+    if (res.headersSent) return res.destroy();
+    if (failure?.retryAfter) res.setHeader('Retry-After', failure.retryAfter);
+    return res.status(failure?.status ?? 503).json({ error: failure?.status === 429 ? VOICE_LIMIT_MESSAGE : VOICE_PAUSED_MESSAGE });
+  } finally {
+    res.off('close', disconnected);
   }
-  return res.status(503).json({ error: VOICE_UNAVAILABLE });
 }
 
 // ── Handler ───────────────────────────────────────────────────────────────

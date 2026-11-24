@@ -216,10 +216,10 @@ export default function PrivacyPage() {
               for its processing and retention practices.
             </Bullet>
             <Bullet>
-              When you use the mic in the portfolio chat, <span className="text-white/85">Gemini</span>{" "}
-              transcribes each completed recording while voice mode is on. The chat uses
-              that text as your question. The microphone pauses while the assistant is
-              replying, and Gemini turns the assistant’s text reply into audio.
+              With voice mode on, <span className="text-white/85">Gemini</span> transcribes
+              your recording and reads the text reply aloud. When Gemini is unavailable,
+              Groq can process the recording or read the reply. The chat uses the transcript
+              as your question and pauses the microphone while the assistant is replying.
               See the{" "}
               <a href="https://ai.google.dev/gemini-api/terms" className="underline underline-offset-4">
                 Gemini API terms

@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { chatRequest } from "@/lib/portfolio-chat/history";
-import { MAX_USER_CHARS } from "@/lib/portfolio-chat/types";
+import { MAX_USER_CHARS, VOICE_PAUSED_MESSAGE } from "@/lib/portfolio-chat/types";
 import type { ChatMessage, ChatSource } from "@/lib/portfolio-chat/types";
 import {
   useReveal,
@@ -347,7 +347,7 @@ export default function ChatTakeover() {
         setMessages((previous) => initial ? [...previous, partial] : [...previous.slice(0, -1), partial]);
       });
     } else {
-      speech.setNotice("Gemini voice is unavailable for this reply. You can keep chatting by text.");
+      speech.setNotice(VOICE_PAUSED_MESSAGE);
     }
     setMessages((previous) => [...(revealedWords ? previous.slice(0, -1) : previous), { role: "assistant", content: text, ...links }]);
     lastActivity.current = Date.now();
@@ -435,9 +435,9 @@ export default function ChatTakeover() {
     permission: "Allow microphone access in your browser to start recording.",
     listening: recorder.notice || "Listening… ask a question when you’re ready.",
     recording: "Listening… I’ll send your question when you finish speaking.",
-    transcribing: "Gemini is transcribing your recording…",
-    paused: speech.speaking ? "Puck is speaking…" : speech.notice || "Preparing your reply…",
-    idle: speech.speaking ? "Puck is speaking…" : recorder.notice || speech.notice || "Type a message to hear a Gemini reply.",
+    transcribing: "Transcribing your question…",
+    paused: speech.speaking ? "Speaking…" : "Preparing your reply…",
+    idle: speech.speaking ? "Speaking…" : recorder.notice || "Type a message to hear a reply.",
   }[recorder.phase];
   const panelIn = open && phase !== "outro";
 
@@ -571,7 +571,10 @@ export default function ChatTakeover() {
 
             {voiceMode && (
               <div className="ct-voice-notice">
-                <p role="status">{voiceStatus}</p>
+                <p role="status">
+                  {speech.notice && <span className="ct-voice-caption">{speech.notice}</span>}
+                  {voiceStatus}
+                </p>
               </div>
             )}
             <div className="ct-input-bar">
@@ -795,6 +798,7 @@ const TAKEOVER_CSS = `
   .ct-mic:hover { background: #e8e6e3; color: #1D1D1F; }
   .ct-mic:disabled { opacity: .45; cursor: default; }
   .ct-voice-notice { width: 100%; max-width: 720px; margin: 6px auto 0; padding: 0 28px; color: #565357; font-size: 12px; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .ct-voice-caption { display: block; color: #1d1d1f; font-weight: 600; }
   .ct-mic.on { background: linear-gradient(135deg,#F04E00,#FF8A33); color: #fff; border-color: transparent; box-shadow: 0 2px 8px rgba(240,78,0,0.3); }
   .ct-mic.listening { animation: ct-mic-pulse 1.3s ease-out infinite; }
   @keyframes ct-mic-pulse { 0%{box-shadow:0 0 0 0 rgba(240,78,0,0.45)} 70%{box-shadow:0 0 0 10px rgba(240,78,0,0)} 100%{box-shadow:0 0 0 0 rgba(240,78,0,0)} }
