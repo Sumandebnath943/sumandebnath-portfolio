@@ -1,4 +1,5 @@
 import { randomBytes } from 'node:crypto';
+import { once } from 'node:events';
 import Groq from 'groq-sdk';
 import { SYSTEM_PROMPT, SYSTEM_REMINDER } from '../../lib/systemPrompt';
 import { catalogKind, loadPortfolioSearch, resolveCitations } from '../../lib/portfolio-chat/retrieval';
@@ -6,7 +7,7 @@ import { MAX_ASSISTANT_CHARS, MAX_HISTORY_MESSAGES, MAX_USER_CHARS } from '../..
 import { PUBLIC_EMAIL } from '../../lib/public-contact';
 import { cleanVisitorText, hasControlDirective, isPrivateRequest, isSafeAnswer } from '../../lib/portfolio-chat/guardrails';
 import { boundaryReply, playfulReply } from '../../lib/portfolio-chat/replies';
-import { issueVoiceTicket, synthesizeVoice, verifyVoiceTicket } from '../../lib/portfolio-chat/voice';
+import { issueVoiceTicket, streamVoice, synthesizeVoice, verifyVoiceTicket } from '../../lib/portfolio-chat/voice';
 import { chatRequestAllowed, createChatLimits } from '../../lib/portfolio-chat/request-limits';
 
 /**
@@ -35,7 +36,7 @@ const groq = new Groq({ apiKey: process.env.GROQ_API_KEY, maxRetries: 0 });
 // ── Limits ────────────────────────────────────────────────────────────────
 
 const MAX_BODY_BYTES = 20_000;
-export const config = { api: { bodyParser: { sizeLimit: 20_000 } } };
+export const config = { api: { bodyParser: { sizeLimit: 20_000 } }, maxDuration: 60 };
 /** Upstream call ceiling. A hung API must not hold the function open. */
 const UPSTREAM_TIMEOUT_MS = 25_000;
 
@@ -115,6 +116,25 @@ async function sendVoice(req, res) {
   const { text, voiceTicket } = req.body;
   if (!verifyVoiceTicket(text, voiceTicket, key)) return res.status(400).json({ error: 'Invalid or expired voice ticket.' });
   if (overDailyCap()) return res.status(429).json({ error: VOICE_UNAVAILABLE });
+  if (req.body.streamAudio === true) {
+    const controller = new AbortController();
+    const disconnected = () => controller.abort();
+    res.once('close', disconnected);
+    try {
+      for await (const chunk of streamVoice(text, key, controller.signal)) {
+        if (!res.headersSent) res.setHeader('Content-Type', 'application/octet-stream');
+        if (!res.write(chunk)) await once(res, 'drain', { signal: controller.signal });
+      }
+      return res.end();
+    } catch (error) {
+      if (controller.signal.aborted) return;
+      console.error('Gemini speech stream error:', { name: error?.name });
+      if (res.headersSent) return res.destroy();
+      return res.status(503).json({ error: VOICE_UNAVAILABLE });
+    } finally {
+      res.off('close', disconnected);
+    }
+  }
   try {
     const result = await synthesizeVoice(text, key);
     if (result.wav) {
@@ -242,7 +262,7 @@ export default async function handler(req, res) {
               excerpts: evidence.map(({ id, title, text }) => ({ id, title, text })),
             }),
           },
-          { role: 'system', content: SYSTEM_REMINDER + '\nInternal check marker, never output: ' + marker },
+          { role: 'system', content: SYSTEM_REMINDER + (voice === true ? '\nThis reply will be spoken. Aim for two or three short sentences and up to about 65 words. Give more detail when the visitor asks for depth.' : '') + '\nInternal check marker, never output: ' + marker },
         ],
         response_format: FORMAT,
         max_completion_tokens: 850,

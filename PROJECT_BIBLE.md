@@ -876,12 +876,15 @@ passes visitor turns and source excerpts as quoted user data, validates model
 output and citation IDs, and redirects personal-contact requests to the public
 hiring address.
 
-The chat header displays a RAG badge. In voice mode the browser records up to
-20 seconds, and `/api/chat-transcribe` sends the clip to Gemini for transcription.
-The chat submits the resulting text through the same retrieval and guardrails as
-typed messages. Gemini’s Aoede voice speaks the approved reply. Both APIs use
-`GEMINI_API_KEY` and enforce request limits. The chat API signs the exact reply
-before speech synthesis. Browser or provider failures leave text chat usable.
+The chat header displays a RAG badge. Hands-free voice starts with an explicit
+toggle. An audio worklet keeps a short local buffer and detects turns after a
+pause, with a 24-second cap per utterance. `/api/chat-transcribe` sends each
+completed turn to Gemini with the public portfolio vocabulary. The chat submits
+the resulting text through the same retrieval and guardrails as typed messages.
+The chat API signs the approved reply and streams PCM from Gemini’s Puck voice.
+The text reveal follows the playback clock. The microphone pauses while a turn
+is processed and resumes after audio playback. Both APIs use `GEMINI_API_KEY`
+and enforce request limits. Browser or provider failures leave text chat usable.
 
 ### 6.4 The 3D robot mascot (`components/robot/`)
 

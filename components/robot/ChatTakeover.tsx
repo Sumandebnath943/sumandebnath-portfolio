@@ -123,6 +123,7 @@ export default function ChatTakeover() {
   const inputRef = useRef<HTMLInputElement>(null);
   const launchRef = useRef<HTMLButtonElement>(null);
   const typewriterRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const replyInFlight = useRef(false);
 
   // ── Robot state ──
   const [phase, setPhase] = useState<TakeoverPhase>("intro");
@@ -245,7 +246,7 @@ export default function ChatTakeover() {
     // This is why Nodding is no longer in AMBIENT_SEQ: a gesture that also
     // shows up at random while idling is decoration, and cannot be read as
     // "it is working on it". Here it means exactly one thing.
-    if (isLoading) {
+    if (isLoading && !speech.speaking) {
       setRobotAnim("Nodding");
       return;
     }
@@ -315,24 +316,41 @@ export default function ChatTakeover() {
     phaseTimers.current.push(setTimeout(() => closeChat(), PHASE_MS));
   };
 
-  const recordVoice = () => {
-    if (recorder.phase === "recording") { recorder.stop(); return; }
-    if (recorder.phase !== "idle" || isLoading || isAnimating) return;
-    speech.cancelSpeak();
-    speech.enableAudio();
+  const toggleVoice = () => {
+    if (voiceModeRef.current) { stopVoice(); return; }
+    if (replyInFlight.current || isAnimating) return;
+    const audio = speech.enableAudio();
+    if (!audio) return;
     voiceModeRef.current = true;
     setVoiceMode(true);
-    if (recorder.supported) void recorder.start();
+    if (recorder.supported) void recorder.start(audio);
   };
 
-  function respond(text: string, links?: ReplyLinks, voiceTicket?: string) {
-    animateResponse(text, links);
-    if (!voiceModeRef.current || !openRef.current || !speech.supported) return;
-    if (!voiceTicket) {
-      speech.setNotice("Gemini voice is unavailable for this reply. You can keep chatting by text.");
+  async function respond(text: string, links?: ReplyLinks, voiceTicket?: string) {
+    if (!voiceModeRef.current || !openRef.current) {
+      animateResponse(text, links);
       return;
     }
-    void speech.speak(text, voiceTicket);
+
+    // While audio is arriving, approximate the speaking pace. Once its total
+    // duration is known, use the playback clock for the remaining words.
+    const boundaries = Array.from(text.matchAll(/\S+/g), (match) => match.index + match[0].length);
+    let revealedWords = 0;
+    if (voiceTicket) {
+      await speech.speak(text, voiceTicket, (played, duration) => {
+        const estimate = duration ? Math.floor(played / duration * boundaries.length) + 1 : Math.floor(played * 2.5) + 1;
+        const next = Math.min(Math.max(1, boundaries.length - 1), estimate);
+        if (next <= revealedWords) return;
+        const initial = revealedWords === 0;
+        revealedWords = next;
+        const partial: Message = { role: "assistant", content: text.slice(0, boundaries[next - 1]), animating: true };
+        setMessages((previous) => initial ? [...previous, partial] : [...previous.slice(0, -1), partial]);
+      });
+    } else {
+      speech.setNotice("Gemini voice is unavailable for this reply. You can keep chatting by text.");
+    }
+    setMessages((previous) => [...(revealedWords ? previous.slice(0, -1) : previous), { role: "assistant", content: text, ...links }]);
+    lastActivity.current = Date.now();
   }
 
   // ── Chat behaviour ──
@@ -368,9 +386,13 @@ export default function ChatTakeover() {
 
   async function sendMessage(text: string) {
     const userText = text.trim();
-    if (!userText || isLoading || isAnimating) return;
+    if (!userText || replyInFlight.current || isAnimating) return;
+    replyInFlight.current = true;
     const wantsVoice = voiceModeRef.current && speech.supported;
-    if (wantsVoice) speech.cancelSpeak();
+    if (wantsVoice) {
+      recorder.pause();
+      speech.cancelSpeak();
+    }
     lastActivity.current = Date.now();
     const updated = [...messages, { role: "user", content: userText } as Message];
     setMessages(updated);
@@ -383,13 +405,20 @@ export default function ChatTakeover() {
         body: chatRequest(updated, window.location.pathname, wantsVoice),
       });
       const data = await res.json().catch(() => ({}));
-      if (res.status === 429) { respond("Please wait a moment before sending another message."); return; }
-      if (!res.ok || !data.message) { respond(data.error || `Something went wrong. Please email ${PUBLIC_EMAIL} directly.`); return; }
-      respond(data.message, { sources: data.sources, catalog: data.catalog }, data.voiceTicket);
+      if (res.status === 429) { await respond("Please wait a moment before sending another message."); return; }
+      if (!res.ok || !data.message) { await respond(data.error || `Something went wrong. Please email ${PUBLIC_EMAIL} directly.`); return; }
+      await respond(data.message, { sources: data.sources, catalog: data.catalog }, data.voiceTicket);
     } catch {
-      respond(`Network error. Please email ${PUBLIC_EMAIL} directly.`);
+      await respond(`Network error. Please email ${PUBLIC_EMAIL} directly.`);
     } finally {
+      replyInFlight.current = false;
       setIsLoading(false);
+      if (wantsVoice && voiceModeRef.current && openRef.current) {
+        // Let the playback device finish its buffered tail before enabling the mic.
+        window.setTimeout(() => {
+          if (voiceModeRef.current && openRef.current && !replyInFlight.current) recorder.resume();
+        }, 180);
+      }
     }
   }
 
@@ -398,16 +427,17 @@ export default function ChatTakeover() {
   }
 
   const recording = recorder.phase === "recording";
-  const captureInProgress = recorder.phase !== "idle";
+  const captureInProgress = recording || recorder.phase === "permission" || recorder.phase === "transcribing";
   const chatBusy = isLoading || isAnimating || captureInProgress;
   const canSend = !chatBusy && input.trim().length > 0;
-  const micLabel = recording ? "Send recording" : recorder.supported ? "Record a question with Gemini" : "Enable spoken replies";
+  const micLabel = voiceMode ? "Turn off voice mode" : recorder.supported ? "Turn on hands-free voice" : "Enable spoken replies";
   const voiceStatus = {
     permission: "Allow microphone access in your browser to start recording.",
-    recording: "Recording… tap the mic to send, or wait for the 20-second limit.",
+    listening: recorder.notice || "Listening… ask a question when you’re ready.",
+    recording: "Listening… I’ll send your question when you finish speaking.",
     transcribing: "Gemini is transcribing your recording…",
-    idle: recorder.notice || speech.notice || (speech.speaking ? "Aoede is speaking…" :
-      recorder.supported ? "Voice mode on. Tap the mic to ask another question." : "Type a message to hear a Gemini reply."),
+    paused: speech.speaking ? "Puck is speaking…" : speech.notice || "Preparing your reply…",
+    idle: speech.speaking ? "Puck is speaking…" : recorder.notice || speech.notice || "Type a message to hear a Gemini reply.",
   }[recorder.phase];
   const panelIn = open && phase !== "outro";
 
@@ -479,12 +509,13 @@ export default function ChatTakeover() {
               {messages.length > 1 && (
                 <button
                   className="ct-reset"
-                  disabled={isLoading || isAnimating}
+                  disabled={chatBusy}
                   onClick={() => {
-                    stopVoice();
+                    recorder.pause();
                     setMessages([INITIAL_MESSAGE]);
                     setInput("");
                     inputRef.current?.focus();
+                    recorder.resume();
                   }}
                 >
                   New chat
@@ -519,7 +550,7 @@ export default function ChatTakeover() {
                     </div>
                   </div>
                 ))}
-                {isLoading && (
+                {isLoading && !speech.speaking && (
                   <div className="ct-row assistant">
                     <div className="ct-typing"><span /><span /><span /></div>
                   </div>
@@ -541,23 +572,21 @@ export default function ChatTakeover() {
             {voiceMode && (
               <div className="ct-voice-notice">
                 <p role="status">{voiceStatus}</p>
-                <button type="button" className="ct-voice-off" onClick={stopVoice}>Turn off voice</button>
               </div>
             )}
             <div className="ct-input-bar">
               {(recorder.supported || speech.supported) && (
                 <button
                   className={`ct-mic ${voiceMode ? "on" : ""} ${recording ? "listening" : ""}`}
-                  onClick={recordVoice}
+                  onClick={toggleVoice}
                   aria-label={micLabel}
-                  disabled={!recording && (chatBusy || (!recorder.supported && voiceMode))}
+                  aria-pressed={voiceMode}
+                  disabled={!voiceMode && chatBusy}
                   title={micLabel}
                 >
                   <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
-                    {recording ? <rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" /> : <>
-                      <path d="M12 2a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z" fill="currentColor" />
-                      <path d="M19 11a7 7 0 0 1-14 0M12 18v3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                    </>}
+                    <path d="M12 2a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z" fill="currentColor" />
+                    <path d="M19 11a7 7 0 0 1-14 0M12 18v3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                   </svg>
                 </button>
               )}
@@ -766,7 +795,6 @@ const TAKEOVER_CSS = `
   .ct-mic:hover { background: #e8e6e3; color: #1D1D1F; }
   .ct-mic:disabled { opacity: .45; cursor: default; }
   .ct-voice-notice { width: 100%; max-width: 720px; margin: 6px auto 0; padding: 0 28px; color: #565357; font-size: 12px; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-  .ct-voice-off { flex-shrink: 0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
   .ct-mic.on { background: linear-gradient(135deg,#F04E00,#FF8A33); color: #fff; border-color: transparent; box-shadow: 0 2px 8px rgba(240,78,0,0.3); }
   .ct-mic.listening { animation: ct-mic-pulse 1.3s ease-out infinite; }
   @keyframes ct-mic-pulse { 0%{box-shadow:0 0 0 0 rgba(240,78,0,0.45)} 70%{box-shadow:0 0 0 10px rgba(240,78,0,0)} 100%{box-shadow:0 0 0 0 rgba(240,78,0,0)} }

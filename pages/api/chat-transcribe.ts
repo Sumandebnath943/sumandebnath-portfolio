@@ -2,9 +2,10 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { chatRequestAllowed, createChatLimits } from "../../lib/portfolio-chat/request-limits";
 import { MAX_USER_CHARS, MAX_VOICE_BYTES } from "../../lib/portfolio-chat/types";
 
-export const config = { api: { bodyParser: { sizeLimit: 525_000 } } };
+export const config = { api: { bodyParser: { sizeLimit: 1_025_000 } } };
 
-const { isRateLimited, overDailyCap } = createChatLimits(6, 250);
+const { isRateLimited, overDailyCap } = createChatLimits(10, 250);
+const PORTFOLIO_VOCABULARY = ["Suman Debnath", "Pune Institute of Business Management", "Milo", "MIGI", "Pentashell", "PACT Agent", "PentaCMD", "Qdex-1.5B", "OutreachOS", "ROASmind", "IMPRINT", "LEGATUS", "CITE", "AEGIS VAULT", "NUNO", "PixelVille", "Crawl Daddy", "That One Crawler", "Brief Killer", "Soul Canvas"];
 const MIME_TYPES = new Map([
   ["audio/webm", "audio/webm"],
   ["audio/ogg", "audio/ogg"],
@@ -48,7 +49,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         model: "gemini-3.5-transcribe",
         store: false,
         input: [{ type: "audio", mime_type: mime, data: audio }],
-        generation_config: { transcription_config: { mode: { type: "verbatim" } } },
+        generation_config: { transcription_config: { mode: { type: "verbatim" }, custom_vocabulary: PORTFOLIO_VOCABULARY } },
       }),
       signal: AbortSignal.timeout(15_000),
     });

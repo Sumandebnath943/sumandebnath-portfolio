@@ -3,8 +3,9 @@ export const INDEX_VERSION = 2;
 export const MAX_HISTORY_MESSAGES = 10;
 export const MAX_USER_CHARS = 500;
 export const MAX_ASSISTANT_CHARS = 2_000;
-export const MAX_VOICE_BYTES = 384 * 1024;
-export const VOICE_RECORDING_MS = 20_000;
+export const VOICE_RECORDING_MS = 24_000;
+export const VOICE_INPUT_RATE = 16_000;
+export const MAX_VOICE_BYTES = VOICE_RECORDING_MS * VOICE_INPUT_RATE * 2 / 1_000 + 44;
 
 export type ChatSource = { href: string; title: string };
 
