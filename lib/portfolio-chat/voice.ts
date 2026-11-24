@@ -119,15 +119,18 @@ function* groqPhrases(text: string) {
   if (remaining) yield remaining;
 }
 
-function normalizeWave(wav: Buffer) {
+export function normalizeGroqWave(wav: Buffer) {
   if (wav.length < 44 || wav.length > MAX_WAV_BYTES || wav.toString("ascii", 0, 4) !== "RIFF" ||
       wav.toString("ascii", 8, 12) !== "WAVE") throw new Error("Invalid Groq WAV");
+  const streaming = wav.readUInt32LE(4) === 0xffffffff;
   let sampleRate = 0;
   let pcm: Buffer | undefined;
   for (let offset = 12; offset + 8 <= wav.length;) {
     const kind = wav.toString("ascii", offset, offset + 4);
-    const size = wav.readUInt32LE(offset + 4);
+    const declaredSize = wav.readUInt32LE(offset + 4);
     const start = offset + 8;
+    // Groq's streaming WAV leaves both RIFF and the final data chunk length unset.
+    const size = streaming && kind === "data" && declaredSize === 0xffffffff ? wav.length - start : declaredSize;
     if (start + size > wav.length) throw new Error("Truncated Groq WAV");
     if (kind === "fmt " && size >= 16) {
       if (wav.readUInt16LE(start) !== 1 || wav.readUInt16LE(start + 2) !== 1 || wav.readUInt16LE(start + 14) !== 16) {
@@ -164,7 +167,7 @@ async function* streamGroq(text: string, key: string, signal: AbortSignal) {
       signal: AbortSignal.any([signal, AbortSignal.timeout(12_000)]),
     });
     checkSpeechResponse(response, "playback", "groq");
-    const pcm = normalizeWave(Buffer.from(await response.arrayBuffer()));
+    const pcm = normalizeGroqWave(Buffer.from(await response.arrayBuffer()));
     bytes += pcm.length;
     if (bytes > MAX_WAV_BYTES) throw new Error("Groq audio exceeded response budget");
     yield pcm;

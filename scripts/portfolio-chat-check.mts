@@ -6,6 +6,7 @@ import { catalogKind, createPortfolioSearch, resolveCitations } from "../lib/por
 import { INDEX_PATH, MAX_HISTORY_MESSAGES, MAX_VOICE_BYTES, VOICE_INPUT_RATE } from "../lib/portfolio-chat/types";
 import type { ChatMessage, PortfolioIndex } from "../lib/portfolio-chat/types";
 import { createUtteranceDetector, encodeUtterance } from "../lib/portfolio-chat/utterance";
+import { normalizeGroqWave } from "../lib/portfolio-chat/voice";
 import { allPosts, postUrl } from "../lib/notebook";
 import { PAGES } from "../lib/pages";
 import { reviewedProjectNotes } from "./portfolio-reviewed-text.mjs";
@@ -138,6 +139,11 @@ assert(recordedTurns[0].includes(firstClause) && recordedTurns[0].includes(secon
 const voiceWav = Buffer.from(await encodeUtterance(recordedTurns[0]).arrayBuffer());
 assert.equal(voiceWav.toString("ascii", 0, 4), "RIFF");
 assert.equal(voiceWav.readUInt32LE(24), VOICE_INPUT_RATE);
+const streamingWav = Buffer.from(voiceWav);
+streamingWav.writeUInt32LE(0xffffffff, 4);
+streamingWav.writeUInt32LE(0xffffffff, 40);
+assert.deepEqual(normalizeGroqWave(streamingWav), normalizeGroqWave(voiceWav));
+assert.throws(() => normalizeGroqWave(voiceWav.subarray(0, -2)), /Truncated Groq WAV/);
 for (let i = 0; i < 1_210; i++) microphone.push(firstClause);
 assert.equal(encodeUtterance(recordedTurns[1]).size, MAX_VOICE_BYTES, "Continuous speech must stay inside the upload cap");
 
