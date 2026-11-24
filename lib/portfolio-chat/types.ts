@@ -37,6 +37,8 @@ export type SourceCoverage = {
   href: string;
   kind: "file" | "external" | "media";
   status: "indexed" | "needs-text" | "unavailable";
+  htmlStatus?: "indexed" | "needs-text" | "unavailable";
+  hasReviewedNote?: boolean;
   detail?: string;
   retiredContact?: boolean;
 };

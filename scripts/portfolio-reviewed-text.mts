@@ -120,3 +120,24 @@ export const reviewedText: {
   }
 ],
 };
+
+// Owner-supplied descriptions and facts corroborated by the public portfolio.
+// Keys are public app URLs. No repository URLs or source code belong here.
+export const reviewedProjectNotes: Readonly<Record<string, string>> = {
+  "https://cite.houseofnamus.com/":
+    "CITE is Suman Debnath's career intelligence toolkit for people navigating changes in their roles and industries. Its career pivot translator maps existing skills to possible roles. The job security radar and skill timeline help explore automation exposure and skill changes. The conversation copilot and voice roleplay help practise difficult workplace conversations and negotiations.",
+  "https://aegisnote.houseofnamus.com/":
+    "AEGIS VAULT is a zero-knowledge encrypted notepad. It uses a login password for the account and a separate master password to decrypt notes on the user's device. Notes are encrypted in the browser with an Argon2id-derived key and AES-256-GCM envelope encryption. The server stores encrypted notes. A forgotten master password cannot be used to recover the vault, and users can unlock their notes on another device with their master password.",
+  "https://crawldaddy.houseofnamus.com/":
+    "Crawl Daddy was version 1 of That One Crawler. Suman built it to help digital marketing teams analyse a website's page performance and technical SEO. It checks signals such as meta titles, meta descriptions, image alt text, and HTTP status codes, and pulls in PageSpeed data. That One Crawler is the successor, with its own feature set.",
+  "https://v0-meet-ember-ai.vercel.app/":
+    "EMBER is Suman's burnout support app. It offers audio journaling, guided grounding, and a de-burn mode for a moment when things feel overwhelming. The idea is to make it easier to reflect and take small recovery steps.",
+  "https://briefkiller.houseofnamus.com/":
+    "The original Brief Killer is a design brief generator. Suman built it because designers often receive incomplete briefs or requests where the requester has yet to pin down what needs designing. It takes the requester through 12 questions, turns their answers into a design brief, and emails the finished brief directly to the requester. This describes the original Brief Killer.",
+  "https://repurposeai.houseofnamus.com/":
+    "Repurpose AI takes long-form content such as blog posts or articles and turns it into shorter material adapted for social media platforms. Suman built it to reuse one piece of source content across channels without writing everything again.",
+  "https://nuno.houseofnamus.com/":
+    "NUNO is Suman's twist on UNO for the browser. It combines familiar card-game rules with six game modes and seven visual themes, several inspired by anime. Players can use bots or play with friends. In multiplayer, the host's browser runs the game and peers connect over WebRTC.",
+  "https://soulcanvas.houseofnamus.com/":
+    "Soul Canvas is an interactive art experience. It asks 24 questions and turns a person's answers into a living 3D particle sculpture that represents how they see themselves on the inside. The portfolio describes 47 possible generative art forms.",
+};

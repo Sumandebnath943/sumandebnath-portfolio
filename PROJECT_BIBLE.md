@@ -859,7 +859,9 @@ Groq, model `openai/gpt-oss-120b`, `reasoning_effort: 'low'`. It lives in the
 site. `scripts/build-portfolio-index.mts` checks the sitemap against the page,
 project, and Notebook registries and extracts sections from the public HTML.
 The same build adds hosted PDF and text content, reviewed media transcripts,
-and HTML from approved linked project entry points. It writes a coverage
+and HTML from approved linked project entry points. Reviewed project descriptions
+cover apps whose HTML has little readable text. The build tracks the fetch
+result separately from whether a reviewed description was indexed. It writes a coverage
 manifest to `build/portfolio-chat/coverage.json` with per-source status and
 content digests for canonical pages. Add captions for meaningful content
 that only exists in interactive media. New external sources require an

@@ -9,7 +9,7 @@ import { experiences } from "../lib/learnings-data";
 import { hasControlDirective, hasRetiredContact, redactContact } from "../lib/portfolio-chat/guardrails";
 import type { IndexedPage, Passage, SourceCoverage } from "../lib/portfolio-chat/types";
 import { RESUME_PDF } from "../lib/resume";
-import { reviewedText } from "./portfolio-reviewed-text.mjs";
+import { reviewedProjectNotes, reviewedText } from "./portfolio-reviewed-text.mjs";
 
 // Explicit public entry points. Do not follow discovered URLs, redirects, or
 // authenticated product links. Local portfolio routes are discovered separately.
@@ -155,35 +155,51 @@ export async function additionalSourcePages({ sectionText, passageParts }: Extra
     coverage.push({ href: record.href, kind: "media", status: passages.length ? "indexed" : "needs-text", detail: record.detail });
   }
 
-  const approved = [...externalSources().values()];
+  const sources = externalSources();
+  for (const href of Object.keys(reviewedProjectNotes)) {
+    if (!sources.has(href)) throw new Error("Reviewed project note has no approved public URL: " + href);
+  }
+  const approved = [...sources.values()];
   for (let cursor = 0; cursor < approved.length; cursor += 5) {
     const batch = approved.slice(cursor, cursor + 5);
-    const results = await Promise.all(batch.map(async ({ href, parentHref, title }) => {
+    const results = await Promise.all(batch.map(async ({ href, parentHref, title }): Promise<SourceCoverage> => {
+      const note = reviewedProjectNotes[href];
+      const notes = note ? textPassages(title + " · Reviewed project description", note) : [];
+      let htmlStatus: NonNullable<SourceCoverage["htmlStatus"]> = "unavailable";
+      let htmlPassages: Passage[] = [];
+      let heading = title;
+      let retiredContact: boolean | undefined;
       try {
         const html = await readApprovedHtml(href);
         const page = parse(html);
         const root = page.querySelector("main, article, [role=main]") ?? page.querySelector("body");
-        const retiredContact = hasRetiredContact(html);
-        if (!root) return { href, kind: "external", status: "needs-text", retiredContact } as const;
-        const heading = root.querySelector("h1")?.text.trim() || title;
-        // Scrape only document text. Client-only games and login shells remain
-        // documented through their public portfolio write-up.
-        let passages: Passage[];
-        try {
-          passages = sectionText(root, heading, true).filter((passage) => !hasControlDirective(passage.text));
-        } catch {
-          passages = [];
+        retiredContact = hasRetiredContact(html);
+        htmlStatus = "needs-text";
+        if (root) {
+          heading = root.querySelector("h1")?.text.trim() || title;
+          try {
+            htmlPassages = sectionText(root, heading, true).filter((passage) => !hasControlDirective(passage.text));
+          } catch {
+            // Some apps return a document with little or no readable text.
+          }
+          if (htmlPassages.reduce((sum, part) => sum + part.text.length, 0) >= 200) htmlStatus = "indexed";
         }
-        if (passages.reduce((sum, part) => sum + part.text.length, 0) < 200) {
-          return { href, kind: "external", status: "needs-text", detail: "No substantial public HTML text. See the portfolio showcase.", retiredContact } as const;
-        }
-        // Keep the document's substance available while an external owner
-        // replaces retired contact details. Cite the portfolio entry meanwhile.
-        add(href, title + " · " + heading, parentHref, "external", passages, retiredContact ? parentHref : undefined);
-        return { href, kind: "external", status: "indexed", retiredContact } as const;
       } catch {
-        return { href, kind: "external", status: "unavailable", detail: "Public fetch failed. See the portfolio showcase." } as const;
+        // The approved description can still be indexed if that app is offline.
       }
+
+      const passages = htmlStatus === "indexed" ? [...notes, ...htmlPassages] : notes;
+      if (passages.length) {
+        const pageTitle = htmlStatus === "indexed" && heading !== title ? title + " · " + heading : title;
+        add(href, pageTitle, parentHref, "external", passages, retiredContact ? parentHref : undefined);
+      }
+      return {
+        href, kind: "external", status: passages.length ? "indexed" : htmlStatus,
+        htmlStatus, hasReviewedNote: Boolean(note), retiredContact,
+        detail: htmlStatus === "indexed" ? undefined
+          : (htmlStatus === "unavailable" ? "Public fetch failed. " : "No substantial public HTML text. ")
+            + (notes.length ? "Indexed the reviewed project description." : "See the portfolio showcase."),
+      };
     }));
     coverage.push(...results);
   }
