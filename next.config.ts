@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve("."),
   },
+  // The build prepares this path for Next's trace and fills it from the
+  // prerendered pages before the deployment packages the Function.
+  outputFileTracingIncludes: {
+    "/api/chat": ["./build/portfolio-chat/index.json"],
+  },
   images: {
     // Allow local /public images and add external domains here when needed
     remotePatterns: [],

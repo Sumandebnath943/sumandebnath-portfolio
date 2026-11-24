@@ -517,7 +517,7 @@ export function StatNumber({ value, suffix = "", prefix = "", decimals = 0, clas
     return () => io.disconnect();
   }, [value]);
   return (
-    <span ref={ref} className={className} suppressHydrationWarning>
+    <span ref={ref} className={className} suppressHydrationWarning data-chat-text={`${prefix}${value.toFixed(decimals)}${suffix}`}>
       {prefix}{n.toFixed(decimals)}{suffix}
     </span>
   );

@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "tsx scripts/build-portfolio-index.mts --prepare && next build && tsx scripts/build-portfolio-index.mts",
+    "check:portfolio-chat": "tsx scripts/portfolio-chat-check.mts",
     "start": "next start",
     "lint": "eslint"
   },
@@ -39,10 +40,12 @@
     "eslint-config-next": "16.2.6",
     "fbx2gltf": "^0.9.7-p1",
     "meshoptimizer": "^1.1.1",
+    "node-html-parser": "^9.0.7",
     "postcss": "^8.5.14",
     "sharp": "^0.35.2",
     "simple-icons": "^16.28.0",
     "tailwindcss": "^3.4.19",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   }
 }

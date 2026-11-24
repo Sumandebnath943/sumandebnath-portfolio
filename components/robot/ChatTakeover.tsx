@@ -2,6 +2,10 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
+import { chatRequest } from "@/lib/portfolio-chat/history";
+import { MAX_USER_CHARS } from "@/lib/portfolio-chat/types";
+import type { ChatMessage, ChatSource } from "@/lib/portfolio-chat/types";
 import {
   useReveal,
   useHeroGate,
@@ -16,7 +20,8 @@ import type { TakeoverPhase, RobotTargets } from "./TakeoverRobotCanvas";
 
 const TakeoverRobotCanvas = dynamic(() => import("./TakeoverRobotCanvas"), { ssr: false });
 
-type Message = { role: "user" | "assistant"; content: string; animating?: boolean };
+type ReplyLinks = { sources?: ChatSource[]; catalog?: ChatSource[] };
+type Message = ChatMessage & ReplyLinks & { animating?: boolean };
 
 const INITIAL_MESSAGE: Message = {
   role: "assistant",
@@ -47,7 +52,6 @@ const SUGGESTED_QUESTIONS = [
  * room to play through.
  */
 const TYPEWRITER_SPEED_MS = 20;
-const CHARS_PER_TICK = 1;
 
 const PHASE_MS = 880; // must be >= TWEEN_MS in TakeoverRobotCanvas
 const FACE_LEFT = -Math.PI / 2;
@@ -314,14 +318,13 @@ export default function ChatTakeover() {
   }, [speech]);
 
   // Speak an assistant reply aloud (voice mode), then resume listening.
-  const respond = useCallback((text: string) => {
-    animateResponse(text);
+  const respond = useCallback((text: string, links?: ReplyLinks) => {
+    animateResponse(text, links);
     if (voiceModeRef.current) {
       speech.speak(text, () => {
         if (voiceModeRef.current && openRef.current) speech.listen();
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [speech]);
 
   // ── Chat behaviour ──
@@ -329,20 +332,21 @@ export default function ChatTakeover() {
   useEffect(() => { if (open) setTimeout(() => inputRef.current?.focus(), 250); }, [open]);
   useEffect(() => () => { if (typewriterRef.current) clearInterval(typewriterRef.current); }, []);
 
-  function animateResponse(fullText: string) {
+  function animateResponse(fullText: string, links?: ReplyLinks) {
     if (typewriterRef.current) clearInterval(typewriterRef.current);
     const text = fullText && fullText.length > 0
       ? fullText
       : "Something went wrong. Please email sumandebnath944@gmail.com directly.";
     let index = 0;
+    const charsPerTick = Math.max(1, Math.ceil(text.length / 180));
     setMessages((prev) => [...prev, { role: "assistant", content: "", animating: true }]);
     setIsAnimating(true);
     typewriterRef.current = setInterval(() => {
-      index = Math.min(index + CHARS_PER_TICK, text.length);
+      index = Math.min(index + charsPerTick, text.length);
       const done = index >= text.length;
       setMessages((prev) => {
         const updated = [...prev];
-        updated[updated.length - 1] = { role: "assistant", content: text.slice(0, index), animating: !done };
+        updated[updated.length - 1] = { role: "assistant", content: text.slice(0, index), animating: !done, ...(done ? links : {}) };
         return updated;
       });
       if (done) {
@@ -362,17 +366,16 @@ export default function ChatTakeover() {
     setMessages(updated);
     setInput("");
     setIsLoading(true);
-    const apiMessages = updated.map(({ role, content }) => ({ role, content }));
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: apiMessages }),
+        body: chatRequest(updated, window.location.pathname),
       });
       const data = await res.json().catch(() => ({}));
       if (res.status === 429) { respond("Please wait a moment before sending another message."); return; }
       if (!res.ok || !data.message) { respond(data.error || "Something went wrong. Please email sumandebnath944@gmail.com directly."); return; }
-      respond(data.message);
+      respond(data.message, { sources: data.sources, catalog: data.catalog });
     } catch {
       respond("Network error. Please email sumandebnath944@gmail.com directly.");
     } finally {
@@ -450,6 +453,20 @@ export default function ChatTakeover() {
                   <div className="ct-sub"><span className="ct-status" />Available · Ask me anything</div>
                 </div>
               </div>
+              {messages.length > 1 && (
+                <button
+                  className="ct-reset"
+                  disabled={isLoading || isAnimating}
+                  onClick={() => {
+                    speech.cancelSpeak();
+                    setMessages([INITIAL_MESSAGE]);
+                    setInput("");
+                    inputRef.current?.focus();
+                  }}
+                >
+                  New chat
+                </button>
+              )}
               <button className="ct-close" onClick={handleClose} aria-label="Close chat">
                 <svg width="18" height="18" viewBox="0 0 15 15" fill="none">
                   <path d="M11.5 3.5l-8 8M3.5 3.5l8 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
@@ -464,6 +481,18 @@ export default function ChatTakeover() {
                     <div className={`ct-bubble ${msg.role}`}>
                       {msg.content}
                       {msg.animating && <span className="ct-cursor" />}
+                      {Boolean(msg.sources?.length) && (
+                        <div className="ct-evidence">
+                          <div className="ct-evidence-label">Sources</div>
+                          <ChatLinks items={msg.sources!} />
+                        </div>
+                      )}
+                      {Boolean(msg.catalog?.length) && (
+                        <details className="ct-evidence">
+                          <summary className="ct-evidence-label">Show all {msg.catalog!.length}</summary>
+                          <ChatLinks items={msg.catalog!} />
+                        </details>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -506,7 +535,7 @@ export default function ChatTakeover() {
                 type="text"
                 placeholder={voiceMode ? (speech.listening ? "Listening…" : "Voice mode on") : "Ask something…"}
                 value={input}
-                maxLength={500}
+                maxLength={MAX_USER_CHARS}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 disabled={isLoading || isAnimating}
@@ -522,6 +551,18 @@ export default function ChatTakeover() {
         </div>
       )}
     </>
+  );
+}
+
+function ChatLinks({ items }: { items: ChatSource[] }) {
+  return (
+    <ul className="ct-evidence-links">
+      {items.map(({ href, title }) => (
+        <li key={`${href}:${title}`}>
+          <Link href={href} prefetch={false} target="_blank" rel="noopener noreferrer">{title}</Link>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -664,6 +705,13 @@ const TAKEOVER_CSS = `
   .ct-bubble { max-width: 80%; padding: 13px 17px; border-radius: 18px; font-size: 15px; line-height: 1.65; word-break: break-word; white-space: pre-wrap; }
   .ct-bubble.user { background: linear-gradient(135deg,#F04E00,#FF8A33); color: #fff; border-bottom-right-radius: 5px; box-shadow: 0 2px 10px rgba(240,78,0,0.22); }
   .ct-bubble.assistant { background: #f5f4f2; color: #1D1D1F; border: 1px solid rgba(0,0,0,0.06); border-bottom-left-radius: 5px; }
+  .ct-reset { margin-left: auto; margin-right: 10px; padding: 8px; font-size: 12px; color: #4B453F; white-space: nowrap; }
+  .ct-reset:disabled { opacity: 0.45; }
+  .ct-evidence { margin-top: 10px; border-top: 1px solid #d9d5d1; padding-top: 8px; white-space: normal; }
+  .ct-evidence-label { color: #51463F; font-size: 12px; font-weight: 700; }
+  summary.ct-evidence-label { cursor: pointer; }
+  .ct-evidence-links { margin: 4px 0 0; padding-left: 17px; list-style: disc; color: #842E0D; font-size: 13px; }
+  .ct-evidence-links a { text-decoration: underline; text-underline-offset: 2px; }
   .ct-cursor { display: inline-block; width: 2px; height: .9em; background: linear-gradient(180deg,#F04E00,#FF8A33); margin-left: 2px; vertical-align: middle; border-radius: 1px; animation: ct-blink .6s steps(1) infinite; }
   @keyframes ct-blink { 0%,100%{opacity:1} 50%{opacity:0} }
   .ct-typing { display: flex; align-items: center; gap: 5px; padding: 13px 16px; background: #f5f4f2; border: 1px solid rgba(0,0,0,0.06); border-radius: 18px; border-bottom-left-radius: 5px; }

@@ -855,8 +855,15 @@ Groq, model `openai/gpt-oss-120b`, `reasoning_effort: 'low'`. It lives in the
 **Pages Router on purpose**. Role-injection was closed and cost bounded in
 `df067e5` — do not loosen the message construction without reading that commit.
 
-Its knowledge comes from `lib/systemPrompt.ts`, which is built from
-`lib/resume.ts`.
+`npm run build` creates the chat's public-content index after prerendering the
+site. `scripts/build-portfolio-index.mts` checks the sitemap against the page,
+project, and Notebook registries and extracts sections from the public HTML.
+The build verifies that the index is in the `/api/chat` deployment trace. The
+chat uses that index for retrieval and validated source links. Run
+`npm run check:portfolio-chat` after building to check representative questions.
+`lib/systemPrompt.ts` holds the assistant's behaviour rules. Conversation context
+lives in the open page, and the chat sends a bounded set of recent and relevant
+earlier turns to Groq. The `/privacy` page describes that data flow.
 
 ### 6.4 The 3D robot mascot (`components/robot/`)
 
@@ -1408,8 +1415,8 @@ the mascot and the art (see commits `9c6696e`, `3182b22`).
 Deploys follow `main` automatically. Commit subjects are lowercase
 `type(scope): sentence` and the body explains *why*, in prose.
 
-**Verification.** `npx next build` and `npx eslint <changed files>` before
-calling anything done.
+**Verification.** `npm run build` and `npx eslint <changed files>` before
+calling anything done. The npm build also generates the portfolio chat index.
 
 > **`next build` does not run eslint.** Next 16 moved it out, so a green build
 > says nothing about lint and the two commands are not interchangeable. Ten

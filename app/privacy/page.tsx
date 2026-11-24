@@ -29,7 +29,7 @@ export const metadata: Metadata = {
    nodes on one URL is a conflict, and the one matching what the reader can see
    is the one that should win. */
 
-const LAST_UPDATED = "14 August 2026";
+const LAST_UPDATED = "24 November 2026";
 
 // Shared type styles — kept local so this page stays self-contained.
 const h2 = "font-manrope font-semibold text-xl md:text-2xl tracking-tight text-white mb-4";
@@ -203,6 +203,16 @@ export default function PrivacyPage() {
             <Bullet>
               <span className="text-white/85">Vercel</span> — hosts this site, so it
               necessarily processes every request, including your IP address.
+            </Bullet>
+            <Bullet>
+              <span className="text-white/85">Groq</span> processes the text you send to
+              the portfolio assistant, relevant earlier chat messages, and excerpts from
+              the public portfolio. Chat history lives in the open page. This site does
+              not save a transcript between visits. See the{" "}
+              <a href="https://console.groq.com/docs/your-data" className="underline underline-offset-4">
+                Groq data policy
+              </a>{" "}
+              for its processing and retention practices.
             </Bullet>
             <Bullet>
               <span className="text-white/85">Telegram</span> — delivers my visit

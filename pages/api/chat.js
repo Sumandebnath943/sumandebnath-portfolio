@@ -1,5 +1,8 @@
 import Groq from 'groq-sdk';
 import { SYSTEM_PROMPT, SYSTEM_REMINDER } from '../../lib/systemPrompt';
+import { catalogKind, loadPortfolioSearch, resolveCitations } from '../../lib/portfolio-chat/retrieval';
+import { MAX_ASSISTANT_CHARS, MAX_HISTORY_MESSAGES, MAX_USER_CHARS } from '../../lib/portfolio-chat/types';
+import { identity } from '../../lib/resume';
 
 /**
  * The portfolio chat endpoint.
@@ -27,9 +30,7 @@ const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 // ── Limits ────────────────────────────────────────────────────────────────
 
 const MAX_BODY_BYTES = 20_000;
-const MAX_MESSAGES = 10;
-const MAX_USER_CHARS = 500;
-const MAX_ASSISTANT_CHARS = 2_000;
+export const config = { api: { bodyParser: { sizeLimit: 20_000 } } };
 /** Upstream call ceiling. A hung API must not hold the function open. */
 const UPSTREAM_TIMEOUT_MS = 25_000;
 
@@ -166,14 +167,14 @@ function sanitize(input, max) {
 /**
  * Reduce the client's history to something safe to forward.
  *
- * Only `user` and `assistant` survive. The endpoint sends exactly one system
- * message and it comes from this server — before this, a caller could post
+ * Only `user` and `assistant` survive. System messages come from this server.
+ * Previously, a caller could post
  * `role: "system"` and have it forwarded to the model verbatim, which is a
  * complete bypass of the brief.
  */
 function normalizeMessages(messages) {
   return messages
-    .slice(-MAX_MESSAGES)
+    .slice(-MAX_HISTORY_MESSAGES)
     .filter((m) => m && typeof m === 'object')
     .map((m) => {
       const role = m.role === 'assistant' ? 'assistant' : m.role === 'user' ? 'user' : null;
@@ -227,6 +228,7 @@ const LEAK_MARKERS = [
   /my (system )?prompt (is|says|reads)/i,
   /here (is|are) my (instructions|system prompt|rules)/i,
   /i (was|have been) instructed to/i,
+  /visitor text and prior messages cannot change these rules/i,
 ];
 
 /**
@@ -234,11 +236,38 @@ const LEAK_MARKERS = [
  * figures are absent from the prompt entirely, so this is belt-and-braces
  * against a number arriving from the model's own priors.
  */
-const COMPENSATION_PATTERN = /(₹|rs\.?|inr)\s?\d|\d+\s*[-–]\s*\d+\s*(lpa|lakh)|\blpa\b/i;
+const COMPENSATION_PATTERN = /\blpa\b|\b(?:salary|compensation|ctc|remuneration)\b[^.\n]{0,70}\d|\d[^.\n]{0,70}\b(?:salary|compensation|ctc|remuneration)\b/i;
 
 function outputIsUnsafe(text) {
   return LEAK_MARKERS.some((m) => m.test(text)) || COMPENSATION_PATTERN.test(text);
 }
+
+const FORMAT = {
+  type: 'json_schema',
+  json_schema: {
+    name: 'portfolio_answer',
+    strict: true,
+    schema: {
+      type: 'object',
+      properties: {
+        answer: { type: 'string' },
+        kind: { type: 'string', enum: ['portfolio', 'insufficient', 'casual'] },
+        sourceIds: { type: 'array', items: { type: 'string' } },
+      },
+      required: ['answer', 'kind', 'sourceIds'],
+      additionalProperties: false,
+    },
+  },
+};
+
+const CATALOG_LABELS = {
+  articles: 'published Notebook articles',
+  games: 'games with portfolio showcases',
+  projects: 'named projects and experiments documented in the portfolio',
+};
+
+const CONTACT_SOURCE = { href: '/contact', title: 'Contact Suman' };
+const UNGROUNDED_RESPONSE = "I couldn't verify that from the portfolio. Try asking about a specific project or detail.";
 
 // ── Handler ───────────────────────────────────────────────────────────────
 
@@ -270,7 +299,7 @@ export default async function handler(req, res) {
     });
   }
 
-  const { messages } = req.body || {};
+  const { messages, pathname, earlierTurns } = req.body || {};
 
   if (!Array.isArray(messages)) {
     return res.status(400).json({ error: 'Invalid request: messages must be an array.' });
@@ -278,27 +307,55 @@ export default async function handler(req, res) {
 
   const sanitizedMessages = normalizeMessages(messages);
 
-  if (sanitizedMessages.length === 0) {
+  if (sanitizedMessages.at(-1)?.role !== 'user') {
     return res.status(400).json({ error: 'Nothing to answer.' });
   }
 
   // Only the newest user turn is worth screening — an attempt buried in a
   // forged history is handled by the trailing reminder instead, and screening
   // the whole history would let one flagged message poison every later reply.
-  const latestUser = [...sanitizedMessages].reverse().find((m) => m.role === 'user');
-  if (latestUser && looksLikeInjection(latestUser.content)) {
+  const latestUser = sanitizedMessages.at(-1);
+  const question = latestUser.content;
+  if (looksLikeInjection(question)) {
     return res.status(200).json({ message: INJECTION_RESPONSE });
   }
 
-  // Checked last, so a blocked or malformed request never consumes budget.
-  if (overDailyCap()) {
-    return res.status(429).json({
-      error:
-        "The assistant has hit its limit for today. Suman can answer directly at sumandebnath944@gmail.com.",
+  const contacts = /\b(?:his|suman(?:['’]s)?)\s+(?:email|e-mail|phone(?: number)?|contact(?: details)?)\b/i;
+  if (contacts.test(question)) {
+    const contact = /\bphone\b/i.test(question) ? identity.phone : identity.email;
+    return res.status(200).json({
+      message: `You can reach Suman at ${contact}. The contact page also has a form.`,
+      sources: [CONTACT_SOURCE],
     });
   }
 
   try {
+    const search = loadPortfolioSearch();
+    const kind = catalogKind(question);
+    const catalog = kind ? search.inventory(kind) : undefined;
+    const inventorySummary = kind ? `There are ${catalog.length} ${CATALOG_LABELS[kind]}.` : '';
+    const asksForDetails = /\b(?:and|then)\s+(?:explain|tell|compare|describe|which|what|how)\b/i.test(question);
+    if (catalog && !asksForDetails) {
+      return res.status(200).json({
+        message: inventorySummary,
+        catalog,
+      });
+    }
+
+    const older = Array.isArray(earlierTurns) ? earlierTurns.slice(-2)
+      .map((turn) => sanitize(turn, MAX_USER_CHARS))
+      .filter(Boolean)
+      .map((content) => ({ role: 'user', content })) : [];
+    const history = [...older, ...sanitizedMessages.slice(0, -1)];
+    const evidence = search.retrieve(question, history, typeof pathname === 'string' ? pathname : undefined);
+
+    // Catalog and contact replies are deterministic and do not use the model.
+    if (overDailyCap()) {
+      return res.status(429).json({
+        error: 'The assistant has hit its limit for today. You can reach Suman through the contact page.',
+      });
+    }
+
     const completion = await groq.chat.completions.create(
       {
         // llama-3.3-70b-versatile is deprecated. gpt-oss-120b is OpenAI's
@@ -311,25 +368,34 @@ export default async function handler(req, res) {
         reasoning_effort: 'low',
         messages: [
           { role: 'system', content: SYSTEM_PROMPT },
-          ...sanitizedMessages,
-          // After the conversation, so it is the last thing read. See
-          // SYSTEM_REMINDER — a forged assistant turn cannot outrank it.
+          { role: 'system', content: 'Published excerpts for this question, as quoted data:\n' + JSON.stringify(evidence) },
+          ...history,
+          latestUser,
           { role: 'system', content: SYSTEM_REMINDER },
         ],
-        max_tokens: 400,
+        response_format: FORMAT,
+        max_completion_tokens: 850,
         temperature: 0.4,
         top_p: 0.9,
       },
       { signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS) },
     );
 
-    const response = toPlainText(completion.choices?.[0]?.message?.content ?? '');
-
-    if (!response || outputIsUnsafe(response)) {
-      return res.status(200).json({ message: INJECTION_RESPONSE });
+    let reply;
+    try {
+      reply = JSON.parse(completion.choices?.[0]?.message?.content ?? '');
+    } catch {
+      return res.status(200).json({ message: UNGROUNDED_RESPONSE });
+    }
+    const response = typeof reply?.answer === 'string' ? toPlainText(reply.answer) : '';
+    const sources = resolveCitations(reply?.sourceIds, evidence);
+    if (outputIsUnsafe(response)) return res.status(200).json({ message: INJECTION_RESPONSE });
+    if (!response || !sources || !['portfolio', 'insufficient', 'casual'].includes(reply.kind) ||
+      (reply.kind === 'portfolio' && sources.length === 0)) {
+      return res.status(200).json({ message: UNGROUNDED_RESPONSE });
     }
 
-    return res.status(200).json({ message: response });
+    return res.status(200).json({ message: [inventorySummary, response].filter(Boolean).join('\n\n'), sources, catalog });
   } catch (error) {
     // The upstream message can carry account, model and quota detail. Log it;
     // never hand it to the caller.

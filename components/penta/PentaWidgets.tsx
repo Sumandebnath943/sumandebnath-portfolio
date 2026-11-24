@@ -78,7 +78,7 @@ export function StatCounter({
   }, [value, duration]);
 
   return (
-    <span ref={ref} className={className} suppressHydrationWarning>
+    <span ref={ref} className={className} suppressHydrationWarning data-chat-text={`${prefix}${value.toFixed(decimals)}${suffix}`}>
       {prefix}
       {display.toFixed(decimals)}
       {suffix}
