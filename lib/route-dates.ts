@@ -38,7 +38,7 @@ export const ROUTE_DATES: Record<string, string> = {
   "/crawlers/that-one-crawler": "2026-10-23",
   "/ar/video-resume": "2026-11-22",
   "/crms/outreachos": "2026-11-23", // no git history yet
-  "/notebook": "2026-10-26",
+  "/notebook": "2026-11-24",
 };
 
 /** Shared date for the /projects/[slug] dossiers — they all render from the
