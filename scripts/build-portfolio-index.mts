@@ -4,16 +4,19 @@ import { dirname, join, relative, resolve } from "node:path";
 import { HTMLElement, NodeType, parse } from "node-html-parser";
 import type { Node } from "node-html-parser";
 import { CAREER_MODE_URL } from "../components/ui/CareerModeButton";
+import { journeyInteractionDetails } from "../components/journey/JourneyInteractions";
 import { SHOTS as MIGI_SHOTS } from "../components/migi/migi-data";
 import { FAMILIES as PENTASHELL_FAMILIES } from "../components/pentashell/pentashell-data";
 import { archiveProjects } from "../lib/archive-projects";
 import { experiences } from "../lib/learnings-data";
 import { allPosts, postModified, postUrl } from "../lib/notebook";
 import { PAGES } from "../lib/pages";
+import { hasRetiredContact, redactContact } from "../lib/portfolio-chat/guardrails";
 import { INDEX_PATH, INDEX_VERSION } from "../lib/portfolio-chat/types";
 import type { CatalogEntry, IndexedPage, Passage, PortfolioIndex } from "../lib/portfolio-chat/types";
 import { projects, SITE_URL } from "../lib/projects";
-import { additionalProjects, flagshipProjects, identity, RESUME_PDF } from "../lib/resume";
+import { additionalProjects, flagshipProjects, RESUME_PDF } from "../lib/resume";
+import { additionalSourcePages } from "./portfolio-public-sources.mjs";
 
 const ARTIFACT = resolve(INDEX_PATH);
 const APP_OUTPUT = ".next/server/app";
@@ -36,9 +39,7 @@ function pageFile(href: string) {
 }
 
 function clean(text: string) {
-  return text.replace(/\s+/g, " ").trim()
-    .replaceAll(identity.email, "[see the contact page]")
-    .replace(/\+91[\s-]*79802[\s-]*96957/g, "[see the contact page]");
+  return redactContact(text).replace(/\s+/g, " ").trim();
 }
 
 function publicLink(href?: string) {
@@ -68,14 +69,16 @@ function passageParts(text: string) {
   return parts;
 }
 
-function sectionText(root: HTMLElement, title: string) {
+function sectionText(root: HTMLElement, title: string, external = false) {
   // Keep collapsed, server-rendered content, such as the other Milo starter panels.
   // Process only the public main landmark. In particular, the Flight payload and
   // arbitrary data props outside rendered text are never evidence.
-  root.querySelectorAll([
+  const excluded = [
     "script", "style", "template", "svg", "canvas", "noscript", "nav", "footer", "[data-chat-exclude]",
     ".nb-anchor", ".nb-read-rail", ".nb-pullquote", ".ct-root", ".sr-only",
-  ].join(", ")).forEach((element) => {
+  ];
+  if (external) excluded.push("[hidden]", "[aria-hidden=true]", "[inert]", "iframe", "form");
+  root.querySelectorAll(excluded.join(", ")).forEach((element) => {
     if (element.tagName === "H1") return;
     element.remove();
   });
@@ -103,6 +106,7 @@ function sectionText(root: HTMLElement, title: string) {
       return;
     }
     if (!(node instanceof HTMLElement)) return;
+    if (external && /(?:display\s*:\s*none|visibility\s*:\s*hidden)/i.test(node.getAttribute("style") || "")) return;
     const tag = node.tagName;
     const id = node.getAttribute("id");
     // React useId output varies between builds and is unsuitable as a citation.
@@ -127,7 +131,7 @@ function sectionText(root: HTMLElement, title: string) {
       if (alt) buffer += `\nImage: ${alt}\n`;
     }
     if (tag === "P" || tag === "LI" || tag === "PRE" || tag === "FIGCAPTION" || tag === "TR") textBlocks++;
-    const publishedText = node.getAttribute("data-chat-text");
+    const publishedText = external ? undefined : node.getAttribute("data-chat-text");
     if (publishedText) buffer += publishedText;
     else for (const child of node.childNodes) visit(child, anchor);
     if (tag === "A" && clean(node.text)) {
@@ -147,7 +151,7 @@ function sectionText(root: HTMLElement, title: string) {
   return passages;
 }
 
-function buildIndex(): PortfolioIndex {
+async function buildIndex(): Promise<PortfolioIndex> {
   const posts = allPosts();
   const postByHref = new Map(posts.map((post) => [postUrl(post.slug), post]));
   const pageByHref = new Map(PAGES.map((page) => [page.href, page]));
@@ -175,7 +179,9 @@ function buildIndex(): PortfolioIndex {
     if (isNavigation(href)) continue;
     if (!Object.hasOwn(routes, href)) throw new Error(`Public route is missing prerendered content: ${href}`);
     try {
-      const doc = parse(readOutput(pageFile(href)));
+      const html = readOutput(pageFile(href));
+      if (hasRetiredContact(html)) throw new Error("Retired contact details in rendered HTML");
+      const doc = parse(html);
       const post = postByHref.get(href);
       const root = doc.querySelector(post ? "#nb-article" : "main");
       if (!root) throw new Error("Missing public content landmark");
@@ -223,6 +229,7 @@ function buildIndex(): PortfolioIndex {
             heading: item.title,
             text: clean([item.description, item.whyItMatters, item.learningOutcome,
               `Skills: ${item.skills.join(", ")}.`,
+              `Recognised by: ${item.recognizedBy.join(", ")}.`,
               `Credentials: ${item.credentials.map((credential) => `${credential.title} (${credential.issuer})`).join(", ")}.`,
             ].join(" ")),
           });
@@ -230,6 +237,9 @@ function buildIndex(): PortfolioIndex {
       }
       if (href === "/resume") {
         passages.push({ heading: "Career Mode and résumé download", text: `Career Mode is the playable version of Suman Debnath's résumé (${CAREER_MODE_URL}). The résumé PDF can be downloaded from ${RESUME_PDF}.` });
+      }
+      if (href === "/journey") {
+        for (const { heading, text } of journeyInteractionDetails) passages.push({ heading, text: clean(text) });
       }
       pages.push({
         href, title, description,
@@ -242,12 +252,14 @@ function buildIndex(): PortfolioIndex {
     }
   }
 
+  const additional = await additionalSourcePages({ sectionText, passageParts });
   return {
     version: INDEX_VERSION,
     buildId: readOutput(".next/BUILD_ID").trim(),
-    pages,
+    pages: [...pages, ...additional.pages],
     catalog: buildCatalog(funApps, postByHref),
     navigation: [...new Set([...dates.keys(), ...renderedPages])].filter(isNavigation),
+    coverage: additional.coverage,
   };
 }
 
@@ -308,7 +320,7 @@ if (process.argv.includes("--prepare")) {
   mkdirSync(dirname(ARTIFACT), { recursive: true });
   if (!existsSync(ARTIFACT)) writeFileSync(ARTIFACT, "{}", { flag: "wx" });
 } else {
-  const index = buildIndex();
+  const index = await buildIndex();
   const tracePath = ".next/server/pages/api/chat.js.nft.json";
   const trace = JSON.parse(readOutput(tracePath)) as { files: string[] };
   if (!trace.files.some((file) => resolve(dirname(tracePath), file) === ARTIFACT)) {
@@ -317,6 +329,12 @@ if (process.argv.includes("--prepare")) {
   const temp = `${ARTIFACT}.${process.pid}.tmp`;
   writeFileSync(temp, JSON.stringify(index));
   renameSync(temp, ARTIFACT);
+  writeFileSync(join(dirname(ARTIFACT), "coverage.json"), JSON.stringify({
+    buildId: index.buildId,
+    canonicalPages: index.pages.filter((page) => !page.sourceKind).map(({ href, digest, passages }) => ({ href, digest, passages: passages.length })),
+    navigation: index.navigation,
+    additionalSources: index.coverage,
+  }, null, 2));
   const passages = index.pages.reduce((sum, page) => sum + page.passages.length, 0);
   console.log(`Portfolio chat indexed ${index.pages.length} pages, ${passages} passages and ${index.catalog.length} catalog entries (${index.buildId}).`);
 }

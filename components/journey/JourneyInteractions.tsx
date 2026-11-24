@@ -586,3 +586,14 @@ export function Finish({ onDone, done }: Props) {
     </button>
   );
 }
+
+// Public details unlocked by the story controls, which don't mount in the
+// prerendered transcript. Reuse the exact values shown by the gestures.
+export const journeyInteractionDetails = [
+  { heading: "College attendance", text: `The attendance interaction depicts about ${ATTENDED} of ${TERM_DAYS} days in the term.` },
+  { heading: "World of Lamborghini followers", text: `The follower interaction counts up to ${PEAK.toLocaleString("en-IN")} followers.` },
+  { heading: "What he taught himself", text: TOOLS.join(", ") },
+  { heading: "Responsibilities in Kerala", text: LOADS.map((load) => load.replace(/^\+ /, "")).join(", ") },
+  { heading: "What he had shipped at the time of the story", text: SHIPPED.join(", ") },
+  { heading: "The four disciplines brought together", text: FACETS.map(({ k, v }) => `${k} — ${v}`).join(". ") },
+];

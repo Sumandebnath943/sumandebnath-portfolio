@@ -1,5 +1,5 @@
 export const INDEX_PATH = "build/portfolio-chat/index.json";
-export const INDEX_VERSION = 1;
+export const INDEX_VERSION = 2;
 export const MAX_HISTORY_MESSAGES = 10;
 export const MAX_USER_CHARS = 500;
 export const MAX_ASSISTANT_CHARS = 2_000;
@@ -24,10 +24,21 @@ export type Passage = {
 };
 
 export type IndexedPage = ChatSource & {
+  parentHref?: string;
+  citationHref?: string;
+  sourceKind?: "file" | "external" | "transcript";
   description: string;
   updated?: string;
   digest: string;
   passages: Passage[];
+};
+
+export type SourceCoverage = {
+  href: string;
+  kind: "file" | "external" | "media";
+  status: "indexed" | "needs-text" | "unavailable";
+  detail?: string;
+  retiredContact?: boolean;
 };
 
 export type PortfolioIndex = {
@@ -36,4 +47,5 @@ export type PortfolioIndex = {
   pages: IndexedPage[];
   catalog: CatalogEntry[];
   navigation: string[];
+  coverage: SourceCoverage[];
 };

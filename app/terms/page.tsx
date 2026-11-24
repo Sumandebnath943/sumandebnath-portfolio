@@ -1,3 +1,4 @@
+import { PUBLIC_EMAIL, PUBLIC_EMAIL_LINK } from "@/lib/public-contact";
 import type { Metadata } from "next";
 import BannerArt from "@/components/ui/BannerArt";
 import MotionProvider from "@/components/providers/MotionProvider";
@@ -246,10 +247,10 @@ export default function TermsPage() {
             it is commercial, it is still probably yes — I just want to know.
           </p>
           <a
-            href="mailto:sumandebnath944@gmail.com"
+            href={PUBLIC_EMAIL_LINK}
             className="font-manrope text-[15px] text-white/85 underline underline-offset-4 decoration-white/25 hover:decoration-white/60 transition-colors"
           >
-            sumandebnath944@gmail.com
+            {PUBLIC_EMAIL}
           </a>
         </section>
 

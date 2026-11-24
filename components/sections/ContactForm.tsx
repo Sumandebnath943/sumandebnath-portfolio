@@ -1,4 +1,5 @@
 "use client";
+import { PUBLIC_EMAIL } from "@/lib/public-contact";
 
 import { useEffect, useRef, useState } from "react";
 import { m } from "framer-motion";
@@ -76,7 +77,7 @@ export default function ContactForm() {
       window.dispatchEvent(new Event("robot-celebrate"));
     } catch {
       setError(
-        "Couldn't reach the server. Check your connection, or email sumandebnath944@gmail.com directly.",
+        `Couldn't reach the server. Check your connection, or email ${PUBLIC_EMAIL} directly.`,
       );
       setStatus("error");
     }
@@ -109,8 +110,7 @@ export default function ContactForm() {
           Message sent.
         </h3>
         <p className="font-manrope text-[14.5px] text-[#5a5a63] leading-relaxed max-w-sm mx-auto">
-          It landed on Suman&apos;s phone. He usually replies within a day or two —
-          if it&apos;s urgent, the phone number above is faster.
+          Suman usually replies within a day or two.
         </p>
         <button
           type="button"

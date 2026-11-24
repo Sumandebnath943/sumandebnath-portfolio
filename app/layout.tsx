@@ -228,19 +228,14 @@ const personJsonLd = {
     page on the site — carrying the co-occurrence cost for the least benefit,
     because the unique strings in the same sentence already do the resolving.
 
-    Same principle as the phone number in AEO_PLAYBOOK §8: present where a human
-    needs it, absent from anything parsed in bulk. §6 holds the canonical wording.
+    AEO_PLAYBOOK §6 holds the canonical wording.
   */
   disambiguatingDescription:
     "Suman Debnath, the Senior Brand Marketing Manager and AI-native product builder based between Pune and Kolkata, India — creator of ROASmind, IMPRINT, LEGATUS, CITE, EMBER and D-PE.ai, of the PentaCMD-47M language model, and founder of House of Namus. Not any of the several other technology professionals who share this name.",
   url: SITE_URL,
   image: `${SITE_URL}/og-image.png`,
   email: `mailto:${identity.email}`,
-  // No `telephone` here either, and this was the worst of the three: the Person
-  // node is emitted by the root layout, so the number was in the structured data
-  // of **every page on the site** — not just the contact page. It is still
-  // visible and tappable on /contact and /resume for a human; it is simply no
-  // longer handed to anything parsing schema in bulk.
+  // The same public contact address serves the visible and machine-readable site.
   jobTitle: "Senior Brand Marketing Manager & AI-Native Product Builder",
   gender: "Male",
   nationality: "Indian",
@@ -474,10 +469,8 @@ const websiteJsonLd = {
 
   ## Two deliberate omissions
 
-  **No `telephone`.** Same standing rule as the Person node and /contact —
-  AEO_PLAYBOOK §8. A number in a machine-readable surface is scraped in bulk.
-  Email is the channel that scales and can be filtered. Do not add it back for
-  schema "completeness"; `telephone` is optional and its absence costs nothing.
+  **Contact uses the public hiring email.** The Person node and /contact use
+  the same address.
 
   **No street address.** `address` mirrors exactly what this site already
   publishes about where its founder works — Pune and Kolkata, at locality level,

@@ -1,3 +1,4 @@
+import { PUBLIC_EMAIL, PUBLIC_EMAIL_LINK } from "@/lib/public-contact";
 import type { Metadata } from "next";
 import BannerArt from "@/components/ui/BannerArt";
 import MotionProvider from "@/components/providers/MotionProvider";
@@ -143,7 +144,7 @@ export default function PrivacyPage() {
             </Bullet>
             <Bullet>
               Specific actions that signal interest: downloading my résumé, clicking my
-              email, phone or social links, or copying my contact details
+              email or social links, or copying my contact details
             </Bullet>
             <Bullet>How many times you have visited before, and how long ago that was</Bullet>
           </ul>
@@ -349,10 +350,10 @@ export default function PrivacyPage() {
             messages.
           </p>
           <a
-            href="mailto:sumandebnath944@gmail.com"
+            href={PUBLIC_EMAIL_LINK}
             className="font-manrope text-[15px] text-white/85 underline underline-offset-4 decoration-white/25 hover:decoration-white/60 transition-colors"
           >
-            sumandebnath944@gmail.com
+            {PUBLIC_EMAIL}
           </a>
           <p className={`${p} mt-8`}>
             This is a personal portfolio, not a company. If something here reads as

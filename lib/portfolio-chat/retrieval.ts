@@ -50,7 +50,7 @@ export function createPortfolioSearch(index: PortfolioIndex) {
   const documentFrequency = new Map<string, number>();
   const prepared: PreparedPassage[] = [];
   for (const page of index.pages) {
-    const pageWords = terms(`${page.title} ${page.href}`);
+    const pageWords = terms(`${page.title} ${page.parentHref ?? page.href}`);
     for (const passage of page.passages) {
       const heading = terms(passage.heading);
       const body = terms(passage.text);
@@ -110,6 +110,7 @@ export function createPortfolioSearch(index: PortfolioIndex) {
       }
       if (row.page.href === currentPage && (value > 0 || conversational)) value += conversational && !entities.length ? 4 : 1.5;
       if (matchedPaths.has(row.page.href)) value += explicit.length ? 11 : 7;
+      if (row.page.parentHref && matchedPaths.has(row.page.parentHref) && value > 0) value += 4;
       if (identityQuestion && ["/about", "/profile", "/resume"].includes(row.page.href)) value += 5;
       if (detailWords.size === 0 && (row.passage.anchor === undefined || row.passage.heading === row.page.title)) value += 0.4;
       return value;
@@ -134,10 +135,12 @@ export function createPortfolioSearch(index: PortfolioIndex) {
       if (used.has(row) || count >= (matchedPaths.has(page.href) ? 4 : 2)) return;
       used.add(row);
       perPage.set(page.href, count + 1);
-      const href = passage.anchor ? `${page.href}#${passage.anchor}` : page.href;
+      const href = page.citationHref || (passage.anchor && !page.href.includes("#") ? `${page.href}#${passage.anchor}` : page.href);
       const heading = passage.heading.split(" / ").at(-1);
       const title = heading === page.title ? page.title : `${page.title} · ${heading}`;
-      addEvidence(href, title, `${page.updated ? `Page date: ${page.updated}\n` : ""}${passage.text}`);
+      const context = page.updated ? "Page date: " + page.updated + "\n"
+        : page.sourceKind === "file" ? "Published file. Use current portfolio pages for changed facts.\n" : "";
+      addEvidence(href, title, context + passage.text);
     }
 
     for (const entry of entities.slice(0, 4)) {

@@ -3,13 +3,12 @@
 
    The page worked but read as a form on a beige sheet. What it was missing is
    the thing a contact page is actually for: a sense that someone is on the
-   other end. So it opens dark with a live availability signal and three
-   explicit doors — WhatsApp, email, the form — and only then drops to a light
+   other end. So it opens dark with a live availability signal and links for
+   email and the form. It then drops to a light
    ground where a form belongs, because a long message field on a dark
    background is a worse place to write.
 
-   Identity: emerald, borrowed from the WhatsApp channel that is likely to be
-   the most-used one.
+   Identity: emerald.
 
    Scoped under .cx — NOT .ct, which belongs to ChatTakeover. That widget is
    mounted in the root layout, so its inline <style> is injected on every page
@@ -24,7 +23,6 @@
   --paper: #fbfbf9;
   --mint: #34d399;
   --mint-warm: #6ee7b7;
-  --wa: #25d366;
   --bone: #f0f6f2;
   --bone-soft: rgba(240, 246, 242, 0.62);
   /* 0.48 clears AA on the door panels; 0.34 left the notes at 2.93:1. */
@@ -112,10 +110,10 @@
   margin-top: 1.75rem;
 }
 
-/* ── The three doors ──────────────────────────────────────────────────── */
+/* ── Contact options ──────────────────────────────────────────────────── */
 
 .cx-doors { display: grid; gap: 0.85rem; margin-top: clamp(2.5rem, 6vw, 3.5rem); }
-@media (min-width: 760px) { .cx-doors { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 760px) { .cx-doors { grid-template-columns: repeat(2, 1fr); } }
 
 .cx-door {
   display: flex;
@@ -152,12 +150,8 @@
   line-height: 1.5;
   color: var(--bone-mute);
 }
-.cx-door--wa:hover { border-color: rgba(37, 211, 102, 0.5); }
-.cx-door--wa .cx-door-k { color: var(--wa); }
 .cx-door--mail:hover { border-color: rgba(52, 211, 153, 0.5); }
 .cx-door--mail .cx-door-k { color: var(--mint); }
-.cx-door--call:hover { border-color: rgba(110, 231, 183, 0.5); }
-.cx-door--call .cx-door-k { color: var(--mint-warm); }
 
 /* ── Form ground ──────────────────────────────────────────────────────── */
 /* Light, because a long message field on a dark background is a worse place

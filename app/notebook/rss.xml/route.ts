@@ -1,3 +1,4 @@
+import { PUBLIC_EMAIL } from "@/lib/public-contact";
 import { SITE_URL } from "@/lib/projects";
 import { allPosts, notebookModified, postUrl } from "@/lib/notebook";
 
@@ -62,8 +63,8 @@ ${post.tags.map((t) => `      <category>${esc(t)}</category>`).join("\n")}
     <description>First-hand engineering notes from building AI-native products: what broke, the actual fix, and what generalises.</description>
     <language>en-us</language>
     <copyright>© ${new Date().getFullYear()} Suman Debnath</copyright>
-    <managingEditor>sumandebnath944@gmail.com (Suman Debnath)</managingEditor>
-    <webMaster>sumandebnath944@gmail.com (Suman Debnath)</webMaster>
+    <managingEditor>${PUBLIC_EMAIL} (Suman Debnath)</managingEditor>
+    <webMaster>${PUBLIC_EMAIL} (Suman Debnath)</webMaster>
     <lastBuildDate>${rfc822(notebookModified())}</lastBuildDate>
 ${items}
   </channel>

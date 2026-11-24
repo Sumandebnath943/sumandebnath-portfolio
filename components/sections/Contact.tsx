@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { PUBLIC_EMAIL, PUBLIC_EMAIL_LINK } from "@/lib/public-contact";
 import { useRef } from "react";
 import { m, useInView } from "framer-motion";
 
@@ -250,22 +251,10 @@ export default function Contact({
           transition={{ duration: 0.9, delay: 0.24, ease: [0.22, 1, 0.36, 1] }}
           className="flex flex-col sm:flex-row sm:items-center sm:flex-wrap gap-4 mb-16"
         >
-          {/* Phone pill */}
-          <a
-            href="tel:+917980296957"
-            className={`group inline-flex items-center gap-3 px-6 py-3 rounded-full border transition-all duration-500 font-manrope text-xs tracking-wide ${
-              light
-                ? "border-[#2E8B57]/25 bg-[#2E8B57]/[0.05] text-[#0B3B25]/80 hover:text-[#0B3B25] hover:border-[#2E8B57]/45 hover:bg-[#2E8B57]/[0.1]"
-                : "border-[#F5F5F3]/[0.12] bg-[#F5F5F3]/[0.04] text-[#F5F5F3]/55 hover:text-[#F5F5F3]/85 hover:border-[#F5F5F3]/[0.22] hover:bg-[#F5F5F3]/[0.07]"
-            }`}
-          >
-            <span className={`w-1 h-1 rounded-full transition-colors duration-500 ${light ? "bg-[#2E8B57]/50 group-hover:bg-[#2E8B57]" : "bg-[#F5F5F3]/30 group-hover:bg-[#F5F5F3]/60"}`} />
-            +91 7980296957
-          </a>
 
           {/* Email pill */}
           <a
-            href="mailto:sumandebnath944@gmail.com"
+            href={PUBLIC_EMAIL_LINK}
             className={`group inline-flex items-center gap-3 px-6 py-3 rounded-full border transition-all duration-500 font-manrope text-xs tracking-wide ${
               light
                 ? "border-[#2E8B57]/25 bg-[#2E8B57]/[0.05] text-[#0B3B25]/80 hover:text-[#0B3B25] hover:border-[#2E8B57]/45 hover:bg-[#2E8B57]/[0.1]"
@@ -273,7 +262,7 @@ export default function Contact({
             }`}
           >
             <span className={`w-1 h-1 rounded-full transition-colors duration-500 ${light ? "bg-[#2E8B57]/50 group-hover:bg-[#2E8B57]" : "bg-[#F5F5F3]/30 group-hover:bg-[#F5F5F3]/60"}`} />
-            sumandebnath944@gmail.com
+            {PUBLIC_EMAIL}
             <span className="text-[10px] opacity-35 group-hover:opacity-60 transition-opacity">↗</span>
           </a>
 

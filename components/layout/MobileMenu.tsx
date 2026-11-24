@@ -496,13 +496,10 @@ export default function MobileMenu({
           Search ⌘K
         </button>
         <a
-          href={identity.whatsappHref}
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/contact"
           className="py-3.5 touch-manipulation hover:text-[#F5F0E6]"
         >
-          WhatsApp <span aria-hidden>↗</span>
-          <span className="sr-only"> (opens in a new tab)</span>
+          Contact
         </a>
       </div>
     </m.div>

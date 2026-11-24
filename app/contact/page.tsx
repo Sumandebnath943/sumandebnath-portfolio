@@ -14,7 +14,7 @@ import Breadcrumbs from "@/components/ui/Breadcrumbs";
 export const metadata: Metadata = {
   title: { absolute: `Contact Suman Debnath — ${identity.headline}` },
   description:
-    "Get in touch with Suman Debnath about a role, a collaboration, or one of the AI products. Contact form, email, phone, and current availability.",
+    "Get in touch with Suman Debnath about a role, a collaboration, or one of the AI products. Contact form, email, and current availability.",
   alternates: { canonical: "/contact" },
   keywords: [
     "contact Suman Debnath",
@@ -51,11 +51,6 @@ const contactPointJsonLd = {
       "@type": "ContactPoint",
       contactType: "Recruiting and professional enquiries",
       email: identity.email,
-      // No `telephone`. The number is still on the page for a human to read and
-      // tap — this only keeps it out of the machine-readable surface, where it
-      // is trivially scraped in bulk and ends up in call lists. Email is the
-      // channel that scales and can be filtered; a phone number is not.
-      // Deliberate: do not add it back for schema "completeness".
       areaServed: "IN",
       availableLanguage: ["English", "Hindi", "Bengali"],
       url: `${SITE_URL}/contact`,
@@ -118,36 +113,16 @@ export default function ContactPageRoute() {
               form-filling theatre, no autoresponder.
             </p>
 
-            {/* Three explicit doors, before the form. Plenty of people would
-                rather message than fill anything in, and WhatsApp was
-                previously buried in the hero's status strip as one word. */}
             <div className="cx-doors">
-              <a
-                href={identity.whatsappHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="cx-door cx-door--wa"
-              >
-                <span className="cx-door-k">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884a9.82 9.82 0 0 1 6.988 2.896 9.83 9.83 0 0 1 2.892 6.994c-.003 5.45-4.437 9.886-9.884 9.886m8.413-18.297A11.8 11.8 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.9 11.9 0 0 0 5.688 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.82 11.82 0 0 0 20.464 3.488" />
-                  </svg>
-                  WhatsApp
-                </span>
-                <span className="cx-door-v">{identity.phone}</span>
-                <span className="cx-door-n">Usually the fastest way through.</span>
-              </a>
-
               <a href={`mailto:${identity.email}`} className="cx-door cx-door--mail">
                 <span className="cx-door-k">Email</span>
                 <span className="cx-door-v">{identity.email}</span>
                 <span className="cx-door-n">For anything with an attachment.</span>
               </a>
-
-              <a href={identity.phoneHref} className="cx-door cx-door--call">
-                <span className="cx-door-k">Call</span>
-                <span className="cx-door-v">{identity.phone}</span>
-                <span className="cx-door-n">If it is genuinely urgent.</span>
+              <a href="#tour-contact-form" className="cx-door">
+                <span className="cx-door-k">Contact form</span>
+                <span className="cx-door-v">Write a message</span>
+                <span className="cx-door-n">For a quick note about a role, a project, or a collaboration.</span>
               </a>
             </div>
           </div>
@@ -188,8 +163,7 @@ export default function ContactPageRoute() {
                 <div>
                   <p className="cx-fact-k">Response time</p>
                   <p className="cx-fact-v">
-                    Usually within a day or two. If something is genuinely urgent,
-                    call rather than write.
+                    Usually within a day or two.
                   </p>
                 </div>
 

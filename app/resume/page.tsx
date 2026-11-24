@@ -282,7 +282,6 @@ export default function ResumePage() {
             <p className="rz-answer">{ANSWER}</p>
 
             <div className="rz-contact">
-              <a href={identity.phoneHref}>{identity.phone}</a>
               <span className="sep">·</span>
               <a href={`mailto:${identity.email}`}>{identity.email}</a>
               <span className="sep">·</span>

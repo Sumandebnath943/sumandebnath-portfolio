@@ -155,14 +155,12 @@ export default function Hero() {
           </span>
         </div>
         <a
-          href="https://wa.me/917980296957"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/contact"
           className="group flex items-center gap-2 transition-colors hover:text-[#F5F0E6]"
         >
           GET IN TOUCH:
           <span className="text-[#FF8000] group-hover:text-[#FFB347]">
-            WHATSAPP
+            EMAIL
           </span>
         </a>
       </m.div>

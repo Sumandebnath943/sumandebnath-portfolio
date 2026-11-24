@@ -858,12 +858,21 @@ Groq, model `openai/gpt-oss-120b`, `reasoning_effort: 'low'`. It lives in the
 `npm run build` creates the chat's public-content index after prerendering the
 site. `scripts/build-portfolio-index.mts` checks the sitemap against the page,
 project, and Notebook registries and extracts sections from the public HTML.
+The same build adds hosted PDF and text content, reviewed media transcripts,
+and HTML from approved linked project entry points. It writes a coverage
+manifest to `build/portfolio-chat/coverage.json` with per-source status and
+content digests for canonical pages. Add captions for meaningful content
+that only exists in interactive media. New external sources require an
+explicit public URL in `scripts/portfolio-public-sources.mts`.
 The build verifies that the index is in the `/api/chat` deployment trace. The
 chat uses that index for retrieval and validated source links. Run
 `npm run check:portfolio-chat` after building to check representative questions.
 `lib/systemPrompt.ts` holds the assistant's behaviour rules. Conversation context
 lives in the open page, and the chat sends a bounded set of recent and relevant
-earlier turns to Groq. The `/privacy` page describes that data flow.
+earlier turns to Groq. The `/privacy` page describes that data flow. The API
+passes visitor turns and source excerpts as quoted user data, validates model
+output and citation IDs, and redirects personal-contact requests to the public
+hiring address.
 
 ### 6.4 The 3D robot mascot (`components/robot/`)
 

@@ -1,4 +1,5 @@
 "use client";
+import { PUBLIC_EMAIL } from "@/lib/public-contact";
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
@@ -33,10 +34,10 @@ const INITIAL_MESSAGE: Message = {
 // what Suman has actually built. Kept in step with lib/resume.ts — the old set
 // asked about a salary the assistant no longer discusses.
 const SUGGESTED_QUESTIONS = [
-  "What roles is Suman looking for?",
+  "What can Milo's little agents do?",
+  "How does NUNO run without a game server?",
   "He trained his own language model?",
-  "Tell me about the 46-agent AI fleet",
-  "Why hire a marketer who ships products?",
+  "What roles is Suman looking for?",
 ];
 
 /**
@@ -336,7 +337,7 @@ export default function ChatTakeover() {
     if (typewriterRef.current) clearInterval(typewriterRef.current);
     const text = fullText && fullText.length > 0
       ? fullText
-      : "Something went wrong. Please email sumandebnath944@gmail.com directly.";
+      : `Something went wrong. Please email ${PUBLIC_EMAIL} directly.`;
     let index = 0;
     const charsPerTick = Math.max(1, Math.ceil(text.length / 180));
     setMessages((prev) => [...prev, { role: "assistant", content: "", animating: true }]);
@@ -374,10 +375,10 @@ export default function ChatTakeover() {
       });
       const data = await res.json().catch(() => ({}));
       if (res.status === 429) { respond("Please wait a moment before sending another message."); return; }
-      if (!res.ok || !data.message) { respond(data.error || "Something went wrong. Please email sumandebnath944@gmail.com directly."); return; }
+      if (!res.ok || !data.message) { respond(data.error || `Something went wrong. Please email ${PUBLIC_EMAIL} directly.`); return; }
       respond(data.message, { sources: data.sources, catalog: data.catalog });
     } catch {
-      respond("Network error. Please email sumandebnath944@gmail.com directly.");
+      respond(`Network error. Please email ${PUBLIC_EMAIL} directly.`);
     } finally {
       setIsLoading(false);
     }

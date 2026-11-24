@@ -81,7 +81,7 @@ export const PAGES: PageEntry[] = [
   {
     href: "/contact",
     label: "Contact",
-    blurb: "Email, phone, socials and current availability",
+    blurb: "Email, contact form, socials and current availability",
     group: "start",
     accent: "#34D399",
   },

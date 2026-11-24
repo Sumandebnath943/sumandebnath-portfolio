@@ -1,3 +1,4 @@
+import { PUBLIC_EMAIL } from "@/lib/public-contact";
 import type { NextRequest } from "next/server";
 import { CONTACT_INTENTS } from "@/lib/contact-intents";
 import { contactDbConfigured, saveContactMessage } from "@/lib/contact";
@@ -179,7 +180,7 @@ export async function POST(request: NextRequest) {
     return Response.json(
       {
         error:
-          "That's a few messages in a short window. Try again a bit later, or email sumandebnath944@gmail.com directly.",
+          `That's a few messages in a short window. Try again a bit later, or email ${PUBLIC_EMAIL} directly.`,
       },
       { status: 429 },
     );
@@ -260,7 +261,7 @@ export async function POST(request: NextRequest) {
     return Response.json(
       {
         error:
-          "Something went wrong on my end and your message didn't send. Please email sumandebnath944@gmail.com directly — sorry about that.",
+          `Something went wrong on my end and your message didn't send. Please email ${PUBLIC_EMAIL} directly — sorry about that.`,
       },
       { status: 502 },
     );

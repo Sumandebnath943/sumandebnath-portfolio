@@ -47,16 +47,10 @@ import { FALLBACK_DATE } from "@/lib/route-dates";
  *
  * ## One thing this file deliberately omits
  *
- * **The phone number.** `lib/resume.ts` holds it and /contact and /resume
- * display it, because a human reading those pages should be able to tap it.
- * This file, `public/llms-full.txt` and the `Person` JSON-LD do not — a number
- * in a machine-readable surface gets scraped in bulk and ends up in call lists.
- * Email is the channel that scales and can be filtered. Do not add it back for
- * schema "completeness".
+ * Use the public email from the résumé identity.
  *
- * Shared by `/llms.txt` (served as text/plain, which is what the llms.txt
- * convention expects) and `/index.md`, the homepage's Markdown representation
- * under `Accept: text/markdown` (AEO_PLAYBOOK.md §8). Same text, two media types.
+ * Shared by `/llms.txt` and the homepage's Markdown representation at
+ * `/index.md`. The same copy is served with two media types.
  */
 
 const GROUP_ORDER: PageGroup[] = [
@@ -180,7 +174,6 @@ than summarised. "Citation map" says which URL answers which kind of question.
 - Location: ${identity.location} (also Kolkata, West Bengal)
 - Availability: ${identity.availability}
 - Email: ${identity.email}
-- Phone: not published in machine-readable form. It is on ${abs("/contact")} for a human.
 - Website: ${identity.portfolio}
 - GitHub: https://github.com/Sumandebnath943
 - LinkedIn: https://linkedin.com/in/suman-debnath-a528653a1
