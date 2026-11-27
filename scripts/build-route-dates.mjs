@@ -31,7 +31,7 @@ const ROUTES = {
   "/journey": ["app/journey", "components/journey", "lib/journey.ts"],
   "/about": ["app/about"],
   "/profile": ["app/profile", "components/profile"],
-  "/recognitions": ["app/recognitions", "public/recognitions"],
+  "/achievements": ["app/achievements", "public/achievements"],
   "/contact": ["app/contact", "lib/contact.ts", "lib/contact-intents.ts"],
   "/projects": ["app/projects/page.tsx", "lib/projects.ts", "lib/archive-projects.ts"],
   "/learnings": ["app/learnings", "lib/learnings-data.ts"],

@@ -8,42 +8,41 @@ import PageFaq from "@/components/ui/PageFaq";
 import RelatedPages from "@/components/ui/RelatedPages";
 import AchievementCard from "./AchievementCard";
 import { achievements } from "./achievements";
-import styles from "./recognitions.module.css";
+import styles from "./achievements.module.css";
 
-const href = "/recognitions";
+const href = "/achievements";
 const description =
-  "Suman Debnath’s developer recognitions, including the Applicant, Participant and Builder badges from Google Startup Buildathon India 2026.";
+  "Suman Debnath’s achievements, including presenting IMPRINT and earning three Google Developer badges at Google Startup Buildathon India 2026.";
 
 export const metadata: Metadata = {
-  title: "Recognitions & Developer Badges",
+  title: "Achievements",
   description,
   keywords: ["Google Startup Buildathon India 2026", "Google Developer badges", "Prototype Shipper"],
   alternates: { canonical: href },
   openGraph: {
     type: "website",
     url: href,
-    title: "Recognitions & Developer Badges · Suman Debnath",
+    title: "Achievements · Suman Debnath",
     description,
     images: ["/og-image.png"],
   },
 };
 
-export default function RecognitionsPage() {
+export default function AchievementsPage() {
   return (
     <MotionProvider>
       <Navigation />
 
       <div className={styles.page}>
         <main>
-          <section className={styles.shell} aria-labelledby="recognitions-heading">
+          <section className={styles.shell} aria-labelledby="achievements-heading">
             <HeroLock />
             <header className={styles.intro}>
               <Breadcrumbs
                 className={styles.breadcrumbs}
-                trail={[{ label: "About Me", href: "/about" }, { label: "Recognitions", href }]}
+                trail={[{ label: "About Me", href: "/about" }, { label: "Achievements", href }]}
               />
-              <h1 id="recognitions-heading">Recognitions</h1>
-              <p>Developer badges and the work behind them.</p>
+              <h1 id="achievements-heading">Achievements</h1>
             </header>
 
             <div className={styles.achievements}>
@@ -54,8 +53,8 @@ export default function RecognitionsPage() {
           </section>
         </main>
 
-        <PageFaq href={href} heading="About the Buildathon badges" variant="system" surface="var(--recognitions-bg)" />
-        <RelatedPages href={href} variant="system" surface="var(--recognitions-bg)" />
+        <PageFaq href={href} heading="About the Buildathon badges" variant="system" surface="var(--achievements-bg)" />
+        <RelatedPages href={href} variant="system" surface="var(--achievements-bg)" />
       </div>
 
       <Contact />

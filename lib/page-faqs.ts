@@ -33,14 +33,14 @@ export interface PageFaq {
 }
 
 export const PAGE_FAQS: Record<string, PageFaq[]> = {
-  "/recognitions": [
+  "/achievements": [
     {
       q: "What did Suman Debnath earn the Buildathon Builder badge for?",
-      a: "Suman Debnath earned the Prototype Shipper badge at Google Startup Buildathon India 2026 by shipping and demoing a working AI MVP at the City Buildathon. The badge credits work built with Google AI Studio, Gemini/Gemma and Google Cloud.",
+      a: "Suman Debnath earned the Prototype Shipper badge at Google Startup Buildathon India 2026 by shipping and demoing IMPRINT, a working AI MVP, at the City Buildathon. The badge credits work built with Google AI Studio, Gemini/Gemma and Google Cloud.",
     },
     {
       q: "Where can I verify Suman Debnath’s Google Buildathon badges?",
-      a: "Suman Debnath’s public Google Developer Profile is at g.dev/sumandebnath. Each milestone on the Recognitions page also links to its own Google credential.",
+      a: "Suman Debnath’s public Google Developer Profile is at g.dev/sumandebnath. The Achievements page links to each Google credential and shows the original credential screenshots.",
     },
   ],
 

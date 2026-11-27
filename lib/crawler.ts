@@ -166,6 +166,7 @@ export function isPageRequest(pathname: string): boolean {
 export const STATIC_ROUTES = new Set([
   "/",
   "/about",
+  "/achievements",
   "/agents/migi",
   "/agents/milo",
   "/agents/pact-agent",
@@ -193,7 +194,6 @@ export const STATIC_ROUTES = new Set([
   "/profile",
   "/projects",
   "/projects/aegis-vault",
-  "/recognitions",
   "/resume",
   "/slms/pentacmd",
   "/terms",

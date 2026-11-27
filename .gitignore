@@ -74,7 +74,7 @@ _source-film/
 # Originals for the /profile filmstrip — served copies live in public/profile/
 _source-profile-photos/
 
-# Original badge screenshots for the crops in public/recognitions/
+# Original badge screenshots for the artwork and proof images in public/achievements/
 /_source-recognitions/
 
 # Generated cross-post Markdown — derived from lib/notebook, paste-and-discard.

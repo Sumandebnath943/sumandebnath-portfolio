@@ -417,7 +417,7 @@ Founder: Suman Debnath
 - Notebook (engineering write-ups): https://sumandebnath.houseofnamus.com/notebook
 - Notebook RSS feed: https://sumandebnath.houseofnamus.com/notebook/rss.xml
 - Learnings (AI Certifications): https://sumandebnath.houseofnamus.com/learnings
-- Recognitions (Google Startup Buildathon India 2026 badges): https://sumandebnath.houseofnamus.com/recognitions
+- Achievements (Google Startup Buildathon India 2026 badges and the IMPRINT demo): https://sumandebnath.houseofnamus.com/achievements
 - The Journey (interactive life story): https://sumandebnath.houseofnamus.com/journey
 - Fun Apps & Experiments: https://sumandebnath.houseofnamus.com/fun-apps
 - PACT Agent: https://sumandebnath.houseofnamus.com/agents/pact-agent

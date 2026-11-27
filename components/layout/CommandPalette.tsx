@@ -232,11 +232,11 @@ const commands: Command[] = [
     icon: "◉",
   },
   {
-    id: "recognitions",
-    command: "/recognitions",
-    label: "Recognitions",
-    description: "Developer badges and Google Startup Buildathon India 2026 milestones",
-    href: "/recognitions",
+    id: "achievements",
+    command: "/achievements",
+    label: "Achievements",
+    description: "Achievements, including Google Startup Buildathon India 2026 and IMPRINT",
+    href: "/achievements",
     icon: "✦",
   },
   {

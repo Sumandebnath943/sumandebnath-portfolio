@@ -52,6 +52,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/recognitions",
+        destination: "/achievements",
+        permanent: true,
+      },
+      {
         // Renamed 26 Aug 2026 with the SEO audit. The article's title moved from
         // "What does it actually mean for a website to be agentic-ready?" to
         // "Agentic-ready: the four things an agent has to be able to do", and the
