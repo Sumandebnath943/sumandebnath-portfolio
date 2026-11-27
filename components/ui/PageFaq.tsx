@@ -35,7 +35,7 @@ import { routeDate } from "@/lib/route-dates";
  * Renders nothing when the route has no entry in lib/page-faqs, so mounting it
  * speculatively is harmless.
  */
-type Variant = "dark" | "paper";
+type Variant = "dark" | "paper" | "system";
 
 // Mirrors RelatedPages' palette exactly — the two stack directly on top of each
 // other above the footer, and a mismatch between them reads as a rendering bug
@@ -64,6 +64,14 @@ const THEME: Record<
     q: "text-[#191512]",
     a: "text-[#191512]/[0.72]",
     fallback: "#ece5d8",
+  },
+  system: {
+    border: "border-[#191512]/[0.12] dark:border-white/[0.12]",
+    kicker: "text-[#191512]/[0.68] dark:text-white/[0.68]",
+    rule: "border-[#191512]/[0.14] dark:border-white/[0.12]",
+    q: "text-[#191512] dark:text-white",
+    a: "text-[#191512]/[0.75] dark:text-white/[0.72]",
+    fallback: "light-dark(#ece5d8, #050505)",
   },
 };
 
@@ -107,7 +115,7 @@ export default function PageFaq({
     <section
       aria-labelledby="page-faq-heading"
       style={{ backgroundColor: surface ?? t.fallback }}
-      className={`relative border-t px-6 py-14 sm:px-10 lg:px-16 ${t.border}`}
+      className={`relative border-t px-6 py-14 sm:px-10 lg:px-16 ${t.border}${variant === "system" ? " [color-scheme:light_dark]" : ""}`}
     >
       <script
         type="application/ld+json"

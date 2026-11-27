@@ -232,6 +232,14 @@ const commands: Command[] = [
     icon: "◉",
   },
   {
+    id: "recognitions",
+    command: "/recognitions",
+    label: "Recognitions",
+    description: "Developer badges and Google Startup Buildathon India 2026 milestones",
+    href: "/recognitions",
+    icon: "✦",
+  },
+  {
     id: "philosophy-page",
     command: "/philosophy-page",
     label: "Philosophy (full page)",

@@ -1,0 +1,408 @@
+.page {
+  --recognitions-bg: #f4f3ed;
+  --text: #191512;
+  --muted: #5c5348;
+  --accent: #7b4a14;
+  --line: #ded8ca;
+  --track: #b8a588;
+  --panel: #fffdf6;
+  --badge: #f9f7ef;
+  --featured: #f9eed8;
+  --featured-line: #c6a671;
+  --highlight: #fffaee;
+  --ring: #a77632;
+  --glow: #d7a74e24;
+  --shadow: #51401b13;
+  color: var(--text);
+  background: radial-gradient(ellipse 48rem 24rem at 30% 0, var(--glow), transparent), var(--recognitions-bg);
+  font-family: var(--font-manrope), sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  .page {
+    --recognitions-bg: #100d0a;
+    --text: #faf5ea;
+    --muted: #c1b7a7;
+    --accent: #f3c477;
+    --line: #3a3126;
+    --track: #77644a;
+    --panel: #191510;
+    --badge: #211b15;
+    --featured: #352516;
+    --featured-line: #866237;
+    --highlight: #412e1c;
+    --ring: #c48b48;
+    --glow: #d18f3220;
+    --shadow: #0005;
+  }
+}
+
+.shell {
+  width: min(100%, var(--sd-shell-read));
+  margin-inline: auto;
+  padding: clamp(6.75rem, 12vw, 8.5rem) clamp(1rem, 4vw, 2rem) clamp(3rem, 8vw, 5.5rem);
+}
+
+.intro {
+  margin-bottom: clamp(1.75rem, 5vw, 3.25rem);
+}
+
+.breadcrumbs ol,
+.breadcrumbs [aria-current="page"] {
+  color: var(--muted);
+}
+
+.breadcrumbs a:hover,
+.breadcrumbs a:focus-visible {
+  color: var(--accent);
+}
+
+.intro h1 {
+  margin-top: 0.875rem;
+  font-size: clamp(2.65rem, 8.5vw, 6.5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.075em;
+}
+
+.intro p {
+  margin-top: 0.75rem;
+  color: var(--muted);
+  font-size: clamp(0.95rem, 2vw, 1.125rem);
+  line-height: 1.55;
+}
+
+.achievements {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.achievement {
+  --inset: clamp(1rem, 4vw, 2rem);
+  --gap: clamp(0.75rem, 2vw, 1rem);
+  --badge-inset: clamp(0.875rem, 2.4vw, 1.25rem);
+  padding: var(--inset);
+  border: 1px solid var(--line);
+  border-radius: clamp(1.25rem, 4vw, 1.875rem);
+  background: var(--panel);
+  box-shadow: 0 18px 50px var(--shadow);
+  min-width: 0;
+}
+
+.achievementHeader {
+  padding-bottom: clamp(1.375rem, 3vw, 2rem);
+}
+
+.issuer,
+.date,
+.tooltip {
+  font-family: var(--font-dm-mono), monospace;
+}
+
+.issuer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.55rem;
+  color: var(--accent);
+  font-size: 0.6875rem;
+  line-height: 1.55;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.achievementTitle {
+  margin-top: 0.45rem;
+  font-size: clamp(1.625rem, 5.4vw, 3.125rem);
+  font-weight: 750;
+  line-height: 1.04;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+
+.achievementTitle em {
+  display: inline-block;
+  color: var(--accent);
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: 1.16em;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+
+.milestones {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: var(--gap);
+  list-style: none;
+}
+
+.milestone {
+  position: relative;
+  min-width: 0;
+  padding-top: 1.375rem;
+}
+
+.milestone::before,
+.milestone::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.milestone::before {
+  z-index: 1;
+  top: 0.125rem;
+  left: var(--badge-inset);
+  width: 0.625rem;
+  height: 0.625rem;
+  border: 1px solid var(--ring);
+  border-radius: 50%;
+  background: var(--panel);
+}
+
+.featured::before {
+  background: var(--ring);
+  box-shadow: 0 0 0 3px var(--glow);
+}
+
+.milestone:not(:last-child)::after {
+  top: 0.4375rem;
+  right: calc(-1 * (var(--gap) + var(--badge-inset)));
+  left: var(--badge-inset);
+  height: 1px;
+  background: var(--track);
+}
+
+.badge {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+  height: 100%;
+  padding: var(--badge-inset) var(--badge-inset) calc(var(--badge-inset) + 1.65rem);
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: var(--badge);
+  scroll-margin-block: 6rem 4rem;
+  transition: border-color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+}
+
+.featured .badge {
+  border-color: var(--featured-line);
+  background: radial-gradient(ellipse at 14% 0%, var(--glow), transparent 72%), var(--featured);
+}
+
+.badgeArrow {
+  position: absolute;
+  top: var(--badge-inset);
+  right: var(--badge-inset);
+  color: var(--accent);
+}
+
+.artwork {
+  display: flex;
+  align-items: center;
+  min-height: 5.1875rem;
+}
+
+.artwork img {
+  width: 3.625rem;
+  height: auto;
+  border-radius: 50%;
+  box-shadow: 0 5px 13px var(--shadow);
+  transition: transform 180ms ease;
+}
+
+.featured .artwork img {
+  width: 5.1875rem;
+  outline: 1px solid var(--featured-line);
+  outline-offset: 4px;
+}
+
+.badgeCopy {
+  display: grid;
+  gap: 0.375rem;
+  min-width: 0;
+}
+
+.date {
+  color: var(--muted);
+  font-size: 0.6875rem;
+  line-height: 1.4;
+}
+
+.badgeName {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.125rem 0.625rem;
+  font-size: 1.1875rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  scroll-margin-block-start: 6rem;
+}
+
+.credentialName {
+  color: var(--accent);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.badgeDescription {
+  max-width: 34ch;
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+/* A reserved row inside the link keeps the tooltip hoverable when the copy wraps. */
+.tooltip {
+  position: absolute;
+  bottom: 0.625rem;
+  left: var(--badge-inset);
+  max-width: calc(100% - 2 * var(--badge-inset));
+  padding: 0.2rem 0.45rem;
+  border-radius: 0.3rem;
+  color: var(--panel);
+  background: var(--text);
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  visibility: hidden;
+}
+
+.badge:focus-visible,
+.profileLink:focus-visible,
+.breadcrumbs a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.badge:focus-visible .tooltip {
+  visibility: visible;
+}
+
+.achievementFooter {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.25rem;
+}
+
+.profileLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  min-height: 2.75rem;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--featured-line);
+  border-radius: 999px;
+  color: var(--accent);
+  background: var(--badge);
+  font-size: 0.8125rem;
+  font-weight: 800;
+  line-height: 1.35;
+  text-align: center;
+  scroll-margin-block: 6rem 4rem;
+  transition: background-color 180ms ease, border-color 180ms ease;
+}
+
+.profileLink svg {
+  flex-shrink: 0;
+}
+
+@media (hover: hover) {
+  .badge:hover {
+    border-color: var(--ring);
+    background-color: var(--highlight);
+    box-shadow: 0 6px 16px var(--shadow);
+  }
+
+  .badge:hover .artwork img {
+    transform: translateY(-3px);
+  }
+
+  .badge:hover .tooltip {
+    visibility: visible;
+  }
+
+  .profileLink:hover {
+    border-color: var(--ring);
+    background: var(--highlight);
+  }
+}
+
+@media (min-width: 41.25rem) {
+  .milestones:has(> :nth-child(3)) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr);
+  }
+
+  .milestone:nth-child(3n)::after {
+    display: none;
+  }
+}
+
+@media (max-width: 41.249rem) {
+  .milestones {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .milestone {
+    padding: 0 0 0 1.125rem;
+  }
+
+  .milestone::before {
+    top: 1.5rem;
+    left: 0;
+  }
+
+  .milestone:not(:last-child)::after {
+    top: 1.5rem;
+    right: auto;
+    bottom: calc(-1 * (var(--gap) + 1.5rem));
+    left: 0.28125rem;
+    width: 1px;
+    height: auto;
+  }
+
+  .badge {
+    grid-template-columns: 3.25rem minmax(0, 1fr);
+    align-items: start;
+    gap: 0.625rem;
+  }
+
+  .featured .badge {
+    grid-template-columns: 4rem minmax(0, 1fr);
+  }
+
+  .badgeArrow {
+    width: 0.875rem;
+    height: 0.875rem;
+    top: 0.625rem;
+    right: 0.625rem;
+  }
+
+  .artwork {
+    min-height: 0;
+  }
+
+  .date {
+    padding-inline-end: 0.875rem;
+  }
+
+  .profileLink {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .badge,
+  .artwork img,
+  .profileLink {
+    transition: none;
+  }
+
+  .badge:hover .artwork img {
+    transform: none;
+  }
+}

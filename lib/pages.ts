@@ -250,6 +250,13 @@ export const PAGES: PageEntry[] = [
 
   // ── The person ───────────────────────────────────────────────────────────
   {
+    href: "/recognitions",
+    label: "Recognitions",
+    blurb: "Developer badges and milestones from Google Startup Buildathon India 2026",
+    group: "person",
+    accent: "#D4AF37",
+  },
+  {
     href: "/experience",
     label: "Experience",
     blurb:
@@ -366,10 +373,11 @@ const RELATED: Record<string, string[]> = {
   "/about": ["/journey", "/philosophy", "/profile"],
   "/journey": ["/about", "/profile", "/learnings"],
   "/profile": ["/resume", "/journey", "/fun-apps"],
+  "/recognitions": ["/learnings", "/profile", "/resume"],
   "/philosophy": ["/about", "/faq", "/notebook"],
 
   "/notebook": ["/learnings", "/crawlers/that-one-crawler", "/projects"],
-  "/learnings": ["/notebook", "/resume", "/profile"],
+  "/learnings": ["/notebook", "/resume", "/recognitions"],
   "/faq": ["/about", "/contact", "/philosophy"],
 
   "/agents/pact-agent": ["/agents/pentashell", "/crawlers/that-one-crawler", "/projects/aegis-vault"],

@@ -39,6 +39,7 @@ const ROUTES: Entry[] = [
   { path: "/journey", changeFrequency: "monthly", priority: 0.9 },
   { path: "/about", changeFrequency: "monthly", priority: 0.9 },
   { path: "/profile", changeFrequency: "monthly", priority: 0.9 },
+  { path: "/recognitions", changeFrequency: "monthly", priority: 0.8 },
   { path: "/contact", changeFrequency: "monthly", priority: 0.9 },
   { path: "/projects", changeFrequency: "weekly", priority: 0.9 },
   // Weekly, and second only to the homepage among the non-résumé pages: this

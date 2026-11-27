@@ -44,7 +44,7 @@ import { relatedFor } from "@/lib/pages";
  * goes below 0.62 now. **Do not lower these values without measuring.**
  */
 
-type Variant = "dark" | "paper";
+type Variant = "dark" | "paper" | "system";
 
 const THEME: Record<
   Variant,
@@ -74,6 +74,14 @@ const THEME: Record<
     // going dark.
     fallback: "#ece5d8",
   },
+  system: {
+    border: "border-[#191512]/[0.12] dark:border-white/[0.12]",
+    kicker: "text-[#191512]/[0.68] dark:text-white/[0.68]",
+    card: "border-[#191512]/[0.16] bg-white/70 hover:border-[#191512]/[0.34] hover:bg-white dark:border-white/[0.14] dark:bg-white/[0.05] dark:hover:border-white/[0.32] dark:hover:bg-white/[0.09]",
+    title: "text-[#191512] dark:text-white",
+    blurb: "text-[#191512]/[0.75] dark:text-white/[0.72]",
+    fallback: "light-dark(#ece5d8, #050505)",
+  },
 };
 
 export default function RelatedPages({
@@ -101,7 +109,7 @@ export default function RelatedPages({
     <section
       aria-labelledby="related-heading"
       style={{ backgroundColor: surface ?? t.fallback }}
-      className={`relative border-t px-6 py-14 sm:px-10 lg:px-16 ${t.border} ${className}`}
+      className={`relative border-t px-6 py-14 sm:px-10 lg:px-16 ${t.border}${variant === "system" ? " [color-scheme:light_dark]" : ""} ${className}`}
     >
       <div className="mx-auto max-w-5xl">
         <h2
